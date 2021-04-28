@@ -11,10 +11,12 @@ public class TwinPosition : MonoBehaviour
     public bool LoopOption = false;
     public float Duration;
     public bool stay = false;
+    public bool ui = false;
 
     private bool direction = false;
     private bool endMove = false;
     private float timer = 0f;
+    private float distanceCheckValue = 0.1f;
 
 
     // Lerp
@@ -34,6 +36,8 @@ public class TwinPosition : MonoBehaviour
         SetStartTime();
         SetJourneyLength();
         staying = stay;
+
+        if (ui) distanceCheckValue = 3.0f;
     }
 
     private void Update()
@@ -45,7 +49,7 @@ public class TwinPosition : MonoBehaviour
     {
         if (!direction)
         {
-            if (Vector3.Distance(this.transform.localPosition, TargetPosition) < 3.0f)
+            if (Vector3.Distance(this.transform.localPosition, TargetPosition) < distanceCheckValue)
             {
                 if (!LoopOption) endMove = true;
 
@@ -84,7 +88,7 @@ public class TwinPosition : MonoBehaviour
 
         if (direction)
         {
-            if (Vector3.Distance(this.transform.localPosition, OriginPosition) < 3.0f)
+            if (Vector3.Distance(this.transform.localPosition, OriginPosition) < distanceCheckValue)
             {
                 if (!LoopOption) endMove = true;
 

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TwinPosition : MonoBehaviour
+public class TweenPosition : MonoBehaviour
 {
     // SerializeField
     public Vector3 OriginPosition;

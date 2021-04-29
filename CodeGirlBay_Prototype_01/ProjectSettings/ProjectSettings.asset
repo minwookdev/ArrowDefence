@@ -574,7 +574,8 @@ PlayerSettings:
   webGLLinkerTarget: 1
   webGLThreadsSupport: 0
   webGLWasmStreaming: 0
-  scriptingDefineSymbols: {}
+  scriptingDefineSymbols:
+    1: ENABLE_LOG;Mobile_Android;Mobile_Apple;PC_Windows;PC_Mac
   platformArchitecture: {}
   scriptingBackend: {}
   il2cppCompilerConfiguration: {}

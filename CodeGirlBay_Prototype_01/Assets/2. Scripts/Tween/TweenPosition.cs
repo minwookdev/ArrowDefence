@@ -155,5 +155,4 @@ public class TweenPosition : MonoBehaviour
     {
         staying = false;
     }
-
 }

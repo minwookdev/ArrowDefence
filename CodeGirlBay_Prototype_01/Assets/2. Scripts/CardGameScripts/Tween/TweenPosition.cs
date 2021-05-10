@@ -64,7 +64,7 @@ public class TweenPosition : MonoBehaviour
                 else
                 {
                     timer += Time.deltaTime * 60;
-                    Debug.Log("Time.deltaTime Value : " + Time.deltaTime * 60);
+                    //Debug.Log("Time.deltaTime Value : " + Time.deltaTime * 60);
                 }
 
                 if (reverseToHide)
@@ -80,9 +80,9 @@ public class TweenPosition : MonoBehaviour
                 distCovered = (Time.time - startTime) * MoveTime;
                 fracJourney = distCovered / journeyLength;
                 this.transform.localPosition = Vector3.Lerp(this.transform.localPosition, TargetPosition, fracJourney);
-                Debug.Log("Target Lerp : " + Vector3.Lerp(this.transform.localPosition, TargetPosition, fracJourney));
-                Debug.Log("This Pos : " + this.transform.localPosition);
-                Debug.Log("Distance : " + Vector3.Distance(this.transform.localPosition, TargetPosition));
+                //Debug.Log("Target Lerp : " + Vector3.Lerp(this.transform.localPosition, TargetPosition, fracJourney));
+                //Debug.Log("This Pos : " + this.transform.localPosition);
+                //Debug.Log("Distance : " + Vector3.Distance(this.transform.localPosition, TargetPosition));
             }
         }
 
@@ -103,7 +103,7 @@ public class TweenPosition : MonoBehaviour
                 else
                 {
                     timer += Time.deltaTime * 60;
-                    Debug.Log("Time.deltaTime Value : " + Time.deltaTime * 60);
+                    //Debug.Log("Time.deltaTime Value : " + Time.deltaTime * 60);
                 }
 
 
@@ -120,8 +120,8 @@ public class TweenPosition : MonoBehaviour
                 distCovered = (Time.time - startTime) * MoveTime;
                 fracJourney = distCovered / journeyLength;
                 this.transform.localPosition = Vector3.Lerp(this.transform.localPosition, OriginPosition, fracJourney);
-                Debug.Log("Origin Lerp : " + Vector3.Lerp(this.transform.localPosition, OriginPosition, fracJourney));
-                Debug.Log("This Pos : " + this.transform.localPosition);
+                //Debug.Log("Origin Lerp : " + Vector3.Lerp(this.transform.localPosition, OriginPosition, fracJourney));
+                //Debug.Log("This Pos : " + this.transform.localPosition);
             }
         }
 

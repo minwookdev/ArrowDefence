@@ -1,0 +1,7 @@
+For the demo scenes to work as intended, please:
+	1. Set Gravity to X = 0 and Y = -9.81
+	2. Set the Game view’s aspect ratio to 16:10
+
+For more information on how to do these steps, please see the ‘Using a Demo Scene’ section of the documentation:
+
+https://docs.google.com/document/d/17m4y5yoBm_ukfak3RyERgg6bgui734qsSq4X1_8slVg/edit#heading=h.2ytkukbgy337

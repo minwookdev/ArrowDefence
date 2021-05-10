@@ -7,6 +7,10 @@ public class PlayerMove : MonoBehaviour
     GameObject playerGO;
     Transform playerTR;
 
+    bool knockBack = false;
+    Vector3 knockBackPosition;
+    Vector3 knockBackDirection;
+
     private void Awake()
     {
         playerGO = this.gameObject;
@@ -15,7 +19,22 @@ public class PlayerMove : MonoBehaviour
 
     private void Update()
     {
-        PushMoveKey();
+        if (!knockBack)
+        {
+            PushMoveKey();
+        }
+        
+        if(knockBack)
+        {
+            if(1 > Vector3.Distance(playerTR.position, knockBackPosition))
+            {
+                knockBack = false;
+            }
+            else
+            {
+                playerTR.position += knockBackDirection * 0.1f;
+            }
+        }
     }
 
     private void PushMoveKey()
@@ -39,5 +58,12 @@ public class PlayerMove : MonoBehaviour
         {
             playerTR.position += Vector3.up * 0.1f;
         }
+    }
+
+    public void PlayerKnockBack(Vector3 Direction)
+    {
+        knockBackDirection = Direction;
+        knockBackPosition = playerTR.position + knockBackDirection * 2f;
+        knockBack = true;
     }
 }

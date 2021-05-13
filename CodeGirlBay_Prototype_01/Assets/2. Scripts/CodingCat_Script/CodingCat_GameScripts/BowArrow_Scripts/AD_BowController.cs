@@ -91,6 +91,8 @@
                 Action act1 = () => { mainCam = Camera.main; };
                 act1();
             }
+
+            //StartCoroutine(this.ResetArrow(currentLoadedArrow.GetComponent<AD_Arrow>()));
         }
 
         private void Update()
@@ -276,6 +278,7 @@
             if (arrowForce.magnitude < requiredLaunchForce)
             {
                 CatLog.Log("Not Enough Require Force, More Pulling the Bow !");
+                StartCoroutine(this.ResetArrow(currentLoadedArrow));
                 return;
             }
 
@@ -317,7 +320,24 @@
 
             yield return null;
 
+        }
 
+        private IEnumerator ResetArrow(GameObject loadedArrow)
+        {
+            while (null == loadedArrow)
+            {
+                CatLog.Log("Current Loaded Arrow is Null, Continue Function :: InitialArrow()");
+                yield return null;
+            }
+
+            var adArrow = loadedArrow.GetComponent<AD_Arrow>();
+
+            var tempPosition = adArrow.transform.position;
+            tempPosition.x = adArrow.rightClampPoint.position.x;
+            tempPosition.y = adArrow.rightClampPoint.position.y;
+            adArrow.transform.position = tempPosition;
+
+            CatLog.Log("Reset Loaded Arrow Position");
         }
     }
 }

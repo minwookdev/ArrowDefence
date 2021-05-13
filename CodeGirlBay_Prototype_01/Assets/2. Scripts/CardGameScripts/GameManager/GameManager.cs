@@ -7,6 +7,20 @@ public class GameManager : MonoBehaviour
     private static GameManager instance = null;
     private PlayerData playerData;
 
+    // Sound Value
+    public float BgmSoundValue;
+    //{
+    //    get
+    //    {
+    //        return BgmSoundValue;
+    //    }
+    //
+    //    set
+    //    {
+    //        BgmSoundValue = value;
+    //    }
+    //}
+
     private void Awake()
     {
         if (null == instance)
@@ -64,5 +78,15 @@ public class GameManager : MonoBehaviour
     public void HitPlayer(int damage)
     {
         playerData.HitDamage(damage);
+    }
+
+    public float GetBgmSoundValue()
+    {
+        return BgmSoundValue;
+    }
+
+    public void SetBgmSoundValue(float value)
+    {
+        BgmSoundValue = value;
     }
 }

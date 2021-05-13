@@ -19,7 +19,7 @@ public class TrapDamage : MonoBehaviour
             Vector3 DirectionValue;
             DirectionValue = collision.transform.position - this.transform.position;
 
-            playMV.PlayerKnockBack(DirectionValue);
+            playMV.PlayerKnockBack(DirectionValue.normalized);
         }
     }
 }

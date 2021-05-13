@@ -65,6 +65,7 @@ namespace CodingCat_Scripts
             string initMsg = string.Format("{0} :: {1}", "Init Singleton Instance", "<color=yellow>" + this + "</color>");
             Debug.Log(initMsg);
 #endif
+
         }
 
         private void OnApplicationQuit()

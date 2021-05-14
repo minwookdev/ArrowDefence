@@ -505,6 +505,8 @@ MonoBehaviour:
   areaPullTypeRect: {fileID: 38832116}
   initialTouchPos: {x: 0, y: 0}
   touchRadius: 1
+  rightClampPoint: {fileID: 0}
+  leftClampPoint: {fileID: 0}
   arrowComponent: {fileID: 6036723072012287972}
   currentLoadedArrow: {fileID: 6036723072012287971}
   arrowParent: {fileID: 1757660976}
@@ -1737,7 +1739,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0.70980394, g: 0.8392157, b: 0.57254905, a: 0}
+  m_BackGroundColor: {r: 0.70980394, g: 0.8392157, b: 0.57254905, a: 1}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -1758,7 +1760,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 23
+    m_Bits: 535
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -2286,6 +2288,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 328185799}
     m_Modifications:
+    - target: {fileID: 6082609631992581025, guid: f7c77f6295899b64fb1cdb6894b3117c,
+        type: 3}
+      propertyPath: m_BodyType
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6082609631992581027, guid: f7c77f6295899b64fb1cdb6894b3117c,
         type: 3}
       propertyPath: leftClampPoint
@@ -2300,6 +2307,31 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Object_Arrow
+      objectReference: {fileID: 0}
+    - target: {fileID: 6082609632005288340, guid: f7c77f6295899b64fb1cdb6894b3117c,
+        type: 3}
+      propertyPath: m_SortingLayerID
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6082609632005288340, guid: f7c77f6295899b64fb1cdb6894b3117c,
+        type: 3}
+      propertyPath: m_SortingLayer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6082609632005288342, guid: f7c77f6295899b64fb1cdb6894b3117c,
+        type: 3}
+      propertyPath: m_SortingLayerID
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6082609632005288342, guid: f7c77f6295899b64fb1cdb6894b3117c,
+        type: 3}
+      propertyPath: m_SortingLayer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6082609632005288342, guid: f7c77f6295899b64fb1cdb6894b3117c,
+        type: 3}
+      propertyPath: m_SortingOrder
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6082609632006488348, guid: f7c77f6295899b64fb1cdb6894b3117c,
         type: 3}

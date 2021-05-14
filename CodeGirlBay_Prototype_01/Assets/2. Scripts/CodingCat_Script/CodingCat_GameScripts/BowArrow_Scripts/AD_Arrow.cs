@@ -8,6 +8,7 @@
     {
         //The Left, Right Clamp Point for the Arrow.
         public Transform leftClampPoint, rightClampPoint;
+        public Transform arrowChatchPoint;
 
         [HideInInspector]
         public bool islaunched;
@@ -28,11 +29,16 @@
         {
             //Set Normal Arrow (TEST)
             arrowAttribute = AD_GameScripts.ArrowAttrubute.Arrow_Normal;
+
+            if(arrowChatchPoint == null)
+            {
+                //Find Arrow Chatch Point Function
+            }
         }
 
         private void Update()
         {
-            if(!islaunched)
+            if (!islaunched)
             {
                 ClampPosition();
                 CalculatePower();

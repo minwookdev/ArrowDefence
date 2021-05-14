@@ -59,8 +59,6 @@
 
             if(!(xIn && yIn))
             {
-                //gameObject.SetActive(false);
-
                 //Disable the Current Arrow
                 this.DisableArrow();
                 return;
@@ -72,10 +70,14 @@
         /// </summary>
         private void DisableArrow()
         {
-            //RigidBody Kinematic, Trail Disable
+            //RigidBody Kinematic, Trail Disable And Collect Request The Collect To PoolManger
+            //After than, in PoolManager is work disable this Object
             this.arrowRigidBody.isKinematic = true;
             this.transform.GetChild(2).GetChild(0).gameObject.SetActive(false);
-            this.gameObject.SetActive(false);
+            CatPoolManager.Instance.CollectObject(AD_GameScripts.Arrow,
+                                                  0, this.gameObject);
+
+            //this.gameObject.SetActive(false);
         }
     }
 }

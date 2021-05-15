@@ -10,8 +10,8 @@
         public Transform leftClampPoint, rightClampPoint;
         public Transform arrowChatchPoint;
 
-        [HideInInspector]
-        public bool islaunched;
+        //[HideInInspector]
+        public bool isLaunched;
         [HideInInspector]
         public float power;
 
@@ -30,7 +30,7 @@
             //Set Normal Arrow (TEST)
             arrowAttribute = AD_GameScripts.ArrowAttrubute.Arrow_Normal;
 
-            if(arrowChatchPoint == null)
+            if (arrowChatchPoint == null)
             {
                 //Find Arrow Chatch Point Function
             }
@@ -38,11 +38,16 @@
 
         private void Update()
         {
-            if (!islaunched)
+            if (!isLaunched)
             {
                 ClampPosition();
                 CalculatePower();
             }
+        }
+
+        private void OnDisable()
+        {
+            if(this.isLaunched) isLaunched = false;
         }
 
         private void ClampPosition()

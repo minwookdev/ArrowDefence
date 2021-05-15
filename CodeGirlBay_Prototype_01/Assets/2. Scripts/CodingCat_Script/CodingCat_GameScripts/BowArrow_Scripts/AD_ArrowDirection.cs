@@ -66,7 +66,7 @@
         }
 
         /// <summary>
-        /// 화면밖으로 나가거나 충돌되어 Disable 처리되어야할 상황에서 Initialize 처리
+        /// 화면밖으로 나가거나 충돌되어 Disable 처리되어야할 상황에서 각종 변수들 초기화 처리
         /// </summary>
         private void DisableArrow()
         {

@@ -104,6 +104,11 @@
             {
                 leftClampPoint  = this.transform.GetChild(3).GetChild(0);
                 rightClampPoint = this.transform.GetChild(3).GetChild(1);
+
+                if(transform.GetChild(3).name != "Bow_ClampPoints")
+                {
+                    CatLog.WLog("Bow Clamp Point is in the wrong Lcoation. Check The Bow");
+                }
             }
 
             //TestFunction Set
@@ -308,7 +313,6 @@
             if (arrowForce.magnitude < requiredLaunchForce)
             {
                 CatLog.Log("Not Enough Require Force, More Pulling the Bow !");
-                //StartCoroutine(this.ResetArrow(currentLoadedArrow));
                 return;
             }
 
@@ -318,7 +322,7 @@
             currentLoadedArrow.transform.GetChild(2).GetChild(0).gameObject.SetActive(true);
             currentLoadedArrow.GetComponent<Rigidbody2D>().isKinematic = false;
 
-            arrowComponent.islaunched = true;
+            arrowComponent.isLaunched = true;
 
             //Add Force Arrow
             currentLoadedArrow.GetComponent<Rigidbody2D>().AddForce(arrowForce, ForceMode2D.Force);
@@ -362,7 +366,9 @@
             arrow.transform.localScale                     = this.initialArrowScale;
             arrow.transform.localEulerAngles               = this.initialArrowRotation;
             arrow.transform.position   = ReturnInitArrowPos(arrow.transform.position);
+
             //Right, Left Clamp 한번만 잡아주면 다음 Active때 잡아주지 않아도 가능한지?
+            // -> 추후 게임이 시작되기 전에 미리 Clamp 한번에 Initial해주면 어떨지?
             arrow.GetComponent<AD_Arrow>().leftClampPoint  = this.leftClampPoint;
             arrow.GetComponent<AD_Arrow>().rightClampPoint = this.rightClampPoint;
 

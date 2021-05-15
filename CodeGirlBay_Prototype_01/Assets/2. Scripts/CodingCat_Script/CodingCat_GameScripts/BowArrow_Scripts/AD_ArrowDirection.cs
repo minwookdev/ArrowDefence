@@ -5,10 +5,10 @@
 
     public class AD_ArrowDirection : MonoBehaviour
     {
-        //Arrow Destroy Variable
+        //Screen Limit Variable
         private Vector2 topLeftScreenPoint;
         private Vector2 bottomRightScreenPoint;
-        private Vector2 offset = new Vector2(8, 8);
+        private Vector2 offset = new Vector2(2, 2);
         private bool xIn, yIn;  //The x-Position inside Screen, y-Position inside Screen Flags.
 
         //Arrow Angle Calculate Variable

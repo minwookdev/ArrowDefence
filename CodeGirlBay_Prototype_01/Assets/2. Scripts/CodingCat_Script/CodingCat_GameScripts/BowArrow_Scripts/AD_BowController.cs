@@ -386,13 +386,16 @@
         /// </summary>
         /// <param name="pos">Currnet Loaded Arrow Position Vector</param>
         /// <returns></returns>
-        private Vector2 ReturnInitArrowPos(Vector2 pos)
+        private Vector3 ReturnInitArrowPos(Vector3 pos)
         {
             var changePos = pos;
-            changePos.x = rightClampPoint.position.x;
-            changePos.y = rightClampPoint.position.y;
+            changePos = rightClampPoint.position;
 
             return changePos;
+
+            //changePos.x = rightClampPoint.position.x;
+            //changePos.y = rightClampPoint.position.y;
+            //changePos.z = rightClampPoint.position.z;
         }
     }
 }

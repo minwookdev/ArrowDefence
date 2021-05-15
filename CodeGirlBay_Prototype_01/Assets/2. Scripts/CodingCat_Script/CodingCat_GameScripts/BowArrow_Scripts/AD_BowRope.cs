@@ -53,7 +53,6 @@
 			{
 				instance = this;
 			}
-
 		}
 
 		// Use this for initialization
@@ -82,9 +81,9 @@
 			{
 				rope1.SetPosition(0, bowLeftPoint.position);
 				rope1.SetPosition(1, bowRightPoint.position);
-
 				rope2.SetPosition(0, Vector3.zero);
 				rope2.SetPosition(1, Vector3.zero);
+
 				return;
 			}
 

@@ -9,8 +9,9 @@
         //The Left, Right Clamp Point for the Arrow.
         public Transform leftClampPoint, rightClampPoint;
         public Transform arrowChatchPoint;
+        public GameObject arrowTrail;
 
-        //[HideInInspector]
+        [HideInInspector]
         public bool isLaunched;
         [HideInInspector]
         public float power;
@@ -20,20 +21,20 @@
 
         //Launch Power for the Arrow
         private float powerFactor = 2000;
+        private TrailRenderer trail;
 
         //Arrow Attributes
-        private AD_GameScripts.ArrowAttrubute arrowAttribute;
-        public AD_GameScripts.ArrowAttrubute ArrowAttribute { get { return arrowAttribute; } }
+        //private AD_GameScripts.ArrowAttrubute arrowAttribute;
 
         private void Start()
         {
             //Set Normal Arrow (TEST)
-            arrowAttribute = AD_GameScripts.ArrowAttrubute.Arrow_Normal;
+            //arrowAttribute = AD_GameScripts.ArrowAttrubute.Arrow_Normal;
 
-            if (arrowChatchPoint == null)
-            {
-                //Find Arrow Chatch Point Function
-            }
+
+            //Initial Arrow Childs
+            if (arrowChatchPoint == null) arrowChatchPoint = transform.GetChild(2);
+            if (arrowTrail == null)       arrowTrail = transform.GetChild(2).GetChild(0).gameObject;
         }
 
         private void Update()

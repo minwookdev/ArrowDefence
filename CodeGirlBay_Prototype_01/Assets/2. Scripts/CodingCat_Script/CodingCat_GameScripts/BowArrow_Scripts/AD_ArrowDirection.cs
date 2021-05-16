@@ -74,8 +74,11 @@
             //After than, in PoolManager is work disable this Object
             this.arrowRigidBody.isKinematic = true;
             this.transform.GetChild(2).GetChild(0).gameObject.SetActive(false);
-            CatPoolManager.Instance.CollectObject(AD_GameScripts.Arrow,
+            CatPoolManager.Instance.CollectObject(AD_Data.Arrow,
                                                   0, this.gameObject);
+
+            //CatPoolManager에 Disable 요청하는 이유 -> Arrow클래스에서 자체적으로 Disable할 경우 PoolManager에서 회수 처리하기 복잡해진다.
+            //Disable 하기전에 SerParent 하면 스케일이랑 좌표 난리난다. 항상 SetParent할 경우 Disable 후에 부모바꿔줄것.
 
             //this.gameObject.SetActive(false);
         }

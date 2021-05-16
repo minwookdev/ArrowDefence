@@ -1,7 +1,7 @@
 ﻿namespace CodingCat_Games
 {
     using CodingCat_Scripts;
-    using System.Globalization;
+    using System.Collections.Generic;
     using UnityEngine;
 
     public class CatPoolManager : Singleton<CatPoolManager>
@@ -16,6 +16,11 @@
         [Header("Arrows")]                 public GameObject normalArrow;
         [Header("How Many ? (MAX : 255)")] public byte normalArrowCounts;
 
+        [Header("Arrows List")]
+        [SerializeField] private List<GameObject> nArrowList = new List<GameObject>();
+        [SerializeField] private List<GameObject> eArrowList = new List<GameObject>();
+        [SerializeField] private List<GameObject> sArrowList = new List<GameObject>();
+
         private void Start()
         {
             this.PoolObjectRouteInitialize();
@@ -25,15 +30,23 @@
         private void SetNormalArrowGameObject()
         {
             this.normalArrow = Resources.Load("ArrowDefence_Arrows/Object_Arrow") as GameObject;
-
-            GameObject[] nmArrowObj = new GameObject[normalArrowCounts];
-
-            for(int i =0;i<normalArrowCounts;i++)
+            
+            //List Managing Object Pool
+            for(int i = 0;i<normalArrowCounts;i++)
             {
-                nmArrowObj[i] = Instantiate(normalArrow);
-                nmArrowObj[i].SetActive(false);
-                nmArrowObj[i].transform.SetParent(NormalArrowObjects.transform);
+                nArrowList.Add(Instantiate(normalArrow));
+                nArrowList[i].SetActive(false);
+                nArrowList[i].transform.SetParent(NormalArrowObjects, false);
             }
+            
+            //GameObject[] nmArrowObj = new GameObject[normalArrowCounts];
+            //
+            //for(int i =0;i<normalArrowCounts;i++)
+            //{
+            //    nmArrowObj[i] = Instantiate(normalArrow);
+            //    nmArrowObj[i].SetActive(false);
+            //    nmArrowObj[i].transform.SetParent(NormalArrowObjects.transform, false);
+            //}
         }
 
         private void PoolObjectRouteInitialize()
@@ -54,17 +67,25 @@
         public GameObject LoadNormalArrow(AD_BowController adBow)
         {
             //NormalArrows Object내의 Disable된 화살 오브젝트를 반환
-            for(int i =0;i<normalArrowCounts;i++)
-            {
-                if(NormalArrowObjects.transform.GetChild(i).gameObject.activeSelf == false)
-                {
-                    return NormalArrowObjects.transform.GetChild(i).gameObject;
-                }
-            }
+            //for(int i =0;i<normalArrowCounts;i++)
+            //{
+            //    if(NormalArrowObjects.transform.GetChild(i).gameObject.activeSelf == false)
+            //    {
+            //        return NormalArrowObjects.transform.GetChild(i).gameObject;
+            //    }
+            //}
 
             //** 끝내 Disable된 화살 오브젝트를 찾지 못한 경우 for문 다시 돌리도록 기능수정
-            //** 비활성화된 Arrow를 찾기위해 탐색하는 위치 Last Index부터 탐색하도록 수정
-            //*** List로 관리되도록 수정
+            //* Last Index 부터 탐색하도록 수정 완료.
+            //* List로 관리되도록 수정 완료.
+
+            for(int i = normalArrowCounts - 1; i >= 0; i--)
+            {
+                if(nArrowList[i].activeSelf == false)
+                {
+                    return nArrowList[i];
+                }
+            }
 
             return null;
         }
@@ -79,17 +100,17 @@
         {
             switch (objKind)
             {
-                case AD_GameScripts.Arrow:
-                    if (objType == (int)AD_GameScripts.ArrowAttrubute.Arrow_Normal)
+                case AD_Data.Arrow:
+                    if (objType == (int)AD_Data.ArrowAttrubute.Arrow_Normal)
                     {
                         targetObj.SetActive(false);
-                        targetObj.transform.SetParent(this.NormalArrowObjects.transform);
+                        targetObj.transform.SetParent(this.NormalArrowObjects.transform, false);
                     }
-                    else if (objType == (int)AD_GameScripts.ArrowAttrubute.Arrow_Effect)
+                    else if (objType == (int)AD_Data.ArrowAttrubute.Arrow_Effect)
                     {
 
                     }
-                    else if (objType == (int)AD_GameScripts.ArrowAttrubute.Arrow_Special)
+                    else if (objType == (int)AD_Data.ArrowAttrubute.Arrow_Special)
                     {
 
                     }
@@ -98,9 +119,9 @@
                         CatLog.Log("Arrow Object Type is Wrong, Can't Collect Object");
                     }
                     break;
-                case AD_GameScripts.Effect:
+                case AD_Data.Effect:
                     break;
-                case AD_GameScripts.Monster:
+                case AD_Data.Monster:
                     break;
                 default:
                     break;

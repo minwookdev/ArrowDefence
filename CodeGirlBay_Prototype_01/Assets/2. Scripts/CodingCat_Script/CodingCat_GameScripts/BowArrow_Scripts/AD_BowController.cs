@@ -5,7 +5,6 @@
     using UnityEngine.UI;
     using CodingCat_Scripts;
     using System.Collections;
-    using DG.Tweening;
 
     public class AD_BowController : MonoBehaviour
     {
@@ -32,7 +31,7 @@
         //The Angle Variable (angle between Click point and Bow).
         private float bowAngle;
         private Vector3 direction;
-        public Vector3 currentClickPosition;
+        private Vector3 currentClickPosition;
         private Vector3 tempEulerAngle;
 
         //The Distance between first click and Bowlope
@@ -49,9 +48,9 @@
         //Bow Pull State variable
         private bool bowPullBegan;
         public Image bowPivotImg;
-        public RectTransform areaPullTypeRect;
         //Pull Type 1 Save Position Variable
-        public Vector2 initialTouchPos; //InitialTouchPos 현재 두가지 용도로 사용중, 추후 수정.
+        private Vector2 initialTouchPos; //InitialTouchPos 현재 두가지 용도로 사용중, 추후 수정.
+        private Vector2 limitTouchPosVec;
         public float touchRadius = 1f;
         public Transform rightClampPoint, leftClampPoint;
 
@@ -70,8 +69,7 @@
         private Vector3 initialArrowRotation = new Vector3(0f, 0f, -90f);
 
         [Header("Test Object")]
-        public GameObject LoadedArrow;
-        public Action TestFunction; 
+        private Action TestFunction; 
 
         private void Awake()
         {
@@ -312,20 +310,28 @@
             //일정 이상 당겨져야 발사되도록 할 조건
             if (arrowForce.magnitude < requiredLaunchForce)
             {
+                //Reset Position
+                currentLoadedArrow.transform.position = rightClampPoint.transform.position;
+
                 CatLog.Log("Not Enough Require Force, More Pulling the Bow !");
                 return;
             }
 
             AD_BowRope.instance.arrowCatchPoint = null;
             currentLoadedArrow.transform.SetParent(arrowParent);
+            //발사되고 난 뒤에 SetParent로 Canvas의 Child로 바꿔주지 않으면 활 각도 돌릴때마다 자식으로 취급되서
+            //날아가면서 화살각도가 휘어버린다
+
             //Arrow Trail Active
-            currentLoadedArrow.transform.GetChild(2).GetChild(0).gameObject.SetActive(true);
+            //currentLoadedArrow.transform.GetChild(2).GetChild(0).gameObject.SetActive(true);
             currentLoadedArrow.GetComponent<Rigidbody2D>().isKinematic = false;
 
             arrowComponent.isLaunched = true;
 
             //Add Force Arrow
             currentLoadedArrow.GetComponent<Rigidbody2D>().AddForce(arrowForce, ForceMode2D.Force);
+            arrowComponent.arrowTrail.SetActive(true);
+
             currentLoadedArrow = null;
             arrowComponent = null;
 
@@ -335,14 +341,12 @@
 
         private bool CheckTouchRaius(Vector2 pos)
         {
-            this.initialTouchPos = mainCam.ScreenToWorldPoint(pos);
-
-            float touchDistanceFromBow = (initialTouchPos - (Vector2)transform.position).magnitude;
-
-            CatLog.Log("Check Touch Radius !");
+            this.limitTouchPosVec = mainCam.ScreenToWorldPoint(pos);
+            
+            float touchDistanceFromBow = (limitTouchPosVec - (Vector2)transform.position).magnitude;
 
             if (touchDistanceFromBow <= touchRadius) return true;
-            else return false;
+            else CatLog.WLog("Touch Aroud Bow !");   return false;
         }
 
         private void SetInitialTouchPos(Vector2 pos)
@@ -356,13 +360,16 @@
         {
             //Get Disabled Arrow from PoolManager Object
             //만약 Disable 처리된 화살이 없을 경우 재 탐색하는 기능 필요
-            this.currentLoadedArrow = CatPoolManager.Instance.LoadNormalArrow(this);
-            this.arrowComponent = currentLoadedArrow.GetComponent<AD_Arrow>();
-            var arrow = currentLoadedArrow;
+            //this.currentLoadedArrow = CatPoolManager.Instance.LoadNormalArrow(this);
+            //this.arrowComponent = currentLoadedArrow.GetComponent<AD_Arrow>();
+            //var arrow = currentLoadedArrow;
 
-            yield return null;
+            var arrow = CatPoolManager.Instance.LoadNormalArrow(this);
 
-            arrow.transform.SetParent(this.transform);
+            currentLoadedArrow = arrow;
+            arrowComponent     = arrow.GetComponent<AD_Arrow>();
+
+            arrow.transform.SetParent(this.transform, false);
             arrow.transform.localScale                     = this.initialArrowScale;
             arrow.transform.localEulerAngles               = this.initialArrowRotation;
             arrow.transform.position   = ReturnInitArrowPos(arrow.transform.position);
@@ -372,13 +379,10 @@
             arrow.GetComponent<AD_Arrow>().leftClampPoint  = this.leftClampPoint;
             arrow.GetComponent<AD_Arrow>().rightClampPoint = this.rightClampPoint;
 
+            yield return null;
+
             //After than Arrow Initial Setting, Activate Objects for Visible
             arrow.SetActive(true);
-        }
-
-        private IEnumerator ResetArrow(GameObject loadedArrow)
-        {
-            yield return null;
         }
 
         /// <summary>

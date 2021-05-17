@@ -66,18 +66,8 @@
 
         public GameObject LoadNormalArrow(AD_BowController adBow)
         {
-            //NormalArrows Object내의 Disable된 화살 오브젝트를 반환
-            //for(int i =0;i<normalArrowCounts;i++)
-            //{
-            //    if(NormalArrowObjects.transform.GetChild(i).gameObject.activeSelf == false)
-            //    {
-            //        return NormalArrowObjects.transform.GetChild(i).gameObject;
-            //    }
-            //}
-
             //** 끝내 Disable된 화살 오브젝트를 찾지 못한 경우 for문 다시 돌리도록 기능수정
-            //* Last Index 부터 탐색하도록 수정 완료.
-            //* List로 관리되도록 수정 완료.
+            //** 활 오브젝트에서 요청 시 화살이 부족할 경우 추가로 Instance하는 기능 구현
 
             for(int i = normalArrowCounts - 1; i >= 0; i--)
             {

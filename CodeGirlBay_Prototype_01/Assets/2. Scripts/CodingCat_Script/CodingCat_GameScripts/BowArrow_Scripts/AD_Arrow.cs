@@ -21,7 +21,6 @@
 
         //Launch Power for the Arrow
         private float powerFactor = 2000;
-        private TrailRenderer trail;
 
         //Arrow Attributes
         //private AD_GameScripts.ArrowAttrubute arrowAttribute;
@@ -34,7 +33,7 @@
 
             //Initial Arrow Childs
             if (arrowChatchPoint == null) arrowChatchPoint = transform.GetChild(2);
-            if (arrowTrail == null)       arrowTrail = transform.GetChild(2).GetChild(0).gameObject;
+            if (arrowTrail == null) arrowTrail = transform.GetChild(2).GetChild(0).gameObject;
         }
 
         private void Update()

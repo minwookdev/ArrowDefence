@@ -322,15 +322,16 @@
             //발사되고 난 뒤에 SetParent로 Canvas의 Child로 바꿔주지 않으면 활 각도 돌릴때마다 자식으로 취급되서
             //날아가면서 화살각도가 휘어버린다
 
-            //Arrow Trail Active
-            //currentLoadedArrow.transform.GetChild(2).GetChild(0).gameObject.SetActive(true);
             currentLoadedArrow.GetComponent<Rigidbody2D>().isKinematic = false;
-
             arrowComponent.isLaunched = true;
 
             //Add Force Arrow
             currentLoadedArrow.GetComponent<Rigidbody2D>().AddForce(arrowForce, ForceMode2D.Force);
+            //Arrow Trail Active
+            //arrowComponent.arrowTrail.gameObject.SetActive(true);
+            //arrowComponent.arrowTrail.Clear();
             arrowComponent.arrowTrail.SetActive(true);
+            arrowComponent.arrowTrail.GetComponent<TrailRenderer>().Clear();
 
             currentLoadedArrow = null;
             arrowComponent = null;
@@ -358,12 +359,6 @@
 
         private IEnumerator ArrowReload()
         {
-            //Get Disabled Arrow from PoolManager Object
-            //만약 Disable 처리된 화살이 없을 경우 재 탐색하는 기능 필요
-            //this.currentLoadedArrow = CatPoolManager.Instance.LoadNormalArrow(this);
-            //this.arrowComponent = currentLoadedArrow.GetComponent<AD_Arrow>();
-            //var arrow = currentLoadedArrow;
-
             var arrow = CatPoolManager.Instance.LoadNormalArrow(this);
 
             currentLoadedArrow = arrow;

@@ -2373,10 +2373,20 @@ PrefabInstance:
       propertyPath: rightClampPoint
       value: 
       objectReference: {fileID: 720246152}
+    - target: {fileID: 6082609631992581027, guid: f7c77f6295899b64fb1cdb6894b3117c,
+        type: 3}
+      propertyPath: arrowTrail
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 6082609631992581028, guid: f7c77f6295899b64fb1cdb6894b3117c,
         type: 3}
       propertyPath: m_Name
       value: Object_Arrow
+      objectReference: {fileID: 0}
+    - target: {fileID: 6082609631992581032, guid: f7c77f6295899b64fb1cdb6894b3117c,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6082609632005288340, guid: f7c77f6295899b64fb1cdb6894b3117c,
         type: 3}

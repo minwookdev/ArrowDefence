@@ -4,18 +4,23 @@ using UnityEngine;
 using UnityEngine.UI;
 
 using CodingCat_Scripts;
+using DG.Tweening;
 
 public class MainSceneRoute : MonoBehaviour
 {
     [SerializeField]
-    private CanvasGroup fadeCanvasGroup;
-    private bool isFadePlaying;
+    //private CanvasGroup fadeCanvasGroup;
+    //private bool isFadePlaying;
 
-    public float fadeTime = 2f;
+    //public float fadeTime = 2f;
 
     [Header("Main Scene UI Elements")]
     public GameObject optionPanel;
     public GameObject battleScenePanel;
+
+    [Header("Screen Fade")]
+    public Image imgFade;
+    private float fadeTime = 2.0f;
 
     private void Start()
     {
@@ -26,52 +31,57 @@ public class MainSceneRoute : MonoBehaviour
 
     public void OptionBtnAction() => optionPanel.SetActive(optionPanel.activeSelf ? false : true);
 
-    public void BtnActionBattleSceneLoad() => SceneManagement.Instance.LoadBattleScene();
+    public void BtnActionBattleSceneLoad() => SceneLoader.Instance.LoadScene(AD_Data.Scene_Battle_Dev);
 
     public void BtnActionBattle() => battleScenePanel.SetActive(battleScenePanel.activeSelf ? false : true);
 
-    public void BtnLoadStartScene() => SceneManagement.Instance.LoadStartScene();
+    public void BtnLoadStartScene() => SceneLoader.Instance.LoadScene(AD_Data.Scene_Title);
+
+    public void BtnLoadMain()
+    {
+        imgFade.DOFade(1, fadeTime).OnStart(() => imgFade.raycastTarget = false);
+    }
 
     #endregion
 
     #region Fade Effect Test Function
-
-    public void FadeTestBtn() => StartFadeEffect(true);  
-
-    private void StartFadeEffect(bool isFade)
-    {
-        if (isFadePlaying) return;
-
-        if (isFade)
-        {
-            fadeCanvasGroup.gameObject.SetActive(true);
-        }
-
-        StartCoroutine(this.Fade(isFade));
-    }
-
-    private IEnumerator Fade(bool isFadeIn)
-    {
-        isFadePlaying = true;
-
-        float timer = 0f;
-
-        while (timer <= 1f)
-        {
-            yield return null;
-            timer += Time.deltaTime / fadeTime;
-
-            fadeCanvasGroup.alpha = Mathf.Lerp(isFadeIn ? 0 : 1, isFadeIn ? 1 : 0, timer);
-        }
-
-        if(!isFadeIn)
-        {
-            fadeCanvasGroup.gameObject.SetActive(false);
-        }
-
-        isFadePlaying = false;
-    }
-
+    //
+    //public void FadeTestBtn() => StartFadeEffect(true);  
+    //
+    //private void StartFadeEffect(bool isFade)
+    //{
+    //    if (isFadePlaying) return;
+    //
+    //    if (isFade)
+    //    {
+    //        fadeCanvasGroup.gameObject.SetActive(true);
+    //    }
+    //
+    //    StartCoroutine(this.Fade(isFade));
+    //}
+    //
+    //private IEnumerator Fade(bool isFadeIn)
+    //{
+    //    isFadePlaying = true;
+    //
+    //    float timer = 0f;
+    //
+    //    while (timer <= 1f)
+    //    {
+    //        yield return null;
+    //        timer += Time.deltaTime / fadeTime;
+    //
+    //        fadeCanvasGroup.alpha = Mathf.Lerp(isFadeIn ? 0 : 1, isFadeIn ? 1 : 0, timer);
+    //    }
+    //
+    //    if(!isFadeIn)
+    //    {
+    //        fadeCanvasGroup.gameObject.SetActive(false);
+    //    }
+    //
+    //    isFadePlaying = false;
+    //}
+    //
     #endregion
 }
 

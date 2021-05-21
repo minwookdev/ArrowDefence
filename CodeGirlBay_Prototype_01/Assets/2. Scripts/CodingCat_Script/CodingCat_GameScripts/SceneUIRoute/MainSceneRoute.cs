@@ -8,41 +8,39 @@ using DG.Tweening;
 
 public class MainSceneRoute : MonoBehaviour
 {
-    [SerializeField]
-    //private CanvasGroup fadeCanvasGroup;
-    //private bool isFadePlaying;
-
-    //public float fadeTime = 2f;
-
-    [Header("Main Scene UI Elements")]
-    public GameObject optionPanel;
-    public GameObject battleScenePanel;
-
-    [Header("Screen Fade")]
-    public Image imgFade;
-    private float fadeTime = 2.0f;
-
-    private void Start()
-    {
-        //StartFadeEffect(false);
-    }
-
-    #region Btn_Actions
-
-    public void OptionBtnAction() => optionPanel.SetActive(optionPanel.activeSelf ? false : true);
-
-    public void BtnActionBattleSceneLoad() => SceneLoader.Instance.LoadScene(AD_Data.Scene_Battle_Dev);
-
-    public void BtnActionBattle() => battleScenePanel.SetActive(battleScenePanel.activeSelf ? false : true);
-
-    public void BtnLoadStartScene() => SceneLoader.Instance.LoadScene(AD_Data.Scene_Title);
-
-    public void BtnLoadMain()
-    {
-        imgFade.DOFade(1, fadeTime).OnStart(() => imgFade.raycastTarget = false);
-    }
-
-    #endregion
+    //[SerializeField]
+    ////private CanvasGroup fadeCanvasGroup;
+    ////private bool isFadePlaying;
+    //
+    ////public float fadeTime = 2f;
+    //
+    //[Header("Main Scene UI Elements")]
+    //public GameObject optionPanel;
+    //public GameObject battleScenePanel;
+    //
+    //[Header("Screen Fade")]
+    //public Image imgFade;
+    //private float fadeTime = 2.0f;
+    //
+    //private void Start()
+    //{
+    //    //StartFadeEffect(false);
+    //}
+    //
+    //#region Btn_Actions
+    //
+    //public void OptionBtnAction() => optionPanel.SetActive(optionPanel.activeSelf ? false : true);
+    //
+    //public void BtnActionBattleSceneLoad() => SceneLoader.Instance.LoadScene(AD_Data.Scene_Battle_Dev);
+    //
+    //public void BtnActionBattle() => battleScenePanel.SetActive(battleScenePanel.activeSelf ? false : true);
+    //
+    //public void BtnLoadStartScene() => SceneLoader.Instance.LoadScene(AD_Data.Scene_Title);
+    //
+    //public void BtnLoadMain()
+    //{
+    //    imgFade.DOFade(1, fadeTime).OnStart(() => imgFade.raycastTarget = false);
+    //}
 
     #region Fade Effect Test Function
     //

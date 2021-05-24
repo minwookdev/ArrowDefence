@@ -1,47 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using CodingCat_Scripts;
 using UnityEngine;
-using UnityEngine.UI;
-
-using CodingCat_Scripts;
 using DG.Tweening;
 
 public class MainSceneRoute : MonoBehaviour
 {
-    //[SerializeField]
-    ////private CanvasGroup fadeCanvasGroup;
-    ////private bool isFadePlaying;
-    //
-    ////public float fadeTime = 2f;
-    //
-    //[Header("Main Scene UI Elements")]
-    //public GameObject optionPanel;
-    //public GameObject battleScenePanel;
-    //
-    //[Header("Screen Fade")]
-    //public Image imgFade;
-    //private float fadeTime = 2.0f;
-    //
-    //private void Start()
-    //{
-    //    //StartFadeEffect(false);
-    //}
-    //
-    //#region Btn_Actions
-    //
-    //public void OptionBtnAction() => optionPanel.SetActive(optionPanel.activeSelf ? false : true);
-    //
-    //public void BtnActionBattleSceneLoad() => SceneLoader.Instance.LoadScene(AD_Data.Scene_Battle_Dev);
-    //
-    //public void BtnActionBattle() => battleScenePanel.SetActive(battleScenePanel.activeSelf ? false : true);
-    //
-    //public void BtnLoadStartScene() => SceneLoader.Instance.LoadScene(AD_Data.Scene_Title);
-    //
-    //public void BtnLoadMain()
-    //{
-    //    imgFade.DOFade(1, fadeTime).OnStart(() => imgFade.raycastTarget = false);
-    //}
-
     #region Fade Effect Test Function
     //
     //public void FadeTestBtn() => StartFadeEffect(true);  
@@ -81,6 +43,91 @@ public class MainSceneRoute : MonoBehaviour
     //}
     //
     #endregion
+
+    public GameObject currentOpenedMenu;
+    public GameObject[] menuObjects = new GameObject[4];
+
+    private Sequence exitSeq;
+    private bool isTweenDone = true;
+    private float openMenuTime = 0.5f;
+    private float closeMenuTime = 0.2f;
+
+    private void Start()
+    {
+        //스타트 시 초기 Scale 값 초기화
+        //MenuOpen Tween에 잔상 방지 -> 추후 수정
+        foreach (var item in menuObjects)
+        {
+            item.transform.localScale = Vector3.zero;
+        }
+
+        if(openMenuTime <= closeMenuTime)
+        {
+            CatLog.WLog("OpenMenuTime is less than CloseMenuTime. need to modify the variable.");
+        }
+    }
+
+    public void OpenMenuItem(GameObject target)
+    {
+        if(target.activeSelf == false && isTweenDone)
+        {
+            if (currentOpenedMenu != null)
+            {
+                currentOpenedMenu.GetComponent<CanvasGroup>()
+                                 .DOFade(0, closeMenuTime)
+                                 .OnStart(() => currentOpenedMenu.GetComponent<CanvasGroup>()
+                                                                 .blocksRaycasts = false)
+                                 .OnComplete(() => { currentOpenedMenu.SetActive(false);
+                                 });
+            }
+
+            this.MenuOpenTween(target.transform);
+        }
+        else
+        {
+            CatLog.Log("This Menu is Already Opened or Menu Openning");
+        }
+    }
+
+    public void ExitMenuItem(GameObject target)
+    {
+        if(currentOpenedMenu == target)
+        {
+            //target.SetActive(false);
+            //currentOpenedMenu = null;
+            target.GetComponent<CanvasGroup>().DOFade(0, closeMenuTime)
+                                              .OnStart(() => target.GetComponent<CanvasGroup>()
+                                                                  .blocksRaycasts = false)
+                                              .OnComplete(() => { target.SetActive(false);
+                                                                  currentOpenedMenu = null;});
+        }
+        else
+        {
+            CatLog.WLog("Wrong Exit Button Route Check This Button. ");
+        }
+    }
+
+    //매번 값을 넣어주는 방식이 아닌 Repeat처럼 활용할 방법은 없는지?
+    private void MenuOpenTween(Transform target)
+    {
+        var targetCG = target.GetComponent<CanvasGroup>();
+
+        exitSeq = DOTween.Sequence();
+        exitSeq.SetAutoKill(true).
+           OnStart(() => {
+               this.isTweenDone = false;
+               target.gameObject.SetActive(true);
+               targetCG.blocksRaycasts = false;
+               targetCG.alpha = 0;
+               target.localScale = Vector3.zero;
+           })
+          .Append(target.DOScale(1f, openMenuTime))
+          .Join(targetCG.DOFade(1f, openMenuTime))
+          .OnComplete(() => { this.isTweenDone = true;
+                              targetCG.blocksRaycasts = true;
+                              currentOpenedMenu = target.gameObject;
+          });
+    }
 }
 
 //using System.Collections;

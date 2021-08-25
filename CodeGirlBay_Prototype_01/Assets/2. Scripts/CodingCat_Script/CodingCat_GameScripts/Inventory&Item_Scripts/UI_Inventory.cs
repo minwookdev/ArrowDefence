@@ -173,10 +173,10 @@
                 default: CatLog.WLog("UI Inventory : Wrong Number");              break;
             }
 
-            //if (inventoryList.Count <= 0) return; //Inventory 아무것도 없으면 return
+            CatLog.Log($"Get Player Inventory List Count : {inventoryList.Count}");
 
-            CatLog.Log($"Inventory List Count : {inventoryList.Count}");
-            
+            //if (inventoryList.Count <= 0) return; //Inventory 아무것도 없으면 return 하는 로직 추가
+
             if(inventoryList.Count > slotList.Count)
             {
                 var count = inventoryList.Count - slotList.Count;

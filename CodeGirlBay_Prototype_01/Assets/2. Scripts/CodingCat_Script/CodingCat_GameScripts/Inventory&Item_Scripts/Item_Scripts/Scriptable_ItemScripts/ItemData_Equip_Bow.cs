@@ -47,6 +47,8 @@
         }
     }
 
+#if UNITY_EDITOR
+
     [CustomEditor(typeof(ItemData_Equip_Bow))]
     public class BowItemDataScriptEditor : Editor
     {
@@ -98,4 +100,6 @@
             //Editor 는 보여줄 뿐이다.. 여기서 스킬을 할당한다고 해도 저장되지 않는다
         }
     }
+
+#endif
 }

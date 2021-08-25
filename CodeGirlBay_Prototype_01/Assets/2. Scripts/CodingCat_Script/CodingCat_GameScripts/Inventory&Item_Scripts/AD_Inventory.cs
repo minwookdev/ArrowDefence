@@ -264,9 +264,6 @@
             var itemList = invenList.FindAll(x => x.GetType() == typeof(Item_Bow));
             //var itemList = invenList.FindAll(x => x is Item_Bow);
             //var itemList = invenList.FindAll(x => x.Equals(Item_Bow)); // -> 이건 잘못됨
-
-            CatLog.Log($"itemList Count : {itemList.Count}");
-
             return itemList;
         }
 
@@ -298,9 +295,6 @@
         {
             var itemList = invenList.FindAll(x => x.Item_Type == ITEMTYPE.ITEM_MATERIAL ||
                                                   x.Item_Type == ITEMTYPE.ITEM_CONSUMABLE);
-
-            CatLog.Log($"itemList Count : {itemList.Count}");
-
             return itemList;
         }
     }

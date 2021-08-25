@@ -1,10 +1,10 @@
 ﻿namespace CodingCat_Games
 {
     using System;
+    using System.Collections;
     using UnityEngine;
     using UnityEngine.UI;
     using CodingCat_Scripts;
-    using System.Collections;
 
     public class AD_BowController : MonoBehaviour
     {
@@ -56,8 +56,8 @@
 
         [Header("Arrow Variable")]
         //Arrow Relation Variables
-        public AD_Arrow arrowComponent;
-        public GameObject currentLoadedArrow;
+        [ReadOnly] public AD_Arrow arrowComponent;
+        [ReadOnly] public GameObject currentLoadedArrow;
         private Vector3 arrowPosition;
         private Vector2 arrowForce;
         private float requiredLaunchForce = 250f;
@@ -69,17 +69,25 @@
         private Vector3 initialArrowRotation = new Vector3(0f, 0f, -90f);
 
         [Header("Test Object")]
-        private Action TestFunction; 
+        private Action TestFunction;
+
+        /// <summary>
+        /// Bow Skill Sets Delegate
+        /// </summary>
+        public delegate void BowSkillsDel(float rot, float angle, byte arrownum, Transform arrowparent,
+                                          AD_BowController bowcontroller, Vector3 initScale, Vector3 initpos, Vector2 force);
+        public BowSkillsDel bowSkillSet;
+        //굳이 Event 쓸 필요 없을거같아서 그냥 delegate로 일단 만듦
 
         private void Awake()
         {
-            if (instance = null)
+            if (instance == null)
             {
                 instance = this;
             }
         }
 
-        private void Start()
+        private IEnumerator Start()
         {
             //Play Platform Check -> Move Manager Script.
             if (Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer)
@@ -105,9 +113,11 @@
 
                 if(transform.GetChild(3).name != "Bow_ClampPoints")
                 {
-                    CatLog.WLog("Bow Clamp Point is in the wrong Lcoation. Check The Bow");
+                    CatLog.WLog("Bow Clamp Point is in the wrong Location. Check The Bow");
                 }
             }
+
+            if (pullType == BowPullType.Around_Bow) bowPivotImg.rectTransform.position = transform.position;
 
             //TestFunction Set
             TestFunction = () => {
@@ -118,7 +128,11 @@
 
                 // ↑ Improvement / fix
                 //currentLoadedArrow.transform.position = ReturnInitArrowPos(currentLoadedArrow.transform.position);
-            }; 
+
+            }; TestFunction();
+
+            yield return new WaitUntil(() => CCPooler.IsInitialized);
+            StartCoroutine(this.ArrowReload());
         }
 
         private void Update()
@@ -172,7 +186,9 @@
 
             if(Input.GetKeyDown(KeyCode.N))
             {
-                this.TestFunction();
+                //this.TestFunction();
+
+                Time.timeScale = 0.1f;
             }
         }
 
@@ -195,7 +211,10 @@
                 //조건 1. 활 주변의 일정거리 주변을 클릭 | 터치했을때만 조준 가능
                 case BowPullType.Around_Bow:
                     if (!this.CheckTouchRaius(pos)) return;
-                    radius = Vector2.Distance(AD_BowRope.instance.transform.position, mainCam.ScreenToWorldPoint(pos));
+                    #region ORIGIN_SCRIPTS
+                    //radius = Vector2.Distance(AD_BowRope.instance.transform.position, mainCam.ScreenToWorldPoint(pos));
+                    #endregion
+                    radius = Vector2.Distance(transform.position, mainCam.ScreenToWorldPoint(pos));
                     break;
 
                 //조건 2. 처음 클릭한 곳 기준으로 활의 기준점 지정
@@ -215,7 +234,12 @@
             }
 
             bowPullBegan = true;
-            CatLog.Log("Bow Pull Start");
+
+            //if(currentLoadedArrow.transform.parent != this.transform)
+            //{
+            //    //화살을 불러올 때 간혹 Parent가 잡히지 않는 경우가 있음
+            //    currentLoadedArrow.transform.SetParent(this.transform);
+            //}
         }
 
         private void BowMoved(Vector2 pos)
@@ -226,23 +250,47 @@
             //Pull Type 추가에 따른 스크립트 구분
             if (pullType == BowPullType.Around_Bow)
             {
+                #region ORIGIN_SCRIPTS
+                //this.direction = currentClickPosition - transform.position;
+                //
+                ////클릭 위치에 따른 활 자체의 각도를 변경할 변수 저장
+                //this.bowAngle = Mathf.Atan2(direction.x, -direction.y) * Mathf.Rad2Deg + 90;
+                //
+                ////Set Direction of the Bow
+                //tempEulerAngle = transform.eulerAngles;
+                //tempEulerAngle.z = bowAngle;
+                //transform.eulerAngles = tempEulerAngle;
+                //
+                ////Calculate current cPoint based on angle and radius (center.x - r * cos(theta), center.y - r * sin(theta))
+                //cPoint.x = AD_BowRope.instance.transform.position.x - radius * Mathf.Cos(bowAngle * Mathf.Deg2Rad);
+                //cPoint.y = AD_BowRope.instance.transform.position.y - radius * Mathf.Sin(bowAngle * Mathf.Deg2Rad);
+                //
+                ////Pull or Drag the arrow ralative to Click Position
+                //distance = (AD_BowRope.instance.transform.position - currentClickPosition) -
+                //           (AD_BowRope.instance.transform.position - cPoint);
+                #endregion 
+
                 this.direction = currentClickPosition - transform.position;
 
                 //클릭 위치에 따른 활 자체의 각도를 변경할 변수 저장
                 this.bowAngle = Mathf.Atan2(direction.x, -direction.y) * Mathf.Rad2Deg + 90;
-
+                //this.bowAngle = Mathf.Atan2(direction.x, -direction.y) * Mathf.Rad2Deg;
+                
                 //Set Direction of the Bow
                 tempEulerAngle = transform.eulerAngles;
                 tempEulerAngle.z = bowAngle;
                 transform.eulerAngles = tempEulerAngle;
-
+                
                 //Calculate current cPoint based on angle and radius (center.x - r * cos(theta), center.y - r * sin(theta))
-                cPoint.x = AD_BowRope.instance.transform.position.x - radius * Mathf.Cos(bowAngle * Mathf.Deg2Rad);
-                cPoint.y = AD_BowRope.instance.transform.position.y - radius * Mathf.Sin(bowAngle * Mathf.Deg2Rad);
-
+                cPoint.x = transform.position.x - radius * Mathf.Cos(bowAngle * Mathf.Deg2Rad);
+                cPoint.y = transform.position.y - radius * Mathf.Sin(bowAngle * Mathf.Deg2Rad);
+                
                 //Pull or Drag the arrow ralative to Click Position
-                distance = (AD_BowRope.instance.transform.position - currentClickPosition) -
-                           (AD_BowRope.instance.transform.position - cPoint);
+                distance = (transform.position - currentClickPosition) -
+                           (transform.position - cPoint);
+                
+                //위 공식과 거리 차이가 있는지 체크 
+
             }
             else if (pullType == BowPullType.FirstTouch_Position)
             {
@@ -278,6 +326,7 @@
                 {
                     //Path Drawer
                     //추후 Path Drawer 작업 후 활 당김 시, 조건 사용
+                    //조준경 아이템을 사용했을 때 나타나는 효과로서 작업
                 }
                 else
                 {
@@ -295,7 +344,7 @@
 
                 launchArrow = true;
 
-                CatLog.Log("Bow Released !");
+                //CatLog.Log("Bow Released !");
             }
         }
 
@@ -303,11 +352,12 @@
         {
             if (currentLoadedArrow == null)
             {
+                //장전할 수 있는 화살이 없음 -> CatPoolManager 체크 또는 Pool Arrow Object 갯수 체크
                 CatLog.WLog("Current Loaded Arrow is Null, Can't Launch the Arrow");
                 return;
             }
 
-            //일정 이상 당겨져야 발사되도록 할 조건
+            //일정 이상 당겨져야 발사되도록 할 조건 :: 다시 점검 
             if (arrowForce.magnitude < requiredLaunchForce)
             {
                 //Reset Position
@@ -318,23 +368,15 @@
             }
 
             AD_BowRope.instance.arrowCatchPoint = null;
-            currentLoadedArrow.transform.SetParent(arrowParent);
-            //발사되고 난 뒤에 SetParent로 Canvas의 Child로 바꿔주지 않으면 활 각도 돌릴때마다 자식으로 취급되서
-            //날아가면서 화살각도가 휘어버린다
 
-            currentLoadedArrow.GetComponent<Rigidbody2D>().isKinematic = false;
-            arrowComponent.isLaunched = true;
+            arrowComponent.ShotArrow(arrowForce, arrowParent);
 
-            //Add Force Arrow
-            currentLoadedArrow.GetComponent<Rigidbody2D>().AddForce(arrowForce, ForceMode2D.Force);
-            //Arrow Trail Active
-            //arrowComponent.arrowTrail.gameObject.SetActive(true);
-            //arrowComponent.arrowTrail.Clear();
-            arrowComponent.arrowTrail.SetActive(true);
-            arrowComponent.arrowTrail.GetComponent<TrailRenderer>().Clear();
+            //Active Bow Skill
+            bowSkillSet?.Invoke(transform.eulerAngles.z, 30f, 2, arrowParent, this, initialArrowScale,
+                                arrowComponent.arrowChatchPoint.transform.position, arrowForce);
 
             currentLoadedArrow = null;
-            arrowComponent = null;
+            arrowComponent     = null;
 
             //ReLoad Logic Start
             StartCoroutine(this.ArrowReload());
@@ -359,25 +401,39 @@
 
         private IEnumerator ArrowReload()
         {
-            var arrow = CatPoolManager.Instance.LoadNormalArrow(this);
+            #region ORIGIN_RELAOD
+            //var arrow = CatPoolManager.Instance.LoadNormalArrow(this);
+            //
+            //currentLoadedArrow = arrow;
+            //arrowComponent     = arrow.gameObject.GetComponent<AD_Arrow>();
+            //loadedArrowRbody   = arrow.gameObject.GetComponent<Rigidbody2D>();
+            //
+            //arrow.transform.SetParent(this.transform, false);
+            //arrow.transform.localScale                     = this.initialArrowScale;
+            //arrow.transform.localEulerAngles               = this.initialArrowRotation;
+            //arrow.transform.position   = ReturnInitArrowPos(arrow.transform.position);
+            //
+            ////Right, Left Clamp 한번만 잡아주면 다음 Active때 잡아주지 않아도 가능한지?
+            //// -> 추후 게임이 시작되기 전에 미리 Clamp 한번에 Initial해주면 어떨지?
+            //arrowComponent.leftClampPoint  = this.leftClampPoint;
+            //arrowComponent.rightClampPoint = this.rightClampPoint;
+            #endregion
 
-            currentLoadedArrow = arrow;
-            arrowComponent     = arrow.GetComponent<AD_Arrow>();
+            #region POOL_RELOAD
 
-            arrow.transform.SetParent(this.transform, false);
-            arrow.transform.localScale                     = this.initialArrowScale;
-            arrow.transform.localEulerAngles               = this.initialArrowRotation;
-            arrow.transform.position   = ReturnInitArrowPos(arrow.transform.position);
+           yield return null;
+            
+            currentLoadedArrow = CCPooler.SpawnFromPool(AD_Data.Arrow_Main_Tag, this.transform, initialArrowScale,
+                                     rightClampPoint.position, Quaternion.identity);
 
-            //Right, Left Clamp 한번만 잡아주면 다음 Active때 잡아주지 않아도 가능한지?
-            // -> 추후 게임이 시작되기 전에 미리 Clamp 한번에 Initial해주면 어떨지?
-            arrow.GetComponent<AD_Arrow>().leftClampPoint  = this.leftClampPoint;
-            arrow.GetComponent<AD_Arrow>().rightClampPoint = this.rightClampPoint;
+            currentLoadedArrow.transform.localEulerAngles = initialArrowRotation;
 
-            yield return null;
+            arrowComponent = currentLoadedArrow.GetComponent<AD_Arrow>();
+            arrowComponent.leftClampPoint = this.leftClampPoint;
+            arrowComponent.rightClampPoint = this.rightClampPoint;
 
-            //After than Arrow Initial Setting, Activate Objects for Visible
-            arrow.SetActive(true);
+            #endregion
+
         }
 
         /// <summary>
@@ -391,10 +447,6 @@
             changePos = rightClampPoint.position;
 
             return changePos;
-
-            //changePos.x = rightClampPoint.position.x;
-            //changePos.y = rightClampPoint.position.y;
-            //changePos.z = rightClampPoint.position.z;
         }
     }
 }

@@ -4,9 +4,10 @@
 
     public class SceneLoader : Singleton<SceneLoader>
     {
-        private readonly string startScene   = AD_Data.Scene_Title;
-        private readonly string mainScene    = AD_Data.Scene_Main;
-        private readonly string battleScene  = AD_Data.Scene_Battle_Dev;
+        //private readonly string startScene   = AD_Data.Scene_Title;
+        //private readonly string mainScene    = AD_Data.Scene_Main;
+        //private readonly string battleScene  = AD_Data.Scene_Battle_Dev;
+
         private readonly string loadingScene = AD_Data.Scene_Loading;
 
         public string NextScene { get; private set; }

@@ -1,6 +1,5 @@
 ﻿namespace CodingCat_Games
 {
-    using CodingCat_Scripts;
     using UnityEngine;
 
     public class AD_ArrowDirection : MonoBehaviour
@@ -16,20 +15,15 @@
         private Vector2 velocity;
         private Rigidbody2D arrowRigidBody;
         private float arrowAngle = 0f;
-
-        //Object Pool Parent
-        private GameObject arrowPoolObject;
+        private AD_Arrow adArrow;
 
         private void Start()
         {
             //Screen top-left, bottom-right 계산
-            topLeftScreenPoint = Camera.main.ScreenToWorldPoint(new Vector2(0, Screen.height));
+            topLeftScreenPoint     = Camera.main.ScreenToWorldPoint(new Vector2(0, Screen.height));
             bottomRightScreenPoint = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, 0));
-
-            if(arrowRigidBody == null)
-            {
-                arrowRigidBody = gameObject.GetComponent<Rigidbody2D>();  
-            }
+            arrowRigidBody         = gameObject.GetComponent<Rigidbody2D>();
+            adArrow                = gameObject.GetComponent<AD_Arrow>();
         }
 
         private void Update()
@@ -48,6 +42,11 @@
             }
         }
 
+        private void OnDisable()
+        {
+            //CCPooler.ReturnToPool(this.gameObject, AD_Data.ARROW_MAIN);
+        }
+
         //arrow Position is Out of Screen, then Destroy the Arrow (When Arrow Firing).
         private void CheckArrowBounds()
         {
@@ -59,7 +58,7 @@
 
             if(!(xIn && yIn))
             {
-                //Disable the Current Arrow
+                //화면 밖으로 나가면 Disable
                 this.DisableArrow();
                 return;
             }
@@ -70,17 +69,13 @@
         /// </summary>
         private void DisableArrow()
         {
-            //RigidBody Kinematic, Trail Disable And Collect Request The Collect To PoolManger
-            //After than, in PoolManager is work disable this Object
             this.arrowRigidBody.isKinematic = true;
-            this.transform.GetChild(2).GetChild(0).gameObject.SetActive(false);
-            CatPoolManager.Instance.CollectObject(AD_Data.Arrow,
-                                                  0, this.gameObject);
+            adArrow.arrowTrail.gameObject.SetActive(false);
+            CCPooler.ReturnToPool(this.gameObject, AD_Data.ARROW_MAIN);
 
-            //CatPoolManager에 Disable 요청하는 이유 -> Arrow클래스에서 자체적으로 Disable할 경우 PoolManager에서 회수 처리하기 복잡해진다.
+            //gameObject.SetActive(false);
             //Disable 하기전에 SerParent 하면 스케일이랑 좌표 난리난다. 항상 SetParent할 경우 Disable 후에 부모바꿔줄것.
-
-            //this.gameObject.SetActive(false);
+            //CCPooler.ReturnToPool 실행으로 비활성화 요청
         }
     }
 }

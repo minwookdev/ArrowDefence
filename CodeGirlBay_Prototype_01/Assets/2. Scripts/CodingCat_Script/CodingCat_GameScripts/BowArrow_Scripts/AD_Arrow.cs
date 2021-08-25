@@ -1,7 +1,5 @@
-﻿namespace CodingCat_Scripts
+﻿namespace CodingCat_Games
 {
-    using CodingCat_Games;
-    using DG.Tweening;
     using UnityEngine;
 
     public class AD_Arrow : MonoBehaviour
@@ -9,7 +7,7 @@
         //The Left, Right Clamp Point for the Arrow.
         public Transform leftClampPoint, rightClampPoint;
         public Transform arrowChatchPoint;
-        public GameObject arrowTrail;
+        public TrailRenderer arrowTrail;
 
         [HideInInspector]
         public bool isLaunched;
@@ -21,19 +19,16 @@
 
         //Launch Power for the Arrow
         private float powerFactor = 2000;
-
-        //Arrow Attributes
-        //private AD_GameScripts.ArrowAttrubute arrowAttribute;
+        private Rigidbody2D rBody;
 
         private void Start()
         {
-            //Set Normal Arrow (TEST)
-            //arrowAttribute = AD_GameScripts.ArrowAttrubute.Arrow_Normal;
-
-
+            //if (ReferenceEquals(rBody, null)) rBody = gameObject.GetComponent<Rigidbody2D
             //Initial Arrow Childs
             if (arrowChatchPoint == null) arrowChatchPoint = transform.GetChild(2);
-            if (arrowTrail == null) arrowTrail = transform.GetChild(2).GetChild(0).gameObject;
+            if (arrowTrail == null) arrowTrail = transform.GetChild(2).GetChild(0).GetComponent<TrailRenderer>();
+            rBody = gameObject.GetComponent<Rigidbody2D>();
+            rBody.gravityScale = 0f;
         }
 
         private void Update()
@@ -45,10 +40,7 @@
             }
         }
 
-        private void OnDisable()
-        {
-            if(this.isLaunched) isLaunched = false;
-        }
+        private void OnDisable() => this.isLaunched = false;
 
         private void ClampPosition()
         {
@@ -69,9 +61,35 @@
             this.power = Vector2.Distance(transform.position, rightClampPoint.position) * powerFactor;
         }
 
-        public void DestroyArrow()
+        public void ShotArrow(Vector2 force, Transform parent)
         {
-            Destroy(this.gameObject);
+            //부모바꿔준 상태에서 발사
+            //발사되고 난 뒤에 SetParent로 Canvas의 Child로 바꿔주지 않으면 활 각도 돌릴때마다 자식으로 취급되서 날아가면서 화살각도가 휘어버린다
+            //발사할 때는 보정 필요함 뒤에 false 붙이면 이상한 곳에서 날아감;
+            transform.SetParent(parent);
+
+            this.rBody.isKinematic = false;
+            //this.rBody.gravityScale = 0;
+            this.isLaunched = true;
+            this.rBody.AddForce(force, ForceMode2D.Force);
+
+            //발사할 때 Clear 해주지 않으면 전에 있던 잔상이 남는다
+            arrowTrail.gameObject.SetActive(true);
+            arrowTrail.Clear();
         }
+
+        //Initial 할 당시에는 Arrow gameobject 자체가 Disable 된 상태라 외부에서 컨트롤이 필요
+        //public void InitialArrowPosition(Transform parent, Vector3 scale, Vector3 eulerAngles, Vector3 position,
+        //                                 Transform leftClamp, Transform rightClamp)
+        //{
+        //    transform.SetParent(parent, false);
+        //    transform.localScale = scale;
+        //    transform.eulerAngles = eulerAngles;
+        //    transform.position = position;
+        //
+        //    //if
+        //    this.rightClampPoint = rightClamp;
+        //    this.leftClampPoint  = leftClamp;
+        //}
     }
 }

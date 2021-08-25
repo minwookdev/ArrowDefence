@@ -16,8 +16,8 @@
         public Slider progressSlider = null;
         public TextMeshProUGUI tmpProgress = null;
 
-        private Text progressText = null;
-        private Text loadingText = null;
+        //private Text progressText = null;
+        //private Text loadingText = null;
 
         private void Start()
         {

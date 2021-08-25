@@ -1,6 +1,12 @@
-﻿using CodingCat_Scripts;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using DG.Tweening;
+using CodingCat_Games;
+using CodingCat_Scripts;
+using System.Linq;
 
 public class MainSceneRoute : MonoBehaviour
 {
@@ -44,27 +50,176 @@ public class MainSceneRoute : MonoBehaviour
     //
     #endregion
 
+    static MainSceneRoute _inst;
+
     public GameObject currentOpenedMenu;
+    [Space(10)]
     public GameObject[] menuObjects = new GameObject[4];
 
     private Sequence exitSeq;
     private bool isTweenDone = true;
     private float openMenuTime = 0.5f;
-    private float closeMenuTime = 0.2f;
+    private float closeMenuTime = 0.2f; //Less than Menu Open Time.
+
+    [Header("Fade Effect Option")]
+    [Space(10)]
+    public CanvasGroup ImgFade = null;
+    public float FadeTime = 2.0f;
+
+    [Header("DEV Options")]
+    public bool IsDevMode = true;
+
+    [Header("Devlope Player Data")]
+    [Space(10)]
+    public AD_PlayerData playerData; // 아이템 Get 해주는 부분 지워주고 정리가능
+
+    [Header("Inventory System")]
+    [SerializeField] private UI_Inventory uiInven;  //정리 가능 지워줘도 된다
+
+    [Header("Popup")]
+    [Space(10)]
+    public BattlePopup battlePop;
+    public ItemInfoPop itemInfoPop;
+
+    public enum STAGELIST
+    {
+        STAGE_FOREST = 1,
+        STAGE_DESERT = 2,
+        STAGE_DUNGEON = 3,
+        STAGE_DEV = 0
+    }
+
+    private void Awake() => _inst = this;
 
     private void Start()
     {
-        //스타트 시 초기 Scale 값 초기화
+        //스타트 시 초기 Scale 값 초기화 (테스트용)
         //MenuOpen Tween에 잔상 방지 -> 추후 수정
         foreach (var item in menuObjects)
         {
-            item.transform.localScale = Vector3.zero;
+            if (item.activeSelf)
+            {
+                currentOpenedMenu = item;
+            }
+            else
+            {
+                item.transform.localScale = Vector3.zero;
+            }
         }
 
-        if(openMenuTime <= closeMenuTime)
+        //Fade Effect When Etnering The Battle Scene (if Don't Work This Function, Enable The DEV Variable)
+        this.OnSceneEnteringFadeOut();
+
+        if (openMenuTime <= closeMenuTime)
         {
             CatLog.WLog("OpenMenuTime is less than CloseMenuTime. need to modify the variable.");
         }
+
+        //Inventory Test Code
+        //if (playerData != null) uiInven.playerData = playerData;
+
+        Action TestAction = () =>
+        {
+            //List<string> TestIntList = new List<string> { "Animal_Cat", "Animal_Dog", "Animal_Rabbit" };
+            //string DebugString = null;
+            //foreach (var item in TestIntList)
+            //{
+            //    DebugString += $"{item}, ";
+            //}
+            //CatLog.Log("Test string List Value : " + DebugString);
+            //DebugString = null;
+
+            //var Num3 = TestIntList.FindAll(x => x == 3);
+            //CatLog.Log(Num3.Count.ToString() + "개 만큼의 객체를 찾았습니다");
+            //for(int i = 0; i < Num3.Count; i++)
+            //{
+            //    CatLog.Log("변경 대상 객체 : " + Num3[i].ToString());
+            //    Num3[i] = 5;
+            //    CatLog.Log($"{Num3[i].ToString()}로 값이 변경되었음");
+            //}
+            //CatLog.Log("Num3 int value : " + Num3[0].ToString());
+
+            //값이 3인 변수를 5로 변경
+            //TestIntList.FindAll(x => x == 3).ForEach(x => x = 5);
+            //foreach(var item in TestIntList.FindAll(x => x == 3))
+            //{
+            //    item = 5;
+            //}
+
+            //TestIntList.Where(x => x == 3).ToList().ForEach(s => s = 5);
+
+            //var index = TestIntList.FindIndex(x => x == 3); //정상작동
+            //TestIntList[index] = 5;
+
+            //var findNum = TestIntList.FindAll(x => x == "Animal_Cat");
+            //for(int i =0;i<findNum.Count;i++)
+            //{
+            //    findNum[i] = "Animal_Whale";
+            //}
+
+            //TestIntList.FirstOrDefault
+
+            //foreach(var item in TestIntList.FindAll(x => x == 3))
+            //{
+            //    item = 5;
+            //}
+
+            //foreach (var item in TestIntList)
+            //{
+            //    DebugString += $"{item}, ";
+            //}
+            //CatLog.Log("Test string List Value : " + DebugString);
+
+            //변경되지 않음..FindAll로 찾은 객체를 깊은 복사로 인해 완전히 다른 List로 되는건지
+
+        }; TestAction();
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.O))
+        {
+            StartCoroutine("SetPlayerItems", playerData);
+        }
+    }
+
+    IEnumerator SetPlayerItems(AD_PlayerData player)
+    {
+        yield return new WaitForSeconds(.5f);
+
+        player.SetTestItems();
+    }
+
+    /// <summary>
+    /// Open Item Information Popup When Click in the Invnetory Items
+    /// </summary>
+    /// <param name="item"></param>
+    public static void OpenItemInfo(AD_item item)
+    {
+        switch (item)
+        {
+            case Item_Consumable conItem:
+                _inst.itemInfoPop.gameObject.SetActive(true);
+                _inst.itemInfoPop.Open_Popup_ConItem(conItem);
+                break;
+            case Item_Material matItem:
+                _inst.itemInfoPop.gameObject.SetActive(true);
+                _inst.itemInfoPop.Open_Popup_MatItem(matItem);     
+                break;
+            case Item_Equipment equipItem:
+                _inst.itemInfoPop.gameObject.SetActive(true);
+                _inst.itemInfoPop.Open_Popup_EquipItem(equipItem); 
+                break;
+            default: break;
+        }
+    }
+
+    /// <summary>
+    /// Update Inventory UI Method
+    /// </summary>
+    public static void UpdateInvenUI()
+    {
+
     }
 
     public void OpenMenuItem(GameObject target)
@@ -127,6 +282,72 @@ public class MainSceneRoute : MonoBehaviour
                               targetCG.blocksRaycasts = true;
                               currentOpenedMenu = target.gameObject;
           });
+    }
+
+    public void StageSelect(int stagedata)
+    {
+        Action<string> actPopup = (str) =>
+        {
+            battlePop.SelectStage = str;
+            battlePop.gameObject.SetActive(true);
+        };
+
+        switch (stagedata)
+        {
+            case (int)STAGELIST.STAGE_DEV:
+                actPopup(AD_Data.StageInfoDev);
+                break;
+            case (int)STAGELIST.STAGE_FOREST:
+                actPopup(AD_Data.StageInfoForest);
+                break;
+            case (int)STAGELIST.STAGE_DESERT:
+                actPopup(AD_Data.StageInfoDesert);
+                break;
+            case (int)STAGELIST.STAGE_DUNGEON:
+                actPopup(AD_Data.StageInfoDungeon);
+                break;
+            default:
+                CatLog.WLog("Not Support This Stage");
+                break;
+        }
+    }
+
+    public void OnBtnLoadBattle()
+    {
+        //현재 DEV 스테이지에 한해서 Scene 이동하도록 구현
+        ImgFade.DOFade(1f, FadeTime)
+               .OnStart(() =>
+               {   ImgFade.blocksRaycasts = false;
+                   ImgFade.gameObject.SetActive(true);
+               })
+               .OnComplete(() => { SceneLoader.Instance.LoadScene(AD_Data.Scene_Battle_Dev); });
+    }
+
+    public void OnBtnLoadTitle()
+    {
+        //현재 Settings Button 을 누르면 바로 Title Scene 으로 이동하도록 구현
+        ImgFade.DOFade(1f, FadeTime)
+               .OnStart(() =>
+               {
+                   ImgFade.blocksRaycasts = false;
+                   ImgFade.gameObject.SetActive(true);
+               })
+               .OnComplete(() => SceneLoader.Instance.LoadScene(AD_Data.Scene_Title));
+    }
+
+    private void OnSceneEnteringFadeOut()
+    {
+        if (IsDevMode) return;
+
+        ImgFade.alpha = 1f;
+
+        ImgFade.DOFade(0f, FadeTime)
+               .OnStart(() => ImgFade.blocksRaycasts = false)
+               .OnComplete(() => 
+               {   ImgFade.blocksRaycasts = true;
+                   ImgFade.gameObject.SetActive(false);
+               });
+
     }
 }
 

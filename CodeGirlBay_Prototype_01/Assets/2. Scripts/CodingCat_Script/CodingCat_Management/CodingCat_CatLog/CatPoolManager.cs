@@ -4,8 +4,10 @@
     using System.Collections.Generic;
     using UnityEngine;
 
-    public class CatPoolManager : Singleton<CatPoolManager>
+    public class CatPoolManager : MonoBehaviour
     {
+        public static CatPoolManager Instance = null;
+
         //각 Object들 GameObject형이 아닌 Transform형으로 변수 수정
         [Header("Arrow Object Pool Route")]
         public Transform ArrowObjects;
@@ -13,13 +15,21 @@
         public Transform EffectArrowObjects;
         public Transform SpecialArrowObjects;
 
-        [Header("Arrows")]                 public GameObject normalArrow;
-        [Header("How Many ? (MAX : 255)")] public byte normalArrowCounts;
+        [Header("Arrows")]                   public GameObject normalArrow;
+        [Header("Count of Arrows [Normal]")] public byte normalArrowCounts;
+
+        [Header("Bow Skill Arrows")]         public GameObject skillArrow;
+        [Header("Count of Arrows [Skill]")]  public byte SkillArrowCount;
 
         [Header("Arrows List")]
         [SerializeField] private List<GameObject> nArrowList = new List<GameObject>();
         [SerializeField] private List<GameObject> eArrowList = new List<GameObject>();
         [SerializeField] private List<GameObject> sArrowList = new List<GameObject>();
+
+        private void Awake()
+        {
+            if(Instance == null || Instance != this) Instance = this;
+        }
 
         private void Start()
         {
@@ -30,6 +40,7 @@
         private void SetNormalArrowGameObject()
         {
             this.normalArrow = Resources.Load("ArrowDefence_Arrows/Object_Arrow") as GameObject;
+            this.skillArrow  = Resources.Load("ArrowDefence_Arrows/Object_Arrow_Skill") as GameObject;
             
             //List Managing Object Pool
             for(int i = 0;i<normalArrowCounts;i++)
@@ -38,7 +49,18 @@
                 nArrowList[i].SetActive(false);
                 nArrowList[i].transform.SetParent(NormalArrowObjects, false);
             }
-            
+
+            #region Skill_Arrow_Ready
+
+            for (int i = 0; i < SkillArrowCount; i++)
+            {
+                eArrowList.Add(Instantiate(skillArrow));
+                eArrowList[i].SetActive(false);
+                eArrowList[i].transform.SetParent(EffectArrowObjects, false);
+            }
+
+            #endregion
+
             //GameObject[] nmArrowObj = new GameObject[normalArrowCounts];
             //
             //for(int i =0;i<normalArrowCounts;i++)
@@ -80,6 +102,30 @@
             return null;
         }
 
+        public GameObject LoadEffectedArrow(AD_BowController adBow)
+        {
+            //Multiple Arrow Test 용 Method
+
+            for(int i = SkillArrowCount - 1; i >= 0; i--)
+            {
+                if(eArrowList[i].activeSelf == false)
+                {
+                    return eArrowList[i];
+                }
+            }
+
+            return null;
+        }
+
+        //public GameObject[] LoadNormalArrows(AD_BowController adBow, int arratSize)
+        //{
+        //    //** 배열로 가져오는 Method 테스팅
+        //
+        //    GameObject[] setArray = new GameObject
+        //
+        //    for(int i =0;i<normal)
+        //}
+
         /// <summary>
         /// PoolManager에서 비활성화 대상을 수집합니다
         /// </summary>
@@ -98,7 +144,8 @@
                     }
                     else if (objType == (int)AD_Data.ArrowAttrubute.Arrow_Effect)
                     {
-
+                        targetObj.SetActive(false);
+                        targetObj.transform.SetParent(this.EffectArrowObjects.transform, false);
                     }
                     else if (objType == (int)AD_Data.ArrowAttrubute.Arrow_Special)
                     {
@@ -120,6 +167,8 @@
 
         //Load, Collect Method 오브젝트 종류별로 나눠놓는게 관리에 좋을것 같음
         //추후 Pool로 관리될 오브젝트가 늘어날것을 감안
+
+        public void ReleaseInstance() => Instance = null;
     }
 }
 

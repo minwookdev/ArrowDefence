@@ -4,8 +4,6 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - TargetCollider
-  - Target
   - ArrowDefence_Bow
   - ArrowDefence_Arrow
   layers:
@@ -29,7 +27,7 @@ TagManager:
   - 
   - 
   - 
-  - 
+  - Tilemap
   - 
   - 
   - 
@@ -42,15 +40,30 @@ TagManager:
   - 
   - 
   m_SortingLayers:
-  - name: Background
-    uniqueID: 344467957
-    locked: 0
-  - name: ForeGround
-    uniqueID: 3500657879
-    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: map:Ground
+    uniqueID: 2425651459
+    locked: 0
+  - name: map:Objects
+    uniqueID: 4250941897
+    locked: 0
+  - name: 
+    uniqueID: 4189426099
+    locked: 0
+  - name: 
+    uniqueID: 293537937
+    locked: 0
+  - name: 
+    uniqueID: 389775653
+    locked: 0
+  - name: 
+    uniqueID: 879352621
+    locked: 0
+  - name: Bow
+    uniqueID: 1856344157
+    locked: 0
   - name: Arrow
-    uniqueID: 2415157723
+    uniqueID: 2938535581
     locked: 0

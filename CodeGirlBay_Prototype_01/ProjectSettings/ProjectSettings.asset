@@ -8,12 +8,12 @@ PlayerSettings:
   AndroidProfiler: 0
   AndroidFilterTouchesWhenObscured: 0
   AndroidEnableSustainedPerformanceMode: 0
-  defaultScreenOrientation: 4
+  defaultScreenOrientation: 0
   targetDevice: 2
   useOnDemandResources: 0
   accelerometerFrequency: 60
-  companyName: DefaultCompany
-  productName: CodeGirlBay_Prototype_01
+  companyName: CodingCatGames
+  productName: Arrow&Defence(TEMP)
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenBackgroundColor: {r: 0.13725491, g: 0.12156863, b: 0.1254902, a: 1}
@@ -171,7 +171,7 @@ PlayerSettings:
     Standalone: com.Company.ProductName
   buildNumber: {}
   AndroidBundleVersionCode: 1
-  AndroidMinSdkVersion: 19
+  AndroidMinSdkVersion: 29
   AndroidTargetSdkVersion: 0
   AndroidPreferredInstallLocation: 1
   aotOptions: 
@@ -245,7 +245,7 @@ PlayerSettings:
   clonedFromGUID: b9742cdd9187f8d449919213d208335a
   templatePackageId: 
   templateDefaultScene: Assets/Scenes/SampleScene.unity
-  AndroidTargetArchitectures: 5
+  AndroidTargetArchitectures: 3
   AndroidSplashScreenScale: 0
   androidSplashScreen: {fileID: 0}
   AndroidKeystoreName: 
@@ -549,7 +549,8 @@ PlayerSettings:
     1: Mobile_Android;Mobile_Apple;PC_Windows;PC_Mac;ENABLE_LOG
     7: Mobile_Android;Mobile_Apple;PC_Windows;PC_Mac;ENABLE_LOG
   platformArchitecture: {}
-  scriptingBackend: {}
+  scriptingBackend:
+    Android: 1
   il2cppCompilerConfiguration: {}
   managedStrippingLevel: {}
   incrementalIl2cppBuild: {}

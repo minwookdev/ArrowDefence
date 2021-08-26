@@ -141,6 +141,7 @@
 
         public void PointMaker(Transform arrowParent, Vector2 initPos, Vector2 destPos)
         {
+#if UNITY_EDITOR
             var posMarker = new GameObject("ArrowRain_dest_marker");
             posMarker.transform.SetParent(arrowParent, true);
             posMarker.transform.localScale = new Vector2(20f, 20f);
@@ -154,6 +155,7 @@
             posMarker.GetComponent<SpriteRenderer>().sortingLayerID = SortingLayer.NameToID("Bow");
             posMarker.GetComponent<SpriteRenderer>().sortingOrder = 2;
             Destroy(posMarker, 2f);
+#endif
         }
     }
 }

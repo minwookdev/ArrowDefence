@@ -6,6 +6,9 @@
 
     public class Skill_Multiple_Shot : AD_BowSkill
     {
+        private byte arrowCount;
+        private float spreadAngle;
+
         public override void BowSpecialSkill(float facingVec, float arrowSpreadAngle, byte numOfArrows, Transform arrowParent,
                                   AD_BowController adBow, Vector3 initScale, Vector3 initPos, Vector2 arrowForce)
         {

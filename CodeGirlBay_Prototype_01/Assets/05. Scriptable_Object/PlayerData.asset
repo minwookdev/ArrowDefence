@@ -12,7 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c75b234f993a6f24a8ffbf132cc52a86, type: 3}
   m_Name: PlayerData
   m_EditorClassIdentifier: 
-  PlayerHP: 500
   TempEquip_Bow: {fileID: 0}
   TempEquip_Arrow_Main: {fileID: 0}
   TempEquip_Arrow_Less: {fileID: 0}
@@ -20,3 +19,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: ea039b8bf5e2d594ca07360436d14752, type: 2}
   - {fileID: 11400000, guid: f02c24899fcd3bd4a87213b5fc58da65, type: 2}
   - {fileID: 11400000, guid: f8cf2d491cdbd38409db2b0178418dce, type: 2}
+  - {fileID: 11400000, guid: 84adca0e3393b98439a37949c1223e36, type: 2}
+  - {fileID: 11400000, guid: 64254eedd1c43c446ae2e7682daa20a6, type: 2}
+  - {fileID: 11400000, guid: 4281f4c496660d946b11d546253599bd, type: 2}

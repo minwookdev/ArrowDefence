@@ -4,7 +4,7 @@ using UnityEngine;
 namespace ES3Types
 {
 	[UnityEngine.Scripting.Preserve]
-	[ES3PropertiesAttribute("<Item_Id>k__BackingField", "<Item_Name>k__BackingField", "<Item_Desc>k__BackingField", "<Item_Amount>k__BackingField", "<Item_Sprite>k__BackingField", "<Item_Type>k__BackingField", "<Item_Grade>k__BackingField")]
+	[ES3PropertiesAttribute("Item_Id", "Item_Name", "Item_Desc", "Item_Amount", "Item_Sprite", "Item_Type", "Item_Grade")]
 	public class ES3UserType_Item_Consumable : ES3ObjectType
 	{
 		public static ES3Type Instance = null;
@@ -16,13 +16,13 @@ namespace ES3Types
 		{
 			var instance = (CodingCat_Games.Item_Consumable)obj;
 			
-			writer.WritePrivateField("<Item_Id>k__BackingField", instance);
-			writer.WritePrivateField("<Item_Name>k__BackingField", instance);
-			writer.WritePrivateField("<Item_Desc>k__BackingField", instance);
-			writer.WritePrivateField("<Item_Amount>k__BackingField", instance);
-			writer.WritePrivateFieldByRef("<Item_Sprite>k__BackingField", instance);
-			writer.WritePrivateField("<Item_Type>k__BackingField", instance);
-			writer.WritePrivateField("<Item_Grade>k__BackingField", instance);
+			writer.WritePrivateField("Item_Id", instance);
+			writer.WritePrivateField("Item_Name", instance);
+			writer.WritePrivateField("Item_Desc", instance);
+			writer.WritePrivateField("Item_Amount", instance);
+			writer.WritePrivateFieldByRef("Item_Sprite", instance);
+			writer.WritePrivateField("Item_Type", instance);
+			writer.WritePrivateField("Item_Grade", instance);
 		}
 
 		protected override void ReadObject<T>(ES3Reader reader, object obj)
@@ -33,26 +33,26 @@ namespace ES3Types
 				switch(propertyName)
 				{
 					
-					case "<Item_Id>k__BackingField":
-					reader.SetPrivateField("<Item_Id>k__BackingField", reader.Read<System.Int32>(), instance);
+					case "Item_Id":
+					reader.SetPrivateField("Item_Id", reader.Read<System.Int32>(), instance);
 					break;
-					case "<Item_Name>k__BackingField":
-					reader.SetPrivateField("<Item_Name>k__BackingField", reader.Read<System.String>(), instance);
+					case "Item_Name":
+					reader.SetPrivateField("Item_Name", reader.Read<System.String>(), instance);
 					break;
-					case "<Item_Desc>k__BackingField":
-					reader.SetPrivateField("<Item_Desc>k__BackingField", reader.Read<System.String>(), instance);
+					case "Item_Desc":
+					reader.SetPrivateField("Item_Desc", reader.Read<System.String>(), instance);
 					break;
-					case "<Item_Amount>k__BackingField":
-					reader.SetPrivateField("<Item_Amount>k__BackingField", reader.Read<System.Int32>(), instance);
+					case "Item_Amount":
+					reader.SetPrivateField("Item_Amount", reader.Read<System.Int32>(), instance);
 					break;
-					case "<Item_Sprite>k__BackingField":
-					reader.SetPrivateField("<Item_Sprite>k__BackingField", reader.Read<UnityEngine.Sprite>(), instance);
+					case "Item_Sprite":
+					reader.SetPrivateField("Item_Sprite", reader.Read<UnityEngine.Sprite>(), instance);
 					break;
-					case "<Item_Type>k__BackingField":
-					reader.SetPrivateField("<Item_Type>k__BackingField", reader.Read<CodingCat_Games.ITEMTYPE>(), instance);
+					case "Item_Type":
+					reader.SetPrivateField("Item_Type", reader.Read<CodingCat_Games.ITEMTYPE>(), instance);
 					break;
-					case "<Item_Grade>k__BackingField":
-					reader.SetPrivateField("<Item_Grade>k__BackingField", reader.Read<CodingCat_Games.ITEMGRADE>(), instance);
+					case "Item_Grade":
+					reader.SetPrivateField("Item_Grade", reader.Read<CodingCat_Games.ITEMGRADE>(), instance);
 					break;
 					default:
 						reader.Skip();

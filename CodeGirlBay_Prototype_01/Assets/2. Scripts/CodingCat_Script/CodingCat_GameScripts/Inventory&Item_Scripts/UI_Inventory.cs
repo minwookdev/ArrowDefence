@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Security.Cryptography;
+    using CodingCat_Games.Data;
     using CodingCat_Scripts;
     using UnityEditor;
     using UnityEngine;
@@ -81,7 +82,7 @@
     public class UI_Inventory : MonoBehaviour
     {
         [Header("Player Data Setting")]
-        public AD_PlayerData playerData;
+        //public AD_PlayerData playerData;
         private List<AD_item> inventoryList = new List<AD_item>();
 
         [Header("Inventory UI Control")]
@@ -124,7 +125,7 @@
 
         public void CheckPlayerData()
         {
-            if(this.playerData == null)
+            if(CCPlayerData.inventory == null)
             {
                 CatLog.ELog("UI_Inventory : Player Data is return Null");
                 gameObject.SetActive(false);
@@ -133,7 +134,7 @@
 
         private void UpdateUIinventory()
         {
-            inventoryList = playerData.inventory.GetAllItemList();
+            inventoryList = CCPlayerData.inventory.GetAllItemList();
 
             //깔려있는 Slot이 부족하면 그만큼 새로 생성
             if (inventoryList.Count > slotList.Count)
@@ -165,12 +166,12 @@
             
             switch (num)
             {
-                case 0 : inventoryList = playerData.inventory.GetAllItemList();   break;
-                case 1 : inventoryList = playerData.inventory.GetBowItemList();   break;
-                case 2 : inventoryList = playerData.inventory.GetArrowItemList(); break;
-                case 3 : inventoryList = new List<AD_item>();                     break;
-                case 4 : inventoryList = playerData.inventory.GetItemList();      break;
-                default: CatLog.WLog("UI Inventory : Wrong Number");              break;
+                case 0 : inventoryList = CCPlayerData.inventory.GetAllItemList();       break;
+                case 1 : inventoryList = CCPlayerData.inventory.GetBowItemList();       break;
+                case 2 : inventoryList = CCPlayerData.inventory.GetArrowItemList();     break;
+                case 3 : inventoryList = CCPlayerData.inventory.GetAccessoryItemList(); break;
+                case 4 : inventoryList = CCPlayerData.inventory.GetItemList();          break;
+                default: CatLog.WLog("UI Inventory : Wrong Number");                    break;
             }
 
             CatLog.Log($"Get Player Inventory List Count : {inventoryList.Count}");

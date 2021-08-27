@@ -74,9 +74,9 @@
 
         public void Button_AddItem() => StartCoroutine(SetPlayerItems());
 
-        public void Button_SaveData() => CCPlayerData.Saveinventory();
+        public void Button_SaveData() => CCPlayerData.SaveUserData();
 
-        public void Button_LoadData() => CCPlayerData.LoadInventory();
+        public void Button_LoadData() => CCPlayerData.LoadUserData();
 
         public void Button_Additems()
         {

@@ -1,8 +1,6 @@
 ﻿namespace CodingCat_Games
 {
-    using System;
     using UnityEngine;
-    using UnityEngine.UI;
 
     public class Item_Bow : Item_Equipment
     {
@@ -66,6 +64,11 @@
             this.bowSkill_Sec  = item.BowSkill_Second;
         }
 
+        /// <summary>
+        /// Constructor With no Parameters. (Used Saving Function. Don't Delete this)
+        /// </summary>
+        public Item_Bow() : base() { }
+
         public AD_BowSkill GetBowSkill()
         {
             if (bowSkill_Fst != null) return bowSkill_Fst;
@@ -89,5 +92,7 @@
             if (bowSkill_Fst != null) return true;
             else                  return false;
         }
+
+        public override object GetItem() => this;
     }
 }

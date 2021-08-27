@@ -5,6 +5,7 @@
     using UnityEngine.UI;
     using TMPro;
     using CodingCat_Scripts;
+    using CodingCat_Games.Data;
 
     public enum Popup_Type
     { 
@@ -34,11 +35,13 @@
 
             public void EnablePopup(Item_Consumable item, Sprite frame)
             {
+                var itemInfo = item.GetItem();
+
                 Text_ItemType.text  = "Consumable";
-                Text_ItemName.text  = item.Item_Name;
-                Text_ItemDesc.text  = item.Item_Desc;
-                Text_ItemCount.text = item.Item_Amount.ToString();
-                Image_Item.sprite   = item.Item_Sprite;
+                Text_ItemName.text  = item.GetName;
+                Text_ItemDesc.text  = item.GetDesc;
+                Text_ItemCount.text = item.GetAmount.ToString();
+                Image_Item.sprite   = item.GetSprite;
                 Image_Frame.sprite  = frame;
                 itemAddress         = item;
 
@@ -48,10 +51,10 @@
             public void EnablePopup(Item_Material item, Sprite frame)
             {
                 Text_ItemType.text  = "Consumable";
-                Text_ItemName.text  = item.Item_Name;
-                Text_ItemDesc.text  = item.Item_Desc;
-                Text_ItemCount.text = item.Item_Amount.ToString();
-                Image_Item.sprite   = item.Item_Sprite;
+                Text_ItemName.text  = item.GetName;
+                Text_ItemDesc.text  = item.GetDesc;
+                Text_ItemCount.text = item.GetAmount.ToString();
+                Image_Item.sprite   = item.GetSprite;
                 Image_Frame.sprite  = frame;
                 itemAddress         = item;
 
@@ -89,8 +92,8 @@
             public void EnablePopup(Item_Bow item, Sprite sprite)
             {
                 Text_ItemType.text = "Equipment";
-                Text_ItemName.text = item.Item_Name;
-                Image_Item.sprite  = item.Item_Sprite;
+                Text_ItemName.text = item.GetName;
+                Image_Item.sprite  = item.GetSprite;
                 Image_Frame.sprite = sprite;
                 itemAddress        = item;
 
@@ -116,8 +119,8 @@
                 }
 
                 //플레이어의 현재 장비아이템이 선택한 장비아이템인지 비교해서 버튼 띄워줌
-                if (AD_PlayerData.PlayerEquipments.MainBow != itemAddress) SwitchButtons(false);
-                else                                                       SwitchButtons(true);
+                if (CCPlayerData.equipments.GetBowItem() != itemAddress) SwitchButtons(false);
+                else                                                            SwitchButtons(true);
 
                 PopObject.SetActive(true);
             }
@@ -166,7 +169,7 @@
 
             public void Button_EquipAction()
             {
-                AD_PlayerData.PlayerEquipments.Equip_BowItem(itemAddress);
+                CCPlayerData.equipments.Equip_BowItem(itemAddress);
                 SwitchButtons(true);
 
                 //여기서 UpdateEquipUI Call
@@ -175,7 +178,7 @@
 
             public void Button_ReleaseAction()
             {
-                AD_PlayerData.PlayerEquipments.Release_BowItem();
+                CCPlayerData.equipments.Release_BowItem();
                 SwitchButtons(false);
 
                 UI_Equipments.Update_EquipUI();
@@ -214,13 +217,13 @@
 
         public void Open_Popup_ConItem(Item_Consumable item)
         {
-            ItemPop.EnablePopup(item, Frames[(int)item.Item_Grade]);
+            ItemPop.EnablePopup(item, Frames[(int)item.GetGrade]);
             popType = Popup_Type.Popup_NormalItem;
         }
 
         public void Open_Popup_MatItem(Item_Material item)
         {
-            ItemPop.EnablePopup(item, Frames[(int)item.Item_Grade]);
+            ItemPop.EnablePopup(item, Frames[(int)item.GetGrade]);
             popType = Popup_Type.Popup_NormalItem;
         }
 
@@ -228,7 +231,7 @@
         {
             switch (item)
             {
-                case Item_Bow bowItem: ItemPop_Bow.EnablePopup(bowItem, Frames[(int)item.Item_Grade]); popType = Popup_Type.Popup_BowItem;  break;
+                case Item_Bow bowItem: ItemPop_Bow.EnablePopup(bowItem, Frames[(int)item.GetGrade]); popType = Popup_Type.Popup_BowItem;  break;
                 case Item_Arrow arrowItem: break;
                 default: break;
             }

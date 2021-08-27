@@ -4,18 +4,21 @@ using UnityEngine;
 namespace ES3Types
 {
 	[UnityEngine.Scripting.Preserve]
-	[ES3PropertiesAttribute("Item_Id", "Item_Name", "Item_Desc", "Item_Amount", "Item_Sprite", "Item_Type", "Item_Grade")]
-	public class ES3UserType_Item_Material : ES3ObjectType
+	[ES3PropertiesAttribute("mainArrowObject", "lessArrowObject", "EquipType", "Item_Id", "Item_Name", "Item_Desc", "Item_Amount", "Item_Sprite", "Item_Type", "Item_Grade")]
+	public class ES3UserType_Item_Arrow : ES3ObjectType
 	{
 		public static ES3Type Instance = null;
 
-		public ES3UserType_Item_Material() : base(typeof(CodingCat_Games.Item_Material)){ Instance = this; priority = 1; }
+		public ES3UserType_Item_Arrow() : base(typeof(CodingCat_Games.Item_Arrow)){ Instance = this; priority = 1; }
 
 
 		protected override void WriteObject(object obj, ES3Writer writer)
 		{
-			var instance = (CodingCat_Games.Item_Material)obj;
+			var instance = (CodingCat_Games.Item_Arrow)obj;
 			
+			writer.WritePrivateFieldByRef("mainArrowObject", instance);
+			writer.WritePrivateFieldByRef("lessArrowObject", instance);
+			writer.WritePrivateField("EquipType", instance);
 			writer.WritePrivateField("Item_Id", instance);
 			writer.WritePrivateField("Item_Name", instance);
 			writer.WritePrivateField("Item_Desc", instance);
@@ -27,12 +30,21 @@ namespace ES3Types
 
 		protected override void ReadObject<T>(ES3Reader reader, object obj)
 		{
-			var instance = (CodingCat_Games.Item_Material)obj;
+			var instance = (CodingCat_Games.Item_Arrow)obj;
 			foreach(string propertyName in reader.Properties)
 			{
 				switch(propertyName)
 				{
 					
+					case "mainArrowObject":
+					reader.SetPrivateField("mainArrowObject", reader.Read<UnityEngine.GameObject>(), instance);
+					break;
+					case "lessArrowObject":
+					reader.SetPrivateField("lessArrowObject", reader.Read<UnityEngine.GameObject>(), instance);
+					break;
+					case "EquipType":
+					reader.SetPrivateField("EquipType", reader.Read<CodingCat_Games.Equipment_Item_Type>(), instance);
+					break;
 					case "Item_Id":
 					reader.SetPrivateField("Item_Id", reader.Read<System.Int32>(), instance);
 					break;
@@ -63,18 +75,18 @@ namespace ES3Types
 
 		protected override object ReadObject<T>(ES3Reader reader)
 		{
-			var instance = new CodingCat_Games.Item_Material();
+			var instance = new CodingCat_Games.Item_Arrow();
 			ReadObject<T>(reader, instance);
 			return instance;
 		}
 	}
 
 
-	public class ES3UserType_Item_MaterialArray : ES3ArrayType
+	public class ES3UserType_Item_ArrowArray : ES3ArrayType
 	{
 		public static ES3Type Instance;
 
-		public ES3UserType_Item_MaterialArray() : base(typeof(CodingCat_Games.Item_Material[]), ES3UserType_Item_Material.Instance)
+		public ES3UserType_Item_ArrowArray() : base(typeof(CodingCat_Games.Item_Arrow[]), ES3UserType_Item_Arrow.Instance)
 		{
 			Instance = this;
 		}

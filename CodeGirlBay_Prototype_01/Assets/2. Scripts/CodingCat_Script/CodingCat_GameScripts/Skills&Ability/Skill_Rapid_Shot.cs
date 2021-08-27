@@ -6,6 +6,8 @@
 
     public class Skill_Rapid_Shot : AD_BowSkill
     {
+        private byte arrowCount;
+
         public override void BowSpecialSkill(float facingVec, float arrowSpreadAngle, byte numOfArrows, Transform arrowParent, 
                                              AD_BowController adBow, Vector3 initScale, Vector3 initPos, Vector2 arrowForce)
         {

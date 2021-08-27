@@ -25,8 +25,9 @@
                 case ITEMTYPE.ITEM_EQUIPMENT:
                     switch (item)
                     {
-                        case ItemData_Equip_Bow   item_Bow:   Add_BowItem(item_Bow);     break;
-                        case ItemData_Equip_Arrow item_Arrow: Add_ArrowItem(item_Arrow); break;
+                        case ItemData_Equip_Bow   item_Bow:        Add_BowItem(item_Bow);       break;
+                        case ItemData_Equip_Arrow item_Arrow:      Add_ArrowItem(item_Arrow);   break;
+                        case ItemData_Equip_Accessory item_Access: Add_AccessItem(item_Access); break;
                     }
                     break;
             }
@@ -86,7 +87,7 @@
         //Item Stack 중첩 구현 (최대 255개)
         private void Add_ConItem(ItemData newItem)
         {
-            var duplicateItems = invenList.FindAll(x => x.Item_Id == newItem.Item_Id);
+            var duplicateItems = invenList.FindAll(x => x.GetID == newItem.Item_Id);
 
             //Duplicate Items Index 있는 경우 (중복되는 아이템이 있다)
             if(duplicateItems.Count > 0)
@@ -95,9 +96,9 @@
 
                 for (int i = 0; i < duplicateItems.Count; i++)
                 {
-                    if (duplicateItems[i].Item_Amount < maxItemCount)
+                    if (duplicateItems[i].GetAmount < maxItemCount)
                     {
-                        var sumAmount = duplicateItems[i].Item_Amount + itemAmount;
+                        var sumAmount = duplicateItems[i].GetAmount + itemAmount;
 
                         if (sumAmount <= maxItemCount) //이번 인덱스에 들어가도 최대수량 안되는경우 바로 들어감
                         {
@@ -123,7 +124,7 @@
                             else continue;
                         }
                     }
-                    else if (duplicateItems[i].Item_Amount >= maxItemCount)
+                    else if (duplicateItems[i].GetAmount >= maxItemCount)
                     {
                         if (i == duplicateItems.Count - 1) //Last Index 경우 바로 추가해줌
                         {
@@ -151,7 +152,7 @@
         //Item Stack 중첩 구현 (최대 255개)
         private void Add_MatItem(ItemData newItem)
         {
-            var dupItems = invenList.FindAll(x => x.Item_Id == newItem.Item_Id);
+            var dupItems = invenList.FindAll(x => x.GetID == newItem.Item_Id);
 
             //Duplicate Items Index 있는 경우 (중복되는 아이템이 있다)
             if (dupItems.Count > 0)
@@ -160,9 +161,9 @@
 
                 for (int i = 0; i < dupItems.Count; i++)
                 {
-                    if (dupItems[i].Item_Amount < maxItemCount) //인덱스가 최대수량 아님
+                    if (dupItems[i].GetAmount < maxItemCount) //인덱스가 최대수량 아님
                     {
-                        var sumAmount = dupItems[i].Item_Amount + itemAmount;
+                        var sumAmount = dupItems[i].GetAmount + itemAmount;
 
                         if (sumAmount <= maxItemCount) //이번 인덱스에 들어가도 최대수량 안되는경우 바로 들어감
                         {
@@ -184,7 +185,7 @@
                             else continue;
                         }
                     }
-                    else if (dupItems[i].Item_Amount >= maxItemCount) //인덱스가 이미 최대수량
+                    else if (dupItems[i].GetAmount >= maxItemCount) //인덱스가 이미 최대수량
                     {
                         if (i == dupItems.Count - 1) //Last Index 경우 바로 추가해줌
                         {
@@ -241,9 +242,17 @@
                                          newItem.LessArrowObj));
         }
 
-        private void Add_AccessItem()
+        /// <summary>
+        /// Accessory Item Add by Inventory
+        /// </summary>
+        /// <param name="newItem"></param>
+        private void Add_AccessItem(ItemData_Equip_Accessory newItem)
         {
-
+            invenList.Add(new Item_Accessory(newItem.Item_Id,
+                                             newItem.Item_Name,
+                                             newItem.Item_Desc,
+                                             newItem.Item_Sprite,
+                                             newItem.Item_Grade));
         }
 
         public void ClearInventory() => invenList.Clear();
@@ -274,7 +283,6 @@
         public List<AD_item> GetArrowItemList()
         {
             var itemList = invenList.FindAll(x => x.GetType() == typeof(Item_Arrow));
-
             return itemList;
         }
 
@@ -282,10 +290,11 @@
         /// Get Equipment Item (Accessory) List
         /// </summary>
         /// <returns></returns>
-        //public List<AD_item> GetAccessoryItemList()
-        //{
-        //    return invenList.FindAll(x => x.GetType() == typeof(Item_Bow));
-        //}
+        public List<AD_item> GetAccessoryItemList()
+        {
+            var itemList = invenList.FindAll(x => x.GetType() == typeof(Item_Accessory));
+            return itemList;
+        }
 
         /// <summary>
         /// Get Material, Consumable Item List
@@ -293,8 +302,8 @@
         /// <returns></returns>
         public List<AD_item> GetItemList()
         {
-            var itemList = invenList.FindAll(x => x.Item_Type == ITEMTYPE.ITEM_MATERIAL ||
-                                                  x.Item_Type == ITEMTYPE.ITEM_CONSUMABLE);
+            var itemList = invenList.FindAll(x => x.GetItemType == ITEMTYPE.ITEM_MATERIAL ||
+                                                  x.GetItemType == ITEMTYPE.ITEM_CONSUMABLE);
             return itemList;
         }
     }

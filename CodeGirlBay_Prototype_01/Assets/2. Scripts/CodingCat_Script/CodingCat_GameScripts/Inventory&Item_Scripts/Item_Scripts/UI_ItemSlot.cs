@@ -22,19 +22,19 @@
             ItemAddress = address;
 
             //Set Item Sprite
-            ItemImg.sprite = address.Item_Sprite;
+            ItemImg.sprite = address.GetSprite;
             ItemImg.preserveAspect = true;  //PreserveAspect는 프리팹에서 고정해놓는게 좋지않을까 한번 정해놓은거 풀리지는 않는지 체크
 
-            if (address.Item_Type != ITEMTYPE.ITEM_EQUIPMENT)
+            if (address.GetItemType != ITEMTYPE.ITEM_EQUIPMENT)
             {
                 if (ItemStackTmp.gameObject.activeSelf == false)
                     ItemStackTmp.gameObject.SetActive(true);
-                ItemStackTmp.text = address.Item_Amount.ToString();
+                ItemStackTmp.text = address.GetAmount.ToString();
             }
             else ItemStackTmp.gameObject.SetActive(false);
 
             //Setting Item Frame For Item Grade
-            this.ItemFrame.sprite = Frames[(int)address.Item_Grade];
+            this.ItemFrame.sprite = Frames[(int)address.GetGrade];
         }
 
         public void Clear()
@@ -51,7 +51,7 @@
         {
             //throw new System.NotImplementedException();
 
-            if (ItemAddress.Item_Type == ITEMTYPE.ITEM_EQUIPMENT)
+            if (ItemAddress.GetItemType == ITEMTYPE.ITEM_EQUIPMENT)
             {
                 #region Item_FeedBack
                 //switch (ItemAddress)
@@ -75,9 +75,9 @@
             }
             else
             {
-                CatLog.Log($"Item Name   : {ItemAddress.Item_Name}  \n  " +
-                           $"Item Amount : {ItemAddress.Item_Amount} \n  " +
-                           $"ITem Type   : {ItemAddress.Item_Type.ToString()} ");
+                //CatLog.Log($"Item Name   : {ItemAddress.GetName}  \n  " +
+                //           $"Item Amount : {ItemAddress.GetAmount} \n  " +
+                //           $"ITem Type   : {ItemAddress.GetItemType.ToString()} ");
 
                 MainSceneRoute.OpenItemInfo(ItemAddress);
             }

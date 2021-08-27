@@ -6,12 +6,9 @@ using CodingCat_Scripts;
 [CreateAssetMenu(fileName = "PlayerData", menuName = "Scriptable Object Asset/PlayerData")]
 public class AD_PlayerData : ScriptableObject
 {
-    public int PlayerHP = 0;
-
-    [Space(20)]
     [SerializeField]
     public static Player_Equipments PlayerEquipments = new Player_Equipments();
-
+    [Header("Temp Equipments")]
     public ItemData_Equip_Bow TempEquip_Bow;
     public ItemData_Equip_Arrow TempEquip_Arrow_Main;
     public ItemData_Equip_Arrow TempEquip_Arrow_Less;
@@ -20,7 +17,6 @@ public class AD_PlayerData : ScriptableObject
     [SerializeField]
     public AD_Inventory inventory = new AD_Inventory();
 
-    [Space(20)]
     [SerializeField]
     private List<ItemData> tempItems = new List<ItemData>();
 

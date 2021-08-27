@@ -1,5 +1,6 @@
 ﻿namespace CodingCat_Games
 {
+    using CodingCat_Games.Data;
     using UnityEngine;
 
     public class UI_Equipments : MonoBehaviour
@@ -38,10 +39,10 @@
         public void UpdateEquipUI()
         {
             //Equipment Item : Bow
-            if(AD_PlayerData.PlayerEquipments.IsEquipBow())
+            if(CCPlayerData.equipments.IsEquipBow())
             {
                 BowItem_Slot.gameObject.SetActive(true);
-                BowItem_Slot.Setup(AD_PlayerData.PlayerEquipments.GetBowItem());
+                BowItem_Slot.Setup(CCPlayerData.equipments.GetBowItem());
             }
             else
             {
@@ -49,10 +50,10 @@
             }
 
             //Equipment Item : Arrow (Main)
-            if(AD_PlayerData.PlayerEquipments.IsEquipMainArrow())
+            if(CCPlayerData.equipments.IsEquipMainArrow())
             {
                 ArrowItem_Slot0.gameObject.SetActive(true);
-                ArrowItem_Slot0.Setup(AD_PlayerData.PlayerEquipments.GetMainArrow());
+                ArrowItem_Slot0.Setup(CCPlayerData.equipments.GetMainArrow());
             }
             else
             {
@@ -60,10 +61,10 @@
             }
 
             //Equipment Item : Arrow (Sub)
-            if(AD_PlayerData.PlayerEquipments.IsEquipSubArrow())
+            if(CCPlayerData.equipments.IsEquipSubArrow())
             {
                 ArrowItem_Slot1.gameObject.SetActive(true);
-                ArrowItem_Slot1.Setup(AD_PlayerData.PlayerEquipments.GetSubArrow());
+                ArrowItem_Slot1.Setup(CCPlayerData.equipments.GetSubArrow());
             }
             else
             {
@@ -73,30 +74,30 @@
 
         public static void Update_EquipUI()
         {
-            if(AD_PlayerData.PlayerEquipments.IsEquipBow())
+            if(CCPlayerData.equipments.IsEquipBow())
             {
                 _Inst.BowItem_Slot.gameObject.SetActive(true);
-                _Inst.BowItem_Slot.Setup(AD_PlayerData.PlayerEquipments.GetBowItem());
+                _Inst.BowItem_Slot.Setup(CCPlayerData.equipments.GetBowItem());
             }
             else
             {
                 if (_Inst.BowItem_Slot.gameObject.activeSelf) _Inst.BowItem_Slot.Clear();
             }
 
-            if (AD_PlayerData.PlayerEquipments.IsEquipMainArrow())
+            if (CCPlayerData.equipments.IsEquipMainArrow())
             {
                 _Inst.ArrowItem_Slot0.gameObject.SetActive(true);
-                _Inst.ArrowItem_Slot0.Setup(AD_PlayerData.PlayerEquipments.GetMainArrow());
+                _Inst.ArrowItem_Slot0.Setup(CCPlayerData.equipments.GetMainArrow());
             }
             else
             {
                 if (_Inst.ArrowItem_Slot0.gameObject.activeSelf) _Inst.ArrowItem_Slot0.Clear();
             }
 
-            if (AD_PlayerData.PlayerEquipments.IsEquipSubArrow())
+            if (CCPlayerData.equipments.IsEquipSubArrow())
             {
                 _Inst.ArrowItem_Slot1.gameObject.SetActive(true);
-                _Inst.ArrowItem_Slot1.Setup(AD_PlayerData.PlayerEquipments.GetSubArrow());
+                _Inst.ArrowItem_Slot1.Setup(CCPlayerData.equipments.GetSubArrow());
             }
             else
             {

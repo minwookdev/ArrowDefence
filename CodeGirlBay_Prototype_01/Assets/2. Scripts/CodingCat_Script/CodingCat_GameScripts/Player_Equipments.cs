@@ -6,7 +6,7 @@
     [Serializable]
     public class Player_Equipments
     {
-        public Item_Bow MainBow { get; private set; }
+        private Item_Bow MainBow;
         private Item_Arrow MainArrow;
         private Item_Arrow SubArrow;
 
@@ -23,7 +23,7 @@
             }
             else this.MainBow = item;
 
-            CatLog.Log($"{this.MainBow.Item_Name} 아이템이 장착되었습니다.");
+            CatLog.Log($"{this.MainBow.GetName} 아이템이 장착되었습니다.");
         }
 
         public void Release_BowItem()

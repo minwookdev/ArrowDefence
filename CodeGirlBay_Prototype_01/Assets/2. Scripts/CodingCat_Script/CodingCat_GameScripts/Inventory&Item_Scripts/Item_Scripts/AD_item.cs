@@ -24,19 +24,30 @@
     [Serializable] //Abstract Class 는 Serailizable 속성 달려있어도 Inspector에서 표기되지 않는다
     public abstract class AD_item
     {
-        public int Item_Id             { get; protected set; }
-        public string Item_Name        { get; protected set; }
-        public string Item_Desc        { get; protected set; }
-        public int Item_Amount         { get; protected set; }
-        public Sprite Item_Sprite      { get; protected set; }
-        public ITEMTYPE Item_Type      { get; protected set; }
-        public ITEMGRADE Item_Grade    { get; protected set; }
+        protected int       Item_Id;
+        protected string    Item_Name;
+        protected string    Item_Desc;
+        protected int       Item_Amount;
+        protected Sprite    Item_Sprite;
+        protected ITEMTYPE  Item_Type;
+        protected ITEMGRADE Item_Grade;
 
-        //public int itemID;
-        //public string itemName;
-        //public string description;
-        //public int amount;
-        //public Sprite itemSprite;
-        //public Enum_Itemtype itemType;
+        #region PROPERTY
+
+        public int       GetID            { get { return Item_Id; } }
+        public string    GetName          { get { return Item_Name; } }
+        public string    GetDesc          { get { return Item_Desc; } }
+        public int       GetAmount        { get { return Item_Amount; } }
+        public Sprite    GetSprite        { get { return Item_Sprite; } }
+        public ITEMTYPE  GetItemType      { get { return Item_Type; } }
+        public ITEMGRADE GetGrade         { get { return Item_Grade; } }
+
+        #endregion
+
+        /// <summary>
+        /// NEVER USE CASTING
+        /// </summary>
+        /// <returns></returns>
+        public abstract object GetItem();
     }
 }

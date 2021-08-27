@@ -6,6 +6,9 @@
 
     public class Skill_Arrow_Rain : AD_BowSkill
     {
+        private byte arrowCount;
+
+        //Debug Options
         private bool isActiveDebugLine = false;
         private bool isDrawLine = false;
         private ArrowRain_LineRender debugLineRender;

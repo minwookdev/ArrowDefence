@@ -21,5 +21,12 @@
             this.mainArrowObject = main;
             this.lessArrowObject = less;
         }
+
+        /// <summary>
+        /// Constructor With no Parameters. (Used Saving Function. Don't Delete this) 
+        /// </summary>
+        public Item_Arrow() : base() { }
+
+        public override object GetItem() => this;
     }
 }

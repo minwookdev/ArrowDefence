@@ -27,10 +27,15 @@
             this.Item_Sprite  = item.Item_Sprite;
         }
 
+        /// <summary>
+        /// Constructor With no Parameters. (Used Saving Function. Don't Delete this)
+        /// </summary>
         public Item_Material() { }
 
         public void SetAmount(int value) => this.Item_Amount = value;
 
         public void IncAmount(int value) => this.Item_Amount += value;
+
+        public override object GetItem() => this;
     }
 }

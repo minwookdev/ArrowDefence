@@ -55,5 +55,11 @@
             if (this.SubArrow != null) return true;
             else                       return false;
         }
+
+        public void CompareItem(Item_Bow compareTarget)
+        {
+            if (ReferenceEquals(this.MainBow, compareTarget)) CatLog.Log("같은 아이템 입니다.");
+            else                                              CatLog.Log("다른 아이템 입니다.");
+        }
     }
 }

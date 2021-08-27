@@ -35,13 +35,6 @@
             endPosX = startPosX + panelRect.rect.width;
         }
 
-        IEnumerator SetPlayerItems()
-        {
-            yield return awaitTime;
-            playerData.SetTestItems();
-            CatLog.Log("ADD Item Button Active");
-        }
-
         #region BUTTON_METHOD
 
         public void Button_PanelOpen()
@@ -71,8 +64,6 @@
                 });
             }
         }
-
-        public void Button_AddItem() => StartCoroutine(SetPlayerItems());
 
         public void Button_SaveData() => CCPlayerData.SaveUserData();
 

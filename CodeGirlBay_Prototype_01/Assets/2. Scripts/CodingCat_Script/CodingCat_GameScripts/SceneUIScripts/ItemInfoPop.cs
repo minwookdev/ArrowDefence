@@ -97,21 +97,6 @@
                 Image_Frame.sprite = sprite;
                 itemAddress        = item;
 
-                //if(item.IsBowSkill())
-                //{
-                //    Object_SkillSlots[0].SetActive(true);
-                //    Object_SkillSlots[1].SetActive(false);
-                //}
-                //else
-                //{
-                //    foreach (var slot in Object_SkillSlots)
-                //    {
-                //        slot.SetActive(false);
-                //    }
-                //    //일단은 둘 다 꺼주고 있는데 BowSkill은 최대 2개까지 구상중이므로
-                //    //Skill 이 복수인 상황도 생각해서 다시 작성
-                //}
-
                 for(int i =0;i<item.GetBowSkills().Length;i++)
                 {
                     if (item.GetBowSkills()[i] != null) Object_SkillSlots[i].SetActive(true);
@@ -120,7 +105,12 @@
 
                 //플레이어의 현재 장비아이템이 선택한 장비아이템인지 비교해서 버튼 띄워줌
                 if (CCPlayerData.equipments.GetBowItem() != itemAddress) SwitchButtons(false);
-                else                                                            SwitchButtons(true);
+                else                                                     SwitchButtons(true);
+
+                //if (ReferenceEquals(CCPlayerData.equipments.GetBowItem(), itemAddress)) SwitchButtons(true);
+                //else                                                                    SwitchButtons(false);
+
+                CCPlayerData.equipments.CompareItem(itemAddress);
 
                 PopObject.SetActive(true);
             }

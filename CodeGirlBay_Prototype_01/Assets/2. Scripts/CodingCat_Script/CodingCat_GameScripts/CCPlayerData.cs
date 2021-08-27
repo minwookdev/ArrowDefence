@@ -4,7 +4,7 @@
 
     public static class CCPlayerData
     {
-        public static AD_Inventory      inventory = new AD_Inventory();
+        public static AD_Inventory      inventory  = new AD_Inventory();
         public static Player_Equipments equipments = new Player_Equipments();
 
         public static int user_int;

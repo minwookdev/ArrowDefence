@@ -44,4 +44,6 @@ public class AD_PlayerData : ScriptableObject
         //    PlayerEquipments.EquipBowItem(TempEquip_Bow);
         //}
     }
+
+    public List<ItemData> GetItemData() => tempItems;
 }

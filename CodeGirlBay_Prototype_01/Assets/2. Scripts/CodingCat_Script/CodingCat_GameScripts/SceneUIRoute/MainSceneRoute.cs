@@ -69,13 +69,6 @@ public class MainSceneRoute : MonoBehaviour
     [Header("DEV Options")]
     public bool IsDevMode = true;
 
-    [Header("Devlope Player Data")]
-    [Space(10)]
-    public AD_PlayerData playerData; // 아이템 Get 해주는 부분 지워주고 정리가능
-
-    [Header("Inventory System")]
-    [SerializeField] private UI_Inventory uiInven;  //정리 가능 지워줘도 된다
-
     [Header("Popup")]
     [Space(10)]
     public BattlePopup battlePop;
@@ -114,9 +107,6 @@ public class MainSceneRoute : MonoBehaviour
         {
             CatLog.WLog("OpenMenuTime is less than CloseMenuTime. need to modify the variable.");
         }
-
-        //Inventory Test Code
-        //if (playerData != null) uiInven.playerData = playerData;
 
         Action TestAction = () =>
         {
@@ -173,21 +163,6 @@ public class MainSceneRoute : MonoBehaviour
             //변경되지 않음..FindAll로 찾은 객체를 깊은 복사로 인해 완전히 다른 List로 되는건지
 
         }; TestAction();
-    }
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.O))
-        {
-            StartCoroutine("SetPlayerItems", playerData);
-        }
-    }
-
-    IEnumerator SetPlayerItems(AD_PlayerData player)
-    {
-        yield return new WaitForSeconds(.5f);
-
-        player.SetTestItems();
     }
 
     /// <summary>

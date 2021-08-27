@@ -29,6 +29,8 @@
             this.Item_Sprite  = item.Item_Sprite;
         }
 
+        public Item_Consumable() { }
+
         public void SetAmount(int value) => this.Item_Amount = value;
 
         public void IncAmount(int value) => this.Item_Amount += value;

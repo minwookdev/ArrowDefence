@@ -1,5 +1,6 @@
 ﻿namespace CodingCat_Games.Data
 {
+    using System.Collections.Generic;
     using CodingCat_Scripts;
 
     public static class CCPlayerData
@@ -40,6 +41,10 @@
             if (ES3.KeyExists(KEY_INVENTORY))
             {
                 inventory = ES3.Load<AD_Inventory>(KEY_INVENTORY);
+                //inventory = ES3.Load(KEY_INVENTORY, inventory.invenList);
+                //ES3.LoadInto<AD_item>(KEY_INVENTORY, inventory.invenList);
+                //ES3.Load
+                //inventory.AddRangeItem(ES3.Load<List<AD_item>>(KEY_INVENTORY));
                 CatLog.Log("성공적으로 Inventory를 불러왔습니다.");
             }
             else CatLog.WLog("ES3 inventory Key 값이 없습니다.");

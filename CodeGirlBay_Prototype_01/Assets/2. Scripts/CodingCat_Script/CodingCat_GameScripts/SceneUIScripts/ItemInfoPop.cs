@@ -16,7 +16,6 @@
         Popup_Accessory  = 4
     }
 
-
     public class ItemInfoPop : MonoBehaviour
     {
         [Serializable]
@@ -104,11 +103,11 @@
                 }
 
                 //플레이어의 현재 장비아이템이 선택한 장비아이템인지 비교해서 버튼 띄워줌
-                if (CCPlayerData.equipments.GetBowItem() != itemAddress) SwitchButtons(false);
-                else                                                     SwitchButtons(true);
+                //if (CCPlayerData.equipments.GetBowItem() != itemAddress) SwitchButtons(false);
+                //else                                                     SwitchButtons(true);
 
-                //if (ReferenceEquals(CCPlayerData.equipments.GetBowItem(), itemAddress)) SwitchButtons(true);
-                //else                                                                    SwitchButtons(false);
+                if (ReferenceEquals(CCPlayerData.equipments.GetBowItem(), itemAddress)) SwitchButtons(true);
+                else                                                                    SwitchButtons(false);
 
                 CCPlayerData.equipments.CompareItem(itemAddress);
 
@@ -160,18 +159,18 @@
             public void Button_EquipAction()
             {
                 CCPlayerData.equipments.Equip_BowItem(itemAddress);
-                SwitchButtons(true);
+                //SwitchButtons(true); 버튼바꿔주지 말고, 창 자체를 닫히게 만들어주기
 
-                //여기서 UpdateEquipUI Call
-                UI_Equipments.Update_EquipUI();
+                //여기서 UpdateEquipUI Call 이거 밑으로 뺴기
+                //UI_Equipments.Update_EquipUI();
             }
 
             public void Button_ReleaseAction()
             {
                 CCPlayerData.equipments.Release_BowItem();
-                SwitchButtons(false);
+                //SwitchButtons(false); 아이템 해제 할때도 창 바로 닫아줌
 
-                UI_Equipments.Update_EquipUI();
+                //UI_Equipments.Update_EquipUI();
             }
 
             //장착버튼 교체
@@ -234,9 +233,23 @@
 
         #region BUTTON_METHOD
 
-        public void Button_EquipBowItem() => ItemPop_Bow.Button_EquipAction();
+        public void Button_EquipBowItem()
+        {
+            ItemPop_Bow.Button_EquipAction();
+            UI_Equipments.Update_EquipUI();
+            UI_Inventory.InvenUpdate();
+            
+            Close_Popup(3);
+        }
 
-        public void Button_ReleaseBowItem() => ItemPop_Bow.Button_ReleaseAction();
+        public void Button_ReleaseBowItem()
+        {
+            ItemPop_Bow.Button_ReleaseAction();
+            UI_Equipments.Update_EquipUI();
+            UI_Inventory.InvenUpdate();
+
+            Close_Popup(3);
+        }
 
         public void Close_Popup(int popnum)
         {
@@ -260,11 +273,11 @@
             switch (popType)
             {
                 case Popup_Type.None:             CatLog.Log("현재 열려있는 팝업 타입 Enum 없음."); break;
-                case Popup_Type.Popup_NormalItem: ItemPop.DisablePop(); break;
-                case Popup_Type.Popup_BowItem:    ItemPop_Bow.DisablePopup();  break;
+                case Popup_Type.Popup_NormalItem: ItemPop.DisablePop();                           break;
+                case Popup_Type.Popup_BowItem:    ItemPop_Bow.DisablePopup();                     break;
                 case Popup_Type.Popup_ArrowItem: break;
                 case Popup_Type.Popup_Accessory: break;
-                default: break;
+                default:                         break;
             }
 
             popType = Popup_Type.None;

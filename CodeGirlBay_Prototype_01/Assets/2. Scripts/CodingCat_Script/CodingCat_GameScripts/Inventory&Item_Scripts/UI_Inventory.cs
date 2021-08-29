@@ -2,10 +2,8 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Security.Cryptography;
     using CodingCat_Games.Data;
     using CodingCat_Scripts;
-    using UnityEditor;
     using UnityEngine;
 
     [Serializable]
@@ -22,7 +20,6 @@
             else           ObjButton.SetActive(false);
         }
     }
-
 
     [Serializable]
     public class ItemSortPanel
@@ -95,6 +92,10 @@
         [Header("Item Sort Panel")]
         public ItemSortPanel SortPanel;
 
+        public delegate void InventoryUpdate();
+        public static InventoryUpdate InvenUpdate;
+        //event 붙여버리면 다른데에서 사용이 불가능해진다
+
         private void Awake()
         {
             for (int i = 0; i < itemSlotContainer.childCount; i++)
@@ -108,19 +109,24 @@
                 //GameObject 형이 아닌 UI_ItemSlot형으로 변경했지만, 인벤토리가 열리는 시점에 심하게
                 //프레임 다운이 발생하지 않는지 검증 필요. -> 빌드때 심하면 외부에서 미리 Add해주는 작업 요청필요
             }
+
+            InvenUpdate += ClearUIinventory;
+            InvenUpdate += UpdateUIinventory;
         }
 
-        private void Start() => SortPanel.Button_Switch(0);
+        private void Start() => SortPanel.Button_Switch(0); //Inventory 처음에 열고 시작하면 Bar살짝 밀리는거 왜그런지
 
-        private void OnEnable()
-        {
-            CheckPlayerData();
-            UpdateUIinventory(0);
-        }
+        private void OnEnable() => InvenUpdate();
 
         private void OnDisable()
         {
             ClearUIinventory();
+        }
+
+        private void OnDestroy()
+        {
+            InvenUpdate -= ClearUIinventory;
+            InvenUpdate -= UpdateUIinventory;
         }
 
         public void CheckPlayerData()
@@ -132,7 +138,7 @@
             }
         }
 
-        private void UpdateUIinventory()
+        private void UpdateUIinventory(int num)
         {
             inventoryList = CCPlayerData.inventory.GetAllItemList();
 
@@ -156,7 +162,7 @@
             }
         }
 
-        private void UpdateUIinventory(int num)
+        private void UpdateUIinventory()
         {
             //inventoryList.Clear();  //List 불러오기 전 기존 List 정리해줌 아니
             //;; 여기서 지워버리면 어떡함 주소값 다 가지고있는데
@@ -164,14 +170,14 @@
             //1. 일단 GetItemList 하고 Count는 제대로 적용되는지 확인하고
             //2. Count는 제대로 넘겨받으면 Tab 바뀔때마다 Clear UI해주는 로직 추가
             
-            switch (num)
+            switch (SortPanel.SortType)
             {
-                case 0 : inventoryList = CCPlayerData.inventory.GetAllItemList();       break;
-                case 1 : inventoryList = CCPlayerData.inventory.GetBowItemList();       break;
-                case 2 : inventoryList = CCPlayerData.inventory.GetArrowItemList();     break;
-                case 3 : inventoryList = CCPlayerData.inventory.GetAccessoryItemList(); break;
-                case 4 : inventoryList = CCPlayerData.inventory.GetItemList();          break;
-                default: CatLog.WLog("UI Inventory : Wrong Number");                    break;
+                case ItemSortPanel.ItemSort_Type.SortType_All       : inventoryList = CCPlayerData.inventory.GetAllItemList();       break;
+                case ItemSortPanel.ItemSort_Type.SortType_Bow       : inventoryList = CCPlayerData.inventory.GetBowItemList();       break;
+                case ItemSortPanel.ItemSort_Type.SortType_Arrow     : inventoryList = CCPlayerData.inventory.GetArrowItemList();     break;
+                case ItemSortPanel.ItemSort_Type.SortType_Accessory : inventoryList = CCPlayerData.inventory.GetAccessoryItemList(); break;
+                case ItemSortPanel.ItemSort_Type.SortType_Etc       : inventoryList = CCPlayerData.inventory.GetItemList();          break;
+                default: CatLog.WLog("UI Inventory : Wrong Number");                                                                 break;
             }
 
             CatLog.Log($"Get Player Inventory List Count : {inventoryList.Count}");
@@ -214,17 +220,15 @@
             //}
 
             slotList.FindAll(x => x.gameObject.activeSelf == true).ForEach(x => x.Clear());
-
-            //inventoryList.Clear();
-            //Update가 제때 된다는 전제하에 invenList로 돌려도 괜찮을거같다
-            //전부 다 돌리는게 아니라 켜져있는 애들만 골라서 돌리면 어떨까
             CatLog.Log("Clear UI Slot in Inventory");
         }
 
         #region BUTTON_METHOD
 
-        //같은 Tab 일 경우 다시 로드하지 않도록 로직수정
-
+        /// <summary>
+        /// 매개변수 Number에 따라 SortType을 바꿔주는 Method
+        /// </summary>
+        /// <param name="num"></param>
         public void Button_SortTab(int num)
         {
             if (num == (int)SortPanel.SortType) //같은 탭을 실행하려고 하면 return
@@ -234,10 +238,13 @@
             }
             SortPanel.Update_Tab(num);
 
-            this.ClearUIinventory();
-            this.UpdateUIinventory(num);
+            InvenUpdate();
         }
 
+        /// <summary>
+        /// Button Toggle Method
+        /// </summary>
+        /// <param name="num"></param>
         public void Button_Switch(int num)
         {
             if (SortPanel.Buttons[num].isOn) 

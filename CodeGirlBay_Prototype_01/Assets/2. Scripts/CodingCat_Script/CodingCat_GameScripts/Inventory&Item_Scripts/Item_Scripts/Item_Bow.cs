@@ -65,6 +65,25 @@
         }
 
         /// <summary>
+        /// Equip Item Test Constructor
+        /// </summary>
+        /// <param name="item"></param>
+        public Item_Bow(Item_Bow item) : base()
+        {
+            this.EquipType = Equipment_Item_Type.Equip_Bow;
+
+            this.Item_Id     = item.Item_Id;
+            this.Item_Name   = item.Item_Name;
+            this.Item_Desc   = item.Item_Desc;
+            this.Item_Sprite = item.Item_Sprite;
+            this.Item_Grade  = item.Item_Grade;
+
+            this.bowGameObject = item.bowGameObject;
+            this.bowSkill_Fst  = item.bowSkill_Fst;
+            this.bowSkill_Sec  = item.bowSkill_Sec;
+        }
+
+        /// <summary>
         /// Constructor With no Parameters. (Used Saving Function. Don't Delete this)
         /// </summary>
         public Item_Bow() : base() { }

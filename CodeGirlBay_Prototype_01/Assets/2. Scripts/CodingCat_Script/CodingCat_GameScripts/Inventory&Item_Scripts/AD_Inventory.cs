@@ -2,13 +2,12 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Security.Cryptography.X509Certificates;
     using CodingCat_Scripts;
 
     [Serializable]
     public class AD_Inventory
     {
-        public List<AD_item> invenList = new List<AD_item>();
+        private List<AD_item> invenList = new List<AD_item>();
         private readonly byte maxItemCount = 255;
 
         public AD_Inventory()
@@ -253,6 +252,22 @@
                                              newItem.Item_Desc,
                                              newItem.Item_Sprite,
                                              newItem.Item_Grade));
+        }
+
+        public void DelItem(AD_item target)
+        {
+            if (invenList.Contains(target))
+            {
+                CatLog.Log($"인벤토리에서 삭제대상 아이템 : {target.GetName}을 찾았습니다.");
+                invenList.Remove(target);
+                CatLog.Log("인벤토리에서 해당 아이템을 제거하였습니다.");
+            }
+            else CatLog.WLog("인벤토리 내부에 해당 아이템이 없습니다.");
+        }
+
+        public void Add_BowItem(Item_Bow newItem)
+        {
+            invenList.Add(new Item_Bow(newItem));
         }
 
         public void ClearInventory() => invenList.Clear();

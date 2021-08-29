@@ -6,6 +6,7 @@ TagManager:
   tags:
   - ArrowDefence_Bow
   - ArrowDefence_Arrow
+  - BattleScene_MainCanvas
   layers:
   - Default
   - TransparentFX

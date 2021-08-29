@@ -7,7 +7,6 @@
     public class AD_BowAbility : MonoBehaviour
     {
         private AD_BowController bowController;
-        //public AD_PlayerData playerData;
 
         private void Start()
         {
@@ -20,11 +19,12 @@
                 for (int i = 0; i < weapon.GetBowSkills().Length; i++)
                 {
                     if (weapon.GetBowSkills()[i] != null)
+                    {
                         bowController.bowSkillSet += weapon.GetBowSkills()[i].BowSpecialSkill;
-                    else CatLog.WLog($"{i} Skill Slot NULL");
+                        CatLog.WLog($"Skill Slot {i} Init, Skill Name : {weapon.GetBowSkill().ToString()}");
+                    }
                 }
             }
-            else CatLog.WLog("Equip Bow Item is Null");
         }
     }
 }

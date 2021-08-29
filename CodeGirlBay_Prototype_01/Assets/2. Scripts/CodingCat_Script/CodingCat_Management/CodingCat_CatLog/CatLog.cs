@@ -112,6 +112,14 @@
 #endif
         }
 
+        [System.Diagnostics.Conditional("ENABLE_LOG")]
+        public static void Break()
+        {
+#if ENABLE_LOG
+            UnityEngine.Debug.Break();
+#endif
+        }
+
         #region DLog_Stop_Method
         [System.Diagnostics.Conditional("ENABLE_LOG")]
         public static void ELog(string msg, bool isStopEditor)

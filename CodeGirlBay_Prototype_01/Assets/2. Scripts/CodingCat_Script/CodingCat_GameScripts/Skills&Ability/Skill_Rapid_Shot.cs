@@ -21,7 +21,7 @@
         {
             yield return null;
 
-            CatLog.Log("Bow Special Effect Occured :: Rapid Shot");
+            //CatLog.Log("Bow Special Effect Occured :: Rapid Shot");
 
             byte arrowCount = 0;
 

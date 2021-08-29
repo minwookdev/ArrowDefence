@@ -36,37 +36,37 @@
             {
                 var itemInfo = item.GetItem();
 
-                Text_ItemType.text  = "Consumable";
-                Text_ItemName.text  = item.GetName;
-                Text_ItemDesc.text  = item.GetDesc;
+                Text_ItemType.text = "Consumable";
+                Text_ItemName.text = item.GetName;
+                Text_ItemDesc.text = item.GetDesc;
                 Text_ItemCount.text = item.GetAmount.ToString();
-                Image_Item.sprite   = item.GetSprite;
-                Image_Frame.sprite  = frame;
-                itemAddress         = item;
+                Image_Item.sprite = item.GetSprite;
+                Image_Frame.sprite = frame;
+                itemAddress = item;
 
                 Popup_Object.SetActive(true);
             }
 
             public void EnablePopup(Item_Material item, Sprite frame)
             {
-                Text_ItemType.text  = "Consumable";
-                Text_ItemName.text  = item.GetName;
-                Text_ItemDesc.text  = item.GetDesc;
+                Text_ItemType.text = "Consumable";
+                Text_ItemName.text = item.GetName;
+                Text_ItemDesc.text = item.GetDesc;
                 Text_ItemCount.text = item.GetAmount.ToString();
-                Image_Item.sprite   = item.GetSprite;
-                Image_Frame.sprite  = frame;
-                itemAddress         = item;
+                Image_Item.sprite = item.GetSprite;
+                Image_Frame.sprite = frame;
+                itemAddress = item;
 
                 Popup_Object.SetActive(true);
             }
 
             public void DisablePop()
             {
-                Text_ItemType.text  = "";
-                Text_ItemName.text  = "";
-                Text_ItemDesc.text  = "";
+                Text_ItemType.text = "";
+                Text_ItemName.text = "";
+                Text_ItemDesc.text = "";
                 Text_ItemCount.text = "";
-                itemAddress         = null;
+                itemAddress = null;
 
                 Popup_Object.SetActive(false);
             }
@@ -92,14 +92,14 @@
             {
                 Text_ItemType.text = "Equipment";
                 Text_ItemName.text = item.GetName;
-                Image_Item.sprite  = item.GetSprite;
+                Image_Item.sprite = item.GetSprite;
                 Image_Frame.sprite = sprite;
-                itemAddress        = item;
+                itemAddress = item;
 
-                for(int i =0;i<item.GetBowSkills().Length;i++)
+                for (int i = 0; i < item.GetBowSkills().Length; i++)
                 {
                     if (item.GetBowSkills()[i] != null) Object_SkillSlots[i].SetActive(true);
-                    else                                Object_SkillSlots[i].SetActive(false);
+                    else Object_SkillSlots[i].SetActive(false);
                 }
 
                 //플레이어의 현재 장비아이템이 선택한 장비아이템인지 비교해서 버튼 띄워줌
@@ -107,7 +107,7 @@
                 //else                                                     SwitchButtons(true);
 
                 if (ReferenceEquals(CCPlayerData.equipments.GetBowItem(), itemAddress)) SwitchButtons(true);
-                else                                                                    SwitchButtons(false);
+                else SwitchButtons(false);
 
                 CCPlayerData.equipments.CompareItem(itemAddress);
 
@@ -118,7 +118,7 @@
             {
                 Text_ItemType.text = "";
                 Text_ItemName.text = "";
-                itemAddress        = null;
+                itemAddress = null;
 
                 foreach (var item in Object_SkillSlots)
                 {
@@ -130,7 +130,7 @@
 
             public Item_Bow GetItemAddress()
             {
-                if(itemAddress != null)
+                if (itemAddress != null)
                 {
                     CatLog.Log("Bow Item Address 전달되었습니다.");
                     return itemAddress;
@@ -145,7 +145,7 @@
             //Temp Method
             public bool GetItemAddress(ref Item_Bow bowItem)
             {
-                if(itemAddress != null)
+                if (itemAddress != null)
                 {
                     bowItem = itemAddress;
                     return true;
@@ -176,7 +176,7 @@
             //장착버튼 교체
             private void SwitchButtons(bool isEquip)
             {
-                if(isEquip) //장착중인 아이템이면 해제버튼을 활성화
+                if (isEquip) //장착중인 아이템이면 해제버튼을 활성화
                 {
                     Button_Release.gameObject.SetActive(true);
                     Button_Equip.gameObject.SetActive(false);
@@ -189,11 +189,28 @@
             }
         }
 
+        [Serializable]
+        public class ItemPop_Equip_Arrow
+        {
+
+        }
+
+        [Serializable]
+        public class ItemPop_Equip_Accessory
+        {
+
+        }
+
+        [Header("Item Grade Frames")]
         public Sprite[] Frames;
 
+
+        [Header("Item Popup Type")]
         [Space(10)]
-        public ItemPop_Normal    ItemPop;      //Material, Consumable Item Popup
-        public ItemPop_Equip_Bow ItemPop_Bow;  //Equipment Bow Item Popup
+        public ItemPop_Normal    ItemPop;               //Material, Consumable Item Popup
+        public ItemPop_Equip_Bow ItemPop_Bow;           //Equipment Bow Item Popup
+        public ItemPop_Equip_Arrow ItemPop_Arrow;       //Equipment Arrow Item Popup
+        public ItemPop_Equip_Accessory ItemPop_Access;  //Equipment Accessory Item Popup
         private Popup_Type       popType = Popup_Type.None; //현재 열려있는 팝업
 
         /*

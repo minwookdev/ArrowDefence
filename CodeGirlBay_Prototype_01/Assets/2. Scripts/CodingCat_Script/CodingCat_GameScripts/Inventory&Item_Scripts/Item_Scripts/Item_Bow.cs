@@ -1,5 +1,6 @@
 ﻿namespace CodingCat_Games
 {
+    using CodingCat_Scripts;
     using UnityEngine;
 
     public class Item_Bow : Item_Equipment
@@ -109,7 +110,17 @@
         public bool IsBowSkill() //Skill이 여러개 일때는 어떻게?
         {
             if (bowSkill_Fst != null) return true;
-            else                  return false;
+            else                      return false;
+        }
+
+        public GameObject GetBowObject()
+        {
+            if (this.bowGameObject != null) return bowGameObject;
+            else
+            {
+                CatLog.WLog($"{this.Item_Name}의 Bow GameObject가 NULL 입니다.");
+                return null;
+            }
         }
 
         public override object GetItem() => this;

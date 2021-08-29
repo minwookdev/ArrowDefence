@@ -131,6 +131,9 @@
 
             }; TestFunction();
 
+            //arrowParent = GameObject.FindWithTag(AD_Data.Tag_BattleScene_MainCanvas).GetComponent<RectTransform>();
+            arrowParent = transform.parent;
+
             yield return new WaitUntil(() => CCPooler.IsInitialized);
             StartCoroutine(this.ArrowReload());
         }

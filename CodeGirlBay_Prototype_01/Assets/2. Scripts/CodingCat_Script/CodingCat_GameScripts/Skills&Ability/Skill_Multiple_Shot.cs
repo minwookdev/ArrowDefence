@@ -12,7 +12,7 @@
         public override void BowSpecialSkill(float facingVec, float arrowSpreadAngle, byte numOfArrows, Transform arrowParent,
                                   AD_BowController adBow, Vector3 initScale, Vector3 initPos, Vector2 arrowForce)
         {
-            CatLog.Log("Bow Special Effect Occured :: Multiple Shot");
+            //CatLog.Log("Bow Special Effect Occured :: Multiple Shot");
 
             //float facingRotation = Mathf.Atan2(facingVec.y, facingVec.x) * Mathf.Rad2Deg;
             float startRotation = facingVec + arrowSpreadAngle / 2f;

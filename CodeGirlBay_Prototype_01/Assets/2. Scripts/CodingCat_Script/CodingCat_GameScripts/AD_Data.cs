@@ -15,6 +15,7 @@
     /// </summary>
     public const string Tag_Bow   = "ArrowDefence_Bow";
     public const string Tag_Arrow = "ArrowDefence_Arrow";
+    public static readonly string Tag_BattleScene_MainCanvas = "BattleScene_MainCanvas";
 
     /// <summary>
     /// Object Pool Type String Data

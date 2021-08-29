@@ -18,7 +18,7 @@
         {
             base.BowSpecialSkill(facingVec, arrowSpreadAngle, numOfArrows, arrowParent, adBow, initScale, arrowInitPos, force);
 
-            CatLog.Log("Bow Special Effect Occured :: Arrow Rain");
+            //CatLog.Log("Bow Special Effect Occured :: Arrow Rain");
 
             for (int i =0;i < numOfArrows;i++)
             {

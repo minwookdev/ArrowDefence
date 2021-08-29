@@ -35,6 +35,10 @@
         [Header("DEV Options")]
         public bool IsDevMode = true;
 
+        [Header("Game Init Settings")]
+        public Transform ParentCanvas;
+        public Transform InitPos;
+
         private void Start()
         {
             #region LIMIT_LINE_MAKER
@@ -68,6 +72,8 @@
             #region BATTLE_SCENE_INITIALIZING
 
             PausePanel.GetComponent<CanvasGroup>().alpha = 0f;
+
+            GameManager.Instance.SetPlayerBow(ParentCanvas, InitPos);
 
             //Fade Effect When Etnering The Battle Scene (if Don't Work This Function, Enable The DEV Variable)
             this.OnSceneEnteringFadeOut();

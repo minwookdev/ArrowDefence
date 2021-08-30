@@ -8,7 +8,7 @@
 
         public Item_Accessory(int id, string name, string desc, Sprite sprite, ITEMGRADE grade) : base()
         {
-            EquipType = Equipment_Item_Type.Equip_Accessory;
+            EquipType = EQUIP_ITEMTYPE.EQUIP_ACCESSORY;
 
             this.Item_Id     = id;
             this.Item_Name   = name;

@@ -12,7 +12,7 @@
 
         public Item_Arrow(int id, string name, Sprite sprite, ITEMGRADE grade, GameObject main, GameObject less) : base()
         {
-            this.EquipType   = Equipment_Item_Type.Equip_Arrow;
+            this.EquipType   = EQUIP_ITEMTYPE.EQUIP_ARROW;
             this.Item_Id     = id;
             this.Item_Name   = name;
             this.Item_Sprite = sprite;

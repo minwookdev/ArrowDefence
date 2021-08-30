@@ -1,17 +1,15 @@
 ﻿namespace CodingCat_Games
 {
-    using UnityEngine;
-
-    public enum Equipment_Item_Type
+    public enum EQUIP_ITEMTYPE
     {
-        Equip_Bow,
-        Equip_Arrow,
-        Equip_Accessory
+        EQUIP_BOW       = 0,
+        EQUIP_ARROW     = 1,
+        EQUIP_ACCESSORY = 2
     }
 
     public class Item_Equipment : AD_item
     {
-        protected Equipment_Item_Type EquipType;
+        protected EQUIP_ITEMTYPE EquipType;
 
         public Item_Equipment()
         {
@@ -23,5 +21,7 @@
         {
             throw new System.NotImplementedException();
         }
+
+        public EQUIP_ITEMTYPE GetEquipType() => EquipType;
     }
 }

@@ -12,7 +12,7 @@
 
         public ItemData_Equip_Accessory() : base()
         {
-            this.Equip_Type = Equipment_Item_Type.Equip_Accessory;
+            this.Equip_Type = EQUIP_ITEMTYPE.EQUIP_ACCESSORY;
         }
 #if UNITY_EDITOR
         [MenuItem("CodingCat/Item Asset/Accessory Item Asset")]

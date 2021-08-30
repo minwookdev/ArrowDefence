@@ -31,7 +31,7 @@
                         GameObject obj, AD_BowSkill skill1, AD_BowSkill skill2) : base()
         {
             //Equip Item Type Set
-            EquipType = Equipment_Item_Type.Equip_Bow;
+            EquipType = EQUIP_ITEMTYPE.EQUIP_BOW;
 
             //Default Item Data Set
             Item_Id     = id;
@@ -52,7 +52,7 @@
         /// <param name="item">Bow Item Data Address</param>
         public Item_Bow(ItemData_Equip_Bow item) : base()
         {
-            this.EquipType    = Equipment_Item_Type.Equip_Bow;
+            this.EquipType    = EQUIP_ITEMTYPE.EQUIP_BOW;
 
             this.Item_Id      = item.Item_Id;
             this.Item_Name    = item.Item_Name;
@@ -71,7 +71,7 @@
         /// <param name="item"></param>
         public Item_Bow(Item_Bow item) : base()
         {
-            this.EquipType = Equipment_Item_Type.Equip_Bow;
+            this.EquipType = EQUIP_ITEMTYPE.EQUIP_BOW;
 
             this.Item_Id     = item.Item_Id;
             this.Item_Name   = item.Item_Name;
@@ -85,7 +85,7 @@
         }
 
         /// <summary>
-        /// Constructor With no Parameters. (Used Saving Function. Don't Delete this)
+        /// Constructor With no Parameters. (Used Saving Function. Don't Delete and Use this)
         /// </summary>
         public Item_Bow() : base() { }
 

@@ -142,20 +142,6 @@
                 }
             }
 
-            //Temp Method
-            public bool GetItemAddress(ref Item_Bow bowItem)
-            {
-                if (itemAddress != null)
-                {
-                    bowItem = itemAddress;
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-
             public void Button_EquipAction()
             {
                 CCPlayerData.equipments.Equip_BowItem(itemAddress);
@@ -192,13 +178,97 @@
         [Serializable]
         public class ItemPop_Equip_Arrow
         {
+            public GameObject PopObject;
+            public Image Image_Item;
+            public Image Image_Frame;
+            public TextMeshProUGUI Text_ItemName;
+            public TextMeshProUGUI Text_ItemDesc;
+            public Button Button_Equip;
+            public Button Button_Release;
 
+            public GameObject[] Object_Skill_Slot;
+            private Item_Arrow itemAddress;
+
+            public void EnablePopup(Item_Arrow address, Sprite frameSprite)
+            {
+                itemAddress = address;
+
+                Text_ItemName.text = address.GetName;
+                Image_Item.sprite = address.GetSprite;
+                Image_Frame.sprite = frameSprite;
+
+                //Skil Slot Enable Logic
+                foreach (var item in Object_Skill_Slot)
+                {
+                    item.SetActive(false);
+                }
+
+                //Enable / Disable Equip Button Logic
+
+                PopObject.SetActive(true);
+            }
+
+            public void DisablePopup()
+            {
+                Text_ItemName.text = "";
+                itemAddress = null;
+
+                foreach (var item in Object_Skill_Slot)
+                {
+                    if (item.activeSelf == true)
+                        item.SetActive(false);
+                }
+
+                PopObject.SetActive(false);
+            }
         }
 
         [Serializable]
         public class ItemPop_Equip_Accessory
         {
+            public GameObject PopObject;
+            public Image Image_Item;
+            public Image Image_Frame;
+            public TextMeshProUGUI Text_ItemName;
+            public TextMeshProUGUI Text_ItemDesc;
+            public Button Button_Equip;
+            public Button Button_Release;
 
+            public GameObject[] Object_Skill_Slot;
+            private Item_Accessory itemAddress;
+
+            public void EnablePopup(Item_Accessory address, Sprite frameSprite)
+            {
+                itemAddress = address;
+
+                Text_ItemName.text = address.GetName;
+                Image_Item.sprite = address.GetSprite;
+                Image_Frame.sprite = frameSprite;
+
+                //Skill Slot Enable Logic
+                foreach (var item in Object_Skill_Slot)
+                {
+                    item.SetActive(false);
+                }
+
+                //Enable / Disable Equip Button Logic
+
+                PopObject.SetActive(true);
+            }
+
+            public void DisablePopup()
+            {
+                Text_ItemName.text = "";
+                itemAddress = null;
+
+                foreach (var item in Object_Skill_Slot)
+                {
+                    if (item.activeSelf == true)
+                        item.SetActive(false);
+                }
+
+                PopObject.SetActive(false);
+            }
         }
 
         [Header("Item Grade Frames")]
@@ -237,15 +307,11 @@
         {
             switch (item)
             {
-                case Item_Bow bowItem: ItemPop_Bow.EnablePopup(bowItem, Frames[(int)item.GetGrade]); popType = Popup_Type.Popup_BowItem;  break;
-                case Item_Arrow arrowItem: break;
+                case Item_Bow bowItem:          ItemPop_Bow.EnablePopup(bowItem, Frames[(int)item.GetGrade]); popType = Popup_Type.Popup_BowItem;  break;
+                case Item_Arrow arrowItem:      ItemPop_Arrow.EnablePopup(arrowItem, Frames[(int)item.GetGrade]); popType = Popup_Type.Popup_ArrowItem;  break;
+                case Item_Accessory accessItem: ItemPop_Access.EnablePopup(accessItem, Frames[(int)item.GetGrade]); popType = Popup_Type.Popup_Accessory; break;
                 default: break;
             }
-        }
-
-        public void Open_Popup_Accessory()
-        {
-
         }
 
         #region BUTTON_METHOD
@@ -268,16 +334,36 @@
             Close_Popup(3);
         }
 
+        public void Button_EquipArrowItem()
+        {
+
+        }
+
+        public void Button_ReleaseArrowItem()
+        {
+
+        }
+        
+        public void Button_EquipAccessItem()
+        {
+
+        }
+
+        public void Button_ReleaseAccessItem()
+        {
+
+        }
+
         public void Close_Popup(int popnum)
         {
             //itemAddress = null;
 
             switch (popnum)
             {
-                case 0: ItemPop.DisablePop();       break;   //Con, Mat
-                case 1:                             break;   //Equip Non-Skill
-                case 2:                             break;   //Equip One-Skill
-                case 3: ItemPop_Bow.DisablePopup(); break;   //New Bow Item
+                case 0: ItemPop.DisablePop();           break;   //Con, Mat
+                case 1: ItemPop_Arrow.DisablePopup();   break;   //Equip Non-Skill
+                case 2: ItemPop_Access.DisablePopup();  break;   //Equip One-Skill
+                case 3: ItemPop_Bow.DisablePopup();     break;   //New Bow Item
                 default: break;
             }
 
@@ -292,9 +378,9 @@
                 case Popup_Type.None:             CatLog.Log("현재 열려있는 팝업 타입 Enum 없음."); break;
                 case Popup_Type.Popup_NormalItem: ItemPop.DisablePop();                           break;
                 case Popup_Type.Popup_BowItem:    ItemPop_Bow.DisablePopup();                     break;
-                case Popup_Type.Popup_ArrowItem: break;
-                case Popup_Type.Popup_Accessory: break;
-                default:                         break;
+                case Popup_Type.Popup_ArrowItem:  ItemPop_Arrow.DisablePopup();                   break;
+                case Popup_Type.Popup_Accessory:  ItemPop_Access.DisablePopup();                  break;
+                default:                                                                          break;
             }
 
             popType = Popup_Type.None;

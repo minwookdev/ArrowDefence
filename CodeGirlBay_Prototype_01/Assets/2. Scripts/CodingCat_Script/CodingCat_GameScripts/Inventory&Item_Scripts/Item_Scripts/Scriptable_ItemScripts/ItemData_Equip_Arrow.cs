@@ -12,7 +12,7 @@
 
         public ItemData_Equip_Arrow() : base()
         {
-            this.Equip_Type = Equipment_Item_Type.Equip_Arrow;
+            this.Equip_Type = EQUIP_ITEMTYPE.EQUIP_ARROW;
         }
     }
 }

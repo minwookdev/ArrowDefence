@@ -7,7 +7,7 @@ using UnityEngine;
 
 public class PlayerData_Editor : EditorWindow
 {
-    SerializedObject so;
+    //SerializedObject so;
     public List<ItemInfo> invenInfo = new List<ItemInfo>();
     Vector2 scrollPos; //스크롤 바의 위치
 
@@ -32,29 +32,15 @@ public class PlayerData_Editor : EditorWindow
         EditorWindow.GetWindow(typeof(PlayerData_Editor));
     }
 
-    private void OnEnable()
-    {
-        //scriptable = new ScriptableObject(CCPlayerData.inventory);
-        //inven = new SerializedObject(CCPlayerData.inventory);
-        //itemList = CCPlayerData.inventory.GetItemList();
-        //
-        //ScriptableObject target = this;
-        //so = new SerializedObject(target);
-    }
-
     private void OnGUI()
     {
         SetItemInfo(CCPlayerData.inventory.GetAllItemList());
 
-        GUILayout.Label("PlayerData Window", EditorStyles.boldLabel);
+        GUILayout.Label("PlayerData Window (v0.3)", EditorStyles.boldLabel);
 
         GUILayout.BeginVertical("HelpBox");
 
         GUILayout.Label("ArrowDefenece PlayerData");
-
-        //EditorGUILayout.LabelField("Player int Value : ", CCPlayerData.user_int.ToString());
-        //
-        //GUILayout.Space(10);
 
         EditorGUILayout.LabelField("Total inventory Items : ", CCPlayerData.inventory.GetAllItemList().Count.ToString());
 
@@ -88,34 +74,115 @@ public class PlayerData_Editor : EditorWindow
 [System.Serializable]
 public class ItemInfo
 {
-    public string Id;
     public string Name;
+    public string Id;
     public string Desc;
+    public string Type;
     public string Grade;
     public string Amount;
-    public string Type;
+
     public string EquipType;
-    public Sprite ItemSprite;
+
+    public string SkillString_0;
+    public string SkillString_1;
+
+    private string empty = "x";
 
     public ItemInfo(AD_item item)
     {
-        this.Id         = item.GetID.ToString();
-        this.Name       = item.GetName;
-        this.Desc       = item.GetDesc;
-        this.Grade      = item.GetGrade.ToString();
-        this.Amount     = item.GetAmount.ToString();
-        this.Type       = item.GetItemType.ToString();
-        this.ItemSprite = item.GetSprite;
+        switch (item)
+        {
+            case Item_Material matitem:     InitItem_Mat(matitem);       break;
+            case Item_Consumable conitem:   InitItem_Con(conitem);       break;
+            case Item_Bow bowitem:          InitItem_Bow(bowitem);       break;
+            case Item_Arrow arrowitem:      InitItem_Arrow(arrowitem);   break;
+            case Item_Accessory accessitem: InitItem_Access(accessitem); break;
+            default: break;
+        }
+    }
 
-        //switch (item)
-        //{
-        //    case Item_Material matitem:     break;
-        //    case Item_Consumable conitem:   break;
-        //    case Item_Bow bowitem:          break;
-        //    case Item_Arrow arrowitem:      break;
-        //    case Item_Accessory accessitem: break;
-        //    default: break;
-        //}
+    public void InitItem_Mat (Item_Material item) 
+    {
+        this.Name   = item.GetName;
+        this.Id     = item.GetID.ToString();
+        this.Desc   = item.GetDesc;
+        this.Type   = item.GetItemType.ToString();
+        this.Grade  = item.GetGrade.ToString();
+        this.Amount = item.GetAmount.ToString();
+
+        this.EquipType = empty;
+        this.SkillString_0 = empty;
+        this.SkillString_1 = empty;
+    }
+
+    public void InitItem_Con (Item_Consumable item)
+    {
+        this.Name   = item.GetName;
+        this.Id     = item.GetID.ToString();
+        this.Desc   = item.GetDesc;
+        this.Type   = item.GetItemType.ToString();
+        this.Grade  = item.GetGrade.ToString();
+        this.Amount = item.GetAmount.ToString();
+
+        this.EquipType = empty;
+        this.SkillString_0 = empty;
+        this.SkillString_1 = empty;
+    }
+
+    public void InitItem_Bow (Item_Bow item)
+    {
+        this.Name   = item.GetName;
+        this.Id     = item.GetID.ToString();
+        this.Desc   = item.GetDesc;
+        this.Type   = item.GetItemType.ToString();
+        this.Grade  = item.GetGrade.ToString();
+        this.Amount = item.GetAmount.ToString();
+
+        this.EquipType = item.GetEquipType().ToString();
+
+        for (int i = 0; i < item.GetBowSkills().Length; i++)
+        {
+            if(item.GetBowSkills()[i] != null)
+            {
+                if (i == 0) SkillString_0 = item.GetBowSkills()[i].ToString();
+                else if (i == 1)            item.GetBowSkills()[i].ToString();
+            }
+            else
+            {
+                if (i == 0)      SkillString_0 = empty;
+                else if (i == 1) SkillString_1 = empty;
+            }
+        } 
+    }
+
+    public void InitItem_Arrow (Item_Arrow item)
+    {
+        this.Name   = item.GetName;
+        this.Id     = item.GetID.ToString();
+        this.Desc   = item.GetDesc;
+        this.Type   = item.GetItemType.ToString();
+        this.Grade  = item.GetGrade.ToString();
+        this.Amount = item.GetAmount.ToString();
+
+        this.EquipType = item.GetEquipType().ToString();
+
+        SkillString_0 = empty;
+        SkillString_1 = empty;
+    }
+    
+    public void InitItem_Access (Item_Accessory item)
+    {
+        this.Name   = item.GetName;
+        this.Id     = item.GetID.ToString();
+        this.Desc   = item.GetDesc;
+        this.Type   = item.GetItemType.ToString();
+        this.Grade  = item.GetGrade.ToString();
+        this.Amount = item.GetAmount.ToString();
+
+        this.EquipType = item.GetEquipType().ToString();
+
+        SkillString_0 = empty;
+        SkillString_1 = empty;
     }
 }
 

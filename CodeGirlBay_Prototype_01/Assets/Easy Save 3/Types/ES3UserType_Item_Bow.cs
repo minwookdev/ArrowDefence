@@ -47,7 +47,7 @@ namespace ES3Types
 					reader.SetPrivateField("bowGameObject", reader.Read<UnityEngine.GameObject>(), instance);
 					break;
 					case "EquipType":
-					reader.SetPrivateField("EquipType", reader.Read<CodingCat_Games.Equipment_Item_Type>(), instance);
+					reader.SetPrivateField("EquipType", reader.Read<CodingCat_Games.EQUIP_ITEMTYPE>(), instance);
 					break;
 					case "Item_Id":
 					reader.SetPrivateField("Item_Id", reader.Read<System.Int32>(), instance);

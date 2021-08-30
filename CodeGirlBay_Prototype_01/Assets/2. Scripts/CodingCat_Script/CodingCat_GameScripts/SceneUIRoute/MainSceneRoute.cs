@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using DG.Tweening;
 using CodingCat_Games;
 using CodingCat_Scripts;
@@ -76,10 +73,10 @@ public class MainSceneRoute : MonoBehaviour
 
     public enum STAGELIST
     {
-        STAGE_FOREST = 1,
-        STAGE_DESERT = 2,
+        STAGE_FOREST  = 1,
+        STAGE_DESERT  = 2,
         STAGE_DUNGEON = 3,
-        STAGE_DEV = 0
+        STAGE_DEV     = 0
     }
 
     private void Awake() => _inst = this;

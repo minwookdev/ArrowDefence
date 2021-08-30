@@ -7,7 +7,7 @@ namespace CodingCat_Games
     {
         [Header("Equipment Item Data")]
         [Space(15)]
-        [ReadOnly] public Equipment_Item_Type Equip_Type;
+        [ReadOnly] public EQUIP_ITEMTYPE Equip_Type;
         
         protected ItemData_Equip()
         {

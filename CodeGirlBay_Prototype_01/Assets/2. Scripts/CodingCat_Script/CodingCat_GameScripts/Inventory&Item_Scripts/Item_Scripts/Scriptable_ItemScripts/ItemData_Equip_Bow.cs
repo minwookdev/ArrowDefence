@@ -17,7 +17,7 @@
 
         public ItemData_Equip_Bow() : base()
         {
-            Equip_Type = Equipment_Item_Type.Equip_Bow;
+            Equip_Type = EQUIP_ITEMTYPE.EQUIP_BOW;
         }
 
         private void OnEnable() => SetBowSkills();

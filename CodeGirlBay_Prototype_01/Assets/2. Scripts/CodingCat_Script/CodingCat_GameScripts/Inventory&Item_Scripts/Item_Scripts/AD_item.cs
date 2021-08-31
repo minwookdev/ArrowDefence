@@ -21,6 +21,13 @@
         GRADE_UNIQUE    = 6
     }
 
+    interface IStackable 
+    {
+        void SetAmount(int value);
+        void IncAmount(int value);
+        void DecAmount(int value);
+    }
+
     [Serializable] //Abstract Class 는 Serailizable 속성 달려있어도 Inspector에서 표기되지 않는다
     public abstract class AD_item
     {
@@ -32,7 +39,7 @@
         protected ITEMTYPE  Item_Type;
         protected ITEMGRADE Item_Grade;
 
-        #region PROPERTY
+        #region PROPERTY_FIELD
 
         public int       GetID            { get { return Item_Id; } }
         public string    GetName          { get { return Item_Name; } }
@@ -50,4 +57,6 @@
         /// <returns></returns>
         public abstract object GetItem();
     }
+
+
 }

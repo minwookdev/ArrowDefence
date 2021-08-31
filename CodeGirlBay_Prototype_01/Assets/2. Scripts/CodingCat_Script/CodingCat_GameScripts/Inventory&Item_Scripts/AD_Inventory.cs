@@ -17,20 +17,31 @@
 
         public void AddItem(ItemData item)
         {
-            switch (item.Item_Type)
+            switch (item)
             {
-                case ITEMTYPE.ITEM_CONSUMABLE: Add_ConItem(item); break;
-                case ITEMTYPE.ITEM_MATERIAL:   Add_MatItem(item); break;
-                case ITEMTYPE.ITEM_EQUIPMENT:
-                    switch (item)
-                    {
-                        case ItemData_Equip_Bow   item_Bow:        Add_BowItem(item_Bow);       break;
-                        case ItemData_Equip_Arrow item_Arrow:      Add_ArrowItem(item_Arrow);   break;
-                        case ItemData_Equip_Accessory item_Access: Add_AccessItem(item_Access); break;
-                    }
-                    break;
+                case ItemData_Con             newitem: Add_ConItem(newitem);    break;
+                case ItemData_Mat             newitem: Add_MatItem(newitem);    break;
+                case ItemData_Equip_Bow       newitem: Add_BowItem(newitem);    break;
+                case ItemData_Equip_Arrow     newitem: Add_ArrowItem(newitem);  break;
+                case ItemData_Equip_Accessory newitem: Add_AccessItem(newitem); break;
+                default:                                                        break;
             }
+
             #region OLD_CODE
+
+            //switch (item.Item_Type)
+            //{
+            //    case ITEMTYPE.ITEM_CONSUMABLE: Add_ConItem(item); break;
+            //    case ITEMTYPE.ITEM_MATERIAL:   Add_MatItem(item); break;
+            //    case ITEMTYPE.ITEM_EQUIPMENT:
+            //        switch (item)
+            //        {
+            //            case ItemData_Equip_Bow   item_Bow:        Add_BowItem(item_Bow);       break;
+            //            case ItemData_Equip_Arrow item_Arrow:      Add_ArrowItem(item_Arrow);   break;
+            //            case ItemData_Equip_Accessory item_Access: Add_AccessItem(item_Access); break;
+            //        }
+            //        break;
+            //}
 
             //AD_item newItem     = new AD_item();
             //newItem.Id          = item.Item_Id;
@@ -84,7 +95,7 @@
         }
 
         //Item Stack 중첩 구현 (최대 255개)
-        private void Add_ConItem(ItemData newItem)
+        private void Add_ConItem(ItemData_Con newItem)
         {
             var duplicateItems = invenList.FindAll(x => x.GetID == newItem.Item_Id);
 
@@ -114,11 +125,7 @@
 
                             if (i == duplicateItems.Count - 1) //Last Index 경우 바로 추가해줌
                             {
-                                invenList.Add(new Item_Consumable(newItem.Item_Id, itemAmount,
-                                                                  newItem.Item_Name,
-                                                                  newItem.Item_Desc,
-                                                                  newItem.Item_Sprite,
-                                                                  newItem.Item_Grade));
+                                invenList.Add(new Item_Consumable(newItem));
                             }
                             else continue;
                         }
@@ -127,11 +134,7 @@
                     {
                         if (i == duplicateItems.Count - 1) //Last Index 경우 바로 추가해줌
                         {
-                            invenList.Add(new Item_Consumable(newItem.Item_Id, itemAmount,
-                                                              newItem.Item_Name,
-                                                              newItem.Item_Desc,
-                                                              newItem.Item_Sprite,
-                                                              newItem.Item_Grade));
+                            invenList.Add(new Item_Consumable(newItem));
                         }
                         else continue;
                     }
@@ -139,17 +142,12 @@
             }
             else //중복되는 아이템이 없다 -> 바로 추가해줌
             {
-                invenList.Add(new Item_Consumable(newItem.Item_Id,
-                                                  newItem.Item_Amount,
-                                                  newItem.Item_Name,
-                                                  newItem.Item_Desc,
-                                                  newItem.Item_Sprite,
-                                                  newItem.Item_Grade));
+                invenList.Add(new Item_Consumable(newItem));
             }
         }
 
         //Item Stack 중첩 구현 (최대 255개)
-        private void Add_MatItem(ItemData newItem)
+        private void Add_MatItem(ItemData_Mat newItem)
         {
             var dupItems = invenList.FindAll(x => x.GetID == newItem.Item_Id);
 
@@ -175,11 +173,7 @@
 
                             if (i == dupItems.Count - 1) //Last Index 경우 바로 추가해줌
                             {
-                                invenList.Add(new Item_Material(newItem.Item_Id, itemAmount,
-                                                                newItem.Item_Name,
-                                                                newItem.Item_Desc,
-                                                                newItem.Item_Sprite,
-                                                                newItem.Item_Grade));
+                                invenList.Add(new Item_Material(newItem));
                             }
                             else continue;
                         }
@@ -188,11 +182,7 @@
                     {
                         if (i == dupItems.Count - 1) //Last Index 경우 바로 추가해줌
                         {
-                            invenList.Add(new Item_Material(newItem.Item_Id, itemAmount,
-                                                            newItem.Item_Name,
-                                                            newItem.Item_Desc,
-                                                            newItem.Item_Sprite,
-                                                            newItem.Item_Grade));
+                            invenList.Add(new Item_Material(newItem));
                         }
                         else continue;
                     }
@@ -200,12 +190,7 @@
             }
             else //중복되는 아이템이 없다 -> 바로 추가해줌
             {
-                invenList.Add(new Item_Material(newItem.Item_Id,
-                                                newItem.Item_Amount,
-                                                newItem.Item_Name,
-                                                newItem.Item_Desc,
-                                                newItem.Item_Sprite,
-                                                newItem.Item_Grade));
+                invenList.Add(new Item_Material(newItem));
             }
 
             //Con Item, Mat Item Byte형 데이터로 바꿔주기
@@ -217,14 +202,7 @@
         /// <param name="newItem">BowItem Data</param>
         private void Add_BowItem(ItemData_Equip_Bow newItem)
         {
-            invenList.Add(new Item_Bow(newItem.Item_Id,
-                                       newItem.Item_Name,
-                                       newItem.Item_Desc,
-                                       newItem.Item_Sprite,
-                                       newItem.Item_Grade,
-                                       newItem.BowGameObject,
-                                       newItem.BowSkill_First,
-                                       newItem.BowSkill_Second));
+            invenList.Add(new Item_Bow(newItem));
         }
 
         /// <summary>
@@ -233,12 +211,7 @@
         /// <param name="newItem">Arrow item Data</param>
         private void Add_ArrowItem(ItemData_Equip_Arrow newItem)
         {
-            invenList.Add(new Item_Arrow(newItem.Item_Id,
-                                         newItem.Item_Name,
-                                         newItem.Item_Sprite,
-                                         newItem.Item_Grade,
-                                         newItem.MainArrowObj,
-                                         newItem.LessArrowObj));
+            invenList.Add(new Item_Arrow(newItem));
         }
 
         /// <summary>
@@ -247,11 +220,7 @@
         /// <param name="newItem"></param>
         private void Add_AccessItem(ItemData_Equip_Accessory newItem)
         {
-            invenList.Add(new Item_Accessory(newItem.Item_Id,
-                                             newItem.Item_Name,
-                                             newItem.Item_Desc,
-                                             newItem.Item_Sprite,
-                                             newItem.Item_Grade));
+            invenList.Add(new Item_Accessory(newItem));
         }
 
         public void DelItem(AD_item target)

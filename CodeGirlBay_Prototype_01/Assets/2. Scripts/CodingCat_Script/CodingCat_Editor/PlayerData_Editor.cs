@@ -5,6 +5,7 @@ using CodingCat_Scripts;
 using UnityEditor;
 using UnityEngine;
 
+#if UNITY_EDITOR
 public class PlayerData_Editor : EditorWindow
 {
     //SerializedObject so;
@@ -185,4 +186,5 @@ public class ItemInfo
         SkillString_1 = empty;
     }
 }
+#endif
 

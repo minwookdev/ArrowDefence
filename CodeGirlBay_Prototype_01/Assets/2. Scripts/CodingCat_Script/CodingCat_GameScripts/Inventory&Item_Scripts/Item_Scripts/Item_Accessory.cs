@@ -4,7 +4,7 @@
 
     public class Item_Accessory : Item_Equipment
     {
-        private object effect;
+        private object AccessEffect;
 
         public Item_Accessory(int id, string name, string desc, Sprite sprite, ITEMGRADE grade) : base()
         {
@@ -16,14 +16,27 @@
             this.Item_Sprite = sprite;
             this.Item_Grade  = grade;
 
-            this.effect = null;
+            this.AccessEffect = null;
+        }
+        
+        public Item_Accessory(ItemData_Equip_Accessory item) : base()
+        {
+            this.EquipType = EQUIP_ITEMTYPE.EQUIP_ACCESSORY;
+
+            this.Item_Id     = item.Item_Id;
+            this.Item_Name   = item.Item_Name;
+            this.Item_Desc   = item.Item_Desc;
+            this.Item_Sprite = item.Item_Sprite;
+            this.Item_Grade  = item.Item_Grade;
+
+            this.AccessEffect = null;
         }
 
         public Item_Accessory() : base() { }
 
         private void AddEffect(object effect)
         {
-            this.effect = effect;
+            this.AccessEffect = effect;
         }
     }
 }

@@ -7,20 +7,17 @@
         EQUIP_ACCESSORY = 2
     }
 
-    public class Item_Equipment : AD_item
+    public abstract class Item_Equipment : AD_item
     {
         protected EQUIP_ITEMTYPE EquipType;
 
-        public Item_Equipment()
+        protected Item_Equipment()
         {
             this.Item_Amount = 1;
             this.Item_Type = ITEMTYPE.ITEM_EQUIPMENT;
         }
 
-        public override object GetItem()
-        {
-            throw new System.NotImplementedException();
-        }
+        public override object GetItem() => throw new System.NotImplementedException();
 
         public EQUIP_ITEMTYPE GetEquipType() => EquipType;
     }

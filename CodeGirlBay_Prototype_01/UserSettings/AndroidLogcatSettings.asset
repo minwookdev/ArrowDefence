@@ -3,7 +3,7 @@
     "m_SelectedPackage": {
         "deviceId": "R3CMC06BR0T",
         "name": "com.CodingCatGames.ArrowDefenceTEMP",
-        "processId": 8935,
+        "processId": 4105,
         "exited": false
     },
     "m_SelectedPriority": 0,
@@ -12,12 +12,24 @@
             "deviceId": "R3CMC06BR0T",
             "name": "com.android.settings",
             "processId": 3077,
-            "exited": false
+            "exited": true
         },
         {
             "deviceId": "R3CMC06BR0T",
             "name": "com.CodingCatGames.ArrowDefenceTEMP",
             "processId": 8935,
+            "exited": true
+        },
+        {
+            "deviceId": "R3CMC06BR0T",
+            "name": "com.CodingCatGames.ArrowDefenceTEMP",
+            "processId": 21768,
+            "exited": true
+        },
+        {
+            "deviceId": "R3CMC06BR0T",
+            "name": "com.CodingCatGames.ArrowDefenceTEMP",
+            "processId": 4105,
             "exited": false
         }
     ],

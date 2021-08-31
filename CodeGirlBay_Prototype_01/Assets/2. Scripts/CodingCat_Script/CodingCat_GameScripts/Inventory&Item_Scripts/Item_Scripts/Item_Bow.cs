@@ -17,7 +17,7 @@
         //PlayerData로 들어가는 함수를 가볍게 해주기
 
         /// <summary>
-        /// 통합 Bow Item Constructor
+        /// Bow Item Constructor (Value Type)
         /// </summary>
         /// <param name="id">Item Id</param>
         /// <param name="name">Item Name</param>
@@ -47,7 +47,7 @@
         }
 
         /// <summary>
-        /// Item Address Constructor
+        /// Bow Item Constructor (Item Data Type)
         /// </summary>
         /// <param name="item">Bow Item Data Address</param>
         public Item_Bow(ItemData_Equip_Bow item) : base()
@@ -66,7 +66,7 @@
         }
 
         /// <summary>
-        /// Equip Item Test Constructor
+        /// Bow Item Constructor (Item Type)
         /// </summary>
         /// <param name="item"></param>
         public Item_Bow(Item_Bow item) : base()

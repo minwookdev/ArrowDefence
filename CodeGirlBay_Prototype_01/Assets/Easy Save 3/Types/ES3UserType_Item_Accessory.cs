@@ -4,7 +4,7 @@ using UnityEngine;
 namespace ES3Types
 {
 	[UnityEngine.Scripting.Preserve]
-	[ES3PropertiesAttribute("effect", "EquipType", "Item_Id", "Item_Name", "Item_Desc", "Item_Amount", "Item_Sprite", "Item_Type", "Item_Grade")]
+	[ES3PropertiesAttribute("AccessEffect", "EquipType", "Item_Id", "Item_Name", "Item_Desc", "Item_Amount", "Item_Sprite", "Item_Type", "Item_Grade")]
 	public class ES3UserType_Item_Accessory : ES3ObjectType
 	{
 		public static ES3Type Instance = null;
@@ -16,7 +16,7 @@ namespace ES3Types
 		{
 			var instance = (CodingCat_Games.Item_Accessory)obj;
 			
-			writer.WritePrivateField("effect", instance);
+			writer.WritePrivateField("AccessEffect", instance);
 			writer.WritePrivateField("EquipType", instance);
 			writer.WritePrivateField("Item_Id", instance);
 			writer.WritePrivateField("Item_Name", instance);
@@ -35,8 +35,8 @@ namespace ES3Types
 				switch(propertyName)
 				{
 					
-					case "effect":
-					reader.SetPrivateField("effect", reader.Read<System.Object>(), instance);
+					case "AccessEffect":
+					reader.SetPrivateField("AccessEffect", reader.Read<System.Object>(), instance);
 					break;
 					case "EquipType":
 					reader.SetPrivateField("EquipType", reader.Read<CodingCat_Games.EQUIP_ITEMTYPE>(), instance);

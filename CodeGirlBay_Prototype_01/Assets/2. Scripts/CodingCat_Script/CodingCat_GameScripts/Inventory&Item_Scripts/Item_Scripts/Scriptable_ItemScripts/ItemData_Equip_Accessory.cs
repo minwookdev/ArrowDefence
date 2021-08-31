@@ -7,7 +7,6 @@
     public class ItemData_Equip_Accessory : ItemData_Equip
     {
         [Header("Accessory Item Data")]
-        [Space(10)]
         public string effect = "";
 
         public ItemData_Equip_Accessory() : base()

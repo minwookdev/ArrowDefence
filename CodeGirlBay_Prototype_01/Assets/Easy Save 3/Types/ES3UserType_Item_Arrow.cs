@@ -4,7 +4,7 @@ using UnityEngine;
 namespace ES3Types
 {
 	[UnityEngine.Scripting.Preserve]
-	[ES3PropertiesAttribute("mainArrowObject", "lessArrowObject", "EquipType", "Item_Id", "Item_Name", "Item_Desc", "Item_Amount", "Item_Sprite", "Item_Type", "Item_Grade")]
+	[ES3PropertiesAttribute("MainArrowObject", "LessArrowObject", "EquipType", "Item_Id", "Item_Name", "Item_Desc", "Item_Amount", "Item_Sprite", "Item_Type", "Item_Grade")]
 	public class ES3UserType_Item_Arrow : ES3ObjectType
 	{
 		public static ES3Type Instance = null;
@@ -16,8 +16,8 @@ namespace ES3Types
 		{
 			var instance = (CodingCat_Games.Item_Arrow)obj;
 			
-			writer.WritePrivateFieldByRef("mainArrowObject", instance);
-			writer.WritePrivateFieldByRef("lessArrowObject", instance);
+			writer.WritePrivateFieldByRef("MainArrowObject", instance);
+			writer.WritePrivateFieldByRef("LessArrowObject", instance);
 			writer.WritePrivateField("EquipType", instance);
 			writer.WritePrivateField("Item_Id", instance);
 			writer.WritePrivateField("Item_Name", instance);
@@ -36,11 +36,11 @@ namespace ES3Types
 				switch(propertyName)
 				{
 					
-					case "mainArrowObject":
-					reader.SetPrivateField("mainArrowObject", reader.Read<UnityEngine.GameObject>(), instance);
+					case "MainArrowObject":
+					reader.SetPrivateField("MainArrowObject", reader.Read<UnityEngine.GameObject>(), instance);
 					break;
-					case "lessArrowObject":
-					reader.SetPrivateField("lessArrowObject", reader.Read<UnityEngine.GameObject>(), instance);
+					case "LessArrowObject":
+					reader.SetPrivateField("LessArrowObject", reader.Read<UnityEngine.GameObject>(), instance);
 					break;
 					case "EquipType":
 					reader.SetPrivateField("EquipType", reader.Read<CodingCat_Games.EQUIP_ITEMTYPE>(), instance);

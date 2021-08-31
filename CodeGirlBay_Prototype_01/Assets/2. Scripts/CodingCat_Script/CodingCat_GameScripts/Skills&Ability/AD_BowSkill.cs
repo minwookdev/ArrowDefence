@@ -3,7 +3,7 @@
     using System;
     using UnityEngine;
 
-    public enum Enum_BowSkillType
+    public enum BOWSKILL_TYPE
     {
         SKILL_NULL,
         SKILL_SPREAD_SHOT,

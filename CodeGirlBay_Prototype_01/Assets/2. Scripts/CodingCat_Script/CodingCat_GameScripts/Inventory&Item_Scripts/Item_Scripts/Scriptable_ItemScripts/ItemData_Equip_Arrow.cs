@@ -6,7 +6,6 @@
     public class ItemData_Equip_Arrow : ItemData_Equip
     {
         [Header("Arrow Item Data")]
-        [Space(15)]
         public GameObject MainArrowObj;
         public GameObject LessArrowObj;
 

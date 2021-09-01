@@ -223,6 +223,10 @@
             invenList.Add(new Item_Accessory(newItem));
         }
 
+        /// <summary>
+        /// Find the Item Reference and removes an Item from the Inventory
+        /// </summary>
+        /// <param name="target"></param>
         public void DelItem(AD_item target)
         {
             if (invenList.Contains(target))
@@ -234,10 +238,24 @@
             else CatLog.WLog("인벤토리 내부에 해당 아이템이 없습니다.");
         }
 
+        #region This Three Method Modify Later
+
         public void Add_BowItem(Item_Bow newItem)
         {
             invenList.Add(new Item_Bow(newItem));
         }
+
+        public void Add_ArrowItem(Item_Arrow item)
+        {
+            invenList.Add(new Item_Arrow(item));
+        }
+
+        public void Add_AccessoryItem(Item_Accessory item)
+        {
+            invenList.Add(new Item_Accessory(item));
+        }
+
+        #endregion
 
         public void ClearInventory() => invenList.Clear();
 

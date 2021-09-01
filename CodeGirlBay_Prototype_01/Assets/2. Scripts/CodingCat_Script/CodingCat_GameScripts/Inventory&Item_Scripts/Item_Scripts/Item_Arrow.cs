@@ -36,6 +36,20 @@
             this.LessArrowObject = less;
         }
 
+        public Item_Arrow(Item_Arrow item) : base()
+        {
+            this.EquipType = EQUIP_ITEMTYPE.EQUIP_ARROW;
+
+            this.Item_Id     = item.Item_Id;
+            this.Item_Name   = item.Item_Name;
+            this.Item_Desc   = item.Item_Desc;
+            this.Item_Sprite = item.Item_Sprite;
+            this.Item_Grade  = item.Item_Grade;
+
+            this.MainArrowObject = item.MainArrowObject;
+            this.LessArrowObject = item.LessArrowObject;
+        }
+
         /// <summary>
         /// Constructor With no Parameters. (Used Saving Function. Don't Delete this) 
         /// </summary>

@@ -102,14 +102,12 @@
                     else Object_SkillSlots[i].SetActive(false);
                 }
 
-                //플레이어의 현재 장비아이템이 선택한 장비아이템인지 비교해서 버튼 띄워줌
                 //if (CCPlayerData.equipments.GetBowItem() != itemAddress) SwitchButtons(false);
                 //else                                                     SwitchButtons(true);
 
+                //플레이어의 현재 장비아이템이 선택한 장비아이템인지 비교해서 버튼 띄워줌
                 if (ReferenceEquals(CCPlayerData.equipments.GetBowItem(), itemAddress)) SwitchButtons(true);
-                else SwitchButtons(false);
-
-                CCPlayerData.equipments.CompareItem(itemAddress);
+                else                                                                    SwitchButtons(false);
 
                 PopObject.SetActive(true);
             }
@@ -204,6 +202,9 @@
                 }
 
                 //Enable / Disable Equip Button Logic
+                if (ReferenceEquals(CCPlayerData.equipments.GetMainArrow(), itemAddress))     SwitchButton(true);
+                else if (ReferenceEquals(CCPlayerData.equipments.GetSubArrow(), itemAddress)) SwitchButton(true);
+                else                                                                          SwitchButton(false);
 
                 PopObject.SetActive(true);
             }
@@ -220,6 +221,35 @@
                 }
 
                 PopObject.SetActive(false);
+            }
+
+            public void Button_EquipAction()
+            {
+                //Open Equip Slot Choose Panel
+                UI_Equipments.Instance.OpenChoosePanel(SlotChoosePop.SLOTPANELTYPE.SLOT_ARROW, itemAddress);
+
+                //CCPlayerData.equipments.Equip_ArrowItem(itemAddress);
+            }
+
+            public void Button_ReleaseAction()
+            {
+                //릴리즈 버튼이 Enable 되는 때는 내가 장착하고 있는 화살일 경우에 뜨는데, 현재 장착중인 화살이 Main 아니면 Sub니까 이걸 비교해보면 될듯
+                if (ReferenceEquals(CCPlayerData.equipments.GetMainArrow(), itemAddress)) CCPlayerData.equipments.Release_ArrowItem();
+                else CCPlayerData.equipments.Release_SubArrow();
+            }
+
+            private void SwitchButton(bool isEquip)
+            {
+                if (isEquip)
+                {
+                    Button_Equip.gameObject.SetActive(false);
+                    Button_Release.gameObject.SetActive(true);
+                }
+                else
+                {
+                    Button_Equip.gameObject.SetActive(true);
+                    Button_Release.gameObject.SetActive(false);
+                }
             }
         }
 
@@ -252,6 +282,8 @@
                 }
 
                 //Enable / Disable Equip Button Logic
+                if (ReferenceEquals(CCPlayerData.equipments.GetAccessory(), itemAddress)) SwitchButton(true);
+                else                                                                      SwitchButton(false);
 
                 PopObject.SetActive(true);
             }
@@ -268,6 +300,33 @@
                 }
 
                 PopObject.SetActive(false);
+            }
+
+            public void Button_EquipAction()
+            {
+                //Open Equipment Slot Choose Panel
+                UI_Equipments.Instance.OpenChoosePanel(SlotChoosePop.SLOTPANELTYPE.SLOT_ACCESSORY, itemAddress);
+
+                //CCPlayerData.equipments.Equip_AccessoryItem(itemAddress);
+            }
+
+            public void Button_ReleaseAction()
+            {
+                CCPlayerData.equipments.Release_AccessoryItem();
+            }
+
+            private void SwitchButton(bool isEquip)
+            {
+                if(isEquip)
+                {
+                    Button_Equip.gameObject.SetActive(false);
+                    Button_Release.gameObject.SetActive(true);
+                }
+                else
+                {
+                    Button_Equip.gameObject.SetActive(true);
+                    Button_Release.gameObject.SetActive(false);
+                }
             }
         }
 
@@ -319,7 +378,7 @@
         public void Button_EquipBowItem()
         {
             ItemPop_Bow.Button_EquipAction();
-            UI_Equipments.Update_EquipUI();
+            UI_Equipments.Instance.UpdateEquipUI();
             UI_Inventory.InvenUpdate();
             
             Close_Popup(3);
@@ -328,7 +387,7 @@
         public void Button_ReleaseBowItem()
         {
             ItemPop_Bow.Button_ReleaseAction();
-            UI_Equipments.Update_EquipUI();
+            UI_Equipments.Instance.UpdateEquipUI();
             UI_Inventory.InvenUpdate();
 
             Close_Popup(3);
@@ -336,22 +395,39 @@
 
         public void Button_EquipArrowItem()
         {
+            ItemPop_Arrow.Button_EquipAction();
+            UI_Equipments.Instance.UpdateEquipUI();
+            UI_Inventory.InvenUpdate();
 
+
+            Close_Popup(1);
         }
 
         public void Button_ReleaseArrowItem()
         {
+            ItemPop_Arrow.Button_ReleaseAction();
+            UI_Equipments.Instance.UpdateEquipUI();
+            UI_Inventory.InvenUpdate();
 
+            Close_Popup(1);
         }
         
         public void Button_EquipAccessItem()
         {
+            ItemPop_Access.Button_EquipAction();
+            UI_Equipments.Instance.UpdateEquipUI();
+            UI_Inventory.InvenUpdate();
 
+            Close_Popup(2);
         }
 
         public void Button_ReleaseAccessItem()
         {
+            ItemPop_Access.Button_ReleaseAction();
+            UI_Equipments.Instance.UpdateEquipUI();
+            UI_Inventory.InvenUpdate();
 
+            Close_Popup(2);
         }
 
         public void Close_Popup(int popnum)

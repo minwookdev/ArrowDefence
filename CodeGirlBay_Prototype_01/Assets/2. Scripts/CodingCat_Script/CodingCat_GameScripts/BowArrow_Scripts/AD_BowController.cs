@@ -426,7 +426,7 @@
 
            yield return null;
             
-            currentLoadedArrow = CCPooler.SpawnFromPool(AD_Data.Arrow_Main_Tag, this.transform, initialArrowScale,
+            currentLoadedArrow = CCPooler.SpawnFromPool(AD_Data.TAG_MAINARROW, this.transform, initialArrowScale,
                                      rightClampPoint.position, Quaternion.identity);
 
             currentLoadedArrow.transform.localEulerAngles = initialArrowRotation;

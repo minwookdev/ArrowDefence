@@ -16,9 +16,9 @@
         public UI_ItemSlot ArrowItem_Slot_Sp;
 
         [Space(10)]
-        public UI_ItemSlot EquipItem_Slot_0;
-        public UI_ItemSlot EquipItem_Slot_1;
-        public UI_ItemSlot EquipItem_Slot_2;
+        public UI_ItemSlot Access_Slot0;
+        public UI_ItemSlot Access_Slot1;
+        public UI_ItemSlot Access_Slot2;
 
         [Header("Equip Item Slot Prefab")]
         public GameObject equipSlotPref;
@@ -41,8 +41,10 @@
 
         public void UpdateEquipUI()
         {
+            var equipment = CCPlayerData.equipments;
+
             //Equipment Item : Bow
-            if(CCPlayerData.equipments.IsEquipBow())
+            if(equipment.IsEquipBow())
             {
                 BowItem_Slot.gameObject.SetActive(true);
                 BowItem_Slot.Setup(CCPlayerData.equipments.GetBowItem());
@@ -53,7 +55,7 @@
             }
 
             //Equipment Item : Arrow (Main)
-            if(CCPlayerData.equipments.IsEquipMainArrow())
+            if(equipment.IsEquippedArrowMain())
             {
                 ArrowItem_Slot0.gameObject.SetActive(true);
                 ArrowItem_Slot0.Setup(CCPlayerData.equipments.GetMainArrow());
@@ -64,7 +66,7 @@
             }
 
             //Equipment Item : Arrow (Sub)
-            if(CCPlayerData.equipments.IsEquipSubArrow())
+            if(equipment.IsEquippedArrowSub())
             {
                 ArrowItem_Slot1.gameObject.SetActive(true);
                 ArrowItem_Slot1.Setup(CCPlayerData.equipments.GetSubArrow());
@@ -74,15 +76,27 @@
                 if (ArrowItem_Slot1.gameObject.activeSelf) ArrowItem_Slot1.Clear();
             }
 
-            //Equipment Item : Accessory ()
-            if(CCPlayerData.equipments.IsEquipAccessory())
+            //Equipment Item : Accessories
+            var accessories = equipment.GetAccessories();
+
+            for (int i = 0; i < accessories.Length; i++)
             {
-                EquipItem_Slot_0.gameObject.SetActive(true);
-                EquipItem_Slot_0.Setup(CCPlayerData.equipments.GetAccessory());
-            }
-            else
-            {
-                if (EquipItem_Slot_0.gameObject.activeSelf) EquipItem_Slot_0.Clear();
+                if (accessories[i] != null)
+                {
+                    switch (i) { 
+                        case 0: Access_Slot0.gameObject.SetActive(true); Access_Slot0.Setup(accessories[i]); break;
+                        case 1: Access_Slot1.gameObject.SetActive(true); Access_Slot1.Setup(accessories[i]); break;
+                        case 2: Access_Slot2.gameObject.SetActive(true); Access_Slot2.Setup(accessories[i]); break;
+                    }
+                }
+                else
+                {
+                    switch (i) { 
+                        case 0: if (Access_Slot0.gameObject.activeSelf) Access_Slot0.Clear(); break;
+                        case 1: if (Access_Slot1.gameObject.activeSelf) Access_Slot1.Clear(); break;
+                        case 2: if (Access_Slot2.gameObject.activeSelf) Access_Slot2.Clear(); break;
+                    }
+                }
             }
         }
 

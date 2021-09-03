@@ -36,8 +36,10 @@
     /// </summary>
     public static readonly byte ARROW_MAIN = 0;
     public static readonly byte ARROW_MAIN_LESS = 1;
-    public static readonly string Arrow_Main_Tag      = "Main_Arrow";
-    public static readonly string Arrow_Main_Less_Tag = "Main_Arrow_Less";
+    public static readonly string TAG_MAINARROW      = "MainArrow";
+    public static readonly string TAG_MAINARROW_LESS = "MainArrow_Less";
+    public static readonly string TAG_SUBARROW       = "SubArrow";
+    public static readonly string TAG_SUBARROW_LESS  = "SubArrow_Less";
 
     //const (상수)형은 빌드 시 인게임 내에서 불러오는데 문제? 가 있을수 있다고 하니, 
     //static readonly로 바꿔주도록 한다

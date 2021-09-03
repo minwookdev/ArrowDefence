@@ -54,7 +54,7 @@
 
                 #endregion
 
-                var poolArrow = CCPooler.SpawnFromPool<AD_Arrow_less>(AD_Data.Arrow_Main_Less_Tag, 
+                var poolArrow = CCPooler.SpawnFromPool<AD_Arrow_less>(AD_Data.TAG_MAINARROW_LESS, 
                                                                       arrowParent, initScale, randomArrowPos, Quaternion.identity);
                 if(poolArrow)
                 {

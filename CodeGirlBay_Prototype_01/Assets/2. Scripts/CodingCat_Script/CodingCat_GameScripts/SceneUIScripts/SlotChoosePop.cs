@@ -19,30 +19,27 @@
 
         [Header("RIGHT PANEL")]
         [SerializeField] private GameObject objectRightPanel;
-        [SerializeField] private UI_ItemSlot accessSlot0;
-        [SerializeField] private UI_ItemSlot accessSlot1;
-        [SerializeField] private UI_ItemSlot accessSlot2;
+        public UI_ItemSlot[] accessSlots = new UI_ItemSlot[3];
 
         private Item_Equipment itemAddress;
 
         public void Setup(SLOTPANELTYPE type, Item_Equipment item)
         {
             var playerEquips = CCPlayerData.equipments;
+            itemAddress = item;
 
             if(type == SLOTPANELTYPE.SLOT_ARROW)
             {
                 objectLeftPanel.SetActive(true);
                 if (objectRightPanel.activeSelf) objectRightPanel.SetActive(false);
 
-                itemAddress = item;
-
-                if (playerEquips.IsEquipMainArrow())
+                if (playerEquips.IsEquippedArrowMain())
                 {
                     arrowSlot0.gameObject.SetActive(true);
                     arrowSlot0.Setup(playerEquips.GetMainArrow());
                 }
 
-                if(playerEquips.IsEquipSubArrow())
+                if(playerEquips.IsEquippedArrowSub())
                 {
                     arrowSlot1.gameObject.SetActive(true);
                     arrowSlot1.Setup(playerEquips.GetSubArrow());
@@ -52,14 +49,18 @@
             else if(type == SLOTPANELTYPE.SLOT_ACCESSORY)
             {
                 objectRightPanel.SetActive(true);
-                if (objectRightPanel.activeSelf) objectLeftPanel.SetActive(false);
+                if (objectLeftPanel.activeSelf) objectLeftPanel.SetActive(false);
 
-                itemAddress = item;
+                var accessories = playerEquips.GetAccessories();
 
-                if(playerEquips.IsEquipAccessory())
+                for (int i = 0; i < accessories.Length; i++)
                 {
-                    accessSlot0.gameObject.SetActive(true);
-                    accessSlot0.Setup(playerEquips.GetAccessory());
+                    if(accessories[i] != null)
+                    {
+                        accessSlots[i].gameObject.SetActive(true);
+                        accessSlots[i].Setup(accessories[i]);
+                    }
+                    continue;
                 }
             }
 
@@ -77,9 +78,10 @@
             }
             else if (objectRightPanel.activeSelf)
             {
-                if (accessSlot0.gameObject.activeSelf) accessSlot0.Clear();
-                if (accessSlot1.gameObject.activeSelf) accessSlot1.Clear();
-                if (accessSlot2.gameObject.activeSelf) accessSlot2.Clear();
+                foreach (var slot in accessSlots)
+                {
+                    if (slot.gameObject.activeSelf) slot.Clear();
+                }
 
                 objectRightPanel.SetActive(false);
             }
@@ -102,7 +104,6 @@
             {
                 case Item_Arrow arrow:         ChooseSlot(num, arrow);     break;
                 case Item_Accessory accessory: ChooseSlot(num, accessory); break;
-                default: break;
             }
 
             UI_Equipments.Instance.UpdateEquipUI();
@@ -124,9 +125,9 @@
         {
             switch (num)
             {
-                case 2: CCPlayerData.equipments.Equip_AccessoryItem(item); break;
-                case 3: break;
-                case 4: break;
+                case 0: CCPlayerData.equipments.Equip_Accessory(item, 0); break;
+                case 1: CCPlayerData.equipments.Equip_Accessory(item, 1); break;
+                case 2: CCPlayerData.equipments.Equip_Accessory(item, 2); break;
                 default: CatLog.Log("Wrong Slot Number's Check Slot Button"); break;
             }
         }

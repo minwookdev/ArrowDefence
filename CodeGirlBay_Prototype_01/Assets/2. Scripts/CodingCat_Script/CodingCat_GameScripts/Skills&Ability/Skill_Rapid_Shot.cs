@@ -65,7 +65,7 @@
 
                 #endregion
 
-                var ccArrow = CCPooler.SpawnFromPool<AD_Arrow_less>(AD_Data.Arrow_Main_Less_Tag, 
+                var ccArrow = CCPooler.SpawnFromPool<AD_Arrow_less>(AD_Data.TAG_MAINARROW_LESS, 
                                                                     arrowParent, arrowInitScale, arrowInitPos, 
                                                                     Quaternion.Euler(0f, 0f, (facingVec - 90f) + randomAngle));
 

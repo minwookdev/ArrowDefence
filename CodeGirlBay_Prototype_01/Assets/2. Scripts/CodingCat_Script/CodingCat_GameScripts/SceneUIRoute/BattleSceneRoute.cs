@@ -73,6 +73,7 @@
 
             PausePanel.GetComponent<CanvasGroup>().alpha = 0f;
 
+            GameManager.Instance.SetPooler();
             GameManager.Instance.SetPlayerBow(ParentCanvas, InitPos);
 
             //Fade Effect When Etnering The Battle Scene (if Don't Work This Function, Enable The DEV Variable)

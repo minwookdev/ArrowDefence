@@ -1,5 +1,6 @@
 ﻿namespace CodingCat_Games
 {
+    using CodingCat_Scripts;
     using UnityEngine;
 
     public class Item_Arrow : Item_Equipment
@@ -56,5 +57,31 @@
         public Item_Arrow() : base() { }
 
         public override object GetItem() => this;
+
+        public GameObject GetObject_MainArrow()
+        {
+            if(MainArrowObject == null)
+            {
+                CatLog.ELog($"{Item_Name} Item is Not have a Main Arrow Object");
+                return null;
+            }
+            else
+            {
+                return MainArrowObject;
+            }
+        }
+
+        public GameObject GetObject_LessArrow()
+        {
+            if(LessArrowObject == null)
+            {
+                CatLog.ELog($"{Item_Name} Item is Not have a Less Arrow Object");
+                return null;
+            }
+            else
+            {
+                return LessArrowObject;
+            }
+        }
     }
 }

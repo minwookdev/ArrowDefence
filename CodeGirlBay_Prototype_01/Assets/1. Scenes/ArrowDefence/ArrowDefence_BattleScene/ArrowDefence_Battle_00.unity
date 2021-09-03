@@ -1809,7 +1809,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: -0, y: 285}
+  m_AnchoredPosition: {x: 0, y: 285}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &391396571
@@ -8179,17 +8179,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pools:
-  - tag: Main_Arrow
+  - tag: MainArrow
     prefab: {fileID: 6082609631992581028, guid: f7c77f6295899b64fb1cdb6894b3117c,
       type: 3}
     size: 10
     defalutParent: {fileID: 0}
-  - tag: Main_Arrow_Less
+  - tag: MainArrow_Less
     prefab: {fileID: 3548661466032091854, guid: 66cb8cd01d158ff479e8762d09710f9d,
       type: 3}
     size: 30
     defalutParent: {fileID: 0}
   ParentList: []
+  testingPools: []
 --- !u!4 &1559786647
 Transform:
   m_ObjectHideFlags: 0

@@ -2,6 +2,7 @@
 {
     using UnityEngine;
     using CodingCat_Games.Data;
+    using CodingCat_Games;
 
     public class GameManager : Singleton<GameManager>
     {
@@ -34,6 +35,23 @@
             Instantiate(bowObj, initpos.position, Quaternion.Euler(0f, 0f, 90f), parent);
 
             //생성하고 바로 해줘야할거 있으면 여기서 해줌
+        }
+
+        public void SetPooler()
+        {
+            var equipment = CCPlayerData.equipments;
+
+            if(equipment.IsEquippedArrowMain())
+            {
+                CCPooler.AddPoolList(AD_Data.TAG_MAINARROW,      10, equipment.GetMainArrow().GetObject_MainArrow());
+                CCPooler.AddPoolList(AD_Data.TAG_MAINARROW_LESS, 30, equipment.GetMainArrow().GetObject_LessArrow());
+            }
+
+            if(equipment.IsEquippedArrowSub())
+            {
+                CCPooler.AddPoolList(AD_Data.TAG_SUBARROW,      10, equipment.GetSubArrow().GetObject_MainArrow());
+                CCPooler.AddPoolList(AD_Data.TAG_SUBARROW_LESS, 30, equipment.GetSubArrow().GetObject_LessArrow());
+            }
         }
     }
 }

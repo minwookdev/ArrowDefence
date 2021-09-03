@@ -143,18 +143,11 @@
             public void Button_EquipAction()
             {
                 CCPlayerData.equipments.Equip_BowItem(itemAddress);
-                //SwitchButtons(true); 버튼바꿔주지 말고, 창 자체를 닫히게 만들어주기
-
-                //여기서 UpdateEquipUI Call 이거 밑으로 뺴기
-                //UI_Equipments.Update_EquipUI();
             }
 
             public void Button_ReleaseAction()
             {
                 CCPlayerData.equipments.Release_BowItem();
-                //SwitchButtons(false); 아이템 해제 할때도 창 바로 닫아줌
-
-                //UI_Equipments.Update_EquipUI();
             }
 
             //장착버튼 교체
@@ -192,7 +185,7 @@
                 itemAddress = address;
 
                 Text_ItemName.text = address.GetName;
-                Image_Item.sprite = address.GetSprite;
+                Image_Item.sprite  = address.GetSprite;
                 Image_Frame.sprite = frameSprite;
 
                 //Skil Slot Enable Logic
@@ -201,10 +194,11 @@
                     item.SetActive(false);
                 }
 
-                //Enable / Disable Equip Button Logic
-                if (ReferenceEquals(CCPlayerData.equipments.GetMainArrow(), itemAddress))     SwitchButton(true);
-                else if (ReferenceEquals(CCPlayerData.equipments.GetSubArrow(), itemAddress)) SwitchButton(true);
-                else                                                                          SwitchButton(false);
+                //Enable / Disable Equip Button Logic 현재 들고있는 Item Reference랑 비교해서 Equip / Release Button의 Enable 결정
+                bool isEquipped = (ReferenceEquals(CCPlayerData.equipments.GetMainArrow(), itemAddress) || 
+                                   ReferenceEquals(CCPlayerData.equipments.GetSubArrow(),  itemAddress)) ? true : false;
+
+                SwitchButton(isEquipped);
 
                 PopObject.SetActive(true);
             }
@@ -227,14 +221,13 @@
             {
                 //Open Equip Slot Choose Panel
                 UI_Equipments.Instance.OpenChoosePanel(SlotChoosePop.SLOTPANELTYPE.SLOT_ARROW, itemAddress);
-
-                //CCPlayerData.equipments.Equip_ArrowItem(itemAddress);
             }
 
             public void Button_ReleaseAction()
             {
-                //릴리즈 버튼이 Enable 되는 때는 내가 장착하고 있는 화살일 경우에 뜨는데, 현재 장착중인 화살이 Main 아니면 Sub니까 이걸 비교해보면 될듯
-                if (ReferenceEquals(CCPlayerData.equipments.GetMainArrow(), itemAddress)) CCPlayerData.equipments.Release_ArrowItem();
+                //Release 버튼이 떳다는건 일단 Main, Sub Arrow 둘중에 하나 끼고있는거니까 둘간에 비교해서 Release 해주면 된다
+                if (ReferenceEquals(CCPlayerData.equipments.GetMainArrow(), itemAddress))
+                    CCPlayerData.equipments.Release_ArrowItem();
                 else CCPlayerData.equipments.Release_SubArrow();
             }
 
@@ -265,7 +258,9 @@
             public Button Button_Release;
 
             public GameObject[] Object_Skill_Slot;
+
             private Item_Accessory itemAddress;
+            private byte accessoryIdx = 0;
 
             public void EnablePopup(Item_Accessory address, Sprite frameSprite)
             {
@@ -282,8 +277,17 @@
                 }
 
                 //Enable / Disable Equip Button Logic
-                if (ReferenceEquals(CCPlayerData.equipments.GetAccessory(), itemAddress)) SwitchButton(true);
-                else                                                                      SwitchButton(false);
+                foreach (var item in CCPlayerData.equipments.GetAccessories())
+                {
+                    if (ReferenceEquals(item, itemAddress))
+                    {
+                        SwitchButton(true);
+                        break;
+                    }
+                    else SwitchButton(false);
+
+                    accessoryIdx++;
+                }
 
                 PopObject.SetActive(true);
             }
@@ -292,6 +296,7 @@
             {
                 Text_ItemName.text = "";
                 itemAddress = null;
+                accessoryIdx = 0;
 
                 foreach (var item in Object_Skill_Slot)
                 {
@@ -312,7 +317,11 @@
 
             public void Button_ReleaseAction()
             {
-                CCPlayerData.equipments.Release_AccessoryItem();
+                //새로운 Release 메서드를 사용하도록 수정
+                //릴리즈 버튼이 떳다는건 지금 악세칸에 있다는거임.
+                //CCPlayerData.equipments.Release_AccessoryItem();
+
+                CCPlayerData.equipments.Release_Accessory(accessoryIdx);
             }
 
             private void SwitchButton(bool isEquip)

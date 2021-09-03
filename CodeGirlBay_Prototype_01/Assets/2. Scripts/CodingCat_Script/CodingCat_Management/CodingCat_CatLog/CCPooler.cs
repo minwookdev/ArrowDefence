@@ -8,6 +8,7 @@
     using System.Linq;
     using UnityEngine.UIElements;
     using CodingCat_Scripts;
+    using CodingCat_Games.Data;
 
 #if UNITY_EDITOR
     [CustomEditor(typeof(CCPooler))]
@@ -62,6 +63,9 @@
         private List<Transform> ParentList;
 
         private string parentStr = "_Pool";
+
+        [Header("TESTING POOL OBJECTS")]
+        [SerializeField] private List<Pool> testingPools = new List<Pool>();
 
         public static bool IsInitialized { get; private set; }
 
@@ -275,6 +279,26 @@
             }
 
             IsInitialized = true;
+
+            //pools에 캐싱된 정보로 만드는 Dictionary가 아닌 코드로 직접 풀 배열을 만들어주는 기능 필요
+            //var equipment = CCPlayerData.equipments;
+            //
+            //if (equipment.IsEquippedArrowMain())
+            //{
+            //    Pool arrowPool = new Pool();
+            //    arrowPool.tag = AD_Data.TAG_MAINARROW;
+            //    arrowPool.size = 30;
+            //    arrowPool.prefab = equipment.GetMainArrow().GetObject_MainArrow();
+            //
+            //    testingPools.Add(arrowPool);
+            //
+            //    Pool lessPool = new Pool();
+            //    lessPool.tag = AD_Data.TAG_MAINARROW_LESS;
+            //    lessPool.size = 30;
+            //    lessPool.prefab = equipment.GetMainArrow().GetObject_LessArrow();
+            //
+            //    testingPools.Add(lessPool);
+            //}
         }
 
         GameObject CreateNewObject(string tag, GameObject prefab, Transform parent)
@@ -290,6 +314,13 @@
         {
             Destroy(CCPooler._inst.gameObject);
             CCPooler._inst = null;
+        }
+
+        public static void AddPoolList(string tag, int size, GameObject prefab)
+        {
+            Pool pool = new Pool() { tag = tag, size = size, prefab = prefab };
+            _inst.testingPools.Add(pool);
+
         }
     }
 }

@@ -51,36 +51,33 @@
         {
             //throw new System.NotImplementedException();
 
-            if (ItemAddress.GetItemType == ITEMTYPE.ITEM_EQUIPMENT)
-            {
-                #region Item_FeedBack
-                //switch (ItemAddress)
-                //{
-                //    case Item_Bow itemBow:
-                //        CatLog.Log($"Item Name : {itemBow.ItemName} \n" +
-                //                   $"Item Amount : {itemBow.Amount.ToString()} \n" +
-                //                   $"Item Type : {itemBow.EquipType.ToString()} \n" + 
-                //                   $"Item Skill : {itemBow.GetBowSkill().ToString()}"); break;
-                //    case Item_Arrow itemArrow:
-                //        CatLog.Log($"Item Name   : {itemArrow.ItemName}  \n  " +
-                //                   $"Item Amount : {itemArrow.Amount} \n  " +
-                //                   $"Equip Type  : {itemArrow.EquipType.ToString()} \n  " +
-                //                   $"ITem Type   : {itemArrow.ItemType.ToString()}"); break;
-                //    default: break;
-                //} //피드백 필요하면 열어서 사용하기
-                //Item_Bow itemBow = (Item_Bow)ItemAddress; 이거랑 똑같은 말인가?
-                #endregion
+            MainSceneRoute.OpenItemInfo(ItemAddress);
 
-                MainSceneRoute.OpenItemInfo(ItemAddress);
-            }
-            else
-            {
-                //CatLog.Log($"Item Name   : {ItemAddress.GetName}  \n  " +
-                //           $"Item Amount : {ItemAddress.GetAmount} \n  " +
-                //           $"ITem Type   : {ItemAddress.GetItemType.ToString()} ");
+            #region FEEDBACKINLOG
 
-                MainSceneRoute.OpenItemInfo(ItemAddress);
-            }
+            //if(ItemAddress.GetItemType != ITEMTYPE.ITEM_EQUIPMENT)
+            //{
+            //    string itemInfoStr = "Item Info \n" +
+            //        $"Name : {ItemAddress.GetName}" +
+            //        $"Desc : {}";
+            //}
+            //else
+            //{
+            //    if(ItemAddress is Item_Bow)
+            //    {
+            //        Item_Bow item = (Item_Bow)ItemAddress;
+            //    }
+            //    else if (ItemAddress is Item_Arrow)
+            //    {
+            //        Item_Arrow item = (Item_Arrow)ItemAddress;
+            //    }
+            //    else if(ItemAddress is Item_Accessory)
+            //    {
+            //        Item_Accessory item = (Item_Accessory)ItemAddress;
+            //    }
+            //}
+
+            #endregion
         }
 
         #region SLOT_SETTING_METHOD

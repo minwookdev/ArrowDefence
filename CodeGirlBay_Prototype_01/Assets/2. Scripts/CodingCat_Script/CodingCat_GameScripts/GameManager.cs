@@ -43,14 +43,14 @@
 
             if(equipment.IsEquippedArrowMain())
             {
-                CCPooler.AddPoolList(AD_Data.TAG_MAINARROW,      10, equipment.GetMainArrow().GetObject_MainArrow());
-                CCPooler.AddPoolList(AD_Data.TAG_MAINARROW_LESS, 30, equipment.GetMainArrow().GetObject_LessArrow());
+                CCPooler.AddPoolList(AD_Data.TAG_MAINARROW,      1, equipment.GetMainArrow().GetObject_MainArrow());
+                CCPooler.AddPoolList(AD_Data.TAG_MAINARROW_LESS, 1, equipment.GetMainArrow().GetObject_LessArrow());
             }
 
             if(equipment.IsEquippedArrowSub())
             {
-                CCPooler.AddPoolList(AD_Data.TAG_SUBARROW,      10, equipment.GetSubArrow().GetObject_MainArrow());
-                CCPooler.AddPoolList(AD_Data.TAG_SUBARROW_LESS, 30, equipment.GetSubArrow().GetObject_LessArrow());
+                CCPooler.AddPoolList(AD_Data.TAG_SUBARROW,      1, equipment.GetSubArrow().GetObject_MainArrow());
+                CCPooler.AddPoolList(AD_Data.TAG_SUBARROW_LESS, 1, equipment.GetSubArrow().GetObject_LessArrow());
             }
         }
     }

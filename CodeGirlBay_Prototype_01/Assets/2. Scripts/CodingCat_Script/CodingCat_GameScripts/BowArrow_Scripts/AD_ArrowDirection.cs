@@ -71,7 +71,7 @@
         {
             this.arrowRigidBody.isKinematic = true;
             adArrow.arrowTrail.gameObject.SetActive(false);
-            CCPooler.ReturnToPool(this.gameObject, AD_Data.ARROW_MAIN);
+            CCPooler.ReturnToPool(this.gameObject, 0);
 
             //gameObject.SetActive(false);
             //Disable 하기전에 SerParent 하면 스케일이랑 좌표 난리난다. 항상 SetParent할 경우 Disable 후에 부모바꿔줄것.

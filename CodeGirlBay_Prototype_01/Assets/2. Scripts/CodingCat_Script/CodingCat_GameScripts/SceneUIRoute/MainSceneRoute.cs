@@ -284,6 +284,11 @@ public class MainSceneRoute : MonoBehaviour
         }
     }
 
+    public void Button_ClosePopup(GameObject obj)
+    {
+        obj.SetActive(false);
+    }
+
     public void OnBtnLoadBattle()
     {
         //현재 DEV 스테이지에 한해서 Scene 이동하도록 구현

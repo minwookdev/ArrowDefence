@@ -72,7 +72,7 @@
             }
         }
 
-        public void DisableArrow() => CCPooler.ReturnToPool(this.gameObject, AD_Data.ARROW_MAIN_LESS);
+        public void DisableArrow() => CCPooler.ReturnToPool(this.gameObject, 0);
         //{
         //    this.rBody.velocity = Vector2.zero;
         //    this.trailObject.SetActive(false);

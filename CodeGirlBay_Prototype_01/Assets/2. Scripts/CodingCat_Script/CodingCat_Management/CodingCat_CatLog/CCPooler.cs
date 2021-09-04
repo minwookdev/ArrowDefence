@@ -56,23 +56,18 @@
             [ReadOnly] public Transform defalutParent;
         }
 
-        [SerializeField]
-        private Pool[] pools;
+        [Header("PARENT LIST")]
+        [SerializeField] private List<Transform> ParentList;
 
-        [SerializeField]
-        private List<Transform> ParentList;
-
-        private string parentStr = "_Pool";
-
-        [Header("TESTING POOL OBJECTS")]
-        [SerializeField] private List<Pool> testingPools = new List<Pool>();
+        [Header("POOL OBJECTS")]
+        [SerializeField] private List<Pool> poolInstanceList = new List<Pool>();
 
         public static bool IsInitialized { get; private set; }
 
         [ContextMenu("GetSpawnObjectsInfo")]
         void GetSpawnObjectInfo()
         {
-            foreach (var pool in pools)
+            foreach (var pool in poolInstanceList)
             {
                 int count = poolDictionary[pool.tag].Count;
                 CatLog.Log($"{pool.tag} Count : {count}");
@@ -138,11 +133,9 @@
             //꺼내려는 Object가 Stack에 없을 경우 새로 추가
             if(poolStack.Count <= 0)
             {
-                Pool pool = Array.Find(pools, x=> x.tag == tag);
-                var obj = CreateNewObject(pool.tag, pool.prefab, ParentList.Find(tr => tr.name == tag + parentStr));
-
-                //Pool Class 자체에 Transform 형태의 부모를 껴주는것도 나쁘지 않을듯..
-                //Parent List에 등록된 Transform 의 Name 으로 이름을 찾아온다
+                //Pool pool = Array.Find(pools, x=> x.tag == tag);
+                Pool pool = poolInstanceList.Find(x => x.tag == tag);
+                var obj = CreateNewObject(pool.tag, pool.prefab, FindParentTransform(pool.tag));
             }
 
             //Stack 에서 꺼내서 사용
@@ -173,8 +166,9 @@
             if(poolStack.Count <= 0)
             {
                 //부모찾는방법 최적화
-                Pool pool = Array.Find(pools, x => x.tag == tag);
-                var obj = CreateNewObject(pool.tag, pool.prefab, ParentList.Find(tr => tr.name == tag + parentStr));
+                //Pool pool = Array.Find(pools, x => x.tag == tag);
+                Pool pool = poolInstanceList.Find(x => x.tag == tag);
+                var obj = CreateNewObject(pool.tag, pool.prefab, FindParentTransform(pool.tag));
             }
 
             GameObject objectToSpawn = poolStack.Pop();
@@ -212,29 +206,29 @@
 
         #endregion
 
-        //Parent가 움직이는 개체에 대한 함수
-        public static void ReturnToPool(GameObject obj, byte parentNum)
+        /// <summary>
+        /// 관리 부모 Object가 있는경우에 회수처리 Method
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <param name="parentNum"></param>
+        public static void ReturnToPool(GameObject obj, byte num)
         {
             if (!_inst.poolDictionary.ContainsKey(obj.name))
                 throw new Exception($"Pool With Tag {obj.name} doesn't Exist.");
 
-            //테스트 필요
             obj.SetActive(false);
-            obj.transform.SetParent(_inst.ParentList[parentNum]);
+            obj.transform.SetParent(_inst.FindParentTransform(obj.name));
+            //obj.transform.SetParent(_inst.FindParentTransform(tag)); //이거 못씀;; Main, Sub Arrow 회수할때 중복됨
+            //ParentList에서 GameObject.name 이랑 싱크 맞춰놓았으니 굳이 사용할 필요도 없음
 
+            //사용할 준비가 완벽하게 정리되면 Push 해주기
             _inst.poolDictionary[obj.name].Push(obj);
-
-            //굳이 코루틴으로 한프레임 Waiting 해서 사용하는 이유는
-            //대상 PoolObjec의 Disable 처리와 ReturnToPool 메서드에서 Parent 바꿔주는 프레임이 동일해서
-            //Unity 자체에서 에러로그를 띄워버린다
-            //같은 프레임에 Object Disable 처리와 SetParent 과정이 동일하게 있으면 오류를 띄우는듯 하다
-            //PoolObject와 커플링이 너무 심하다..
-            //_inst의 gameObject가 살아있는지 확인하는 이유는 CCPooler 오브젝트가 죽었을때 StartCoroutine을
-            //시도하려 한다는 에러메세지가 출력되었기 때문에 살아있는지 체크하고 코루틴을 돌린다
-            //한 프레임 기다리는게 말이 안되고 코드도 더러워지기 때문에 기다릴일이 없도록 수정
         }
 
-        //Parent가 움직이지 않는 개체에 대한 함수
+        /// <summary>
+        /// 부모 Object가 없는경우 또는 CreateNewObject 메서드제외 사용금지
+        /// </summary>
+        /// <param name="obj"></param>
         public static void ReturnToPool(GameObject obj)
         {
             if (!_inst.poolDictionary.ContainsKey(obj.name))
@@ -255,50 +249,32 @@
             poolDictionary = new Dictionary<string, Stack<GameObject>>();
             ParentList = new List<Transform>();
 
-            foreach (Pool pool in pools)
-            {
-                //현재는 갯수 할당되지 않은 오브젝트는 돌려주지 않음
-                if (pool.size <= 0) continue;
-
-                poolDictionary.Add(pool.tag, new Stack<GameObject>());
-
-                var parentObj = new GameObject(pool.tag + parentStr).transform;
-                parentObj.SetParent(this.transform);
-                ParentList.Add(parentObj);
-
-                for(int i =0; i < pool.size; i++)
-                {
-                    var obj = CreateNewObject(pool.tag, pool.prefab, parentObj.transform);
-                }
-
-                //Pool 대상 Object에 ReturnToPool 메서드 검사
-                if (poolDictionary[pool.tag].Count <= 0)
-                    CatLog.ELog($"{pool.tag} ReturnToPool 메서드 누락, Stack에 Pull 되지 않았습니다.");
-                else if (poolDictionary[pool.tag].Count != pool.size)
-                    CatLog.ELog($"{pool.tag} ReturnToPool 메서드가 중복 작성.");
-            }
+            #region LEGACY_CODE
+            //foreach (Pool pool in pools)
+            //{
+            //    //현재는 갯수 할당되지 않은 오브젝트는 돌려주지 않음
+            //    if (pool.size <= 0) continue;
+            //
+            //    poolDictionary.Add(pool.tag, new Stack<GameObject>());
+            //
+            //    var parentObj = new GameObject(pool.tag + parentStr).transform;
+            //    parentObj.SetParent(this.transform);
+            //    ParentList.Add(parentObj);
+            //
+            //    for(int i =0; i < pool.size; i++)
+            //    {
+            //        var obj = CreateNewObject(pool.tag, pool.prefab, parentObj.transform);
+            //    }
+            //
+            //    //Pool 대상 Object에 ReturnToPool 메서드 검사
+            //    if (poolDictionary[pool.tag].Count <= 0)
+            //        CatLog.ELog($"{pool.tag} ReturnToPool 메서드 누락, Stack에 Pull 되지 않았습니다.");
+            //    else if (poolDictionary[pool.tag].Count != pool.size)
+            //        CatLog.ELog($"{pool.tag} ReturnToPool 메서드가 중복 작성.");
+            //}
+            #endregion
 
             IsInitialized = true;
-
-            //pools에 캐싱된 정보로 만드는 Dictionary가 아닌 코드로 직접 풀 배열을 만들어주는 기능 필요
-            //var equipment = CCPlayerData.equipments;
-            //
-            //if (equipment.IsEquippedArrowMain())
-            //{
-            //    Pool arrowPool = new Pool();
-            //    arrowPool.tag = AD_Data.TAG_MAINARROW;
-            //    arrowPool.size = 30;
-            //    arrowPool.prefab = equipment.GetMainArrow().GetObject_MainArrow();
-            //
-            //    testingPools.Add(arrowPool);
-            //
-            //    Pool lessPool = new Pool();
-            //    lessPool.tag = AD_Data.TAG_MAINARROW_LESS;
-            //    lessPool.size = 30;
-            //    lessPool.prefab = equipment.GetMainArrow().GetObject_LessArrow();
-            //
-            //    testingPools.Add(lessPool);
-            //}
         }
 
         GameObject CreateNewObject(string tag, GameObject prefab, Transform parent)
@@ -319,8 +295,31 @@
         public static void AddPoolList(string tag, int size, GameObject prefab)
         {
             Pool pool = new Pool() { tag = tag, size = size, prefab = prefab };
-            _inst.testingPools.Add(pool);
+            _inst.poolInstanceList.Add(pool);
 
+            _inst.poolDictionary.Add(pool.tag, new Stack<GameObject>());
+
+            var parentObj = new GameObject(pool.tag).transform;
+            parentObj.SetParent(_inst.transform);
+            _inst.ParentList.Add(parentObj);
+
+            for (int i = 0; i < pool.size; i++)
+            {
+                _inst.CreateNewObject(pool.tag, pool.prefab, parentObj);
+            }
+
+            if (_inst.poolDictionary[pool.tag].Count <= 0)
+                CatLog.ELog($"{pool.tag} : ReturnToPool 메서드 누락되어, Stack에 Pull 되지 않았습니다.");
+            else if (_inst.poolDictionary[pool.tag].Count != pool.size)
+                CatLog.ELog($"{pool.tag} : ReturnToPool 메서드가 중복 작성되었습니다.");
+        }
+
+        private Transform FindParentTransform(string tag)
+        {
+            Transform tr = ParentList.Find(x => x.name == tag);
+
+            if (tr) return tr;
+            else    return null;
         }
     }
 }

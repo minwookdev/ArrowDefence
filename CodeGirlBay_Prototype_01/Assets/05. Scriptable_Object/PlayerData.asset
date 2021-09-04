@@ -13,12 +13,6 @@ MonoBehaviour:
   m_Name: PlayerData
   m_EditorClassIdentifier: 
   tempItems:
-  - {fileID: 11400000, guid: ea039b8bf5e2d594ca07360436d14752, type: 2}
-  - {fileID: 11400000, guid: f02c24899fcd3bd4a87213b5fc58da65, type: 2}
-  - {fileID: 11400000, guid: f8cf2d491cdbd38409db2b0178418dce, type: 2}
   - {fileID: 11400000, guid: 84adca0e3393b98439a37949c1223e36, type: 2}
+  - {fileID: 11400000, guid: 5bec2fd1b6efecd4a895a90954477707, type: 2}
   - {fileID: 11400000, guid: 64254eedd1c43c446ae2e7682daa20a6, type: 2}
-  - {fileID: 11400000, guid: 4281f4c496660d946b11d546253599bd, type: 2}
-  - {fileID: 11400000, guid: b45f0104ff3c6bd4297fcb84817eeed9, type: 2}
-  - {fileID: 11400000, guid: 5e2d003e93cf37c4c95dc232f4de4b0f, type: 2}
-  - {fileID: 11400000, guid: b17b27258dbe732409b167071453f871, type: 2}

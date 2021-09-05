@@ -1,4 +1,5 @@
 ﻿using CodingCat_Games;
+using CodingCat_Scripts;
 using UnityEditor;
 using UnityEngine;
 
@@ -149,6 +150,9 @@ public class BowItemData_Editor : Editor
 {
     ItemData_Equip_Bow item;
 
+    //bool changevalue;
+    string saveString = "";
+
     public void OnEnable()
     {
         item = (ItemData_Equip_Bow)target;
@@ -162,7 +166,8 @@ public class BowItemData_Editor : Editor
         EditorGUILayout.ObjectField("Script", MonoScript.FromScriptableObject((ItemData_Equip_Bow)item), typeof(ItemData_Equip_Bow), false);
         EditorGUI.EndDisabledGroup();
 
-        //serializedObject.Update();
+        serializedObject.Update();
+        EditorGUI.BeginChangeCheck();
 
         GUILayout.Space(5);
         GUILayout.BeginVertical("HelpBox");
@@ -235,9 +240,51 @@ public class BowItemData_Editor : Editor
 
         #endregion
 
+        //bool somethingChanged = (EditorGUI.EndChangeCheck()) ? false : true;
+        //EditorGUI.BeginDisabledGroup(EditorGUI.EndChangeCheck() == false);
+        //if (!somethingChanged) CatLog.Log("몬가 바뀜 !");
+        //using (new EditorGUI.DisabledScope(!somethingChanged))
+        //{
+        //    if (GUILayout.Button("GENERATE"))
+        //    {
+        //        EditorUtility.SetDirty(item);
+        //        AssetDatabase.SaveAssets();
+        //        AssetDatabase.Refresh();
+        //        //CatLog.Log($"{item.Item_Name} : Save Editor's Value !");
+        //        somethingChanged = true;
+        //    }
+        //}
+        //EditorGUI.EndDisabledGroup();
+
+        //bool changeChecker = EditorGUI.EndChangeCheck();
+        //if (changeChecker) CatLog.Log("몬가 값이 바뀜 !");
+        if (GUILayout.Button("GENERATE"))
+        {
+            EditorUtility.SetDirty(item);
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+            CatLog.Log($"<color=green>{item.Item_Name} : Apply the Modified Value</color>");
+            //changeChecker = false;
+        }
+        GUILayout.Space(5f);
+
         GUILayout.EndVertical();
 
-        //serializedObject.ApplyModifiedProperties();
+        //if (changeChecker)
+        //{
+        //    saveString = "VALUE's CHANGE";
+        //}
+        //else saveString = "NOTHING";
+        //
+        //
+        //Repaint(); 바로 Repaint가 업데이트 되지 않아서 saveString이 바뀌지 않는다
+
+        EditorGUILayout.LabelField(saveString);
+        
+
+        serializedObject.ApplyModifiedProperties();
+        
+        //EditorApplication.update.Invoke();
     }
 }
 
@@ -323,6 +370,15 @@ public class ArrowItemData_Editor : Editor
         GUILayout.EndVertical();
 
         #endregion
+
+        if(GUILayout.Button("GENERATE"))
+        {
+            EditorUtility.SetDirty(item);
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+            CatLog.Log($"{item.Item_Name} : Save Editor's Value !");
+        }
+        GUILayout.Space(5f);
 
         GUILayout.EndVertical();
 

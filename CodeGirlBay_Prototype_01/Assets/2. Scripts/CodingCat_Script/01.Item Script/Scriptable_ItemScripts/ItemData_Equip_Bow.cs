@@ -1,7 +1,7 @@
 ﻿namespace CodingCat_Games
 {
-    using UnityEngine;
     using UnityEditor;
+    using UnityEngine;
     using CodingCat_Scripts;
 
     [CreateAssetMenu(fileName = "Item_Bow_Asset", menuName = "Scriptable Object Asset/Item_Bow_Asset")]
@@ -47,6 +47,32 @@
     }
 
 #if UNITY_EDITOR
+
+    //[UnityEditor.CustomEditor(typeof(ItemData_Equip_Bow))]
+    //public class ItemDataEditor : Editor
+    //{
+    //    ItemData_Equip_Bow item;
+    //
+    //    private void OnEnable()
+    //    {
+    //        item = (ItemData_Equip_Bow)target;
+    //    }
+    //
+    //    public override void OnInspectorGUI()
+    //    {
+    //        base.OnInspectorGUI();
+    //
+    //        //serializedObject.Update();
+    //
+    //        //너가 에디터에서 값을변경 하든지 할거
+    //        //
+    //        //
+    //
+    //        //serializedObject.ApplyModifiedProperties();
+    //
+    //        EditorUtility.SetDirty(target);
+    //    }
+    //}
 
     //[CustomEditor(typeof(ItemData_Equip_Bow))]
     //public class BowItemDataScriptEditor : Editor

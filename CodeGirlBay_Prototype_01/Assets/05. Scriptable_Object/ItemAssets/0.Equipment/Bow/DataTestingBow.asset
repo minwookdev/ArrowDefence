@@ -9,16 +9,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf2d431614543144c88942f47ae83b63, type: 3}
-  m_Name: Steel_Arrow
+  m_Script: {fileID: 11500000, guid: 85b041e0ff5f89e41b19a84369197493, type: 3}
+  m_Name: DataTestingBow
   m_EditorClassIdentifier: 
   Item_Type: 2
-  Item_Grade: 3
-  Item_Id: 4001
+  Item_Grade: 0
+  Item_Id: 3777
   Item_Amount: 1
-  Item_Name: Steel Arrow
+  Item_Name: 
   Item_Desc: 
-  Item_Sprite: {fileID: 21300000, guid: e4ba42abb72b4496f934f1a517f64fea, type: 3}
-  Equip_Type: 1
-  MainArrowObj: {fileID: 0}
-  LessArrowObj: {fileID: 0}
+  Item_Sprite: {fileID: 0}
+  Equip_Type: 0
+  BowGameObject: {fileID: 0}
+  FirstSkill_Type: 0
+  SecondSkill_Type: 0

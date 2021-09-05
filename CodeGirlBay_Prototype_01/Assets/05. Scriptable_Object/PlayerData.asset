@@ -13,6 +13,5 @@ MonoBehaviour:
   m_Name: PlayerData
   m_EditorClassIdentifier: 
   tempItems:
-  - {fileID: 11400000, guid: 84adca0e3393b98439a37949c1223e36, type: 2}
-  - {fileID: 11400000, guid: 5bec2fd1b6efecd4a895a90954477707, type: 2}
   - {fileID: 11400000, guid: 64254eedd1c43c446ae2e7682daa20a6, type: 2}
+  - {fileID: 11400000, guid: 766421f3dc0731a40b1dd91084048d8c, type: 2}

@@ -3,6 +3,7 @@
     using CodingCat_Scripts;
     using UnityEngine;
 
+    [System.Serializable]
     public abstract class ItemData : ScriptableObject
     {
         [Header("Default Item Data")]

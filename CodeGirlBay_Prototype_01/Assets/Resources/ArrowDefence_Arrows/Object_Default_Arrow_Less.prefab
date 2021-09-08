@@ -340,7 +340,7 @@ PolygonCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -380,7 +380,7 @@ GameObject:
   - component: {fileID: 3969598150573786131}
   - component: {fileID: 3548661466032091851}
   m_Layer: 9
-  m_Name: Object_Arrow_Less
+  m_Name: Object_Default_Arrow_Less
   m_TagString: ArrowDefence_Arrow
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

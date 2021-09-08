@@ -4,7 +4,6 @@ using DG.Tweening;
 using CodingCat_Games;
 using CodingCat_Scripts;
 using System.Linq;
-using UnityEditor;
 
 public class MainSceneRoute : MonoBehaviour
 {
@@ -63,9 +62,6 @@ public class MainSceneRoute : MonoBehaviour
     [Space(10)]
     public CanvasGroup ImgFade = null;
     public float FadeTime = 2.0f;
-
-    [Header("DEV Options")]
-    public bool IsDevMode = true;
 
     [Header("Popup")]
     [Space(10)]
@@ -315,7 +311,7 @@ public class MainSceneRoute : MonoBehaviour
 
     private void OnSceneEnteringFadeOut()
     {
-        if (IsDevMode) return;
+        if (CodingCat_Games.GameManager.Instance.IsDevMode) return;
 
         ImgFade.alpha = 1f;
 

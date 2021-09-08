@@ -132,38 +132,38 @@
         /// <param name="objKind">오브젝트의 종류 Arrow, Effect, Monster</param>
         /// <param name="objType">종류별 ENUM, AD_GameScripts 참조</param>
         /// <param name="targetObj">회수될 대상, this.gameObject</param>
-        public void CollectObject(string objKind, int objType, GameObject targetObj)
-        {
-            switch (objKind)
-            {
-                case AD_Data.Arrow:
-                    if (objType == (int)AD_Data.ArrowAttrubute.Arrow_Normal)
-                    {
-                        targetObj.SetActive(false);
-                        targetObj.transform.SetParent(this.NormalArrowObjects.transform, false);
-                    }
-                    else if (objType == (int)AD_Data.ArrowAttrubute.Arrow_Effect)
-                    {
-                        targetObj.SetActive(false);
-                        targetObj.transform.SetParent(this.EffectArrowObjects.transform, false);
-                    }
-                    else if (objType == (int)AD_Data.ArrowAttrubute.Arrow_Special)
-                    {
-
-                    }
-                    else
-                    {
-                        CatLog.Log("Arrow Object Type is Wrong, Can't Collect Object");
-                    }
-                    break;
-                case AD_Data.Effect:
-                    break;
-                case AD_Data.Monster:
-                    break;
-                default:
-                    break;
-            }
-        }
+        //public void CollectObject(string objKind, int objType, GameObject targetObj)
+        //{
+        //    switch (objKind)
+        //    {
+        //        case AD_Data.Arrow:
+        //            if (objType == (int)AD_Data.ArrowAttrubute.Arrow_Normal)
+        //            {
+        //                targetObj.SetActive(false);
+        //                targetObj.transform.SetParent(this.NormalArrowObjects.transform, false);
+        //            }
+        //            else if (objType == (int)AD_Data.ArrowAttrubute.Arrow_Effect)
+        //            {
+        //                targetObj.SetActive(false);
+        //                targetObj.transform.SetParent(this.EffectArrowObjects.transform, false);
+        //            }
+        //            else if (objType == (int)AD_Data.ArrowAttrubute.Arrow_Special)
+        //            {
+        //
+        //            }
+        //            else
+        //            {
+        //                CatLog.Log("Arrow Object Type is Wrong, Can't Collect Object");
+        //            }
+        //            break;
+        //        case AD_Data.Effect:
+        //            break;
+        //        case AD_Data.Monster:
+        //            break;
+        //        default:
+        //            break;
+        //    }
+        //}
 
         //Load, Collect Method 오브젝트 종류별로 나눠놓는게 관리에 좋을것 같음
         //추후 Pool로 관리될 오브젝트가 늘어날것을 감안

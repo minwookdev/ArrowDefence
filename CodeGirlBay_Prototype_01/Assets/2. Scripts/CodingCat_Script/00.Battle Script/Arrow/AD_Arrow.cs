@@ -1,5 +1,6 @@
 ﻿namespace CodingCat_Games
 {
+    using CodingCat_Scripts;
     using UnityEngine;
 
     public class AD_Arrow : MonoBehaviour
@@ -9,8 +10,7 @@
         public Transform arrowChatchPoint;
         public TrailRenderer arrowTrail;
 
-        [HideInInspector]
-        public bool isLaunched;
+        [ReadOnly] public bool isLaunched;
         [HideInInspector]
         public float power;
 
@@ -20,6 +20,14 @@
         //Launch Power for the Arrow
         private float powerFactor = 2000;
         private Rigidbody2D rBody;
+        private PolygonCollider2D polyCollider;
+
+        private void OnEnable()
+        {
+            if (polyCollider == null) polyCollider = transform.GetChild(0).GetComponent<PolygonCollider2D>();
+            polyCollider.enabled = false;
+            isLaunched = false;
+        }
 
         private void Start()
         {
@@ -40,7 +48,7 @@
             }
         }
 
-        private void OnDisable() => this.isLaunched = false;
+        //private void OnDisable() => this.isLaunched = false;
 
         private void ClampPosition()
         {
@@ -76,20 +84,9 @@
             //발사할 때 Clear 해주지 않으면 전에 있던 잔상이 남는다
             arrowTrail.gameObject.SetActive(true);
             arrowTrail.Clear();
-        }
 
-        //Initial 할 당시에는 Arrow gameobject 자체가 Disable 된 상태라 외부에서 컨트롤이 필요
-        //public void InitialArrowPosition(Transform parent, Vector3 scale, Vector3 eulerAngles, Vector3 position,
-        //                                 Transform leftClamp, Transform rightClamp)
-        //{
-        //    transform.SetParent(parent, false);
-        //    transform.localScale = scale;
-        //    transform.eulerAngles = eulerAngles;
-        //    transform.position = position;
-        //
-        //    //if
-        //    this.rightClampPoint = rightClamp;
-        //    this.leftClampPoint  = leftClamp;
-        //}
+            //Poly Collider가 활성되는 순간 충돌 가능
+            polyCollider.enabled = true;
+        }
     }
 }

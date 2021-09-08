@@ -4,6 +4,7 @@
     using UnityEngine.UI;
     using CodingCat_Scripts;
     using DG.Tweening;
+    using System.Collections;
 
     public class BattleSceneRoute : MonoBehaviour
     {
@@ -14,6 +15,20 @@
         public float LineWidth = 0.1f;
         public Material DefaultLineMat;
 
+        [Header("START FADE OPTION")]
+        public CanvasGroup ImgFade;
+        public float FadeTime = 1.0f;
+
+        [Header("PANEL's")]
+        public GameObject PausePanel;
+        public GameObject ResultPanel;
+        public GameObject GameOverPanel;
+        public float PanelOpenFadeTime = 0.5f;
+
+        [Header("PLAYER's INIT")]
+        public Transform ParentCanvas;
+        public Transform InitPos;
+
         private float screenZpos = 90f;
         private LineRenderer arrowLimitLine;
         private Vector2 topLeftPoint;
@@ -21,25 +36,7 @@
         private Vector3[] limitPoints = new Vector3[5];
         private Vector2 offset = new Vector2(2f, 2f);
 
-        [Header("Fade Option")]
-        public CanvasGroup ImgFade;
-        public float FadeTime = 1.0f;
-
-        [Header("Pause Game")]
-        public GameObject PausePanel;
-        public float PauseFadeTime = 0.5f;
-
-        [Header("Game Over")]
-        public GameObject GameOverPanel;
-
-        [Header("DEV Options")]
-        public bool IsDevMode = true;
-
-        [Header("Game Init Settings")]
-        public Transform ParentCanvas;
-        public Transform InitPos;
-
-        private void Start()
+        void Start()
         {
             #region LIMIT_LINE_MAKER
             if (IsVisible)
@@ -71,8 +68,9 @@
 
             #region BATTLE_SCENE_INITIALIZING
 
-            PausePanel.GetComponent<CanvasGroup>().alpha = 0f;
+            PausePanel.GetComponent<CanvasGroup>().alpha = 0f; //이거 무엇?
 
+            //Battle Initializing
             GameManager.Instance.SetPooler();
             GameManager.Instance.SetPlayerBow(ParentCanvas, InitPos);
 
@@ -82,21 +80,13 @@
             #endregion
         }
 
-        public void Update()
-        {
-            //GameOver Logic Test
-            if(Input.GetKeyDown(KeyCode.O))
-            {
-
-            }
-        }
 
         #region Region_Button_Methods
 
         public void Btn_OpenPausePanel()
         {
             PausePanel.GetComponent<CanvasGroup>()
-                      .DOFade(1f, PauseFadeTime)
+                      .DOFade(1f, PanelOpenFadeTime)
                       .OnStart(() => { PausePanel.GetComponent<CanvasGroup>().blocksRaycasts = false;
                                        PausePanel.SetActive(true);})
                       .OnComplete(() => PausePanel.GetComponent<CanvasGroup>().blocksRaycasts = true);
@@ -104,7 +94,7 @@
 
         public void Btn_ContinueGame()
         {
-            PausePanel.GetComponent<CanvasGroup>().DOFade(0f, PauseFadeTime)
+            PausePanel.GetComponent<CanvasGroup>().DOFade(0f, PanelOpenFadeTime)
                       .OnStart(() => PausePanel.GetComponent<CanvasGroup>().blocksRaycasts = false)
                       .OnComplete(() => PausePanel.SetActive(false));
         }
@@ -123,7 +113,7 @@
 
         private void OnSceneEnteringFadeOut()
         {
-            if (IsDevMode) return;
+            if (GameManager.Instance.IsDevMode) return;
 
             //씬 진입 시 alpha 값 바꾸기 전 상황이 나오는 지 체크, alpha 값 바꿔주기 전 상황이 나오면
             //Build 시 alpha 값을 살려놓은 상태로 빌드..?
@@ -140,8 +130,12 @@
                        ImgFade.gameObject.SetActive(false);
                    });
         }
+
+        public void OnResultPanel()
+        {
+            if (ResultPanel.activeSelf) return;
+
+            ResultPanel.SetActive(true);
+        }
     }
-
-
-
 }

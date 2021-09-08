@@ -237,12 +237,6 @@
             }
 
             bowPullBegan = true;
-
-            //if(currentLoadedArrow.transform.parent != this.transform)
-            //{
-            //    //화살을 불러올 때 간혹 Parent가 잡히지 않는 경우가 있음
-            //    currentLoadedArrow.transform.SetParent(this.transform);
-            //}
         }
 
         private void BowMoved(Vector2 pos)
@@ -424,7 +418,7 @@
 
             #region POOL_RELOAD
 
-           yield return null;
+            yield return null;
             
             currentLoadedArrow = CCPooler.SpawnFromPool(AD_Data.TAG_MAINARROW, this.transform, initialArrowScale,
                                      rightClampPoint.position, Quaternion.identity);

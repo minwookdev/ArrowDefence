@@ -2,7 +2,7 @@
 {
     using UnityEngine;
 
-    public class AD_ArrowDirection : MonoBehaviour
+    public class AD_ArrowDirection : MonoBehaviour, IPoolObject
     {
         //Screen Limit Variable
         private Vector2 topLeftScreenPoint;
@@ -42,11 +42,6 @@
             }
         }
 
-        private void OnDisable()
-        {
-            //CCPooler.ReturnToPool(this.gameObject, AD_Data.ARROW_MAIN);
-        }
-
         //arrow Position is Out of Screen, then Destroy the Arrow (When Arrow Firing).
         private void CheckArrowBounds()
         {
@@ -59,23 +54,41 @@
             if(!(xIn && yIn))
             {
                 //화면 밖으로 나가면 Disable
-                this.DisableArrow();
+                DisableObject_Req(this.gameObject);
+                //DisableArrow();
                 return;
             }
         }
 
+        //private void DisableArrow()
+        //{
+        //    this.arrowRigidBody.isKinematic = true;
+        //    adArrow.arrowTrail.gameObject.SetActive(false);
+        //    CCPooler.ReturnToPool(this.gameObject, 0);
+        //
+        //    //gameObject.SetActive(false);
+        //    //Disable 하기전에 SerParent 하면 스케일이랑 좌표 난리난다. 항상 SetParent할 경우 Disable 후에 부모바꿔줄것.
+        //    //CCPooler.ReturnToPool 실행으로 비활성화 요청
+        //}
+
         /// <summary>
-        /// 화면밖으로 나가거나 충돌되어 Disable 처리되어야할 상황에서 각종 변수들 초기화 처리
+        /// 화면밖으로 나가거나 몬스터에 충돌되어 Disable처리되고, ObjectPooler에 비활성화 요청
         /// </summary>
-        private void DisableArrow()
+        /// <param name="target"></param>
+        public void DisableObject_Req(GameObject target)
         {
             this.arrowRigidBody.isKinematic = true;
             adArrow.arrowTrail.gameObject.SetActive(false);
-            CCPooler.ReturnToPool(this.gameObject, 0);
 
-            //gameObject.SetActive(false);
-            //Disable 하기전에 SerParent 하면 스케일이랑 좌표 난리난다. 항상 SetParent할 경우 Disable 후에 부모바꿔줄것.
-            //CCPooler.ReturnToPool 실행으로 비활성화 요청
+            CCPooler.ReturnToPool(target, 0);
+        }
+
+        private void OnCollisionEnter2D(Collision2D coll)
+        {
+            if(coll.gameObject.layer == LayerMask.NameToLayer(AD_Data.LAYER_MONSTER))
+            {
+                DisableObject_Req(this.gameObject);
+            }
         }
     }
 }

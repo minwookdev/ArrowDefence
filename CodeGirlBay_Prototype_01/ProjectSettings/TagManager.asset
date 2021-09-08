@@ -16,10 +16,10 @@ TagManager:
   - UI
   - 
   - 
-  - Bow
-  - Arrow
-  - 
-  - 
+  - ObjectBow
+  - ObjectArrow
+  - ObjectMonster
+  - DisableCollider
   - 
   - 
   - 
@@ -44,27 +44,27 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: map:Ground
+  - name: Map:Ground
     uniqueID: 2425651459
     locked: 0
-  - name: map:Objects
+  - name: Map:Objects
     uniqueID: 4250941897
     locked: 0
   - name: 
     uniqueID: 4189426099
     locked: 0
-  - name: 
+  - name: Object:Monster
     uniqueID: 293537937
     locked: 0
   - name: 
     uniqueID: 389775653
     locked: 0
-  - name: 
+  - name: Map:Building
     uniqueID: 879352621
     locked: 0
-  - name: Bow
+  - name: Object:Bow
     uniqueID: 1856344157
     locked: 0
-  - name: Arrow
+  - name: Object:Arrow
     uniqueID: 2938535581
     locked: 0

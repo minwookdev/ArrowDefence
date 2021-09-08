@@ -45,11 +45,11 @@ public class MatItemData_Editor : Editor
     {
         if (item == null) return;
 
-        //serializedObject.Update();
-
         EditorGUI.BeginDisabledGroup(true);
         EditorGUILayout.ObjectField("Script", MonoScript.FromScriptableObject((ItemData_Mat)item), typeof(ItemData_Mat), false);
         EditorGUI.EndDisabledGroup();
+
+        serializedObject.Update();
 
         GUILayout.Space(5);
         GUILayout.BeginVertical("HelpBox");
@@ -82,6 +82,20 @@ public class MatItemData_Editor : Editor
 
         #endregion
 
+        #region GENERATE_BUTTON
+
+        if (GUILayout.Button("GENERATE"))
+        {
+            EditorUtility.SetDirty(item);
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+            CatLog.Log($"<color=green>{item.Item_Name} : Apply the Modified Value</color>");
+            //changeChecker = false;
+        }
+        GUILayout.Space(5f);
+
+        #endregion
+
         GUILayout.EndVertical();
 
         //serializedObject.ApplyModifiedProperties();
@@ -106,7 +120,7 @@ public class ConItemData_Editor : Editor
         EditorGUILayout.ObjectField("Script", MonoScript.FromScriptableObject((ItemData_Con)item), typeof(ItemData_Con), false);
         EditorGUI.EndDisabledGroup();
 
-        //serializedObject.Update();
+        serializedObject.Update();
 
         GUILayout.Space(5);
         GUILayout.BeginVertical("HelpBox");
@@ -139,6 +153,20 @@ public class ConItemData_Editor : Editor
 
         #endregion
 
+        #region GENERATE_BUTTON
+
+        if (GUILayout.Button("GENERATE"))
+        {
+            EditorUtility.SetDirty(item);
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+            CatLog.Log($"<color=green>{item.Item_Name} : Apply the Modified Value</color>");
+            //changeChecker = false;
+        }
+        GUILayout.Space(5f);
+
+        #endregion
+
         GUILayout.EndVertical();
 
         //serializedObject.ApplyModifiedProperties();
@@ -151,7 +179,7 @@ public class BowItemData_Editor : Editor
     ItemData_Equip_Bow item;
 
     //bool changevalue;
-    string saveString = "";
+    //string saveString = "";
 
     public void OnEnable()
     {
@@ -167,7 +195,7 @@ public class BowItemData_Editor : Editor
         EditorGUI.EndDisabledGroup();
 
         serializedObject.Update();
-        EditorGUI.BeginChangeCheck();
+        //EditorGUI.BeginChangeCheck();
 
         GUILayout.Space(5);
         GUILayout.BeginVertical("HelpBox");
@@ -258,6 +286,9 @@ public class BowItemData_Editor : Editor
 
         //bool changeChecker = EditorGUI.EndChangeCheck();
         //if (changeChecker) CatLog.Log("몬가 값이 바뀜 !");
+
+        #region GENERATE_BUTTON
+
         if (GUILayout.Button("GENERATE"))
         {
             EditorUtility.SetDirty(item);
@@ -267,6 +298,8 @@ public class BowItemData_Editor : Editor
             //changeChecker = false;
         }
         GUILayout.Space(5f);
+
+        #endregion
 
         GUILayout.EndVertical();
 
@@ -279,7 +312,7 @@ public class BowItemData_Editor : Editor
         //
         //Repaint(); 바로 Repaint가 업데이트 되지 않아서 saveString이 바뀌지 않는다
 
-        EditorGUILayout.LabelField(saveString);
+        //EditorGUILayout.LabelField(saveString);
         
 
         serializedObject.ApplyModifiedProperties();
@@ -306,7 +339,7 @@ public class ArrowItemData_Editor : Editor
         EditorGUILayout.ObjectField("Script", MonoScript.FromScriptableObject((ItemData_Equip_Arrow)item), typeof(ItemData_Equip_Arrow), false);
         EditorGUI.EndDisabledGroup();
 
-        //serializedObject.Update();
+        serializedObject.Update();
 
         GUILayout.Space(5);
         GUILayout.BeginVertical("HelpBox");
@@ -371,14 +404,19 @@ public class ArrowItemData_Editor : Editor
 
         #endregion
 
-        if(GUILayout.Button("GENERATE"))
+        #region GENERATE_BUTTON
+
+        if (GUILayout.Button("GENERATE"))
         {
             EditorUtility.SetDirty(item);
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
-            CatLog.Log($"{item.Item_Name} : Save Editor's Value !");
+            CatLog.Log($"<color=green>{item.Item_Name} : Apply the Modified Value</color>");
+            //changeChecker = false;
         }
         GUILayout.Space(5f);
+
+        #endregion
 
         GUILayout.EndVertical();
 
@@ -462,6 +500,20 @@ public class AccessItemData_Editor : Editor
         item.effect = EditorGUILayout.TextField(ItemData_Editor.AccessoryEffectText, item.effect);
 
         GUILayout.EndVertical();
+
+        #endregion
+
+        #region GENERATE_BUTTON
+
+        if (GUILayout.Button("GENERATE"))
+        {
+            EditorUtility.SetDirty(item);
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+            CatLog.Log($"<color=green>{item.Item_Name} : Apply the Modified Value</color>");
+            //changeChecker = false;
+        }
+        GUILayout.Space(5f);
 
         #endregion
 

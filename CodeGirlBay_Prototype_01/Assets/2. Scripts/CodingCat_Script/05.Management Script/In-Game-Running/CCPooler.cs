@@ -14,14 +14,7 @@
     [CustomEditor(typeof(CCPooler))]
     public class CCPoolerEditor : Editor
     {
-        //const string info = "** The following code is written in Pooling Object \n" +
-        //                    "void OnDisable()\n" +
-        //                    "{\n" +
-        //                    "   CatObjectPooler.ReturnToPool(this.gameObject); //Once Per Object \n" +
-        //                    "   CancelInvoke(); //If the object has an Invoke Method \n" +
-        //                    "}";
-
-        const string rules = "Coding Cat Object Pooler Rules \n" +
+        const string rules = "Coding Cat Notification ! Object Pooler Rules \n" +
                                      "1st Pool Object : Main Arrow \n" + 
                                      "2nd Pool Object : Main Arrow-Less \n" + 
                                      "3rd Pool Object : Sub Arrow \n" +
@@ -40,7 +33,6 @@
     public class CCPooler : MonoBehaviour
     {
         //특정 오브젝트의 부모가 바뀌는 상황에서 반드시 개체는 Disable 된 상황이어야 한다.
-
         static CCPooler _inst;
 
         private void Awake() => _inst = this;
@@ -234,6 +226,8 @@
             if (!_inst.poolDictionary.ContainsKey(obj.name))
                 throw new Exception($"Pool With Tag {obj.name} doesn't Exist.");
 
+            obj.SetActive(false);
+
             _inst.poolDictionary[obj.name].Push(obj);
         }
 
@@ -281,7 +275,7 @@
         {
             var obj = Instantiate(prefab, parent);
             obj.name = tag;
-            obj.SetActive(false);   //Spawn 하고 비활성화 시 ReturnToPool을 실행하므로 Stack에 Push 된다
+            //obj.SetActive(false);   //Spawn 하고 비활성화 시 ReturnToPool을 실행하므로 Stack에 Push 된다
             ReturnToPool(obj);
             return obj;
         }

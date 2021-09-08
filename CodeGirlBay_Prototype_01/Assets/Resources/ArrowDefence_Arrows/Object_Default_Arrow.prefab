@@ -124,7 +124,7 @@ GameObject:
   - component: {fileID: 6082609631992581024}
   - component: {fileID: 6082609631992581025}
   m_Layer: 9
-  m_Name: Object_Arrow
+  m_Name: Object_Default_Arrow
   m_TagString: ArrowDefence_Arrow
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -295,7 +295,7 @@ PolygonCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}

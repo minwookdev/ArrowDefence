@@ -2,7 +2,7 @@
 {
     using UnityEngine;
 
-    public class AD_Arrow_less : MonoBehaviour
+    public class AD_Arrow_less : MonoBehaviour, IPoolObject
     {
         //Screen Limit Variable
         private Vector2 topLeftScreenPoint;
@@ -67,18 +67,13 @@
 
             if (!(xIn && yIn))
             {
-                DisableArrow();
+                //DisableArrow();
+                DisableObject_Req(this.gameObject);
                 return;
             }
         }
 
-        public void DisableArrow() => CCPooler.ReturnToPool(this.gameObject, 0);
-        //{
-        //    this.rBody.velocity = Vector2.zero;
-        //    this.trailObject.SetActive(false);
-        //    this.isLaunched = false;
-        //    gameObject.SetActive(false);
-        //}
+        public void DisableObject_Req(GameObject target) => CCPooler.ReturnToPool(target, 0);
 
         public void ShotArrow(Vector2 force)
         {
@@ -87,6 +82,14 @@
 
             trailObject.SetActive(true);
             trailObject.GetComponent<TrailRenderer>().Clear();
+        }
+
+        private void OnCollisionEnter2D(Collision2D coll)
+        {
+            if(coll.gameObject.layer == LayerMask.NameToLayer(AD_Data.LAYER_MONSTER))
+            {
+                DisableObject_Req(this.gameObject);
+            }
         }
     }
 }

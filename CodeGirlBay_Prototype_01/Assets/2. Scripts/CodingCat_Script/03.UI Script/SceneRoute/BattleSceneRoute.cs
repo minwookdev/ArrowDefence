@@ -5,6 +5,8 @@
     using CodingCat_Scripts;
     using DG.Tweening;
     using System.Collections;
+    using CodingCat_Games.Data;
+    using System.Collections.Generic;
 
     public class BattleSceneRoute : MonoBehaviour
     {
@@ -131,11 +133,19 @@
                    });
         }
 
-        public void OnResultPanel()
+        public void OnResultPanel(List<ItemData> dropItems)
         {
             if (ResultPanel.activeSelf) return;
 
             ResultPanel.SetActive(true);
+
+            CatLog.Log("정산 윈도우 업데이트");
+
+            foreach (var item in dropItems)
+            {
+                CCPlayerData.inventory.AddItem(item);
+                CatLog.Log($"아이템 획득 : {item.Item_Name}, 수량 : {item.Item_Amount}");
+            }
         }
     }
 }

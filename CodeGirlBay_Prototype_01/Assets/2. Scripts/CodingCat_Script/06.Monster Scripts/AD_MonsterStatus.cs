@@ -11,7 +11,17 @@
         private float monsterHp;
         private float monsterMp;
 
+        private void Update()
+        {
+            //if(GameManager.Instance.GameState == GAMESTATE.STATE_ENDBATTLE)
+            //{
+            //    //Battle이 끝남에 따라 자체적으로 비활성화 처리로직 들어가도 된다 
+            //}
+        }
+
         public void DisableObject_Req(GameObject target) => CCPooler.ReturnToPool(target);
+
+        public void OnStageClear() => DisableObject_Req(this.gameObject);
 
         public void OnHitObject(float value)
         {

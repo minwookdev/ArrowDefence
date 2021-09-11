@@ -36,6 +36,8 @@
     public static readonly string LAYER_ARROW        = "ObjectArrow";
     public static readonly string LAYER_BOW          = "ObjectBow";
 
+    public static readonly string OBJECT_TAG_MONSTER = "Monster";
+
     //const (상수)형은 빌드 시 인게임 내에서 불러오는데 문제? 가 있을수 있다고 하니, 
     //static readonly로 바꿔주도록 한다
 }

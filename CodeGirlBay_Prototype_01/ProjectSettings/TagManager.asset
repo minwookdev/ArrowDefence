@@ -7,6 +7,7 @@ TagManager:
   - ArrowDefence_Bow
   - ArrowDefence_Arrow
   - BattleScene_MainCanvas
+  - Monster
   layers:
   - Default
   - TransparentFX

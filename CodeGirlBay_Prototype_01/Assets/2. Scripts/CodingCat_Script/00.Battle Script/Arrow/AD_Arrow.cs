@@ -22,13 +22,6 @@
         private Rigidbody2D rBody;
         private PolygonCollider2D polyCollider;
 
-        private void OnEnable()
-        {
-            if (polyCollider == null) polyCollider = transform.GetChild(0).GetComponent<PolygonCollider2D>();
-            polyCollider.enabled = false;
-            isLaunched = false;
-        }
-
         private void Start()
         {
             //if (ReferenceEquals(rBody, null)) rBody = gameObject.GetComponent<Rigidbody2D
@@ -37,6 +30,9 @@
             if (arrowTrail == null) arrowTrail = transform.GetChild(2).GetChild(0).GetComponent<TrailRenderer>();
             rBody = gameObject.GetComponent<Rigidbody2D>();
             rBody.gravityScale = 0f;
+
+            if (polyCollider == null) polyCollider = transform.GetChild(0).GetComponent<PolygonCollider2D>();
+            polyCollider.enabled = false;
         }
 
         private void Update()
@@ -48,7 +44,7 @@
             }
         }
 
-        //private void OnDisable() => this.isLaunched = false;
+        private void OnDisable() => this.isLaunched = false;
 
         private void ClampPosition()
         {
@@ -88,5 +84,11 @@
             //Poly Collider가 활성되는 순간 충돌 가능
             polyCollider.enabled = true;
         }
+
+        #region PROPERTIES
+
+        public void OnDisableCollider() => this.polyCollider.enabled = false;
+
+        #endregion
     }
 }

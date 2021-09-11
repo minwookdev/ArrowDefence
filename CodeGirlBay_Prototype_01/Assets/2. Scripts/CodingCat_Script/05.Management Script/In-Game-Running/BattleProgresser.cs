@@ -1,7 +1,10 @@
 ﻿namespace CodingCat_Games
 {
     using CodingCat_Scripts;
+    using DG.Tweening;
     using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
     using UnityEngine;
     using UnityEngine.UI;
 
@@ -15,7 +18,7 @@
         private bool isInitialized = false;
 
         [Header("STAGE CLEAR COUNT")]
-        [Range(100, 1000)] 
+        [Range(100, 1200)] 
         public float MaxClearCount = 100;
         private float currentClearCount = 0f;
 
@@ -29,6 +32,11 @@
         [Header("CURRENT BATTLE STATE")]
         [ReadOnly] public string BattleStr;
 
+        [Header("DROP LIST FOR THIS STAGE")]
+        public ItemDropList DropListAsset;
+        [Range(0, 100)] public int ItemDropChance;
+        public List<ItemData> DropItems = new List<ItemData>();
+
         private BattleSceneRoute battleSceneUI;
 
         public delegate void OnIncreaseValue(float value);
@@ -40,6 +48,7 @@
             GameManager.Instance.SetGameState(GAMESTATE.STATE_BEFOREBATTLE);
 
             OnIncreaseClearGauge += IncreaseClearGauge;
+            if (DropListAsset != null) OnIncreaseClearGauge += OnRollDropList;
 
             isInitialized = true;
         }
@@ -48,19 +57,20 @@
         {
             switch (GameManager.Instance.GameState)
             {
-                case GAMESTATE.STATE_BEFOREBATTLE : OnCheckBeforeBattle(); break;
-                case GAMESTATE.STATE_INBATTLE     : OnCheckInBattle();     break;
-                case GAMESTATE.STATE_BOSSBATTLE   : OnCheckBossBattle();   break;
-                case GAMESTATE.STATE_ENDBATTLE    : OnCheckEndBattle();    break;
+                case GAMESTATE.STATE_BEFOREBATTLE : OnUpdateBeforeBattle(); break;
+                case GAMESTATE.STATE_INBATTLE     : OnUpdateInBattle();     break;
+                case GAMESTATE.STATE_BOSSBATTLE   : OnUpdateBossBattle();   break;
+                case GAMESTATE.STATE_ENDBATTLE    : OnUpdateEndBattle();    break;
             }
         }
 
         private void OnDestroy()
         {
             OnIncreaseClearGauge -= IncreaseClearGauge;
+            OnIncreaseClearGauge -= OnRollDropList;
         }
 
-        #region GAME_GAUGE_LOGIC'S
+        #region GAME_GAUGE_LOGIC's
 
         public void IncreaseClearGauge(float value)
         {
@@ -68,38 +78,118 @@
 
             if(currentClearCount >= MaxClearCount)
             {
+                //살아있는 몬스터들 비활성화
+                GameObject[] monsters = GameObject.FindGameObjectsWithTag(AD_Data.OBJECT_TAG_MONSTER);
+                CatLog.Log($"Tag Monster's Count : {monsters.Length}"); //Scene에 활성화된 Monster 개체만 담는것을 확인
+
+                foreach (var monster in monsters)
+                {
+                    monster.SendMessage("DisableObject_Req", monster, SendMessageOptions.DontRequireReceiver);
+                }
+
                 currentClearCount = MaxClearCount;
             }
 
-            if (ClearSlider != null || ClearSlider.value < 1f)
-                StartCoroutine(MoveSlider());
+            if (ClearSlider != null)
+            {
+                float dest = currentClearCount / MaxClearCount;
+                ClearSlider.DOValue(dest, 1f);
+            }
+                
         }
 
+        /// <summary>
+        /// 호출되는 간격이 짧을때는 Update에다 두고 사용하는게 안정적임 -> 그냥 DoTween 사용해서 해결함
+        /// </summary>
+        /// <returns></returns>
         private IEnumerator MoveSlider()
         {
             //var value = currentStageCount / MaxStageCount;
             //float startValue = StageSlider.value;
             float lerp = 0f;
 
-            while (lerp < 1f)
+            while (lerp < SliderSmoothTime)
             {
                 clearSliderDest = currentClearCount / MaxClearCount; //처음에만 잡아줘버리면 계속 변동하는 수치를 잡지못함
-                ClearSlider.value = Mathf.Lerp(ClearSlider.value, clearSliderDest, lerp);
-                lerp += Time.deltaTime / SliderSmoothTime;
+                lerp += Time.deltaTime;
+                float lerpValue = lerp / SliderSmoothTime;
+                ClearSlider.value = Mathf.Lerp(ClearSlider.value, clearSliderDest, lerpValue);
 
                 yield return null;
             }
 
-            ClearSlider.value = clearSliderDest;
+            //ClearSlider.value = clearSliderDest;
             //adding Time.deltaTime will probably never add to a full Number, this is just rounding Slider value
             //so it's exactly what we want
         }
 
         #endregion
 
+        #region ITEMDROP_LOGIC
+
+        private void OnRollDropList(float dropRateCorrection)
+        {
+            int rollChance = Random.Range(1, 100 + 1);  //1~100
+            float totalChance = ItemDropChance + dropRateCorrection;
+
+            if (totalChance >= rollChance)    //아이템을 획득한 경우
+            {
+                var itemData = ChooseItemInDropList(DropListAsset.DropListArray);
+                DropItems.Add(itemData);
+            }
+            else                              //아이템을 획득하지 못한 경우
+            {
+
+            }
+        }
+
+        private ItemData ChooseItemInDropList(ItemDropList.DropItems[] items)
+        {
+            float total = 0f;
+
+            foreach (var item in items)
+            {
+                total += item.DropChance;
+            }
+
+            float randomPoint = Random.value * total;
+
+            for (int i = 0; i < items.Length; i++)
+            {
+                if(randomPoint < items[i].DropChance)
+                {
+                    return items[i].itemAsset;
+                }
+                else
+                {
+                    randomPoint -= items[i].DropChance;
+                }
+            }
+
+            //randomPoint 가 극한의 확률로 1이 나와서 어디에도 못들어간 경우 최소 확률의 아이템을 제공해줌
+
+            var minimunChanceOfItem = items[0];
+
+            for (int i = 0; i < items.Length; i++)
+            {
+                if(minimunChanceOfItem.DropChance > items[i].DropChance)
+                {
+                    minimunChanceOfItem = items[i];
+                }
+            }
+
+            return minimunChanceOfItem.itemAsset;
+
+            //Linq를 사용해서 최소확률의 아이템 찾기
+            //var minimunChanceOfItem = (from item in items
+            //                           select item).Min(item => item.DropChance);
+        }
+
+        #endregion
+
         #region ONCHECK_BATTLE_PROGRESS
 
-        private void OnCheckBeforeBattle()
+        private void OnUpdateBeforeBattle()
         {
             if (isInitialized)
             {
@@ -114,7 +204,7 @@
             BattleStr = "BEFORE BATTLE";
         }
 
-        private void OnCheckInBattle()
+        private void OnUpdateInBattle()
         {
             if(currentClearCount >= MaxClearCount)
             {
@@ -124,14 +214,14 @@
             BattleStr = "IN BATTLE";
         }
 
-        private void OnCheckBossBattle()
+        private void OnUpdateBossBattle()
         {
 
         }
 
-        private void OnCheckEndBattle()
+        private void OnUpdateEndBattle()
         {
-            if (endWaitingTime >= EndTime) battleSceneUI.OnResultPanel();
+            if (endWaitingTime >= EndTime) battleSceneUI.OnResultPanel(DropItems);
             else endWaitingTime += Time.deltaTime;
 
             BattleStr = "END BATTLE";

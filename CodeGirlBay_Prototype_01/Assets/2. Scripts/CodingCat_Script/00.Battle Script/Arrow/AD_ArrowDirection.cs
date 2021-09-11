@@ -79,6 +79,7 @@
         {
             this.arrowRigidBody.isKinematic = true;
             adArrow.arrowTrail.gameObject.SetActive(false);
+            adArrow.OnDisableCollider();
 
             CCPooler.ReturnToPool(target, 0);
         }

@@ -4,14 +4,12 @@
     using UnityEngine.UI;
     using CodingCat_Scripts;
     using DG.Tweening;
-    using System.Collections;
-    using CodingCat_Games.Data;
     using System.Collections.Generic;
 
     public class BattleSceneRoute : MonoBehaviour
     {
         //Screen Limit Variable
-        [Header("Visible Disable Limit Line")]
+        [Header("DISABLE OBJECT LINE DRAW")]
         public bool IsVisible;
         [Range(0f, 1.0f)] 
         public float LineWidth = 0.1f;
@@ -30,6 +28,11 @@
         [Header("PLAYER's INIT")]
         public Transform ParentCanvas;
         public Transform InitPos;
+
+        [Header("RESULT PANEL VARIABLE's")]
+        public Transform SlotParentTr;
+        public GameObject DropItemSlotPref;
+        public List<UI_ItemDataSlot> DropItemSlots;
 
         private float screenZpos = 90f;
         private LineRenderer arrowLimitLine;
@@ -75,6 +78,12 @@
             //Battle Initializing
             GameManager.Instance.SetPooler();
             GameManager.Instance.SetPlayerBow(ParentCanvas, InitPos);
+
+            //Item Data Slot Initializing
+            for (int i = 0; i < SlotParentTr.childCount; i++)
+            {
+                DropItemSlots.Add(SlotParentTr.GetChild(i).GetComponent<UI_ItemDataSlot>());
+            }
 
             //Fade Effect When Etnering The Battle Scene (if Don't Work This Function, Enable The DEV Variable)
             this.OnSceneEnteringFadeOut();
@@ -139,12 +148,30 @@
 
             ResultPanel.SetActive(true);
 
-            CatLog.Log("정산 윈도우 업데이트");
+            CatLog.Log("Result Panel Updated !");
 
-            foreach (var item in dropItems)
+            //Scene에 미리 깔려있는 Slot들은 Awake때 캐싱됨 
+            //slotCount Number Object Disable된 상황에서도 잘 잡히는거 확인
+            int slotCount = SlotParentTr.childCount;
+
+            if(dropItems.Count > slotCount)
             {
-                CCPlayerData.inventory.AddItem(item);
-                CatLog.Log($"아이템 획득 : {item.Item_Name}, 수량 : {item.Item_Amount}");
+                int moreSlotCount = dropItems.Count - slotCount;
+
+                for(int i = 0; i < moreSlotCount; i++)
+                {
+                    var newSlot = Instantiate(DropItemSlotPref, SlotParentTr).GetComponent<UI_ItemDataSlot>();
+                    newSlot.gameObject.SetActive(false);
+                    DropItemSlots.Add(newSlot);
+                }
+            }
+
+            for (int i = 0; i < dropItems.Count; i++)
+            {
+                DropItemSlots[i].gameObject.SetActive(true);
+                DropItemSlots[i].Setup(dropItems[i], dropItems[i].Item_Amount);
+
+                //DropItemSlot 모자라는 경우도 여기서 다 처리할 수 있지않을까
             }
         }
     }

@@ -53,7 +53,7 @@ public class MainSceneRoute : MonoBehaviour
     [Space(10)]
     public GameObject[] menuObjects = new GameObject[4];
 
-    private Sequence exitSeq;
+    private Sequence menuOpenSeq;
     private bool isTweenDone = true;
     private float openMenuTime = 0.5f;
     private float closeMenuTime = 0.2f; //Less than Menu Open Time.
@@ -99,7 +99,7 @@ public class MainSceneRoute : MonoBehaviour
 
         if (openMenuTime <= closeMenuTime)
         {
-            CatLog.WLog("OpenMenuTime is less than CloseMenuTime. need to modify the variable.");
+            CatLog.WLog("OpenMenuTime is less than CloseMenuTime.");
         }
 
         Action TestAction = () =>
@@ -199,13 +199,13 @@ public class MainSceneRoute : MonoBehaviour
             {
                 currentOpenedMenu.GetComponent<CanvasGroup>()
                                  .DOFade(0, closeMenuTime)
-                                 .OnStart(() => currentOpenedMenu.GetComponent<CanvasGroup>()
-                                                                 .blocksRaycasts = false)
+                                 .OnStart(() => currentOpenedMenu.GetComponent<CanvasGroup>().blocksRaycasts = false)
                                  .OnComplete(() => { currentOpenedMenu.SetActive(false);
                                  });
             }
 
-            this.MenuOpenTween(target.transform);
+            //this.MenuOpenTween(target.transform);
+            menuOpenSeq = MenuOpenSequence(target.transform);
         }
         else
         {
@@ -236,8 +236,8 @@ public class MainSceneRoute : MonoBehaviour
     {
         var targetCG = target.GetComponent<CanvasGroup>();
 
-        exitSeq = DOTween.Sequence();
-        exitSeq.SetAutoKill(true).
+        menuOpenSeq = DOTween.Sequence();
+        menuOpenSeq.SetAutoKill(true).
            OnStart(() => {
                this.isTweenDone = false;
                target.gameObject.SetActive(true);
@@ -251,6 +251,30 @@ public class MainSceneRoute : MonoBehaviour
                               targetCG.blocksRaycasts = true;
                               currentOpenedMenu = target.gameObject;
           });
+    }
+
+    Sequence MenuOpenSequence(Transform target)
+    {
+        var targetCG = target.GetComponent<CanvasGroup>();
+
+        return DOTween.Sequence()
+                      .SetAutoKill(true)
+                      .OnStart(() =>
+                      {
+                          this.isTweenDone = false;
+                          target.gameObject.SetActive(true);
+                          targetCG.blocksRaycasts = false;
+                          targetCG.alpha = 0f;
+                          target.localScale = Vector3.zero;
+                      })
+                      .Append(target.DOScale(1f, openMenuTime))
+                      .Join(targetCG.DOFade(1f, openMenuTime))
+                      .OnComplete(() =>
+                      {
+                          this.isTweenDone = true;
+                          targetCG.blocksRaycasts = true;
+                          currentOpenedMenu = target.gameObject;
+                      });
     }
 
     public void StageSelect(int stagedata)

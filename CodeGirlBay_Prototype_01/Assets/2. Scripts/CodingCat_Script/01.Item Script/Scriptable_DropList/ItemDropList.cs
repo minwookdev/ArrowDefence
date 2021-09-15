@@ -9,7 +9,7 @@
         [System.Serializable]
         public class DropItems
         {
-            public ItemData itemAsset;
+            public ItemData ItemAsset;
             public float DropChance;
         }
 

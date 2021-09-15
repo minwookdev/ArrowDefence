@@ -11,6 +11,9 @@
         private float monsterHp;
         private float monsterMp;
 
+        private float dropCorrection = 5f;
+        private float clearGaugeIncreaseValue = 10f;
+
         private void Update()
         {
             //if(GameManager.Instance.GameState == GAMESTATE.STATE_ENDBATTLE)
@@ -29,7 +32,8 @@
 
             if(monsterHp <= 0)
             {
-                BattleProgresser.OnIncreaseClearGauge(10f);
+                BattleProgresser.OnIncreaseClearGauge(clearGaugeIncreaseValue);
+                BattleProgresser.OnDropItemChance(dropCorrection);
                 DisableObject_Req(this.gameObject);
             }
         }

@@ -74,7 +74,7 @@
     }
 
     /// <summary>
-    /// 아이템이 얻어지는 Event가 발생했을때, 즉각 Update 될 수 있도록하는 메서드 구현
+    /// Main Scene UI Inventory Script
     /// </summary>
     public class UI_Inventory : MonoBehaviour
     {

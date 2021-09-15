@@ -22,5 +22,5 @@ MonoBehaviour:
   Equip_Type: 1
   MainArrowObj: {fileID: 6145561601560700122, guid: 72e101e4e68e4cd4a973db42b6f4c64b,
     type: 3}
-  LessArrowObj: {fileID: 5274051625870463734, guid: 2e3c1d20f506af54fba56591badc541e,
+  LessArrowObj: {fileID: 1773074856053835197, guid: 2e3c1d20f506af54fba56591badc541e,
     type: 3}

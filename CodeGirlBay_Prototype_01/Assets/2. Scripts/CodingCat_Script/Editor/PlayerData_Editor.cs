@@ -2,6 +2,7 @@
 using CodingCat_Games;
 using CodingCat_Games.Data;
 using CodingCat_Scripts;
+using ES3Editor;
 using UnityEditor;
 using UnityEngine;
 
@@ -10,6 +11,13 @@ public class PlayerData_Editor : EditorWindow
     //SerializedObject so;
     public List<ItemInfo> invenInfo = new List<ItemInfo>();
     Vector2 scrollPos; //스크롤 바의 위치
+
+    //Font Size GUI Style
+    GUIStyle TitleStyle = new GUIStyle();
+
+    //Bottom Info Message
+    string Message = "Window에 마우스오버 또는 클릭하면 데이터가 즉시 갱신됩니다. \n" +
+                     "**Player Data Class를 수정하지 않습니다.";
 
     public void SetItemInfo(List<AD_item> itemList)
     {
@@ -36,17 +44,24 @@ public class PlayerData_Editor : EditorWindow
     {
         SetItemInfo(CCPlayerData.inventory.GetAllItemList());
 
-        GUILayout.Label("PlayerData Window (v0.3)", EditorStyles.boldLabel);
+        TitleStyle.fontSize = 20;
+        TitleStyle.fontStyle = FontStyle.BoldAndItalic;
+        TitleStyle.normal.textColor = Color.white;
+        GUILayout.Label("PlayerData Window (v0.5)", TitleStyle);
 
         GUILayout.BeginVertical("HelpBox");
 
         GUILayout.Label("ArrowDefenece PlayerData");
 
-        EditorGUILayout.LabelField("Total inventory Items : ", CCPlayerData.inventory.GetAllItemList().Count.ToString());
+        #region Inventory_Info
+
+        EditorGUILayout.LabelField("Inventory Data Field", EditorStyles.boldLabel);
 
         ScriptableObject target = this;
         SerializedObject so = new SerializedObject(target);
         SerializedProperty itemList = so.FindProperty("invenInfo");
+
+        EditorGUILayout.LabelField("Total inventory Items : ", CCPlayerData.inventory.GetAllItemList().Count.ToString());
 
         scrollPos = GUI.BeginScrollView(new Rect(0, 60, 450, 600), scrollPos, new Rect(0, 60, 400, 1500));
 
@@ -54,12 +69,65 @@ public class PlayerData_Editor : EditorWindow
 
         GUI.EndScrollView();
 
+        #endregion
+
+        #region Equipment_Info
+
+        EditorGUILayout.Space(10f);
+
+        EditorGUILayout.LabelField("Equipment Data Field", EditorStyles.boldLabel);
+
+        //Equipped Bow
+        if (CCPlayerData.equipments.IsEquipBow())
+            EditorGUILayout.LabelField("Equipped Bow Item : ", CCPlayerData.equipments.GetBowItem().GetName);
+        else
+            EditorGUILayout.LabelField("Euqippped Bow Item : ", "NULL");
+        //Equipped Arrow (Main)
+        if (CCPlayerData.equipments.IsEquippedArrowMain())
+            EditorGUILayout.LabelField("Equipped Main Arrow Item : ", CCPlayerData.equipments.GetMainArrow().GetName);
+        else
+            EditorGUILayout.LabelField("Equipped Main Arrow Item : ", "NULL");
+        //Equipped Arrow (Sub)
+        if (CCPlayerData.equipments.IsEquippedArrowSub())
+            EditorGUILayout.LabelField("Equipped Sub Arrow Item : ", CCPlayerData.equipments.GetSubArrow().GetName);
+        else 
+            EditorGUILayout.LabelField("Equipped Sub Arrow Item : ", "NULL");
+
+        EditorGUILayout.Space(10f);
+
+        //Get Array Accessories
+        var accessories = CCPlayerData.equipments.GetAccessories();
+
+        //Equipped Accessory (f)
+        if (CCPlayerData.equipments.IsEquippedAccessory(0))
+            EditorGUILayout.LabelField("Equipped Accessory [0] : ", accessories[0].GetName);
+        else
+            EditorGUILayout.LabelField("Equipped Accessory [0] : ", "NULL");
+        //Equipped Accessory (s)
+        if (CCPlayerData.equipments.IsEquippedAccessory(1))
+            EditorGUILayout.LabelField("Equipped Accessory [1] : ", accessories[1].GetName);
+        else
+            EditorGUILayout.LabelField("Equipped Accessory [1] : ", "NULL");
+        //Equipped Accessory (t)
+        if (CCPlayerData.equipments.IsEquippedAccessory(2))
+            EditorGUILayout.LabelField("Equipped Accessory [2] : ", accessories[2].GetName);
+        else
+            EditorGUILayout.LabelField("Equipped Accessory [2] : ", "NULL");
+
+
+        #endregion
+
+        #region Data_Info
+
+        //Another Player's Data in here
+
+        #endregion
+
         GUILayout.Space(100);
 
         GUILayout.FlexibleSpace();  //화면 하단에 배치
         GUILayout.EndVertical();
-        GUILayout.Label("Editor Window의 데이터 갱신이 느릴 수 있습니다." + '\n' +
-                        "Window에 마우스오버 또는 클릭하면 데이터가 갱신됩니다.");
+        GUILayout.Label(Message, EditorStyles.boldLabel);
 
     }
 

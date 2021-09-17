@@ -14,14 +14,14 @@
 
             if (CCPlayerData.equipments.GetBowItem() != null)
             {
-                Item_Bow weapon = CCPlayerData.equipments.GetBowItem();
+                var bowSkills = CCPlayerData.equipments.GetBowItem().GetBowSkills();
 
-                for (int i = 0; i < weapon.GetBowSkills().Length; i++)
+                for (int i = 0; i < bowSkills.Length; i++)
                 {
-                    if (weapon.GetBowSkills()[i] != null)
+                    if(bowSkills[i] != null)
                     {
-                        bowController.bowSkillSet += weapon.GetBowSkills()[i].BowSpecialSkill;
-                        CatLog.WLog($"Skill Slot {i} Init, Skill Name : {weapon.GetBowSkill().ToString()}");
+                        bowController.bowSkillSet += bowSkills[i].BowSpecialSkill;
+                        CatLog.Log($"Skill Slot {i} Init, Skill Name : {bowSkills[i].ToString()}");
                     }
                 }
             }

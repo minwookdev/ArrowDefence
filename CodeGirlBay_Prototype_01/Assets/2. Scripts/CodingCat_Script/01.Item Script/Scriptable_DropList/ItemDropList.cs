@@ -11,6 +11,15 @@
         {
             public ItemData ItemAsset;
             public float DropChance;
+            public int[] QuantityRange;
+
+            //public int GetQuantityInRange() 원본
+            //{
+            //    if (QuantityRange.Length <= 1) return ItemAsset.Item_Amount;
+            //
+            //    int randomIndexInRange = Random.Range(0, QuantityRange.Length + 1);
+            //    return QuantityRange[randomIndexInRange];
+            //}
         }
 
         [Header("ITEM DROP LIST")]

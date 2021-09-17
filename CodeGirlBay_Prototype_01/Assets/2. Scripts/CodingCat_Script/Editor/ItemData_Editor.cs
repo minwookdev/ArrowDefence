@@ -499,11 +499,14 @@ public class AccessItemData_Editor : Editor
 
         item.effect = EditorGUILayout.TextField(ItemData_Editor.AccessoryEffectText, item.effect);
 
+        item.Effect_AimSight = (MonoScript)EditorGUILayout.ObjectField("Effect Script", item.Effect_AimSight,
+                                                            typeof(MonoScript), allowSceneObjects: false);
+
         GUILayout.EndVertical();
 
         #endregion
 
-        #region GENERATE_BUTTON
+        #region GENERATE
 
         if (GUILayout.Button("GENERATE"))
         {

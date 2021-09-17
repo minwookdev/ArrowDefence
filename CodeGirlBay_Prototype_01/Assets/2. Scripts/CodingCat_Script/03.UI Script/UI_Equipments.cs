@@ -44,7 +44,7 @@
             var equipment = CCPlayerData.equipments;
 
             //Equipment Item : Bow
-            if(equipment.IsEquipBow())
+            if(equipment.IsEquippedBow())
             {
                 BowItem_Slot.gameObject.SetActive(true);
                 BowItem_Slot.Setup(CCPlayerData.equipments.GetBowItem());

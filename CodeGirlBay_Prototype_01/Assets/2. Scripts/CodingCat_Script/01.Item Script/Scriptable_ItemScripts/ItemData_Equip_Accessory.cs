@@ -8,11 +8,21 @@
     {
         [Header("Accessory Item Data")]
         public string effect = "";
+        public MonoScript Effect_AimSight;
 
         public ItemData_Equip_Accessory() : base()
         {
             this.Equip_Type = EQUIP_ITEMTYPE.EQUIP_ACCESSORY;
         }
+
+        //public void TEST()
+        //{
+        //    System.Type effectscript = Effect_AimSight.GetClass();
+        //
+        //    GameObject test = new GameObject();
+        //    test.AddComponent(effectscript);
+        //}
+
 #if UNITY_EDITOR
         [MenuItem("CodingCat/Scriptable Object/Accessory Item Asset")]
         static void CreateAsset()

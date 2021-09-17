@@ -15,9 +15,13 @@ MonoBehaviour:
   DropListArray:
   - ItemAsset: {fileID: 11400000, guid: f8cf2d491cdbd38409db2b0178418dce, type: 2}
     DropChance: 40
+    QuantityRange: 0600000007000000
   - ItemAsset: {fileID: 11400000, guid: 818e48ff8014cd743904a971f1118bab, type: 2}
     DropChance: 40
+    QuantityRange: 0500000007000000
   - ItemAsset: {fileID: 11400000, guid: 766421f3dc0731a40b1dd91084048d8c, type: 2}
     DropChance: 15
+    QuantityRange: 
   - ItemAsset: {fileID: 11400000, guid: 5e2d003e93cf37c4c95dc232f4de4b0f, type: 2}
     DropChance: 5
+    QuantityRange: 

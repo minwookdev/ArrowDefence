@@ -19,6 +19,10 @@
         private float endWaitingTime;
         private bool isInitialized = false;
 
+        [Header("PLAYER's INITIALIZING")]
+        public Transform ParentTransform;
+        public Transform BowInitPosition;
+
         [Header("STAGE CLEAR COUNT")]
         [Range(100, 1200)] 
         public float MaxClearCount = 100;
@@ -48,13 +52,21 @@
 
         private void Start()
         {
+            //Get Scene UI Component
             battleSceneUI = GetComponent<BattleSceneRoute>();
             GameManager.Instance.SetGameState(InitGameState);
 
+            //Setup Delegate
             if (DropListAsset != null)
                 OnDropItemChance += OnDropItem;
             OnIncreaseClearGauge += IncreaseClearGauge;
 
+            //Initializing GameObject Player's Equipments
+            GameManager.Instance.SetupPlayerEquipments(BowInitPosition, ParentTransform,
+                                                       AD_Data.TAG_MAINARROW, AD_Data.TAG_MAINARROW_LESS, 1,
+                                                       AD_Data.TAG_SUBARROW,  AD_Data.TAG_SUBARROW_LESS, 1);
+
+            //Progresser Ready
             isInitialized = true;
         }
 

@@ -32,35 +32,13 @@
         private bool isDevMode = true;
         public bool IsDevMode { get { return isDevMode; }}
 
-        public void SetPlayerBow(Transform parent, Transform initpos)
+        public void SetupPlayerEquipments(Transform bowObjInitPos, Transform bowObjParentTr, 
+                                          string mainArrowObjTag, string mainArrowLessObjTag, int mainArrowObjPoolQuantity,
+                                          string subArrowObjTag,  string subArrowLessObjTag,  int subArrowPoolQuantity)
         {
-            if(CCPlayerData.equipments.GetBowItem() == null)
-            {
-                CatLog.WLog("Player Bow Item or GameObject Not in Bow Item, Return Function SetPlayerBow");
-                return;
-            }
-
-            var bowObj = CCPlayerData.equipments.GetBowItem().GetBowObject();
-            Instantiate(bowObj, initpos.position, Quaternion.Euler(0f, 0f, 90f), parent);
-
-            //생성하고 바로 해줘야할거 있으면 여기서 해줌
-        }
-
-        public void SetPooler()
-        {
-            var equipment = CCPlayerData.equipments;
-
-            if(equipment.IsEquippedArrowMain())
-            {
-                CCPooler.AddPoolList(AD_Data.TAG_MAINARROW,      1, equipment.GetMainArrow().GetObject_MainArrow());
-                CCPooler.AddPoolList(AD_Data.TAG_MAINARROW_LESS, 1, equipment.GetMainArrow().GetObject_LessArrow());
-            }
-
-            if(equipment.IsEquippedArrowSub())
-            {
-                CCPooler.AddPoolList(AD_Data.TAG_SUBARROW,      1, equipment.GetSubArrow().GetObject_MainArrow());
-                CCPooler.AddPoolList(AD_Data.TAG_SUBARROW_LESS, 1, equipment.GetSubArrow().GetObject_LessArrow());
-            }
+            CCPlayerData.equipments.SetupEquipments(bowObjInitPos, bowObjParentTr, 
+                                                    mainArrowObjTag, mainArrowLessObjTag, mainArrowObjPoolQuantity,
+                                                    subArrowObjTag, subArrowLessObjTag, subArrowPoolQuantity);
         }
 
         public void SetGameState(GAMESTATE gameState)
@@ -88,6 +66,31 @@
 
         public ItemData OnRollItemList(ItemDropList.DropItems[] items)
         {
+            #region RETURN_RANGEOFAMOUNT_(TEST)
+            //범위내 아이템 갯수 드랍
+            //var exItem = items[0];
+            //exItem.ItemAsset.Item_Amount = exItem.GetQuantityInRange();
+            //return exItem.ItemAsset;
+            //대충 요로케..? 해보면 될듯 !
+
+            //for 문 안에서 쓸거니까 요로케? 
+            //for (int i = 0; i < items.Length; i++)
+            //{
+            //    //var amountOfItem = items[i].GetQuantityInRange();
+            //    //items[i].ItemAsset.Item_Amount = amountOfItem;
+            //    //return items[i].ItemAsset;
+            //
+            //    if(items[i].ItemAsset is ItemData_Con || items[i].ItemAsset is ItemData_Mat)
+            //    {
+            //        GameGlobal.RandomIntInRange(items[i].QuantityRange, ref items[i].ItemAsset.Item_Amount);
+            //        return items[i].ItemAsset;
+            //    }
+            //}
+            //내일 이거한번 테스트해보고 원본 ItemData Asset Amount 안바뀌면 이걸로 가자
+            //원본 건드리는로직 되버리면 안된당..
+
+            #endregion
+
             float total = 0f;
 
             foreach (var item in items)
@@ -101,7 +104,19 @@
             {
                 if(randomPoint < items[i].DropChance)
                 {
+                    //기존 로직
                     return items[i].ItemAsset;
+
+                    #region TEST_LOGIC
+                    //수정 로직 테스트 원본 값이 바뀌는지 테스트 원본 값이 바뀌어버림
+                    //if (items[i].ItemAsset is ItemData_Con || items[i].ItemAsset is ItemData_Mat) 캐스트 하지말고 Type 가져와서 비교하는거 괜찮겠다
+                    //{
+                    //    GameGlobal.RandomIntInRange(items[i].QuantityRange, ref items[i].ItemAsset.Item_Amount);
+                    //    return items[i].ItemAsset;
+                    //}
+                    //else return items[i].ItemAsset;
+                    //기존 값이 바뀌어 버리긴 하는데, 전투가 끝나고 난 뒤에 기존 Amount로 변경해주거나 해서 사용해면 충분히 될듯하다 (멋져)
+                    #endregion
                 }
                 else
                 {

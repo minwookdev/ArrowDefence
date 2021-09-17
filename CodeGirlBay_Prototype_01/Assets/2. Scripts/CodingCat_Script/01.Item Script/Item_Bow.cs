@@ -107,12 +107,6 @@
             return skills;
         }
 
-        public bool IsBowSkill() //Skill이 여러개 일때는 어떻게?
-        {
-            if (bowSkill_Fst != null) return true;
-            else                      return false;
-        }
-
         public GameObject GetBowObject()
         {
             if (this.bowGameObject != null) return bowGameObject;
@@ -124,5 +118,16 @@
         }
 
         public override object GetItem() => this;
+
+        public void Setup(Transform initPos, Transform parentTr)
+        {
+            if(bowGameObject == null)
+            {
+                CatLog.ELog($"{Item_Name} is Bow GameObject is NULL, return Function");
+                return;
+            }
+
+            var bowObject = GameObject.Instantiate(bowGameObject, initPos.position, Quaternion.Euler(0f, 0f, 90f), parentTr);
+        }
     }
 }

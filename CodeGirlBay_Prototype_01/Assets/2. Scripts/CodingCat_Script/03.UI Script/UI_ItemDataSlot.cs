@@ -44,7 +44,7 @@
 
         void IPointerClickHandler.OnPointerClick(PointerEventData eventData)
         {
-            //간단한 설명 "툴팁"정도 뜨도록 구현하기 -> Item Desc
+            //간단한 설명 툴팁띄우는 정도로 구현 -> 현재는 Battle Scene 정산 페이지 에서만 이 스크립트가 작동함
             return;
         }
     }

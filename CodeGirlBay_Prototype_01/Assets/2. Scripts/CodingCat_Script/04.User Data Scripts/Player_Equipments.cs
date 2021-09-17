@@ -4,6 +4,7 @@
     using CodingCat_Scripts;
     using System;
     using System.Runtime.CompilerServices;
+    using UnityEngine;
 
     [Serializable]
     public class Player_Equipments
@@ -28,7 +29,7 @@
         /// <param name="item"></param>
         public void Equip_BowItem(Item_Bow item)
         {
-            if(IsEquipBow())
+            if(IsEquippedBow())
             {
                 Release_BowItem();
                 this.EquippedBow = new Item_Bow(item);
@@ -143,7 +144,7 @@
             return accessories;
         }
 
-        public bool IsEquipBow()
+        public bool IsEquippedBow()
         {
             if (this.EquippedBow != null) return true;
             else                          return false;
@@ -188,6 +189,15 @@
             }
 
             return boolArray;
+        }
+
+        public void SetupEquipments(Transform bowObjectInitPos, Transform bowObjectParentTr,
+                                    string mainArrowObjTag, string mainArrowLessObjTag, int mainArrowPoolQuantity,
+                                    string subArrowObjTag,  string subArrowLessObjTag,  int subArrowPoolQuantity)
+        {
+            if (IsEquippedArrowMain()) EquippedArrow_f.Setup(mainArrowObjTag, mainArrowLessObjTag, mainArrowPoolQuantity);
+            if (IsEquippedArrowSub())  EquippedArrow_s.Setup(subArrowObjTag, subArrowLessObjTag, subArrowPoolQuantity);
+            if (IsEquippedBow())       EquippedBow.Setup(bowObjectInitPos, bowObjectParentTr);
         }
     }
 }

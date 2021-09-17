@@ -25,10 +25,6 @@
         public GameObject GameOverPanel;
         public float PanelOpenFadeTime = 0.5f;
 
-        [Header("PLAYER's INIT")]
-        public Transform ParentCanvas;
-        public Transform InitPos;
-
         [Header("RESULT PANEL VARIABLE's")]
         public Transform SlotParentTr;
         public GameObject DropItemSlotPref;
@@ -75,10 +71,6 @@
 
             PausePanel.GetComponent<CanvasGroup>().alpha = 0f; //이거 무엇?
 
-            //Battle Initializing
-            GameManager.Instance.SetPooler();
-            GameManager.Instance.SetPlayerBow(ParentCanvas, InitPos);
-
             //Item Data Slot Initializing
             for (int i = 0; i < SlotParentTr.childCount; i++)
             {
@@ -90,7 +82,6 @@
 
             #endregion
         }
-
 
         #region Region_Button_Methods
 

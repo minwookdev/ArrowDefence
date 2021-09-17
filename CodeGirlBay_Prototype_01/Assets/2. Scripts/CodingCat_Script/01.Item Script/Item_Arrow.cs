@@ -83,5 +83,18 @@
                 return LessArrowObject;
             }
         }
+
+        public void Setup(string mainArrowObjTag, string lessArrowObjTag, int poolQuantity)
+        {
+            if(MainArrowObject == null || LessArrowObject == null)
+            {
+                CatLog.ELog($"{Item_Name} is Arrow GameObject is NULL, return Function");
+                return;
+            }
+
+            CCPooler.AddPoolList(mainArrowObjTag, poolQuantity, MainArrowObject);
+            CCPooler.AddPoolList(lessArrowObjTag, poolQuantity, LessArrowObject);
+
+        }
     }
 }

@@ -28,6 +28,7 @@ public static class ItemData_Editor
 
     public const string AccessoryItemInfoText = "Accessory Item Info";
     public const string AccessoryEffectText   = "Accessory Effect";
+    public const string AccessorySpEffectText = "Special Effect Type";
 }
 
 [CustomEditor(typeof(ItemData_Mat))]
@@ -296,6 +297,9 @@ public class BowItemData_Editor : Editor
             AssetDatabase.Refresh();
             CatLog.Log($"<color=green>{item.Item_Name} : Apply the Modified Value</color>");
             //changeChecker = false;
+
+            //Repaint();
+            item.OnEnable(); //AD_BowSkill 할당을 위한 OnEnable 호출
         }
         GUILayout.Space(5f);
 
@@ -497,10 +501,16 @@ public class AccessItemData_Editor : Editor
 
         GUILayout.BeginVertical("GroupBox");
 
-        item.effect = EditorGUILayout.TextField(ItemData_Editor.AccessoryEffectText, item.effect);
+        //item.effect = EditorGUILayout.TextField(ItemData_Editor.AccessoryEffectText, item.effect);
 
-        item.Effect_AimSight = (MonoScript)EditorGUILayout.ObjectField("Effect Script", item.Effect_AimSight,
-                                                            typeof(MonoScript), allowSceneObjects: false);
+        //item.Effect_AimSight = (MonoScript)EditorGUILayout.ObjectField("Effect Script", item.Effect_AimSight,
+        //                                                    typeof(MonoScript), allowSceneObjects: false);
+
+        item.SPEffectType = (ACCESSORY_SPECIALEFFECT_TYPE)EditorGUILayout.EnumPopup(ItemData_Editor.AccessorySpEffectText, item.SPEffectType);
+
+        if (item.SpecialEffect != null) EditorGUILayout.LabelField("Loaded SP Effect : ", item.SpecialEffect.ToString());
+        else                            EditorGUILayout.LabelField("Loaded SP Effect : ", "NULL");
+
 
         GUILayout.EndVertical();
 
@@ -514,8 +524,11 @@ public class AccessItemData_Editor : Editor
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
             CatLog.Log($"<color=green>{item.Item_Name} : Apply the Modified Value</color>");
+
+            item.OnEnable(); //Accessory Special Effect & Reinforcement Effect 할당을 위해 OnEnable 호출
             //changeChecker = false;
         }
+
         GUILayout.Space(5f);
 
         #endregion

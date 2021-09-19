@@ -1,5 +1,6 @@
 ﻿namespace CodingCat_Games
 {
+    using CodingCat_Scripts;
     using UnityEditor;
     using UnityEngine;
 
@@ -26,6 +27,13 @@
         public static T GetRandom<T>(this T[] array)
         {
             return array[Random.Range(0, array.Length)];
+        }
+
+        public static GameObject GetBowGameObjectInScene()
+        {
+            GameObject BowGameObject = GameObject.FindWithTag(AD_Data.OBJECT_TAG_BOW);
+            if (BowGameObject)                                        return BowGameObject;
+            else CatLog.WLog("Bow GameObject Not Found This Scene."); return null;
         }
     }
 }

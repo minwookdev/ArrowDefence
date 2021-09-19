@@ -15,3 +15,4 @@ MonoBehaviour:
   tempItems:
   - {fileID: 11400000, guid: 64254eedd1c43c446ae2e7682daa20a6, type: 2}
   - {fileID: 11400000, guid: 766421f3dc0731a40b1dd91084048d8c, type: 2}
+  - {fileID: 11400000, guid: 4281f4c496660d946b11d546253599bd, type: 2}

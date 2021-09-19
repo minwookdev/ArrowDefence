@@ -22,5 +22,5 @@ MonoBehaviour:
   Equip_Type: 0
   BowGameObject: {fileID: 3549159203555372210, guid: 764bffb09a29bf440b61e0c0c511064e,
     type: 3}
-  FirstSkill_Type: 0
+  FirstSkill_Type: 1
   SecondSkill_Type: 0

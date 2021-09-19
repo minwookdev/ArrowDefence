@@ -21,3 +21,6 @@ MonoBehaviour:
   Item_Sprite: {fileID: 21300000, guid: 4f7b6ffe7b0e2488c8e98abcd0a85dea, type: 3}
   Equip_Type: 2
   effect: 
+  MaxNumberOfEffect: 0
+  EffectsType: 
+  SPEffectType: 1

@@ -1,10 +1,9 @@
 ﻿namespace CodingCat_Games
 {
+    using System;
+    using UnityEngine;
     using CodingCat_Games.Data;
     using CodingCat_Scripts;
-    using System;
-    using System.Runtime.CompilerServices;
-    using UnityEngine;
 
     [Serializable]
     public class Player_Equipments
@@ -198,6 +197,11 @@
             if (IsEquippedArrowMain()) EquippedArrow_f.Setup(mainArrowObjTag, mainArrowLessObjTag, mainArrowPoolQuantity);
             if (IsEquippedArrowSub())  EquippedArrow_s.Setup(subArrowObjTag, subArrowLessObjTag, subArrowPoolQuantity);
             if (IsEquippedBow())       EquippedBow.Setup(bowObjectInitPos, bowObjectParentTr);
+
+            foreach (var accessory in GetAccessories())
+            {
+                if (accessory != null) accessory.Setup();
+            }
         }
     }
 }

@@ -18,7 +18,7 @@
             Equip_Type = EQUIP_ITEMTYPE.EQUIP_BOW;
         }
 
-        private void OnEnable() => SetBowSkills();
+        public void OnEnable() => SetBowSkills();
 
         private void SetBowSkills()
         {

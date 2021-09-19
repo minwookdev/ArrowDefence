@@ -1,4 +1,6 @@
-﻿namespace CodingCat_Games
+﻿using UnityEngine;
+
+namespace CodingCat_Games
 {
     public enum EQUIP_ITEMTYPE
     {
@@ -20,5 +22,7 @@
         public override object GetItem() => throw new System.NotImplementedException();
 
         public EQUIP_ITEMTYPE GetEquipType() => EquipType;
+
+        //public abstract void Setup();
     }
 }

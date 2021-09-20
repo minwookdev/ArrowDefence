@@ -13134,8 +13134,6 @@ MonoBehaviour:
   ResultPanel: {fileID: 1184598043}
   GameOverPanel: {fileID: 0}
   PanelOpenFadeTime: 0.5
-  ParentCanvas: {fileID: 1757660976}
-  InitPos: {fileID: 377625007}
   SlotParentTr: {fileID: 946775822}
   DropItemSlotPref: {fileID: 5984624412175565113, guid: 07963ed1caf360a429dfd7b2ee79fd4d,
     type: 3}
@@ -13405,7 +13403,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 0
-  m_SortingLayerID: 1856344157
+  m_SortingLayerID: -1356431715
   m_SortingOrder: 0
   m_TargetDisplay: 0
 --- !u!224 &1757660976

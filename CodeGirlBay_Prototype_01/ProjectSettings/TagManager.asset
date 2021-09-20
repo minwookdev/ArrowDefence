@@ -63,9 +63,12 @@ TagManager:
   - name: Map:Building
     uniqueID: 879352621
     locked: 0
-  - name: Object:Bow
+  - name: Skill Effect
     uniqueID: 1856344157
     locked: 0
-  - name: Object:Arrow
+  - name: Object:Bow
     uniqueID: 2938535581
+    locked: 0
+  - name: Object:Arrow
+    uniqueID: 863014967
     locked: 0

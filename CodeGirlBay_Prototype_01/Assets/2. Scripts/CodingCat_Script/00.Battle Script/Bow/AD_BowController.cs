@@ -53,6 +53,7 @@
         private Vector2 limitTouchPosVec;
         public float touchRadius = 1f;
         public Transform rightClampPoint, leftClampPoint;
+        public bool BowPullBegan { get { return bowPullBegan; } }
 
         [Header("Arrow Variable")]
         //Arrow Relation Variables

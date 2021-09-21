@@ -24,3 +24,4 @@ MonoBehaviour:
   MaxNumberOfEffect: 0
   EffectsType: 
   SPEffectType: 1
+  LineRenderMaterial: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}

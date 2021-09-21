@@ -511,6 +511,16 @@ public class AccessItemData_Editor : Editor
         if (item.SpecialEffect != null) EditorGUILayout.LabelField("Loaded SP Effect : ", item.SpecialEffect.ToString());
         else                            EditorGUILayout.LabelField("Loaded SP Effect : ", "NULL");
 
+        //switch (item.SpecialEffect)
+        //{
+        //    case Acsp_AimSight effect:
+        //        GUILayout.Label("AimSight Effect Property");
+        //        effect.lineMat = (Material)EditorGUILayout.ObjectField("Line Renderer Material : ", effect.lineMat, typeof(Material), false);
+        //        break;
+        //    case Acsp_SlowTime effect: break;
+        //    default: break;
+        //}
+        item.LineRenderMaterial = (Material)EditorGUILayout.ObjectField("Line Renderer Material : ", item.LineRenderMaterial, typeof(Material), false);
 
         GUILayout.EndVertical();
 
@@ -525,6 +535,7 @@ public class AccessItemData_Editor : Editor
             AssetDatabase.Refresh();
             CatLog.Log($"<color=green>{item.Item_Name} : Apply the Modified Value</color>");
 
+            //item.SetAccessoryEffect();
             item.OnEnable(); //Accessory Special Effect & Reinforcement Effect 할당을 위해 OnEnable 호출
             //changeChecker = false;
         }

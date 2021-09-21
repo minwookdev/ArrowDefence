@@ -2,6 +2,7 @@
 {
     using UnityEditor;
     using UnityEngine;
+    using UnityEngine.UIElements;
 
     [CreateAssetMenu(fileName ="Item_Accessory_Asset", menuName = "Scriptable Object Asset/Item_Accessory_Asset")]
     public class ItemData_Equip_Accessory : ItemData_Equip
@@ -18,6 +19,9 @@
         [Header("SPECIAL EFFECT")]
         public ACCESSORY_SPECIALEFFECT_TYPE SPEffectType;
         public AccessorySPEffect SpecialEffect;
+
+        [Header("AIM SIGHT")]
+        public Material LineRenderMaterial;
 
         public ItemData_Equip_Accessory() : base()
         {
@@ -42,9 +46,9 @@
         {
             switch (SPEffectType)
             {
-                case ACCESSORY_SPECIALEFFECT_TYPE.SPEFFECT_NONE:     this.SpecialEffect = null;                break;
-                case ACCESSORY_SPECIALEFFECT_TYPE.SPEFFECT_AIMSIGHT: this.SpecialEffect = new Acsp_AimSight(); break;
-                case ACCESSORY_SPECIALEFFECT_TYPE.SPEEFECT_SLOWTIME: this.SpecialEffect = new Acsp_SlowTime(); break;
+                case ACCESSORY_SPECIALEFFECT_TYPE.SPEFFECT_NONE:     this.SpecialEffect = null;                                  break;
+                case ACCESSORY_SPECIALEFFECT_TYPE.SPEFFECT_AIMSIGHT: this.SpecialEffect = new Acsp_AimSight(LineRenderMaterial); break;
+                case ACCESSORY_SPECIALEFFECT_TYPE.SPEEFECT_SLOWTIME: this.SpecialEffect = new Acsp_SlowTime();                   break;
             }
         }
 

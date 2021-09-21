@@ -47,7 +47,7 @@
         {
             rbody = GetComponent<Rigidbody2D>();
             movePos = Vector2.down;
-            moveSpeed = Random.Range(1f, 2f + 1f);
+            moveSpeed = Random.Range(0.5f, 1f + 1f);
 
             monsterState = MONSTERSTATE.STATE_MOVE;
         }

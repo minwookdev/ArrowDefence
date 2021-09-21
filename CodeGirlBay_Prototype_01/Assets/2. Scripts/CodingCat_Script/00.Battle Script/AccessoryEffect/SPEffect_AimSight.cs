@@ -1,24 +1,32 @@
 ﻿namespace CodingCat_Games
 {
-    using CodingCat_Scripts;
     using UnityEngine;
 
     public class SPEffect_AimSight : MonoBehaviour
     {
-        public Material lineRenderMat;
-
-        private LineRenderer laserLine;
+        //Ray Casting Variables
         private AD_BowController bowController;
+        private LineRenderer laserLine;
         private Transform LineStartPoint;
-
         private float rayDistance = 10f;
-        private float lineRenderDist = 1000f;
-        private float lineRenderZpos = 89f;
-        private float lineRenderWidthValue = 0.1f;
 
-        public void Initialize()
+        //Line Render Variables
+        public Material lineRenderMat;
+        private float lineEndAlpha = 0.3f;
+        private float lineStartAlpha = 0.8f;
+        private float lineRenderWidth;
+        private float alphaChangeSpeed = 0.7f;
+
+        /// <summary>
+        /// Executed before the Start method is called. Setting Linerenderer Related Variables
+        /// </summary>
+        /// <param name="lineMat">Material LineRenderer</param>
+        /// <param name="lineWidth">LineRenderer Width (Recommen [0.010 ~ 0.5])</param>
+        public void Initialize(Material lineMat, float lineWidth)
         {
-            //CatLog.Log("Initialize AimSight Component Success"); //잘 들어오는거 확인됨
+            //Initial LineRender Variables
+            lineRenderMat   = lineMat;
+            lineRenderWidth = lineWidth;
         }
 
         private void Start()
@@ -26,13 +34,12 @@
             //Initial LineRender
             gameObject.AddComponent<LineRenderer>();
             laserLine = GetComponent<LineRenderer>();
-            laserLine.material = AD_BowRope.instance.ropeMaterial;
-            laserLine.startWidth = lineRenderWidthValue;
-            laserLine.endWidth   = lineRenderWidthValue;
-            laserLine.endColor = new Color(laserLine.endColor.r, laserLine.endColor.g, laserLine.endColor.b, 0.5f);
+            laserLine.startColor = new Color(255f, 0f, 0f, 0f);
+            laserLine.endColor   = new Color(255f, 0f, 0f, 0f);
+            laserLine.startWidth = lineRenderWidth; laserLine.endWidth = lineRenderWidth;
+            laserLine.material   = lineRenderMat;
             laserLine.sortingLayerName = "Object:Bow";
-            laserLine.sortingOrder = 0;
-            laserLine.useWorldSpace = false;    
+            laserLine.sortingOrder = 0;  
 
             //Initial Bow Controller
             bowController = GetComponent<AD_BowController>();
@@ -43,31 +50,114 @@
 
         private void FixedUpdate()
         {
-            if(bowController.BowPullBegan)
+            if (bowController.BowPullBegan)
             {
-                //CatLog.Log("Check Bow Pull Began !");
+                #region OLD
+                //RaycastHit hit;
+                //
+                //laserLine.SetPosition(0, LineStartPoint.position);
+                //
+                ////Physics2D.Raycast(LineStartPoint.position, LineStartPoint.right, out hit, rayDistance)
+                //
+                //if (Physics.Raycast(LineStartPoint.position, LineStartPoint.right, out hit, rayDistance))
+                //{
+                //    laserLine.SetPosition(1, hit.point);
+                //    CatLog.Log("무언가에 부딫히고 있음");
+                //}
+                //else
+                //{
+                //    //Vector3 endPos = LineStartPoint.right * lineRenderDist;
+                //    //endPos.z = lineRenderZpos;
+                //    //laserLine.SetPosition(1, endPos);
+                //
+                //    //이 방법으로 Line의 Position을 정해주니까 제대로 작동한다 -> 줄어들거나 하는 현상없이 (근데 왜 그러는거지)
+                //    laserLine.SetPosition(1, LineStartPoint.position + (transform.right * rayDistance));
+                //}
+                #endregion
 
-                Vector3 startPos = LineStartPoint.position;
-                RaycastHit hit;
+                RaycastHit2D rayhit = Physics2D.Raycast(LineStartPoint.position, LineStartPoint.right, rayDistance);
+                //Debug.DrawRay(LineStartPoint.position, LineStartPoint.right * rayDistance, Color.red); //Debug
 
-                laserLine.SetPosition(0, startPos);
+                laserLine.SetPosition(0, LineStartPoint.position);
 
-                if(Physics.Raycast(startPos, LineStartPoint.right, out hit, rayDistance))
+                if(rayhit)  //무언가에 부딫혔을때
                 {
-                    laserLine.SetPosition(1, hit.point);
-                    CatLog.Log("무언가에 부딫히고 있음");
+                    if(rayhit.collider.CompareTag(AD_Data.OBJECT_TAG_MONSTER))
+                    {
+                        laserLine.SetPosition(1, rayhit.point);
+                    }
                 }
                 else
                 {
-                    Vector3 endPos = LineStartPoint.right * lineRenderDist;
-                    endPos.z = lineRenderZpos;
-                    laserLine.SetPosition(1, endPos);
+                    laserLine.SetPosition(1, LineStartPoint.position + (LineStartPoint.right * rayDistance));
                 }
+
+                IncreaseLineAlpha();
             }
             else
             {
-                laserLine.SetPosition(0, LineStartPoint.position);
-                laserLine.SetPosition(1, LineStartPoint.position);
+                //laserLine.SetPosition(0, LineStartPoint.position);
+                //laserLine.SetPosition(1, LineStartPoint.position);
+
+                DecreaseLineAlpha();
+            }
+
+            //방법은 찾았는데 왜 되고 내꺼는 안되는지 모르겠다
+        }
+
+        /// <summary>
+        /// Decrease Alpha Value in Laser Liner
+        /// </summary>
+        private void DecreaseLineAlpha()
+        {
+            //if(laserLine.startColor.a > 0f || laserLine.endColor.a > 0f)
+            //{
+            //    var lineColor = laserLine.startColor;
+            //    lineColor.a -= Time.deltaTime * alphaChangeSpeed;
+            //    laserLine.startColor = lineColor;
+            //    laserLine.endColor   = lineColor;
+            //}
+
+            if(laserLine.startColor.a > 0f)
+            {
+                var lineColor = laserLine.startColor;
+                lineColor.a -= Time.deltaTime * alphaChangeSpeed;
+                laserLine.startColor = lineColor;
+            }
+            
+            if(laserLine.endColor.a > 0f)
+            {
+                var lineColor = laserLine.endColor;
+                lineColor.a -= Time.deltaTime * alphaChangeSpeed;
+                laserLine.endColor = lineColor;
+            }
+        }
+
+        /// <summary>
+        /// Increase Alpha Value in Laser Liner
+        /// </summary>
+        private void IncreaseLineAlpha()
+        {
+            //if(laserLine.startColor.a < 1f || laserLine.endColor.a < 1f)
+            //{
+            //    var lineColor = laserLine.startColor;
+            //    lineColor.a += Time.deltaTime * alphaChangeSpeed;
+            //    laserLine.startColor = lineColor;
+            //    laserLine.endColor   = lineColor;
+            //}
+
+            if (laserLine.startColor.a < lineStartAlpha)
+            {
+                var lineColor = laserLine.startColor;
+                lineColor.a += Time.deltaTime * alphaChangeSpeed;
+                laserLine.startColor = lineColor;
+            }
+
+            if (laserLine.endColor.a < lineEndAlpha)
+            {
+                var lineColor = laserLine.endColor;
+                lineColor.a += Time.deltaTime * alphaChangeSpeed;
+                laserLine.endColor = lineColor;
             }
         }
     }

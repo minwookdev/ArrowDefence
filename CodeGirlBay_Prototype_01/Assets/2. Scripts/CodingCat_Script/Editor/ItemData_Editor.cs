@@ -1,5 +1,6 @@
 ﻿using CodingCat_Games;
 using CodingCat_Scripts;
+using ES3Editor;
 using UnityEditor;
 using UnityEngine;
 
@@ -520,6 +521,11 @@ public class AccessItemData_Editor : Editor
         //    case Acsp_SlowTime effect: break;
         //    default: break;
         //}
+
+        GUILayout.Space(10f);
+
+        GUILayout.Label("Aim Sight Effect Variables", EditorStyles.boldLabel);
+
         item.LineRenderMaterial = (Material)EditorGUILayout.ObjectField("Line Renderer Material : ", item.LineRenderMaterial, typeof(Material), false);
 
         GUILayout.EndVertical();

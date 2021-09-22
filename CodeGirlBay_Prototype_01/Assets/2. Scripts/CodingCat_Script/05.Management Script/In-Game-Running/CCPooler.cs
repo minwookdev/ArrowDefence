@@ -6,9 +6,7 @@
     using UnityEngine;
     using UnityEditor;
     using System.Linq;
-    using UnityEngine.UIElements;
     using CodingCat_Scripts;
-    using CodingCat_Games.Data;
 
 #if UNITY_EDITOR
     [CustomEditor(typeof(CCPooler))]

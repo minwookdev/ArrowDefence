@@ -7,39 +7,50 @@
     public class ItemDropList : ScriptableObject
     {
         [System.Serializable]
-        public class DropItems
+        public class DropTable
         {
             public ItemData ItemAsset;
             public float DropChance;
             public int[] QuantityRange;
 
-            //public int GetQuantityInRange() 원본
-            //{
-            //    if (QuantityRange.Length <= 1) return ItemAsset.Item_Amount;
-            //
-            //    int randomIndexInRange = Random.Range(0, QuantityRange.Length + 1);
-            //    return QuantityRange[randomIndexInRange];
-            //}
+            public void CheckQuantity()
+            {
+                if(QuantityRange.Length <= 0) QuantityRange = new int[] { 1 };
+            }
         }
 
         [Header("ITEM DROP LIST")]
-        public DropItems[] DropListArray;
+        public DropTable[] DropTableArray;
 
         private void OnEnable()
         {
+            OnCheckTotalChanceValue();
+            OnCheckQuantityArray();
+        }
+
+        private void OnCheckTotalChanceValue()
+        {
             float totalChance = 0f;
 
-            if (DropListArray.Length != 0)
+            if (DropTableArray.Length != 0)
             {
-                for (int i = 0; i < DropListArray.Length; i++)
+                for (int i = 0; i < DropTableArray.Length; i++)
                 {
-                    totalChance += DropListArray[i].DropChance;
+                    totalChance += DropTableArray[i].DropChance;
                 }
 
                 if (totalChance != 100) CatLog.WLog($"DropList : {this.name}, Total Item Chance is not match \n" +
                                                     $"TotalChance : {totalChance}%");
             }
             else CatLog.WLog($"DropList : {this.name} is Not have a Item Data's");
+        }
+
+        private void OnCheckQuantityArray()
+        {
+            foreach (var item in DropTableArray)
+            {
+                item.CheckQuantity();
+            }
         }
 
         [UnityEditor.MenuItem("CodingCat/Scriptable Object/ItemDropList Asset")]

@@ -24,6 +24,10 @@
         private GAMEPLATFORM gamePlatform;
         private GAMESTATE    gameState = GAMESTATE.STATE_BEFOREBATTLE;
 
+        //DropList Variables
+        private ItemDropList.DropTable[] dropListArray;
+        private float totalDropChances;
+
         //PROPERTIES
         public GAMEPLATFORM GamePlay_Platform { get => gamePlatform; set => gamePlatform = value; }
         public GAMESTATE GameState { get => gameState; }
@@ -31,6 +35,8 @@
         //이거그냥 readonly두고 코드로 결정시켜버리기
         private bool isDevMode = true;
         public bool IsDevMode { get { return isDevMode; }}
+
+        #region PLAYER_DATA_METHOD
 
         public void SetupPlayerEquipments(Transform bowObjInitPos, Transform bowObjParentTr, 
                                           string mainArrowObjTag, string mainArrowLessObjTag, int mainArrowObjPoolQuantity,
@@ -52,7 +58,32 @@
             }
         }
 
+        #endregion
+
         #region ITEM_DROP_METHOD
+
+        public void InitialDroplist(ItemDropList newDropList)
+        {
+            dropListArray = newDropList.DropTableArray;
+
+            totalDropChances = 0f;
+
+            //Set Drop Chance
+            foreach (var item in dropListArray)
+            {
+                totalDropChances += item.DropChance;
+            }
+
+            CatLog.Log("Initialize Drop List");
+        }
+
+        public void ReleaseDropList()
+        {
+            dropListArray = null;
+            totalDropChances = 0f;
+
+            CatLog.Log("Release Drop List");
+        }
 
         public bool OnRollItemDrop(float stageDropRate, float monsterDropRateCorrection)
         {
@@ -64,7 +95,7 @@
             else                       return false;    //아이템을 획득하지 못한 경우
         }
 
-        public ItemData OnRollItemList(ItemDropList.DropItems[] items)
+        public ItemData OnRollItemList(ItemDropList.DropTable[] items)
         {
             #region RETURN_RANGEOFAMOUNT_(TEST)
             //범위내 아이템 갯수 드랍
@@ -138,6 +169,68 @@
             }
 
             return minimunChanceOfItem.ItemAsset;
+        }
+
+        public ItemData OnRollItemList()
+        {
+            float randomPoint = Random.value * totalDropChances;
+
+            for (int i = 0; i < dropListArray.Length; i++)
+            {
+                if(randomPoint < dropListArray[i].DropChance)
+                {
+                    return dropListArray[i].ItemAsset;
+                }
+                else
+                {
+                    randomPoint -= dropListArray[i].DropChance;
+                }
+            }
+
+            var minimunChanceOfItem = dropListArray[0];
+
+            for (int i = 0; i < dropListArray.Length; i++)
+            {
+                if(minimunChanceOfItem.DropChance > dropListArray[i].DropChance)
+                {
+                    //이거 만약에 가장 낮은 확률의 아이템이 두개라면 어떻게 되는지
+                    minimunChanceOfItem = dropListArray[i];
+                }
+            }
+
+            return minimunChanceOfItem.ItemAsset;
+        }
+
+        public DropItem OnDropInItemList()
+        {
+            float randomPoint = Random.value * totalDropChances;
+
+            for (int i = 0; i < dropListArray.Length; i++)
+            {
+                if (randomPoint < dropListArray[i].DropChance)
+                {
+                    DropItem newItem = new DropItem(GameGlobal.RandomIntInArray(dropListArray[i].QuantityRange), dropListArray[i].ItemAsset);
+                    return newItem;
+                }
+                else
+                {
+                    randomPoint -= dropListArray[i].DropChance;
+                }
+            }
+
+            var minimunChanceOfItem = dropListArray[0];
+
+            for (int i = 0; i < dropListArray.Length; i++)
+            {
+                if (minimunChanceOfItem.DropChance > dropListArray[i].DropChance)
+                {
+                    //이거 만약에 가장 낮은 확률의 아이템이 두개라면 어떻게 되는지
+                    minimunChanceOfItem = dropListArray[i];
+                }
+            }
+
+            DropItem item = new DropItem(GameGlobal.RandomIntInArray(minimunChanceOfItem.QuantityRange), minimunChanceOfItem.ItemAsset);
+            return item;
         }
 
         #endregion

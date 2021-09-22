@@ -8,6 +8,18 @@
     using UnityEngine;
     using UnityEngine.UI;
 
+    [System.Serializable]
+    public class DropItem
+    {
+        [SerializeField] private int quantity;
+        [SerializeField] private ItemData itemAsset;
+
+        public DropItem(int quantityValue, ItemData asset)
+        {
+            this.quantity = quantityValue; this.itemAsset = asset;
+        }
+    }
+
     public class BattleProgresser : MonoBehaviour
     {
         [Header("BATTLE PROGRESS")]
@@ -42,6 +54,8 @@
         public ItemDropList DropListAsset;
         [Range(0, 100)] public int StageDropCorrection;
         public List<ItemData> DropItems = new List<ItemData>();
+        [SerializeField] 
+        private List<DropItem> dropItemList = new List<DropItem>();
 
         private BattleSceneRoute battleSceneUI;
 
@@ -52,13 +66,18 @@
 
         private void Start()
         {
-            //Get Scene UI Component
+            //Init GameManager
             battleSceneUI = GetComponent<BattleSceneRoute>();
             GameManager.Instance.SetGameState(InitGameState);
 
-            //Setup Delegate
+            //Initial Delegate
             if (DropListAsset != null)
+            {
+                GameManager.Instance.InitialDroplist(this.DropListAsset);
                 OnDropItemChance += OnDropItem;
+                OnDropItemChance += OnDropItemRoll;
+            }
+
             OnIncreaseClearGauge += IncreaseClearGauge;
 
             //Initializing GameObject Player's Equipments
@@ -85,6 +104,10 @@
         {
             OnIncreaseClearGauge -= IncreaseClearGauge;
             OnDropItemChance     -= OnDropItem;
+            OnDropItemChance     -= OnDropItemRoll;
+
+            //종료 되어버리는 경우 GameManager가 먼저 지워져버리기 때문에 null 체크함
+            if (GameManager.Instance != null) GameManager.Instance.ReleaseDropList();
         }
 
         #region GAME_GAUGE_LOGIC's
@@ -147,16 +170,14 @@
         private void OnDropItem(float dropRateCorrection)
         {
             bool isItemDrop = GameManager.Instance.OnRollItemDrop(StageDropCorrection, dropRateCorrection);
-            if (isItemDrop)
-            { 
-                //Item DropList를 그때그때 보내도 되지 않게끔, Start에서 미리 GameManager에 전달하는 식으로 변경
-                var ItemData = GameManager.Instance.OnRollItemList(DropListAsset.DropListArray);
-                DropItems.Add(ItemData);
-            }
-            else
-            {
+            if (isItemDrop) DropItems.Add(GameManager.Instance.OnRollItemList());
+            else return;
+        }
 
-            }
+        private void OnDropItemRoll(float dropRateCorrection)
+        {
+            bool isItemDrop = GameManager.Instance.OnRollItemDrop(StageDropCorrection, dropRateCorrection);
+            if (isItemDrop) dropItemList.Add(GameManager.Instance.OnDropInItemList());
         }
 
         private void OnRollDropList(float dropRateCorrection)
@@ -169,7 +190,7 @@
 
             if (totalChance >= chance)    //아이템을 획득한 경우
             {
-                var itemData = ChooseItemInDropList(DropListAsset.DropListArray);
+                var itemData = ChooseItemInDropList(DropListAsset.DropTableArray);
                 DropItems.Add(itemData);
             }
             else                              //아이템을 획득하지 못한 경우
@@ -178,7 +199,7 @@
             }
         }
 
-        private ItemData ChooseItemInDropList(ItemDropList.DropItems[] items)
+        private ItemData ChooseItemInDropList(ItemDropList.DropTable[] items)
         {
             float total = 0f;
 
@@ -221,6 +242,9 @@
             //                           select item).Min(item => item.DropChance);
         }
 
+        /// <summary>
+        /// Add DropItems List to Player Inventory
+        /// </summary>
         private void DropItemsInPlayerInventory()
         {
             DropItems.ForEach((item) => { CCPlayerData.inventory.AddItem(item);
@@ -274,6 +298,7 @@
                 IsResult = true;
                 DropItemsInPlayerInventory();
                 battleSceneUI.OnResultPanel(DropItems);
+
 
                 endWaitingTime = 0f;
             }

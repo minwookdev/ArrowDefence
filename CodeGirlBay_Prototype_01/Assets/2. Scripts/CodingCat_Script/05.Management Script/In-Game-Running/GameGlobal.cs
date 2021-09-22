@@ -24,6 +24,18 @@
             value = valueOfRange;
         }
 
+        public static int RandomIntInArray(int[] intArray)
+        {
+            if (intArray.Length <= 0)
+            {
+                CatLog.WLog("Int Array Parameter Size 0, return 1");
+                return 1;
+            }
+
+            int valueOfArray = intArray[GameGlobal.RandomIndexInRange(intArray)];
+            return valueOfArray;
+        }
+
         public static T GetRandom<T>(this T[] array)
         {
             return array[Random.Range(0, array.Length)];

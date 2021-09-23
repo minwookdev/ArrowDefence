@@ -1,7 +1,5 @@
 ﻿namespace CodingCat_Games
 {
-    using UnityEngine;
-
     public class Item_Material : AD_item, IStackable    
     {
         public Item_Material(ItemData_Mat item)
@@ -17,16 +15,24 @@
             this.Item_Grade  = item.Item_Grade;
         }
 
-        public Item_Material(int itemId, int amount, string name, string desc, Sprite sprite, ITEMGRADE grade)
+        /// <summary>
+        /// Constructor For Item Stack
+        /// </summary>
+        /// <param name="item">New Material Item Data</param>
+        /// <param name="quantity">Item Quantity int</param>
+        public Item_Material(ItemData_Mat item, int quantity)
         {
+            //Item Type Field (Static)
             this.Item_Type = ITEMTYPE.ITEM_MATERIAL;
 
-            this.Item_Grade  = grade;
-            this.Item_Id     = itemId;
-            this.Item_Amount = amount;
-            this.Item_Name   = name;
-            this.Item_Desc   = desc;
-            this.Item_Sprite = sprite;
+            this.Item_Id     = item.Item_Id;
+            this.Item_Name   = item.Item_Name;
+            this.Item_Desc   = item.Item_Desc;
+            this.Item_Sprite = item.Item_Sprite;
+            this.Item_Grade  = item.Item_Grade;
+
+            //Init Item Amount Quantity Value
+            this.Item_Amount = quantity;
         }
 
         /// <summary>

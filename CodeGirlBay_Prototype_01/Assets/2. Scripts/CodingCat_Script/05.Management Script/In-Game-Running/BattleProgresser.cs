@@ -14,6 +14,10 @@
         [SerializeField] private int quantity;
         [SerializeField] private ItemData itemAsset;
 
+        public int Quantity { get => quantity; }
+
+        public ItemData ItemAsset { get => itemAsset; }
+
         public DropItem(int quantityValue, ItemData asset)
         {
             this.quantity = quantityValue; this.itemAsset = asset;
@@ -178,6 +182,7 @@
         {
             bool isItemDrop = GameManager.Instance.OnRollItemDrop(StageDropCorrection, dropRateCorrection);
             if (isItemDrop) dropItemList.Add(GameManager.Instance.OnDropInItemList());
+            else return;
         }
 
         private void OnRollDropList(float dropRateCorrection)
@@ -243,12 +248,13 @@
         }
 
         /// <summary>
-        /// Add DropItems List to Player Inventory
+        /// Add DropItems to Player Inventory
         /// </summary>
-        private void DropItemsInPlayerInventory()
+        private void DropItemsAddInventory()
         {
-            DropItems.ForEach((item) => { CCPlayerData.inventory.AddItem(item);
-                                          CatLog.Log($"아이템 획득 : {item.Item_Name}, 수량 : {item.Item_Amount}");
+            dropItemList.ForEach((item) => {
+                CCPlayerData.inventory.AddItem(item.ItemAsset, item.Quantity);
+                CatLog.Log($"아이템 획득 : {item.ItemAsset.Item_Name}, 수량 : {item.Quantity}");
             });
         }
 
@@ -296,7 +302,7 @@
             if (endWaitingTime >= EndTime)
             {
                 IsResult = true;
-                DropItemsInPlayerInventory();
+                DropItemsAddInventory();
                 battleSceneUI.OnResultPanel(DropItems);
 
 

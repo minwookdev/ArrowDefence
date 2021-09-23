@@ -17,17 +17,24 @@
             this.Item_Grade  = item.Item_Grade;
         }
 
-        public Item_Consumable(int itemId, int amount, string name, string desc, Sprite sprite, ITEMGRADE grade)
+        /// <summary>
+        /// Constructor For Item Stack
+        /// </summary>
+        /// <param name="item">New Item Data</param>
+        /// <param name="quantity">Item Quantity int</param>
+        public Item_Consumable(ItemData_Con item, int quantity)
         {
-            //Consume Item Static Field
+            //Item Type Set (Static)
             this.Item_Type = ITEMTYPE.ITEM_CONSUMABLE;
 
-            this.Item_Id     = itemId;
-            this.Item_Name   = name;
-            this.Item_Amount = amount;
-            this.Item_Desc   = desc;
-            this.Item_Sprite = sprite;
-            this.Item_Grade  = grade;
+            this.Item_Id     = item.Item_Id;
+            this.Item_Name   = item.Item_Name;
+            this.Item_Desc   = item.Item_Desc;
+            this.Item_Sprite = item.Item_Sprite;
+            this.Item_Grade  = item.Item_Grade;
+
+            //Init Item Amount Quantity Value
+            this.Item_Amount = quantity;
         }
 
         /// <summary>

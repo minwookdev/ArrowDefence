@@ -1,7 +1,7 @@
-﻿using UnityEngine;
-
-namespace CodingCat_Games
+﻿namespace CodingCat_Games
 {
+    using UnityEngine;
+
     public enum ACCESSORY_SPECIALEFFECT_TYPE
     { 
         SPEFFECT_NONE,
@@ -20,20 +20,19 @@ namespace CodingCat_Games
         public Material lineMaterial;
         public float LineWidth = 0.050f;
 
-        public override void Setup()
-        {
-            GameGlobal.GetBowGameObjectInScene().AddComponent<SPEffect_AimSight>().Initialize(lineMaterial, LineWidth);
-        }
+        public override void Setup() => GameGlobal.GetBowGameObjectInScene().AddComponent<SPEffect_AimSight>().Initialize(lineMaterial, LineWidth);
 
-        public override string ToString()
-        {
-            return "Aim Sight";
-        }
+        public override string ToString() => "Aim Sight";
 
         public Acsp_AimSight(Material lineMat)
         {
-            this.lineMaterial = lineMat;
+            lineMaterial = lineMat;
         }
+
+        /// <summary>
+        /// No Parameter Constructor For ES3 Utility (Don't Destory this)
+        /// </summary>
+        public Acsp_AimSight() : base() { }
     }
 
     public class Acsp_SlowTime : AccessorySPEffect, IToString

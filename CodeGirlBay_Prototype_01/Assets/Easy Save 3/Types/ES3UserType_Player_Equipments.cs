@@ -4,7 +4,7 @@ using UnityEngine;
 namespace ES3Types
 {
 	[UnityEngine.Scripting.Preserve]
-	[ES3PropertiesAttribute("MainBow", "MainArrow", "SubArrow")]
+	[ES3PropertiesAttribute("EquippedBow", "EquippedArrow_f", "EquippedArrow_s", "EquippedAccessory_f", "EquippedAccessory_s", "EquippedAccessory_t")]
 	public class ES3UserType_Player_Equipments : ES3ObjectType
 	{
 		public static ES3Type Instance = null;
@@ -16,9 +16,12 @@ namespace ES3Types
 		{
 			var instance = (CodingCat_Games.Player_Equipments)obj;
 			
-			writer.WritePrivateField("MainBow", instance);
-			writer.WritePrivateField("MainArrow", instance);
-			writer.WritePrivateField("SubArrow", instance);
+			writer.WritePrivateField("EquippedBow", instance);
+			writer.WritePrivateField("EquippedArrow_f", instance);
+			writer.WritePrivateField("EquippedArrow_s", instance);
+			writer.WritePrivateField("EquippedAccessory_f", instance);
+			writer.WritePrivateField("EquippedAccessory_s", instance);
+			writer.WritePrivateField("EquippedAccessory_t", instance);
 		}
 
 		protected override void ReadObject<T>(ES3Reader reader, object obj)
@@ -29,14 +32,23 @@ namespace ES3Types
 				switch(propertyName)
 				{
 					
-					case "MainBow":
-					reader.SetPrivateField("MainBow", reader.Read<CodingCat_Games.Item_Bow>(), instance);
+					case "EquippedBow":
+					reader.SetPrivateField("EquippedBow", reader.Read<CodingCat_Games.Item_Bow>(), instance);
 					break;
-					case "MainArrow":
-					reader.SetPrivateField("MainArrow", reader.Read<CodingCat_Games.Item_Arrow>(), instance);
+					case "EquippedArrow_f":
+					reader.SetPrivateField("EquippedArrow_f", reader.Read<CodingCat_Games.Item_Arrow>(), instance);
 					break;
-					case "SubArrow":
-					reader.SetPrivateField("SubArrow", reader.Read<CodingCat_Games.Item_Arrow>(), instance);
+					case "EquippedArrow_s":
+					reader.SetPrivateField("EquippedArrow_s", reader.Read<CodingCat_Games.Item_Arrow>(), instance);
+					break;
+					case "EquippedAccessory_f":
+					reader.SetPrivateField("EquippedAccessory_f", reader.Read<CodingCat_Games.Item_Accessory>(), instance);
+					break;
+					case "EquippedAccessory_s":
+					reader.SetPrivateField("EquippedAccessory_s", reader.Read<CodingCat_Games.Item_Accessory>(), instance);
+					break;
+					case "EquippedAccessory_t":
+					reader.SetPrivateField("EquippedAccessory_t", reader.Read<CodingCat_Games.Item_Accessory>(), instance);
 					break;
 					default:
 						reader.Skip();

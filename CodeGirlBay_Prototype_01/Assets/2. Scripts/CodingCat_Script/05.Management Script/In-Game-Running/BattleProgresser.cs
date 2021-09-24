@@ -9,7 +9,7 @@
     using UnityEngine.UI;
 
     [System.Serializable]
-    public class DropItem
+    public class DropItem : IStackable
     {
         [SerializeField] private int quantity;
         [SerializeField] private ItemData itemAsset;
@@ -21,6 +21,16 @@
         public DropItem(int quantityValue, ItemData asset)
         {
             this.quantity = quantityValue; this.itemAsset = asset;
+        }
+
+        public void SetAmount(int value) => quantity = value;
+
+        public void IncAmount(int value) => quantity += value;
+
+        public void DecAmount(int value)
+        {
+            if (quantity - value < 0) quantity = 0;
+            else quantity -= value;
         }
     }
 
@@ -57,7 +67,6 @@
         [Header("DROP LIST FOR THIS STAGE")]
         public ItemDropList DropListAsset;
         [Range(0, 100)] public int StageDropCorrection;
-        public List<ItemData> DropItems = new List<ItemData>();
         [SerializeField] 
         private List<DropItem> dropItemList = new List<DropItem>();
 
@@ -78,7 +87,6 @@
             if (DropListAsset != null)
             {
                 GameManager.Instance.InitialDroplist(this.DropListAsset);
-                OnDropItemChance += OnDropItem;
                 OnDropItemChance += OnDropItemRoll;
             }
 
@@ -107,7 +115,6 @@
         private void OnDestroy()
         {
             OnIncreaseClearGauge -= IncreaseClearGauge;
-            OnDropItemChance     -= OnDropItem;
             OnDropItemChance     -= OnDropItemRoll;
 
             //종료 되어버리는 경우 GameManager가 먼저 지워져버리기 때문에 null 체크함
@@ -171,80 +178,29 @@
 
         #region ITEMDROP_METHOD
 
-        private void OnDropItem(float dropRateCorrection)
-        {
-            bool isItemDrop = GameManager.Instance.OnRollItemDrop(StageDropCorrection, dropRateCorrection);
-            if (isItemDrop) DropItems.Add(GameManager.Instance.OnRollItemList());
-            else return;
-        }
-
         private void OnDropItemRoll(float dropRateCorrection)
         {
-            bool isItemDrop = GameManager.Instance.OnRollItemDrop(StageDropCorrection, dropRateCorrection);
-            if (isItemDrop) dropItemList.Add(GameManager.Instance.OnDropInItemList());
+            if (GameManager.Instance.OnRollItemDrop(StageDropCorrection, dropRateCorrection))
+                AddItemInDropItems(GameManager.Instance.OnDropInItemList());
             else return;
         }
 
-        private void OnRollDropList(float dropRateCorrection)
+        private void AddItemInDropItems(DropItem item)
         {
-            //기본 드롭량을 BattleProgress에 작성한 이유는 Stage마다 스폰량이 달리하게 되면
-            //이를 보정해주기 쉽게 하기위해 각 Stage Battle Progress에 작성함
-
-            int chance = Random.Range(1, 100 + 1);  //1~100
-            float totalChance = StageDropCorrection + dropRateCorrection;
-
-            if (totalChance >= chance)    //아이템을 획득한 경우
+            switch (item.ItemAsset.Item_Type)
             {
-                var itemData = ChooseItemInDropList(DropListAsset.DropTableArray);
-                DropItems.Add(itemData);
-            }
-            else                              //아이템을 획득하지 못한 경우
-            {
-
+                case ITEMTYPE.ITEM_CONSUMABLE: StackOnDropItem(item);  break;
+                case ITEMTYPE.ITEM_MATERIAL:   StackOnDropItem(item);  break;
+                case ITEMTYPE.ITEM_EQUIPMENT:  dropItemList.Add(item); break;
+                default:                                               break;
             }
         }
 
-        private ItemData ChooseItemInDropList(ItemDropList.DropTable[] items)
+        private void StackOnDropItem(DropItem item)
         {
-            float total = 0f;
-
-            foreach (var item in items)
-            {
-                total += item.DropChance;
-            }
-
-            float randomPoint = Random.value * total;
-
-            for (int i = 0; i < items.Length; i++)
-            {
-                if(randomPoint < items[i].DropChance)
-                {
-                    return items[i].ItemAsset;
-                }
-                else
-                {
-                    randomPoint -= items[i].DropChance;
-                }
-            }
-
-            //randomPoint 가 극한의 확률로 Random.value = 1f 나오고 리턴되지 못한 경우
-            //드랍 테이블 안에서 가장 최소의 확률을 가진 아이템을 리턴함
-
-            var minimunChanceOfItem = items[0];
-
-            for (int i = 0; i < items.Length; i++)
-            {
-                if(minimunChanceOfItem.DropChance > items[i].DropChance)
-                {
-                    minimunChanceOfItem = items[i];
-                }
-            }
-
-            return minimunChanceOfItem.ItemAsset;
-
-            //Linq를 사용해서 최소확률의 아이템 찾기
-            //var minimunChanceOfItem = (from item in items
-            //                           select item).Min(item => item.DropChance);
+            var duplicateItem = dropItemList.Find(x => x.ItemAsset.Item_Id == item.ItemAsset.Item_Id);
+            if (duplicateItem != null) duplicateItem.IncAmount(item.Quantity);
+            else dropItemList.Add(item);
         }
 
         /// <summary>
@@ -303,8 +259,7 @@
             {
                 IsResult = true;
                 DropItemsAddInventory();
-                battleSceneUI.OnResultPanel(DropItems);
-
+                battleSceneUI.OnEnableResultPanel(dropItemList);
 
                 endWaitingTime = 0f;
             }

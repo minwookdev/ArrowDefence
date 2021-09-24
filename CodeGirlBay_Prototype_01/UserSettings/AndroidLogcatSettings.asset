@@ -3,7 +3,7 @@
     "m_SelectedPackage": {
         "deviceId": "R3CMC06BR0T",
         "name": "com.CodingCatGames.ArrowDefenceTEMP",
-        "processId": 4105,
+        "processId": 12250,
         "exited": false
     },
     "m_SelectedPriority": 0,
@@ -30,6 +30,12 @@
             "deviceId": "R3CMC06BR0T",
             "name": "com.CodingCatGames.ArrowDefenceTEMP",
             "processId": 4105,
+            "exited": false
+        },
+        {
+            "deviceId": "R3CMC06BR0T",
+            "name": "com.CodingCatGames.ArrowDefenceTEMP",
+            "processId": 12250,
             "exited": false
         }
     ],

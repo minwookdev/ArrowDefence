@@ -32,9 +32,11 @@
         public GAMEPLATFORM GamePlay_Platform { get => gamePlatform; set => gamePlatform = value; }
         public GAMESTATE GameState { get => gameState; }
 
-        //이거그냥 readonly두고 코드로 결정시켜버리기
-        private bool isDevMode = true;
-        public bool IsDevMode { get { return isDevMode; }}
+        /// <summary>
+        /// Is Dev Mode Control Value
+        /// </summary>
+        private readonly bool isDevMode = true;
+        public bool IsDevMode { get => isDevMode; }
 
         #region PLAYER_DATA_METHOD
 

@@ -20,6 +20,7 @@ MonoBehaviour:
   Item_Desc: 
   Item_Sprite: {fileID: 21300000, guid: e4ba42abb72b4496f934f1a517f64fea, type: 3}
   Equip_Type: 0
-  BowGameObject: {fileID: 0}
+  BowGameObject: {fileID: 3549159203555372210, guid: 764bffb09a29bf440b61e0c0c511064e,
+    type: 3}
   FirstSkill_Type: 2
   SecondSkill_Type: 3

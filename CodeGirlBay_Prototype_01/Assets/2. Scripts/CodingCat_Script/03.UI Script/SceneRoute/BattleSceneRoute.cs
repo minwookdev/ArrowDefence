@@ -133,7 +133,7 @@
                    });
         }
 
-        public void OnResultPanel(List<ItemData> dropItems)
+        public void OnEnableResultPanel(List<DropItem> items)
         {
             if (ResultPanel.activeSelf) return;
 
@@ -143,13 +143,14 @@
 
             //Scene에 미리 깔려있는 Slot들은 Awake때 캐싱됨 
             //slotCount Number Object Disable된 상황에서도 잘 잡히는거 확인
+
             int slotCount = SlotParentTr.childCount;
 
-            if(dropItems.Count > slotCount)
+            if(items.Count > slotCount)
             {
-                int moreSlotCount = dropItems.Count - slotCount;
+                int moreSlotCount = items.Count - slotCount;
 
-                for(int i = 0; i < moreSlotCount; i++)
+                for (int i = 0; i < moreSlotCount; i++)
                 {
                     var newSlot = Instantiate(DropItemSlotPref, SlotParentTr).GetComponent<UI_ItemDataSlot>();
                     newSlot.gameObject.SetActive(false);
@@ -157,12 +158,10 @@
                 }
             }
 
-            for (int i = 0; i < dropItems.Count; i++)
+            for (int i = 0; i < items.Count; i++)
             {
                 DropItemSlots[i].gameObject.SetActive(true);
-                DropItemSlots[i].Setup(dropItems[i], dropItems[i].Item_Amount);
-
-                //DropItemSlot 모자라는 경우도 여기서 다 처리할 수 있지않을까
+                DropItemSlots[i].Setup(items[i].ItemAsset, items[i].Quantity);
             }
         }
     }

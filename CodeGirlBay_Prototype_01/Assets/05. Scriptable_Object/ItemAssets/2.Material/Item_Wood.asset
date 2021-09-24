@@ -18,4 +18,4 @@ MonoBehaviour:
   Item_Amount: 10
   Item_Name: Wood
   Item_Desc: 
-  Item_Sprite: {fileID: 21300034, guid: 29c9cded5e558164aaf8c9bf08aa1510, type: 3}
+  Item_Sprite: {fileID: 21300038, guid: 29c9cded5e558164aaf8c9bf08aa1510, type: 3}

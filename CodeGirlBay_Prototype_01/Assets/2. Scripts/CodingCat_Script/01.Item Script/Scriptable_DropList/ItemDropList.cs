@@ -53,6 +53,7 @@
             }
         }
 
+#if UNITY_EDITOR
         [UnityEditor.MenuItem("CodingCat/Scriptable Object/ItemDropList Asset")]
         public static void CreateItemDropListAssetInstance()
         {
@@ -64,5 +65,6 @@
             UnityEditor.EditorUtility.FocusProjectWindow();
             UnityEditor.Selection.activeObject = asset;
         }
+#endif
     }
 }

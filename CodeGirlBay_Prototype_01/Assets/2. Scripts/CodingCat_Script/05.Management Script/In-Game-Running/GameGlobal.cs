@@ -47,5 +47,11 @@
             if (BowGameObject)                                        return BowGameObject;
             else CatLog.WLog("Bow GameObject Not Found This Scene."); return null;
         }
+
+        public static Vector3 FixedVectorOnScreen(Vector2 position)
+        {
+            Vector3 vector = new Vector3(position.x, position.y, 90f);
+            return vector;
+        }
     }
 }

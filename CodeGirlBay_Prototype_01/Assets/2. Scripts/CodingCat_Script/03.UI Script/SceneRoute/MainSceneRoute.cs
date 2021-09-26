@@ -288,16 +288,16 @@ public class MainSceneRoute : MonoBehaviour
         switch (stagedata)
         {
             case (int)STAGELIST.STAGE_DEV:
-                actPopup(AD_Data.StageInfoDev);
+                actPopup(AD_Data.STAGEINFO_DEV);
                 break;
             case (int)STAGELIST.STAGE_FOREST:
-                actPopup(AD_Data.StageInfoForest);
+                actPopup(AD_Data.STAGEINFO_FOREST);
                 break;
             case (int)STAGELIST.STAGE_DESERT:
-                actPopup(AD_Data.StageInfoDesert);
+                actPopup(AD_Data.STAGEINFO_DESERT);
                 break;
             case (int)STAGELIST.STAGE_DUNGEON:
-                actPopup(AD_Data.StageInfoDungeon);
+                actPopup(AD_Data.STAGEINFO_DUNGEON);
                 break;
             default:
                 CatLog.WLog("Not Support This Stage");
@@ -318,7 +318,7 @@ public class MainSceneRoute : MonoBehaviour
                {   ImgFade.blocksRaycasts = false;
                    ImgFade.gameObject.SetActive(true);
                })
-               .OnComplete(() => { SceneLoader.Instance.LoadScene(AD_Data.Scene_Battle_Dev); });
+               .OnComplete(() => { SceneLoader.Instance.LoadScene(AD_Data.SCENE_BATTLE_DEV); });
     }
 
     public void OnBtnLoadTitle()
@@ -330,7 +330,7 @@ public class MainSceneRoute : MonoBehaviour
                    ImgFade.blocksRaycasts = false;
                    ImgFade.gameObject.SetActive(true);
                })
-               .OnComplete(() => SceneLoader.Instance.LoadScene(AD_Data.Scene_Title));
+               .OnComplete(() => SceneLoader.Instance.LoadScene(AD_Data.SCENE_TITLE));
     }
 
     private void OnSceneEnteringFadeOut()

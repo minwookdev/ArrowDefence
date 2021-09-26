@@ -108,7 +108,7 @@
                                     ImgFade.gameObject.SetActive(true);
                                     //CatPoolManager.Instance.ReleaseInstance();
                                     CCPooler.DestroyCCPooler();})
-                   .OnComplete(() => SceneLoader.Instance.LoadScene(AD_Data.Scene_Main));
+                   .OnComplete(() => SceneLoader.Instance.LoadScene(AD_Data.SCENE_MAIN));
         }
 
         #endregion

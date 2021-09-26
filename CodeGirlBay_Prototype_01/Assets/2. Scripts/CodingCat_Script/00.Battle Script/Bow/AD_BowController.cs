@@ -154,7 +154,7 @@
                         //Touch Begin
                         this.BowBegan(screenTouch.position);
                     }
-                    else if (screenTouch.phase == TouchPhase.Moved)
+                    else if (screenTouch.phase == TouchPhase.Moved && bowPullBegan)
                     {
                         //Touch Moved
                         this.BowMoved(screenTouch.position);
@@ -421,7 +421,7 @@
 
             yield return null;
             
-            currentLoadedArrow = CCPooler.SpawnFromPool(AD_Data.TAG_MAINARROW, this.transform, initialArrowScale,
+            currentLoadedArrow = CCPooler.SpawnFromPool(AD_Data.POOLTAG_MAINARROW, this.transform, initialArrowScale,
                                      rightClampPoint.position, Quaternion.identity);
 
             currentLoadedArrow.transform.localEulerAngles = initialArrowRotation;

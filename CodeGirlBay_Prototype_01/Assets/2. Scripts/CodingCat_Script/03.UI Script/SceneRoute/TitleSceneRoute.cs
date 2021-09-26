@@ -18,7 +18,7 @@ public class TitleSceneRoute : MonoBehaviour
     public void BtnLoadMain()
     {
         ImgFade.DOFade(1, FadeTime).OnStart(() => ImgFade.raycastTarget = false).
-                OnComplete(() => { SceneLoader.Instance.LoadScene(AD_Data.Scene_Main); });
+                OnComplete(() => { SceneLoader.Instance.LoadScene(AD_Data.SCENE_MAIN); });
     }
 
     #endregion

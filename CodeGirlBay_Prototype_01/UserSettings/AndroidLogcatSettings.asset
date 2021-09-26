@@ -3,39 +3,45 @@
     "m_SelectedPackage": {
         "deviceId": "R3CMC06BR0T",
         "name": "com.CodingCatGames.ArrowDefenceTEMP",
-        "processId": 12250,
+        "processId": 31610,
         "exited": false
     },
     "m_SelectedPriority": 0,
     "m_KnownPackagesForSerialization": [
         {
             "deviceId": "R3CMC06BR0T",
-            "name": "com.android.settings",
-            "processId": 3077,
+            "name": "com.CodingCatGames.ArrowDefenceTEMP",
+            "processId": 8110,
             "exited": true
         },
         {
             "deviceId": "R3CMC06BR0T",
             "name": "com.CodingCatGames.ArrowDefenceTEMP",
-            "processId": 8935,
+            "processId": 20406,
             "exited": true
         },
         {
             "deviceId": "R3CMC06BR0T",
             "name": "com.CodingCatGames.ArrowDefenceTEMP",
-            "processId": 21768,
+            "processId": 24451,
             "exited": true
         },
         {
             "deviceId": "R3CMC06BR0T",
             "name": "com.CodingCatGames.ArrowDefenceTEMP",
-            "processId": 4105,
-            "exited": false
+            "processId": 24758,
+            "exited": true
         },
         {
             "deviceId": "R3CMC06BR0T",
             "name": "com.CodingCatGames.ArrowDefenceTEMP",
-            "processId": 12250,
+            "processId": 25130,
+            "exited": true
+        },
+        {
+            "deviceId": "R3CMC06BR0T",
+            "name": "com.CodingCatGames.ArrowDefenceTEMP",
+            "processId": 31610,
             "exited": false
         }
     ],

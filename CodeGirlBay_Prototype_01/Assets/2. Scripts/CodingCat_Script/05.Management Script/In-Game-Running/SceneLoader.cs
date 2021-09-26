@@ -8,7 +8,7 @@
         //private readonly string mainScene    = AD_Data.Scene_Main;
         //private readonly string battleScene  = AD_Data.Scene_Battle_Dev;
 
-        private readonly string loadingScene = AD_Data.Scene_Loading;
+        private readonly string loadingScene = AD_Data.SCENE_LOADING;
 
         public string NextScene { get; private set; }
 

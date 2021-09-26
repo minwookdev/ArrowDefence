@@ -1,5 +1,6 @@
 ﻿namespace CodingCat_Games
 {
+    using CodingCat_Scripts;
     using UnityEngine;
 
     public class SPEffect_AimSight : MonoBehaviour
@@ -15,7 +16,7 @@
         private float lineEndAlpha = 0.3f;
         private float lineStartAlpha = 0.8f;
         private float lineRenderWidth;
-        private float alphaChangeSpeed = 0.7f;
+        private float alphaChangeSpeed = 0.8f;
 
         /// <summary>
         /// Executed before the Start method is called. Setting Linerenderer Related Variables
@@ -76,29 +77,21 @@
                 #endregion
 
                 RaycastHit2D rayhit = Physics2D.Raycast(LineStartPoint.position, LineStartPoint.right, rayDistance);
-                //Debug.DrawRay(LineStartPoint.position, LineStartPoint.right * rayDistance, Color.red); //Debug
+                //Debug.DrawRay(LineStartPoint.position, LineStartPoint.right * rayDistance, Color.green); //Debugging
 
                 laserLine.SetPosition(0, LineStartPoint.position);
 
-                if(rayhit)  //무언가에 부딫혔을때
+                if (rayhit)  //무언가에 부딫혔을때 **문제되었던 부분 정리하기
                 {
-                    if(rayhit.collider.CompareTag(AD_Data.OBJECT_TAG_MONSTER))
-                    {
-                        laserLine.SetPosition(1, rayhit.point);
-                    }
+                    if (rayhit.collider.CompareTag(AD_Data.OBJECT_TAG_MONSTER)) laserLine.SetPosition(1, GameGlobal.FixedVectorOnScreen(rayhit.point));
+                    else                                                        laserLine.SetPosition(1, LineStartPoint.position + (LineStartPoint.right * rayDistance));
                 }
-                else
-                {
-                    laserLine.SetPosition(1, LineStartPoint.position + (LineStartPoint.right * rayDistance));
-                }
+                else laserLine.SetPosition(1, LineStartPoint.position + (LineStartPoint.right * rayDistance));
 
                 IncreaseLineAlpha();
             }
             else
             {
-                //laserLine.SetPosition(0, LineStartPoint.position);
-                //laserLine.SetPosition(1, LineStartPoint.position);
-
                 DecreaseLineAlpha();
             }
 

@@ -86,13 +86,13 @@
             yield return null;
 
             //여기서 CCPooler Spawn처리, 되고나서 컴포넌트 가져와서 뭐 할거있으면 해줌
-            CCPooler.SpawnFromPool(AD_Data.TAG_MONSTER_NORMAL, spawnPos, Quaternion.identity);
+            CCPooler.SpawnFromPool(AD_Data.POOLTAG_MONSTER_NORMAL, spawnPos, Quaternion.identity);
         }
 
         private void MonsterInPool()
         {
             if (monsterPref != null)
-                CCPooler.AddPoolList(AD_Data.TAG_MONSTER_NORMAL, 10, monsterPref);
+                CCPooler.AddPoolList(AD_Data.POOLTAG_MONSTER_NORMAL, 10, monsterPref);
         }
     }
 }

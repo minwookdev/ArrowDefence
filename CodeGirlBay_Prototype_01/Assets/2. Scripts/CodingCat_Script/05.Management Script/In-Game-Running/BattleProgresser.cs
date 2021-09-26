@@ -94,8 +94,8 @@
 
             //Initializing GameObject Player's Equipments
             GameManager.Instance.SetupPlayerEquipments(BowInitPosition, ParentTransform,
-                                                       AD_Data.TAG_MAINARROW, AD_Data.TAG_MAINARROW_LESS, 1,
-                                                       AD_Data.TAG_SUBARROW,  AD_Data.TAG_SUBARROW_LESS, 1);
+                                                       AD_Data.POOLTAG_MAINARROW, AD_Data.POOLTAG_MAINARROW_LESS, 1,
+                                                       AD_Data.POOLTAG_SUBARROW,  AD_Data.POOLTAG_SUBARROW_LESS, 1);
 
             //Progresser Ready
             isInitialized = true;

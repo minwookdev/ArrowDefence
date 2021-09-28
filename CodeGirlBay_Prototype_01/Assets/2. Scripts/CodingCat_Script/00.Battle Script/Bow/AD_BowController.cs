@@ -53,6 +53,8 @@
         private Vector2 limitTouchPosVec;
         public float touchRadius = 1f;
         public Transform rightClampPoint, leftClampPoint;
+        [Range(1f, 20f)] public float SmoothRotateSpeed = 12f;
+        private Vector3 arrowPullingVelocity;
         public bool BowPullBegan { get { return bowPullBegan; } }
 
         [Header("Arrow Variable")]
@@ -270,14 +272,19 @@
 
                 this.direction = currentClickPosition - transform.position;
 
-                //클릭 위치에 따른 활 자체의 각도를 변경할 변수 저장
-                this.bowAngle = Mathf.Atan2(direction.x, -direction.y) * Mathf.Rad2Deg + 90;
-                //this.bowAngle = Mathf.Atan2(direction.x, -direction.y) * Mathf.Rad2Deg;
+                //클릭 위치에 따른 활 자체의 각도를 변경할 변수 저장 -> 여기에 Lerp를 박는게 맞지 않을까
+                //this.bowAngle = Mathf.Atan2(direction.x, -direction.y) * Mathf.Rad2Deg + 90; //Visualizing 이전
+                this.bowAngle = Mathf.LerpAngle(bowAngle, Mathf.Atan2(direction.x, -direction.y) * Mathf.Rad2Deg + 90, Time.deltaTime * SmoothRotateSpeed);
                 
                 //Set Direction of the Bow
                 tempEulerAngle = transform.eulerAngles;
                 tempEulerAngle.z = bowAngle;
                 transform.eulerAngles = tempEulerAngle;
+
+                //Lerp to Set Direction of the Bow
+                //tempEulerAngle = transform.eulerAngles;
+                //tempEulerAngle.z = Mathf.LerpAngle(tempEulerAngle.z, bowAngle, Time.deltaTime * 8f);
+                //transform.eulerAngles = tempEulerAngle;
                 
                 //Calculate current cPoint based on angle and radius (center.x - r * cos(theta), center.y - r * sin(theta))
                 cPoint.x = transform.position.x - radius * Mathf.Cos(bowAngle * Mathf.Deg2Rad);
@@ -297,7 +304,7 @@
                 //클릭 위치에 따른 활 자체의 각도를 변경할 변수 저장
                 this.bowAngle = Mathf.Atan2(direction.x, -direction.y) * Mathf.Rad2Deg + 90;
 
-                //Set Direction of the Bow
+                //Lerp to Set Direction of the Bow
                 tempEulerAngle = transform.eulerAngles;
                 tempEulerAngle.z = bowAngle;
                 transform.eulerAngles = tempEulerAngle;
@@ -313,10 +320,29 @@
 
             if(currentLoadedArrow != null)
             {
+                //Before Visualizing
+                //arrowPosition = currentLoadedArrow.transform.position;
+                //arrowPosition.x = arrowComponent.rightClampPoint.position.x - distance.x;
+                //arrowPosition.y = arrowComponent.rightClampPoint.position.y - distance.y;
+                //currentLoadedArrow.transform.position = arrowPosition;
+
+                //After Visualizing
+                //arrowPosition = currentLoadedArrow.transform.position;
+                //arrowPosition = leftClampPoint.position;
+                //currentLoadedArrow.transform.position = arrowPosition;
+
+                //if (Vector2.Distance(currentLoadedArrow.transform.position, leftClampPoint.position) > .4f) CatLog.Log("0.1f 보다 멀다");
+                //else CatLog.Log("가깝다");
+                //CatLog.Log($"Distance of Arrow Position : {Vector2.Distance(currentLoadedArrow.transform.position, leftClampPoint.position).ToString()}");
+
+                //After Visualizing
                 arrowPosition = currentLoadedArrow.transform.position;
-                arrowPosition.x = arrowComponent.rightClampPoint.position.x - distance.x;
-                arrowPosition.y = arrowComponent.rightClampPoint.position.y - distance.y;
+                arrowPosition = Vector3.MoveTowards(arrowPosition, leftClampPoint.position, Time.deltaTime); //deltaTime * speed 변수해주면 되겠다
                 currentLoadedArrow.transform.position = arrowPosition;
+
+                //arrowPosition = Vector3.SmoothDamp(arrowPosition, leftClampPoint.position, ref arrowPullingVelocity, .5f);
+
+                //끝까지 땡겨서 더는 못 움직이는곳까지 가도 Arrow Position은 계속 수치가 증가함
 
                 arrowForce = currentLoadedArrow.transform.up * arrowComponent.power;
 

@@ -276,6 +276,7 @@ MonoBehaviour:
   touchRadius: 1
   rightClampPoint: {fileID: 1797254673301586942}
   leftClampPoint: {fileID: 1797254671658650087}
+  SmoothRotateSpeed: 12
   arrowComponent: {fileID: 0}
   currentLoadedArrow: {fileID: 0}
   arrowParent: {fileID: 0}

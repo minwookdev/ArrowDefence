@@ -40,6 +40,7 @@
         public GAMESTATE InitGameState;
         public float StartTime = 3f;
         public float EndTime = 2f;
+        public bool IsDebug = false;
         private bool IsResult = false;
         private float startWaitingTime;
         private float endWaitingTime;
@@ -220,6 +221,8 @@
 
         private void OnUpdateBeforeBattle()
         {
+            if (IsDebug) return;
+
             if (isInitialized)
             {
                 startWaitingTime += Time.deltaTime;

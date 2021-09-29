@@ -2462,6 +2462,7 @@ MonoBehaviour:
   touchRadius: 1
   rightClampPoint: {fileID: 720246152}
   leftClampPoint: {fileID: 1287872401}
+  SmoothRotateSpeed: 12
   arrowComponent: {fileID: 0}
   currentLoadedArrow: {fileID: 0}
   arrowParent: {fileID: 0}
@@ -13182,6 +13183,7 @@ MonoBehaviour:
   InitGameState: 0
   StartTime: 2
   EndTime: 3
+  IsDebug: 1
   ParentTransform: {fileID: 1757660976}
   BowInitPosition: {fileID: 377625007}
   MaxClearCount: 100
@@ -13192,7 +13194,6 @@ MonoBehaviour:
   BattleStr: 
   DropListAsset: {fileID: 11400000, guid: 834b46e9df025194da792695df7f4b4b, type: 2}
   StageDropCorrection: 70
-  DropItems: []
   dropItemList: []
 --- !u!1 &1745501736
 GameObject:

@@ -143,59 +143,47 @@
 
         private void Update()
         {
-            #region Mobile_Platform
-            if (currentPlatform == CurrentPlatform.Platform_Mobile)
+#if UNITY_ANDROID
+            if (Input.touchCount != 0)
             {
-                if (Input.touchCount != 0)
-                {
-                    //Get Value On Screen Touch -> Area Designation Func Add
-                    screenTouch = Input.GetTouch(0);
+                //Get Value On Screen Touch -> Area Designation Func Add
+                screenTouch = Input.GetTouch(0);
 
-                    if (screenTouch.phase == TouchPhase.Began)
-                    {
-                        //Touch Begin
-                        this.BowBegan(screenTouch.position);
-                    }
-                    else if (screenTouch.phase == TouchPhase.Moved && bowPullBegan)
-                    {
-                        //Touch Moved
-                        this.BowMoved(screenTouch.position);
-                    }
-                    else if (screenTouch.phase == TouchPhase.Ended)
-                    {
-                        //Touch Ended
-                        this.BowReleased(screenTouch.position);
-                    }
+                if (screenTouch.phase == TouchPhase.Began)
+                {
+                    //Touch Begin
+                    this.BowBegan(screenTouch.position);
+                }
+                else if (screenTouch.phase == TouchPhase.Moved && bowPullBegan)
+                {
+                    //Touch Moved
+                    this.BowMoved(screenTouch.position);
+                }
+                else if (screenTouch.phase == TouchPhase.Ended)
+                {
+                    //Touch Ended
+                    this.BowReleased(screenTouch.position);
                 }
             }
-            #endregion
-            else //PC
+#endif
+#if UNITY_EDITOR
+            if (Input.GetMouseButtonDown(0))
             {
-                if (Input.GetMouseButtonDown(0))
-                {
-                    //Click Began
-                    this.BowBegan(Input.mousePosition);
-                }
-                else if (Input.GetMouseButtonUp(0))
-                {
-                    //Click Ended
-                    this.BowReleased(Input.mousePosition);
-                }
-
-                if (bowPullBegan)
-                {
-                    //Click Moved
-                    this.BowMoved(Input.mousePosition);
-                }
-
+                //Click Began
+                this.BowBegan(Input.mousePosition);
+            }
+            else if (Input.GetMouseButtonUp(0))
+            {
+                //Click Ended
+                this.BowReleased(Input.mousePosition);
             }
 
-            if(Input.GetKeyDown(KeyCode.N))
+            if (bowPullBegan)
             {
-                //this.TestFunction();
-
-                Time.timeScale = 0.1f;
+                //Click Moved
+                this.BowMoved(Input.mousePosition);
             }
+#endif
         }
 
         private void FixedUpdate()
@@ -217,9 +205,9 @@
                 //조건 1. 활 주변의 일정거리 주변을 클릭 | 터치했을때만 조준 가능
                 case BowPullType.Around_Bow:
                     if (!this.CheckTouchRaius(pos)) return;
-                    #region ORIGIN_SCRIPTS
+#region ORIGIN_SCRIPTS
                     //radius = Vector2.Distance(AD_BowRope.instance.transform.position, mainCam.ScreenToWorldPoint(pos));
-                    #endregion
+#endregion
                     radius = Vector2.Distance(transform.position, mainCam.ScreenToWorldPoint(pos));
                     break;
 
@@ -250,7 +238,7 @@
             //Pull Type 추가에 따른 스크립트 구분
             if (pullType == BowPullType.Around_Bow)
             {
-                #region ORIGIN_SCRIPTS
+                #region ORIGIN_CODES
                 //this.direction = currentClickPosition - transform.position;
                 //
                 ////클릭 위치에 따른 활 자체의 각도를 변경할 변수 저장
@@ -268,58 +256,62 @@
                 ////Pull or Drag the arrow ralative to Click Position
                 //distance = (AD_BowRope.instance.transform.position - currentClickPosition) -
                 //           (AD_BowRope.instance.transform.position - cPoint);
-                #endregion 
+                //Calculate current cPoint based on angle and radius (center.x - r * cos(theta), center.y - r * sin(theta))
+                //cPoint.x = transform.position.x - radius * Mathf.Cos(bowAngle * Mathf.Deg2Rad);
+                //cPoint.y = transform.position.y - radius * Mathf.Sin(bowAngle * Mathf.Deg2Rad);
+                //
+                //Pull or Drag the arrow ralative to Click Position
+                //distance = (transform.position - currentClickPosition) -
+                //           (transform.position - cPoint);
+                #endregion
 
                 this.direction = currentClickPosition - transform.position;
 
-                //클릭 위치에 따른 활 자체의 각도를 변경할 변수 저장 -> 여기에 Lerp를 박는게 맞지 않을까
-                //this.bowAngle = Mathf.Atan2(direction.x, -direction.y) * Mathf.Rad2Deg + 90; //Visualizing 이전
                 this.bowAngle = Mathf.LerpAngle(bowAngle, Mathf.Atan2(direction.x, -direction.y) * Mathf.Rad2Deg + 90, Time.deltaTime * SmoothRotateSpeed);
+
+                //CatLog.Log($"BowAngle : {bowAngle.ToString()}");
+                //여기에 BowAngle 조건 걸기
                 
                 //Set Direction of the Bow
                 tempEulerAngle = transform.eulerAngles;
                 tempEulerAngle.z = bowAngle;
+                tempEulerAngle.z = Mathf.Clamp(bowAngle, 0f, 180f); //이렇게 주면 일단 작동은 하니까 조건문 걸던가해서 아예 들어오지 못하게 하기
+                //if (tempEulerAngle.z >= 0 && tempEulerAngle.z <= 180)
                 transform.eulerAngles = tempEulerAngle;
 
-                //Lerp to Set Direction of the Bow
-                //tempEulerAngle = transform.eulerAngles;
-                //tempEulerAngle.z = Mathf.LerpAngle(tempEulerAngle.z, bowAngle, Time.deltaTime * 8f);
-                //transform.eulerAngles = tempEulerAngle;
-                
-                //Calculate current cPoint based on angle and radius (center.x - r * cos(theta), center.y - r * sin(theta))
-                cPoint.x = transform.position.x - radius * Mathf.Cos(bowAngle * Mathf.Deg2Rad);
-                cPoint.y = transform.position.y - radius * Mathf.Sin(bowAngle * Mathf.Deg2Rad);
-                
-                //Pull or Drag the arrow ralative to Click Position
-                distance = (transform.position - currentClickPosition) -
-                           (transform.position - cPoint);
-                
-                //위 공식과 거리 차이가 있는지 체크 
+                CatLog.Log($"Temp Euler Angle Z Pos : {bowAngle.ToString()}");
+                //Quaternion quat = Quaternion.
 
+                //float clampBowAngle = Mathf.Clamp(bowAngle, 0f, 180f);
+                //if (clampBowAngle >= 0 && clampBowAngle <= 180) CatLog.Log(StringColor.GREEN, "Clamp Bow Angle 조건 충족");
+                //CatLog.Log($"Clamp Bow Angle : {transform.eulerAngles.z.ToString()}");
             }
             else if (pullType == BowPullType.FirstTouch_Position)
             {
                 this.direction = (Vector2)currentClickPosition - initialTouchPos;
 
                 //클릭 위치에 따른 활 자체의 각도를 변경할 변수 저장
-                this.bowAngle = Mathf.Atan2(direction.x, -direction.y) * Mathf.Rad2Deg + 90;
+                this.bowAngle = Mathf.LerpAngle(bowAngle, Mathf.Atan2(direction.x, -direction.y) * Mathf.Rad2Deg + 90, Time.deltaTime * SmoothRotateSpeed);
 
                 //Lerp to Set Direction of the Bow
                 tempEulerAngle = transform.eulerAngles;
                 tempEulerAngle.z = bowAngle;
                 transform.eulerAngles = tempEulerAngle;
 
+                #region ORIGIN_CODES
                 //BowRope Controller
-                cPoint.x = initialTouchPos.x - radius * Mathf.Cos(bowAngle * Mathf.Deg2Rad);
-                cPoint.y = initialTouchPos.y - radius * Mathf.Sin(bowAngle * Mathf.Deg2Rad);
-
+                //cPoint.x = initialTouchPos.x - radius * Mathf.Cos(bowAngle * Mathf.Deg2Rad);
+                //cPoint.y = initialTouchPos.y - radius * Mathf.Sin(bowAngle * Mathf.Deg2Rad);
+                //
                 //Pull or Drag the arrow ralative to Click Position (distance 변수는 )
-                distance = (initialTouchPos - (Vector2)currentClickPosition) -
-                           (initialTouchPos - (Vector2)cPoint);
+                //distance = (initialTouchPos - (Vector2)currentClickPosition) -
+                //           (initialTouchPos - (Vector2)cPoint);
+                #endregion
             }
 
-            if(currentLoadedArrow != null)
+            if (currentLoadedArrow != null)
             {
+                #region ORIGIN_CODES
                 //Before Visualizing
                 //arrowPosition = currentLoadedArrow.transform.position;
                 //arrowPosition.x = arrowComponent.rightClampPoint.position.x - distance.x;
@@ -334,23 +326,20 @@
                 //if (Vector2.Distance(currentLoadedArrow.transform.position, leftClampPoint.position) > .4f) CatLog.Log("0.1f 보다 멀다");
                 //else CatLog.Log("가깝다");
                 //CatLog.Log($"Distance of Arrow Position : {Vector2.Distance(currentLoadedArrow.transform.position, leftClampPoint.position).ToString()}");
+                #endregion
 
-                //After Visualizing
+                //Bow Pulling Over Time
                 arrowPosition = currentLoadedArrow.transform.position;
                 arrowPosition = Vector3.MoveTowards(arrowPosition, leftClampPoint.position, Time.deltaTime); //deltaTime * speed 변수해주면 되겠다
                 currentLoadedArrow.transform.position = arrowPosition;
-
-                //arrowPosition = Vector3.SmoothDamp(arrowPosition, leftClampPoint.position, ref arrowPullingVelocity, .5f);
-
-                //끝까지 땡겨서 더는 못 움직이는곳까지 가도 Arrow Position은 계속 수치가 증가함
 
                 arrowForce = currentLoadedArrow.transform.up * arrowComponent.power;
 
                 if (arrowForce.magnitude > requiredLaunchForce)
                 {
-                    //Path Drawer
-                    //추후 Path Drawer 작업 후 활 당김 시, 조건 사용
-                    //조준경 아이템을 사용했을 때 나타나는 효과로서 작업
+                    //초기 스크립트에 Path Drawer가 있었던 조건문
+                    //
+                    //
                 }
                 else
                 {
@@ -425,7 +414,7 @@
 
         private IEnumerator ArrowReload()
         {
-            #region ORIGIN_RELAOD
+#region ORIGIN_RELAOD
             //var arrow = CatPoolManager.Instance.LoadNormalArrow(this);
             //
             //currentLoadedArrow = arrow;
@@ -441,9 +430,9 @@
             //// -> 추후 게임이 시작되기 전에 미리 Clamp 한번에 Initial해주면 어떨지?
             //arrowComponent.leftClampPoint  = this.leftClampPoint;
             //arrowComponent.rightClampPoint = this.rightClampPoint;
-            #endregion
+#endregion
 
-            #region POOL_RELOAD
+#region POOL_RELOAD
 
             yield return null;
             
@@ -456,7 +445,7 @@
             arrowComponent.leftClampPoint = this.leftClampPoint;
             arrowComponent.rightClampPoint = this.rightClampPoint;
 
-            #endregion
+#endregion
 
         }
 

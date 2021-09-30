@@ -17,6 +17,8 @@
         private float lineStartAlpha = 0.8f;
         private float lineRenderWidth;
         private float alphaChangeSpeed = 0.8f;
+        Color currentStartColor;
+        Color currentEndColor;
 
         /// <summary>
         /// Executed before the Start method is called. Setting Linerenderer Related Variables
@@ -46,7 +48,7 @@
             bowController = GetComponent<AD_BowController>();
 
             //Initial Line Start Position
-            LineStartPoint = bowController.leftClampPoint;
+            LineStartPoint = bowController.LeftClampPoint;
         }
 
         private void FixedUpdate()
@@ -103,26 +105,18 @@
         /// </summary>
         private void DecreaseLineAlpha()
         {
-            //if(laserLine.startColor.a > 0f || laserLine.endColor.a > 0f)
-            //{
-            //    var lineColor = laserLine.startColor;
-            //    lineColor.a -= Time.deltaTime * alphaChangeSpeed;
-            //    laserLine.startColor = lineColor;
-            //    laserLine.endColor   = lineColor;
-            //}
-
             if(laserLine.startColor.a > 0f)
             {
-                var lineColor = laserLine.startColor;
-                lineColor.a -= Time.deltaTime * alphaChangeSpeed;
-                laserLine.startColor = lineColor;
+                currentStartColor    = laserLine.startColor;
+                currentStartColor.a -= Time.deltaTime * alphaChangeSpeed;
+                laserLine.startColor = currentStartColor;
             }
             
             if(laserLine.endColor.a > 0f)
             {
-                var lineColor = laserLine.endColor;
-                lineColor.a -= Time.deltaTime * alphaChangeSpeed;
-                laserLine.endColor = lineColor;
+                currentEndColor    = laserLine.endColor;
+                currentEndColor.a -= Time.deltaTime * alphaChangeSpeed;
+                laserLine.endColor = currentEndColor;
             }
         }
 
@@ -131,26 +125,18 @@
         /// </summary>
         private void IncreaseLineAlpha()
         {
-            //if(laserLine.startColor.a < 1f || laserLine.endColor.a < 1f)
-            //{
-            //    var lineColor = laserLine.startColor;
-            //    lineColor.a += Time.deltaTime * alphaChangeSpeed;
-            //    laserLine.startColor = lineColor;
-            //    laserLine.endColor   = lineColor;
-            //}
-
             if (laserLine.startColor.a < lineStartAlpha)
             {
-                var lineColor = laserLine.startColor;
-                lineColor.a += Time.deltaTime * alphaChangeSpeed;
-                laserLine.startColor = lineColor;
+                currentStartColor = laserLine.startColor;
+                currentStartColor.a += Time.deltaTime * alphaChangeSpeed;
+                laserLine.startColor = currentStartColor;
             }
 
             if (laserLine.endColor.a < lineEndAlpha)
             {
-                var lineColor = laserLine.endColor;
-                lineColor.a += Time.deltaTime * alphaChangeSpeed;
-                laserLine.endColor = lineColor;
+                currentEndColor = laserLine.endColor;
+                currentEndColor.a += Time.deltaTime * alphaChangeSpeed;
+                laserLine.endColor = currentEndColor;
             }
         }
     }

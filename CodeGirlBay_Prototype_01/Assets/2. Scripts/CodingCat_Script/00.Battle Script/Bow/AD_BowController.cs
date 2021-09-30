@@ -17,47 +17,46 @@
             TYPE_AUTOMATIC_SHOT
         }
 
-        [Header("Game Settings Variable")]
+        [Header("GENERAL")]
         public Camera MainCam;
         private Touch screenTouch;
         
-        //The Angle Variable (angle between Click point and Bow).
-        private float bowAngle;
+        [Header("BOW CONTROL VARIABLES")]
+        public BOWPULLING_TYPE PullType = BOWPULLING_TYPE.TYPE_AROUND_BOW;
+        public Transform RightClampPoint, LeftClampPoint;
+        public float TouchRadius = 1f;
+        public Image BowCenterPointImg;
+        [Range(1f, 20f)] public float SmoothRotateSpeed = 12f;
+        [Range(1f, 5f)]  public float ArrowPullingSpeed = 1f;
+
+        private bool bowPullBegan;               //Bow Pull State variable
+        private float bowAngle;                  //The Angle Variable (angle between Click point and Bow).
+        private Vector2 initialTouchPos;         //처음 터치한 곳을 저장할 벡터
+        private Vector2 correctionTouchPosition; //First Touch Type Correction Vector
+        private Vector2 limitTouchPosVec;        //Bow GameObject와 거리를 비교할 벡터
         private Vector3 direction;
         private Vector3 currentClickPosition;
         private Vector3 tempEulerAngle;
-
-        [Header("BOW PULLING VARIALES")]
-        public BOWPULLING_TYPE pullType = BOWPULLING_TYPE.TYPE_AROUND_BOW;
-        public Transform rightClampPoint, leftClampPoint;
-        public float touchRadius = 1f;
-        public Image BowCenterPointImg;
-        [Range(1f, 20f)] public float SmoothRotateSpeed = 12f;
-        [Range(1f, 5f)]  public float arrowPullingSpeed = 1f;
-
-        private bool bowPullBegan;           //Bow Pull State variable
-        private Vector2 initialTouchPos;     //처음 터치한 곳을 저장할 벡터
-        private Vector2 limitTouchPosVec;    //Bow GameObject와 거리를 비교할 벡터
-        public bool BowPullBegan { get { return bowPullBegan; } }   //활이 당겨지고 있는 상태에 대한 Property
+        public bool BowPullBegan { get { return bowPullBegan; } }   //Bow Pulling Condition property (Used ACSP)                          
 
         [Header("ARROW VARIABLES")] //Arrow Relation Variables
-        [ReadOnly] public AD_Arrow arrowComponent;
-        [ReadOnly] public GameObject currentLoadedArrow;
+        [ReadOnly] public AD_Arrow ArrowComponent;
+        [ReadOnly] public Transform ArrowParentTr;
+        [ReadOnly] public GameObject LoadedArrow;
 
-        public Transform arrowParent;
-        private Vector3 arrowPosition;
-        private Vector2 arrowForce;
         private float requiredLaunchForce = 250f;
         private bool launchArrow = false;
+        private Vector2 arrowForce;
+        private Vector3 arrowPosition;
         private Vector3 initialArrowScale    = new Vector3(1.5f, 1.5f, 0f);
         private Vector3 initialArrowRotation = new Vector3(0f, 0f, -90f);
 
         /// <summary>
-        /// Bow Skill Sets Delegate
+        /// Bow Skills Delegate
         /// </summary>
         public delegate void BowSkillsDel(float rot, float angle, byte arrownum, Transform arrowparent,
                                           AD_BowController bowcontroller, Vector3 initScale, Vector3 initpos, Vector2 force);
-        public BowSkillsDel bowSkillSet;
+        public BowSkillsDel BowSkillSet;
 
         #region NOT_USED_VARIABLES
         //The Distance between first click and Bowlope
@@ -81,10 +80,10 @@
             if (MainCam == null) MainCam = Camera.main;
 
             //Initialize variables For Arrow to be Loaded
-            if(rightClampPoint == null || leftClampPoint == null)
+            if(RightClampPoint == null || LeftClampPoint == null)
             {
-                leftClampPoint  = this.transform.GetChild(3).GetChild(0);
-                rightClampPoint = this.transform.GetChild(3).GetChild(1);
+                LeftClampPoint  = this.transform.GetChild(3).GetChild(0);
+                RightClampPoint = this.transform.GetChild(3).GetChild(1);
 
                 if(transform.GetChild(3).name != "Bow_ClampPoints")
                 {
@@ -92,7 +91,7 @@
                 }
             }
 
-            arrowParent = transform.parent;
+            ArrowParentTr = transform.parent;
 
             //Initialize Bow Center Pivot Image Object
             if (BowCenterPointImg)
@@ -158,10 +157,7 @@
 
         private void BowBegan(Vector2 pos)
         {
-            //처음 터치 포인트 저장 Vec2
-            //Vector2 touchBeganPos = mainCam.ScreenToWorldPoint(pos);
-
-            switch (pullType)
+            switch (PullType)
             {
                 //조건 1. 활 주변의 일정거리 주변을 클릭 | 터치했을때만 조준 가능
                 case BOWPULLING_TYPE.TYPE_AROUND_BOW: if (!this.CheckTouchRaius(pos)) return; break;
@@ -171,9 +167,9 @@
                 case BOWPULLING_TYPE.TYPE_AUTOMATIC_SHOT: CatLog.Log("Not Support this Pull Type, Return Function"); return;
             }
 
-            if(AD_BowRope.instance.arrowCatchPoint == null && arrowComponent != null)
+            if(AD_BowRope.instance.arrowCatchPoint == null && ArrowComponent != null)
             {
-                AD_BowRope.instance.arrowCatchPoint = arrowComponent.arrowChatchPoint;
+                AD_BowRope.instance.arrowCatchPoint = ArrowComponent.arrowChatchPoint;
             }
 
             bowPullBegan = true;
@@ -185,7 +181,7 @@
             currentClickPosition = MainCam.ScreenToWorldPoint(pos);
 
             //Pull Type 추가에 따른 스크립트 구분
-            if (pullType == BOWPULLING_TYPE.TYPE_AROUND_BOW)
+            if (PullType == BOWPULLING_TYPE.TYPE_AROUND_BOW)
             {
                 #region ORIGIN_CODES
                 //this.direction = currentClickPosition - transform.position;
@@ -227,15 +223,16 @@
                 transform.eulerAngles = tempEulerAngle;
 
                 //CatLog.Log($"Temp Euler Angle Z Pos : {bowAngle.ToString()}"); //Bow Angle Debugging
+                DrawTouchPos.Instance.DrawTouchLine(currentClickPosition, transform.position);
             }
-            else if (pullType == BOWPULLING_TYPE.TYPE_FIRSTTOUCH_POSITION)
+            else if (PullType == BOWPULLING_TYPE.TYPE_FIRSTTOUCH_POSITION)
             {
-                Vector2 correctionTouchPosition = new Vector2(currentClickPosition.x, currentClickPosition.y - 0.5f);
+                //Touch Correction Vector Setting (보정하지 않으면 활이 바로 아래로 회전해버린다)
+                correctionTouchPosition = new Vector2(currentClickPosition.x, currentClickPosition.y - 0.1f);
 
-                //direction 변수만 따로 빼주면 Bow Angle로 Transform.EulerAngle 은 한곳으로 놔도 괜찮을 듯
                 this.direction = correctionTouchPosition - initialTouchPos;
 
-                //클릭 위치에 따른 활 자체의 각도를 변경할 변수 저장
+                //클릭 위치에 따른 활 자체의 각도를 변경할 변수
                 this.bowAngle = Mathf.Clamp(Mathf.LerpAngle(bowAngle, Mathf.Atan2(direction.x, -direction.y) * Mathf.Rad2Deg + 90, Time.deltaTime * SmoothRotateSpeed),
                                             0f, 180f);
 
@@ -253,9 +250,11 @@
                 //distance = (initialTouchPos - (Vector2)currentClickPosition) -
                 //           (initialTouchPos - (Vector2)cPoint);
                 #endregion
+
+                DrawTouchPos.Instance.DrawTouchLine(correctionTouchPosition, initialTouchPos);
             }
 
-            if (currentLoadedArrow != null)
+            if (LoadedArrow != null)
             {
                 #region ORIGIN_CODES
                 //Before Visualizing
@@ -275,11 +274,11 @@
                 #endregion
 
                 //Bow Pulling Over Time
-                arrowPosition = currentLoadedArrow.transform.position;
-                arrowPosition = Vector3.MoveTowards(arrowPosition, leftClampPoint.position, Time.deltaTime * arrowPullingSpeed); //deltaTime * speed 변수해주면 되겠다
-                currentLoadedArrow.transform.position = arrowPosition;
+                arrowPosition = LoadedArrow.transform.position;
+                arrowPosition = Vector3.MoveTowards(arrowPosition, LeftClampPoint.position, Time.deltaTime * ArrowPullingSpeed); //deltaTime * speed 변수해주면 되겠다
+                LoadedArrow.transform.position = arrowPosition;
 
-                arrowForce = currentLoadedArrow.transform.up * arrowComponent.power;
+                arrowForce = LoadedArrow.transform.up * ArrowComponent.power;
 
                 if (arrowForce.magnitude > requiredLaunchForce)
                 {
@@ -302,14 +301,14 @@
                 currentClickPosition = MainCam.ScreenToWorldPoint(pos);
 
                 launchArrow = true;
-
-                //CatLog.Log("Bow Released !");
             }
+
+            DrawTouchPos.Instance.ReleaseTouchLine();
         }
 
         private void LaunchTheArrow()
         {
-            if (currentLoadedArrow == null)
+            if (LoadedArrow == null)
             {
                 //장전할 수 있는 화살이 없음 -> CatPoolManager 체크 또는 Pool Arrow Object 갯수 체크
                 CatLog.WLog("Current Loaded Arrow is Null, Can't Launch the Arrow");
@@ -320,7 +319,7 @@
             if (arrowForce.magnitude < requiredLaunchForce)
             {
                 //Reset Position
-                currentLoadedArrow.transform.position = rightClampPoint.transform.position;
+                LoadedArrow.transform.position = RightClampPoint.transform.position;
 
                 CatLog.Log("Not Enough Require Force, More Pulling the Bow !");
                 return;
@@ -328,14 +327,14 @@
 
             AD_BowRope.instance.arrowCatchPoint = null;
 
-            arrowComponent.ShotArrow(arrowForce, arrowParent);
+            ArrowComponent.ShotArrow(arrowForce, ArrowParentTr);
 
             //Active Bow Skill
-            bowSkillSet?.Invoke(transform.eulerAngles.z, 30f, 2, arrowParent, this, initialArrowScale,
-                                arrowComponent.arrowChatchPoint.transform.position, arrowForce);
+            BowSkillSet?.Invoke(transform.eulerAngles.z, 30f, 2, ArrowParentTr, this, initialArrowScale,
+                                ArrowComponent.arrowChatchPoint.transform.position, arrowForce);
 
-            currentLoadedArrow = null;
-            arrowComponent     = null;
+            LoadedArrow = null;
+            ArrowComponent     = null;
 
             //ReLoad Logic Start
             StartCoroutine(this.ArrowReload());
@@ -347,17 +346,14 @@
             
             float touchDistanceFromBow = (limitTouchPosVec - (Vector2)transform.position).magnitude;
 
-            if (touchDistanceFromBow <= touchRadius) return true;
+            if (touchDistanceFromBow <= TouchRadius) return true;
             else CatLog.WLog("Touch Aroud Bow !");   return false;
         }
 
         private void SetInitialTouchPos(Vector2 pos)
         {
             initialTouchPos = MainCam.ScreenToWorldPoint(pos);
-            //Vector2 correctionTouchPos = new Vector2(initialTouchPos.x, initialTouchPos.y - 1f);
-            //initialTouchPos = correctionTouchPos;
 
-            //bowPivotImg.rectTransform.position = new Vector3(initialTouchPos.x, initialTouchPos.y, 0);
             CatLog.Log("Save First Touch Position");
         }
 
@@ -385,14 +381,14 @@
 
             yield return null;
             
-            currentLoadedArrow = CCPooler.SpawnFromPool(AD_Data.POOLTAG_MAINARROW, this.transform, initialArrowScale,
-                                     rightClampPoint.position, Quaternion.identity);
+            LoadedArrow = CCPooler.SpawnFromPool(AD_Data.POOLTAG_MAINARROW, this.transform, initialArrowScale,
+                                     RightClampPoint.position, Quaternion.identity);
 
-            currentLoadedArrow.transform.localEulerAngles = initialArrowRotation;
+            LoadedArrow.transform.localEulerAngles = initialArrowRotation;
 
-            arrowComponent = currentLoadedArrow.GetComponent<AD_Arrow>();
-            arrowComponent.leftClampPoint = this.leftClampPoint;
-            arrowComponent.rightClampPoint = this.rightClampPoint;
+            ArrowComponent = LoadedArrow.GetComponent<AD_Arrow>();
+            ArrowComponent.leftClampPoint = this.LeftClampPoint;
+            ArrowComponent.rightClampPoint = this.RightClampPoint;
 
 #endregion
         }
@@ -405,7 +401,7 @@
         private Vector3 ReturnInitArrowPos(Vector3 pos)
         {
             var changePos = pos;
-            changePos = rightClampPoint.position;
+            changePos = RightClampPoint.position;
 
             return changePos;
         }

@@ -162,16 +162,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MainCam: {fileID: 0}
-  pullType: 0
-  rightClampPoint: {fileID: 1790275044804970797}
-  leftClampPoint: {fileID: 1790275043095577396}
-  touchRadius: 1
+  PullType: 0
+  RightClampPoint: {fileID: 1790275044804970797}
+  LeftClampPoint: {fileID: 1790275043095577396}
+  TouchRadius: 1
   BowCenterPointImg: {fileID: 7432606157785209578}
   SmoothRotateSpeed: 12
-  arrowPullingSpeed: 1
-  arrowComponent: {fileID: 0}
-  currentLoadedArrow: {fileID: 0}
-  arrowParent: {fileID: 0}
+  ArrowPullingSpeed: 1
+  ArrowComponent: {fileID: 0}
+  ArrowParentTr: {fileID: 0}
+  LoadedArrow: {fileID: 0}
 --- !u!1 &1790275043862822168
 GameObject:
   m_ObjectHideFlags: 0

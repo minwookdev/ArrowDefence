@@ -20,7 +20,7 @@
                 {
                     if(bowSkills[i] != null)
                     {
-                        bowController.bowSkillSet += bowSkills[i].BowSpecialSkill;
+                        bowController.BowSkillSet += bowSkills[i].BowSpecialSkill;
                         CatLog.Log($"Skill Slot {i} Init, Skill Name : {bowSkills[i].ToString()}");
                     }
                 }

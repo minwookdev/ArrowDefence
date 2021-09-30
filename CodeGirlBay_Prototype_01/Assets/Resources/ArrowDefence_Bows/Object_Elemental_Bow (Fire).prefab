@@ -270,12 +270,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34b76004ecd537b448e6408fed03d6f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mainCam: {fileID: 0}
+  MainCam: {fileID: 0}
   pullType: 0
-  bowPivotImg: {fileID: 5673580315594693947}
-  touchRadius: 1
   rightClampPoint: {fileID: 3549159204211674876}
   leftClampPoint: {fileID: 3549159202636498149}
+  touchRadius: 1
+  BowCenterPointImg: {fileID: 5673580315594693947}
+  SmoothRotateSpeed: 12
+  arrowPullingSpeed: 1
   arrowComponent: {fileID: 0}
   currentLoadedArrow: {fileID: 0}
   arrowParent: {fileID: 0}

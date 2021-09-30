@@ -10,69 +10,47 @@
     {
         public static AD_BowController instance;
 
-        private enum CurrentPlatform
+        public enum BOWPULLING_TYPE //활 조준 타입 -> 추후 User Data에서 받아오도록 방식 변경
         {
-            Platform_PC,
-            Platform_Mobile
-        }
-
-        public enum BowPullType
-        {
-            Around_Bow,
-            FirstTouch_Position,
-            Automatic_ShotMode
+            TYPE_AROUND_BOW,         
+            TYPE_FIRSTTOUCH_POSITION,
+            TYPE_AUTOMATIC_SHOT
         }
 
         [Header("Game Settings Variable")]
-        public Camera mainCam;
+        public Camera MainCam;
         private Touch screenTouch;
-        private CurrentPlatform currentPlatform;
-
+        
         //The Angle Variable (angle between Click point and Bow).
         private float bowAngle;
         private Vector3 direction;
         private Vector3 currentClickPosition;
         private Vector3 tempEulerAngle;
 
-        //The Distance between first click and Bowlope
-        private float radius;
-
-        //The Point on the Circumference based on radius and angle.
-        private Vector3 cPoint = Vector3.zero;
-
-        private Vector2 distance;
-
-        [Header("Bow Pulling Variable")]
-        //0 == 활 주변, 1 == 마지막 터치한 곳 기준
-        public BowPullType pullType = BowPullType.Around_Bow;
-        //Bow Pull State variable
-        private bool bowPullBegan;
-        public Image bowPivotImg;
-        //Pull Type 1 Save Position Variable
-        private Vector2 initialTouchPos; //InitialTouchPos 현재 두가지 용도로 사용중, 추후 수정.
-        private Vector2 limitTouchPosVec;
-        public float touchRadius = 1f;
+        [Header("BOW PULLING VARIALES")]
+        public BOWPULLING_TYPE pullType = BOWPULLING_TYPE.TYPE_AROUND_BOW;
         public Transform rightClampPoint, leftClampPoint;
+        public float touchRadius = 1f;
+        public Image BowCenterPointImg;
         [Range(1f, 20f)] public float SmoothRotateSpeed = 12f;
-        private Vector3 arrowPullingVelocity;
-        public bool BowPullBegan { get { return bowPullBegan; } }
+        [Range(1f, 5f)]  public float arrowPullingSpeed = 1f;
 
-        [Header("Arrow Variable")]
-        //Arrow Relation Variables
+        private bool bowPullBegan;           //Bow Pull State variable
+        private Vector2 initialTouchPos;     //처음 터치한 곳을 저장할 벡터
+        private Vector2 limitTouchPosVec;    //Bow GameObject와 거리를 비교할 벡터
+        public bool BowPullBegan { get { return bowPullBegan; } }   //활이 당겨지고 있는 상태에 대한 Property
+
+        [Header("ARROW VARIABLES")] //Arrow Relation Variables
         [ReadOnly] public AD_Arrow arrowComponent;
         [ReadOnly] public GameObject currentLoadedArrow;
+
+        public Transform arrowParent;
         private Vector3 arrowPosition;
         private Vector2 arrowForce;
         private float requiredLaunchForce = 250f;
         private bool launchArrow = false;
-        public Transform arrowParent;
-
-        [Header("ArrowInitial Variables")]
         private Vector3 initialArrowScale    = new Vector3(1.5f, 1.5f, 0f);
         private Vector3 initialArrowRotation = new Vector3(0f, 0f, -90f);
-
-        [Header("Test Object")]
-        private Action TestFunction;
 
         /// <summary>
         /// Bow Skill Sets Delegate
@@ -80,7 +58,14 @@
         public delegate void BowSkillsDel(float rot, float angle, byte arrownum, Transform arrowparent,
                                           AD_BowController bowcontroller, Vector3 initScale, Vector3 initpos, Vector2 force);
         public BowSkillsDel bowSkillSet;
-        //굳이 Event 쓸 필요 없을거같아서 그냥 delegate로 일단 만듦
+
+        #region NOT_USED_VARIABLES
+        //The Distance between first click and Bowlope
+        //private float radius;
+        //The Point on the Circumference based on radius and angle.
+        //private Vector3 cPoint = Vector3.zero;
+        //private Vector2 distance;
+        #endregion
 
         private void Awake()
         {
@@ -92,23 +77,10 @@
 
         private void Start()
         {
-            //Play Platform Check -> Move Manager Script.
-            if (Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer)
-            {
-                currentPlatform = CurrentPlatform.Platform_Mobile;
-            }
-            else
-            {
-                currentPlatform = CurrentPlatform.Platform_PC;
-            }
+            //Initialize Main Camera Object
+            if (MainCam == null) MainCam = Camera.main;
 
-            if (mainCam == null)
-            {
-                Action act1 = () => { mainCam = Camera.main; };
-                act1();
-            }
-
-            //장전될 화살들에게 부여할 변수 설정
+            //Initialize variables For Arrow to be Loaded
             if(rightClampPoint == null || leftClampPoint == null)
             {
                 leftClampPoint  = this.transform.GetChild(3).GetChild(0);
@@ -120,22 +92,11 @@
                 }
             }
 
-            if (pullType == BowPullType.Around_Bow) bowPivotImg.rectTransform.position = transform.position;
-
-            //TestFunction Set
-            TestFunction = () => {
-                //Arrow Position Init Method
-                //var arrowPos = currentLoadedArrow.transform.position;
-                //arrowPos.x = rightClampPoint.position.x;
-                //arrowPos.y = rightClampPoint.position.y;
-
-                // ↑ Improvement / fix
-                //currentLoadedArrow.transform.position = ReturnInitArrowPos(currentLoadedArrow.transform.position);
-
-            }; TestFunction();
-
-            //arrowParent = GameObject.FindWithTag(AD_Data.Tag_BattleScene_MainCanvas).GetComponent<RectTransform>();
             arrowParent = transform.parent;
+
+            //Initialize Bow Center Pivot Image Object
+            if (BowCenterPointImg)
+                BowCenterPointImg.transform.position = transform.position;
 
             //yield return new WaitUntil(() => CCPooler.IsInitialized);
             StartCoroutine(this.ArrowReload());
@@ -203,23 +164,11 @@
             switch (pullType)
             {
                 //조건 1. 활 주변의 일정거리 주변을 클릭 | 터치했을때만 조준 가능
-                case BowPullType.Around_Bow:
-                    if (!this.CheckTouchRaius(pos)) return;
-#region ORIGIN_SCRIPTS
-                    //radius = Vector2.Distance(AD_BowRope.instance.transform.position, mainCam.ScreenToWorldPoint(pos));
-#endregion
-                    radius = Vector2.Distance(transform.position, mainCam.ScreenToWorldPoint(pos));
-                    break;
-
+                case BOWPULLING_TYPE.TYPE_AROUND_BOW: if (!this.CheckTouchRaius(pos)) return; break;
                 //조건 2. 처음 클릭한 곳 기준으로 활의 기준점 지정
-                case BowPullType.FirstTouch_Position:
-                    this.SetInitialTouchPos(pos);
-                    radius = Vector2.Distance(initialTouchPos, mainCam.ScreenToWorldPoint(pos));
-                    break;
-
-                case BowPullType.Automatic_ShotMode:
-                    CatLog.Log("Not Support this Pull Type, Return Function");
-                    return;
+                case BOWPULLING_TYPE.TYPE_FIRSTTOUCH_POSITION: this.SetInitialTouchPos(pos);  break;
+                //조건 3. 자동으로 적을 인식하고 활을 조준
+                case BOWPULLING_TYPE.TYPE_AUTOMATIC_SHOT: CatLog.Log("Not Support this Pull Type, Return Function"); return;
             }
 
             if(AD_BowRope.instance.arrowCatchPoint == null && arrowComponent != null)
@@ -233,10 +182,10 @@
         private void BowMoved(Vector2 pos)
         {
             //Get CurrentClick Position
-            currentClickPosition = mainCam.ScreenToWorldPoint(pos);
+            currentClickPosition = MainCam.ScreenToWorldPoint(pos);
 
             //Pull Type 추가에 따른 스크립트 구분
-            if (pullType == BowPullType.Around_Bow)
+            if (pullType == BOWPULLING_TYPE.TYPE_AROUND_BOW)
             {
                 #region ORIGIN_CODES
                 //this.direction = currentClickPosition - transform.position;
@@ -263,35 +212,32 @@
                 //Pull or Drag the arrow ralative to Click Position
                 //distance = (transform.position - currentClickPosition) -
                 //           (transform.position - cPoint);
+                //
+                //this.bowAngle = Mathf.LerpAngle(bowAngle, Mathf.Atan2(direction.x, -direction.y) * Mathf.Rad2Deg + 90, Time.deltaTime * SmoothRotateSpeed);
                 #endregion
 
                 this.direction = currentClickPosition - transform.position;
 
-                this.bowAngle = Mathf.LerpAngle(bowAngle, Mathf.Atan2(direction.x, -direction.y) * Mathf.Rad2Deg + 90, Time.deltaTime * SmoothRotateSpeed);
+                this.bowAngle = Mathf.Clamp(Mathf.LerpAngle(bowAngle, Mathf.Atan2(direction.x, -direction.y) * Mathf.Rad2Deg + 90, Time.deltaTime * SmoothRotateSpeed),
+                                            0f, 180f);
 
-                //CatLog.Log($"BowAngle : {bowAngle.ToString()}");
-                //여기에 BowAngle 조건 걸기
-                
                 //Set Direction of the Bow
                 tempEulerAngle = transform.eulerAngles;
                 tempEulerAngle.z = bowAngle;
-                tempEulerAngle.z = Mathf.Clamp(bowAngle, 0f, 180f); //이렇게 주면 일단 작동은 하니까 조건문 걸던가해서 아예 들어오지 못하게 하기
-                //if (tempEulerAngle.z >= 0 && tempEulerAngle.z <= 180)
                 transform.eulerAngles = tempEulerAngle;
 
-                CatLog.Log($"Temp Euler Angle Z Pos : {bowAngle.ToString()}");
-                //Quaternion quat = Quaternion.
-
-                //float clampBowAngle = Mathf.Clamp(bowAngle, 0f, 180f);
-                //if (clampBowAngle >= 0 && clampBowAngle <= 180) CatLog.Log(StringColor.GREEN, "Clamp Bow Angle 조건 충족");
-                //CatLog.Log($"Clamp Bow Angle : {transform.eulerAngles.z.ToString()}");
+                //CatLog.Log($"Temp Euler Angle Z Pos : {bowAngle.ToString()}"); //Bow Angle Debugging
             }
-            else if (pullType == BowPullType.FirstTouch_Position)
+            else if (pullType == BOWPULLING_TYPE.TYPE_FIRSTTOUCH_POSITION)
             {
-                this.direction = (Vector2)currentClickPosition - initialTouchPos;
+                Vector2 correctionTouchPosition = new Vector2(currentClickPosition.x, currentClickPosition.y - 0.5f);
+
+                //direction 변수만 따로 빼주면 Bow Angle로 Transform.EulerAngle 은 한곳으로 놔도 괜찮을 듯
+                this.direction = correctionTouchPosition - initialTouchPos;
 
                 //클릭 위치에 따른 활 자체의 각도를 변경할 변수 저장
-                this.bowAngle = Mathf.LerpAngle(bowAngle, Mathf.Atan2(direction.x, -direction.y) * Mathf.Rad2Deg + 90, Time.deltaTime * SmoothRotateSpeed);
+                this.bowAngle = Mathf.Clamp(Mathf.LerpAngle(bowAngle, Mathf.Atan2(direction.x, -direction.y) * Mathf.Rad2Deg + 90, Time.deltaTime * SmoothRotateSpeed),
+                                            0f, 180f);
 
                 //Lerp to Set Direction of the Bow
                 tempEulerAngle = transform.eulerAngles;
@@ -330,7 +276,7 @@
 
                 //Bow Pulling Over Time
                 arrowPosition = currentLoadedArrow.transform.position;
-                arrowPosition = Vector3.MoveTowards(arrowPosition, leftClampPoint.position, Time.deltaTime); //deltaTime * speed 변수해주면 되겠다
+                arrowPosition = Vector3.MoveTowards(arrowPosition, leftClampPoint.position, Time.deltaTime * arrowPullingSpeed); //deltaTime * speed 변수해주면 되겠다
                 currentLoadedArrow.transform.position = arrowPosition;
 
                 arrowForce = currentLoadedArrow.transform.up * arrowComponent.power;
@@ -353,7 +299,7 @@
             if (bowPullBegan)
             {
                 bowPullBegan = false;
-                currentClickPosition = mainCam.ScreenToWorldPoint(pos);
+                currentClickPosition = MainCam.ScreenToWorldPoint(pos);
 
                 launchArrow = true;
 
@@ -397,7 +343,7 @@
 
         private bool CheckTouchRaius(Vector2 pos)
         {
-            this.limitTouchPosVec = mainCam.ScreenToWorldPoint(pos);
+            this.limitTouchPosVec = MainCam.ScreenToWorldPoint(pos);
             
             float touchDistanceFromBow = (limitTouchPosVec - (Vector2)transform.position).magnitude;
 
@@ -407,8 +353,11 @@
 
         private void SetInitialTouchPos(Vector2 pos)
         {
-            this.initialTouchPos = mainCam.ScreenToWorldPoint(pos);
-            bowPivotImg.rectTransform.position = new Vector3(initialTouchPos.x, initialTouchPos.y, 0);
+            initialTouchPos = MainCam.ScreenToWorldPoint(pos);
+            //Vector2 correctionTouchPos = new Vector2(initialTouchPos.x, initialTouchPos.y - 1f);
+            //initialTouchPos = correctionTouchPos;
+
+            //bowPivotImg.rectTransform.position = new Vector3(initialTouchPos.x, initialTouchPos.y, 0);
             CatLog.Log("Save First Touch Position");
         }
 
@@ -446,7 +395,6 @@
             arrowComponent.rightClampPoint = this.rightClampPoint;
 
 #endregion
-
         }
 
         /// <summary>

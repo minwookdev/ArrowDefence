@@ -1,0 +1,253 @@
+fileFormatVersion: 2
+guid: c17d401f420abfa46b8fb0ed3d5ce230
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 4012710621068745301
+    second: Arrow_Red_01_0
+  - first:
+      213: -7940685964348253786
+    second: Arrow_Red_01_0
+  - first:
+      213: 8196459378230238771
+    second: Arrow_Red_01_1
+  externalObjects: {}
+  serializedVersion: 11
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: -1
+    aniso: -1
+    mipBias: -100
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 927}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  applyGammaDecoding: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Arrow_Red_01_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 92
+        height: 199
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 24, y: -4.5}
+        - {x: 37, y: 52.5}
+        - {x: 42, y: 74.5}
+        - {x: 44, y: 83.5}
+        - {x: 46, y: 89.5}
+        - {x: 46, y: 98.5}
+        - {x: 45, y: 99.5}
+        - {x: 42, y: 99.5}
+        - {x: 28, y: 92.5}
+        - {x: 26, y: 90.5}
+        - {x: 9, y: 80.5}
+        - {x: 0, y: 74.5}
+        - {x: -13, y: 82.5}
+        - {x: -19, y: 87.5}
+        - {x: -34, y: 96.5}
+        - {x: -40, y: 99.5}
+        - {x: -44, y: 99.5}
+        - {x: -45, y: 96.5}
+        - {x: -42, y: 81.5}
+        - {x: -41, y: 77.5}
+        - {x: -37, y: 57.5}
+        - {x: -34, y: 43.5}
+        - {x: -29, y: 19.5}
+        - {x: -27, y: 9.5}
+        - {x: -26, y: 5.5}
+        - {x: -22, y: -14.5}
+        - {x: -21, y: -18.5}
+        - {x: -17, y: -38.5}
+        - {x: -16, y: -42.5}
+        - {x: -12, y: -62.5}
+        - {x: -11, y: -66.5}
+        - {x: -7, y: -86.5}
+        - {x: -6, y: -90.5}
+        - {x: -4, y: -99.5}
+        - {x: 2, y: -99.5}
+        - {x: 4, y: -91.5}
+        - {x: 13, y: -52.5}
+        - {x: 18, y: -30.5}
+      physicsShape: []
+      tessellationDetail: 0.29
+      bones: []
+      spriteID: 6a9971edf240dc190800000000000000
+      internalID: -7940685964348253786
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Arrow_Red_01_1
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 199
+        width: 92
+        height: 926
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 36, y: 255}
+        - {x: 42, y: 263}
+        - {x: 45, y: 270}
+        - {x: 46, y: 273}
+        - {x: 46, y: 320}
+        - {x: 44, y: 323}
+        - {x: 46, y: 327}
+        - {x: 46, y: 387}
+        - {x: 44, y: 387}
+        - {x: 33, y: 380}
+        - {x: 36, y: 384}
+        - {x: 41, y: 390}
+        - {x: 46, y: 399}
+        - {x: 46, y: 447}
+        - {x: 45, y: 459}
+        - {x: 43, y: 461}
+        - {x: 41, y: 461}
+        - {x: 20, y: 440}
+        - {x: 2, y: 424}
+        - {x: -33, y: 458}
+        - {x: -33, y: 459}
+        - {x: -37, y: 463}
+        - {x: -43, y: 463}
+        - {x: -44, y: 447}
+        - {x: -45, y: 435}
+        - {x: -45, y: 407}
+        - {x: -44, y: 402}
+        - {x: -39, y: 390}
+        - {x: -31, y: 379}
+        - {x: -39, y: 385}
+        - {x: -42, y: 387}
+        - {x: -44, y: 387}
+        - {x: -46, y: 385}
+        - {x: -46, y: 333}
+        - {x: -45, y: 330}
+        - {x: -42, y: 323}
+        - {x: -45, y: 318}
+        - {x: -45, y: 277}
+        - {x: -43, y: 270}
+        - {x: -40, y: 263}
+        - {x: -34, y: 254}
+        - {x: -25, y: 241}
+        - {x: -10, y: 220}
+        - {x: -7, y: 216}
+        - {x: -7, y: -463}
+        - {x: 9, y: -463}
+        - {x: 9, y: 216}
+        - {x: 14, y: 222}
+      physicsShape: []
+      tessellationDetail: 0.4
+      bones: []
+      spriteID: 33e1557b06cafb170800000000000000
+      internalID: 8196459378230238771
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

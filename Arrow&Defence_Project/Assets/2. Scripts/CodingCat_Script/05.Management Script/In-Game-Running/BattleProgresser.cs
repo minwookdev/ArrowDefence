@@ -72,8 +72,10 @@
 
         [Header("DEBUG OPTION")]
         public bool IsDebugClearStage = false;
+        public bool IsDebugMonsterLogics = false;
 
         private BattleSceneRoute battleSceneUI;
+        private MonsterSpawner   monsterSpawner;
 
         public delegate void OnIncreaseValue(float value);
         public static OnIncreaseValue OnIncreaseClearGauge;
@@ -83,7 +85,8 @@
         private void Start()
         {
             //Init GameManager
-            battleSceneUI = GetComponent<BattleSceneRoute>();
+            battleSceneUI  = GetComponent<BattleSceneRoute>();
+            monsterSpawner = GetComponent<MonsterSpawner>();
             GameManager.Instance.SetGameState(GAMESTATE.STATE_BEFOREBATTLE);
             CurrentGameState = GameManager.Instance.GameState;
 
@@ -248,8 +251,20 @@
                     GameManager.Instance.SetGameState(GAMESTATE.STATE_ENDBATTLE); return;
                 }
             }
+            //Debug : Monster Logic Test
+            if(isInitialized && IsDebugMonsterLogics == true)
+            {
+                startWaitingTime += Time.deltaTime;
+
+                if(startWaitingTime >= StartBattleDelay)
+                {
+                    monsterSpawner.MonsterDebug(AD_Data.POOLTAG_MONSTER_NORMAL, new Vector2(-0.05f, 4.5f));
+                    startWaitingTime = 0f;
+                }
+            }
 #endif
-            if (isInitialized && IsDebugClearStage == false)
+            if (isInitialized && IsDebugClearStage    == false
+                              && IsDebugMonsterLogics == false)
             {
                 startWaitingTime += Time.deltaTime;
 

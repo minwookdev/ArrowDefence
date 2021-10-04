@@ -1,18 +1,36 @@
 ﻿namespace CodingCat_Games
 {
+    using System.Collections;
     using UnityEngine;
+    using DG.Tweening;
+    
 
     public class AD_MonsterStatus : MonoBehaviour, IPoolObject, IDamageable
     {
         [Header("MONSTER STATUS DATA")]
         public float MaxMonsterHP;
         public float MaxMonsterMP;
+        public float HitColorDuration = 1f;
 
+        [Header("MONSTER HIT")]
+        public Color HitColor;
+
+        //Monster Status Value
         private float monsterHp;
         private float monsterMp;
+        private bool isChangingColor = false;
+        private SpriteRenderer sprite;
+        private Color startColor;
 
+        //Battle Related Variables
         private float dropCorrection = 5f;
         private float clearGaugeIncreaseValue = 10f;
+
+        private void Start()
+        {
+            sprite = GetComponent<SpriteRenderer>();
+            startColor = sprite.color;
+        }
 
         private void Update()
         {
@@ -28,7 +46,11 @@
 
         public void OnHitObject(float value)
         {
+            //Decrease Monster's Health Point
             monsterHp -= value;
+
+            //Hit Effect
+            HitColorChange();
 
             if(monsterHp <= 0)
             {
@@ -50,7 +72,7 @@
         {
             if (coll.gameObject.layer == LayerMask.NameToLayer(AD_Data.LAYER_ARROW))
             {
-                float damageCount = Random.Range(70f, 130f + 1f);
+                float damageCount = Random.Range(50f, 110f + 1f);
                 OnHitObject(damageCount);
             }
         }
@@ -59,6 +81,25 @@
         {
             this.monsterHp = MaxMonsterHP;
             this.monsterMp = MaxMonsterMP;
+        }
+
+        private void OnDisable()
+        {
+            if(isChangingColor)
+            {
+                sprite.DOKill();
+                sprite.color    = startColor;
+                isChangingColor = false;
+            }
+        }
+
+        private void HitColorChange()
+        {
+            isChangingColor = true;
+            sprite.color    = HitColor;
+
+            sprite.DOColor(startColor, 1f)
+                  .OnComplete(() => isChangingColor = false);
         }
     }
 }

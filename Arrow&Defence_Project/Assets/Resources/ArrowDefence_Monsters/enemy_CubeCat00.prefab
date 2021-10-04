@@ -167,6 +167,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MaxMonsterHP: 100
   MaxMonsterMP: 100
+  HitColorDuration: 1
+  HitColor: {r: 1, g: 0.39215687, b: 0.39215687, a: 1}
 --- !u!114 &2117330865147067928
 MonoBehaviour:
   m_ObjectHideFlags: 0

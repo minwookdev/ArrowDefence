@@ -94,5 +94,12 @@
             if (monsterPref != null)
                 CCPooler.AddPoolList(AD_Data.POOLTAG_MONSTER_NORMAL, 10, monsterPref);
         }
+
+#if UNITY_EDITOR
+        public void MonsterDebug(string monsterTag, Vector2 spawnPos)
+        {
+            CCPooler.SpawnFromPool(monsterTag, GameGlobal.FixedVectorOnScreen(spawnPos), Quaternion.identity);
+        }
+#endif
     }
 }

@@ -1426,7 +1426,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &213149822
 Transform:
   m_ObjectHideFlags: 0
@@ -1469,6 +1469,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MaxMonsterHP: 0
   MaxMonsterMP: 0
+  HitColorDuration: 1
+  HitColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!50 &213149825
 Rigidbody2D:
   serializedVersion: 4
@@ -2049,7 +2051,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &262340018
 Transform:
   m_ObjectHideFlags: 0
@@ -6021,7 +6023,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &839987020
 Transform:
   m_ObjectHideFlags: 0
@@ -6064,6 +6066,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MaxMonsterHP: 0
   MaxMonsterMP: 0
+  HitColorDuration: 1
+  HitColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!50 &839987023
 Rigidbody2D:
   serializedVersion: 4
@@ -13408,7 +13412,7 @@ MonoBehaviour:
   PausePanel: {fileID: 1455058982}
   ResultPanel: {fileID: 1184598043}
   GameOverPanel: {fileID: 0}
-  ResultPanelParent: {fileID: 218318156}
+  BattleSceneUICanvas: {fileID: 218318155}
   PanelOpenFadeTime: 0.5
   SlotParentTr: {fileID: 946775822}
   DropItemSlotPref: {fileID: 5984624412175565113, guid: 07963ed1caf360a429dfd7b2ee79fd4d,
@@ -13459,7 +13463,7 @@ MonoBehaviour:
   EndBattleDelay: 2
   ParentTransform: {fileID: 1757660976}
   BowInitPosition: {fileID: 377625007}
-  MaxClearCount: 100
+  MaxClearCount: 300
   ClearSlider: {fileID: 1285843479}
   PlayerHealthSlider: {fileID: 1031677355}
   EnemyBossHealthSlider: {fileID: 14942452}
@@ -13468,7 +13472,8 @@ MonoBehaviour:
   DropListAsset: {fileID: 11400000, guid: 834b46e9df025194da792695df7f4b4b, type: 2}
   StageDropCorrection: 30
   dropItemList: []
-  IsDebugClearStage: 1
+  IsDebugClearStage: 0
+  IsDebugMonsterLogics: 0
 --- !u!1 &1745501736
 GameObject:
   m_ObjectHideFlags: 0
@@ -19243,6 +19248,26 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2117330865147067909, guid: 40d1d771a1a397747af99ffc6adc9852,
+        type: 3}
+      propertyPath: m_FlipY
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2117330865147067909, guid: 40d1d771a1a397747af99ffc6adc9852,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2117330865147067909, guid: 40d1d771a1a397747af99ffc6adc9852,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2117330865147067909, guid: 40d1d771a1a397747af99ffc6adc9852,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2117330865147067910, guid: 40d1d771a1a397747af99ffc6adc9852,
         type: 3}
       propertyPath: m_Name
@@ -19251,7 +19276,7 @@ PrefabInstance:
     - target: {fileID: 2117330865147067910, guid: 40d1d771a1a397747af99ffc6adc9852,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 40d1d771a1a397747af99ffc6adc9852, type: 3}

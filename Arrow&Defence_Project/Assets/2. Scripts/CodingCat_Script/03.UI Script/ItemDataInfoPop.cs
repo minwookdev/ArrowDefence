@@ -13,50 +13,66 @@
             {
                 if(_instance == null)
                 {
-                    var tooltipObject = Instantiate(Resources.Load<GameObject>("ArrowDefence_UI/Tooltip_Object"));
-                    _instance = tooltipObject.AddComponent<ItemDataInfoPop>();
-                    tooltipObject.name = "UI_Tooltip_Object [Singleton]";
+                    var obj = FindObjectOfType<ItemDataInfoPop>();
+                    if (obj != null) _instance = obj;
+                    else
+                    {
+                        var tooltipSingleton = Instantiate(Resources.Load<GameObject>("ArrowDefence_UI/Tooltip_Object")).AddComponent<ItemDataInfoPop>();
+                        tooltipSingleton.name = "UI_Tooltip_Object [Singleton]";
+                        _instance = tooltipSingleton;
+                    }
+
                 }
 
                 return _instance;
             }    
         }
 
-        //Item Data Tooltip String [Get Item Asset Data]
-        private string itemDescStr = null;
-        private string itemNameStr = null;
 
+        private TMPro.TextMeshProUGUI itemNameTMP = null;
+        private TMPro.TextMeshProUGUI itemDescTMP = null;
         private RectTransform tooltipRect;
         private CanvasGroup canvasGroup;
         private bool isInitialize = false;
 
-        private void Awake() => CatLog.Log("Tooltip System is Initializing");
+        private void Awake()
+        {
+            var obj = FindObjectsOfType<ItemDataInfoPop>();
+            if(obj.Length != 1)
+            {
+                Destroy(gameObject);
+                return;
+            }
+
+            CatLog.Log(StringColor.YELLOW, "Tooltip System is Initializing");
+            //DontDestroyOnLoad(gameObject); //Scene 변경될 때, Release Parent 메서드를 받아서 처리될 수 있도록해줌
+        }
 
         private void Start() => InitiallizeTooltip();
 
-        public void Expose(Vector2 pos, Transform parentTr)
+        public void Expose(Vector2 pos, Canvas targetCanvas, string itemName, string itemDesc)
         {
             if (_instance.gameObject.activeSelf == false)
                 _instance.gameObject.SetActive(true);
 
             //4. ItemDataSlot UI Script에서 ToolTip띄우는 로직 최적화 해주기
 
-            StartCoroutine(ShowPopupCo(pos, parentTr));
+            StartCoroutine(ShowPopupCo(pos, targetCanvas, itemName, itemDesc));
         }
 
-        private IEnumerator ShowPopupCo(Vector2 pos, Transform parentCanvasTr)
+        private IEnumerator ShowPopupCo(Vector2 pos, Canvas parentCanvas, string itemName, string itemDesc)
         {
             yield return new WaitUntil(() => this.isInitialize);
 
             //init Parent & Scale
-            if (parentCanvasTr != transform.parent)
+            if (parentCanvas != transform.parent)
             {
-                transform.SetParent(parentCanvasTr);
+                transform.SetParent(parentCanvas.transform);
                 transform.localScale = Vector3.one;
-                transform.position   = parentCanvasTr.position;
+                transform.position   = parentCanvas.transform.position;
             }
 
-            #region DELETE
+            #region OLD
             //float initPosX = pos.x - tooltipRect.rect.width * 0.5f;
             //float initPosY = pos.y + tooltipRect.rect.height * 0.5f;
             //Vector2 initVec = new Vector2(initPosX, initPosY);
@@ -67,11 +83,15 @@
             //float screenCheckValue = pos.x * tooltipRect.rect.width;
             #endregion
 
+            //Init Item Name, Desc Text
+            itemNameTMP.text = itemName; itemDescTMP.text = itemDesc;
+
             //Init Tooltip Position
             Vector2 InitPos = (pos.x + tooltipRect.rect.width > Screen.width) ?
                 new Vector2(pos.x - tooltipRect.rect.width * 0.5f, pos.y + tooltipRect.rect.height * 0.5f) : 
                 new Vector2(pos.x + tooltipRect.rect.width * 0.5f, pos.y + tooltipRect.rect.height * 0.5f);
 
+            //anchoredPosition valueChanged : this Rect Transform anchor is Always LEFT-BOTTOM
             tooltipRect.anchoredPosition = InitPos;
 
             //Expose Tooltip [Set Alpha]
@@ -88,6 +108,9 @@
             tooltipRect = GetComponent<RectTransform>();
             canvasGroup = GetComponent<CanvasGroup>();
             canvasGroup.blocksRaycasts = false;
+
+            itemNameTMP = transform.GetChild(0).GetComponent<TMPro.TextMeshProUGUI>();
+            itemDescTMP = transform.GetChild(1).GetComponent<TMPro.TextMeshProUGUI>();
 
             isInitialize = true;
         }

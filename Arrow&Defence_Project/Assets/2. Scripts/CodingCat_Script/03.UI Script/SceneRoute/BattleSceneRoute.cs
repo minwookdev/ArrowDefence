@@ -23,7 +23,7 @@
         public GameObject PausePanel;
         public GameObject ResultPanel;
         public GameObject GameOverPanel;
-        public Transform ResultPanelParent;
+        public Canvas BattleSceneUICanvas;
         public float PanelOpenFadeTime = 0.5f;
 
         [Header("RESULT PANEL VARIABLE's")]
@@ -173,7 +173,7 @@
             for (int i = 0; i < items.Count; i++)
             {
                 DropItemSlots[i].gameObject.SetActive(true);
-                DropItemSlots[i].Setup(items[i].ItemAsset, items[i].Quantity, ResultPanelParent);
+                DropItemSlots[i].Setup(items[i].ItemAsset, items[i].Quantity, BattleSceneUICanvas);
             }
         }
     }

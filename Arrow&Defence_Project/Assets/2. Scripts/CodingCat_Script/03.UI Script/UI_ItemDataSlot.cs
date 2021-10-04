@@ -14,12 +14,14 @@
         public TextMeshProUGUI ItemStackTmp;
         public Sprite[] Frames;
 
+        private ItemData itemDataAddress = null;
+
         [Header("SHOW TOOLTIP")]
         public float TooltipOpenPressedTime = 1f;
 
-        //※ Tooltip 띄워주는 방식 최적화 필요 ※
+        //※ Build하고 두개의 DataSlot을 동시에 터치했을때 어떻게되는지 확인하고 Tooltip 띄워주는 방식 최적화※
         private Vector2 tooltipPoint;
-        private Transform tooltipParent;
+        private Canvas tooltipParent;
         private float pressedTime;
         private bool isTimeStart   = false;
         private bool isToolTipOpen = false;
@@ -36,17 +38,20 @@
                 if (pressedTime >= 0) pressedTime -= Time.deltaTime;
                 else
                 {
-                    ItemDataInfoPop.Instance.Expose(tooltipPoint, tooltipParent);
+                    ItemDataInfoPop.Instance.Expose(tooltipPoint, tooltipParent, itemDataAddress.Item_Name,
+                                                                                 itemDataAddress.Item_Desc);
                     isToolTipOpen = true;
                     isTimeStart   = false;
                 }
             }
         }
 
-        public void Setup(ItemData address, int visibleStack, Transform parentTr)
+        public void Setup(ItemData address, int visibleStack, Canvas tooltipTargetCanvas)
         {
+            itemDataAddress = address;
+
             ItemImg.sprite = address.Item_Sprite;
-            tooltipParent  = parentTr;
+            tooltipParent  = tooltipTargetCanvas;
 
             if (address.Item_Type != ITEMTYPE.ITEM_EQUIPMENT)
             {

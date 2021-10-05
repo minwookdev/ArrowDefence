@@ -1,5 +1,5 @@
 ﻿/// <summary>
-/// String Date class used during runtime
+/// Editor-Related String Date class, used during runtime
 /// </summary>
 public static class AD_Data
 {

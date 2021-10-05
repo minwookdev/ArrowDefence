@@ -34,14 +34,6 @@
             InitRFeffect();
         }
 
-        //public void TEST()
-        //{
-        //    System.Type effectscript = Effect_AimSight.GetClass();
-        //
-        //    GameObject test = new GameObject();
-        //    test.AddComponent(effectscript);
-        //}
-
         private void InitSPeffect()
         {
             switch (SPEffectType)
@@ -56,16 +48,5 @@
         {
 
         }
-
-#if UNITY_EDITOR
-        [MenuItem("CodingCat/Scriptable Object/Accessory Item Asset")]
-        static void CreateAsset()
-        {
-            var asset = ScriptableObject.CreateInstance<ItemData_Equip_Accessory>();
-            AssetDatabase.CreateAsset(asset, "Assets/05. Scriptable_Object/Equipment_Items/Accessory Item Asset");
-            AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
-        }
-#endif
     }
 }

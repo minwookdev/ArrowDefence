@@ -555,3 +555,75 @@ public class AccessItemData_Editor : Editor
         //serializedObject.ApplyModifiedProperties();
     }
 }
+
+/// <summary>
+/// Add Item Data Asset Create Button to CodingCat Menu
+/// </summary>
+public class CreateItemDataAsset
+{
+    [UnityEditor.MenuItem("CodingCat/Scriptable Object/Item Data Asset/Material Item Asset")]
+    public static void CreateMaterialItemAsset()
+    {
+        string createAssetPath = "Assets/05. Scriptable_Object/ItemAssets/2.Material/Material_Item.asset";
+        var asset = ScriptableObject.CreateInstance<ItemData_Mat>();
+        AssetDatabase.CreateAsset(asset, createAssetPath);
+        AssetDatabase.SaveAssets();
+        AssetDatabase.Refresh();
+
+        EditorUtility.FocusProjectWindow();
+        Selection.activeObject = asset;
+    }
+
+    [UnityEditor.MenuItem("CodingCat/Scriptable Object/Item Data Asset/Consumable Item Asset")]
+    public static void CreateConsumableItemAsset()
+    {
+        string createAssetPath = "Assets/05. Scriptable_Object/ItemAssets/1.Consume/Consumable_Item.asset";
+        var asset = ScriptableObject.CreateInstance<ItemData_Con>();
+        AssetDatabase.CreateAsset(asset, createAssetPath);
+        AssetDatabase.SaveAssets();
+        AssetDatabase.Refresh();
+
+        EditorUtility.FocusProjectWindow();
+        Selection.activeObject = asset;
+    }
+
+    [UnityEditor.MenuItem("CodingCat/Scriptable Object/Item Data Asset/Bow Item Asset")]
+    public static void CreateBowItemAsset()
+    {
+        string createAssetPath = "Assets/05. Scriptable_Object/ItemAssets/0.Equipment/Bow/Bow_Item.asset";
+        var asset = ScriptableObject.CreateInstance<ItemData_Equip_Bow>();
+        AssetDatabase.CreateAsset(asset, createAssetPath);
+        AssetDatabase.SaveAssets();
+        AssetDatabase.Refresh();
+
+        EditorUtility.FocusProjectWindow();
+        Selection.activeObject = asset;
+    }
+
+    [UnityEditor.MenuItem("CodingCat/Scriptable Object/Item Data Asset/Arrow Item Asset")]
+    public static void CreateArrowItemAsset()
+    {
+        string createAssetPath = "Assets/05. Scriptable_Object/ItemAssets/0.Equipment/Arrow/Arrow_Item.asset";
+        var asset = ScriptableObject.CreateInstance<ItemData_Equip_Arrow>();
+        AssetDatabase.CreateAsset(asset, createAssetPath);
+        AssetDatabase.SaveAssets();
+        AssetDatabase.Refresh();
+
+        EditorUtility.FocusProjectWindow();
+        Selection.activeObject = asset;
+    }
+
+    [UnityEditor.MenuItem("CodingCat/Scriptable Object/Item Data Asset/Accessory Item Asset")]
+    public static void CreateAccessoryItemAsset()
+    {
+        string createAssetPath = "Assets/05. Scriptable_Object/ItemAssets/0.Equipment/Aceessory/Accessory_Item.asset";
+        var asset = ScriptableObject.CreateInstance<ItemData_Equip_Accessory>();
+        AssetDatabase.CreateAsset(asset, createAssetPath);
+        AssetDatabase.SaveAssets();
+        AssetDatabase.Refresh();
+
+        EditorUtility.FocusProjectWindow();
+        Selection.activeObject = asset;
+    }
+}
+

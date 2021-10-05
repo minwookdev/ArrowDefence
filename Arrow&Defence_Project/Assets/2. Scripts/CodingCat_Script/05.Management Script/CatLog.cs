@@ -10,14 +10,20 @@
         BLACK
     }
 
+    ///System.Diagnotics.Conditional Attribute는 함수 자체를 전처리 시켜주는 역할을 수행
+    ///매개변수는 Unity Editor의 Define Symbol.
+    ///#if 와 같은 역할을 하는데 타겟이 함수이다.
+    ///각각의 메서드 내부의 Debug.Log 등의 내용을 한번 더 전처리 지시문으로 감싼 이유는 컴파일 했을 때,
+    ///함수자체가 실행되지는 않지만
+    ///함수 내부의 코드자체는 남는것으로 확인이 되어 이 함수내부의 내용마저 컴파일 당시에 제외되도록 하기 위해
+    ///전처리 지시문으로 한번 더 감싸주었다 
+
     /// <summary>
     /// CatLog class helps not to include "Debug.Log" Method when building.
     /// But, if you need to log in other environments such as mobile, you can output the log by adding "ENABLE_LOG" Define.
     /// </summary>
     public static class CatLog
     {
-        //Currently Not Using StringBuilders, (Low utility)
-        //private static StringBuilder _sb = new StringBuilder();
 
         [System.Diagnostics.Conditional("ENABLE_LOG")]
         public static void Log(string msg)

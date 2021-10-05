@@ -1,32 +1,35 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-// Need To Modified List
-// 어떤 오브젝트나 스크립트에서 Singleton Object를 호출하는 시점이 곧 생성되는 순간임
-// Singleton이 될 대상에 미리 스크립트를 붙여놓는 것 만으로 Singleton이 되지 못한다
-// 이는 특정 Singleton이 될 스크립트의 값을 수정하여 테스트할 때 문제가 되고있다 2021/04/30
-
-namespace CodingCat_Scripts
+﻿namespace CodingCat_Scripts
 {
+    using UnityEngine;
+
+    ///inherit from this base class to Create a Singleton
+    ///e.g. public class MyCustomScript : Singleton {}
+
+    ///Untiy Generic Singleton Template Codes
+    ///Scene에 배치하여 미리 어떤 참조를 캐싱하는 것처럼 사용하는 형태에는 맞지 않다
+    ///이 싱글턴클래스를 상속받아서 일처리 하는 경우는 오로지 모든 동작이 코드로 작동되어야 맞다
+    ///Arrow & Defence Project에서는 Scene UI와 내부 Data들과 소통하는 형태로 사용중임
+
     /// <summary>
     /// Make Singleton Class
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
     {
-        //Destroy Check
+        //Check to see if we're about to be Destoryed
         private static bool _shuttingdown = false;
         private static object _lock = new object();
         private static T _instance;
 
+        /// <summary>
+        /// Access Singleton Instance through this Property
+        /// </summary>
         public static T Instance
         {
             get
             {
                 //게임종료 시 object보다 싱글턴의 OnDestroy가 먼저 실행될 수 있다
                 //해당 싱글턴을 gameObject.OnDestroy() 에서는 사용하지 않거나 사용한다면 null체크 해주자
-
                 if (_shuttingdown)
                 {
                     Debug.Log("[Singleton] Instance '" + typeof(T) + "' already Destroyed. Returning Null.");
@@ -65,7 +68,6 @@ namespace CodingCat_Scripts
             string initMsg = string.Format("{0} :: {1}", "Init Singleton Instance", "<color=yellow>" + this + "</color>");
             Debug.Log(initMsg);
 #endif
-
         }
 
         private void OnApplicationQuit()

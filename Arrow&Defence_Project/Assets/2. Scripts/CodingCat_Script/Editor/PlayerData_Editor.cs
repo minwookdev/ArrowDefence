@@ -33,7 +33,7 @@ public class PlayerData_Editor : EditorWindow
     }
 
     //Add Menu item named "PlayerData_Editor" to the Window menu
-    [MenuItem("CodingCat/Data Window")]
+    [MenuItem("CodingCat/Player Data Window")]
     public static void ShowWindow()
     {
         EditorWindow.GetWindow(typeof(PlayerData_Editor));

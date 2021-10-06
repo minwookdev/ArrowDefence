@@ -38,8 +38,7 @@
                 if (pressedTime >= 0) pressedTime -= Time.deltaTime;
                 else
                 {
-                    ItemDataInfoPop.Instance.Expose(tooltipPoint, tooltipParent, itemDataAddress.Item_Name,
-                                                                                 itemDataAddress.Item_Desc);
+                    ActionCat.Games.UI.ItemTooltip.Instance.Expose(tooltipPoint, tooltipParent, itemDataAddress.Item_Name, itemDataAddress.Item_Desc);
                     isToolTipOpen = true;
                     isTimeStart   = false;
                 }
@@ -87,7 +86,7 @@
         {
             if(isToolTipOpen)
             {
-                ItemDataInfoPop.Instance.Hide();
+                ActionCat.Games.UI.ItemTooltip.Instance.Hide();
                 isToolTipOpen = false;
             }
 

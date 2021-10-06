@@ -13472,7 +13472,7 @@ MonoBehaviour:
   DropListAsset: {fileID: 11400000, guid: 834b46e9df025194da792695df7f4b4b, type: 2}
   StageDropCorrection: 30
   dropItemList: []
-  IsDebugClearStage: 0
+  IsDebugClearStage: 1
   IsDebugMonsterLogics: 0
 --- !u!1 &1745501736
 GameObject:

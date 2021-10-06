@@ -120,7 +120,7 @@
             CCPooler.DestroyCCPooler();
 
             //Release Item Info Tootip
-            ItemDataInfoPop.Instance.ReleaseParent();
+            ActionCat.Games.UI.ItemTooltip.Instance.ReleaseParent();
         }
 
         #endregion

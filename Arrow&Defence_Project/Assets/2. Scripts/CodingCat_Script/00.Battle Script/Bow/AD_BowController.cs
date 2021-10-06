@@ -97,6 +97,9 @@
             if (BowCenterPointImg)
                 BowCenterPointImg.transform.position = transform.position;
 
+            //Init Start Bow Angle : Start 이후 처음 조준할 때 Bounce 현상 방지
+            bowAngle = transform.eulerAngles.z;
+
             //yield return new WaitUntil(() => CCPooler.IsInitialized);
             StartCoroutine(this.ArrowReload());
         }

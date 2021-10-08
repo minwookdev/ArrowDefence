@@ -10,11 +10,12 @@
 
     public class DevTestPanel : MonoBehaviour
     {
-        [Header("Only DevMode UI")]
+        [Header("DEV MODE UI")]
+        public MainSceneRoute MainSceneUI;
         public Image OpenButton;
         public Image DevPanel;
 
-        [Header("Player Data")]
+        [Header("PLAYER DATA")]
         public AD_PlayerData playerData;
 
         private float endPosX;
@@ -65,9 +66,19 @@
             }
         }
 
-        public void Button_SaveData() => CCPlayerData.SaveUserData();
+        public void Button_SaveData()
+        {
+            CCPlayerData.SaveUserData();
 
-        public void Button_LoadData() => CCPlayerData.LoadUserData();
+            MainSceneUI.Message("SAVE USER DATA");
+        }
+
+        public void Button_LoadData()
+        {
+            CCPlayerData.LoadUserData();
+
+            MainSceneUI.Message("LOAD USER DATA");
+        }
 
         public void Button_Additems()
         {
@@ -91,9 +102,29 @@
             }
 
             CatLog.Log($"{itemList.Count} 개의 아이템이 전달되었습니다.");
+
+            MainSceneUI.Message($"INVENTORY IN {itemList.Count} ITEMS");
         }
 
-        public void Button_SetUserData(int num) => CCPlayerData.SetUserInt(num);
+        public void Button_ClearInventory()
+        {
+            CCPlayerData.inventory.Clear();
+            CCPlayerData.equipments.Clear();
+
+            MainSceneUI.Message("CLEAR INVENTORY, EQUIPMENTS DATA");
+        }
+
+        public void Button_PullingTypeChange()
+        {
+            switch (CCPlayerData.settings.PullingType)
+            {
+                case PULLINGTYPE.AROUND_BOW_TOUCH: CCPlayerData.settings.SetPullingType(PULLINGTYPE.FREE_TOUCH);       break;
+                case PULLINGTYPE.FREE_TOUCH:       CCPlayerData.settings.SetPullingType(PULLINGTYPE.AROUND_BOW_TOUCH); break;
+                case PULLINGTYPE.AUTOMATIC: break;
+            }
+
+            MainSceneUI.Message($"PULLING TYPE CHANGE, CURRENT TYPE {CCPlayerData.settings.PullingType.ToString()}");
+        }
 
         #endregion
 

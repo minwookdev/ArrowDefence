@@ -6,7 +6,7 @@
     using UnityEngine.UI;
     using CodingCat_Scripts;
 
-    public class UI_ItemDataSlot : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDeselectHandler
+    public class UI_ItemDataSlot : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     {
         [Header("ITEM DATA SLOT")]
         public Image ItemImg;
@@ -17,7 +17,7 @@
         private ItemData itemDataAddress = null;
 
         [Header("SHOW TOOLTIP")]
-        public float TooltipOpenPressedTime = .5f;
+        public float TooltipOpenPressedTime = .3f;
 
         //※ Build하고 두개의 DataSlot을 동시에 터치했을때 어떻게되는지 확인하고 Tooltip 띄워주는 방식 최적화※
         private Vector2 tooltipPoint;
@@ -38,7 +38,7 @@
                 if (pressedTime >= 0) pressedTime -= Time.deltaTime;
                 else
                 {
-                    ActionCat.Games.UI.ItemTooltip.Instance.Expose(tooltipPoint, tooltipParent, itemDataAddress.Item_Name, itemDataAddress.Item_Desc);
+                    ActionCat.Games.UI.ItemTooltip.Instance.Expose(tooltipPoint, tooltipParent, itemDataAddress.Item_Name, itemDataAddress.Item_Desc, this.gameObject);
                     isToolTipOpen = true;
                     isTimeStart   = false;
                 }
@@ -74,6 +74,8 @@
 
         void IPointerDownHandler.OnPointerDown(PointerEventData data)
         {
+            if (isToolTipOpen) return;
+
             if (isTimeStart == false)
             {
                 tooltipPoint  = data.pressPosition;
@@ -82,24 +84,18 @@
             }
 
             CatLog.Log($"EventData Position x : {data.pressPosition.x.ToString()}, y : {data.pressPosition.y.ToString()}");
-            
         }
 
         void IPointerUpHandler.OnPointerUp(PointerEventData data)
         {
             if(isToolTipOpen)
             {
-                ActionCat.Games.UI.ItemTooltip.Instance.Hide();
+                ActionCat.Games.UI.ItemTooltip.Instance.Hide(this.gameObject);
                 isToolTipOpen = false;
             }
 
             isTimeStart   = false;
             pressedTime   = TooltipOpenPressedTime;
-        }
-
-        void IDeselectHandler.OnDeselect(BaseEventData data)
-        {
-            CatLog.Log("DeSeleted Called !");
         }
     }
 }

@@ -32,6 +32,7 @@
         private TMPro.TextMeshProUGUI itemDescTMP = null;
         private RectTransform tooltipRect;
         private CanvasGroup canvasGroup;
+        private GameObject target;
         private bool isInitialize = false;
 
         //Properties
@@ -104,6 +105,7 @@
         {
             if(gameObject.activeSelf)
             {
+                target = null;
                 transform.SetParent(null);
                 DontDestroyOnLoad(this.gameObject);
 
@@ -111,17 +113,19 @@
             }
         }
 
-        public void Expose(Vector2 pos, Canvas targetCanvas, string itemName, string itemDesc)
+        public void Expose(Vector2 pos, Canvas targetCanvas, string itemName, string itemDesc, GameObject target)
         {
             if (_instance.gameObject.activeSelf == false)
                 _instance.gameObject.SetActive(true);
-
-            //4. ItemDataSlot UI Script에서 ToolTip띄우는 로직 최적화 해주기
-
+            this.target = target;
             StartCoroutine(ShowPopupCo(pos, targetCanvas, itemName, itemDesc));
         }
 
-        public void Hide() => canvasGroup.alpha = 0f;
+        public void Hide(GameObject target)
+        {
+            if (target == this.target)
+                canvasGroup.alpha = 0f;
+        }
 
         #endregion
     }

@@ -20,7 +20,7 @@
         #region EQUIP_REALESE
 
         //마법활, 마법장신구등 장비종류 좀 늘어날텐데 이거 메서드 좀 적게 관리 가능할거같은데, 장비 종류 늘어날거 대비해서 늘리자
-        //사실살 Equipment라는 하나의 인벤토리가 늘어난 셈으로 알면된다. -> 장신구는 배열로 깔아도 괜찮을것같다 아니면 장신구 관련 함수들은 배열로 하든지
+        //사실상 Equipment라는 하나의 인벤토리가 늘어난 셈으로 알면된다. -> 장신구는 배열로 깔아도 괜찮을것같다 아니면 장신구 관련 함수들은 배열로 하든지
 
         /// <summary>
         /// 인벤토리 내부의 Bow Item Data가져와서 새로 할당하고 Inventory내부에 있던 아이템 지워줌
@@ -202,6 +202,19 @@
             {
                 if (accessory != null) accessory.Setup();
             }
+        }
+
+        /// <summary>
+        /// Clear Equipped Item Class
+        /// </summary>
+        public void Clear()
+        {
+            this.EquippedBow         = null;
+            this.EquippedArrow_f     = null;
+            this.EquippedArrow_s     = null;
+            this.EquippedAccessory_f = null;
+            this.EquippedAccessory_s = null;
+            this.EquippedAccessory_t = null;
         }
     }
 }

@@ -206,7 +206,7 @@
             else CatLog.WLog("인벤토리 내부에 해당 아이템이 없습니다.");
         }
 
-        public void ClearInventory() => invenList.Clear();
+        public void Clear() => invenList.Clear();
 
         #endregion
 

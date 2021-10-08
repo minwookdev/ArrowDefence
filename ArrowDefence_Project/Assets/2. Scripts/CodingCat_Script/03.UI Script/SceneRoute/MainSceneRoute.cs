@@ -1,9 +1,9 @@
 ﻿using System;
+using System.Linq;
 using UnityEngine;
 using DG.Tweening;
 using CodingCat_Games;
 using CodingCat_Scripts;
-using System.Linq;
 
 public class MainSceneRoute : MonoBehaviour
 {
@@ -58,15 +58,18 @@ public class MainSceneRoute : MonoBehaviour
     private float openMenuTime = 0.5f;
     private float closeMenuTime = 0.2f; //Less than Menu Open Time.
 
-    [Header("Fade Effect Option")]
+    [Header("FADE EFFECT")]
     [Space(10)]
     public CanvasGroup ImgFade = null;
     public float FadeTime = 2.0f;
 
-    [Header("Popup")]
+    [Header("POPUP'S")]
     [Space(10)]
     public BattlePopup battlePop;
     public ItemInfoPop itemInfoPop;
+
+    [Header("MESSAGE")]
+    public TMPro.TextMeshProUGUI MessageText;
 
     public enum STAGELIST
     {
@@ -159,6 +162,18 @@ public class MainSceneRoute : MonoBehaviour
         }; TestAction();
     }
 
+    public void Message(string msg)
+    {
+        if (MessageText != null)
+        {
+            MessageText.DOKill();
+            MessageText.color = new Color(MessageText.color.r, MessageText.color.g, MessageText.color.b, 1f);
+
+            MessageText.DOFade(0f, 3f)
+                       .OnStart(() => { MessageText.text = msg; });
+        }
+    }
+
     /// <summary>
     /// Open Item Information Popup When Click in the Invnetory Items
     /// </summary>
@@ -181,14 +196,6 @@ public class MainSceneRoute : MonoBehaviour
                 break;
             default: break;
         }
-    }
-
-    /// <summary>
-    /// Update Inventory UI Method
-    /// </summary>
-    public static void UpdateInvenUI()
-    {
-
     }
 
     public void OpenMenuItem(GameObject target)

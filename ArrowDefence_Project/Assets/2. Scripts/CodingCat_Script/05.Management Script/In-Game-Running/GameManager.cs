@@ -57,17 +57,21 @@
 
         public void SetGameState(GAMESTATE gameState) => this.gameState = gameState;
 
-        public void ResumeBattle()
+        public void SetBowPullingStop(bool isStop)
         {
             if (AD_BowController.instance != null)
-                AD_BowController.instance.IsPullingStop = false;
+                AD_BowController.instance.IsPullingStop = isStop;
+        }
+
+        public void ResumeBattle()
+        {
+            SetBowPullingStop(false);
             TimeDefault();
         }
 
         public void PauseBattle()
         {
-            if (AD_BowController.instance != null)
-                AD_BowController.instance.IsPullingStop = true;
+            SetBowPullingStop(true);
             TimePause();
         }
 

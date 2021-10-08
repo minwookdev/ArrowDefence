@@ -111,21 +111,24 @@
         public void Btn_LoadMainScene()
         {
             ImgFade.DOFade(1f, FadeTime)
+                   .SetUpdate(true)
                    .OnStart(() => { ImgFade.blocksRaycasts = false;
                                     ImgFade.gameObject.SetActive(true);
-                                    ReleaseBattleScene();})
-                   .OnComplete(() => SceneLoader.Instance.LoadScene(AD_Data.SCENE_MAIN));
+                                    ReleaseBattleScene();}) //OnComplete로 옮겨주기
+                   .OnComplete(() => { GameManager.Instance.SetBowPullingStop(false);
+                                       SceneLoader.Instance.LoadScene(AD_Data.SCENE_MAIN);
+                   });
         }
 
         /// <summary>
-        /// Main Scene이 Load되기 전 정리되어야할 UI들 처리
+        /// Main Scene이 Load되기 전 정리되어야할 로직들 처리
         /// </summary>
         private void ReleaseBattleScene()
         {
             //Release CCPooler 
             CCPooler.DestroyCCPooler();
 
-            //Release Item Info Tootip
+            //Release Item Info Tooltip
             ActionCat.Games.UI.ItemTooltip.Instance.ReleaseParent();
         }
 
@@ -151,9 +154,11 @@
                    });
         }
 
-        public void OnEnableResultPanel(List<DropItem> items)
+        public void OnEnableResultPanel(List<DropItem> items, System.Action callback)
         {
             if (ResultPanel.activeSelf) return;
+
+            callback();
 
             ResultPanel.SetActive(true);
 

@@ -299,7 +299,7 @@
             {
                 IsResult = true;
                 DropItemsAddInventory();
-                battleSceneUI.OnEnableResultPanel(dropItemList);
+                battleSceneUI.OnEnableResultPanel(dropItemList, () => GameManager.Instance.SetBowPullingStop(true));
 
                 endWaitingTime = 0f;
             }

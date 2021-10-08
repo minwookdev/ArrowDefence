@@ -1,6 +1,5 @@
 ﻿namespace CodingCat_Games
 {
-    using System;
     using System.Collections;
     using UnityEngine;
     using UnityEngine.UI;
@@ -10,26 +9,20 @@
     {
         public static AD_BowController instance;
 
-        public enum BOWPULLING_TYPE //활 조준 타입 -> 추후 User Data에서 받아오도록 방식 변경
-        {
-            TYPE_AROUND_BOW,         
-            TYPE_FIRSTTOUCH_POSITION,
-            TYPE_AUTOMATIC_SHOT
-        }
-
         [Header("GENERAL")]
         public Camera MainCam;
         private Touch screenTouch;
         
         [Header("BOW CONTROL VARIABLES")]
-        public BOWPULLING_TYPE PullType = BOWPULLING_TYPE.TYPE_AROUND_BOW;
         public Transform RightClampPoint, LeftClampPoint;
         public float TouchRadius = 1f;
         public Image BowCenterPointImg;
         [Range(1f, 20f)] public float SmoothRotateSpeed = 12f;
         [Range(1f, 5f)]  public float ArrowPullingSpeed = 1f;
 
-        private bool bowPullBegan;               //Bow Pull State variable
+        private PULLINGTYPE currentPullType;     //조준 타입 변경 -> Player Settings로 부터 받아오는 Enum Data
+        private bool bowPullBegan;               //Bow Pull State Variables
+        private float maxBowAngle, minBowAngle;  //Min, Max BowAngle Variables
         private float bowAngle;                  //The Angle Variable (angle between Click point and Bow).
         private Vector2 initialTouchPos;         //처음 터치한 곳을 저장할 벡터
         private Vector2 correctionTouchPosition; //First Touch Type Correction Vector
@@ -73,6 +66,7 @@
         {
             //Initialize Main Camera Object
             if (MainCam == null) MainCam = Camera.main;
+            currentPullType = Data.CCPlayerData.settings.PullingType;
 
             //Initialize variables For Arrow to be Loaded
             if(RightClampPoint == null || LeftClampPoint == null)
@@ -94,6 +88,7 @@
 
             //Init Start Bow Angle : Start 이후 처음 조준할 때 Bounce 현상 방지
             bowAngle = transform.eulerAngles.z;
+            minBowAngle = 0f; maxBowAngle = 180f;
 
             //yield return new WaitUntil(() => CCPooler.IsInitialized);
             StartCoroutine(this.ArrowReload());
@@ -158,14 +153,12 @@
             //Pause 상태거나, Battle Clear된 상태라면 활을 당길 수 없음
             if (IsPullingStop == true) return;
 
-            switch (PullType)
+            switch (currentPullType)
             {
-                //조건 1. 활 주변의 일정거리 주변을 클릭 | 터치했을때만 조준 가능
-                case BOWPULLING_TYPE.TYPE_AROUND_BOW: if (!this.CheckTouchRaius(pos)) return; break;
-                //조건 2. 처음 클릭한 곳 기준으로 활의 기준점 지정
-                case BOWPULLING_TYPE.TYPE_FIRSTTOUCH_POSITION: this.SetInitialTouchPos(pos);  break;
-                //조건 3. 자동으로 적을 인식하고 활을 조준
-                case BOWPULLING_TYPE.TYPE_AUTOMATIC_SHOT: CatLog.Log("Not Support this Pull Type, Return Function"); return;
+                case PULLINGTYPE.AROUND_BOW_TOUCH: if (CheckTouchRaius(pos) == false) return;       break;  //Type1. 활 주변의 일정거리 터치 조준
+                case PULLINGTYPE.FREE_TOUCH:           SetInitialTouchPos(pos);                     break;  //Type2. 터치한 곳 기준 활 조준
+                case PULLINGTYPE.AUTOMATIC:            CatLog.Log("Not Support This Pulling Type"); break;  //Type3. 자동 사격
+                default: break;
             }
 
             if(AD_BowRope.instance.arrowCatchPoint == null && ArrowComponent != null)
@@ -182,7 +175,7 @@
             currentClickPosition = MainCam.ScreenToWorldPoint(pos);
 
             //Pull Type 추가에 따른 스크립트 구분
-            if (PullType == BOWPULLING_TYPE.TYPE_AROUND_BOW)
+            if (currentPullType == PULLINGTYPE.AROUND_BOW_TOUCH)
             {
                 #region ORIGIN_CODES
                 //this.direction = currentClickPosition - transform.position;
@@ -216,7 +209,7 @@
                 this.direction = currentClickPosition - transform.position;
 
                 this.bowAngle = Mathf.Clamp(Mathf.LerpAngle(bowAngle, Mathf.Atan2(direction.x, -direction.y) * Mathf.Rad2Deg + 90, Time.deltaTime * SmoothRotateSpeed),
-                                            0f, 180f);
+                                            minBowAngle, maxBowAngle);
 
                 //Set Direction of the Bow
                 tempEulerAngle = transform.eulerAngles;
@@ -226,7 +219,7 @@
                 //CatLog.Log($"Temp Euler Angle Z Pos : {bowAngle.ToString()}"); //Bow Angle Debugging
                 DrawTouchPos.Instance.DrawTouchLine(currentClickPosition, transform.position);
             }
-            else if (PullType == BOWPULLING_TYPE.TYPE_FIRSTTOUCH_POSITION)
+            else if (currentPullType == PULLINGTYPE.FREE_TOUCH)
             {
                 //Touch Correction Vector Setting (보정하지 않으면 활이 바로 아래로 회전해버린다)
                 correctionTouchPosition = new Vector2(currentClickPosition.x, currentClickPosition.y - 0.1f);
@@ -235,7 +228,7 @@
 
                 //클릭 위치에 따른 활 자체의 각도를 변경할 변수
                 this.bowAngle = Mathf.Clamp(Mathf.LerpAngle(bowAngle, Mathf.Atan2(direction.x, -direction.y) * Mathf.Rad2Deg + 90, Time.deltaTime * SmoothRotateSpeed),
-                                            0f, 180f);
+                                            minBowAngle, maxBowAngle);
 
                 //Lerp to Set Direction of the Bow
                 tempEulerAngle = transform.eulerAngles;

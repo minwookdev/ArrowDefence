@@ -65,16 +65,17 @@
             isInitialize = true;
         }
 
-        private IEnumerator ShowPopupCo(Vector2 pos, Canvas parentCanvas, string itemName, string itemDesc)
+        private IEnumerator ShowPopupCo(Vector2 pos, RectTransform parentCanvasRect, Camera targetCam,
+                                        string itemName, string itemDesc)
         {
             yield return new WaitUntil(() => this.isInitialize);
 
             //init Parent & Scale
-            if (parentCanvas != transform.parent)
+            if (parentCanvasRect != transform.parent)
             {
-                transform.SetParent(parentCanvas.transform);
+                transform.SetParent(parentCanvasRect);
                 transform.localScale = Vector3.one;
-                transform.position = parentCanvas.transform.position;
+                transform.position = parentCanvasRect.position;
             }
 
             //Init Item Name, Desc Text
@@ -84,12 +85,26 @@
             yield return null;
 
             //Init Tooltip Position
-            Vector2 InitPos = (pos.x + tooltipRect.rect.width > Screen.width) ?
+            Vector2 initPos = (pos.x + tooltipRect.rect.width > parentCanvasRect.rect.xMax) ?
                 new Vector2(pos.x - tooltipRect.rect.width * 0.5f, pos.y + tooltipRect.rect.height * 0.5f) :
                 new Vector2(pos.x + tooltipRect.rect.width * 0.5f, pos.y + tooltipRect.rect.height * 0.5f);
 
+            //Calc Target Camera Width, Height
+            //float camHeight = 2f * targetCam.orthographicSize;
+            //float camWidth  = camHeight * targetCam.aspect;
+            //
+            //Vector2 initPos = (tooltipRect.anchoredPosition.x + tooltipRect.rect.width > parentCanvasRect.rect.width) ?
+            //    new Vector2(pos.x - tooltipRect.rect.width * 0.5f, pos.y + tooltipRect.rect.height * 0.5f) :
+            //    new Vector2(pos.x + tooltipRect.rect.width * 0.5f, pos.y + tooltipRect.rect.height * 0.5f);
+            //
+            //CatLog.Log($"X Position : {(pos.x + tooltipRect.rect.width).ToString()}" + '\n' +
+            //           $"Parent rect Width : {parentCanvasRect.rect.width}" + '\n' +
+            //           $"Cam Width : {camWidth.ToString()}");
+
+            //Vector2 initPos = new Vector2(pos.x + tooltipRect.rect.width * 0.5f, pos.y + tooltipRect.rect.height * 0.5f); ;
+
             //anchoredPosition valueChanged : this Rect Transform anchor is Always LEFT-BOTTOM
-            tooltipRect.anchoredPosition = InitPos;
+            tooltipRect.anchoredPosition = initPos;
 
             //Expose Tooltip [Set Alpha]
             canvasGroup.alpha = 1f;
@@ -113,12 +128,13 @@
             }
         }
 
-        public void Expose(Vector2 pos, Canvas targetCanvas, string itemName, string itemDesc, GameObject target)
+        public void Expose(Vector2 pos, RectTransform targetCanvasRect, string itemName, string itemDesc,
+                           GameObject target, Camera targetCam)
         {
             if (_instance.gameObject.activeSelf == false)
                 _instance.gameObject.SetActive(true);
             this.target = target;
-            StartCoroutine(ShowPopupCo(pos, targetCanvas, itemName, itemDesc));
+            StartCoroutine(ShowPopupCo(pos, targetCanvasRect, targetCam, itemName, itemDesc));
         }
 
         public void Hide(GameObject target)

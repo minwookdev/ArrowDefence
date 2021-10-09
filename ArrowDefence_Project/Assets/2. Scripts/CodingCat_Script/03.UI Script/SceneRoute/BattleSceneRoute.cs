@@ -23,7 +23,6 @@
         public GameObject PausePanel;
         public GameObject ResultPanel;
         public GameObject GameOverPanel;
-        public Canvas BattleSceneUICanvas;
         public float PanelOpenFadeTime = 0.5f;
 
         [Header("RESULT PANEL VARIABLE's")]
@@ -37,6 +36,12 @@
         private Vector2 bottomRightPoint;
         private Vector3[] limitPoints = new Vector3[5];
         private Vector2 offset = new Vector2(2f, 2f);
+
+        [Header("ITEM SLOT TOOLTIP")]
+        public Canvas BattleSceneUICanvas;
+        public Camera UICamera;
+
+        private void Awake() => GameManager.Instance.ResolutionPortrait(Camera.main);
 
         void Start()
         {
@@ -184,7 +189,7 @@
             for (int i = 0; i < items.Count; i++)
             {
                 DropItemSlots[i].gameObject.SetActive(true);
-                DropItemSlots[i].Setup(items[i].ItemAsset, items[i].Quantity, BattleSceneUICanvas);
+                DropItemSlots[i].Setup(items[i].ItemAsset, items[i].Quantity, BattleSceneUICanvas, UICamera);
             }
         }
     }

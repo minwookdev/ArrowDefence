@@ -44,6 +44,33 @@
             this.fixedDeltaTime = Time.fixedDeltaTime;
         }
 
+        #region SCREEN
+
+        /// <summary>
+        /// Rect Set of Target Camera with a  9 : 16 Portrait Resolition
+        /// It must be called from the Awake function in the Script.
+        /// </summary>
+        /// <param name="targetCam"></param>
+        public void ResolutionPortrait(Camera targetCam)
+        {
+            Rect rect = targetCam.rect;
+            float scaleHeight = ((float)Screen.width / Screen.height) / ((float)9 / 16); // (Width / Height)
+            float scaleWidth = 1f / scaleHeight;
+            if(scaleHeight < 1)
+            {
+                rect.height = scaleHeight;
+                rect.y = (1f - scaleHeight) / 2f;
+            }
+            else
+            {
+                rect.width = scaleHeight;
+                rect.x = (1f - scaleWidth) / 2f;
+            }
+            targetCam.rect = rect;
+        }
+
+        #endregion
+
         #region GAME_PROGRESS_LOGIC
 
         public void SetupPlayerEquipments(Transform bowObjInitPos, Transform bowObjParentTr, 

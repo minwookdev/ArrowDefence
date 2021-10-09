@@ -20,8 +20,10 @@
         public float TooltipOpenPressedTime = .3f;
 
         //※ Build하고 두개의 DataSlot을 동시에 터치했을때 어떻게되는지 확인하고 Tooltip 띄워주는 방식 최적화※
+        //Tooltip Variables
         private Vector2 tooltipPoint;
-        private Canvas tooltipParent;
+        private RectTransform tooltipCanvasRect;
+        private Camera uiCamera;
         private float pressedTime;
         private bool isTimeStart   = false;
         private bool isToolTipOpen = false;
@@ -38,19 +40,22 @@
                 if (pressedTime >= 0) pressedTime -= Time.deltaTime;
                 else
                 {
-                    ActionCat.Games.UI.ItemTooltip.Instance.Expose(tooltipPoint, tooltipParent, itemDataAddress.Item_Name, itemDataAddress.Item_Desc, this.gameObject);
+                    ActionCat.Games.UI.ItemTooltip.Instance.Expose(tooltipPoint, tooltipCanvasRect, 
+                                                                   itemDataAddress.Item_Name, itemDataAddress.Item_Desc, 
+                                                                   this.gameObject, uiCamera);
                     isToolTipOpen = true;
                     isTimeStart   = false;
                 }
             }
+
+
         }
 
-        public void Setup(ItemData address, int visibleStack, Canvas tooltipTargetCanvas)
+        public void Setup(ItemData address, int visibleStack, Canvas tooltipTargetCanvas, Camera uiCamera)
         {
             itemDataAddress = address;
 
             ItemImg.sprite = address.Item_Sprite;
-            tooltipParent  = tooltipTargetCanvas;
 
             if (address.Item_Type != ITEMTYPE.ITEM_EQUIPMENT)
             {
@@ -62,6 +67,10 @@
 
             //Set Item Frame according to Item Grade
             ItemFrame.sprite = Frames[(int)address.Item_Grade];
+
+            //Init Tooltip Variables
+            this.tooltipCanvasRect = tooltipTargetCanvas.GetComponent<RectTransform>();
+            this.uiCamera          = uiCamera;
         }
 
         public void Clear()
@@ -78,12 +87,10 @@
 
             if (isTimeStart == false)
             {
-                tooltipPoint  = data.pressPosition;
+                RectTransformUtility.ScreenPointToLocalPointInRectangle(tooltipCanvasRect, data.position, uiCamera, out tooltipPoint);
                 pressedTime   = TooltipOpenPressedTime;
                 isTimeStart   = true;
             }
-
-            CatLog.Log($"EventData Position x : {data.pressPosition.x.ToString()}, y : {data.pressPosition.y.ToString()}");
         }
 
         void IPointerUpHandler.OnPointerUp(PointerEventData data)

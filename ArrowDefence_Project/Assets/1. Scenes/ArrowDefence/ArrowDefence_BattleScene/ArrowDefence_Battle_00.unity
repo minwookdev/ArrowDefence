@@ -3424,7 +3424,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 284.4, y: 0}
+  m_AnchoredPosition: {x: 284.39996, y: 0}
   m_SizeDelta: {x: 35, y: 35}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &433753543
@@ -9507,7 +9507,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -12.4999695}
+  m_AnchoredPosition: {x: 0, y: -12.5}
   m_SizeDelta: {x: -40, y: -35}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1228947426
@@ -13408,12 +13408,13 @@ MonoBehaviour:
   PausePanel: {fileID: 1455058982}
   ResultPanel: {fileID: 1184598043}
   GameOverPanel: {fileID: 0}
-  BattleSceneUICanvas: {fileID: 218318155}
   PanelOpenFadeTime: 0.5
   SlotParentTr: {fileID: 946775822}
   DropItemSlotPref: {fileID: 5984624412175565113, guid: 07963ed1caf360a429dfd7b2ee79fd4d,
     type: 3}
   DropItemSlots: []
+  BattleSceneUICanvas: {fileID: 218318155}
+  UICamera: {fileID: 259746812}
 --- !u!114 &1744735826
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19136,7 +19137,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -30.399994}
+  m_AnchoredPosition: {x: 0, y: -30.400024}
   m_SizeDelta: {x: 520, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2142864435

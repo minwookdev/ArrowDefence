@@ -51,33 +51,10 @@
             LineStartPoint = bowController.LeftClampPoint;
         }
 
-        private void FixedUpdate()
+        private void Update()
         {
-            if (bowController.IsBowPullBegan)
+            if (bowController.IsBowPulling)
             {
-                #region OLD
-                //RaycastHit hit;
-                //
-                //laserLine.SetPosition(0, LineStartPoint.position);
-                //
-                ////Physics2D.Raycast(LineStartPoint.position, LineStartPoint.right, out hit, rayDistance)
-                //
-                //if (Physics.Raycast(LineStartPoint.position, LineStartPoint.right, out hit, rayDistance))
-                //{
-                //    laserLine.SetPosition(1, hit.point);
-                //    CatLog.Log("무언가에 부딫히고 있음");
-                //}
-                //else
-                //{
-                //    //Vector3 endPos = LineStartPoint.right * lineRenderDist;
-                //    //endPos.z = lineRenderZpos;
-                //    //laserLine.SetPosition(1, endPos);
-                //
-                //    //이 방법으로 Line의 Position을 정해주니까 제대로 작동한다 -> 줄어들거나 하는 현상없이 (근데 왜 그러는거지)
-                //    laserLine.SetPosition(1, LineStartPoint.position + (transform.right * rayDistance));
-                //}
-                #endregion
-
                 RaycastHit2D rayhit = Physics2D.Raycast(LineStartPoint.position, LineStartPoint.right, rayDistance);
                 //Debug.DrawRay(LineStartPoint.position, LineStartPoint.right * rayDistance, Color.green); //Debugging
 
@@ -86,7 +63,7 @@
                 if (rayhit)  //무언가에 부딫혔을때 **문제되었던 부분 정리하기
                 {
                     if (rayhit.collider.CompareTag(AD_Data.OBJECT_TAG_MONSTER)) laserLine.SetPosition(1, GameGlobal.FixedVectorOnScreen(rayhit.point));
-                    else                                                        laserLine.SetPosition(1, LineStartPoint.position + (LineStartPoint.right * rayDistance));
+                    else laserLine.SetPosition(1, LineStartPoint.position + (LineStartPoint.right * rayDistance));
                 }
                 else laserLine.SetPosition(1, LineStartPoint.position + (LineStartPoint.right * rayDistance));
 
@@ -96,6 +73,30 @@
             {
                 DecreaseLineAlpha();
             }
+        }
+
+        private void FixedUpdate()
+        {
+            //if (bowController.IsBowPullBegan)
+            //{
+            //    RaycastHit2D rayhit = Physics2D.Raycast(LineStartPoint.position, LineStartPoint.right, rayDistance);
+            //    //Debug.DrawRay(LineStartPoint.position, LineStartPoint.right * rayDistance, Color.green); //Debugging
+            //
+            //    laserLine.SetPosition(0, LineStartPoint.position);
+            //
+            //    if (rayhit)  //무언가에 부딫혔을때 **문제되었던 부분 정리하기
+            //    {
+            //        if (rayhit.collider.CompareTag(AD_Data.OBJECT_TAG_MONSTER)) laserLine.SetPosition(1, GameGlobal.FixedVectorOnScreen(rayhit.point));
+            //        else                                                        laserLine.SetPosition(1, LineStartPoint.position + (LineStartPoint.right * rayDistance));
+            //    }
+            //    else laserLine.SetPosition(1, LineStartPoint.position + (LineStartPoint.right * rayDistance));
+            //
+            //    IncreaseLineAlpha();
+            //}
+            //else
+            //{
+            //    DecreaseLineAlpha();
+            //}
 
             //방법은 찾았는데 왜 되고 내꺼는 안되는지 모르겠다
         }

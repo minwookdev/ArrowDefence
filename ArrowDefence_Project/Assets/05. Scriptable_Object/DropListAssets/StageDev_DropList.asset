@@ -14,17 +14,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DropTableArray:
   - ItemAsset: {fileID: 11400000, guid: 818e48ff8014cd743904a971f1118bab, type: 2}
-    DropChance: 35
+    DropChance: 40
     QuantityRange: 0800000009000000
   - ItemAsset: {fileID: 11400000, guid: f8cf2d491cdbd38409db2b0178418dce, type: 2}
-    DropChance: 35
+    DropChance: 40
     QuantityRange: 0400000005000000
   - ItemAsset: {fileID: 11400000, guid: 2a445904b5855114f872d1826d693bcf, type: 2}
-    DropChance: 15
+    DropChance: 16
     QuantityRange: 01000000
   - ItemAsset: {fileID: 11400000, guid: 4281f4c496660d946b11d546253599bd, type: 2}
-    DropChance: 5
+    DropChance: 1.5
     QuantityRange: 01000000
   - ItemAsset: {fileID: 11400000, guid: 5e2d003e93cf37c4c95dc232f4de4b0f, type: 2}
-    DropChance: 10
+    DropChance: 2.5
     QuantityRange: 01000000

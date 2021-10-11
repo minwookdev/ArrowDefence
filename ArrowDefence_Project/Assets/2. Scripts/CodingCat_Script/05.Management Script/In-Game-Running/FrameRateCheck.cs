@@ -58,7 +58,7 @@
         {
             int w = Screen.width, h = Screen.height;
 
-            rect = new Rect(0, 0, w, h * 4 / 100);
+            rect = new Rect(0, 250f, w, h * 4 / 100);
 
             style = new GUIStyle();
             style.alignment = TextAnchor.UpperLeft;

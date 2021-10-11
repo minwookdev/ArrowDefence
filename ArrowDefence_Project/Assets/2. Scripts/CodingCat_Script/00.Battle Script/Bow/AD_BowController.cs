@@ -15,14 +15,15 @@
         
         [Header("BOW CONTROL VARIABLES")]
         public Transform RightClampPoint, LeftClampPoint;
-        public float TouchRadius = 1f;
+        public float TouchRadius    = 1f;
+        public float PullableRadius = 1f;
         public Image BowCenterPointImg;
         [Range(1f, 20f)] public float SmoothRotateSpeed = 12f;
         [Range(1f, 5f)]  public float ArrowPullingSpeed = 1f;
 
         private PULLINGTYPE currentPullType;     //조준 타입 변경 -> Player Settings로 부터 받아오는 Enum Data
-        private bool isBowPulling = false;       //활이 일정거리 이상 당겨져서 회전할 수 있는 상태
-        private bool bowPullBegan = false;       //Bow Pull State Variables
+        private bool isBowPulling   = false;     //활이 일정거리 이상 당겨져서 회전할 수 있는 상태
+        private bool isBowPullBegan = false;     //Bow Pull State Variables
         private float maxBowAngle, minBowAngle;  //Min, Max BowAngle Variables
         private float bowAngle;                  //The Angle Variable (angle between Click point and Bow).
         private Vector2 correctionTouchPosition; //First Touch Type Correction Vector
@@ -31,8 +32,10 @@
         private Vector3 direction;
         private Vector3 currentClickPosition;
         private Vector3 tempEulerAngle;
-        public bool IsBowPullBegan { get { return bowPullBegan; } }   //Bow Pulling Condition property (Used ACSP)
-        public bool IsPullingStop { get; set; }                       //Pulling Stop boolean For Pause, Clear Battle Scene
+        //private bool isPullingStartPosSet = false;    //When pulling is started, it is used to forcibly hold the position.
+                                                        //Enabled later, when using with -> PullingStartPosition();
+        public bool IsBowPulling { get { return isBowPulling; } }   //Bow Pulling Condition property (Used ACSP)
+        public bool IsPullingStop { get; set; }                     //Pulling Stop boolean For Pause, Clear Battle Scene
 
         [Header("ARROW VARIABLES")] //Arrow Relation Variables
         [ReadOnly] public AD_Arrow ArrowComponent;
@@ -108,7 +111,7 @@
                     //Touch Begin
                     this.BowBegan(screenTouch.position);
                 }
-                else if (screenTouch.phase == TouchPhase.Moved && bowPullBegan)
+                else if (screenTouch.phase == TouchPhase.Moved && isBowPullBegan)
                 {
                     //Touch Moved
                     this.BowMoved(screenTouch.position);
@@ -132,12 +135,13 @@
                 this.BowReleased(Input.mousePosition);
             }
 
-            if (bowPullBegan)
+            if (isBowPullBegan)
             {
                 //Click Moved
                 this.BowMoved(Input.mousePosition);
             }
 #endif
+            ArrowPosUpdate();
         }
 
         private void FixedUpdate()
@@ -167,7 +171,7 @@
                 AD_BowRope.instance.arrowCatchPoint = ArrowComponent.arrowChatchPoint;
             }
 
-            bowPullBegan = true;
+            isBowPullBegan = true;
         }
 
         private void BowMoved(Vector2 pos)
@@ -175,6 +179,7 @@
             //Get CurrentClick Position
             currentClickPosition = MainCam.ScreenToWorldPoint(pos);
 
+            #region OLD_BOW_ROTATION_LOGIC
             //Pull Type 추가에 따른 스크립트 구분
             //if (currentPullType == PULLINGTYPE.AROUND_BOW_TOUCH)
             //{
@@ -248,6 +253,7 @@
             //
             //    DrawTouchPos.Instance.DrawTouchLine(correctionTouchPosition, initialTouchPos);
             //}
+            #endregion
 
             #region NEW_CONTROLLER
 
@@ -255,10 +261,12 @@
                 Vector2.Distance(transform.position, currentClickPosition) : 
                 Vector2.Distance(initialTouchPos, currentClickPosition);
 
-            if (distOfPoint > 1f)
+            isBowPulling = (distOfPoint > 1f) ? true : false;
+
+            if(isBowPulling)
             {
-                //when pulling starts, correct the position once.
-                PullingStartPosition(currentClickPosition);
+                //when pulling starts, correct the position once. (부자연스러워 보여서 비활성화.)
+                //PullingStartPosition(currentClickPosition);
 
                 this.direction = (currentPullType == PULLINGTYPE.AROUND_BOW_TOUCH) ?
                     currentClickPosition - transform.position :
@@ -269,32 +277,26 @@
                             minBowAngle, maxBowAngle);
 
                 //Set Direction of the Bow.
-                tempEulerAngle        = transform.eulerAngles;
-                tempEulerAngle.z      = bowAngle;
+                tempEulerAngle = transform.eulerAngles;
+                tempEulerAngle.z = bowAngle;
                 transform.eulerAngles = tempEulerAngle;
 
-                if(LoadedArrow != null) //따로 뺄까 생각중
-                {
-                    CheckPauseBattle();
-                    arrowPosition = LoadedArrow.transform.position;
-                    arrowPosition = Vector3.MoveTowards(arrowPosition, LeftClampPoint.position, Time.deltaTime * ArrowPullingSpeed);
-                    LoadedArrow.transform.position = arrowPosition;
-
-                    arrowForce = LoadedArrow.transform.up * ArrowComponent.power;
-                }
+                //Draw Touch Line : Color Green.
+                if (currentPullType == PULLINGTYPE.AROUND_BOW_TOUCH) DrawTouchPos.Instance.DrawTouchLine(currentClickPosition, transform.position);
+                else if (currentPullType == PULLINGTYPE.FREE_TOUCH)  DrawTouchPos.Instance.DrawTouchLine(currentClickPosition, initialTouchPos);
             }
             else
             {
-                if (LoadedArrow != null)
-                    LoadedArrow.transform.position = RightClampPoint.position;
-                arrowForce = Vector2.zero;
-                isBowPulling = false;
+                //Draw Touch Line : Color Red.
+                if (currentPullType == PULLINGTYPE.AROUND_BOW_TOUCH) DrawTouchPos.Instance.DrawTouchLine(currentClickPosition, transform.position);
+                else if (currentPullType == PULLINGTYPE.FREE_TOUCH)  DrawTouchPos.Instance.DrawTouchLine(currentClickPosition, initialTouchPos);
             }
 
-            if (currentPullType == PULLINGTYPE.AROUND_BOW_TOUCH) DrawTouchPos.Instance.DrawTouchLine(currentClickPosition, transform.position);
-            else if (currentPullType == PULLINGTYPE.FREE_TOUCH)  DrawTouchPos.Instance.DrawTouchLine(currentClickPosition, initialTouchPos);
+            CheckPauseBattle();
 
             #endregion
+
+            #region OLD_ARROW_LOGIC
 
             //if (LoadedArrow != null)
             //{
@@ -335,16 +337,18 @@
             //
             //    }
             //}
+            #endregion
         }
 
         private void BowReleased(Vector2 pos)
         {
-            if (bowPullBegan)
+            if (isBowPullBegan)
             {
-                bowPullBegan = false;
                 currentClickPosition = MainCam.ScreenToWorldPoint(pos);
+                launchArrow  = true;
+                isBowPulling = false;
 
-                launchArrow = true;
+                isBowPullBegan = false;
             }
 
             DrawTouchPos.Instance.ReleaseTouchLine();
@@ -444,28 +448,52 @@
         {
             if (IsPullingStop)
             {
-                LoadedArrow.transform.position = RightClampPoint.transform.position;
-                bowPullBegan = false;
+                if (LoadedArrow != null)
+                    LoadedArrow.transform.position = RightClampPoint.transform.position;
+                isBowPullBegan = false; isBowPulling = false;
             }
         }
 
         private void PullingStartPosition(Vector3 touchPos)
         {
-            if(isBowPulling == false)
+            //if(isPullingStartPosSet == false)
+            //{
+            //    //Pulling Start Action
+            //    this.direction = (currentPullType == PULLINGTYPE.AROUND_BOW_TOUCH) ?
+            //        touchPos - transform.position :
+            //        touchPos - initialTouchPos;
+            //
+            //    this.bowAngle = Mathf.Clamp(Mathf.Atan2(direction.x, -direction.y) * Mathf.Rad2Deg + 90, minBowAngle, maxBowAngle);
+            //
+            //    tempEulerAngle        = transform.eulerAngles;
+            //    tempEulerAngle.z      = bowAngle;
+            //    transform.eulerAngles = tempEulerAngle;
+            //
+            //    isPullingStartPosSet = true;
+            //}
+        }
+
+        private void ArrowPosUpdate()
+        {
+            if(LoadedArrow != null)
             {
-                //Pulling Start Action
-                this.direction = (currentPullType == PULLINGTYPE.AROUND_BOW_TOUCH) ?
-                    touchPos - transform.position :
-                    touchPos - initialTouchPos;
-
-                this.bowAngle = Mathf.Clamp(Mathf.Atan2(direction.x, -direction.y) * Mathf.Rad2Deg + 90, minBowAngle, maxBowAngle);
-
-                tempEulerAngle        = transform.eulerAngles;
-                tempEulerAngle.z      = bowAngle;
-                transform.eulerAngles = tempEulerAngle;
-
-                isBowPulling = true;
+                if(isBowPulling)
+                {
+                    arrowPosition = LoadedArrow.transform.position;
+                    arrowPosition = Vector3.MoveTowards(arrowPosition, LeftClampPoint.position, Time.deltaTime * ArrowPullingSpeed);
+                    LoadedArrow.transform.position = arrowPosition;
+                    
+                    arrowForce = LoadedArrow.transform.up * ArrowComponent.power;
+                }
+                else
+                {
+                    //LoadedArrow.transform.position = RightClampPoint.position;
+                    //arrowForce = Vector2.zero;
+                }
             }
+
+            //화살이 당겨져서 발사될 때, 사용되는 arrowForce는 항상 최대치로 고정되어 발사되도록 로직변경
+            //당겨지는 애니메이션은 그냥 관상용일뿐, 얼마나 당겨졌는가는 상관없도록 로직 변경
         }
     }
 }

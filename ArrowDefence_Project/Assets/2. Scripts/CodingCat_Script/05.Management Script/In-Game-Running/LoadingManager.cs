@@ -15,6 +15,8 @@
         [Header("Loading UI")]
         public Slider progressSlider = null;
         public TextMeshProUGUI tmpProgress = null;
+        public Image SliderFillImage;
+        public Color LoadingSliderColor;
 
         //private Text progressText = null;
         //private Text loadingText = null;
@@ -25,6 +27,9 @@
             //Current TimeScale variable affects loading Logic.
             if (Time.timeScale != 1f)
                 CodingCat_Games.GameManager.Instance.TimeDefault();
+
+            //Set Loading Slider Color
+            SliderFillImage.color = LoadingSliderColor;
 
             if (SceneLoader.Instance.NextScene != null)
             {

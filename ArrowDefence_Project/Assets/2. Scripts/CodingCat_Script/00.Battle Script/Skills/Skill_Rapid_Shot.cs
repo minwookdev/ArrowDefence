@@ -29,8 +29,8 @@
             {
                 yield return new WaitForSeconds(0.2f);
 
-                // -5 ~ 5의 랜덤 각도
-                short randomAngle = (short)Random.Range(-5, 5 + 1);
+                // -3 ~ 3의 랜덤 각도
+                short randomAngle = (short)Random.Range(-3, 3 + 1);
 
                 #region OLD_CODE
 

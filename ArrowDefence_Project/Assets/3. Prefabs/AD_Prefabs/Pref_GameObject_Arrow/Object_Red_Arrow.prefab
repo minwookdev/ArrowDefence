@@ -197,12 +197,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8331987b02608c4b973083bb036bf47, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  leftClampPoint: {fileID: 0}
-  rightClampPoint: {fileID: 0}
   arrowChatchPoint: {fileID: 6328379487739595121}
   arrowTrail: {fileID: 1463430684381138353}
+  leftClampPoint: {fileID: 0}
+  rightClampPoint: {fileID: 0}
+  ArrowPower: 1200
   isLaunched: 0
-  power: 0
 --- !u!114 &5378564909189577020
 MonoBehaviour:
   m_ObjectHideFlags: 0

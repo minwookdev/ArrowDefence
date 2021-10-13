@@ -30,6 +30,9 @@
         public GameObject DropItemSlotPref;
         public List<UI_ItemDataSlot> DropItemSlots;
 
+        [Header("SHOW FPS")]
+        public bool isOnFPS = false;
+
         private float screenZpos = 90f;
         private LineRenderer arrowLimitLine;
         private Vector2 topLeftPoint;
@@ -41,7 +44,14 @@
         public Canvas BattleSceneUICanvas;
         public Camera UICamera;
 
-        private void Awake() => GameManager.Instance.ResolutionPortrait(Camera.main);
+        private void Awake()
+        {
+            //Camera Resolution Initialize
+            GameManager.Instance.ResolutionPortrait(Camera.main);
+            GameManager.Instance.ResolutionPortrait(UICamera);
+
+
+        }
 
         void Start()
         {
@@ -85,6 +95,9 @@
 
             //Fade Effect When Etnering The Battle Scene (if Don't Work This Function, Enable The DEV Variable)
             this.OnSceneEnteringFadeOut();
+
+            //FPS Checker Initialize
+            if (isOnFPS) gameObject.AddComponent<FrameRateCheck>();
 
             #endregion
         }

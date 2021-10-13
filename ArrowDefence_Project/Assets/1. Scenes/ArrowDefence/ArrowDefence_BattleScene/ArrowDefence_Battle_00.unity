@@ -2597,6 +2597,7 @@ MonoBehaviour:
   RightClampPoint: {fileID: 0}
   LeftClampPoint: {fileID: 0}
   TouchRadius: 1
+  PullableRadius: 1
   BowCenterPointImg: {fileID: 0}
   SmoothRotateSpeed: 12
   ArrowPullingSpeed: 1
@@ -10766,6 +10767,9 @@ MonoBehaviour:
   ObjectTouchPosImage: {fileID: 1376701272}
   ObjectLineRender: {fileID: 189217028}
   LineWidth: 0.025
+  ColorChangeDuration: 0.5
+  EnableColor: {r: 0.5385085, g: 1, b: 0.4481132, a: 1}
+  DisableColor: {r: 1, g: 0.2971698, b: 0.2971698, a: 1}
 --- !u!1 &1350883390
 GameObject:
   m_ObjectHideFlags: 0
@@ -13366,7 +13370,6 @@ GameObject:
   - component: {fileID: 1744735825}
   - component: {fileID: 1744735827}
   - component: {fileID: 1744735828}
-  - component: {fileID: 1744735826}
   m_Layer: 0
   m_Name: SceneRouteObj
   m_TagString: Untagged
@@ -13413,20 +13416,9 @@ MonoBehaviour:
   DropItemSlotPref: {fileID: 5984624412175565113, guid: 07963ed1caf360a429dfd7b2ee79fd4d,
     type: 3}
   DropItemSlots: []
+  isOnFPS: 1
   BattleSceneUICanvas: {fileID: 218318155}
   UICamera: {fileID: 259746812}
---- !u!114 &1744735826
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1744735823}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6a04fb2be9069e948aea496b063bbfc1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1744735827
 MonoBehaviour:
   m_ObjectHideFlags: 0

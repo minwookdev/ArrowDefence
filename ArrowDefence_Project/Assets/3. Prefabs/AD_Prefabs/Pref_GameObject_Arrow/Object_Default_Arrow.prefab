@@ -164,12 +164,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8331987b02608c4b973083bb036bf47, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  leftClampPoint: {fileID: 0}
-  rightClampPoint: {fileID: 0}
   arrowChatchPoint: {fileID: 6082609631992878996}
   arrowTrail: {fileID: 6082609632002076946}
+  leftClampPoint: {fileID: 0}
+  rightClampPoint: {fileID: 0}
+  ArrowPower: 1200
   isLaunched: 0
-  power: 0
 --- !u!114 &6082609631992581024
 MonoBehaviour:
   m_ObjectHideFlags: 0

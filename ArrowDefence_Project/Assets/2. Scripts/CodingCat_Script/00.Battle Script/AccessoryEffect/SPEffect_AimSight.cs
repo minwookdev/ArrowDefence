@@ -108,15 +108,24 @@
         {
             if(laserLine.startColor.a > 0f)
             {
+                //currentStartColor    = laserLine.startColor;
+                //currentStartColor.a -= Time.deltaTime * alphaChangeSpeed;
+                //laserLine.startColor = currentStartColor;
+
+                //Pulling 상태가 끝나면 바로 사라지도록 수정
                 currentStartColor    = laserLine.startColor;
-                currentStartColor.a -= Time.deltaTime * alphaChangeSpeed;
+                currentStartColor.a  = 0f;
                 laserLine.startColor = currentStartColor;
             }
             
             if(laserLine.endColor.a > 0f)
             {
+                //currentEndColor    = laserLine.endColor;
+                //currentEndColor.a -= Time.deltaTime * alphaChangeSpeed;
+                //laserLine.endColor = currentEndColor;
+
                 currentEndColor    = laserLine.endColor;
-                currentEndColor.a -= Time.deltaTime * alphaChangeSpeed;
+                currentEndColor.a  = 0f;
                 laserLine.endColor = currentEndColor;
             }
         }

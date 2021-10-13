@@ -6,19 +6,20 @@
     public class AD_Arrow : MonoBehaviour
     {
         //The Left, Right Clamp Point for the Arrow.
-        public Transform leftClampPoint, rightClampPoint;
+        [Header("COMPONENT")]
         public Transform arrowChatchPoint;
         public TrailRenderer arrowTrail;
+        public Transform leftClampPoint, rightClampPoint;
 
+        [Header("SHOOTING")]
+        public float ArrowPower;
         [ReadOnly] public bool isLaunched;
-        [HideInInspector]
-        public float power;
 
         //Controll Arrow Position (Before Launched)
         private Vector3 arrowPosition;
 
         //Launch Power for the Arrow
-        private float powerFactor = 2000;
+        //private float powerFactor = 2000;
         private Rigidbody2D rBody;
         private PolygonCollider2D polyCollider;
 
@@ -40,7 +41,7 @@
             if (!isLaunched)
             {
                 ClampPosition();
-                CalculatePower();
+                //CalculatePower();
             }
         }
 
@@ -62,7 +63,7 @@
 
         private void CalculatePower()
         {
-            this.power = Vector2.Distance(transform.position, rightClampPoint.position) * powerFactor;
+            //this.power = Vector2.Distance(transform.position, rightClampPoint.position) * powerFactor;
         }
 
         public void ShotArrow(Vector2 force, Transform parent)

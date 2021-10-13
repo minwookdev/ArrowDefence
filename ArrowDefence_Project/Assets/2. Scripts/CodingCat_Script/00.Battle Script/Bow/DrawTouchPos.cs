@@ -1,8 +1,9 @@
 ﻿namespace CodingCat_Games
 {
-    using CodingCat_Scripts;
     using UnityEngine;
     using UnityEngine.UI;
+    using DG.Tweening;
+    using CodingCat_Scripts;
 
     public class DrawTouchPos : MonoBehaviour
     {
@@ -21,9 +22,17 @@
         [Header("LINE VARIABLES")]
         [Range(0.1f, 0.001f)] public float LineWidth = 0.025f;
 
+        [Header("COLOR")]
+        public float ColorChangeDuration = 1f;
+        public Color EnableColor;
+        public Color DisableColor;
+
         private bool isInitialize  = false;
         private bool isDrawLine    = false;
-        private Color tempColor;
+        private bool isColored     = false;
+        private float colorTime = 0f;
+        Color tempColor;
+        Color colorAlphaZero;
 
         private void Awake() => Instance = this;
 
@@ -55,9 +64,24 @@
             ObjectLineRender.material         = LineRenderMaterial;
             ObjectLineRender.sortingLayerName = "Object:Bow";
             ObjectLineRender.sortingOrder     = 0;
+
+            //Initialize Color
+            if (ObjectCenterPivotImage.color.a != 0f)
+                ObjectCenterPivotImage.color = new Color(ObjectCenterPivotImage.color.r, ObjectCenterPivotImage.color.g, ObjectCenterPivotImage.color.b, 0f);
+            if (ObjectTouchPosImage.color.a != 0f)
+                ObjectTouchPosImage.color = new Color(ObjectTouchPosImage.color.r, ObjectTouchPosImage.color.g, ObjectTouchPosImage.color.b, 0f);
+            if (ObjectLineRender.startColor.a != 0f)
+                ObjectLineRender.startColor = new Color(ObjectLineRender.startColor.r, ObjectLineRender.startColor.g, ObjectLineRender.startColor.b, 0f);
+            if (ObjectLineRender.endColor.a != 0f)
+                ObjectLineRender.endColor = new Color(ObjectLineRender.endColor.r, ObjectLineRender.endColor.g, ObjectLineRender.endColor.b, 0f);
+
+            colorAlphaZero = DisableColor;
+            colorAlphaZero.a = 0f;
         }
 
         private void FixedUpdate() => DrawLine();
+
+        #region CONTROLLER_USED
 
         /// <summary>
         /// Draw LineRenderer between StartPos and EndPos on Screen
@@ -81,6 +105,26 @@
             if (isInitialize == false) return;
             isDrawLine = false;
         }
+
+        /// <summary>
+        /// (Apply Color) Draw LineRenderer between StartPos and EndPos on Screen
+        /// </summary>
+        /// <param name="startPos"></param>
+        /// <param name="endPos"></param>
+        /// <param name="targetColor"></param>
+        public void DrawTouchLine(Vector3 startPos, Vector3 endPos, bool isEnable)
+        {
+            if (isInitialize == false) return;
+
+            ObjectCenterPivotImage.transform.position = GameGlobal.FixedVectorOnScreen(startPos);
+            ObjectTouchPosImage.transform.position    = GameGlobal.FixedVectorOnScreen(endPos);
+            isDrawLine = true;
+
+            //Lerp Color
+            LerpColor(isEnable);
+        }
+
+        #endregion
 
         private void DrawLine()
         {
@@ -130,32 +174,69 @@
 
         private void DisableObjectsAlpha()
         {
-            if (ObjectCenterPivotImage.color.a > 0)
-            {
-                tempColor = ObjectCenterPivotImage.color;
-                tempColor.a = 0f;
-                ObjectCenterPivotImage.color = tempColor;
-            }
+            ObjectCenterPivotImage.color = colorAlphaZero;
+            ObjectTouchPosImage.color    = colorAlphaZero;
+            ObjectLineRender.startColor  = colorAlphaZero;
+            ObjectLineRender.endColor    = colorAlphaZero;
+        }
 
-            if(ObjectTouchPosImage.color.a > 0)
-            {
-                tempColor = ObjectTouchPosImage.color;
-                tempColor.a = 0f;
-                ObjectTouchPosImage.color = tempColor;
-            }
+        private void ChangeColor(bool isEnabled)
+        {
+            ObjectCenterPivotImage.color = (isEnabled) ? Color.Lerp(ObjectCenterPivotImage.color, EnableColor, colorTime) : 
+                                                         Color.Lerp(ObjectCenterPivotImage.color, DisableColor, colorTime);
+            ObjectTouchPosImage.color    = (isEnabled) ? Color.Lerp(ObjectTouchPosImage.color, EnableColor, colorTime) :
+                                                         Color.Lerp(ObjectTouchPosImage.color, DisableColor, colorTime);
+            ObjectLineRender.startColor  = (isEnabled) ? Color.Lerp(ObjectLineRender.startColor, EnableColor, colorTime) :
+                                                         Color.Lerp(ObjectLineRender.startColor, DisableColor, colorTime);
+            ObjectLineRender.endColor    = (isEnabled) ? Color.Lerp(ObjectLineRender.endColor, EnableColor, colorTime) :
+                                                         Color.Lerp(ObjectLineRender.endColor, DisableColor, colorTime);
 
-            if(ObjectLineRender.startColor.a > 0)
+            if (colorTime < ColorChangeDuration)
             {
-                tempColor = ObjectLineRender.startColor;
-                tempColor.a = 0f;
-                ObjectLineRender.startColor = tempColor;
+                colorTime += Time.deltaTime / ColorChangeDuration;
             }
-
-            if(ObjectLineRender.endColor.a > 0)
+            else
             {
-                tempColor = ObjectLineRender.endColor;
-                tempColor.a = 0f;
-                ObjectLineRender.endColor = tempColor;
+                if(isEnabled)
+                {
+                    if      (ObjectCenterPivotImage.color != EnableColor) colorTime = 0f;
+                    else if (ObjectTouchPosImage.color != EnableColor)    colorTime = 0f;
+                    else if (ObjectLineRender.startColor != EnableColor)  colorTime = 0f;
+                    else if (ObjectLineRender.endColor != EnableColor)    colorTime = 0f;
+                }
+                else
+                {
+                    if      (ObjectCenterPivotImage.color != DisableColor) colorTime = 0f;
+                    else if (ObjectTouchPosImage.color != DisableColor)    colorTime = 0f;
+                    else if (ObjectLineRender.startColor != DisableColor)  colorTime = 0f;
+                    else if (ObjectLineRender.endColor != DisableColor)    colorTime = 0f;
+                }
+            }
+        }
+
+        private void LerpColor(bool isEnable)
+        {
+            if (isEnable)
+            {
+                if (isColored == true)
+                {
+                    ObjectCenterPivotImage.DOColor(EnableColor, ColorChangeDuration);
+                    ObjectTouchPosImage.DOColor(EnableColor, ColorChangeDuration);
+                    ObjectLineRender.DOColor(new Color2(ObjectLineRender.startColor, ObjectLineRender.endColor), 
+                                             new Color2(EnableColor, EnableColor), ColorChangeDuration)
+                                    .OnStart(() => isColored = false);
+                }
+            }
+            else
+            {
+                if(isColored == false)
+                {
+                    ObjectCenterPivotImage.DOColor(DisableColor, ColorChangeDuration);
+                    ObjectTouchPosImage.DOColor(DisableColor, ColorChangeDuration);
+                    ObjectLineRender.DOColor(new Color2(ObjectLineRender.startColor, ObjectLineRender.endColor), 
+                                             new Color2(DisableColor, DisableColor), ColorChangeDuration)
+                                    .OnStart(() => isColored = true);
+                }
             }
         }
     }

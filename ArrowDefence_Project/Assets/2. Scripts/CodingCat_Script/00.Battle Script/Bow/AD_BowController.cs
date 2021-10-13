@@ -19,14 +19,13 @@
         public float PullableRadius = 1f;
         public Image BowCenterPointImg;
         [Range(1f, 20f)] public float SmoothRotateSpeed = 12f;
-        [Range(1f, 5f)]  public float ArrowPullingSpeed = 1f;
+        [Range(0f, 2f)]  public float ArrowPullingSpeed = 1f;
 
         private PULLINGTYPE currentPullType;     //조준 타입 변경 -> Player Settings로 부터 받아오는 Enum Data
         private bool isBowPulling   = false;     //활이 일정거리 이상 당겨져서 회전할 수 있는 상태
         private bool isBowPullBegan = false;     //Bow Pull State Variables
         private float maxBowAngle, minBowAngle;  //Min, Max BowAngle Variables
         private float bowAngle;                  //The Angle Variable (angle between Click point and Bow).
-        private Vector2 correctionTouchPosition; //First Touch Type Correction Vector
         private Vector2 limitTouchPosVec;        //Bow GameObject와 거리를 비교할 벡터
         private Vector3 initialTouchPos;         //처음 터치한 곳을 저장할 벡터
         private Vector3 direction;
@@ -42,7 +41,7 @@
         [ReadOnly] public Transform ArrowParentTr;
         [ReadOnly] public GameObject LoadedArrow;
 
-        private float requiredLaunchForce = 250f;
+        //private float requiredLaunchForce = 250f;
         private bool launchArrow = false;
         private Vector2 arrowForce;
         private Vector3 arrowPosition;
@@ -277,19 +276,19 @@
                             minBowAngle, maxBowAngle);
 
                 //Set Direction of the Bow.
-                tempEulerAngle = transform.eulerAngles;
-                tempEulerAngle.z = bowAngle;
+                tempEulerAngle        = transform.eulerAngles;
+                tempEulerAngle.z      = bowAngle;
                 transform.eulerAngles = tempEulerAngle;
 
                 //Draw Touch Line : Color Green.
-                if (currentPullType == PULLINGTYPE.AROUND_BOW_TOUCH) DrawTouchPos.Instance.DrawTouchLine(currentClickPosition, transform.position);
-                else if (currentPullType == PULLINGTYPE.FREE_TOUCH)  DrawTouchPos.Instance.DrawTouchLine(currentClickPosition, initialTouchPos);
+                if (currentPullType == PULLINGTYPE.AROUND_BOW_TOUCH) DrawTouchPos.Instance.DrawTouchLine(currentClickPosition, transform.position, true);
+                else if (currentPullType == PULLINGTYPE.FREE_TOUCH)  DrawTouchPos.Instance.DrawTouchLine(currentClickPosition, initialTouchPos, true);
             }
             else
             {
                 //Draw Touch Line : Color Red.
-                if (currentPullType == PULLINGTYPE.AROUND_BOW_TOUCH) DrawTouchPos.Instance.DrawTouchLine(currentClickPosition, transform.position);
-                else if (currentPullType == PULLINGTYPE.FREE_TOUCH)  DrawTouchPos.Instance.DrawTouchLine(currentClickPosition, initialTouchPos);
+                if (currentPullType == PULLINGTYPE.AROUND_BOW_TOUCH) DrawTouchPos.Instance.DrawTouchLine(currentClickPosition, transform.position, false);
+                else if (currentPullType == PULLINGTYPE.FREE_TOUCH)  DrawTouchPos.Instance.DrawTouchLine(currentClickPosition, initialTouchPos, false);
             }
 
             CheckPauseBattle();
@@ -345,9 +344,7 @@
             if (isBowPullBegan)
             {
                 currentClickPosition = MainCam.ScreenToWorldPoint(pos);
-                launchArrow  = true;
-                isBowPulling = false;
-
+                launchArrow    = true;  //Check LaunchArrow The FixedUpdate.
                 isBowPullBegan = false;
             }
 
@@ -356,22 +353,30 @@
 
         private void LaunchTheArrow()
         {
-            if (LoadedArrow == null)
-            {
-                //장전할 수 있는 화살이 없음 -> CatPoolManager 체크 또는 Pool Arrow Object 갯수 체크
-                CatLog.WLog("Current Loaded Arrow is Null, Can't Launch the Arrow");
-                return;
-            }
+            #region OLD
+            //일정 이상 당겨져야 발사되도록 할 조건
+            //if (arrowForce.magnitude < requiredLaunchForce)
+            //{
+            //    //Reset Position
+            //    LoadedArrow.transform.position = RightClampPoint.transform.position;
+            //
+            //    CatLog.Log("Not Enough Require Force, More Pulling the Bow !");
+            //    return;
+            //}
 
-            //일정 이상 당겨져야 발사되도록 할 조건 :: 다시 점검 
-            if (arrowForce.magnitude < requiredLaunchForce)
+            //Check Bow Pulling [distOfPoint]
+            //if(isBowPulling == false)
+            //{
+            //    CatLog.Log("Dist of Point was short, returned.");
+            //    LoadedArrow.transform.position = RightClampPoint.transform.position;
+            //    return;
+            //}
+            #endregion
+            //장전되어 있는 화살이 없거나 isPulling 않들어왔을때 Return
+            if (LoadedArrow == null || isBowPulling == false)
             {
-                //Reset Position
-                LoadedArrow.transform.position = RightClampPoint.transform.position;
-
-                CatLog.Log("Not Enough Require Force, More Pulling the Bow !");
-                return;
-            }
+                CatLog.WLog("Can't Launch the Arrow"); return;
+            } isBowPulling = false;
 
             AD_BowRope.instance.arrowCatchPoint = null;
 
@@ -483,17 +488,14 @@
                     arrowPosition = Vector3.MoveTowards(arrowPosition, LeftClampPoint.position, Time.deltaTime * ArrowPullingSpeed);
                     LoadedArrow.transform.position = arrowPosition;
                     
-                    arrowForce = LoadedArrow.transform.up * ArrowComponent.power;
+                    //Arrow Direction * Force
+                    arrowForce = LoadedArrow.transform.up * ArrowComponent.ArrowPower;
                 }
                 else
                 {
-                    //LoadedArrow.transform.position = RightClampPoint.position;
-                    //arrowForce = Vector2.zero;
+                    LoadedArrow.transform.position = RightClampPoint.position;
                 }
             }
-
-            //화살이 당겨져서 발사될 때, 사용되는 arrowForce는 항상 최대치로 고정되어 발사되도록 로직변경
-            //당겨지는 애니메이션은 그냥 관상용일뿐, 얼마나 당겨졌는가는 상관없도록 로직 변경
         }
     }
 }

@@ -1,8 +1,6 @@
 ﻿namespace CodingCat_Scripts
 {
-    using JetBrains.Annotations;
     using System.Collections;
-    using System.Collections.Generic;
     using UnityEngine;
 
     public class FrameRateCheck : MonoBehaviour
@@ -58,7 +56,7 @@
         {
             int w = Screen.width, h = Screen.height;
 
-            rect = new Rect(0, 250f, w, h * 4 / 100);
+            rect = new Rect(0f, 175f, w, h * 4 / 100);
 
             style = new GUIStyle();
             style.alignment = TextAnchor.UpperLeft;
@@ -86,7 +84,6 @@
 
         void OnGUI()//소스로 GUI 표시.
         {
-
             msec = deltaTime * 1000.0f;
             fps = 1.0f / deltaTime;  //초당 프레임 - 1초에
 

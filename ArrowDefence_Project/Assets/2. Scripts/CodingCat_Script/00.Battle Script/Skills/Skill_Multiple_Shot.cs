@@ -10,13 +10,15 @@
         private float spreadAngle;
 
         public override void BowSpecialSkill(float facingVec, float arrowSpreadAngle, byte numOfArrows, Transform arrowParent,
-                                  AD_BowController adBow, Vector3 initScale, Vector3 initPos, Vector2 arrowForce)
+                                  AD_BowController adBow, Vector3 initScale, Vector3 initPos, Vector2 arrowForce, LOAD_ARROW_TYPE arrowType)
         {
             //CatLog.Log("Bow Special Effect Occured :: Multiple Shot");
 
             //float facingRotation = Mathf.Atan2(facingVec.y, facingVec.x) * Mathf.Rad2Deg;
             float startRotation = facingVec + arrowSpreadAngle / 2f;
             float angleIncrease = arrowSpreadAngle / ((float)numOfArrows - 1f);
+
+            string poolTag = (arrowType == LOAD_ARROW_TYPE.ARROW_MAIN) ? AD_Data.POOLTAG_MAINARROW_LESS : AD_Data.POOLTAG_SUBARROW_LESS;
 
             for (int i = 0; i < numOfArrows; i++)
             {
@@ -56,8 +58,7 @@
 
                 #endregion
 
-                var poolArrow = CCPooler.SpawnFromPool<AD_Arrow_less>(AD_Data.POOLTAG_MAINARROW_LESS,
-                                                       arrowParent, initScale, initPos,
+                var poolArrow = CCPooler.SpawnFromPool<AD_Arrow_less>(poolTag, arrowParent, initScale, initPos,
                                                        Quaternion.Euler(0f, 0f, tempRotation - 90f));
 
                 if(poolArrow)

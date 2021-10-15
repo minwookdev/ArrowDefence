@@ -25,13 +25,17 @@
 
         public void Setup(SLOTPANELTYPE type, Item_Equipment item)
         {
+            if (this.gameObject.activeSelf == false)
+                gameObject.SetActive(true);
+
             var playerEquips = CCPlayerData.equipments;
             itemAddress = item;
 
             if(type == SLOTPANELTYPE.SLOT_ARROW)
             {
                 objectLeftPanel.SetActive(true);
-                if (objectRightPanel.activeSelf) objectRightPanel.SetActive(false);
+                if (objectRightPanel.activeSelf)
+                    objectRightPanel.SetActive(false);
 
                 if (playerEquips.IsEquippedArrowMain())
                 {
@@ -49,7 +53,8 @@
             else if(type == SLOTPANELTYPE.SLOT_ACCESSORY)
             {
                 objectRightPanel.SetActive(true);
-                if (objectLeftPanel.activeSelf) objectLeftPanel.SetActive(false);
+                if (objectLeftPanel.activeSelf)
+                    objectLeftPanel.SetActive(false);
 
                 var accessories = playerEquips.GetAccessories();
 

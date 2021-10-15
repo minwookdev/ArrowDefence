@@ -39,10 +39,7 @@
         private readonly bool isDevMode = true;
         public bool IsDevMode { get => isDevMode; }
 
-        private void Start()
-        {
-            this.fixedDeltaTime = Time.fixedDeltaTime;
-        }
+        private void Start() => this.fixedDeltaTime = Time.fixedDeltaTime;
 
         #region SCREEN
 
@@ -71,23 +68,60 @@
 
         #endregion
 
-        #region GAME_PROGRESS_LOGIC
+        #region PLAYER_GEAR
 
-        public void SetupPlayerEquipments(Transform bowObjInitPos, Transform bowObjParentTr, 
-                                          string mainArrowObjTag, string mainArrowLessObjTag, int mainArrowObjPoolQuantity,
-                                          string subArrowObjTag,  string subArrowLessObjTag,  int subArrowPoolQuantity)
+        public void InitEquipments(Transform bowObjInitPos, Transform bowObjParentTr, 
+                                   string mainArrowObjTag, string mainArrowLessObjTag, int mainArrowObjPoolQuantity,
+                                   string subArrowObjTag,  string subArrowLessObjTag,  int subArrowPoolQuantity)
         {
             CCPlayerData.equipments.SetupEquipments(bowObjInitPos, bowObjParentTr, 
                                                     mainArrowObjTag, mainArrowLessObjTag, mainArrowObjPoolQuantity,
                                                     subArrowObjTag, subArrowLessObjTag, subArrowPoolQuantity);
         }
 
-        public void SetGameState(GAMESTATE gameState) => this.gameState = gameState;
-
         public void SetBowPullingStop(bool isStop)
         {
             if (AD_BowController.instance != null)
                 AD_BowController.instance.IsPullingStop = isStop;
+        }
+
+        public LOAD_ARROW_TYPE LoadArrowType()
+        {
+            LOAD_ARROW_TYPE type = (CCPlayerData.equipments.IsEquippedArrowMain()) ? LOAD_ARROW_TYPE.ARROW_MAIN : 
+                                                                                     LOAD_ARROW_TYPE.ARROW_SUB;
+            return type;
+        }
+
+        public void InitArrowSlotData(out bool slot_m, out bool slot_s, 
+                                      out Sprite arrowIconSprite_m, out Sprite arrowIconSprite_s)
+        {
+            slot_m = (CCPlayerData.equipments.IsEquippedArrowMain()) ? true : false;
+            slot_s = (CCPlayerData.equipments.IsEquippedArrowSub())  ? true : false;
+
+            if (slot_m) arrowIconSprite_m = CCPlayerData.equipments.GetMainArrow().GetSprite;
+            else        arrowIconSprite_m = null;
+            if (slot_s) arrowIconSprite_s = CCPlayerData.equipments.GetSubArrow().GetSprite;
+            else        arrowIconSprite_s = null;
+        }
+
+        public AD_BowController Controller()
+        {
+            if (AD_BowController.instance != null)
+                return AD_BowController.instance;
+            else
+                return null;
+        }
+
+        #endregion
+
+        #region BATTLE
+
+        public void SetGameState(GAMESTATE gameState) => this.gameState = gameState;
+
+        public void SetGameState(GAMESTATE gameState, System.Action callback)
+        {
+            this.gameState = gameState;
+            callback();
         }
 
         public void ResumeBattle()
@@ -101,6 +135,10 @@
             SetBowPullingStop(true);
             TimePause();
         }
+
+        #endregion
+
+        #region TIME
 
         public void TimeScaleSet(float targetTimeScaleVal)
         {
@@ -130,7 +168,7 @@
 
         #endregion
 
-        #region ITEM_DROP_LOGIC
+        #region ITEM_DROP
 
         public void InitialDroplist(ItemDropList newDropList)
         {

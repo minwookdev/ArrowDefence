@@ -14,11 +14,13 @@
         private ArrowRain_LineRender debugLineRender;
 
         public override void BowSpecialSkill(float facingVec, float arrowSpreadAngle, byte numOfArrows, 
-            Transform arrowParent, AD_BowController adBow, Vector3 initScale, Vector3 arrowInitPos, Vector2 force)
+            Transform arrowParent, AD_BowController adBow, Vector3 initScale, Vector3 arrowInitPos, Vector2 force, LOAD_ARROW_TYPE arrowType)
         {
-            base.BowSpecialSkill(facingVec, arrowSpreadAngle, numOfArrows, arrowParent, adBow, initScale, arrowInitPos, force);
+            base.BowSpecialSkill(facingVec, arrowSpreadAngle, numOfArrows, arrowParent, adBow, initScale, arrowInitPos, force, arrowType);
 
             //CatLog.Log("Bow Special Effect Occured :: Arrow Rain");
+
+            string poolTag = (arrowType == LOAD_ARROW_TYPE.ARROW_MAIN) ? AD_Data.POOLTAG_MAINARROW_LESS : AD_Data.POOLTAG_SUBARROW_LESS;
 
             for (int i =0;i < numOfArrows;i++)
             {
@@ -54,8 +56,7 @@
 
                 #endregion
 
-                var poolArrow = CCPooler.SpawnFromPool<AD_Arrow_less>(AD_Data.POOLTAG_MAINARROW_LESS, 
-                                                                      arrowParent, initScale, randomArrowPos, Quaternion.identity);
+                var poolArrow = CCPooler.SpawnFromPool<AD_Arrow_less>(poolTag, arrowParent, initScale, randomArrowPos, Quaternion.identity);
                 if(poolArrow)
                 {
                     // LocalPosition이 아닌 Position 으로 좌표잡을수 있도록 변경 -> 변경 완료

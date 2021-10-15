@@ -102,7 +102,7 @@
 
         public void OpenChoosePanel(SlotChoosePop.SLOTPANELTYPE type, Item_Equipment itemAddress)
         {
-            choosePanel.gameObject.SetActive(true);
+            //choosePanel.gameObject.SetActive(true);
             choosePanel.Setup(type, itemAddress);
         }
 

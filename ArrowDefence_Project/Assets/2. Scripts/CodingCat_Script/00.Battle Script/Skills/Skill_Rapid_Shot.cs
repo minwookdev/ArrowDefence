@@ -9,15 +9,16 @@
         private byte arrowCount;
 
         public override void BowSpecialSkill(float facingVec, float arrowSpreadAngle, byte numOfArrows, Transform arrowParent, 
-                                             AD_BowController adBow, Vector3 initScale, Vector3 initPos, Vector2 arrowForce)
+                                             AD_BowController adBow, Vector3 initScale, Vector3 initPos, Vector2 arrowForce, LOAD_ARROW_TYPE arrowType)
         {
             //base.BowSpecialSkill(facingVec, arrowSpreadAngle, numOfArrows, arrowParent, adBow, arrowInitScale, arrowInitPos, arrowForce);
 
-            adBow.StartCoroutine(RapidShot(adBow, arrowParent, initScale, initPos, facingVec, arrowForce, numOfArrows));
+            string poolTag = (arrowType == LOAD_ARROW_TYPE.ARROW_MAIN) ? AD_Data.POOLTAG_MAINARROW_LESS : AD_Data.POOLTAG_SUBARROW_LESS;
+            adBow.StartCoroutine(RapidShot(adBow, arrowParent, initScale, initPos, facingVec, arrowForce, numOfArrows, poolTag));
         }
 
         private IEnumerator RapidShot(AD_BowController adBow, Transform arrowParent, Vector3 arrowInitScale, Vector3 arrowInitPos, 
-                                      float facingVec, Vector2 force, byte numOfArrows)
+                                      float facingVec, Vector2 force, byte numOfArrows, string poolTag)
         {
             yield return null;
 
@@ -65,8 +66,7 @@
 
                 #endregion
 
-                var ccArrow = CCPooler.SpawnFromPool<AD_Arrow_less>(AD_Data.POOLTAG_MAINARROW_LESS, 
-                                                                    arrowParent, arrowInitScale, arrowInitPos, 
+                var ccArrow = CCPooler.SpawnFromPool<AD_Arrow_less>(poolTag, arrowParent, arrowInitScale, arrowInitPos, 
                                                                     Quaternion.Euler(0f, 0f, (facingVec - 90f) + randomAngle));
 
                 if (ccArrow)

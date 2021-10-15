@@ -84,13 +84,13 @@
 
         private void Start()
         {
-            //Init GameManager
+            //Init-GameManager
             battleSceneUI  = GetComponent<BattleSceneRoute>();
             monsterSpawner = GetComponent<MonsterSpawner>();
             GameManager.Instance.SetGameState(GAMESTATE.STATE_BEFOREBATTLE);
             CurrentGameState = GameManager.Instance.GameState;
 
-            //Initial Delegate
+            //Init-Delegate
             if (DropListAsset != null)
             {
                 GameManager.Instance.InitialDroplist(this.DropListAsset);
@@ -99,10 +99,19 @@
 
             OnIncreaseClearGauge += IncreaseClearGauge;
 
-            //Initializing GameObject Player's Equipments
-            GameManager.Instance.SetupPlayerEquipments(BowInitPosition, ParentTransform,
-                                                       AD_Data.POOLTAG_MAINARROW, AD_Data.POOLTAG_MAINARROW_LESS, 1,
-                                                       AD_Data.POOLTAG_SUBARROW,  AD_Data.POOLTAG_SUBARROW_LESS, 1);
+            //Init-GameObject Player's Equipments
+            GameManager.Instance.InitEquipments(BowInitPosition, ParentTransform,
+                                                AD_Data.POOLTAG_MAINARROW, AD_Data.POOLTAG_MAINARROW_LESS, 1,
+                                                AD_Data.POOLTAG_SUBARROW,  AD_Data.POOLTAG_SUBARROW_LESS, 1);
+            //Init-Arrow Slots
+            //PlayerData.Equipments와 관련된 로직이기 때문에, Progresser에서 GameManager 참조하여 처리
+            bool arrowSlot_m, arrowSlot_s;
+            Sprite iconSprite_m, iconSprite_s;
+            GameManager.Instance.InitArrowSlotData(out arrowSlot_m, out arrowSlot_s, out iconSprite_m, out iconSprite_s);
+
+            battleSceneUI.InitArrowSlots(arrowSlot_m, arrowSlot_s, iconSprite_m, iconSprite_s,
+                                        () => GameManager.Instance.Controller().ArrowSwap(LOAD_ARROW_TYPE.ARROW_MAIN),
+                                        () => GameManager.Instance.Controller().ArrowSwap(LOAD_ARROW_TYPE.ARROW_SUB));
 
             //Progresser Ready For Battle State Running
             isInitialized = true;
@@ -117,8 +126,6 @@
                 case GAMESTATE.STATE_BOSSBATTLE   : OnUpdateBossBattle();   break;
                 case GAMESTATE.STATE_ENDBATTLE    : OnUpdateEndBattle();    break;
             }
-
-            if (Input.GetKeyDown(KeyCode.O)) Time.timeScale = 0.3f;
         }
 
         private void OnDestroy()
@@ -127,7 +134,8 @@
             OnDropItemChance     -= OnDropItemRoll;
 
             //종료 되어버리는 경우 GameManager가 먼저 지워져버리기 때문에 null 체크함
-            if (GameManager.Instance != null) GameManager.Instance.ReleaseDropList();
+            if (GameManager.Instance != null)
+                GameManager.Instance.ReleaseDropList();
         }
 
         #region GAME_GAUGE_LOGIC's
@@ -281,7 +289,8 @@
             if(currentClearCount >= MaxClearCount)
             {
                 CurrentGameState = GameManager.Instance.GameState;
-                GameManager.Instance.SetGameState(GAMESTATE.STATE_ENDBATTLE);
+                GameManager.Instance.SetGameState(GAMESTATE.STATE_ENDBATTLE, () => 
+                GameManager.Instance.SetBowPullingStop(true));
             }
         }
 
@@ -299,7 +308,7 @@
             {
                 IsResult = true;
                 DropItemsAddInventory();
-                battleSceneUI.OnEnableResultPanel(dropItemList, () => GameManager.Instance.SetBowPullingStop(true));
+                battleSceneUI.OnEnableResultPanel(dropItemList);
 
                 endWaitingTime = 0f;
             }

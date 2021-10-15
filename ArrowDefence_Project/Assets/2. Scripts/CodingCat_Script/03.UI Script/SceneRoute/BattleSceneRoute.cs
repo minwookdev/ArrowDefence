@@ -2,6 +2,7 @@
 {
     using UnityEngine;
     using UnityEngine.UI;
+    using UnityEngine.EventSystems;
     using CodingCat_Scripts;
     using DG.Tweening;
     using System.Collections.Generic;
@@ -9,11 +10,12 @@
     public class BattleSceneRoute : MonoBehaviour
     {
         //Screen Limit Variable
-        [Header("DISABLE OBJECT LINE DRAW")]
+        [Header("DEV OPTIONS")]
         public bool IsVisible;
         [Range(0f, 1.0f)] 
         public float LineWidth = 0.1f;
         public Material DefaultLineMat;
+        public bool isOnFPS = false;
 
         [Header("START FADE OPTION")]
         public CanvasGroup ImgFade;
@@ -30,8 +32,10 @@
         public GameObject DropItemSlotPref;
         public List<UI_ItemDataSlot> DropItemSlots;
 
-        [Header("SHOW FPS")]
-        public bool isOnFPS = false;
+        [Header("ARROW SLOT")]
+        [SerializeField] EventTrigger mainArrowSlot;
+        [SerializeField] EventTrigger subArrowSlot;
+        [SerializeField] EventTrigger specialArrowSlot;
 
         private float screenZpos = 90f;
         private LineRenderer arrowLimitLine;
@@ -49,7 +53,6 @@
             //Camera Resolution Initialize
             GameManager.Instance.ResolutionPortrait(Camera.main);
             GameManager.Instance.ResolutionPortrait(UICamera);
-
 
         }
 
@@ -97,7 +100,8 @@
             this.OnSceneEnteringFadeOut();
 
             //FPS Checker Initialize
-            if (isOnFPS) gameObject.AddComponent<FrameRateCheck>();
+            if (isOnFPS)
+                gameObject.AddComponent<FrameRateCheck>();
 
             #endregion
         }
@@ -172,11 +176,9 @@
                    });
         }
 
-        public void OnEnableResultPanel(List<DropItem> items, System.Action callback)
+        public void OnEnableResultPanel(List<DropItem> items)
         {
             if (ResultPanel.activeSelf) return;
-
-            callback();
 
             ResultPanel.SetActive(true);
 
@@ -204,6 +206,45 @@
                 DropItemSlots[i].gameObject.SetActive(true);
                 DropItemSlots[i].Setup(items[i].ItemAsset, items[i].Quantity, BattleSceneUICanvas, UICamera);
             }
+        }
+
+        public void InitArrowSlots(bool isActiveSlot_m, bool isActiveSlot_s, Sprite icon_m, Sprite icon_s,
+                                   System.Action slotAction_m, System.Action slotAction_s)
+        {
+            //Active || Disable Arrow Swap Slot GameObject.
+            //Event Registration according to the value of isActive boolean.
+            if (isActiveSlot_m == true)
+            {
+                mainArrowSlot.gameObject.SetActive(true);
+                var arrowicon            = mainArrowSlot.transform.GetChild(0).GetComponent<Image>();
+                arrowicon.enabled        = true;
+                arrowicon.preserveAspect = true;
+                arrowicon.sprite         = icon_m;
+
+                EventTrigger.Entry m_slotEntry = new EventTrigger.Entry();
+                m_slotEntry.eventID = EventTriggerType.PointerClick;
+                m_slotEntry.callback.AddListener((data) => slotAction_m());
+                mainArrowSlot.triggers.Add(m_slotEntry);
+            }
+            else mainArrowSlot.gameObject.SetActive(false);
+
+            if (isActiveSlot_s == true)
+            {
+                subArrowSlot.gameObject.SetActive(true);
+                var arrowicon            = subArrowSlot.transform.GetChild(0).GetComponent<Image>();
+                arrowicon.enabled        = true;
+                arrowicon.preserveAspect = true;
+                arrowicon.sprite         = icon_s;
+
+                EventTrigger.Entry s_slotEntry = new EventTrigger.Entry();
+                s_slotEntry.eventID = EventTriggerType.PointerClick;
+                s_slotEntry.callback.AddListener((data) => slotAction_s());
+                subArrowSlot.triggers.Add(s_slotEntry);
+            }
+            else subArrowSlot.gameObject.SetActive(false);
+
+            //Init Special Arrow Slot GameObject
+            specialArrowSlot.gameObject.SetActive(false);
         }
     }
 }

@@ -14,6 +14,6 @@
     public class AD_BowSkill
     {
         public virtual void BowSpecialSkill(float facingVec, float arrowSpreadAngle, byte numOfArrows, Transform arrowParent,
-                                  AD_BowController adBow, Vector3 initscale, Vector3 arrowInitPos, Vector2 force) { }
+                                  AD_BowController adBow, Vector3 initscale, Vector3 arrowInitPos, Vector2 force, LOAD_ARROW_TYPE arrowType) { }
     }
 }

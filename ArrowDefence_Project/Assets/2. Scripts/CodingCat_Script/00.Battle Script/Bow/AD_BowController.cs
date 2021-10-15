@@ -1,9 +1,15 @@
 ﻿namespace CodingCat_Games
 {
-    using System.Collections;
     using UnityEngine;
     using UnityEngine.UI;
+    using System.Collections;
     using CodingCat_Scripts;
+
+    public enum LOAD_ARROW_TYPE
+    {
+        ARROW_MAIN = 0,
+        ARROW_SUB  = 1
+    }
 
     public class AD_BowController : MonoBehaviour
     {
@@ -45,14 +51,15 @@
         private bool launchArrow = false;
         private Vector2 arrowForce;
         private Vector3 arrowPosition;
-        private Vector3 initialArrowScale    = new Vector3(1.5f, 1.5f, 0f);
-        private Vector3 initialArrowRotation = new Vector3(0f, 0f, -90f);
+        private Vector3 initArrowScale = new Vector3(1.5f, 1.5f, 0f);
+        private Vector3 initArrowRot   = new Vector3(0f, 0f, -90f);
+        private LOAD_ARROW_TYPE loadArrowType;
 
         /// <summary>
         /// Bow Skills Delegate
         /// </summary>
         public delegate void BowSkillsDel(float rot, float angle, byte arrownum, Transform arrowparent,
-                                          AD_BowController bowcontroller, Vector3 initScale, Vector3 initpos, Vector2 force);
+                                          AD_BowController bowcontroller, Vector3 initScale, Vector3 initpos, Vector2 force, LOAD_ARROW_TYPE arrowType);
         public BowSkillsDel BowSkillSet;
 
         #region NOT_USED_VARIABLES
@@ -92,6 +99,9 @@
             //Init Start Bow Angle : Start 이후 처음 조준할 때 Bounce 현상 방지
             bowAngle = transform.eulerAngles.z;
             minBowAngle = 0f; maxBowAngle = 180f;
+
+            //Init Load Arrow Type : 장전될 화살 타입 정의
+            loadArrowType = GameManager.Instance.LoadArrowType();
 
             //yield return new WaitUntil(() => CCPooler.IsInitialized);
             StartCoroutine(this.ArrowReload());
@@ -161,7 +171,7 @@
             {
                 case PULLINGTYPE.AROUND_BOW_TOUCH: if (CheckTouchRaius(pos) == false) return;       break;  //Type1. 활 주변의 일정거리 터치 조준
                 case PULLINGTYPE.FREE_TOUCH:           SetInitialTouchPos(pos);                     break;  //Type2. 터치한 곳 기준 활 조준
-                case PULLINGTYPE.AUTOMATIC:            CatLog.Log("Not Support This Pulling Type"); break;  //Type3. 자동 사격
+                case PULLINGTYPE.AUTOMATIC:            CatLog.Log("Not Support This Pulling Type"); break;  //Type3. 자동 사격 (미구현)
                 default: break;
             }
 
@@ -383,8 +393,8 @@
             ArrowComponent.ShotArrow(arrowForce, ArrowParentTr);
 
             //Active Bow Skill
-            BowSkillSet?.Invoke(transform.eulerAngles.z, 30f, 2, ArrowParentTr, this, initialArrowScale,
-                                ArrowComponent.arrowChatchPoint.transform.position, arrowForce);
+            BowSkillSet?.Invoke(transform.eulerAngles.z, 30f, 2, ArrowParentTr, this, initArrowScale,
+                                ArrowComponent.arrowChatchPoint.transform.position, arrowForce, loadArrowType);
 
             LoadedArrow    = null;
             ArrowComponent = null;
@@ -400,7 +410,7 @@
             float touchDistanceFromBow = (limitTouchPosVec - (Vector2)transform.position).magnitude;
 
             if (touchDistanceFromBow <= TouchRadius) return true;
-            else CatLog.WLog("Touch Aroud Bow !");   return false;
+            else                                     return false;
         }
 
         private void SetInitialTouchPos(Vector2 pos)
@@ -433,14 +443,19 @@
 #region POOL_RELOAD
 
             yield return null;
-            
-            LoadedArrow = CCPooler.SpawnFromPool(AD_Data.POOLTAG_MAINARROW, this.transform, initialArrowScale,
-                                     RightClampPoint.position, Quaternion.identity);
 
-            LoadedArrow.transform.localEulerAngles = initialArrowRotation;
+            //LoadedArrow = CCPooler.SpawnFromPool(AD_Data.POOLTAG_MAINARROW, this.transform, initArrowScale,
+            //                         RightClampPoint.position, Quaternion.identity);
+
+            if (loadArrowType == LOAD_ARROW_TYPE.ARROW_MAIN)
+                LoadedArrow = CCPooler.SpawnFromPool(AD_Data.POOLTAG_MAINARROW, transform, initArrowScale, RightClampPoint.position, Quaternion.identity);
+            else if (loadArrowType == LOAD_ARROW_TYPE.ARROW_SUB)
+                LoadedArrow = CCPooler.SpawnFromPool(AD_Data.POOLTAG_SUBARROW, transform, initArrowScale, RightClampPoint.position, Quaternion.identity);
+
+            LoadedArrow.transform.localEulerAngles = initArrowRot;
 
             ArrowComponent = LoadedArrow.GetComponent<AD_Arrow>();
-            ArrowComponent.leftClampPoint = this.LeftClampPoint;
+            ArrowComponent.leftClampPoint  = this.LeftClampPoint;
             ArrowComponent.rightClampPoint = this.RightClampPoint;
 
 #endregion
@@ -496,6 +511,24 @@
                     LoadedArrow.transform.position = RightClampPoint.position;
                 }
             }
+        }
+
+        public void ArrowSwap(LOAD_ARROW_TYPE type)
+        {
+            //조준중 또는 전환하려는 화살이 현재 Load된 화살일 경우 스왑 불가
+            if (isBowPullBegan || loadArrowType == type)
+            {
+                CatLog.WLog("Bow State is Pulling or Same Type of arrow currently loaded");
+                return;
+            }
+            
+            //장전된 화살 Disable 처리하고 Arrow 관련 변수정리, Pool에서 화살을 꺼내서 장전
+            if (LoadedArrow != null)
+                LoadedArrow.GetComponent<AD_ArrowDirection>().DisableObject_Req(LoadedArrow);
+            AD_BowRope.instance.arrowCatchPoint  = null;
+            LoadedArrow   = null; ArrowComponent = null;
+            loadArrowType = type;
+            StartCoroutine(ArrowReload());
         }
     }
 }

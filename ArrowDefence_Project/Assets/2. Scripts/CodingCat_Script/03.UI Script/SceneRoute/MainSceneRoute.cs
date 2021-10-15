@@ -70,6 +70,7 @@ public class MainSceneRoute : MonoBehaviour
 
     [Header("MESSAGE")]
     public TMPro.TextMeshProUGUI MessageText;
+    Sequence messageSeq;
 
     public enum STAGELIST
     {
@@ -105,72 +106,23 @@ public class MainSceneRoute : MonoBehaviour
             CatLog.WLog("OpenMenuTime is less than CloseMenuTime.");
         }
 
-        Action TestAction = () =>
-        {
-            //List<string> TestIntList = new List<string> { "Animal_Cat", "Animal_Dog", "Animal_Rabbit" };
-            //string DebugString = null;
-            //foreach (var item in TestIntList)
-            //{
-            //    DebugString += $"{item}, ";
-            //}
-            //CatLog.Log("Test string List Value : " + DebugString);
-            //DebugString = null;
-
-            //var Num3 = TestIntList.FindAll(x => x == 3);
-            //CatLog.Log(Num3.Count.ToString() + "개 만큼의 객체를 찾았습니다");
-            //for(int i = 0; i < Num3.Count; i++)
-            //{
-            //    CatLog.Log("변경 대상 객체 : " + Num3[i].ToString());
-            //    Num3[i] = 5;
-            //    CatLog.Log($"{Num3[i].ToString()}로 값이 변경되었음");
-            //}
-            //CatLog.Log("Num3 int value : " + Num3[0].ToString());
-
-            //값이 3인 변수를 5로 변경
-            //TestIntList.FindAll(x => x == 3).ForEach(x => x = 5);
-            //foreach(var item in TestIntList.FindAll(x => x == 3))
-            //{
-            //    item = 5;
-            //}
-
-            //TestIntList.Where(x => x == 3).ToList().ForEach(s => s = 5);
-
-            //var index = TestIntList.FindIndex(x => x == 3); //정상작동
-            //TestIntList[index] = 5;
-
-            //var findNum = TestIntList.FindAll(x => x == "Animal_Cat");
-            //for(int i =0;i<findNum.Count;i++)
-            //{
-            //    findNum[i] = "Animal_Whale";
-            //}
-
-            //TestIntList.FirstOrDefault
-
-            //foreach(var item in TestIntList.FindAll(x => x == 3))
-            //{
-            //    item = 5;
-            //}
-
-            //foreach (var item in TestIntList)
-            //{
-            //    DebugString += $"{item}, ";
-            //}
-            //CatLog.Log("Test string List Value : " + DebugString);
-
-            //변경되지 않음..FindAll로 찾은 객체를 깊은 복사로 인해 완전히 다른 List로 되는건지
-
-        }; TestAction();
+        //Set Message Tweening Initialize [Use Testing]
+        messageSeq = DOTween.Sequence()
+                            .Append(MessageText.DOFade(0f, 3f))
+                            .Join(MessageText.transform.DOShakePosition(1f, 5f, 15, 90, false, true))
+                            .SetAutoKill(false)
+                            .Pause(); //Disable Auto Start
     }
 
     public void Message(string msg)
     {
         if (MessageText != null)
         {
-            MessageText.DOKill();
+            //MessageText.DOKill();
             MessageText.color = new Color(MessageText.color.r, MessageText.color.g, MessageText.color.b, 1f);
+            MessageText.text = msg;
 
-            MessageText.DOFade(0f, 3f)
-                       .OnStart(() => { MessageText.text = msg; });
+            messageSeq.Restart();
         }
     }
 

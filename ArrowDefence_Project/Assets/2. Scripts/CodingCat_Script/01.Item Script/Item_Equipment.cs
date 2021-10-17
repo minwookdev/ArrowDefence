@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace CodingCat_Games
+namespace ActionCat
 {
     public enum EQUIP_ITEMTYPE
     {

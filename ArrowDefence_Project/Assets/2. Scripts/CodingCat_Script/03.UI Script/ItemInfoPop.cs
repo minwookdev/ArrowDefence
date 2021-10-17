@@ -1,11 +1,11 @@
-﻿namespace CodingCat_Games
+﻿namespace ActionCat
 {
     using System;
     using UnityEngine;
     using UnityEngine.UI;
     using TMPro;
     using CodingCat_Scripts;
-    using CodingCat_Games.Data;
+    using ActionCat.Data;
 
     public enum Popup_Type
     { 

@@ -1,4 +1,4 @@
-﻿namespace CodingCat_Games
+﻿namespace ActionCat
 {
     using UnityEngine;
     using UnityEngine.UI;

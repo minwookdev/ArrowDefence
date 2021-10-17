@@ -1,11 +1,11 @@
-﻿namespace CodingCat_Games.Testing
+﻿namespace ActionCat.Testing
 {
     using UnityEngine;
     using UnityEngine.UI;
     using System.Collections;
     using DG.Tweening;
     using CodingCat_Scripts;
-    using CodingCat_Games.Data;
+    using ActionCat.Data;
     using ES3Types;
 
     public class DevTestPanel : MonoBehaviour

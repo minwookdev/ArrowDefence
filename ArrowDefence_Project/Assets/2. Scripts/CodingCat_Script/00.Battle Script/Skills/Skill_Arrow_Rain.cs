@@ -1,4 +1,4 @@
-﻿namespace CodingCat_Games
+﻿namespace ActionCat
 {
     using CodingCat_Scripts;
     using UnityEditor;
@@ -7,11 +7,24 @@
     public class Skill_Arrow_Rain : AD_BowSkill
     {
         private byte arrowCount;
+        private float shotDelay;
 
         //Debug Options
         private bool isActiveDebugLine = false;
         private bool isDrawLine = false;
         private ArrowRain_LineRender debugLineRender;
+
+        /// <summary>
+        /// Constructor With no Parameters. (Used Saving Function. Don't Delete this) 
+        /// </summary>
+        public Skill_Arrow_Rain() : base() { }
+
+        public Skill_Arrow_Rain(byte arrowcount, float delay, string name, string desc, SKILL_LEVEL level, BOWSKILL_TYPE type) 
+            : base(name, desc, level, type)
+        {
+            this.arrowCount = arrowcount;
+            this.shotDelay  = delay;
+        }
 
         public override void BowSpecialSkill(float facingVec, float arrowSpreadAngle, byte numOfArrows, 
             Transform arrowParent, AD_BowController adBow, Vector3 initScale, Vector3 arrowInitPos, Vector2 force, LOAD_ARROW_TYPE arrowType)

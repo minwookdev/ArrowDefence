@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using CodingCat_Games;
-using CodingCat_Games.Data;
+using ActionCat;
+using ActionCat.Data;
 using CodingCat_Scripts;
 using UnityEditor;
 using UnityEngine;

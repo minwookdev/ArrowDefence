@@ -1,6 +1,6 @@
 ﻿namespace CodingCat_Tests
 {
-    using CodingCat_Games;
+    using ActionCat;
     using CodingCat_Scripts;
     using System;
     using System.Runtime.CompilerServices;

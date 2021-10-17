@@ -9,19 +9,19 @@ namespace ES3Types
 	{
 		public static ES3Type Instance = null;
 
-		public ES3UserType_Skill_Rapid_Shot() : base(typeof(CodingCat_Games.Skill_Rapid_Shot)){ Instance = this; priority = 1; }
+		public ES3UserType_Skill_Rapid_Shot() : base(typeof(ActionCat.Skill_Rapid_Shot)){ Instance = this; priority = 1; }
 
 
 		protected override void WriteObject(object obj, ES3Writer writer)
 		{
-			var instance = (CodingCat_Games.Skill_Rapid_Shot)obj;
+			var instance = (ActionCat.Skill_Rapid_Shot)obj;
 			
 			writer.WritePrivateField("arrowCount", instance);
 		}
 
 		protected override void ReadObject<T>(ES3Reader reader, object obj)
 		{
-			var instance = (CodingCat_Games.Skill_Rapid_Shot)obj;
+			var instance = (ActionCat.Skill_Rapid_Shot)obj;
 			foreach(string propertyName in reader.Properties)
 			{
 				switch(propertyName)
@@ -39,7 +39,7 @@ namespace ES3Types
 
 		protected override object ReadObject<T>(ES3Reader reader)
 		{
-			var instance = new CodingCat_Games.Skill_Rapid_Shot();
+			var instance = new ActionCat.Skill_Rapid_Shot();
 			ReadObject<T>(reader, instance);
 			return instance;
 		}
@@ -50,7 +50,7 @@ namespace ES3Types
 	{
 		public static ES3Type Instance;
 
-		public ES3UserType_Skill_Rapid_ShotArray() : base(typeof(CodingCat_Games.Skill_Rapid_Shot[]), ES3UserType_Skill_Rapid_Shot.Instance)
+		public ES3UserType_Skill_Rapid_ShotArray() : base(typeof(ActionCat.Skill_Rapid_Shot[]), ES3UserType_Skill_Rapid_Shot.Instance)
 		{
 			Instance = this;
 		}

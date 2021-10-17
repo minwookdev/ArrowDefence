@@ -1,4 +1,4 @@
-﻿namespace CodingCat_Games
+﻿namespace ActionCat
 {
     using CodingCat_Scripts;
     using System.Collections;
@@ -7,6 +7,19 @@
     public class Skill_Rapid_Shot : AD_BowSkill
     {
         private byte arrowCount;
+        private float shotDelay;
+
+        /// <summary>
+        /// Constructor With no Parameters. (Used ES3. Don't Delete this) 
+        /// </summary>
+        public Skill_Rapid_Shot() : base() { }
+
+        public Skill_Rapid_Shot(byte arrowcount, float delay, string name, string desc, SKILL_LEVEL level, BOWSKILL_TYPE type) 
+            : base(name, desc, level, type)
+        {
+            this.arrowCount = arrowcount;
+            this.shotDelay  = delay;
+        }
 
         public override void BowSpecialSkill(float facingVec, float arrowSpreadAngle, byte numOfArrows, Transform arrowParent, 
                                              AD_BowController adBow, Vector3 initScale, Vector3 initPos, Vector2 arrowForce, LOAD_ARROW_TYPE arrowType)

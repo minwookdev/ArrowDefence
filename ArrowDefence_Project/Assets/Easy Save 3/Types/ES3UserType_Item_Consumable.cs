@@ -9,12 +9,12 @@ namespace ES3Types
 	{
 		public static ES3Type Instance = null;
 
-		public ES3UserType_Item_Consumable() : base(typeof(CodingCat_Games.Item_Consumable)){ Instance = this; priority = 1; }
+		public ES3UserType_Item_Consumable() : base(typeof(ActionCat.Item_Consumable)){ Instance = this; priority = 1; }
 
 
 		protected override void WriteObject(object obj, ES3Writer writer)
 		{
-			var instance = (CodingCat_Games.Item_Consumable)obj;
+			var instance = (ActionCat.Item_Consumable)obj;
 			
 			writer.WritePrivateField("Item_Id", instance);
 			writer.WritePrivateField("Item_Name", instance);
@@ -27,7 +27,7 @@ namespace ES3Types
 
 		protected override void ReadObject<T>(ES3Reader reader, object obj)
 		{
-			var instance = (CodingCat_Games.Item_Consumable)obj;
+			var instance = (ActionCat.Item_Consumable)obj;
 			foreach(string propertyName in reader.Properties)
 			{
 				switch(propertyName)
@@ -49,10 +49,10 @@ namespace ES3Types
 					reader.SetPrivateField("Item_Sprite", reader.Read<UnityEngine.Sprite>(), instance);
 					break;
 					case "Item_Type":
-					reader.SetPrivateField("Item_Type", reader.Read<CodingCat_Games.ITEMTYPE>(), instance);
+					reader.SetPrivateField("Item_Type", reader.Read<ActionCat.ITEMTYPE>(), instance);
 					break;
 					case "Item_Grade":
-					reader.SetPrivateField("Item_Grade", reader.Read<CodingCat_Games.ITEMGRADE>(), instance);
+					reader.SetPrivateField("Item_Grade", reader.Read<ActionCat.ITEMGRADE>(), instance);
 					break;
 					default:
 						reader.Skip();
@@ -63,7 +63,7 @@ namespace ES3Types
 
 		protected override object ReadObject<T>(ES3Reader reader)
 		{
-			var instance = new CodingCat_Games.Item_Consumable();
+			var instance = new ActionCat.Item_Consumable();
 			ReadObject<T>(reader, instance);
 			return instance;
 		}
@@ -74,7 +74,7 @@ namespace ES3Types
 	{
 		public static ES3Type Instance;
 
-		public ES3UserType_Item_ConsumableArray() : base(typeof(CodingCat_Games.Item_Consumable[]), ES3UserType_Item_Consumable.Instance)
+		public ES3UserType_Item_ConsumableArray() : base(typeof(ActionCat.Item_Consumable[]), ES3UserType_Item_Consumable.Instance)
 		{
 			Instance = this;
 		}

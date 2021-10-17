@@ -1,4 +1,4 @@
-﻿namespace CodingCat_Games
+﻿namespace ActionCat
 {
     using CodingCat_Scripts;
     using TMPro;

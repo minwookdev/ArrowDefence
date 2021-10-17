@@ -9,12 +9,12 @@ namespace ES3Types
 	{
 		public static ES3Type Instance = null;
 
-		public ES3UserType_Item_Arrow() : base(typeof(CodingCat_Games.Item_Arrow)){ Instance = this; priority = 1; }
+		public ES3UserType_Item_Arrow() : base(typeof(ActionCat.Item_Arrow)){ Instance = this; priority = 1; }
 
 
 		protected override void WriteObject(object obj, ES3Writer writer)
 		{
-			var instance = (CodingCat_Games.Item_Arrow)obj;
+			var instance = (ActionCat.Item_Arrow)obj;
 			
 			writer.WritePrivateFieldByRef("MainArrowObject", instance);
 			writer.WritePrivateFieldByRef("LessArrowObject", instance);
@@ -30,7 +30,7 @@ namespace ES3Types
 
 		protected override void ReadObject<T>(ES3Reader reader, object obj)
 		{
-			var instance = (CodingCat_Games.Item_Arrow)obj;
+			var instance = (ActionCat.Item_Arrow)obj;
 			foreach(string propertyName in reader.Properties)
 			{
 				switch(propertyName)
@@ -43,7 +43,7 @@ namespace ES3Types
 					reader.SetPrivateField("LessArrowObject", reader.Read<UnityEngine.GameObject>(), instance);
 					break;
 					case "EquipType":
-					reader.SetPrivateField("EquipType", reader.Read<CodingCat_Games.EQUIP_ITEMTYPE>(), instance);
+					reader.SetPrivateField("EquipType", reader.Read<ActionCat.EQUIP_ITEMTYPE>(), instance);
 					break;
 					case "Item_Id":
 					reader.SetPrivateField("Item_Id", reader.Read<System.Int32>(), instance);
@@ -61,10 +61,10 @@ namespace ES3Types
 					reader.SetPrivateField("Item_Sprite", reader.Read<UnityEngine.Sprite>(), instance);
 					break;
 					case "Item_Type":
-					reader.SetPrivateField("Item_Type", reader.Read<CodingCat_Games.ITEMTYPE>(), instance);
+					reader.SetPrivateField("Item_Type", reader.Read<ActionCat.ITEMTYPE>(), instance);
 					break;
 					case "Item_Grade":
-					reader.SetPrivateField("Item_Grade", reader.Read<CodingCat_Games.ITEMGRADE>(), instance);
+					reader.SetPrivateField("Item_Grade", reader.Read<ActionCat.ITEMGRADE>(), instance);
 					break;
 					default:
 						reader.Skip();
@@ -75,7 +75,7 @@ namespace ES3Types
 
 		protected override object ReadObject<T>(ES3Reader reader)
 		{
-			var instance = new CodingCat_Games.Item_Arrow();
+			var instance = new ActionCat.Item_Arrow();
 			ReadObject<T>(reader, instance);
 			return instance;
 		}
@@ -86,7 +86,7 @@ namespace ES3Types
 	{
 		public static ES3Type Instance;
 
-		public ES3UserType_Item_ArrowArray() : base(typeof(CodingCat_Games.Item_Arrow[]), ES3UserType_Item_Arrow.Instance)
+		public ES3UserType_Item_ArrowArray() : base(typeof(ActionCat.Item_Arrow[]), ES3UserType_Item_Arrow.Instance)
 		{
 			Instance = this;
 		}

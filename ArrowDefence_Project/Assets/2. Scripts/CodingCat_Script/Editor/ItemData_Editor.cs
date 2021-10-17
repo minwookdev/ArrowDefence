@@ -1,4 +1,4 @@
-﻿using CodingCat_Games;
+﻿using ActionCat;
 using CodingCat_Scripts;
 using ES3Editor;
 using UnityEditor;
@@ -252,19 +252,24 @@ public class BowItemData_Editor : Editor
 
         GUILayout.BeginVertical("GroupBox");
 
+        GUILayout.Label("BOW OBJECT", EditorStyles.boldLabel);
         item.BowGameObject = (GameObject)EditorGUILayout.ObjectField(ItemData_Editor.BowObjectText, item.BowGameObject,
                                                                      typeof(GameObject), allowSceneObjects: false);
 
-        item.FirstSkill_Type  = (BOWSKILL_TYPE)EditorGUILayout.EnumPopup(ItemData_Editor.BowSkillSlotText, item.FirstSkill_Type);
-        item.SecondSkill_Type = (BOWSKILL_TYPE)EditorGUILayout.EnumPopup(ItemData_Editor.BowSkillSlotText, item.SecondSkill_Type);
+        //item.FirstSkill_Type  = (BOWSKILL_TYPE)EditorGUILayout.EnumPopup(ItemData_Editor.BowSkillSlotText, item.FirstSkill_Type);
+        //item.SecondSkill_Type = (BOWSKILL_TYPE)EditorGUILayout.EnumPopup(ItemData_Editor.BowSkillSlotText, item.SecondSkill_Type);
+
+        GUILayout.Space(10f); GUILayout.Label("SKILL-ASSET", EditorStyles.boldLabel);
+        item.SkillAsset_f = (BowSkillData)EditorGUILayout.ObjectField("Skill-Asset First", item.SkillAsset_f, typeof(BowSkillData), allowSceneObjects: false);
+        item.SkillAsset_s = (BowSkillData)EditorGUILayout.ObjectField("Skill-Asset Seconds", item.SkillAsset_s, typeof(BowSkillData), allowSceneObjects: false);
 
         EditorGUILayout.Space(5f);
 
-        if (item.BowSkill_First != null) EditorGUILayout.LabelField(ItemData_Editor.BowSkillEnable + " 0 : ", item.BowSkill_First.ToString());
-        else EditorGUILayout.LabelField(ItemData_Editor.BowSkillEnable + " 0 : ", "SKILL SLOT 0 NULL");
-
-        if (item.BowSkill_Second != null) EditorGUILayout.LabelField(ItemData_Editor.BowSkillEnable + " 1 : ", item.BowSkill_Second.ToString());
-        else EditorGUILayout.LabelField(ItemData_Editor.BowSkillEnable + " 1 : ", "SKILL SLOT 1 NULL");
+        //if (item.BowSkill_First != null) EditorGUILayout.LabelField(ItemData_Editor.BowSkillEnable + " 0 : ", item.BowSkill_First.ToString());
+        //else EditorGUILayout.LabelField(ItemData_Editor.BowSkillEnable + " 0 : ", "SKILL SLOT 0 NULL");
+        //
+        //if (item.BowSkill_Second != null) EditorGUILayout.LabelField(ItemData_Editor.BowSkillEnable + " 1 : ", item.BowSkill_Second.ToString());
+        //else EditorGUILayout.LabelField(ItemData_Editor.BowSkillEnable + " 1 : ", "SKILL SLOT 1 NULL");
 
         GUILayout.EndVertical();
 

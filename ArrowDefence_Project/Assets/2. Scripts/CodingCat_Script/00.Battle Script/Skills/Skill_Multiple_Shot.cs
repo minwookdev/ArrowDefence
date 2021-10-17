@@ -1,13 +1,25 @@
-﻿namespace CodingCat_Games
+﻿namespace ActionCat
 {
     using UnityEngine;
     using CodingCat_Scripts;
     using System;
 
-    public class Skill_Multiple_Shot : AD_BowSkill
+    public class Skill_Multiple_Shot : AD_BowSkill, IToString
     {
         private byte arrowCount;
         private float spreadAngle;
+
+        /// <summary>
+        /// Constructor With no Parameters. (Used Saving Function. Don't Delete this) 
+        /// </summary>
+        public Skill_Multiple_Shot() : base() { }
+
+        public Skill_Multiple_Shot(byte arrowcount, float spreadangle, string name, string desc, SKILL_LEVEL level, BOWSKILL_TYPE type) 
+            : base(name, desc, level, type)
+        {
+            this.arrowCount  = arrowcount;
+            this.spreadAngle = spreadangle;
+        }
 
         public override void BowSpecialSkill(float facingVec, float arrowSpreadAngle, byte numOfArrows, Transform arrowParent,
                                   AD_BowController adBow, Vector3 initScale, Vector3 initPos, Vector2 arrowForce, LOAD_ARROW_TYPE arrowType)

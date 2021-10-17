@@ -26,7 +26,7 @@
             //Set timescale Default Value
             //Current TimeScale variable affects loading Logic.
             if (Time.timeScale != 1f)
-                CodingCat_Games.GameManager.Instance.TimeDefault();
+                ActionCat.GameManager.Instance.TimeDefault();
 
             //Set Loading Slider Color
             SliderFillImage.color = LoadingSliderColor;

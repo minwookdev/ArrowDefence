@@ -1,6 +1,6 @@
-﻿namespace CodingCat_Games
+﻿namespace ActionCat
 {
-    using CodingCat_Games.Data;
+    using ActionCat.Data;
     using UnityEngine;
 
     public class UI_Equipments : MonoBehaviour

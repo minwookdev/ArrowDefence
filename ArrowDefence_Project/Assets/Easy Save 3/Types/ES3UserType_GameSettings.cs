@@ -9,26 +9,26 @@ namespace ES3Types
 	{
 		public static ES3Type Instance = null;
 
-		public ES3UserType_GameSettings() : base(typeof(CodingCat_Games.GameSettings)){ Instance = this; priority = 1; }
+		public ES3UserType_GameSettings() : base(typeof(ActionCat.GameSettings)){ Instance = this; priority = 1; }
 
 
 		protected override void WriteObject(object obj, ES3Writer writer)
 		{
-			var instance = (CodingCat_Games.GameSettings)obj;
+			var instance = (ActionCat.GameSettings)obj;
 			
 			writer.WritePrivateField("pullingType", instance);
 		}
 
 		protected override void ReadObject<T>(ES3Reader reader, object obj)
 		{
-			var instance = (CodingCat_Games.GameSettings)obj;
+			var instance = (ActionCat.GameSettings)obj;
 			foreach(string propertyName in reader.Properties)
 			{
 				switch(propertyName)
 				{
 					
 					case "pullingType":
-					reader.SetPrivateField("pullingType", reader.Read<CodingCat_Games.PULLINGTYPE>(), instance);
+					reader.SetPrivateField("pullingType", reader.Read<ActionCat.PULLINGTYPE>(), instance);
 					break;
 					default:
 						reader.Skip();
@@ -39,7 +39,7 @@ namespace ES3Types
 
 		protected override object ReadObject<T>(ES3Reader reader)
 		{
-			var instance = new CodingCat_Games.GameSettings();
+			var instance = new ActionCat.GameSettings();
 			ReadObject<T>(reader, instance);
 			return instance;
 		}
@@ -50,7 +50,7 @@ namespace ES3Types
 	{
 		public static ES3Type Instance;
 
-		public ES3UserType_GameSettingsArray() : base(typeof(CodingCat_Games.GameSettings[]), ES3UserType_GameSettings.Instance)
+		public ES3UserType_GameSettingsArray() : base(typeof(ActionCat.GameSettings[]), ES3UserType_GameSettings.Instance)
 		{
 			Instance = this;
 		}

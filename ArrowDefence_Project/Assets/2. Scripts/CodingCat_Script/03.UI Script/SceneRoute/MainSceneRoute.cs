@@ -2,7 +2,7 @@
 using System.Linq;
 using UnityEngine;
 using DG.Tweening;
-using CodingCat_Games;
+using ActionCat;
 using CodingCat_Scripts;
 
 public class MainSceneRoute : MonoBehaviour
@@ -294,7 +294,7 @@ public class MainSceneRoute : MonoBehaviour
 
     private void OnSceneEnteringFadeOut()
     {
-        if (CodingCat_Games.GameManager.Instance.IsDevMode) return;
+        if (ActionCat.GameManager.Instance.IsDevMode) return;
 
         ImgFade.alpha = 1f;
 

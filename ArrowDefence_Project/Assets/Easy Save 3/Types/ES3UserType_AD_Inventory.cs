@@ -9,26 +9,26 @@ namespace ES3Types
 	{
 		public static ES3Type Instance = null;
 
-		public ES3UserType_AD_Inventory() : base(typeof(CodingCat_Games.AD_Inventory)){ Instance = this; priority = 1; }
+		public ES3UserType_AD_Inventory() : base(typeof(ActionCat.AD_Inventory)){ Instance = this; priority = 1; }
 
 
 		protected override void WriteObject(object obj, ES3Writer writer)
 		{
-			var instance = (CodingCat_Games.AD_Inventory)obj;
+			var instance = (ActionCat.AD_Inventory)obj;
 			
 			writer.WritePrivateField("invenList", instance);
 		}
 
 		protected override void ReadObject<T>(ES3Reader reader, object obj)
 		{
-			var instance = (CodingCat_Games.AD_Inventory)obj;
+			var instance = (ActionCat.AD_Inventory)obj;
 			foreach(string propertyName in reader.Properties)
 			{
 				switch(propertyName)
 				{
 					
 					case "invenList":
-					reader.SetPrivateField("invenList", reader.Read<System.Collections.Generic.List<CodingCat_Games.AD_item>>(), instance);
+					reader.SetPrivateField("invenList", reader.Read<System.Collections.Generic.List<ActionCat.AD_item>>(), instance);
 					break;
 					default:
 						reader.Skip();
@@ -39,7 +39,7 @@ namespace ES3Types
 
 		protected override object ReadObject<T>(ES3Reader reader)
 		{
-			var instance = new CodingCat_Games.AD_Inventory();
+			var instance = new ActionCat.AD_Inventory();
 			ReadObject<T>(reader, instance);
 			return instance;
 		}
@@ -50,7 +50,7 @@ namespace ES3Types
 	{
 		public static ES3Type Instance;
 
-		public ES3UserType_AD_InventoryArray() : base(typeof(CodingCat_Games.AD_Inventory[]), ES3UserType_AD_Inventory.Instance)
+		public ES3UserType_AD_InventoryArray() : base(typeof(ActionCat.AD_Inventory[]), ES3UserType_AD_Inventory.Instance)
 		{
 			Instance = this;
 		}

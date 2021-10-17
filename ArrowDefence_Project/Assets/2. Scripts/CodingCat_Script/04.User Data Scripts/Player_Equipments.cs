@@ -1,8 +1,8 @@
-﻿namespace CodingCat_Games
+﻿namespace ActionCat
 {
     using System;
     using UnityEngine;
-    using CodingCat_Games.Data;
+    using ActionCat.Data;
     using CodingCat_Scripts;
 
     [Serializable]

@@ -1,4 +1,4 @@
-﻿namespace CodingCat_Games
+﻿namespace ActionCat
 {
     using CodingCat_Scripts;
     using UnityEngine;
@@ -61,8 +61,8 @@
             this.Item_Grade   = item.Item_Grade;
 
             this.bowGameObject = item.BowGameObject;
-            this.bowSkill_Fst  = item.BowSkill_First;
-            this.bowSkill_Sec  = item.BowSkill_Second;
+            this.bowSkill_Fst = item.SkillAsset_f.SkillData;
+            this.bowSkill_Sec = item.SkillAsset_s.SkillData;
         }
 
         /// <summary>

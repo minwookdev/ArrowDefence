@@ -9,19 +9,19 @@ namespace ES3Types
 	{
 		public static ES3Type Instance = null;
 
-		public ES3UserType_Skill_Arrow_Rain() : base(typeof(CodingCat_Games.Skill_Arrow_Rain)){ Instance = this; priority = 1; }
+		public ES3UserType_Skill_Arrow_Rain() : base(typeof(ActionCat.Skill_Arrow_Rain)){ Instance = this; priority = 1; }
 
 
 		protected override void WriteObject(object obj, ES3Writer writer)
 		{
-			var instance = (CodingCat_Games.Skill_Arrow_Rain)obj;
+			var instance = (ActionCat.Skill_Arrow_Rain)obj;
 			
 			writer.WritePrivateField("arrowCount", instance);
 		}
 
 		protected override void ReadObject<T>(ES3Reader reader, object obj)
 		{
-			var instance = (CodingCat_Games.Skill_Arrow_Rain)obj;
+			var instance = (ActionCat.Skill_Arrow_Rain)obj;
 			foreach(string propertyName in reader.Properties)
 			{
 				switch(propertyName)
@@ -39,7 +39,7 @@ namespace ES3Types
 
 		protected override object ReadObject<T>(ES3Reader reader)
 		{
-			var instance = new CodingCat_Games.Skill_Arrow_Rain();
+			var instance = new ActionCat.Skill_Arrow_Rain();
 			ReadObject<T>(reader, instance);
 			return instance;
 		}
@@ -50,7 +50,7 @@ namespace ES3Types
 	{
 		public static ES3Type Instance;
 
-		public ES3UserType_Skill_Arrow_RainArray() : base(typeof(CodingCat_Games.Skill_Arrow_Rain[]), ES3UserType_Skill_Arrow_Rain.Instance)
+		public ES3UserType_Skill_Arrow_RainArray() : base(typeof(ActionCat.Skill_Arrow_Rain[]), ES3UserType_Skill_Arrow_Rain.Instance)
 		{
 			Instance = this;
 		}

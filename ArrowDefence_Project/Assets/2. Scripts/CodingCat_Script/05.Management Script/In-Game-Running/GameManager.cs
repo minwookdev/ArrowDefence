@@ -1,8 +1,8 @@
-﻿namespace CodingCat_Games
+﻿namespace ActionCat
 {
     using UnityEngine;
     using CodingCat_Scripts;
-    using CodingCat_Games.Data;
+    using ActionCat.Data;
 
     public enum GAMESTATE
     {

@@ -1,4 +1,4 @@
-﻿namespace CodingCat_Games
+﻿namespace ActionCat
 {
     public class Item_Material : AD_item, IStackable    
     {

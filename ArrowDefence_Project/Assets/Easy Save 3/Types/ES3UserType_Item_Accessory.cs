@@ -9,12 +9,12 @@ namespace ES3Types
 	{
 		public static ES3Type Instance = null;
 
-		public ES3UserType_Item_Accessory() : base(typeof(CodingCat_Games.Item_Accessory)){ Instance = this; priority = 1; }
+		public ES3UserType_Item_Accessory() : base(typeof(ActionCat.Item_Accessory)){ Instance = this; priority = 1; }
 
 
 		protected override void WriteObject(object obj, ES3Writer writer)
 		{
-			var instance = (CodingCat_Games.Item_Accessory)obj;
+			var instance = (ActionCat.Item_Accessory)obj;
 			
 			writer.WritePrivateField("maxNumberOfEffect", instance);
 			writer.WritePrivateField("effects", instance);
@@ -31,7 +31,7 @@ namespace ES3Types
 
 		protected override void ReadObject<T>(ES3Reader reader, object obj)
 		{
-			var instance = (CodingCat_Games.Item_Accessory)obj;
+			var instance = (ActionCat.Item_Accessory)obj;
 			foreach(string propertyName in reader.Properties)
 			{
 				switch(propertyName)
@@ -41,13 +41,13 @@ namespace ES3Types
 					reader.SetPrivateField("maxNumberOfEffect", reader.Read<System.Int32>(), instance);
 					break;
 					case "effects":
-					reader.SetPrivateField("effects", reader.Read<CodingCat_Games.AccessoryRFEffect[]>(), instance);
+					reader.SetPrivateField("effects", reader.Read<ActionCat.AccessoryRFEffect[]>(), instance);
 					break;
 					case "specialEffect":
-					reader.SetPrivateField("specialEffect", reader.Read<CodingCat_Games.AccessorySPEffect>(), instance);
+					reader.SetPrivateField("specialEffect", reader.Read<ActionCat.AccessorySPEffect>(), instance);
 					break;
 					case "EquipType":
-					reader.SetPrivateField("EquipType", reader.Read<CodingCat_Games.EQUIP_ITEMTYPE>(), instance);
+					reader.SetPrivateField("EquipType", reader.Read<ActionCat.EQUIP_ITEMTYPE>(), instance);
 					break;
 					case "Item_Id":
 					reader.SetPrivateField("Item_Id", reader.Read<System.Int32>(), instance);
@@ -65,10 +65,10 @@ namespace ES3Types
 					reader.SetPrivateField("Item_Sprite", reader.Read<UnityEngine.Sprite>(), instance);
 					break;
 					case "Item_Type":
-					reader.SetPrivateField("Item_Type", reader.Read<CodingCat_Games.ITEMTYPE>(), instance);
+					reader.SetPrivateField("Item_Type", reader.Read<ActionCat.ITEMTYPE>(), instance);
 					break;
 					case "Item_Grade":
-					reader.SetPrivateField("Item_Grade", reader.Read<CodingCat_Games.ITEMGRADE>(), instance);
+					reader.SetPrivateField("Item_Grade", reader.Read<ActionCat.ITEMGRADE>(), instance);
 					break;
 					default:
 						reader.Skip();
@@ -79,7 +79,7 @@ namespace ES3Types
 
 		protected override object ReadObject<T>(ES3Reader reader)
 		{
-			var instance = new CodingCat_Games.Item_Accessory();
+			var instance = new ActionCat.Item_Accessory();
 			ReadObject<T>(reader, instance);
 			return instance;
 		}
@@ -90,7 +90,7 @@ namespace ES3Types
 	{
 		public static ES3Type Instance;
 
-		public ES3UserType_Item_AccessoryArray() : base(typeof(CodingCat_Games.Item_Accessory[]), ES3UserType_Item_Accessory.Instance)
+		public ES3UserType_Item_AccessoryArray() : base(typeof(ActionCat.Item_Accessory[]), ES3UserType_Item_Accessory.Instance)
 		{
 			Instance = this;
 		}

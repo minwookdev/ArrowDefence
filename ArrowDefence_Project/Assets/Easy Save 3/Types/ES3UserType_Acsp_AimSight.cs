@@ -9,12 +9,12 @@ namespace ES3Types
 	{
 		public static ES3Type Instance = null;
 
-		public ES3UserType_Acsp_AimSight() : base(typeof(CodingCat_Games.Acsp_AimSight)){ Instance = this; priority = 1; }
+		public ES3UserType_Acsp_AimSight() : base(typeof(ActionCat.Acsp_AimSight)){ Instance = this; priority = 1; }
 
 
 		protected override void WriteObject(object obj, ES3Writer writer)
 		{
-			var instance = (CodingCat_Games.Acsp_AimSight)obj;
+			var instance = (ActionCat.Acsp_AimSight)obj;
 			
 			writer.WritePropertyByRef("lineMaterial", instance.lineMaterial);
 			writer.WriteProperty("LineWidth", instance.LineWidth, ES3Type_float.Instance);
@@ -22,7 +22,7 @@ namespace ES3Types
 
 		protected override void ReadObject<T>(ES3Reader reader, object obj)
 		{
-			var instance = (CodingCat_Games.Acsp_AimSight)obj;
+			var instance = (ActionCat.Acsp_AimSight)obj;
 			foreach(string propertyName in reader.Properties)
 			{
 				switch(propertyName)
@@ -43,7 +43,7 @@ namespace ES3Types
 
 		protected override object ReadObject<T>(ES3Reader reader)
 		{
-			var instance = new CodingCat_Games.Acsp_AimSight();
+			var instance = new ActionCat.Acsp_AimSight();
 			ReadObject<T>(reader, instance);
 			return instance;
 		}
@@ -54,7 +54,7 @@ namespace ES3Types
 	{
 		public static ES3Type Instance;
 
-		public ES3UserType_Acsp_AimSightArray() : base(typeof(CodingCat_Games.Acsp_AimSight[]), ES3UserType_Acsp_AimSight.Instance)
+		public ES3UserType_Acsp_AimSightArray() : base(typeof(ActionCat.Acsp_AimSight[]), ES3UserType_Acsp_AimSight.Instance)
 		{
 			Instance = this;
 		}

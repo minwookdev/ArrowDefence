@@ -9,12 +9,12 @@ namespace ES3Types
 	{
 		public static ES3Type Instance = null;
 
-		public ES3UserType_Item_Material() : base(typeof(CodingCat_Games.Item_Material)){ Instance = this; priority = 1; }
+		public ES3UserType_Item_Material() : base(typeof(ActionCat.Item_Material)){ Instance = this; priority = 1; }
 
 
 		protected override void WriteObject(object obj, ES3Writer writer)
 		{
-			var instance = (CodingCat_Games.Item_Material)obj;
+			var instance = (ActionCat.Item_Material)obj;
 			
 			writer.WritePrivateField("Item_Id", instance);
 			writer.WritePrivateField("Item_Name", instance);
@@ -27,7 +27,7 @@ namespace ES3Types
 
 		protected override void ReadObject<T>(ES3Reader reader, object obj)
 		{
-			var instance = (CodingCat_Games.Item_Material)obj;
+			var instance = (ActionCat.Item_Material)obj;
 			foreach(string propertyName in reader.Properties)
 			{
 				switch(propertyName)
@@ -49,10 +49,10 @@ namespace ES3Types
 					reader.SetPrivateField("Item_Sprite", reader.Read<UnityEngine.Sprite>(), instance);
 					break;
 					case "Item_Type":
-					reader.SetPrivateField("Item_Type", reader.Read<CodingCat_Games.ITEMTYPE>(), instance);
+					reader.SetPrivateField("Item_Type", reader.Read<ActionCat.ITEMTYPE>(), instance);
 					break;
 					case "Item_Grade":
-					reader.SetPrivateField("Item_Grade", reader.Read<CodingCat_Games.ITEMGRADE>(), instance);
+					reader.SetPrivateField("Item_Grade", reader.Read<ActionCat.ITEMGRADE>(), instance);
 					break;
 					default:
 						reader.Skip();
@@ -63,7 +63,7 @@ namespace ES3Types
 
 		protected override object ReadObject<T>(ES3Reader reader)
 		{
-			var instance = new CodingCat_Games.Item_Material();
+			var instance = new ActionCat.Item_Material();
 			ReadObject<T>(reader, instance);
 			return instance;
 		}
@@ -74,7 +74,7 @@ namespace ES3Types
 	{
 		public static ES3Type Instance;
 
-		public ES3UserType_Item_MaterialArray() : base(typeof(CodingCat_Games.Item_Material[]), ES3UserType_Item_Material.Instance)
+		public ES3UserType_Item_MaterialArray() : base(typeof(ActionCat.Item_Material[]), ES3UserType_Item_Material.Instance)
 		{
 			Instance = this;
 		}

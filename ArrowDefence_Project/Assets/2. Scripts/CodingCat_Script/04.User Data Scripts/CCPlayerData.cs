@@ -1,4 +1,4 @@
-﻿namespace CodingCat_Games.Data
+﻿namespace ActionCat.Data
 {
     using System.Collections.Generic;
     using CodingCat_Scripts;

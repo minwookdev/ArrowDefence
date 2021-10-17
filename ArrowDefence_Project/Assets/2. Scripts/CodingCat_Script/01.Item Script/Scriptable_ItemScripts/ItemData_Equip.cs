@@ -1,7 +1,7 @@
 ﻿using CodingCat_Scripts;
 using UnityEngine;
 
-namespace CodingCat_Games
+namespace ActionCat
 {
     public class ItemData_Equip : ItemData
     {

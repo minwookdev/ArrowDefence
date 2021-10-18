@@ -2,16 +2,16 @@
 {
     using UnityEngine;
 
-    public class BowSkillData : ScriptableObject
+    public class AccessorySkillData : ScriptableObject
     {
         [Header("BASIC SKILL DATA")]
         public string SkillName;
         public string SkillDesc;
-        public BOWSKILL_TYPE SkillType;
+        public ACCESSORY_SPEFFECT_TYPE EffectType;
         public SKILL_LEVEL SkillLevel;
-        protected AD_BowSkill SkillData;
+        protected AccessorySPEffect SkillData;
 
-        public AD_BowSkill Skill()
+        public AccessorySPEffect Skill()
         {
             if (SkillData != null) return SkillData;
             else                   return null;

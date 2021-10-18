@@ -22,7 +22,8 @@
             this.Item_Grade  = item.Item_Grade;
 
             //Set Accessory Item Data
-            specialEffect = item.SpecialEffect;
+            //specialEffect = item.SpecialEffect;
+            specialEffect = item.SPEffect;
         }
 
         public Item_Accessory(Item_Accessory item) : base()

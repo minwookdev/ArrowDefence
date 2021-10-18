@@ -512,10 +512,10 @@ public class AccessItemData_Editor : Editor
         //item.Effect_AimSight = (MonoScript)EditorGUILayout.ObjectField("Effect Script", item.Effect_AimSight,
         //                                                    typeof(MonoScript), allowSceneObjects: false);
 
-        item.SPEffectType = (ACCESSORY_SPECIALEFFECT_TYPE)EditorGUILayout.EnumPopup(ItemData_Editor.AccessorySpEffectText, item.SPEffectType);
-
-        if (item.SpecialEffect != null) EditorGUILayout.LabelField("Loaded SP Effect : ", item.SpecialEffect.ToString());
-        else                            EditorGUILayout.LabelField("Loaded SP Effect : ", "NULL");
+        //item.SPEffectType = (ACCESSORY_SPEFFECT_TYPE)EditorGUILayout.EnumPopup(ItemData_Editor.AccessorySpEffectText, item.SPEffectType);
+        //
+        //if (item.SpecialEffect != null) EditorGUILayout.LabelField("Loaded SP Effect : ", item.SpecialEffect.ToString());
+        //else                            EditorGUILayout.LabelField("Loaded SP Effect : ", "NULL");
 
         //switch (item.SpecialEffect)
         //{
@@ -527,11 +527,28 @@ public class AccessItemData_Editor : Editor
         //    default: break;
         //}
 
-        GUILayout.Space(10f);
+        //GUILayout.Space(10f);
+        //
+        //GUILayout.Label("Aim Sight Effect Variables", EditorStyles.boldLabel);
+        //
+        //item.LineRenderMaterial = (Material)EditorGUILayout.ObjectField("Line Renderer Material : ", item.LineRenderMaterial, typeof(Material), false);
 
-        GUILayout.Label("Aim Sight Effect Variables", EditorStyles.boldLabel);
+        GUILayout.Label("Special Effect Asset", EditorStyles.boldLabel);
+        item.SPEffectAsset = (AccessorySkillData)EditorGUILayout.ObjectField("Skill Effect Asset", item.SPEffectAsset, typeof(AccessorySkillData), false);
 
-        item.LineRenderMaterial = (Material)EditorGUILayout.ObjectField("Line Renderer Material : ", item.LineRenderMaterial, typeof(Material), false);
+        GUILayout.Space(10f); GUILayout.Label("Reinforcement Effect Asset", EditorStyles.boldLabel);
+        //item.RFEffectAssets = 
+
+        //foreach (var effect in item.RFEffectAssets)
+        //{
+        //    effect = (AccessoryRFSkillData)EditorGUILayout.ObjectField("RF Effect Asset", effect, typeof(AccessoryRFSkillData), allowSceneObjects: false);
+        //}
+
+        var serializedObject = new SerializedObject(target);
+        var property = serializedObject.FindProperty("RFEffectAssets");
+        serializedObject.Update();
+        EditorGUILayout.PropertyField(property, true);
+        serializedObject.ApplyModifiedProperties();
 
         GUILayout.EndVertical();
 

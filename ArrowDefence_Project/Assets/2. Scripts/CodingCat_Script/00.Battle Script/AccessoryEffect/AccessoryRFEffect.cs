@@ -13,4 +13,19 @@
     {
 
     }
+
+    public class RFEffectDamage : AccessoryRFEffect
+    {
+
+    }
+
+    public class RFEffectPhysicalDamage : AccessoryRFEffect
+    {
+
+    }
+
+    public class RFEffectMagicalDamage : AccessoryRFEffect
+    {
+    
+    }
 }

@@ -2,7 +2,7 @@
 {
     using UnityEngine;
 
-    public enum ACCESSORY_SPECIALEFFECT_TYPE
+    public enum ACCESSORY_SPEFFECT_TYPE
     { 
         SPEFFECT_NONE,
         SPEFFECT_AIMSIGHT,
@@ -24,9 +24,10 @@
 
         public override string ToString() => "Aim Sight";
 
-        public Acsp_AimSight(Material lineMat)
+        public Acsp_AimSight(Material lineMat, float width)
         {
             lineMaterial = lineMat;
+            LineWidth    = width;
         }
 
         /// <summary>

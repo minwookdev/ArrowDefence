@@ -15,15 +15,35 @@
         public BowSkillData SkillAsset_f;
         public BowSkillData SkillAsset_s;
 
+        //PROPERTY
+        public AD_BowSkill SkillFst
+        {
+            get
+            {
+                if (SkillAsset_f != null)
+                    return SkillAsset_f.Skill();
+                else
+                    return null;
+            }
+        }
+
+        public AD_BowSkill SkillSec
+        {
+            get
+            {
+                if (SkillAsset_s != null)
+                    return SkillAsset_s.Skill();
+                else
+                    return null;
+            }
+        }
+
         public ItemData_Equip_Bow() : base()
         {
             Equip_Type = EQUIP_ITEMTYPE.EQUIP_BOW;
         }
 
-        public void OnEnable()
-        {
-
-        }
+        public void OnEnable() { }
 
         private void SetBowSkills()
         {

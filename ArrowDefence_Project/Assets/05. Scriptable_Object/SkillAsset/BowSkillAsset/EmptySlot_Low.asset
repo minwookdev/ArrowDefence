@@ -9,12 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
-  m_Name: SpreadShot_L1
-  m_EditorClassIdentifier: Assembly-CSharp:ActionCat:SkillDataSpreadShot
-  SkillName: Spread-Shot
-  SkillDesc: Fires an arrow that spreads in a fan-shaped direction.
-  SkillType: 1
+  m_Script: {fileID: 11500000, guid: f51b79c49855bfc4bb5c29b706a56b74, type: 3}
+  m_Name: EmptySlot_Low
+  m_EditorClassIdentifier: 
+  SkillName: Empty-Skill-Slot
+  SkillDesc: An empty slot that can be assigned a new skill using a skill effect
+    grant item.
+  SkillType: 0
   SkillLevel: 0
-  ArrowShotCount: 3
-  SpreadAngle: 30

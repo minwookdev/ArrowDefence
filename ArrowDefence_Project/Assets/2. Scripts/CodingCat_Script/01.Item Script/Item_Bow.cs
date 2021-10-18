@@ -61,8 +61,8 @@
             this.Item_Grade   = item.Item_Grade;
 
             this.bowGameObject = item.BowGameObject;
-            this.bowSkill_Fst = item.SkillAsset_f.SkillData;
-            this.bowSkill_Sec = item.SkillAsset_s.SkillData;
+            this.bowSkill_Fst  = item.SkillFst;
+            this.bowSkill_Sec  = item.SkillSec;
         }
 
         /// <summary>

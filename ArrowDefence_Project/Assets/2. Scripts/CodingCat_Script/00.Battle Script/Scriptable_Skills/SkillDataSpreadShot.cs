@@ -17,8 +17,8 @@
 
         private void OnEnable()
         {
-            SkillData = new Skill_Multiple_Shot((byte)ArrowShotCount, SpreadAngle,
-                                                SkillName, SkillDesc, SkillLevel, SkillType);
+            SkillData = new Skill_Multiple_Shot(SkillName, SkillDesc, SkillLevel, SkillType,
+                                                (byte)ArrowShotCount, SpreadAngle);
         }
     }
 }

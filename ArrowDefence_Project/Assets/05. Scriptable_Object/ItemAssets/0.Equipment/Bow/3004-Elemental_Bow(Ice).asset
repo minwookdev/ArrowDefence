@@ -10,17 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 85b041e0ff5f89e41b19a84369197493, type: 3}
-  m_Name: Wooden_Bow
+  m_Name: 3004-Elemental_Bow(Ice)
   m_EditorClassIdentifier: 
   Item_Type: 2
-  Item_Grade: 0
-  Item_Id: 3001
+  Item_Grade: 1
+  Item_Id: 3004
   Item_Amount: 1
-  Item_Name: Wooden_Bow
-  Item_Desc: A crude bow made of wood.
-  Item_Sprite: {fileID: 21300000, guid: 415bf3ed0fe604b39b622d949713cb24, type: 3}
+  Item_Name: Elemental Bow C
+  Item_Desc: 
+  Item_Sprite: {fileID: 21300000, guid: a330341716ee64ffd8f92101938b00e8, type: 3}
   Equip_Type: 0
-  BowGameObject: {fileID: 1797254673156858288, guid: c44c9d4c930acdb42b41979ed4c3088b,
+  BowGameObject: {fileID: 1790275043846613859, guid: 005ceaace1665cd428c0f49d73edd407,
     type: 3}
-  SkillAsset_f: {fileID: 11400000, guid: 520120a42f020a644b355ed8ca3469fd, type: 2}
+  SkillAsset_f: {fileID: 11400000, guid: 97062504f2a4e58418b96af3a5af4888, type: 2}
   SkillAsset_s: {fileID: 0}

@@ -1,6 +1,5 @@
 ﻿namespace ActionCat
 {
-    using CodingCat_Scripts;
     using System.Collections;
     using UnityEngine;
 
@@ -9,12 +8,14 @@
         private byte arrowCount;
         private float shotDelay;
 
-        /// <summary>
-        /// Constructor With no Parameters. (Used ES3. Don't Delete this) 
-        /// </summary>
+        //WaitForSeconds waitForSec = new WaitForSeconds(0.2f);
+        ///Default 
+        ///byte  ArrowCount = 3;
+        ///float ShotDelay  = 0.2f;
+        
         public Skill_Rapid_Shot() : base() { }
 
-        public Skill_Rapid_Shot(byte arrowcount, float delay, string name, string desc, SKILL_LEVEL level, BOWSKILL_TYPE type) 
+        public Skill_Rapid_Shot(string name, string desc, SKILL_LEVEL level, BOWSKILL_TYPE type, byte arrowcount, float delay) 
             : base(name, desc, level, type)
         {
             this.arrowCount = arrowcount;
@@ -24,26 +25,28 @@
         public override void BowSpecialSkill(float facingVec, float arrowSpreadAngle, byte numOfArrows, Transform arrowParent, 
                                              AD_BowController adBow, Vector3 initScale, Vector3 initPos, Vector2 arrowForce, LOAD_ARROW_TYPE arrowType)
         {
-            //base.BowSpecialSkill(facingVec, arrowSpreadAngle, numOfArrows, arrowParent, adBow, arrowInitScale, arrowInitPos, arrowForce);
+            ///Get the GameObject's MonoBehavior and run a Coroutine with it.
+            ///R. Skill Class has no life cycle.
 
-            string poolTag = (arrowType == LOAD_ARROW_TYPE.ARROW_MAIN) ? AD_Data.POOLTAG_MAINARROW_LESS : AD_Data.POOLTAG_SUBARROW_LESS;
-            adBow.StartCoroutine(RapidShot(adBow, arrowParent, initScale, initPos, facingVec, arrowForce, numOfArrows, poolTag));
+            string poolTag = (arrowType == LOAD_ARROW_TYPE.ARROW_MAIN) ? AD_Data.POOLTAG_MAINARROW_LESS : 
+                                                                         AD_Data.POOLTAG_SUBARROW_LESS;
+            adBow.StartCoroutine(RapidShot(arrowParent, initScale, initPos, facingVec, arrowForce, poolTag));
         }
 
-        private IEnumerator RapidShot(AD_BowController adBow, Transform arrowParent, Vector3 arrowInitScale, Vector3 arrowInitPos, 
-                                      float facingVec, Vector2 force, byte numOfArrows, string poolTag)
+        private IEnumerator RapidShot(Transform arrowParent, Vector3 arrowInitScale, Vector3 arrowInitPos, 
+                                      float facingVec, Vector2 force, string poolTag)
         {
             yield return null;
 
             //CatLog.Log("Bow Special Effect Occured :: Rapid Shot");
 
-            byte arrowCount = 0;
+            byte arrowcount = 0;
 
-            while(arrowCount < numOfArrows)
+            while(arrowcount < arrowCount)
             {
-                yield return new WaitForSeconds(0.2f);
+                yield return new WaitForSeconds(shotDelay);
 
-                // -3 ~ 3의 랜덤 각도
+                // -3 ~ 3 Range of Random Angle
                 short randomAngle = (short)Random.Range(-3, 3 + 1);
 
                 #region OLD_CODE
@@ -85,10 +88,11 @@
                 if (ccArrow)
                 {
                     ccArrow.ShotArrow(ccArrow.transform.up * force.magnitude);
-                    arrowCount++;
+                    arrowcount++;
                 }
             }
 
+            #region LEGACY_CODE
             //var newArrow = CatPoolManager.Instance.LoadEffectedArrow(adBow);
             //var arrowRBdoy = newArrow.GetComponent<Rigidbody2D>();
             //
@@ -113,11 +117,9 @@
             //    newArrow.GetComponent<AD_Arrow>().arrowTrail.SetActive(true);
             //    newArrow.GetComponent<AD_Arrow>().arrowTrail.GetComponent<TrailRenderer>().Clear();
             //}
+            #endregion
         }
 
-        public override string ToString()
-        {
-            return "Rapid_Shot";
-        }
+        public override string ToString() => "Rapid_Shot";
     }
 }

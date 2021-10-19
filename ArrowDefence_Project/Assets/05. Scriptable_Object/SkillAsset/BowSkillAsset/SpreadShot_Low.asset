@@ -17,4 +17,4 @@ MonoBehaviour:
   SkillType: 1
   SkillLevel: 0
   ArrowShotCount: 3
-  SpreadAngle: 30
+  SpreadAngle: 20

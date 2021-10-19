@@ -16,5 +16,5 @@ MonoBehaviour:
   SkillDesc: Fires arrows at random locations.
   SkillType: 3
   SkillLevel: 0
-  ArrowShotCount: 3
-  ShotInterval: 3
+  ArrowShotCount: 5
+  ShotInterval: 0.3

@@ -10,17 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 85b041e0ff5f89e41b19a84369197493, type: 3}
-  m_Name: Elemental_Bow(Ice)
+  m_Name: 3002-Steel_Bow
   m_EditorClassIdentifier: 
   Item_Type: 2
   Item_Grade: 1
-  Item_Id: 3004
+  Item_Id: 3002
   Item_Amount: 1
-  Item_Name: Elemental Bow C
+  Item_Name: Steel Bow
   Item_Desc: 
-  Item_Sprite: {fileID: 21300000, guid: a330341716ee64ffd8f92101938b00e8, type: 3}
+  Item_Sprite: {fileID: 21300000, guid: e4ba42abb72b4496f934f1a517f64fea, type: 3}
   Equip_Type: 0
-  BowGameObject: {fileID: 1790275043846613859, guid: 005ceaace1665cd428c0f49d73edd407,
+  BowGameObject: {fileID: 3549159203555372210, guid: 764bffb09a29bf440b61e0c0c511064e,
     type: 3}
-  FirstSkill_Type: 0
-  SecondSkill_Type: 0
+  SkillAsset_f: {fileID: 11400000, guid: 97062504f2a4e58418b96af3a5af4888, type: 2}
+  SkillAsset_s: {fileID: 11400000, guid: 8fc08db059ce576488c3db5a4393a80a, type: 2}

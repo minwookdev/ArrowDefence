@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 85b041e0ff5f89e41b19a84369197493, type: 3}
-  m_Name: Elemental_Bow(Fire)
+  m_Name: 3003-Elemental_Bow(Fire)
   m_EditorClassIdentifier: 
   Item_Type: 2
   Item_Grade: 1
@@ -22,5 +22,5 @@ MonoBehaviour:
   Equip_Type: 0
   BowGameObject: {fileID: 3549159203555372210, guid: 764bffb09a29bf440b61e0c0c511064e,
     type: 3}
-  FirstSkill_Type: 1
-  SecondSkill_Type: 0
+  SkillAsset_f: {fileID: 11400000, guid: 8fc08db059ce576488c3db5a4393a80a, type: 2}
+  SkillAsset_s: {fileID: 0}

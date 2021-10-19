@@ -17,8 +17,8 @@
 
         private void OnEnable()
         {
-            SkillData = new Skill_Arrow_Rain((byte)ArrowShotCount, ShotInterval,
-                                             SkillName, SkillDesc, SkillLevel, SkillType);
+            SkillData = new Skill_Arrow_Rain(SkillName, SkillDesc, SkillLevel, SkillType,
+                                             (byte)ArrowShotCount, ShotInterval);
         }
     }
 }

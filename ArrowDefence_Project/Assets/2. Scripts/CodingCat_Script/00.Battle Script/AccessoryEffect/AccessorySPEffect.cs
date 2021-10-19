@@ -20,7 +20,11 @@
         public Material lineMaterial;
         public float LineWidth = 0.050f;
 
-        public override void Setup() => GameGlobal.GetBowGameObjectInScene().AddComponent<SPEffect_AimSight>().Initialize(lineMaterial, LineWidth);
+        public override void Setup()
+        {
+            //Battle Scene이 시작되면 Bow GameObject에 Accessory Effect Component를 Add 해줌
+            GameGlobal.GetBowGameObjectInScene().AddComponent<SPEffect_AimSight>().Initialize(lineMaterial, LineWidth);
+        }
 
         public override string ToString() => "Aim Sight";
 

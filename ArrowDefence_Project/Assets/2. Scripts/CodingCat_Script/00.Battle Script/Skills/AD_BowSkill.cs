@@ -12,9 +12,10 @@
 
     public enum SKILL_LEVEL
     { 
-        LEVEL_LOW,
-        LEVEL_MEDIUM,
-        LEVEL_HIGH
+        LEVEL_LOW    = 0,
+        LEVEL_MEDIUM = 1,
+        LEVEL_HIGH   = 2,
+        LEVEL_UNIQUE = 3
     }
 
     public abstract class AD_BowSkill

@@ -583,7 +583,7 @@ public class AccessItemData_Editor : Editor
 /// </summary>
 public class CreateItemDataAsset
 {
-    [UnityEditor.MenuItem("CodingCat/Scriptable Object/Item Data Asset/Material Item Asset")]
+    [UnityEditor.MenuItem("ActionCat/Scriptable Object/Item Data Asset/Material Item Asset")]
     public static void CreateMaterialItemAsset()
     {
         string createAssetPath = "Assets/05. Scriptable_Object/ItemAssets/2.Material/Material_Item.asset";
@@ -596,7 +596,7 @@ public class CreateItemDataAsset
         Selection.activeObject = asset;
     }
 
-    [UnityEditor.MenuItem("CodingCat/Scriptable Object/Item Data Asset/Consumable Item Asset")]
+    [UnityEditor.MenuItem("ActionCat/Scriptable Object/Item Data Asset/Consumable Item Asset")]
     public static void CreateConsumableItemAsset()
     {
         string createAssetPath = "Assets/05. Scriptable_Object/ItemAssets/1.Consume/Consumable_Item.asset";
@@ -609,7 +609,7 @@ public class CreateItemDataAsset
         Selection.activeObject = asset;
     }
 
-    [UnityEditor.MenuItem("CodingCat/Scriptable Object/Item Data Asset/Bow Item Asset")]
+    [UnityEditor.MenuItem("ActionCat/Scriptable Object/Item Data Asset/Bow Item Asset")]
     public static void CreateBowItemAsset()
     {
         string createAssetPath = "Assets/05. Scriptable_Object/ItemAssets/0.Equipment/Bow/Bow_Item.asset";
@@ -622,7 +622,7 @@ public class CreateItemDataAsset
         Selection.activeObject = asset;
     }
 
-    [UnityEditor.MenuItem("CodingCat/Scriptable Object/Item Data Asset/Arrow Item Asset")]
+    [UnityEditor.MenuItem("ActionCat/Scriptable Object/Item Data Asset/Arrow Item Asset")]
     public static void CreateArrowItemAsset()
     {
         string createAssetPath = "Assets/05. Scriptable_Object/ItemAssets/0.Equipment/Arrow/Arrow_Item.asset";
@@ -635,7 +635,7 @@ public class CreateItemDataAsset
         Selection.activeObject = asset;
     }
 
-    [UnityEditor.MenuItem("CodingCat/Scriptable Object/Item Data Asset/Accessory Item Asset")]
+    [UnityEditor.MenuItem("ActionCat/Scriptable Object/Item Data Asset/Accessory Item Asset")]
     public static void CreateAccessoryItemAsset()
     {
         string createAssetPath = "Assets/05. Scriptable_Object/ItemAssets/0.Equipment/Aceessory/Accessory_Item.asset";

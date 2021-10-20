@@ -5,9 +5,8 @@
     [CreateAssetMenu(fileName = "SpreadShot_Asset", menuName = "Scriptable Object Asset/B.SkillData_Asset/SpreadShot_Asset")]
     public class SkillDataSpreadShot : BowSkillData
     {
-        [Header("SPREAD SHOT")]
         [Range(1, 255)]
-        public int ArrowShotCount;
+        public byte ArrowShotCount;
         public float SpreadAngle;
 
         public SkillDataSpreadShot()
@@ -17,8 +16,8 @@
 
         private void OnEnable()
         {
-            SkillData = new Skill_Multiple_Shot(SkillName, SkillDesc, SkillLevel, SkillType,
-                                                (byte)ArrowShotCount, SpreadAngle);
+            SkillData = new Skill_Multiple_Shot(SkillId, SkillName, SkillDesc, SkillLevel, SkillType,
+                                                ArrowShotCount, SpreadAngle);
         }
     }
 }

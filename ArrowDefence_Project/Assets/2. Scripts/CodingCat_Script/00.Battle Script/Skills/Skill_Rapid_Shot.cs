@@ -15,22 +15,22 @@
         
         public Skill_Rapid_Shot() : base() { }
 
-        public Skill_Rapid_Shot(string name, string desc, SKILL_LEVEL level, BOWSKILL_TYPE type, byte arrowcount, float delay) 
-            : base(name, desc, level, type)
+        public Skill_Rapid_Shot(string id, string name, string desc, SKILL_LEVEL level, BOWSKILL_TYPE type, byte arrowcount, float delay) 
+            : base(id, name, desc, level, type)
         {
             this.arrowCount = arrowcount;
             this.shotDelay  = delay;
         }
 
-        public override void BowSpecialSkill(float facingVec, float arrowSpreadAngle, byte numOfArrows, Transform arrowParent, 
-                                             AD_BowController adBow, Vector3 initScale, Vector3 initPos, Vector2 arrowForce, LOAD_ARROW_TYPE arrowType)
+        public override void BowSpecialSkill(float anglez, Transform parent, MonoBehaviour mono, 
+                                             Vector3 initScale, Vector3 initPos, Vector2 arrowForce, LOAD_ARROW_TYPE type)
         {
             ///Get the GameObject's MonoBehavior and run a Coroutine with it.
             ///R. Skill Class has no life cycle.
 
-            string poolTag = (arrowType == LOAD_ARROW_TYPE.ARROW_MAIN) ? AD_Data.POOLTAG_MAINARROW_LESS : 
+            string poolTag = (type == LOAD_ARROW_TYPE.ARROW_MAIN) ? AD_Data.POOLTAG_MAINARROW_LESS : 
                                                                          AD_Data.POOLTAG_SUBARROW_LESS;
-            adBow.StartCoroutine(RapidShot(arrowParent, initScale, initPos, facingVec, arrowForce, poolTag));
+            mono.StartCoroutine(RapidShot(parent, initScale, initPos, anglez, arrowForce, poolTag));
         }
 
         private IEnumerator RapidShot(Transform arrowParent, Vector3 arrowInitScale, Vector3 arrowInitPos, 

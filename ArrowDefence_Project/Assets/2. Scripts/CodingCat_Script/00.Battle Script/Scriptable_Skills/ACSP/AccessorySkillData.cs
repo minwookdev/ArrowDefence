@@ -4,10 +4,11 @@
 
     public class AccessorySkillData : ScriptableObject
     {
-        [Header("BASIC SKILL DATA")]
+        //Default Skill Data
+        public string SkillId;
         public string SkillName;
         public string SkillDesc;
-        public ACCESSORY_SPEFFECT_TYPE EffectType;
+        public ACSP_TYPE EffectType;
         public SKILL_LEVEL SkillLevel;
         protected AccessorySPEffect SkillData;
 

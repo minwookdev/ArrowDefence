@@ -2,7 +2,7 @@
 {
     using UnityEngine;
 
-    public enum ACCESSORY_SPEFFECT_TYPE
+    public enum ACSP_TYPE
     { 
         SPEFFECT_NONE,
         SPEFFECT_AIMSIGHT,
@@ -12,6 +12,31 @@
     [System.Serializable]
     public abstract class AccessorySPEffect
     {
+        protected string id;
+        protected string name;
+        protected string desc;
+        protected ACSP_TYPE effectType;
+        protected SKILL_LEVEL level;
+
+        #region PROPERTY
+        public string ID { get => id; }
+        public string Name { get => name; }
+        public string Description { get => desc; }
+        public ACSP_TYPE SpEffectType { get => effectType; }
+        public SKILL_LEVEL Level { get => level; }
+        #endregion
+
+        protected AccessorySPEffect(string id, string name, string desc, ACSP_TYPE type, SKILL_LEVEL level)
+        {
+            this.id         = id;
+            this.name       = name;
+            this.desc       = desc;
+            this.effectType = type;
+            this.level      = level;
+        }
+
+        public AccessorySPEffect() { }
+
         public abstract void Setup();
     }
 
@@ -28,7 +53,8 @@
 
         public override string ToString() => "Aim Sight";
 
-        public Acsp_AimSight(Material lineMat, float width)
+        public Acsp_AimSight(string skillid, string skillname, string skilldesc, ACSP_TYPE effecttype, SKILL_LEVEL skilllevel, Material lineMat, float width) : 
+            base(skillid, skillname, skilldesc, effecttype, skilllevel)
         {
             lineMaterial = lineMat;
             LineWidth    = width;
@@ -44,12 +70,18 @@
     {
         public override void Setup()
         {
-            throw new System.NotImplementedException();
+            return;
         }
 
-        public override string ToString()
+        public override string ToString() => "Slow Time";
+
+
+        public Acsp_SlowTime(string id, string name, string desc, ACSP_TYPE type, SKILL_LEVEL level) : 
+            base(id, name, desc, type, level)
         {
-            return "Slow Time";
+
         }
+
+        public Acsp_SlowTime() : base() { }
     }
 }

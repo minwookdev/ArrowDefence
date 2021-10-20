@@ -5,9 +5,8 @@
     [CreateAssetMenu(fileName = "ArrowRain_Asset", menuName = "Scriptable Object Asset/B.SkillData_Asset/ArrowRain_Asset")]
     public class SkillDataArrowRain : BowSkillData
     {
-        [Header("ARROW RAIN")]
         [Range(1, 255)]
-        public int ArrowShotCount;
+        public byte ArrowShotCount;
         public float ShotInterval;
 
         public SkillDataArrowRain()
@@ -17,8 +16,8 @@
 
         private void OnEnable()
         {
-            SkillData = new Skill_Arrow_Rain(SkillName, SkillDesc, SkillLevel, SkillType,
-                                             (byte)ArrowShotCount, ShotInterval);
+            SkillData = new Skill_Arrow_Rain(SkillId, SkillName, SkillDesc, SkillLevel, SkillType,
+                                             ArrowShotCount, ShotInterval);
         }
     }
 }

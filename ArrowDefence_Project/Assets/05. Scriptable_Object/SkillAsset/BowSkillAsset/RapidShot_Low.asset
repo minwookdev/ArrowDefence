@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 971315abde318574aaee404db06f9321, type: 3}
   m_Name: RapidShot_Low
   m_EditorClassIdentifier: 
+  SkillId: 
   SkillName: Rapid-Fire
   SkillDesc: Fires arrows in rapid succession.
   SkillType: 2

@@ -5,6 +5,7 @@
     public class BowSkillData : ScriptableObject
     {
         //Basic Skill Data
+        public string SkillId;
         public string SkillName;
         public string SkillDesc;
         public BOWSKILL_TYPE SkillType;

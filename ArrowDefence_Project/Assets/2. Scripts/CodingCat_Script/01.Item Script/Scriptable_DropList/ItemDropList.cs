@@ -24,6 +24,8 @@
 
         private void OnEnable()
         {
+            if (DropTableArray == null) return;
+
             OnCheckTotalChanceValue();
             OnCheckQuantityArray();
         }
@@ -54,7 +56,7 @@
         }
 
 #if UNITY_EDITOR
-        [UnityEditor.MenuItem("CodingCat/Scriptable Object/ItemDropList Asset")]
+        [UnityEditor.MenuItem("ActionCat/Scriptable Object/ItemDropList Asset")]
         public static void CreateItemDropListAssetInstance()
         {
             var asset = ScriptableObject.CreateInstance<ItemDropList>();

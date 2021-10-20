@@ -11,6 +11,7 @@
         ARROW_SUB  = 1
     }
 
+
     public class AD_BowController : MonoBehaviour
     {
         public static AD_BowController instance;
@@ -20,12 +21,12 @@
         private Touch screenTouch;
         
         [Header("BOW CONTROL VARIABLES")]
-        public Transform RightClampPoint, LeftClampPoint;
         public float TouchRadius    = 1f;
         public float PullableRadius = 1f;
         public Image BowCenterPointImg;
+        public Transform RightClampPoint, LeftClampPoint;
         [Range(1f, 20f)] public float SmoothRotateSpeed = 12f;
-        [Range(0f, 2f)]  public float ArrowPullingSpeed = 1f;
+        [Range(1f, 3f)]  public float ArrowPullingSpeed = 1f;
 
         private PULLINGTYPE currentPullType;     //조준 타입 변경 -> Player Settings로 부터 받아오는 Enum Data
         private bool isBowPulling   = false;     //활이 일정거리 이상 당겨져서 회전할 수 있는 상태
@@ -58,8 +59,8 @@
         /// <summary>
         /// Bow Skills Delegate
         /// </summary>
-        public delegate void BowSkillsDel(float rot, float angle, byte arrownum, Transform arrowparent,
-                                          AD_BowController bowcontroller, Vector3 initScale, Vector3 initpos, Vector2 force, LOAD_ARROW_TYPE arrowType);
+        public delegate void BowSkillsDel(float anglez, Transform parent, MonoBehaviour mono, 
+                                          Vector3 initscale, Vector3 initpos, Vector2 force, LOAD_ARROW_TYPE type);
         public BowSkillsDel BowSkillSet;
 
         #region NOT_USED_VARIABLES
@@ -393,7 +394,7 @@
             ArrowComponent.ShotArrow(arrowForce, ArrowParentTr);
 
             //Active Bow Skill
-            BowSkillSet?.Invoke(transform.eulerAngles.z, 30f, 2, ArrowParentTr, this, initArrowScale,
+            BowSkillSet?.Invoke(transform.eulerAngles.z, ArrowParentTr, this, initArrowScale,
                                 ArrowComponent.arrowChatchPoint.transform.position, arrowForce, loadArrowType);
 
             LoadedArrow    = null;
@@ -529,6 +530,11 @@
             LoadedArrow   = null; ArrowComponent = null;
             loadArrowType = type;
             StartCoroutine(ArrowReload());
+        }
+
+        private void ActiveSkill()
+        {
+
         }
     }
 }

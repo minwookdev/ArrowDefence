@@ -6,16 +6,16 @@
     {
         public Skill_Empty() : base() { }
 
-        public Skill_Empty(string name, string desc, SKILL_LEVEL level, BOWSKILL_TYPE type)
-            : base(name, desc, level, type)
+        public Skill_Empty(string id, string name, string desc, SKILL_LEVEL level, BOWSKILL_TYPE type)
+            : base(id, name, desc, level, type)
         {
 
         }
 
-        public override void BowSpecialSkill(float facingVec, float arrowSpreadAngle, byte numOfArrows,
-            Transform arrowParent, AD_BowController adBow, Vector3 initScale, Vector3 arrowInitPos, Vector2 force, LOAD_ARROW_TYPE arrowType)
+        public override void BowSpecialSkill(float facingVec, Transform arrowParent, MonoBehaviour mono, 
+                                             Vector3 initScale, Vector3 arrowInitPos, Vector2 force, LOAD_ARROW_TYPE arrowType)
         {
-
+            return;
         }
     }
 }

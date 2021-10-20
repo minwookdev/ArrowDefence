@@ -16,17 +16,17 @@
         /// </summary>
         public Skill_Multiple_Shot() : base() { }
 
-        public Skill_Multiple_Shot(string name, string desc, SKILL_LEVEL level, BOWSKILL_TYPE type, byte arrowcount, float spreadangle) 
-            : base(name, desc, level, type)
+        public Skill_Multiple_Shot(string id, string name, string desc, SKILL_LEVEL level, BOWSKILL_TYPE type, byte arrowcount, float spreadangle) 
+            : base(id, name, desc, level, type)
         {
             this.arrowCount  = arrowcount;
             this.spreadAngle = spreadangle;
         }
 
-        public override void BowSpecialSkill(float facingVec, float arrowSpreadAngle, byte numOfArrows, Transform arrowParent,
-                                  AD_BowController adBow, Vector3 initScale, Vector3 initPos, Vector2 arrowForce, LOAD_ARROW_TYPE arrowType)
+        public override void BowSpecialSkill(float anglez, Transform parent, MonoBehaviour mono, 
+                                             Vector3 initScale, Vector3 initPos, Vector2 arrowForce, LOAD_ARROW_TYPE arrowType)
         {
-            //float facingRotation = Mathf.Atan2(facingVec.y, facingVec.x) * Mathf.Rad2Deg; //transform.up ..?
+            //float facingRotation = Mathf.Atan2(facingVec.y, facingVec.x) * Mathf.Rad2Deg; //this mean's transform.up..?
 
             #region LEGACY_CODE
             //float startRotation = facingVec + spreadAngle / 2f;
@@ -84,7 +84,7 @@
             //}
 
             #endregion
-            SpreadShot(facingVec, arrowType, arrowParent, initScale, initPos, arrowForce);
+            SpreadShot(anglez, arrowType, parent, initScale, initPos, arrowForce);
         }
     
 

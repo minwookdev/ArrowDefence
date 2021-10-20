@@ -5,9 +5,8 @@
     [CreateAssetMenu(fileName = "RapidShot_Asset", menuName = "Scriptable Object Asset/B.SkillData_Asset/RapidShot_Asset")]
     public class SkillDataRapidShot : BowSkillData
     {
-        [Header("RAPID SHOT")]
         [Range(1, 255)]
-        public int ArrowShotCount;
+        public byte ArrowShotCount;
         public float ShotInterval;
 
         public SkillDataRapidShot()
@@ -17,7 +16,7 @@
 
         private void OnEnable()
         {
-            SkillData = new Skill_Rapid_Shot(SkillName, SkillDesc, SkillLevel, SkillType, 
+            SkillData = new Skill_Rapid_Shot(SkillId, SkillName, SkillDesc, SkillLevel, SkillType, 
                                              (byte)ArrowShotCount, ShotInterval);
         }
     }

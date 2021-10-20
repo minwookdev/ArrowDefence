@@ -12,7 +12,7 @@
 
         public void OnEnable()
         {
-            SkillData = new Skill_Empty(SkillName, SkillDesc, SkillLevel, SkillType);
+            SkillData = new Skill_Empty(SkillId, SkillName, SkillDesc, SkillLevel, SkillType);
         }
     }
 }

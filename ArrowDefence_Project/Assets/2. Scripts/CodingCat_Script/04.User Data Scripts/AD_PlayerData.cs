@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using ActionCat;
-using CodingCat_Scripts;
 
 [CreateAssetMenu(fileName = "PlayerData", menuName = "Scriptable Object Asset/PlayerData")]
 public class AD_PlayerData : ScriptableObject

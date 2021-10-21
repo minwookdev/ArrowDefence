@@ -54,4 +54,42 @@
             return vector;
         }
     }
+
+    #region ENUMS_SKILL
+    public enum SKILL_LEVEL
+    {
+        LEVEL_LOW    = 0,
+        LEVEL_MEDIUM = 1,
+        LEVEL_HIGH   = 2,
+        LEVEL_UNIQUE = 3
+    }
+
+    public enum BOWSKILL_TYPE
+    {
+        SKILL_EMPTY,
+        SKILL_SPREAD_SHOT,
+        SKILL_RAPID_SHOT,
+        SKILL_ARROW_RAIN
+    }
+
+    public enum ACSP_TYPE
+    {
+        SPEFFECT_NONE,
+        SPEFFECT_AIMSIGHT,
+        SPEEFECT_SLOWTIME
+    }
+
+    public enum RFEF_TYPE
+    {
+        RFEFFECT_NONE,
+        RFEFFECT_INCREASE_DAMAGE,
+        RFEFFECT_INCREASE_PHYSICAL_DAMAGE,
+        RFEFFECT_INCREASE_MAGICAL_DAMAGE,
+        RFEFFECT_INCREASE_HEALTH
+    }
+    #endregion
+
+    #region ENUMS_ITEM
+
+    #endregion
 }

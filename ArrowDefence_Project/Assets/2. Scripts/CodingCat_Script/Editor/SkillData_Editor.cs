@@ -354,25 +354,53 @@ public static class CreateSkillDataAsset
     [MenuItem("ActionCat/Scriptable Object/Bow Skill Asset/Spread Shot")]
     public static void CreateSpreadShotAsset()
     {
+        string assetCreatePath = "Assets/05. Scriptable_Object/SkillAsset/BowSkillAsset/SpreadShot_(level).asset";
+        var asset = ScriptableObject.CreateInstance<SkillDataSpreadShot>();
+        AssetDatabase.CreateAsset(asset, assetCreatePath);
+        AssetDatabase.SaveAssets();
+        AssetDatabase.Refresh();
 
+        EditorUtility.FocusProjectWindow();
+        Selection.activeObject = asset;
     }
 
     [MenuItem("ActionCat/Scriptable Object/Bow Skill Asset/Rapid Shot")]
     public static void CreateRapidShotAsset()
     {
+        string assetCreatePath = "Assets/05. Scriptable_Object/SkillAsset/BowSkillAsset/RapidShot_(level).asset";
+        var asset = ScriptableObject.CreateInstance<SkillDataRapidShot>();
+        AssetDatabase.CreateAsset(asset, assetCreatePath);
+        AssetDatabase.SaveAssets();
+        AssetDatabase.Refresh();
 
+        EditorUtility.FocusProjectWindow();
+        Selection.activeObject = asset;
     }
 
     [MenuItem("ActionCat/Scriptable Object/Bow Skill Asset/Rain Arrow")]
     public static void CreateRainArrowAsset()
     {
+        string assetCreatePath = "Assets/05. Scriptable_Object/SkillAsset/BowSkillAsset/RainArrow_(level).asset";
+        var asset = ScriptableObject.CreateInstance<SkillDataArrowRain>();
+        AssetDatabase.CreateAsset(asset, assetCreatePath);
+        AssetDatabase.SaveAssets();
+        AssetDatabase.Refresh();
 
+        EditorUtility.FocusProjectWindow();
+        Selection.activeObject = asset;
     }
 
     [MenuItem("ActionCat/Scriptable Object/Bow Skill Asset/Empty Slot")]
     public static void CreateEmptySlotAsset()
     {
+        string assetCreatePath = "Assets/05. Scriptable_Object/SkillAsset/BowSkillAsset/EmptySlot_(level).asset";
+        var asset = ScriptableObject.CreateInstance<SkillData_Empty>();
+        AssetDatabase.CreateAsset(asset, assetCreatePath);
+        AssetDatabase.SaveAssets();
+        AssetDatabase.Refresh();
 
+        EditorUtility.FocusProjectWindow();
+        Selection.activeObject = asset;
     }
 }
 

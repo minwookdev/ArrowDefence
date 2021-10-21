@@ -1,6 +1,5 @@
 ﻿namespace ActionCat
 {
-    using CodingCat_Scripts;
     using UnityEngine;
 
     public class SPEffect_AimSight : MonoBehaviour

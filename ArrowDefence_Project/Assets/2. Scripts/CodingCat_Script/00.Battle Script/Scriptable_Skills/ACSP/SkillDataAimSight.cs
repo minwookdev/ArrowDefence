@@ -2,7 +2,9 @@
 {
     using UnityEngine;
 
-    [CreateAssetMenu(fileName = "AimSight_Asset", menuName = "Scriptable Object Asset/ACSP.SkillData_Asset/AimSight_Asset")]
+    /// <summary>
+    /// Create it through the ActionCat Menu.
+    /// </summary>
     public class SkillDataAimSight : AccessorySkillData
     {
         public Material LineRenderMat;

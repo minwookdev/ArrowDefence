@@ -19,7 +19,6 @@
             }
         }
 
-        [Header("ITEM DROP LIST")]
         public DropTable[] DropTableArray;
 
         private void OnEnable()

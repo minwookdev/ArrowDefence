@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b418eea6767373489094b25b5ba5c0f, type: 3}
   m_Name: AimSight_Low
   m_EditorClassIdentifier: 
+  SkillId: 0201
   SkillName: Aim Sight
   SkillDesc: Accessory Effect Description.
   EffectType: 1

@@ -2,7 +2,10 @@
 {
     using UnityEngine;
 
-    [CreateAssetMenu(fileName = "RapidShot_Asset", menuName = "Scriptable Object Asset/B.SkillData_Asset/RapidShot_Asset")]
+    /// <summary>
+    /// Bow Skill Scriptable Object
+    /// Create it through the ActionCat Menu.
+    /// </summary>
     public class SkillDataRapidShot : BowSkillData
     {
         [Range(1, 255)]

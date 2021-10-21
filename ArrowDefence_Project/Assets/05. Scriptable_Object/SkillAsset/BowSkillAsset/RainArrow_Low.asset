@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5d0956ed7833aa428d070ad508285da, type: 3}
   m_Name: RainArrow_Low
   m_EditorClassIdentifier: 
+  SkillId: 0103
   SkillName: Rain-Arrow
   SkillDesc: Fires arrows at random locations.
   SkillType: 3

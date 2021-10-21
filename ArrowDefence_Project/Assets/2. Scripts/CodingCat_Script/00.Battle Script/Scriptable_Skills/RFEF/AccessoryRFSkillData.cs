@@ -4,11 +4,12 @@
 
     public class AccessoryRFSkillData : ScriptableObject
     {
-        [Header("BASIC SKILL DATA")]
+        //Default Skill Data
         public string SkillId;
         public string SkillName;
+        [TextArea(3, 7)] 
         public string SkillDesc;
-        public ACCESSORY_RFEFFECT_TYPE EffectType;
+        public RFEF_TYPE EffectType;
         protected AccessoryRFEffect SkillData;
     }
 }

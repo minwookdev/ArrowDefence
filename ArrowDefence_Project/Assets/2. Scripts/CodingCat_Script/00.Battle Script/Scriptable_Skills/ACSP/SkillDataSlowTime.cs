@@ -2,10 +2,12 @@
 {
     using UnityEngine;
 
-    [CreateAssetMenu(fileName = "SlowTime_Asset", menuName = "Scriptable Object Asset/ACSP.SkillData_Asset/SlowTime_Asset")]
+    /// <summary>
+    /// Create it through the ActionCat Menu.
+    /// </summary>
     public class SkillDataSlowTime : AccessorySkillData
     {
-        public float TimeSlotRatio;
+        public float TimeSlowRatio;
 
         public SkillDataSlowTime()
         {

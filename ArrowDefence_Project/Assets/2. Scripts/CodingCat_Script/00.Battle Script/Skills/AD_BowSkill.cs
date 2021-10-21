@@ -2,22 +2,6 @@
 {
     using UnityEngine;
 
-    public enum BOWSKILL_TYPE
-    {
-        SKILL_EMPTY,
-        SKILL_SPREAD_SHOT,
-        SKILL_RAPID_SHOT,
-        SKILL_ARROW_RAIN
-    }
-
-    public enum SKILL_LEVEL
-    { 
-        LEVEL_LOW    = 0,
-        LEVEL_MEDIUM = 1,
-        LEVEL_HIGH   = 2,
-        LEVEL_UNIQUE = 3
-    }
-
     public abstract class AD_BowSkill
     {
         protected string id;

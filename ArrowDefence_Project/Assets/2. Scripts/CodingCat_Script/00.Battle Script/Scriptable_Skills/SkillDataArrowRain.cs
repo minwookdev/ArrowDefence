@@ -2,7 +2,10 @@
 {
     using UnityEngine;
 
-    [CreateAssetMenu(fileName = "ArrowRain_Asset", menuName = "Scriptable Object Asset/B.SkillData_Asset/ArrowRain_Asset")]
+    /// <summary>
+    /// Bow Skill Scriptable Object
+    /// Create it through the ActionCat Menu.
+    /// </summary>
     public class SkillDataArrowRain : BowSkillData
     {
         [Range(1, 255)]

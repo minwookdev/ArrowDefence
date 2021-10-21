@@ -2,13 +2,6 @@
 {
     using UnityEngine;
 
-    public enum ACSP_TYPE
-    { 
-        SPEFFECT_NONE,
-        SPEFFECT_AIMSIGHT,
-        SPEEFECT_SLOWTIME
-    }
-
     [System.Serializable]
     public abstract class AccessorySPEffect
     {
@@ -53,8 +46,8 @@
 
         public override string ToString() => "Aim Sight";
 
-        public Acsp_AimSight(string skillid, string skillname, string skilldesc, ACSP_TYPE effecttype, SKILL_LEVEL skilllevel, Material lineMat, float width) : 
-            base(skillid, skillname, skilldesc, effecttype, skilllevel)
+        public Acsp_AimSight(string id, string name, string desc, ACSP_TYPE type, SKILL_LEVEL level, Material lineMat, float width) : 
+            base(id, name, desc, type, level)
         {
             lineMaterial = lineMat;
             LineWidth    = width;

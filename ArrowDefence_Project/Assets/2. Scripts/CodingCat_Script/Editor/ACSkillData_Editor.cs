@@ -7,6 +7,8 @@ public class ACSkillData_Editor
 
 }
 
+#region EDITOR_ACSP
+
 [CustomEditor(typeof(SkillDataAimSight))]
 public class AimSightDataEditor : Editor
 {
@@ -166,6 +168,90 @@ public class SlowTimeDataEditor : Editor
     }
 }
 
+#endregion
+
+#region EDITOR_RFEF
+
+[CustomEditor(typeof(RFDataDamageUp))]
+public class RFEditor_DamageUp : Editor
+{
+    SerializedObject sobject;
+
+    SerializedProperty idProp;
+    SerializedProperty nameProp;
+    SerializedProperty descProp;
+    SerializedProperty typeProp;
+
+    SerializedProperty valueProp;
+
+    public void OnEnable()
+    {
+        sobject = new SerializedObject(target);
+
+        idProp   = sobject.FindProperty("SkillId");
+        nameProp = sobject.FindProperty("SkillName");
+        descProp = sobject.FindProperty("SkillDesc");
+        typeProp = sobject.FindProperty("EffectType");
+
+        valueProp = sobject.FindProperty("DamageIncreaseValue");
+    }
+
+    public override void OnInspectorGUI()
+    {
+        //base.OnInspectorGUI();
+        EditorGUI.BeginDisabledGroup(true);
+        EditorGUILayout.ObjectField("Script", MonoScript.FromScriptableObject((RFDataDamageUp)target),
+                                                                       typeof(RFDataDamageUp), false);
+        EditorGUI.EndDisabledGroup();
+
+        sobject.Update();
+
+        GUILayout.BeginVertical("HelpBox");
+
+        #region DEFAULT_FIELD
+        //Start Default Skill Data Field
+        GUILayout.Label("Default Skill Info", EditorStyles.boldLabel);
+        GUILayout.BeginVertical("GroupBox");
+
+        //ID Field
+        EditorGUILayout.PropertyField(idProp);
+
+        //Name Field
+        EditorGUILayout.PropertyField(nameProp);
+
+        //Desc Field
+        //GUILayout.Label("Description");
+        //descProp.stringValue = EditorGUILayout.TextArea(descProp.stringValue, GUILayout.Height(50f));
+        EditorGUILayout.PropertyField(descProp);
+
+        //Effecy Type Field
+        EditorGUI.BeginDisabledGroup(true);
+        EditorGUILayout.PropertyField(typeProp); EditorGUI.EndDisabledGroup();
+
+        GUILayout.EndVertical();
+
+        #endregion
+
+        #region INHERENCE_FIELD
+
+        GUILayout.Label("RF Effect Info", EditorStyles.boldLabel);
+        GUILayout.BeginVertical("GroupBox");
+
+        //Increase Damage Field
+        EditorGUILayout.PropertyField(valueProp);
+
+        GUILayout.EndVertical();
+
+        #endregion
+
+        GUILayout.EndVertical();
+
+        sobject.ApplyModifiedProperties();
+    }
+}
+
+#endregion
+
 /// <summary>
 /// Add Skill Data Scriptable Object Asset Create Button to Action Cat Menu
 /// </summary>
@@ -174,13 +260,29 @@ public static class CreateAcspDataAsset
     [MenuItem("ActionCat/Scriptable Object/Accessory Skill Asset/Aim Sight")]
     public static void CreateAimSightAsset()
     {
+        string assetCreatePath = 
+            "Assets/05. Scriptable_Object/SkillAsset/AccessorySkillAsset/AimSight_(skillLevel).asset";
+        var asset = ScriptableObject.CreateInstance<SkillDataAimSight>();
+        AssetDatabase.CreateAsset(asset, assetCreatePath);
+        AssetDatabase.SaveAssets();
+        AssetDatabase.Refresh();
 
+        EditorUtility.FocusProjectWindow();
+        Selection.activeObject = asset;
     }
 
     [MenuItem("ActionCat/Scriptable Object/Accessory Skill Asset/Slow Time")]
     public static void CreateSlowTimeAsset()
     {
+        string assetCreatePath =
+             "Assets/05. Scriptable_Object/SkillAsset/AccessorySkillAsset/SlowTime_(skillLevel).asset";
+        var asset = ScriptableObject.CreateInstance<SkillDataSlowTime>();
+        AssetDatabase.CreateAsset(asset, assetCreatePath);
+        AssetDatabase.SaveAssets();
+        AssetDatabase.Refresh();
 
+        EditorUtility.FocusProjectWindow();
+        Selection.activeObject = asset;
     }
 }
 

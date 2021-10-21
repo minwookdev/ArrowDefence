@@ -2,7 +2,10 @@
 {
     using UnityEngine;
 
-    [CreateAssetMenu(fileName = "EmptySlot_Asset", menuName = "Scriptable Object Asset/B.SkillData_Asset/EmptySlot_Asset")]
+    /// <summary>
+    /// Bow Skill Scriptable Object
+    /// Create it through the ActionCat Menu.
+    /// </summary>
     public class SkillData_Empty : BowSkillData
     {
         public SkillData_Empty()

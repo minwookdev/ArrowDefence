@@ -10,8 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8a7580a6e09168048b3d2ff0a8775050, type: 3}
-  m_Name: DamageUp_TEST
+  m_Name: RF_DamageUP
   m_EditorClassIdentifier: 
-  SkillName: 
+  SkillId: 
+  SkillName: Damage-UP
   SkillDesc: 
   EffectType: 1
+  DamageIncreaseValue: 25

@@ -116,10 +116,10 @@ public class DropTableArrayDraw : PropertyDrawer
             EditorGUILayout.EndHorizontal();
 
             //Limit Quantity Array Length, Less than 3
-            if (property.FindPropertyRelative("QuantityRange").arraySize > 2)
+            if (property.FindPropertyRelative("QuantityRange").arraySize > 2 || property.FindPropertyRelative("QuantityRange").arraySize <= 0)
             {
                 property.FindPropertyRelative("QuantityRange").arraySize = 2;
-                CodingCat_Scripts.CatLog.WLog("Quantity Range Array Length must be less than 3.");
+                CodingCat_Scripts.CatLog.WLog("The Length of a Quantity Range Array can only have a value of 1 or 2.");
             }
 
             int quantityArrayLength = property.FindPropertyRelative("QuantityRange").arraySize;

@@ -11,11 +11,19 @@
         {
             public ItemData ItemAsset;
             public float DropChance;
-            public int[] QuantityRange;
+            public int[] QuantityRange = new int[1] { 1 };
 
             public void CheckQuantity()
             {
                 if(QuantityRange.Length <= 0) QuantityRange = new int[] { 1 };
+                if(ItemAsset.Item_Type == ITEMTYPE.ITEM_EQUIPMENT)
+                {
+                    if (QuantityRange.Length != 1)
+                        QuantityRange = new int[] { 1 };
+
+                    if (QuantityRange[0] != 1)
+                        QuantityRange[0] = 1;
+                }
             }
         }
 

@@ -259,7 +259,7 @@ public class RainArrow_DataEditor : Editor
         EditorGUILayout.PropertyField(arrowCountProp);
 
         //Interval Field
-        EditorGUILayout.PropertyField(intervalProp);
+        EditorGUILayout.PropertyField(intervalProp, new GUIContent("Arrow Spawn Interval"));
 
         GUILayout.EndVertical();
         #endregion

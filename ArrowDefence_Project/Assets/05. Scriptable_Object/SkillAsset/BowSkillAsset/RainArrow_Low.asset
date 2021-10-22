@@ -18,4 +18,4 @@ MonoBehaviour:
   SkillType: 3
   SkillLevel: 0
   ArrowShotCount: 5
-  ShotInterval: 0.3
+  ShotInterval: 0.2

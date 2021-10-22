@@ -517,7 +517,7 @@
         public void ArrowSwap(LOAD_ARROW_TYPE type)
         {
             //조준중 또는 전환하려는 화살이 현재 Load된 화살일 경우 스왑 불가
-            if (isBowPullBegan || loadArrowType == type)
+            if (isBowPulling || loadArrowType == type)
             {
                 CatLog.WLog("Bow State is Pulling or Same Type of arrow currently loaded");
                 return;

@@ -8,6 +8,7 @@
     {
         public static Vector2 ScreenOffset = new Vector2(2f, 2f);
         public static Vector3 ArrowScale = new Vector3(1.5f, 1.5f, 1f);
+        public static readonly int RandomIntRangeCorrection = 1;
 
         public static int RandomIndexInRange(int[] value)
         {
@@ -34,6 +35,27 @@
 
             int valueOfArray = intArray[GameGlobal.RandomIndexInRange(intArray)];
             return valueOfArray;
+        }
+
+        public static int RandomQauntityInRange(int[] quantityArray)
+        {
+            if (quantityArray.Length <= 0)
+            {
+                //DropItem Class Quantity Array Size 가 0인 경우
+                CatLog.WLog("Quantity Array Size is 0, return int value 1");
+                return 1;
+            }
+            else if (quantityArray.Length == 1)
+            {
+                //DropItem Class Quantity Array Size 1의 경우 (주로 장비아이템)
+                return quantityArray[0];
+            }
+            else
+            {
+                //DropItem Class Quantity Array Size 2의 경우 (소모품, 재료 아이템) MinQuantity ~ MaxQuantity 사이의 값 Return
+                int quantityInArray = Random.Range(quantityArray[0], quantityArray[1] + RandomIntRangeCorrection);
+                return quantityInArray;
+            }
         }
 
         public static T GetRandom<T>(this T[] array)

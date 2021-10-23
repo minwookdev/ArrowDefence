@@ -22,5 +22,5 @@ MonoBehaviour:
   Equip_Type: 0
   BowGameObject: {fileID: 1797254673156858288, guid: c44c9d4c930acdb42b41979ed4c3088b,
     type: 3}
-  SkillAsset_f: {fileID: 11400000, guid: 520120a42f020a644b355ed8ca3469fd, type: 2}
-  SkillAsset_s: {fileID: 11400000, guid: 8fc08db059ce576488c3db5a4393a80a, type: 2}
+  SkillAsset_f: {fileID: 11400000, guid: 683f9721fd51453419633b8ecae1b7d4, type: 2}
+  SkillAsset_s: {fileID: 0}

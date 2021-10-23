@@ -4,7 +4,6 @@
     using UnityEngine;
     using UnityEngine.UI;
     using TMPro;
-    using CodingCat_Scripts;
     using ActionCat.Data;
 
     public enum Popup_Type

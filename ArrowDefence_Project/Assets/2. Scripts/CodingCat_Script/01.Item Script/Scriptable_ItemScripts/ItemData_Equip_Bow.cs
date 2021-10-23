@@ -1,7 +1,6 @@
 ﻿namespace ActionCat
 {
     using UnityEngine;
-    using CodingCat_Scripts;
 
     [CreateAssetMenu(fileName = "Item_Bow_Asset", menuName = "Scriptable Object Asset/Item_Bow_Asset")]
     public class ItemData_Equip_Bow : ItemData_Equip

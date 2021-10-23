@@ -4,7 +4,6 @@
     using UnityEngine;
     using UnityEngine.EventSystems;
     using UnityEngine.UI;
-    using CodingCat_Scripts;
 
     public class UI_ItemDataSlot : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     {

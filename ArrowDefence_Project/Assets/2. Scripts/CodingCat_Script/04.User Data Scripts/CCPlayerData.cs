@@ -1,8 +1,5 @@
 ﻿namespace ActionCat.Data
 {
-    using System.Collections.Generic;
-    using CodingCat_Scripts;
-
     public static class CCPlayerData
     {
         public static AD_Inventory      inventory  = new AD_Inventory();

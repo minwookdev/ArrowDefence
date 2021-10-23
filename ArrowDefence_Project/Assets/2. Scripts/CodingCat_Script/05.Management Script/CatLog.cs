@@ -1,4 +1,4 @@
-﻿namespace CodingCat_Scripts
+﻿namespace ActionCat
 {
     public enum StringColor
     { 

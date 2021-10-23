@@ -2,11 +2,8 @@
 {
     using UnityEngine;
     using UnityEngine.UI;
-    using System.Collections;
     using DG.Tweening;
-    using CodingCat_Scripts;
     using ActionCat.Data;
-    using ES3Types;
 
     public class DevTestPanel : MonoBehaviour
     {

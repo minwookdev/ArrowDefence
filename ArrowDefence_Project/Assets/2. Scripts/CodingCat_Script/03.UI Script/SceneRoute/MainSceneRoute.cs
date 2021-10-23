@@ -3,7 +3,6 @@ using System.Linq;
 using UnityEngine;
 using DG.Tweening;
 using ActionCat;
-using CodingCat_Scripts;
 
 public class MainSceneRoute : MonoBehaviour
 {

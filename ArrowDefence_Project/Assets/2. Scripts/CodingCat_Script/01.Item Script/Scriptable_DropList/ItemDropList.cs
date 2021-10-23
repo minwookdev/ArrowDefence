@@ -1,9 +1,8 @@
 ﻿namespace ActionCat
 {
-    using CodingCat_Scripts;
     using UnityEngine;
 
-    [CreateAssetMenu(fileName = "", menuName = "")]
+    //[CreateAssetMenu(fileName = "", menuName = "")]
     public class ItemDropList : ScriptableObject
     {
         [System.Serializable]

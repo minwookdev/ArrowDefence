@@ -56,6 +56,7 @@
             {
                 BattleProgresser.OnIncreaseClearGauge(clearGaugeIncreaseValue);
                 BattleProgresser.OnDropItemChance(dropCorrection);
+                GameManager.Instance.MonsterDeathEvent();   //Active Test Event
                 DisableObject_Req(this.gameObject);
             }
         }
@@ -64,6 +65,7 @@
         {
             if (coll.gameObject.layer == LayerMask.NameToLayer(AD_Data.LAYER_DISABLELINE))
             {
+                BattleProgresser.OnDecreasePlayerHealthPoint(5f);
                 DisableObject_Req(this.gameObject);
             }
         }
@@ -72,7 +74,15 @@
         {
             if (coll.gameObject.layer == LayerMask.NameToLayer(AD_Data.LAYER_ARROW))
             {
+                GameManager.Instance.MonsterHitEvent();
                 float damageCount = Random.Range(50f, 110f + 1f);
+                OnHitObject(damageCount);
+            }
+
+            if(coll.gameObject.layer == LayerMask.NameToLayer(AD_Data.LAYER_ARROW_LESS))
+            {
+                GameManager.Instance.MonsterLessHitEvent();
+                float damageCount = Random.Range(10f, 30f);
                 OnHitObject(damageCount);
             }
         }

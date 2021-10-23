@@ -1,4 +1,4 @@
-﻿namespace CodingCat_Scripts
+﻿namespace ActionCat
 {
     using UnityEditor;
     using UnityEngine;

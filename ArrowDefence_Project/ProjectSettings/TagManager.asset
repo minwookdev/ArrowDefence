@@ -19,9 +19,9 @@ TagManager:
   - 
   - ObjectBow
   - ObjectArrow
+  - ObjectArrowLess
   - ObjectMonster
   - DisableCollider
-  - 
   - 
   - 
   - 
@@ -71,4 +71,7 @@ TagManager:
     locked: 0
   - name: Object:Arrow
     uniqueID: 863014967
+    locked: 0
+  - name: New Layer
+    uniqueID: 1612283651
     locked: 0

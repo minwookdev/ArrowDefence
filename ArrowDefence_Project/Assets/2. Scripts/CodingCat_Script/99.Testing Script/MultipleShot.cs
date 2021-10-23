@@ -1,9 +1,6 @@
 ﻿namespace CodingCat_Tests
 {
     using ActionCat;
-    using CodingCat_Scripts;
-    using System;
-    using System.Runtime.CompilerServices;
     using UnityEngine;
 
     public class MultipleShot : MonoBehaviour

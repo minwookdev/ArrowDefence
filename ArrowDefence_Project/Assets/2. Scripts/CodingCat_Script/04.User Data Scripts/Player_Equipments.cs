@@ -3,7 +3,6 @@
     using System;
     using UnityEngine;
     using ActionCat.Data;
-    using CodingCat_Scripts;
 
     [Serializable]
     public class Player_Equipments

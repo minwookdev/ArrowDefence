@@ -119,7 +119,7 @@ public class DropTableArrayDraw : PropertyDrawer
             if (property.FindPropertyRelative("QuantityRange").arraySize > 2 || property.FindPropertyRelative("QuantityRange").arraySize <= 0)
             {
                 property.FindPropertyRelative("QuantityRange").arraySize = 2;
-                CodingCat_Scripts.CatLog.WLog("The Length of a Quantity Range Array can only have a value of 1 or 2.");
+                CatLog.WLog("The Length of a Quantity Range Array can only have a value of 1 or 2.");
             }
 
             int quantityArrayLength = property.FindPropertyRelative("QuantityRange").arraySize;

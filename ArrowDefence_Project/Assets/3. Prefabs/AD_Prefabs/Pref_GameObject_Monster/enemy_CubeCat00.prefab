@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 2117330865147067929}
   - component: {fileID: 2117330865147067931}
   - component: {fileID: 2117330865147067928}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: enemy_CubeCat00
   m_TagString: Monster
   m_Icon: {fileID: 0}
@@ -194,7 +194,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2117330865734415321}
   - component: {fileID: 2117330865734415320}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: Shadow
   m_TagString: Untagged
   m_Icon: {fileID: 0}

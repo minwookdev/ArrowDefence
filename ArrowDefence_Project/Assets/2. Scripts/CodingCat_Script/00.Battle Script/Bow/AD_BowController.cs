@@ -3,13 +3,8 @@
     using UnityEngine;
     using UnityEngine.UI;
     using System.Collections;
-    using CodingCat_Scripts;
 
-    public enum LOAD_ARROW_TYPE
-    {
-        ARROW_MAIN = 0,
-        ARROW_SUB  = 1
-    }
+
 
 
     public class AD_BowController : MonoBehaviour
@@ -463,7 +458,7 @@
         }
 
         /// <summary>
-        /// Pulling 상태일 때 동시에 Pause 들어가면 Pulling 상태해제, Arorw Position 원위치
+        /// 화살이 당겨진 상황에서 클리어, 일시정지 들어오면 당기고있는 상태 해제
         /// </summary>
         private void CheckPauseBattle()
         {
@@ -471,6 +466,7 @@
             {
                 if (LoadedArrow != null)
                     LoadedArrow.transform.position = RightClampPoint.transform.position;
+                DrawTouchPos.Instance.ReleaseTouchLine();
                 isBowPullBegan = false; isBowPulling = false;
             }
         }
@@ -516,8 +512,8 @@
 
         public void ArrowSwap(LOAD_ARROW_TYPE type)
         {
-            //조준중 또는 전환하려는 화살이 현재 Load된 화살일 경우 스왑 불가
-            if (isBowPulling || loadArrowType == type)
+            //조준중 또는 스왑하려는 화살과 동일된 타입의 화살의 경우 스왑 불가
+            if (isBowPullBegan || loadArrowType == type)
             {
                 CatLog.WLog("Bow State is Pulling or Same Type of arrow currently loaded");
                 return;

@@ -1,5 +1,4 @@
 ﻿using ActionCat;
-using CodingCat_Scripts;
 using ES3Editor;
 using UnityEditor;
 using UnityEngine;

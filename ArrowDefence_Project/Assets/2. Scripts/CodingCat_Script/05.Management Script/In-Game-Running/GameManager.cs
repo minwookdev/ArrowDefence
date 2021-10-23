@@ -1,7 +1,6 @@
 ﻿namespace ActionCat
 {
     using UnityEngine;
-    using CodingCat_Scripts;
     using ActionCat.Data;
 
     public enum GAMESTATE
@@ -25,6 +24,11 @@
         private GAMESTATE    gameState = GAMESTATE.STATE_BEFOREBATTLE;
         private float fixedDeltaTime;
 
+        /// <summary>
+        /// Is Dev Mode Control Value
+        /// </summary>
+        private readonly bool isDevMode = true;
+
         //DropList Variables
         private ItemDropList.DropTable[] dropListArray;
         private float totalDropChances;
@@ -33,11 +37,15 @@
         public GAMEPLATFORM GamePlay_Platform { get => gamePlatform; set => gamePlatform = value; }
         public GAMESTATE GameState { get => gameState; }
 
-        /// <summary>
-        /// Is Dev Mode Control Value
-        /// </summary>
-        private readonly bool isDevMode = true;
+
         public bool IsDevMode { get => isDevMode; }
+
+        //Event
+        public delegate void HitEventHandler();
+        public HitEventHandler MonsterHitEvent;
+        public HitEventHandler MonsterDeathEvent;
+        public HitEventHandler MonsterLessHitEvent;
+
 
         private void Start() => this.fixedDeltaTime = Time.fixedDeltaTime;
 
@@ -134,6 +142,13 @@
         {
             SetBowPullingStop(true);
             TimePause();
+        }
+
+        public void ReleaseEvent()
+        {
+            if (MonsterHitEvent != null)     MonsterHitEvent = null;
+            if (MonsterDeathEvent != null)   MonsterDeathEvent = null;
+            if (MonsterLessHitEvent != null) MonsterLessHitEvent = null;
         }
 
         #endregion

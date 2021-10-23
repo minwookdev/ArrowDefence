@@ -1,6 +1,5 @@
 ﻿namespace ActionCat
 {
-    using CodingCat_Scripts;
     using UnityEngine;
 
     [CreateAssetMenu(fileName = "Item_Material_Asset", menuName = "Scriptable Object Asset/Item_Mat_Asset")]

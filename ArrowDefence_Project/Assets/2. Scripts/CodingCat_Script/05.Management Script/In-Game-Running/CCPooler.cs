@@ -6,7 +6,6 @@
     using UnityEngine;
     using UnityEditor;
     using System.Linq;
-    using CodingCat_Scripts;
 
 #if UNITY_EDITOR
     [CustomEditor(typeof(CCPooler))]

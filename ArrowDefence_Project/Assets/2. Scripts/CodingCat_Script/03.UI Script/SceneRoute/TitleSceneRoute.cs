@@ -1,7 +1,7 @@
-﻿using CodingCat_Scripts;
-using DG.Tweening;
+﻿using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
+using ActionCat;
 
 /// <summary>
 /// Script for UI Interaction of StartScene

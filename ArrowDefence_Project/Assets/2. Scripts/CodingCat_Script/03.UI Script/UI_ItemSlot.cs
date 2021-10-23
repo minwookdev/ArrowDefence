@@ -1,6 +1,5 @@
 ﻿namespace ActionCat
 {
-    using CodingCat_Scripts;
     using TMPro;
     using UnityEngine;
     using UnityEngine.EventSystems;

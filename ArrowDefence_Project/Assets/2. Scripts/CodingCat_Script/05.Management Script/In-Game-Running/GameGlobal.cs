@@ -1,7 +1,5 @@
 ﻿namespace ActionCat
 {
-    using CodingCat_Scripts;
-    using UnityEditor;
     using UnityEngine;
 
     public static class GameGlobal
@@ -77,7 +75,23 @@
         }
     }
 
+    #region ENUMS_BATTLE
+
+    /// <summary>
+    ///  정의. Bow Controller 화살 장전 타입
+    /// </summary>
+    public enum LOAD_ARROW_TYPE
+    {
+        ARROW_MAIN = 0,
+        ARROW_SUB  = 1
+    }
+
+    #endregion
+
     #region ENUMS_SKILL
+    /// <summary>
+    /// 정의. Bow, Accessory Special Skill Level
+    /// </summary>
     public enum SKILL_LEVEL
     {
         LEVEL_LOW    = 0,
@@ -85,7 +99,10 @@
         LEVEL_HIGH   = 2,
         LEVEL_UNIQUE = 3
     }
-
+    /// <summary>
+    /// 정의. 구현된 Bow Skill Type
+    /// 추가 화살 갯수, 방향, 패턴관여
+    /// </summary>
     public enum BOWSKILL_TYPE
     {
         SKILL_EMPTY,
@@ -93,14 +110,20 @@
         SKILL_RAPID_SHOT,
         SKILL_ARROW_RAIN
     }
-
+    /// <summary>
+    /// 정의. 구현된 Accessory Special Effect Type
+    /// 전투 중, 독자적인 효과 부여 (중첩 불가)
+    /// </summary>
     public enum ACSP_TYPE
     {
         SPEFFECT_NONE,
         SPEFFECT_AIMSIGHT,
         SPEEFECT_SLOWTIME
     }
-
+    /// <summary>
+    /// 정의. 구현된 ReinForcement Effect Type 
+    /// 주로 수치 상향, 조정에 적용 (중첩 가능)
+    /// </summary>
     public enum RFEF_TYPE
     {
         RFEFFECT_NONE,

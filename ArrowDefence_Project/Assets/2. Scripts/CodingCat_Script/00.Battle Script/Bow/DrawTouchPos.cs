@@ -3,7 +3,6 @@
     using UnityEngine;
     using UnityEngine.UI;
     using DG.Tweening;
-    using CodingCat_Scripts;
 
     public class DrawTouchPos : MonoBehaviour
     {

@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1773074856053807501}
-  m_Layer: 9
+  m_Layer: 10
   m_Name: ArrowCatchPoint
   m_TagString: Untagged
   m_Icon: {fileID: -1016138426, guid: 0000000000000000d000000000000000, type: 0}
@@ -41,7 +41,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1773074856053807493}
   - component: {fileID: 1773074856063532811}
-  m_Layer: 9
+  m_Layer: 10
   m_Name: trail
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -179,7 +179,7 @@ GameObject:
   - component: {fileID: 1773074856053807491}
   - component: {fileID: 1773074856033058703}
   - component: {fileID: 1751271459259230585}
-  m_Layer: 9
+  m_Layer: 10
   m_Name: ArrowHead
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -292,7 +292,7 @@ GameObject:
   - component: {fileID: 1773074856033668869}
   - component: {fileID: 7192332760362659633}
   - component: {fileID: 1773074856053835192}
-  m_Layer: 9
+  m_Layer: 10
   m_Name: Object_Red_Arrow_Less
   m_TagString: ArrowDefence_Arrow
   m_Icon: {fileID: 0}
@@ -367,7 +367,7 @@ GameObject:
   - component: {fileID: 1773074856053807495}
   - component: {fileID: 1773074856033058701}
   - component: {fileID: 1773074856051347081}
-  m_Layer: 9
+  m_Layer: 10
   m_Name: ArrowBody
   m_TagString: Untagged
   m_Icon: {fileID: 0}

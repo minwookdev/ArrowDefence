@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using CodingCat_Scripts;
 
     [Serializable]
     public class AD_Inventory

@@ -1,5 +1,4 @@
-﻿using CodingCat_Scripts;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace ActionCat
 {

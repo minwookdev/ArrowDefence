@@ -1,6 +1,5 @@
 ﻿namespace ActionCat
 {
-    using CodingCat_Scripts;
     using System.Collections.Generic;
     using UnityEngine;
 

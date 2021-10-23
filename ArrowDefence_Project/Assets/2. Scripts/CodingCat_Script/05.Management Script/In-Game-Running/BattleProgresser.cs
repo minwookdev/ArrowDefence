@@ -1,7 +1,6 @@
 ﻿namespace ActionCat
 {
     using ActionCat.Data;
-    using CodingCat_Scripts;
     using DG.Tweening;
     using System.Collections;
     using System.Collections.Generic;
@@ -47,6 +46,8 @@
         [Header("PLAYER's INITIALIZING")]
         public Transform ParentTransform;
         public Transform BowInitPosition;
+        public float MaxPlayerHealth = 200f;
+        private float currentPlayerHealth;
 
         [Header("STAGE CLEAR COUNT")]
         [Range(100, 1200)] 
@@ -80,6 +81,7 @@
         public delegate void OnIncreaseValue(float value);
         public static OnIncreaseValue OnIncreaseClearGauge;
         public static OnIncreaseValue OnDropItemChance;
+        public static OnIncreaseValue OnDecreasePlayerHealthPoint;
         //위에 두놈 하나로 묶어도 괜찮겠다 -> 몬스터를 Kill하면 무조건 발동되는 이벤트들이라서
 
         private void Start()
@@ -110,8 +112,17 @@
             GameManager.Instance.InitArrowSlotData(out arrowSlot_m, out arrowSlot_s, out iconSprite_m, out iconSprite_s);
 
             battleSceneUI.InitArrowSlots(arrowSlot_m, arrowSlot_s, iconSprite_m, iconSprite_s,
-                                        () => GameManager.Instance.Controller().ArrowSwap(LOAD_ARROW_TYPE.ARROW_MAIN),
-                                        () => GameManager.Instance.Controller().ArrowSwap(LOAD_ARROW_TYPE.ARROW_SUB));
+                                        () => { GameManager.Instance.Controller().ArrowSwap(LOAD_ARROW_TYPE.ARROW_MAIN); },
+                                        () => { GameManager.Instance.Controller().ArrowSwap(LOAD_ARROW_TYPE.ARROW_SUB); });
+
+            //Init-GameManager Event [TEST] (추후 특수효과 발동 및 특수 이벤트에 활용 예정)
+            GameManager.Instance.MonsterHitEvent     += () => CatLog.Log("On Monster Hit");
+            GameManager.Instance.MonsterDeathEvent   += () => CatLog.Log("On Monster Death");
+            GameManager.Instance.MonsterLessHitEvent += () => CatLog.Log("On Monster Hit Less Arrow");
+
+            //Init-Player Health Point [TEST] (플레이어 임시 체력, 추후 PlayerData에서 수치 받아오도록 설정)
+            currentPlayerHealth = MaxPlayerHealth;
+            OnDecreasePlayerHealthPoint += DecreaseHealthGauge;
 
             //Progresser Ready For Battle State Running
             isInitialized = true;
@@ -130,15 +141,20 @@
 
         private void OnDestroy()
         {
-            OnIncreaseClearGauge -= IncreaseClearGauge;
-            OnDropItemChance     -= OnDropItemRoll;
+            OnIncreaseClearGauge        -= IncreaseClearGauge;
+            OnDropItemChance            -= OnDropItemRoll;
+            OnDecreasePlayerHealthPoint -= DecreaseHealthGauge;
 
-            //종료 되어버리는 경우 GameManager가 먼저 지워져버리기 때문에 null 체크함
+            //Clear 처리 후, Main Scene으로 넘어가는 경우가 아닌 ApplicationQuit 되어 버리는 경우
+            //GameManager가 먼저 지워질 수 있다.
             if (GameManager.Instance != null)
+            {
                 GameManager.Instance.ReleaseDropList();
+                GameManager.Instance.ReleaseEvent();
+            }
         }
 
-        #region GAME_GAUGE_LOGIC's
+        #region GAUGE_CONTROLLER
 
         public void IncreaseClearGauge(float value)
         {
@@ -163,7 +179,24 @@
                 float dest = currentClearCount / MaxClearCount;
                 ClearSlider.DOValue(dest, 1f);
             }
-                
+        }
+
+        public void DecreaseHealthGauge(float value)
+        {
+            currentPlayerHealth -= value;
+
+            float tempHealth = currentPlayerHealth;
+            tempHealth -= value;
+            if (tempHealth > 0)
+                currentPlayerHealth = tempHealth;
+            else
+                currentPlayerHealth = 0;
+
+            if(PlayerHealthSlider != null)
+            {
+                float dest = currentPlayerHealth / MaxPlayerHealth;
+                PlayerHealthSlider.DOValue(dest, 0.5f);
+            }
         }
 
         /// <summary>
@@ -313,6 +346,10 @@
                 endWaitingTime = 0f;
             }
         }
+
+        #endregion
+
+        #region GAMEMANAGER_CALLBACK
 
         #endregion
     }

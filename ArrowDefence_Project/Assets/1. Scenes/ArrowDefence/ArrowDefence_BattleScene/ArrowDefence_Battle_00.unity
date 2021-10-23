@@ -2594,11 +2594,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MainCam: {fileID: 0}
-  RightClampPoint: {fileID: 0}
-  LeftClampPoint: {fileID: 0}
   TouchRadius: 1
   PullableRadius: 1
   BowCenterPointImg: {fileID: 0}
+  RightClampPoint: {fileID: 0}
+  LeftClampPoint: {fileID: 0}
   SmoothRotateSpeed: 12
   ArrowPullingSpeed: 1
   ArrowComponent: {fileID: 0}
@@ -6797,7 +6797,7 @@ GameObject:
   m_Component:
   - component: {fileID: 878938223}
   - component: {fileID: 878938222}
-  m_Layer: 11
+  m_Layer: 12
   m_Name: MonsterDisableCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13111,7 +13111,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 1050391
+    m_Bits: 1052439
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0

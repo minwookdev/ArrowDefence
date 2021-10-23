@@ -3,7 +3,6 @@
     using System;
     using System.Collections.Generic;
     using ActionCat.Data;
-    using CodingCat_Scripts;
     using UnityEngine;
 
     [Serializable]

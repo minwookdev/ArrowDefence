@@ -2,7 +2,6 @@
 {
     using System.Collections;
     using UnityEngine;
-    using CodingCat_Scripts;
 
     public class ItemTooltip : MonoBehaviour
     {

@@ -1,6 +1,5 @@
 ﻿namespace ActionCat
 {
-    using CodingCat_Scripts;
     using UnityEngine;
 
     public class AD_MonsterState : MonoBehaviour

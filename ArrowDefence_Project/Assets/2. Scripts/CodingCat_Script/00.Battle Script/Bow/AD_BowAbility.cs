@@ -1,7 +1,6 @@
 ﻿namespace ActionCat
 {
     using ActionCat.Data;
-    using CodingCat_Scripts;
     using UnityEngine;
 
     public class AD_BowAbility : MonoBehaviour

@@ -3,7 +3,6 @@
     using UnityEngine;
     using UnityEngine.UI;
     using UnityEngine.EventSystems;
-    using CodingCat_Scripts;
     using DG.Tweening;
     using System.Collections.Generic;
 
@@ -225,6 +224,17 @@
                 m_slotEntry.eventID = EventTriggerType.PointerClick;
                 m_slotEntry.callback.AddListener((data) => slotAction_m());
                 mainArrowSlot.triggers.Add(m_slotEntry);
+
+                //Bow Controller Pulling Limit [Down, Up Event]
+                EventTrigger.Entry m_slotEntryDown = new EventTrigger.Entry();
+                m_slotEntryDown.eventID = EventTriggerType.PointerDown;
+                m_slotEntryDown.callback.AddListener((data) => GameManager.Instance.SetBowPullingStop(true));
+                mainArrowSlot.triggers.Add(m_slotEntryDown);
+
+                EventTrigger.Entry m_slotEntryUp = new EventTrigger.Entry();
+                m_slotEntryUp.eventID = EventTriggerType.PointerUp;
+                m_slotEntryUp.callback.AddListener((data) => GameManager.Instance.SetBowPullingStop(false));
+                mainArrowSlot.triggers.Add(m_slotEntryUp);
             }
             else mainArrowSlot.gameObject.SetActive(false);
 
@@ -240,6 +250,17 @@
                 s_slotEntry.eventID = EventTriggerType.PointerClick;
                 s_slotEntry.callback.AddListener((data) => slotAction_s());
                 subArrowSlot.triggers.Add(s_slotEntry);
+
+                //Bow Controller Pulling Limit [Down, Up Event]
+                EventTrigger.Entry s_slotEntryDown = new EventTrigger.Entry();
+                s_slotEntryDown.eventID = EventTriggerType.PointerDown;
+                s_slotEntryDown.callback.AddListener((data) => GameManager.Instance.SetBowPullingStop(true));
+                subArrowSlot.triggers.Add(s_slotEntryDown);
+
+                EventTrigger.Entry s_slotEntryUp = new EventTrigger.Entry();
+                s_slotEntryUp.eventID = EventTriggerType.PointerUp;
+                s_slotEntryUp.callback.AddListener((data) => GameManager.Instance.SetBowPullingStop(false));
+                subArrowSlot.triggers.Add(s_slotEntryUp);
             }
             else subArrowSlot.gameObject.SetActive(false);
 

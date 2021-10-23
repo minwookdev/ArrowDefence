@@ -40,6 +40,7 @@ public static class AD_Data
     public static readonly string LAYER_DISABLELINE  = "DisableCollider";
     public static readonly string LAYER_MONSTER      = "ObjectMonster";
     public static readonly string LAYER_ARROW        = "ObjectArrow";
+    public static readonly string LAYER_ARROW_LESS   = "ObjectArrowLess";
     public static readonly string LAYER_BOW          = "ObjectBow";
 
     /// <summary>

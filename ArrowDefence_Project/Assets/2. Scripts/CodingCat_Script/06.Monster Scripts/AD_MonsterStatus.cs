@@ -16,11 +16,14 @@
         public Color HitColor;
 
         //Monster Status Value
-        private float monsterHp;
-        private float monsterMp;
+        private float currentHealthPoint;
+        private float currentManaPoint;
+        private float tempMonsterHealthPoint;
         private bool isChangingColor = false;
+        private bool isDeath         = false;
         private SpriteRenderer sprite;
         private Color startColor;
+        Sequence hitSeq;
 
         //Battle Related Variables
         private float dropCorrection = 5f;
@@ -28,8 +31,14 @@
 
         private void Start()
         {
-            sprite = GetComponent<SpriteRenderer>();
+            sprite     = GetComponent<SpriteRenderer>();
             startColor = sprite.color;
+
+            hitSeq = DOTween.Sequence().SetAutoKill(false)
+                                       .OnStart(() => { })
+                                       .Prepend(sprite.DOColor(HitColor, 0.01f))
+                                       .Append(sprite.DOColor(startColor, 1f))
+                                       .Pause();
         }
 
         private void Update()
@@ -44,19 +53,17 @@
 
         public void OnStageClear() => DisableObject_Req(this.gameObject);
 
-        public void OnHitObject(float value)
+        public void OnHitObject(float damage)
         {
             //Decrease Monster's Health Point
-            monsterHp -= value;
+            currentHealthPoint -= damage;
 
             //Hit Effect
             HitColorChange();
 
-            if(monsterHp <= 0)
+            if(currentHealthPoint <= 0)
             {
-                BattleProgresser.OnIncreaseClearGauge(clearGaugeIncreaseValue);
-                BattleProgresser.OnDropItemChance(dropCorrection);
-                GameManager.Instance.MonsterDeathEvent();   //Active Test Event
+                isDeath = true;
                 DisableObject_Req(this.gameObject);
             }
         }
@@ -75,7 +82,7 @@
             if (coll.gameObject.layer == LayerMask.NameToLayer(AD_Data.LAYER_ARROW))
             {
                 GameManager.Instance.MonsterHitEvent();
-                float damageCount = Random.Range(50f, 110f + 1f);
+                float damageCount = Random.Range(30f, 80f);
                 OnHitObject(damageCount);
             }
 
@@ -89,27 +96,47 @@
 
         private void OnEnable()
         {
-            this.monsterHp = MaxMonsterHP;
-            this.monsterMp = MaxMonsterMP;
+            this.currentHealthPoint = MaxMonsterHP;
+            this.currentManaPoint   = MaxMonsterMP;
+
+            isDeath = false;
+
+            if (sprite != null)
+                sprite.color = sprite.color;
         }
 
         private void OnDisable()
         {
-            if(isChangingColor)
+            //if(isChangingColor)
+            //{
+            //    sprite.DOKill();
+            //    sprite.color    = startColor;
+            //    isChangingColor = false;
+            //}
+
+            //monster hit Sequence 진행중에 MainMenu로 돌아가거나 ApplicationQuit Event
+            //발생하면 DoTween 에러를 방지
+            sprite.DOKill();
+
+            if(isDeath)
             {
-                sprite.DOKill();
-                sprite.color    = startColor;
-                isChangingColor = false;
+                //연속된 빠른 화살에 계속 Hit될 경우 OnHit메서드에 넣을 경우 여러번 이벤트가 발생할 수 있어서
+                //OnDisable 에서 따로 처리하고 있다.
+                GameManager.Instance.MonsterDeathEvent();   //Active Test Event
+                BattleProgresser.OnDropItemChance(dropCorrection);
+                BattleProgresser.OnIncreaseClearGauge(clearGaugeIncreaseValue);
             }
         }
 
         private void HitColorChange()
         {
-            isChangingColor = true;
-            sprite.color    = HitColor;
+            //isChangingColor = true;
+            //sprite.color    = HitColor;
+            //
+            //sprite.DOColor(startColor, 1f)
+            //      .OnComplete(() => isChangingColor = false);
 
-            sprite.DOColor(startColor, 1f)
-                  .OnComplete(() => isChangingColor = false);
+            hitSeq.Restart();
         }
     }
 }

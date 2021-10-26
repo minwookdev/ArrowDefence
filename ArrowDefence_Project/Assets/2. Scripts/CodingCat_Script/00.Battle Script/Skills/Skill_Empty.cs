@@ -6,8 +6,8 @@
     {
         public Skill_Empty() : base() { }
 
-        public Skill_Empty(string id, string name, string desc, SKILL_LEVEL level, BOWSKILL_TYPE type)
-            : base(id, name, desc, level, type)
+        public Skill_Empty(string id, string name, string desc, SKILL_LEVEL level, BOWSKILL_TYPE type, Sprite sprite)
+            : base(id, name, desc, level, type, sprite)
         {
 
         }

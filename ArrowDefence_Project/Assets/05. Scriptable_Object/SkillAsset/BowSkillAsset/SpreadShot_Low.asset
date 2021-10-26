@@ -12,9 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b13b54036fbabc4187d555e760b5c8a, type: 3}
   m_Name: SpreadShot_Low
   m_EditorClassIdentifier: 
-  SkillName: Spread-Shot
+  SkillId: 
+  SkillName: SPREAD SHOT
   SkillDesc: Fires an arrow that spreads in a fan-shaped direction.
   SkillType: 1
   SkillLevel: 0
+  SkillIconSprite: {fileID: 0}
   ArrowShotCount: 3
   SpreadAngle: 20

@@ -10,6 +10,7 @@
         public string SkillDesc;
         public ACSP_TYPE EffectType;
         public SKILL_LEVEL SkillLevel;
+        public Sprite SkillIconSprite;
         protected AccessorySPEffect SkillData;
 
         public AccessorySPEffect Skill()

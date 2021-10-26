@@ -19,8 +19,8 @@
         /// </summary>
         public Skill_Arrow_Rain() : base() { }
 
-        public Skill_Arrow_Rain(string id, string name, string desc, SKILL_LEVEL level, BOWSKILL_TYPE type, byte arrowcount, float delay) 
-            : base(id, name, desc, level, type)
+        public Skill_Arrow_Rain(string id, string name, string desc, SKILL_LEVEL level, BOWSKILL_TYPE type, Sprite sprite, byte arrowcount, float delay) 
+            : base(id, name, desc, level, type, sprite)
         {
             this.arrowCount = arrowcount;
             this.shotDelay  = delay;

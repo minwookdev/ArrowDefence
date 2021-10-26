@@ -19,8 +19,8 @@
 
         private void OnEnable()
         {
-            SkillData = new Skill_Rapid_Shot(SkillId, SkillName, SkillDesc, SkillLevel, SkillType, 
-                                             (byte)ArrowShotCount, ShotInterval);
+            SkillData = new Skill_Rapid_Shot(SkillId, SkillName, SkillDesc, SkillLevel, SkillType, SkillIconSprite,
+                                             ArrowShotCount, ShotInterval);
         }
     }
 }

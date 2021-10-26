@@ -10,6 +10,7 @@
         protected string desc;
         protected ACSP_TYPE effectType;
         protected SKILL_LEVEL level;
+        protected Sprite iconSprite;
 
         #region PROPERTY
         public string ID { get => id; }
@@ -17,15 +18,26 @@
         public string Description { get => desc; }
         public ACSP_TYPE SpEffectType { get => effectType; }
         public SKILL_LEVEL Level { get => level; }
+        public Sprite IconSprite
+        {
+            get
+            {
+                if (iconSprite != null)
+                    return iconSprite;
+                else
+                    return null;
+            }
+        }
         #endregion
 
-        protected AccessorySPEffect(string id, string name, string desc, ACSP_TYPE type, SKILL_LEVEL level)
+        protected AccessorySPEffect(string id, string name, string desc, ACSP_TYPE type, SKILL_LEVEL level, Sprite sprite)
         {
             this.id         = id;
             this.name       = name;
             this.desc       = desc;
             this.effectType = type;
             this.level      = level;
+            this.iconSprite = sprite;
         }
 
         public AccessorySPEffect() { }
@@ -46,8 +58,8 @@
 
         public override string ToString() => "Aim Sight";
 
-        public Acsp_AimSight(string id, string name, string desc, ACSP_TYPE type, SKILL_LEVEL level, Material lineMat, float width) : 
-            base(id, name, desc, type, level)
+        public Acsp_AimSight(string id, string name, string desc, ACSP_TYPE type, SKILL_LEVEL level, Sprite sprite, Material lineMat, float width) : 
+            base(id, name, desc, type, level, sprite)
         {
             lineMaterial = lineMat;
             LineWidth    = width;
@@ -69,8 +81,8 @@
         public override string ToString() => "Slow Time";
 
 
-        public Acsp_SlowTime(string id, string name, string desc, ACSP_TYPE type, SKILL_LEVEL level) : 
-            base(id, name, desc, type, level)
+        public Acsp_SlowTime(string id, string name, string desc, ACSP_TYPE type, SKILL_LEVEL level, Sprite sprite) : 
+            base(id, name, desc, type, level, sprite)
         {
 
         }

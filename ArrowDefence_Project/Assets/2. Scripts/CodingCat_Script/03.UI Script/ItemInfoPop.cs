@@ -15,6 +15,51 @@
         Popup_Accessory  = 4
     }
 
+    [System.Serializable]
+    public class SkillSlot
+    {
+        public GameObject SlotGO;
+        public TextMeshProUGUI TmpSkillName;
+        public TextMeshProUGUI TmpSkillDesc;
+        public TextMeshProUGUI TmpSkillType;
+        public TextMeshProUGUI TmpSkillGrade;
+        public Image ImgIcon;
+
+        public bool isActiveSlotGO()
+        {
+            if (SlotGO.activeSelf) return true;
+            else                   return false;
+        }
+
+        public void ActiveSlot(string skillname, string skilldesc, string skilllevel, Sprite skillsprite)
+        {
+            TmpSkillName.text = skillname;
+            TmpSkillDesc.text = skilldesc;
+            TmpSkillType.text = skilllevel;
+
+            if (skillsprite != null)
+                ImgIcon.sprite = skillsprite;
+
+            if (SlotGO.activeSelf == false)
+                SlotGO.SetActive(true);
+        }
+
+        public void DisableSlot()
+        {
+            if (SlotGO.activeSelf)
+            {
+                //Clean up Skill Slot variables
+                TmpSkillName.text = "";
+                TmpSkillDesc.text = "";
+                TmpSkillType.text = "";
+                //TmpSkillGrade.text = "";
+                //ImgIcon.sprite = null;
+
+                SlotGO.SetActive(false);
+            }
+        }
+    }
+
     public class ItemInfoPop : MonoBehaviour
     {
         [Serializable]
@@ -33,39 +78,37 @@
 
             public void EnablePopup(Item_Consumable item, Sprite frame)
             {
-                var itemInfo = item.GetItem();
-
-                Text_ItemType.text = "Consumable";
-                Text_ItemName.text = item.GetName;
-                Text_ItemDesc.text = item.GetDesc;
+                Text_ItemType.text  = "Consumable";
+                Text_ItemName.text  = item.GetName;
+                Text_ItemDesc.text  = item.GetDesc;
                 Text_ItemCount.text = item.GetAmount.ToString();
-                Image_Item.sprite = item.GetSprite;
-                Image_Frame.sprite = frame;
-                itemAddress = item;
+                Image_Item.sprite   = item.GetSprite;
+                Image_Frame.sprite  = frame;
+                itemAddress         = item;
 
                 Popup_Object.SetActive(true);
             }
 
             public void EnablePopup(Item_Material item, Sprite frame)
             {
-                Text_ItemType.text = "Consumable";
-                Text_ItemName.text = item.GetName;
-                Text_ItemDesc.text = item.GetDesc;
+                Text_ItemType.text  = "Consumable";
+                Text_ItemName.text  = item.GetName;
+                Text_ItemDesc.text  = item.GetDesc;
                 Text_ItemCount.text = item.GetAmount.ToString();
-                Image_Item.sprite = item.GetSprite;
-                Image_Frame.sprite = frame;
-                itemAddress = item;
+                Image_Item.sprite   = item.GetSprite;
+                Image_Frame.sprite  = frame;
+                itemAddress         = item;
 
                 Popup_Object.SetActive(true);
             }
 
             public void DisablePop()
             {
-                Text_ItemType.text = "";
-                Text_ItemName.text = "";
-                Text_ItemDesc.text = "";
+                Text_ItemType.text  = "";
+                Text_ItemName.text  = "";
+                Text_ItemDesc.text  = "";
                 Text_ItemCount.text = "";
-                itemAddress = null;
+                itemAddress         = null;
 
                 Popup_Object.SetActive(false);
             }
@@ -82,23 +125,31 @@
             public TextMeshProUGUI Text_ItemDesc;
             public Button Button_Equip;
             public Button Button_Release;
+            
+            //Skill Slot Variables
+            public SkillSlot[] SkillSlots;
 
-            public GameObject[] Object_SkillSlots;
-
+            //Item Address [TEMP]
             private Item_Bow itemAddress;
 
             public void EnablePopup(Item_Bow item, Sprite sprite)
             {
                 Text_ItemType.text = "Equipment";
                 Text_ItemName.text = item.GetName;
-                Image_Item.sprite = item.GetSprite;
+                //Text_ItemDesc.text = item.GetDesc;    //장비아이템 팝업은 설명 tmp가 없다 [현재 tooltip에서만 사용]
+                Image_Item.sprite  = item.GetSprite;
                 Image_Frame.sprite = sprite;
-                itemAddress = item;
+                itemAddress        = item;
 
-                for (int i = 0; i < item.GetBowSkills().Length; i++)
+                for (int i = 0; i < item.GetSkills().Length; i++)
                 {
-                    if (item.GetBowSkills()[i] != null) Object_SkillSlots[i].SetActive(true);
-                    else Object_SkillSlots[i].SetActive(false);
+                    if (item.GetSkills()[i] != null) 
+                        SkillSlots[i].ActiveSlot(item.GetSkill(i).Name, 
+                                                 item.GetSkill(i).Description,
+                                                 item.GetSkill(i).Level.ToString(),
+                                                 item.GetSkill(i).IconSprite);
+                    else                                
+                        SkillSlots[i].DisableSlot();
                 }
 
                 //if (CCPlayerData.equipments.GetBowItem() != itemAddress) SwitchButtons(false);
@@ -117,9 +168,10 @@
                 Text_ItemName.text = "";
                 itemAddress = null;
 
-                foreach (var item in Object_SkillSlots)
+                foreach (var item in SkillSlots)
                 {
-                    if (item.activeSelf) item.SetActive(false);
+                    if (item.isActiveSlotGO())
+                        item.DisableSlot();
                 }
 
                 PopObject.SetActive(false);
@@ -176,7 +228,10 @@
             public Button Button_Equip;
             public Button Button_Release;
 
-            public GameObject[] Object_Skill_Slot;
+            //Skill Slot Variables
+            public SkillSlot[] SkillSlots;
+
+            //Item Address
             private Item_Arrow itemAddress;
 
             public void EnablePopup(Item_Arrow address, Sprite frameSprite)
@@ -188,9 +243,9 @@
                 Image_Frame.sprite = frameSprite;
 
                 //Skil Slot Enable Logic
-                foreach (var item in Object_Skill_Slot)
+                foreach (var item in SkillSlots)
                 {
-                    item.SetActive(false);
+                    item.DisableSlot();
                 }
 
                 //Enable / Disable Equip Button Logic 현재 들고있는 Item Reference랑 비교해서 Equip / Release Button의 Enable 결정
@@ -207,10 +262,10 @@
                 Text_ItemName.text = "";
                 itemAddress = null;
 
-                foreach (var item in Object_Skill_Slot)
+                foreach (var item in SkillSlots)
                 {
-                    if (item.activeSelf == true)
-                        item.SetActive(false);
+                    if (item.isActiveSlotGO() == true)
+                        item.DisableSlot();
                 }
 
                 PopObject.SetActive(false);
@@ -256,7 +311,8 @@
             public Button Button_Equip;
             public Button Button_Release;
 
-            public GameObject[] Object_Skill_Slot;
+            //Skill Slot variables
+            public SkillSlot[] SkillSlots;
 
             private Item_Accessory itemAddress;
             private byte accessoryIdx = 0;
@@ -269,10 +325,21 @@
                 Image_Item.sprite = address.GetSprite;
                 Image_Frame.sprite = frameSprite;
 
-                //Skill Slot Enable Logic
-                foreach (var item in Object_Skill_Slot)
+                //Active Skill Slot if the having Special Effect
+                for (int i = 0; i < SkillSlots.Length; i++)
                 {
-                    item.SetActive(false);
+                    if (i == 0)
+                    {
+                        if (itemAddress.SPEffect != null)
+                            SkillSlots[i].ActiveSlot(itemAddress.SPEffect.Name,
+                                                     itemAddress.SPEffect.Description,
+                                                     itemAddress.SPEffect.Level.ToString(),
+                                                     itemAddress.SPEffect.IconSprite);
+                        else
+                            SkillSlots[i].DisableSlot();
+                    }
+                    else
+                        SkillSlots[i].DisableSlot();
                 }
 
                 //Enable / Disable Equip Button Logic
@@ -297,10 +364,10 @@
                 itemAddress = null;
                 accessoryIdx = 0;
 
-                foreach (var item in Object_Skill_Slot)
+                foreach (var item in SkillSlots)
                 {
-                    if (item.activeSelf == true)
-                        item.SetActive(false);
+                    if (item.isActiveSlotGO() == true)
+                        item.DisableSlot();
                 }
 
                 PopObject.SetActive(false);

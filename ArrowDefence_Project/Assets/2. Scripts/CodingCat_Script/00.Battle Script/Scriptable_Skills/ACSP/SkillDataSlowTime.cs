@@ -16,7 +16,7 @@
 
         public void OnEnable()
         {
-            this.SkillData = new Acsp_SlowTime(SkillId, SkillName, SkillDesc, EffectType, SkillLevel);
+            this.SkillData = new Acsp_SlowTime(SkillId, SkillName, SkillDesc, EffectType, SkillLevel, SkillIconSprite);
         }
     }
 }

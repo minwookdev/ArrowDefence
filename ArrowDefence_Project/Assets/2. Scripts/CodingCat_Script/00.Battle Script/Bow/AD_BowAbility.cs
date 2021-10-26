@@ -13,7 +13,7 @@
 
             if (CCPlayerData.equipments.GetBowItem() != null)
             {
-                var bowSkills = CCPlayerData.equipments.GetBowItem().GetBowSkills();
+                var bowSkills = CCPlayerData.equipments.GetBowItem().GetSkills();
 
                 for (int i = 0; i < bowSkills.Length; i++)
                 {

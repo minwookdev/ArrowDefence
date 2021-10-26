@@ -13,9 +13,10 @@ MonoBehaviour:
   m_Name: RapidShot_Low
   m_EditorClassIdentifier: 
   SkillId: 
-  SkillName: Rapid-Fire
+  SkillName: RAPID SHOT
   SkillDesc: Fires arrows in rapid succession.
   SkillType: 2
   SkillLevel: 0
+  SkillIconSprite: {fileID: 0}
   ArrowShotCount: 3
   ShotInterval: 0.2

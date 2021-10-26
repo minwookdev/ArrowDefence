@@ -88,15 +88,18 @@
         /// </summary>
         public Item_Bow() : base() { }
 
-        public AD_BowSkill GetBowSkill()
+        public AD_BowSkill GetSkill(int idx)
         {
-            if (bowSkill_Fst != null) return bowSkill_Fst;
-            else                      return null;
-
-            //bool isSkill = (bowSkill_Fst != null) ? return bowSkill_Fst : false;
+            if (idx == 0)
+                return bowSkill_Fst;
+            else if (idx == 1)
+                return bowSkill_Sec;
+            else
+                CatLog.WLog($"GetSkill Method parameter idx is cannot exceed 1 [get parameter : {idx}]");
+            return null;
         }
 
-        public AD_BowSkill[] GetBowSkills()
+        public AD_BowSkill[] GetSkills()
         {
             //AD_BowSkill[] skills = new AD_BowSkill[2] { this.bowSkill_Fst, 
             //                                            this.bowSkill_Sec};

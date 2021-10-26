@@ -15,8 +15,8 @@
         
         public Skill_Rapid_Shot() : base() { }
 
-        public Skill_Rapid_Shot(string id, string name, string desc, SKILL_LEVEL level, BOWSKILL_TYPE type, byte arrowcount, float delay) 
-            : base(id, name, desc, level, type)
+        public Skill_Rapid_Shot(string id, string name, string desc, SKILL_LEVEL level, BOWSKILL_TYPE type, Sprite sprite, byte arrowcount, float delay) 
+            : base(id, name, desc, level, type, sprite)
         {
             this.arrowCount = arrowcount;
             this.shotDelay  = delay;

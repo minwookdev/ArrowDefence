@@ -17,6 +17,7 @@ public class SpreadShot_DataEditor : Editor
     SerializedProperty descProp;
     SerializedProperty typeProp;
     SerializedProperty levelProp;
+    SerializedProperty spriteProp;
 
     SerializedProperty arrowCountProp;
     SerializedProperty spreadAngleProp;
@@ -25,11 +26,12 @@ public class SpreadShot_DataEditor : Editor
     {
         sobject = new SerializedObject(target);
 
-        idProp    = sobject.FindProperty("SkillId");
-        nameProp  = sobject.FindProperty("SkillName");
-        descProp  = sobject.FindProperty("SkillDesc");
-        typeProp  = sobject.FindProperty("SkillType");
-        levelProp = sobject.FindProperty("SkillLevel");
+        idProp     = sobject.FindProperty("SkillId");
+        nameProp   = sobject.FindProperty("SkillName");
+        descProp   = sobject.FindProperty("SkillDesc");
+        typeProp   = sobject.FindProperty("SkillType");
+        levelProp  = sobject.FindProperty("SkillLevel");
+        spriteProp = sobject.FindProperty("SkillIconSprite");
 
         arrowCountProp  = sobject.FindProperty("ArrowShotCount");
         spreadAngleProp = sobject.FindProperty("SpreadAngle");
@@ -71,6 +73,9 @@ public class SpreadShot_DataEditor : Editor
         //Level Field
         EditorGUILayout.PropertyField(levelProp, true);
 
+        //Icon Sprite Field
+        EditorGUILayout.PropertyField(spriteProp, true);
+
         //End Field
         GUILayout.EndVertical();
         #endregion
@@ -105,6 +110,7 @@ public class RapidShot_DataEditor : Editor
     SerializedProperty descProp;
     SerializedProperty typeProp;
     SerializedProperty levelProp;
+    SerializedProperty spriteProp;
 
     SerializedProperty arrowCountProp;
     SerializedProperty intervalProp;
@@ -113,11 +119,12 @@ public class RapidShot_DataEditor : Editor
     {
         sobject = new SerializedObject(target);
 
-        idProp    = sobject.FindProperty("SkillId");
-        nameProp  = sobject.FindProperty("SkillName");
-        descProp  = sobject.FindProperty("SkillDesc");
-        typeProp  = sobject.FindProperty("SkillType");
-        levelProp = sobject.FindProperty("SkillLevel");
+        idProp     = sobject.FindProperty("SkillId");
+        nameProp   = sobject.FindProperty("SkillName");
+        descProp   = sobject.FindProperty("SkillDesc");
+        typeProp   = sobject.FindProperty("SkillType");
+        levelProp  = sobject.FindProperty("SkillLevel");
+        spriteProp = sobject.FindProperty("SkillIconSprite");
 
         arrowCountProp  = sobject.FindProperty("ArrowShotCount");
         intervalProp    = sobject.FindProperty("ShotInterval");
@@ -159,6 +166,9 @@ public class RapidShot_DataEditor : Editor
         //Level Field
         EditorGUILayout.PropertyField(levelProp, true);
 
+        //Icon Sprite Field
+        EditorGUILayout.PropertyField(spriteProp, true);
+
         //End Field
         GUILayout.EndVertical();
         #endregion
@@ -193,6 +203,7 @@ public class RainArrow_DataEditor : Editor
     SerializedProperty descProp;
     SerializedProperty typeProp;
     SerializedProperty levelProp;
+    SerializedProperty spriteProp;
 
     SerializedProperty arrowCountProp;
     SerializedProperty intervalProp;
@@ -200,12 +211,13 @@ public class RainArrow_DataEditor : Editor
     public void OnEnable()
     {
         sobject = new SerializedObject(target);
-
-        idProp    = sobject.FindProperty("SkillId");
-        nameProp  = sobject.FindProperty("SkillName");
-        descProp  = sobject.FindProperty("SkillDesc");
-        typeProp  = sobject.FindProperty("SkillType");
-        levelProp = sobject.FindProperty("SkillLevel");
+                   
+        idProp     = sobject.FindProperty("SkillId");
+        nameProp   = sobject.FindProperty("SkillName");
+        descProp   = sobject.FindProperty("SkillDesc");
+        typeProp   = sobject.FindProperty("SkillType");
+        levelProp  = sobject.FindProperty("SkillLevel");
+        spriteProp = sobject.FindProperty("SkillIconSprite");
 
         arrowCountProp = sobject.FindProperty("ArrowShotCount");
         intervalProp   = sobject.FindProperty("ShotInterval");
@@ -247,6 +259,9 @@ public class RainArrow_DataEditor : Editor
         //Level Field
         EditorGUILayout.PropertyField(levelProp, true);
 
+        //Icon Sprite Field
+        EditorGUILayout.PropertyField(spriteProp, true);
+
         //End Field
         GUILayout.EndVertical();
         #endregion
@@ -281,16 +296,18 @@ public class Empty_DataEditor : Editor
     SerializedProperty descProp;
     SerializedProperty typeProp;
     SerializedProperty levelProp;
+    SerializedProperty spriteProp;
 
     public void OnEnable()
     {
         sobject = new SerializedObject(target);
 
-        idProp    = sobject.FindProperty("SkillId");
-        nameProp  = sobject.FindProperty("SkillName");
-        descProp  = sobject.FindProperty("SkillDesc");
-        typeProp  = sobject.FindProperty("SkillType");
-        levelProp = sobject.FindProperty("SkillLevel");
+        idProp     = sobject.FindProperty("SkillId");
+        nameProp   = sobject.FindProperty("SkillName");
+        descProp   = sobject.FindProperty("SkillDesc");
+        typeProp   = sobject.FindProperty("SkillType");
+        levelProp  = sobject.FindProperty("SkillLevel");
+        spriteProp = sobject.FindProperty("SkillIconSprite");
 
         //levelProperty = sobject.FindProperty(nameof(SkillData_Empty.SkillName));
     }
@@ -330,6 +347,9 @@ public class Empty_DataEditor : Editor
 
         //Level Field
         EditorGUILayout.PropertyField(levelProp, true);
+
+        //Icon Sprite Field
+        EditorGUILayout.PropertyField(spriteProp, true);
 
         //End Field
         GUILayout.EndVertical();

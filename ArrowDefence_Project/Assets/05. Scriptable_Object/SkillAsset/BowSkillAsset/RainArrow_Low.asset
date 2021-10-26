@@ -13,9 +13,10 @@ MonoBehaviour:
   m_Name: RainArrow_Low
   m_EditorClassIdentifier: 
   SkillId: 0103
-  SkillName: Rain-Arrow
+  SkillName: RAIN ARROW
   SkillDesc: Fires arrows at random locations.
   SkillType: 3
   SkillLevel: 0
+  SkillIconSprite: {fileID: 0}
   ArrowShotCount: 5
   ShotInterval: 0.2

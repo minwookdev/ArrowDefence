@@ -18,8 +18,8 @@
         //Monster Status Value
         private float currentHealthPoint;
         private float currentManaPoint;
-        private float tempMonsterHealthPoint;
-        private bool isChangingColor = false;
+        //private float tempMonsterHealthPoint;
+        //private bool isChangingColor = false;
         private bool isDeath         = false;
         private SpriteRenderer sprite;
         private Color startColor;

@@ -13,9 +13,10 @@ MonoBehaviour:
   m_Name: AimSight_Low
   m_EditorClassIdentifier: 
   SkillId: 0201
-  SkillName: Aim Sight
+  SkillName: AIM SIGHT
   SkillDesc: Accessory Effect Description.
   EffectType: 1
   SkillLevel: 0
+  SkillIconSprite: {fileID: 0}
   LineRenderMat: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   LineWidth: 0.05

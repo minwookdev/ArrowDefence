@@ -212,6 +212,8 @@
         {
             //Active || Disable Arrow Swap Slot GameObject.
             //Event Registration according to the value of isActive boolean.
+
+            
             if (isActiveSlot_m == true)
             {
                 mainArrowSlot.gameObject.SetActive(true);
@@ -266,6 +268,19 @@
 
             //Init Special Arrow Slot GameObject
             specialArrowSlot.gameObject.SetActive(false);
+
+            //if Init the Special Arrow
+            //if (isActiveSlot_m == false && isActiveSlot_s == false) return;
+            //또는 SP Arrow가 장착된 경우
+            //if(isActiveSlot_sp)
+            //{
+            //    if (isActiveSlot_m) { }
+            //    if (isActiveSlot_s) { }
+            //}
+            //else
+            //{
+            //    if (isActiveSlot_s && isActiveSlot_m) { }
+            //}
         }
     }
 }

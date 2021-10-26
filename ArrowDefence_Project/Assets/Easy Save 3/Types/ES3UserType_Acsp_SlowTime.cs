@@ -4,20 +4,18 @@ using UnityEngine;
 namespace ES3Types
 {
 	[UnityEngine.Scripting.Preserve]
-	[ES3PropertiesAttribute("lineMaterial", "LineWidth", "id", "name", "desc", "effectType", "level", "iconSprite")]
-	public class ES3UserType_Acsp_AimSight : ES3ObjectType
+	[ES3PropertiesAttribute("id", "name", "desc", "effectType", "level", "iconSprite")]
+	public class ES3UserType_Acsp_SlowTime : ES3ObjectType
 	{
 		public static ES3Type Instance = null;
 
-		public ES3UserType_Acsp_AimSight() : base(typeof(ActionCat.Acsp_AimSight)){ Instance = this; priority = 1; }
+		public ES3UserType_Acsp_SlowTime() : base(typeof(ActionCat.Acsp_SlowTime)){ Instance = this; priority = 1; }
 
 
 		protected override void WriteObject(object obj, ES3Writer writer)
 		{
-			var instance = (ActionCat.Acsp_AimSight)obj;
+			var instance = (ActionCat.Acsp_SlowTime)obj;
 			
-			writer.WritePropertyByRef("lineMaterial", instance.lineMaterial);
-			writer.WriteProperty("LineWidth", instance.LineWidth, ES3Type_float.Instance);
 			writer.WritePrivateField("id", instance);
 			writer.WritePrivateField("name", instance);
 			writer.WritePrivateField("desc", instance);
@@ -28,18 +26,12 @@ namespace ES3Types
 
 		protected override void ReadObject<T>(ES3Reader reader, object obj)
 		{
-			var instance = (ActionCat.Acsp_AimSight)obj;
+			var instance = (ActionCat.Acsp_SlowTime)obj;
 			foreach(string propertyName in reader.Properties)
 			{
 				switch(propertyName)
 				{
 					
-					case "lineMaterial":
-						instance.lineMaterial = reader.Read<UnityEngine.Material>(ES3Type_Material.Instance);
-						break;
-					case "LineWidth":
-						instance.LineWidth = reader.Read<System.Single>(ES3Type_float.Instance);
-						break;
 					case "id":
 					reader.SetPrivateField("id", reader.Read<System.String>(), instance);
 					break;
@@ -67,18 +59,18 @@ namespace ES3Types
 
 		protected override object ReadObject<T>(ES3Reader reader)
 		{
-			var instance = new ActionCat.Acsp_AimSight();
+			var instance = new ActionCat.Acsp_SlowTime();
 			ReadObject<T>(reader, instance);
 			return instance;
 		}
 	}
 
 
-	public class ES3UserType_Acsp_AimSightArray : ES3ArrayType
+	public class ES3UserType_Acsp_SlowTimeArray : ES3ArrayType
 	{
 		public static ES3Type Instance;
 
-		public ES3UserType_Acsp_AimSightArray() : base(typeof(ActionCat.Acsp_AimSight[]), ES3UserType_Acsp_AimSight.Instance)
+		public ES3UserType_Acsp_SlowTimeArray() : base(typeof(ActionCat.Acsp_SlowTime[]), ES3UserType_Acsp_SlowTime.Instance)
 		{
 			Instance = this;
 		}

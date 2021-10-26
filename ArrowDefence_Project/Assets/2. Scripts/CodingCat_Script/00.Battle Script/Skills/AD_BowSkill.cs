@@ -7,6 +7,7 @@
         protected string id;
         protected string name;
         protected string desc;
+        protected Sprite iconSprite;
         protected SKILL_LEVEL level;
         protected BOWSKILL_TYPE skillType;
 
@@ -14,6 +15,16 @@
         public string Id { get => id; }
         public string Name { get => name; }
         public string Description { get => desc; }
+        public Sprite IconSprite
+        {
+            get
+            {
+                if (this.iconSprite != null)
+                    return iconSprite;
+                else
+                    return null;
+            }
+        }
         public SKILL_LEVEL Level { get => level; }
         public BOWSKILL_TYPE Type { get => skillType; }
         #endregion
@@ -24,13 +35,14 @@
         public AD_BowSkill() { }
         ~AD_BowSkill() { }
 
-        protected AD_BowSkill(string skillid, string skillname, string skilldesc, SKILL_LEVEL level, BOWSKILL_TYPE type)
+        protected AD_BowSkill(string skillid, string skillname, string skilldesc, SKILL_LEVEL level, BOWSKILL_TYPE type, Sprite sprite)
         {
-            this.id        = skillid;
-            this.name      = skillname;
-            this.desc      = skilldesc;
-            this.level     = level;
-            this.skillType = type;
+            this.id         = skillid;
+            this.name       = skillname;
+            this.desc       = skilldesc;
+            this.level      = level;
+            this.skillType  = type;
+            this.iconSprite = sprite;
         }
 
         public abstract void BowSpecialSkill(float anglez, Transform arrowParent, MonoBehaviour mono, 

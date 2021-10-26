@@ -9,6 +9,17 @@
         private AccessoryRFEffect[] effects;
         private AccessorySPEffect specialEffect;
 
+        public AccessorySPEffect SPEffect
+        {
+            get
+            {
+                if (this.specialEffect != null)
+                    return specialEffect;
+                else
+                    return null;
+            }
+        }
+
         public Item_Accessory(ItemData_Equip_Accessory item) : base()
         {
             //Set Equipment Item Type

@@ -3,7 +3,7 @@
     "m_SelectedPackage": {
         "deviceId": "R3CMC06BR0T",
         "name": "com.ActionCat.ArrowDefence",
-        "processId": 16499,
+        "processId": 11599,
         "exited": false
     },
     "m_SelectedPriority": 0,
@@ -72,6 +72,12 @@
             "deviceId": "R3CMC06BR0T",
             "name": "com.ActionCat.ArrowDefence",
             "processId": 16499,
+            "exited": false
+        },
+        {
+            "deviceId": "R3CMC06BR0T",
+            "name": "com.ActionCat.ArrowDefence",
+            "processId": 11599,
             "exited": false
         }
     ],

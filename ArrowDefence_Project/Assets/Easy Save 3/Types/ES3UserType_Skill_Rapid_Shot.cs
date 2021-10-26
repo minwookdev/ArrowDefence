@@ -4,7 +4,7 @@ using UnityEngine;
 namespace ES3Types
 {
 	[UnityEngine.Scripting.Preserve]
-	[ES3PropertiesAttribute("arrowCount")]
+	[ES3PropertiesAttribute("arrowCount", "shotDelay", "id", "name", "desc", "iconSprite", "level", "skillType")]
 	public class ES3UserType_Skill_Rapid_Shot : ES3ObjectType
 	{
 		public static ES3Type Instance = null;
@@ -17,6 +17,13 @@ namespace ES3Types
 			var instance = (ActionCat.Skill_Rapid_Shot)obj;
 			
 			writer.WritePrivateField("arrowCount", instance);
+			writer.WritePrivateField("shotDelay", instance);
+			writer.WritePrivateField("id", instance);
+			writer.WritePrivateField("name", instance);
+			writer.WritePrivateField("desc", instance);
+			writer.WritePrivateFieldByRef("iconSprite", instance);
+			writer.WritePrivateField("level", instance);
+			writer.WritePrivateField("skillType", instance);
 		}
 
 		protected override void ReadObject<T>(ES3Reader reader, object obj)
@@ -29,6 +36,27 @@ namespace ES3Types
 					
 					case "arrowCount":
 					reader.SetPrivateField("arrowCount", reader.Read<System.Byte>(), instance);
+					break;
+					case "shotDelay":
+					reader.SetPrivateField("shotDelay", reader.Read<System.Single>(), instance);
+					break;
+					case "id":
+					reader.SetPrivateField("id", reader.Read<System.String>(), instance);
+					break;
+					case "name":
+					reader.SetPrivateField("name", reader.Read<System.String>(), instance);
+					break;
+					case "desc":
+					reader.SetPrivateField("desc", reader.Read<System.String>(), instance);
+					break;
+					case "iconSprite":
+					reader.SetPrivateField("iconSprite", reader.Read<UnityEngine.Sprite>(), instance);
+					break;
+					case "level":
+					reader.SetPrivateField("level", reader.Read<ActionCat.SKILL_LEVEL>(), instance);
+					break;
+					case "skillType":
+					reader.SetPrivateField("skillType", reader.Read<ActionCat.BOWSKILL_TYPE>(), instance);
 					break;
 					default:
 						reader.Skip();

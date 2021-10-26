@@ -19,6 +19,7 @@ public class AimSightDataEditor : Editor
     SerializedProperty descProp;
     SerializedProperty typeProp;
     SerializedProperty levelProp;
+    SerializedProperty spriteProp;
 
     SerializedProperty matProp;
     SerializedProperty lineWidthProp;
@@ -27,11 +28,12 @@ public class AimSightDataEditor : Editor
     {
         sobject = new SerializedObject(target);
 
-        idProp    = sobject.FindProperty("SkillId");
-        nameProp  = sobject.FindProperty("SkillName");
-        descProp  = sobject.FindProperty("SkillDesc");
-        typeProp  = sobject.FindProperty("EffectType");
-        levelProp = sobject.FindProperty("SkillLevel");
+        idProp     = sobject.FindProperty("SkillId");
+        nameProp   = sobject.FindProperty("SkillName");
+        descProp   = sobject.FindProperty("SkillDesc");
+        typeProp   = sobject.FindProperty("EffectType");
+        levelProp  = sobject.FindProperty("SkillLevel");
+        spriteProp = sobject.FindProperty("SkillIconSprite");
 
         matProp       = sobject.FindProperty("LineRenderMat");
         lineWidthProp = sobject.FindProperty("LineWidth");
@@ -73,6 +75,9 @@ public class AimSightDataEditor : Editor
         //Level Field
         EditorGUILayout.PropertyField(levelProp, true);
 
+        //Icon Sprite Field
+        EditorGUILayout.PropertyField(spriteProp, true);
+
         //End Field
         GUILayout.EndVertical();
         #endregion
@@ -106,16 +111,18 @@ public class SlowTimeDataEditor : Editor
     SerializedProperty descProp;
     SerializedProperty typeProp;
     SerializedProperty levelProp;
+    SerializedProperty spriteProp;
 
     public void OnEnable()
     {
         sobject = new SerializedObject(target);
 
-        idProp    = sobject.FindProperty("SkillId");
-        nameProp  = sobject.FindProperty("SkillName");
-        descProp  = sobject.FindProperty("SkillDesc");
-        typeProp  = sobject.FindProperty("EffectType");
-        levelProp = sobject.FindProperty("SkillLevel");
+        idProp     = sobject.FindProperty("SkillId");
+        nameProp   = sobject.FindProperty("SkillName");
+        descProp   = sobject.FindProperty("SkillDesc");
+        typeProp   = sobject.FindProperty("EffectType");
+        levelProp  = sobject.FindProperty("SkillLevel");
+        spriteProp = sobject.FindProperty("SkillIconSprite");
     }
 
     public override void OnInspectorGUI()
@@ -153,6 +160,9 @@ public class SlowTimeDataEditor : Editor
 
         //Level Field
         EditorGUILayout.PropertyField(levelProp, true);
+
+        //Icon Sprite Field
+        EditorGUILayout.PropertyField(spriteProp, true);
 
         //End Field
         GUILayout.EndVertical();

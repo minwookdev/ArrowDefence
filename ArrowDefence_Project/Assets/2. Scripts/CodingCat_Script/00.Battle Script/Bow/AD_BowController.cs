@@ -4,9 +4,6 @@
     using UnityEngine.UI;
     using System.Collections;
 
-
-
-
     public class AD_BowController : MonoBehaviour
     {
         public static AD_BowController instance;
@@ -111,21 +108,21 @@
                 //Get Value On Screen Touch -> Area Designation Func Add
                 screenTouch = Input.GetTouch(0);
 
-                if (screenTouch.phase == TouchPhase.Began)
-                {
-                    //Touch Begin
-                    this.BowBegan(screenTouch.position);
-                }
-                else if (screenTouch.phase == TouchPhase.Moved && isBowPullBegan)
-                {
-                    //Touch Moved
-                    this.BowMoved(screenTouch.position);
-                }
+                if (screenTouch.phase == TouchPhase.Began)        
+                    BowBegan(screenTouch.position);        //Touch Began
                 else if (screenTouch.phase == TouchPhase.Ended)
-                {
-                    //Touch Ended
-                    this.BowReleased(screenTouch.position);
-                }
+                    BowReleased(screenTouch.position);     //Touch Ended
+
+                if (isBowPullBegan)
+                    BowMoved(screenTouch.position);        //Touch Moved
+
+                #region OLD
+                //else if (screenTouch.phase == TouchPhase.Moved && isBowPullBegan)
+                //{
+                //    //Touch Moved
+                //    this.BowMoved(screenTouch.position);
+                //}
+                #endregion
             }
 #endif
 #if UNITY_EDITOR

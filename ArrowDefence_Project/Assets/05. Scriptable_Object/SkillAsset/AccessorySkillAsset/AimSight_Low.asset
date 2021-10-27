@@ -18,5 +18,5 @@ MonoBehaviour:
   EffectType: 1
   SkillLevel: 0
   SkillIconSprite: {fileID: 0}
-  LineRenderMat: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  LineRenderMat: {fileID: 2100000, guid: 3b6158093a629f742982153dc34dcee3, type: 2}
   LineWidth: 0.05

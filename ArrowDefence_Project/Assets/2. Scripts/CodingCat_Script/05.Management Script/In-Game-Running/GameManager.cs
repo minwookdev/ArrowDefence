@@ -112,6 +112,11 @@
             else        arrowIconSprite_s = null;
         }
 
+        public void InitACSPSlotData()
+        {
+
+        }
+
         public AD_BowController Controller()
         {
             if (AD_BowController.instance != null)
@@ -149,6 +154,35 @@
             if (MonsterHitEvent != null)     MonsterHitEvent = null;
             if (MonsterDeathEvent != null)   MonsterDeathEvent = null;
             if (MonsterLessHitEvent != null) MonsterLessHitEvent = null;
+        }
+
+        /// <summary>
+        /// Battle Scene의 각종 버튼 이벤트에서 Bow Pulling을 방지하는 메서드입니다.
+        /// 예외처리될 UI, Arrow Slot, Skill Slot 등에 반드시 추가해주세요
+        /// </summary>
+        /// <param name="trigger"></param>
+        public void PreventionPulling(UnityEngine.EventSystems.EventTrigger trigger)
+        {
+            PullingPreventionDown(trigger);
+            PullingPreventionUp(trigger);
+        }
+
+        void PullingPreventionDown(UnityEngine.EventSystems.EventTrigger trigger)
+        {
+            //Bow Controller Pulling Limit [Button Down Event]
+            UnityEngine.EventSystems.EventTrigger.Entry m_slotEntryDown = new UnityEngine.EventSystems.EventTrigger.Entry();
+            m_slotEntryDown.eventID = UnityEngine.EventSystems.EventTriggerType.PointerDown;
+            m_slotEntryDown.callback.AddListener((data) => SetBowPullingStop(true));
+            trigger.triggers.Add(m_slotEntryDown);
+        }
+
+        void PullingPreventionUp(UnityEngine.EventSystems.EventTrigger trigger)
+        {
+            //Bow Controller Pulling Limit [Button Down Event]
+            UnityEngine.EventSystems.EventTrigger.Entry m_slotEntryUp = new UnityEngine.EventSystems.EventTrigger.Entry();
+            m_slotEntryUp.eventID = UnityEngine.EventSystems.EventTriggerType.PointerUp;
+            m_slotEntryUp.callback.AddListener((data) => SetBowPullingStop(false));
+            trigger.triggers.Add(m_slotEntryUp);
         }
 
         #endregion

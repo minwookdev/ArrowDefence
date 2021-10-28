@@ -132,6 +132,16 @@
         RFEFFECT_INCREASE_MAGICAL_DAMAGE,
         RFEFFECT_INCREASE_HEALTH
     }
+    /// <summary>
+    /// 정의. Skill 발동 UI 타입
+    /// </summary>
+    public enum SKILL_ACTIVATIONS_TYPE
+    {
+        COOLDOWN_ACTIVE,
+        CHARGING_ACTIVE,
+        KILLCOUNT_ACTIVE,
+        HITSCOUNT_ACTIVE
+    }
     #endregion
 
     #region ENUMS_ITEM

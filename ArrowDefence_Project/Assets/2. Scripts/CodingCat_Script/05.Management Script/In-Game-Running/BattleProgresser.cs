@@ -105,7 +105,8 @@
             GameManager.Instance.InitEquipments(BowInitPosition, ParentTransform,
                                                 AD_Data.POOLTAG_MAINARROW, AD_Data.POOLTAG_MAINARROW_LESS, 1,
                                                 AD_Data.POOLTAG_SUBARROW,  AD_Data.POOLTAG_SUBARROW_LESS, 1);
-            //Init-Arrow Slots
+
+            //Init-Arrow Slots -> out 키워드 너무 많다 수정하자
             //PlayerData.Equipments와 관련된 로직이기 때문에, Progresser에서 GameManager 참조하여 처리
             bool arrowSlot_m, arrowSlot_s;
             Sprite iconSprite_m, iconSprite_s;
@@ -114,6 +115,9 @@
             battleSceneUI.InitArrowSlots(arrowSlot_m, arrowSlot_s, iconSprite_m, iconSprite_s,
                                         () => { GameManager.Instance.Controller().ArrowSwap(LOAD_ARROW_TYPE.ARROW_MAIN); },
                                         () => { GameManager.Instance.Controller().ArrowSwap(LOAD_ARROW_TYPE.ARROW_SUB); });
+
+            //Init-Accessory Skill Slots
+            
 
             //Init-GameManager Event [TEST] (추후 특수효과 발동 및 특수 이벤트에 활용 예정)
             GameManager.Instance.MonsterHitEvent     += () => CatLog.Log("On Monster Hit");

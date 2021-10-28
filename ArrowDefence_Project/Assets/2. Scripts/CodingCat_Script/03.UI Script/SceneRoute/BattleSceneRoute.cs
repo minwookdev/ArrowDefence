@@ -36,6 +36,13 @@
         [SerializeField] EventTrigger subArrowSlot;
         [SerializeField] EventTrigger specialArrowSlot;
 
+        [Header("SKILL SLOT")]
+        [SerializeField] Transform skillSlotTr;
+        [SerializeField] GameObject prefCooldownType;
+        [SerializeField] GameObject prefChargingType;
+        [SerializeField] GameObject prefHitsType;
+        [SerializeField] GameObject prefkillType;
+
         private float screenZpos = 90f;
         private LineRenderer arrowLimitLine;
         private Vector2 topLeftPoint;
@@ -207,13 +214,14 @@
             }
         }
 
+        #region BATTLE_SLOTS
+
         public void InitArrowSlots(bool isActiveSlot_m, bool isActiveSlot_s, Sprite icon_m, Sprite icon_s,
                                    System.Action slotAction_m, System.Action slotAction_s)
         {
             //Active || Disable Arrow Swap Slot GameObject.
             //Event Registration according to the value of isActive boolean.
 
-            
             if (isActiveSlot_m == true)
             {
                 mainArrowSlot.gameObject.SetActive(true);
@@ -228,15 +236,18 @@
                 mainArrowSlot.triggers.Add(m_slotEntry);
 
                 //Bow Controller Pulling Limit [Down, Up Event]
-                EventTrigger.Entry m_slotEntryDown = new EventTrigger.Entry();
-                m_slotEntryDown.eventID = EventTriggerType.PointerDown;
-                m_slotEntryDown.callback.AddListener((data) => GameManager.Instance.SetBowPullingStop(true));
-                mainArrowSlot.triggers.Add(m_slotEntryDown);
+                //EventTrigger.Entry m_slotEntryDown = new EventTrigger.Entry();
+                //m_slotEntryDown.eventID = EventTriggerType.PointerDown;
+                //m_slotEntryDown.callback.AddListener((data) => GameManager.Instance.SetBowPullingStop(true));
+                //mainArrowSlot.triggers.Add(m_slotEntryDown);
+                //
+                //EventTrigger.Entry m_slotEntryUp = new EventTrigger.Entry();
+                //m_slotEntryUp.eventID = EventTriggerType.PointerUp;
+                //m_slotEntryUp.callback.AddListener((data) => GameManager.Instance.SetBowPullingStop(false));
+                //mainArrowSlot.triggers.Add(m_slotEntryUp);
 
-                EventTrigger.Entry m_slotEntryUp = new EventTrigger.Entry();
-                m_slotEntryUp.eventID = EventTriggerType.PointerUp;
-                m_slotEntryUp.callback.AddListener((data) => GameManager.Instance.SetBowPullingStop(false));
-                mainArrowSlot.triggers.Add(m_slotEntryUp);
+                //Swap시, Bow Pulling 방지
+                GameManager.Instance.PreventionPulling(mainArrowSlot);
             }
             else mainArrowSlot.gameObject.SetActive(false);
 
@@ -253,16 +264,8 @@
                 s_slotEntry.callback.AddListener((data) => slotAction_s());
                 subArrowSlot.triggers.Add(s_slotEntry);
 
-                //Bow Controller Pulling Limit [Down, Up Event]
-                EventTrigger.Entry s_slotEntryDown = new EventTrigger.Entry();
-                s_slotEntryDown.eventID = EventTriggerType.PointerDown;
-                s_slotEntryDown.callback.AddListener((data) => GameManager.Instance.SetBowPullingStop(true));
-                subArrowSlot.triggers.Add(s_slotEntryDown);
-
-                EventTrigger.Entry s_slotEntryUp = new EventTrigger.Entry();
-                s_slotEntryUp.eventID = EventTriggerType.PointerUp;
-                s_slotEntryUp.callback.AddListener((data) => GameManager.Instance.SetBowPullingStop(false));
-                subArrowSlot.triggers.Add(s_slotEntryUp);
+                //Swap시, Bow Pulling 방지
+                GameManager.Instance.PreventionPulling(subArrowSlot);
             }
             else subArrowSlot.gameObject.SetActive(false);
 
@@ -282,5 +285,27 @@
             //    if (isActiveSlot_s && isActiveSlot_m) { }
             //}
         }
+
+        public void InitSkillSlots(SKILL_ACTIVATIONS_TYPE activeType, Sprite skillicon, 
+                                   float maxcount, bool isprepared, System.Action callback)
+        {
+            //switch (activeType)
+            //{
+            //    case SKILL_ACTIVATIONS_TYPE.COOLDOWN_ACTIVE:
+            //        var cooldownslot = Instantiate(prefCooldownType, skillSlotTr).GetComponent<SkillSlot>();
+            //        cooldownslot.InitCoolDownSkillButton(skillicon, maxcount, isprepared, callback); break;
+            //
+            //    case SKILL_ACTIVATIONS_TYPE.CHARGING_ACTIVE:
+            //        var chargingslot = Instantiate(prefChargingType, skillSlotTr).GetComponent<SkillSlot>();
+            //        chargingslot.InitStackingSkillButton(); break;
+            //
+            //    case SKILL_ACTIVATIONS_TYPE.KILLCOUNT_ACTIVE: break;
+            //
+            //    case SKILL_ACTIVATIONS_TYPE.HITSCOUNT_ACTIVE: break;
+            //    default: break;
+            //} 
+        }
+
+        #endregion
     }
 }

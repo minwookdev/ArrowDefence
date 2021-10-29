@@ -113,16 +113,26 @@ public class SlowTimeDataEditor : Editor
     SerializedProperty levelProp;
     SerializedProperty spriteProp;
 
+    SerializedProperty ratioProp;
+    SerializedProperty durationProp;
+    SerializedProperty cooldownProp;
+
     public void OnEnable()
     {
         sobject = new SerializedObject(target);
 
+        //Default Property
         idProp     = sobject.FindProperty("SkillId");
         nameProp   = sobject.FindProperty("SkillName");
         descProp   = sobject.FindProperty("SkillDesc");
         typeProp   = sobject.FindProperty("EffectType");
         levelProp  = sobject.FindProperty("SkillLevel");
         spriteProp = sobject.FindProperty("SkillIconSprite");
+
+        //Slow Time Property
+        ratioProp = sobject.FindProperty("TimeSlowRatio");
+        durationProp = sobject.FindProperty("Duration");
+        cooldownProp = sobject.FindProperty("CoolDown");
     }
 
     public override void OnInspectorGUI()
@@ -169,6 +179,17 @@ public class SlowTimeDataEditor : Editor
         #endregion
 
         #region SLOWTIME_SKILLDATA
+
+        GUILayout.Label("Slow Time Info", EditorStyles.boldLabel);
+        GUILayout.BeginVertical("GroupBox");
+
+        EditorGUILayout.PropertyField(ratioProp);
+
+        EditorGUILayout.PropertyField(durationProp);
+
+        EditorGUILayout.PropertyField(cooldownProp);
+
+        GUILayout.EndVertical();
 
         #endregion
 

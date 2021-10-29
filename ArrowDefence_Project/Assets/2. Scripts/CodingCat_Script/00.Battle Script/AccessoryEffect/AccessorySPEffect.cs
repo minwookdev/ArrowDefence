@@ -73,6 +73,12 @@
 
     public class Acsp_SlowTime : AccessorySPEffect, IToString
     {
+        float timeSlowRatio;
+        float duration;
+        float cooldown;
+
+        public float Cooldown { get => cooldown; }
+
         public override void Setup()
         {
             return;
@@ -80,13 +86,34 @@
 
         public override string ToString() => "Slow Time";
 
-
-        public Acsp_SlowTime(string id, string name, string desc, ACSP_TYPE type, SKILL_LEVEL level, Sprite sprite) : 
-            base(id, name, desc, type, level, sprite)
+        public Acsp_SlowTime(SkillDataSlowTime data) : 
+            base(data.SkillId, data.SkillName, data.SkillDesc, data.EffectType, data.SkillLevel, data.SkillIconSprite)
         {
-
+            this.timeSlowRatio = data.TimeSlowRatio;
+            this.duration      = data.Duration;
+            this.cooldown      = data.CoolDown;
         }
 
         public Acsp_SlowTime() : base() { }
+
+        public void ActiveSlowTime(MonoBehaviour mono)
+        {
+            mono.StartCoroutine(SlowTimeCo());
+        }
+
+        public float ActiveSkill(MonoBehaviour mono)
+        {
+            mono.StartCoroutine(SlowTimeCo());
+            return duration;
+        }
+
+        System.Collections.IEnumerator SlowTimeCo()
+        {
+            GameManager.Instance.TimeScaleSet(timeSlowRatio);
+
+            yield return new WaitForSecondsRealtime(duration);
+
+            GameManager.Instance.TimeDefault();
+        }
     }
 }

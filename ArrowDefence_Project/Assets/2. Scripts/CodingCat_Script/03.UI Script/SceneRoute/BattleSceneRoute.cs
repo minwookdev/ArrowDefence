@@ -286,24 +286,29 @@
             //}
         }
 
-        public void InitSkillSlots(SKILL_ACTIVATIONS_TYPE activeType, Sprite skillicon, 
-                                   float maxcount, bool isprepared, System.Action callback)
+        public void InitSkillSlots(AccessorySkillSlot.SkillSlotInitData[] datas)
         {
-            //switch (activeType)
-            //{
-            //    case SKILL_ACTIVATIONS_TYPE.COOLDOWN_ACTIVE:
-            //        var cooldownslot = Instantiate(prefCooldownType, skillSlotTr).GetComponent<SkillSlot>();
-            //        cooldownslot.InitCoolDownSkillButton(skillicon, maxcount, isprepared, callback); break;
-            //
-            //    case SKILL_ACTIVATIONS_TYPE.CHARGING_ACTIVE:
-            //        var chargingslot = Instantiate(prefChargingType, skillSlotTr).GetComponent<SkillSlot>();
-            //        chargingslot.InitStackingSkillButton(); break;
-            //
-            //    case SKILL_ACTIVATIONS_TYPE.KILLCOUNT_ACTIVE: break;
-            //
-            //    case SKILL_ACTIVATIONS_TYPE.HITSCOUNT_ACTIVE: break;
-            //    default: break;
-            //} 
+            foreach (var data in datas)
+            {
+                //if (data == null) continue; //-> 로직 변경으로 체크할 필요없어졌다.
+
+                switch (data.ActiveType)
+                {
+                    case SKILL_ACTIVATIONS_TYPE.COOLDOWN_ACTIVE:
+                        var cooldownslot = Instantiate(prefCooldownType, skillSlotTr).GetComponent<AccessorySkillSlot>();
+                        cooldownslot.InitCoolDownSkillButton(data); break;
+
+                    case SKILL_ACTIVATIONS_TYPE.CHARGING_ACTIVE:
+                        var chargingslot = Instantiate(prefChargingType, skillSlotTr).GetComponent<AccessorySkillSlot>();
+                        chargingslot.InitStackingSkillButton(data); break;
+
+                    case SKILL_ACTIVATIONS_TYPE.KILLCOUNT_ACTIVE: break;
+
+                    case SKILL_ACTIVATIONS_TYPE.HITSCOUNT_ACTIVE: break;
+
+                    default: break;
+                }
+            }
         }
 
         #endregion

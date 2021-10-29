@@ -112,9 +112,52 @@
             else        arrowIconSprite_s = null;
         }
 
-        public void InitACSPSlotData()
+        public AccessorySkillSlot.SkillSlotInitData[] InitACSP_SlotData()
         {
+            //PlayerData의 악세서리 스킬 비교해서 active형태 스킬이면 Slot Setting 해주는 작업해주면된다.
+            //장신구 스킬 슬롯 만드는 방식으로 화살 스왑 방식도 교체해주면 될듯..?
+            //배열 리턴할때는 무조건 할당해야된다 null이라도..
+            //AccessorySkillSlot.SkillSlotInitData[] skillDatas = new AccessorySkillSlot.SkillSlotInitData[3]
+            //    { new AccessorySkillSlot.SkillSlotInitData(),
+            //      new AccessorySkillSlot.SkillSlotInitData(),
+            //      new AccessorySkillSlot.SkillSlotInitData()}; 
+            //-> 이렇게 하면 null 뱉어버리는데 이거 원인좀 분석해보자
+            //이렇게 하면 되려나
 
+            //List -> ToArray Return
+            System.Collections.Generic.List<AccessorySkillSlot.SkillSlotInitData> skillDataList 
+                = new System.Collections.Generic.List<AccessorySkillSlot.SkillSlotInitData>();
+
+            var accessories = CCPlayerData.equipments.GetAccessories();
+            for (int i = 0; i < accessories.Length; i++)
+            {
+                if (accessories[i] == null) continue;
+
+                if (accessories[i].SPEffect != null)
+                {
+                    if (accessories[i].SPEffect.SpEffectType == ACSP_TYPE.SPEEFECT_SLOWTIME)
+                    {
+                        var slowTime = accessories[i].SPEffect as Acsp_SlowTime;
+                        if (slowTime != null) //한번 더 검증
+                        {
+                            //skillDatas[i].InitSkillData(slowTime.IconSprite, slowTime.TimeSlowRatio, false, 
+                            //    SKILL_ACTIVATIONS_TYPE.COOLDOWN_ACTIVE,
+                            //    (mono) => slowTime.ActiveSlowTime(mono));
+                            skillDataList.Add(new AccessorySkillSlot.SkillSlotInitData(slowTime.IconSprite, slowTime.Cooldown, false,
+                                             SKILL_ACTIVATIONS_TYPE.COOLDOWN_ACTIVE,
+                                             (mono) => slowTime.ActiveSlowTime(mono),
+                                             (mono) => slowTime.ActiveSkill(mono)));
+                        }
+                        else
+                        {
+                            CatLog.ELog("Accessory Skill Casting failed");
+                            //skillDatas[i] = null;
+                        }
+                    }
+                }
+            }
+
+            return skillDataList.ToArray();
         }
 
         public AD_BowController Controller()

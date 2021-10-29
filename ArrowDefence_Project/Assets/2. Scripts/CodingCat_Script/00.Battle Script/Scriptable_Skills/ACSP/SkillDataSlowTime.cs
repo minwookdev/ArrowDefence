@@ -7,7 +7,10 @@
     /// </summary>
     public class SkillDataSlowTime : AccessorySkillData
     {
-        public float TimeSlowRatio;
+        [Range(0.1f, 0.9f)]
+        public float TimeSlowRatio = 0.5f;
+        public float Duration = 3f;
+        public float CoolDown = 10f;
 
         public SkillDataSlowTime()
         {
@@ -16,7 +19,7 @@
 
         public void OnEnable()
         {
-            this.SkillData = new Acsp_SlowTime(SkillId, SkillName, SkillDesc, EffectType, SkillLevel, SkillIconSprite);
+            this.SkillData = new Acsp_SlowTime(this);
         }
     }
 }

@@ -117,7 +117,8 @@
                                         () => { GameManager.Instance.Controller().ArrowSwap(LOAD_ARROW_TYPE.ARROW_SUB); });
 
             //Init-Accessory Skill Slots
-            
+            var accessorySkillDatas = GameManager.Instance.InitACSP_SlotData();
+            battleSceneUI.InitSkillSlots(accessorySkillDatas);
 
             //Init-GameManager Event [TEST] (추후 특수효과 발동 및 특수 이벤트에 활용 예정)
             GameManager.Instance.MonsterHitEvent     += () => CatLog.Log("On Monster Hit");

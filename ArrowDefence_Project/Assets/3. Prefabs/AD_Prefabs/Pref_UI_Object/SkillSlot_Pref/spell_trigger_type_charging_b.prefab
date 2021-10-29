@@ -457,6 +457,7 @@ GameObject:
   - component: {fileID: 2739246953676750910}
   - component: {fileID: 2739246953676750905}
   - component: {fileID: 3624782767628164747}
+  - component: {fileID: 3048252280272328110}
   m_Layer: 5
   m_Name: spell_trigger_type_charging_b
   m_TagString: Untagged
@@ -578,6 +579,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Delegates: []
+--- !u!114 &3048252280272328110
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2739246953676750907}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4723cd52164963449433b48749a643c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skillIcon: {fileID: 0}
+  coolDownMask: {fileID: 0}
+  activationsImages: []
+  coolDownTmp: {fileID: 0}
 --- !u!1 &2739246954202654789
 GameObject:
   m_ObjectHideFlags: 0

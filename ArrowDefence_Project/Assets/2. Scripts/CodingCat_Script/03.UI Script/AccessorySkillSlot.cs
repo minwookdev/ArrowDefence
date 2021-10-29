@@ -1,5 +1,7 @@
 ﻿namespace ActionCat
 {
+    using System;
+    using System.Collections;
     using UnityEngine;
     using UnityEngine.UI;
     using UnityEngine.EventSystems;
@@ -12,35 +14,58 @@
         /// </summary>
         public class SkillSlotInitData
         {
-            public Sprite SkillIconSprite { get; private set; } = null;
+            public SKILL_ACTIVATIONS_TYPE ActiveType { get; private set; }
+            public Sprite SkillIconSprite { get; private set; }
             public float MaxCount { get; private set; } = 0f;
             public bool IsPrepared { get; private set; } = false;
-            public System.Action SkillCallback { get; private set; } = null;
+            public Action<MonoBehaviour> SkillCallback { get; private set; }
 
-            public void InitSkillData(Sprite iconsprite, float maxcount, bool isprepared, System.Action callback)
+            public Func<MonoBehaviour, float> SkillFunc { get; private set; }
+
+            public SkillSlotInitData(Sprite iconsprite, float maxcount, bool isprepared,
+                                     SKILL_ACTIVATIONS_TYPE type, Action<MonoBehaviour> callback,
+                                     Func<MonoBehaviour, float> skillfunc)
             {
                 SkillIconSprite = iconsprite;
-                MaxCount = maxcount;
-                IsPrepared = isprepared;
-                SkillCallback = callback;
+                MaxCount        = maxcount;
+                IsPrepared      = isprepared;
+                ActiveType      = type;
+                SkillCallback   = callback;
+                SkillFunc       = skillfunc;
+            }
+            
+            public SkillSlotInitData()
+            {
+
             }
         }
 
+        [Header("Default")]
         [SerializeField] Image skillIcon;
+
+        [Header("CoolDown Type")]
         [SerializeField] Image coolDownMask;
-        [SerializeField] Image[] activationsImages;
         [SerializeField] TextMeshProUGUI coolDownTmp;
 
-        private SKILL_ACTIVATIONS_TYPE skillActiveType;
+        [Header("Kill & Hit Type")]
+        [SerializeField] Image[] activationsImages;
+
+        //CoolDown & Charged Type variables
         private float currentCoolDown;
         private float maxCoolDown;
+
+        //Kill & Hit Type variables
         private float currentKillStack;
         private float maxKillStack;
+        private float duration;
+
         private bool isPreparedSkillActive = false;
+        private SKILL_ACTIVATIONS_TYPE skillActiveType;
         private EventTrigger eventTrigger;
 
         //Skill Callback
-        System.Action skillCallback;
+        System.Action<MonoBehaviour> skillCallback;
+        Func<MonoBehaviour, float> skillFunc;
 
         void Init(SKILL_ACTIVATIONS_TYPE type, Sprite skillicon)
         {
@@ -53,31 +78,9 @@
 
         #region INIT
 
-        public void InitCoolDownSkillButton(Sprite skillicon, float maxcooldowncount, bool isprepared,
-                                            System.Action skillcallback)
-        {
-            Init(SKILL_ACTIVATIONS_TYPE.COOLDOWN_ACTIVE, skillicon);
-
-            if (coolDownMask == null || coolDownTmp == null)
-            {
-                CatLog.WLog("CoolDown Mask or CoolDown Count Text is null");
-                return;
-            }
-
-            //Init-Cool Down variables
-            maxCoolDown = maxcooldowncount;
-            currentCoolDown = (isprepared) ? 0f : maxCoolDown;
-
-            //Init-Cool Down UI Element
-            coolDownMask.fillAmount = 0f;
-            coolDownTmp.text = "";
-
-            InitEventTriggerCallback(skillcallback);
-        }
-
         public void InitCoolDownSkillButton(SkillSlotInitData data)
         {
-            Init(SKILL_ACTIVATIONS_TYPE.COOLDOWN_ACTIVE, data.SkillIconSprite);
+            Init(data.ActiveType, data.SkillIconSprite);
 
             if (coolDownMask == null || coolDownTmp == null)
             {
@@ -90,13 +93,13 @@
             currentCoolDown = (data.IsPrepared) ? 0f : maxCoolDown;
 
             //Init-Cool Down UI Element
-            coolDownMask.fillAmount = 0f;
+            coolDownMask.fillAmount = 1f;
             coolDownTmp.text = "";
 
-            InitEventTriggerCallback(data.SkillCallback);
+            InitEventTriggerCallback(data.SkillFunc);
         }
 
-        public void InitStackingSkillButton()
+        public void InitStackingSkillButton(SkillSlotInitData data)
         {
 
         }
@@ -141,7 +144,8 @@
             }
 
             //Update-UI-Element
-            coolDownTmp.text = (currentCoolDown > 0f) ? currentCoolDown.ToString("{0:F0}") : "";
+            //coolDownTmp.text = (currentCoolDown > 0f) ? currentCoolDown.ToString("F0") : "";
+            coolDownTmp.text = (currentCoolDown > 0f) ? Mathf.CeilToInt(currentCoolDown).ToString() : "";
             coolDownMask.fillAmount = currentCoolDown / maxCoolDown;
         }
 
@@ -172,7 +176,7 @@
 
         #endregion 
 
-        void InitEventTriggerCallback(System.Action callback)
+        void InitEventTriggerCallback(Func<MonoBehaviour, float> callback)
         {
             //Script GameObject is having EventTrigger
             //EventTrigger.Entry skillSlotEntry = new EventTrigger.Entry();
@@ -180,7 +184,7 @@
             //skillSlotEntry.callback.AddListener((data) => callback());
             //eventTrigger.triggers.Add(skillSlotEntry);
 
-            skillCallback = callback;
+            skillFunc = callback;
             GameManager.Instance.PreventionPulling(eventTrigger);
         }
 
@@ -189,11 +193,28 @@
             //스킬 발동 가능여부 판단해서 스킬 발동해줌
             if (isPreparedSkillActive)
             {
-                skillCallback();
-                isPreparedSkillActive = false;
+                //skillCallback(GameManager.Instance.Controller());
+                //currentCoolDown = maxCoolDown;
+                //isPreparedSkillActive = false;
+                StartCoroutine(ActiveSkillCo());
             }
             else
                 CatLog.Log("Skill Not Prepared !");
+        }
+
+        IEnumerator ActiveSkillCo()
+        {
+            duration = skillFunc(GameManager.Instance.Controller());
+            coolDownMask.fillAmount = 1f;
+
+            while (duration > 0)
+            {
+                yield return null;
+                duration -= Time.unscaledDeltaTime;
+            }
+
+            currentCoolDown = maxCoolDown;
+            isPreparedSkillActive = false;
         }
     }
 }

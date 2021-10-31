@@ -8,6 +8,20 @@
 
     public class BattleSceneRoute : MonoBehaviour
     {
+        public class ArrowSwapSlotInitData
+        {
+            public bool IsActiveSlot { get; private set; }
+            public Sprite IconSprite { get; private set; }
+            public System.Action SlotCallback { get; private set; }
+
+            public ArrowSwapSlotInitData(bool isactiveslot, Sprite iconsprite, System.Action callback)
+            {
+                IsActiveSlot = isactiveslot;
+                IconSprite   = iconsprite;
+                SlotCallback = callback;
+            }
+        }
+
         //Screen Limit Variable
         [Header("DEV OPTIONS")]
         public bool IsVisible;
@@ -216,6 +230,63 @@
 
         #region BATTLE_SLOTS
 
+        public void InitArrowSlots(ArrowSwapSlotInitData[] datas)
+        {
+            CatLog.Log($"Datas Length : {datas.Length}");
+
+            for (int i = 0; i < datas.Length; i++)
+            {
+                if (i == 0)      //Main Arrow Swap Slot
+                {
+                    if (datas[i].IsActiveSlot == false)
+                    {
+                        mainArrowSlot.gameObject.SetActive(false);
+                        continue;
+                    }
+
+                    mainArrowSlot.gameObject.SetActive(true);
+                    var arrowIcon = mainArrowSlot.transform.GetChild(0).GetComponent<Image>();
+                    arrowIcon.enabled = true;
+                    arrowIcon.preserveAspect = true;
+                    arrowIcon.sprite = datas[i].IconSprite;
+
+                    //Click Event 처리
+                    var tempIndex = i;
+                    EventTrigger.Entry mainSlotEntry = new EventTrigger.Entry();
+                    mainSlotEntry.eventID = EventTriggerType.PointerClick;
+                    mainSlotEntry.callback.AddListener((pointereventdata) => datas[tempIndex].SlotCallback());
+                    mainArrowSlot.triggers.Add(mainSlotEntry);
+
+                    //Controller Pulling 예외처리
+                    GameManager.Instance.PreventionPulling(mainArrowSlot);
+                }
+                else if (i == 1) //Sub Arrow Swap Slot
+                {
+                    if(datas[i].IsActiveSlot == false)
+                    {
+                        subArrowSlot.gameObject.SetActive(false);
+                        continue;
+                    }
+
+                    subArrowSlot.gameObject.SetActive(true);
+                    var arrowIcon = subArrowSlot.transform.GetChild(0).GetComponent<Image>();
+                    arrowIcon.enabled = true;
+                    arrowIcon.preserveAspect = true;
+                    arrowIcon.sprite = datas[i].IconSprite;
+
+                    var tempIndex = i;
+                    EventTrigger.Entry subSlotEntry = new EventTrigger.Entry();
+                    subSlotEntry.eventID = EventTriggerType.PointerClick;
+                    subSlotEntry.callback.AddListener((pointereventdata) => datas[tempIndex].SlotCallback());
+                    subArrowSlot.triggers.Add(subSlotEntry);
+
+                    GameManager.Instance.PreventionPulling(subArrowSlot);
+                }
+            }
+
+            specialArrowSlot.gameObject.SetActive(false);
+        }
+
         public void InitArrowSlots(bool isActiveSlot_m, bool isActiveSlot_s, Sprite icon_m, Sprite icon_s,
                                    System.Action slotAction_m, System.Action slotAction_s)
         {
@@ -286,7 +357,7 @@
             //}
         }
 
-        public void InitSkillSlots(AccessorySkillSlot.SkillSlotInitData[] datas)
+        public void InitSkillSlots(AccessorySkillSlot.ActiveSkillSlotInitData[] datas)
         {
             foreach (var data in datas)
             {

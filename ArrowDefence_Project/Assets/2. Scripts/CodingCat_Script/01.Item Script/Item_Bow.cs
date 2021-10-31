@@ -121,7 +121,7 @@
 
         public override object GetItem() => this;
 
-        public void Setup(Transform initPos, Transform parentTr)
+        public void Init(Transform initPos, Transform parentTr)
         {
             if(bowGameObject == null)
             {

@@ -83,7 +83,7 @@
             }
         }
 
-        public void Setup(string mainArrowObjTag, string lessArrowObjTag, int poolQuantity)
+        public void Init(string mainArrowObjTag, string lessArrowObjTag, int poolQuantity)
         {
             if(MainArrowObject == null || LessArrowObject == null)
             {
@@ -93,7 +93,6 @@
 
             CCPooler.AddPoolList(mainArrowObjTag, poolQuantity, MainArrowObject);
             CCPooler.AddPoolList(lessArrowObjTag, poolQuantity, LessArrowObject);
-
         }
     }
 }

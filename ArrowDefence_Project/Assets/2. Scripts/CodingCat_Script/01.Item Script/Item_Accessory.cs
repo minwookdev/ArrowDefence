@@ -58,7 +58,7 @@
         /// </summary>
         public Item_Accessory() : base() { }
 
-        public void Setup()
+        public void Init()
         {
             //여기다가 Effect 실행하는 코드 써보면된다 !
             //Bow GameObject를 변수로 받던지 하면될거같다

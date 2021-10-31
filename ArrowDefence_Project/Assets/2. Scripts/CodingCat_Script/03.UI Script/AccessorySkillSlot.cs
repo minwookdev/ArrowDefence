@@ -12,19 +12,19 @@
         /// <summary>
         /// ACSP SLOT INIT DATA
         /// </summary>
-        public class SkillSlotInitData
+        public class ActiveSkillSlotInitData
         {
             public SKILL_ACTIVATIONS_TYPE ActiveType { get; private set; }
             public Sprite SkillIconSprite { get; private set; }
             public float MaxCount { get; private set; } = 0f;
             public bool IsPrepared { get; private set; } = false;
-            public Action<MonoBehaviour> SkillCallback { get; private set; }
+            public Action<MonoBehaviour> SkillCallback { get; private set; } // <- Clear
 
             public Func<MonoBehaviour, float> SkillFunc { get; private set; }
 
-            public SkillSlotInitData(Sprite iconsprite, float maxcount, bool isprepared,
-                                     SKILL_ACTIVATIONS_TYPE type, Action<MonoBehaviour> callback,
-                                     Func<MonoBehaviour, float> skillfunc)
+            public ActiveSkillSlotInitData(Sprite iconsprite, float maxcount, bool isprepared,
+                                           SKILL_ACTIVATIONS_TYPE type, Action<MonoBehaviour> callback,
+                                           Func<MonoBehaviour, float> skillfunc)
             {
                 SkillIconSprite = iconsprite;
                 MaxCount        = maxcount;
@@ -32,11 +32,6 @@
                 ActiveType      = type;
                 SkillCallback   = callback;
                 SkillFunc       = skillfunc;
-            }
-            
-            public SkillSlotInitData()
-            {
-
             }
         }
 
@@ -78,7 +73,7 @@
 
         #region INIT
 
-        public void InitCoolDownSkillButton(SkillSlotInitData data)
+        public void InitCoolDownSkillButton(ActiveSkillSlotInitData data)
         {
             Init(data.ActiveType, data.SkillIconSprite);
 
@@ -99,7 +94,7 @@
             InitEventTriggerCallback(data.SkillFunc);
         }
 
-        public void InitStackingSkillButton(SkillSlotInitData data)
+        public void InitStackingSkillButton(ActiveSkillSlotInitData data)
         {
 
         }
@@ -193,9 +188,6 @@
             //스킬 발동 가능여부 판단해서 스킬 발동해줌
             if (isPreparedSkillActive)
             {
-                //skillCallback(GameManager.Instance.Controller());
-                //currentCoolDown = maxCoolDown;
-                //isPreparedSkillActive = false;
                 StartCoroutine(ActiveSkillCo());
             }
             else
@@ -207,12 +199,14 @@
             duration = skillFunc(GameManager.Instance.Controller());
             coolDownMask.fillAmount = 1f;
 
+            //Wait For Skill Duration
             while (duration > 0)
             {
                 yield return null;
                 duration -= Time.unscaledDeltaTime;
             }
 
+            CatLog.Log("Active Skill 발동 종료 초기화 진행");
             currentCoolDown = maxCoolDown;
             isPreparedSkillActive = false;
         }

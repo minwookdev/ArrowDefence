@@ -108,16 +108,20 @@
 
             //Init-Arrow Slots -> out 키워드 너무 많다 수정하자
             //PlayerData.Equipments와 관련된 로직이기 때문에, Progresser에서 GameManager 참조하여 처리
-            bool arrowSlot_m, arrowSlot_s;
-            Sprite iconSprite_m, iconSprite_s;
-            GameManager.Instance.InitArrowSlotData(out arrowSlot_m, out arrowSlot_s, out iconSprite_m, out iconSprite_s);
+            //bool arrowSlot_m, arrowSlot_s;
+            //Sprite iconSprite_m, iconSprite_s;
+            //GameManager.Instance.InitArrowSlotData(out arrowSlot_m, out arrowSlot_s, out iconSprite_m, out iconSprite_s);
 
-            battleSceneUI.InitArrowSlots(arrowSlot_m, arrowSlot_s, iconSprite_m, iconSprite_s,
-                                        () => { GameManager.Instance.Controller().ArrowSwap(LOAD_ARROW_TYPE.ARROW_MAIN); },
-                                        () => { GameManager.Instance.Controller().ArrowSwap(LOAD_ARROW_TYPE.ARROW_SUB); });
+            //battleSceneUI.InitArrowSlots(arrowSlot_m, arrowSlot_s, iconSprite_m, iconSprite_s,
+            //                            () => { GameManager.Instance.Controller().ArrowSwap(LOAD_ARROW_TYPE.ARROW_MAIN); },
+            //                            () => { GameManager.Instance.Controller().ArrowSwap(LOAD_ARROW_TYPE.ARROW_SUB); });
+
+            //Init-Arrow Swap Slots
+            var arrowSwapDatas = GameManager.Instance.ReturnArrowSlotData();
+            battleSceneUI.InitArrowSlots(arrowSwapDatas);
 
             //Init-Accessory Skill Slots
-            var accessorySkillDatas = GameManager.Instance.InitACSP_SlotData();
+            var accessorySkillDatas = GameManager.Instance.ReturnSkillSlotData();
             battleSceneUI.InitSkillSlots(accessorySkillDatas);
 
             //Init-GameManager Event [TEST] (추후 특수효과 발동 및 특수 이벤트에 활용 예정)

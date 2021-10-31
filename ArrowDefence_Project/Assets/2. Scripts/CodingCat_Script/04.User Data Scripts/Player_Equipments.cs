@@ -189,17 +189,18 @@
             return boolArray;
         }
 
-        public void SetupEquipments(Transform bowObjectInitPos, Transform bowObjectParentTr,
+        public void InitEquipments(Transform bowObjectInitPos, Transform bowObjectParentTr,
                                     string mainArrowObjTag, string mainArrowLessObjTag, int mainArrowPoolQuantity,
                                     string subArrowObjTag,  string subArrowLessObjTag,  int subArrowPoolQuantity)
         {
-            if (IsEquippedArrowMain()) EquippedArrow_f.Setup(mainArrowObjTag, mainArrowLessObjTag, mainArrowPoolQuantity);
-            if (IsEquippedArrowSub())  EquippedArrow_s.Setup(subArrowObjTag, subArrowLessObjTag, subArrowPoolQuantity);
-            if (IsEquippedBow())       EquippedBow.Setup(bowObjectInitPos, bowObjectParentTr);
+            //Bow Object needs to reload Arrow from Start Method, Arrow Object must first Init.
+            if (IsEquippedArrowMain()) EquippedArrow_f.Init(AD_Data.POOLTAG_MAINARROW, AD_Data.POOLTAG_MAINARROW_LESS, mainArrowPoolQuantity);
+            if (IsEquippedArrowSub())  EquippedArrow_s.Init(AD_Data.POOLTAG_SUBARROW,  AD_Data.POOLTAG_SUBARROW_LESS, subArrowPoolQuantity);
+            if (IsEquippedBow())       EquippedBow.Init(bowObjectInitPos, bowObjectParentTr);
 
             foreach (var accessory in GetAccessories())
             {
-                if (accessory != null) accessory.Setup();
+                if (accessory != null) accessory.Init();
             }
         }
 

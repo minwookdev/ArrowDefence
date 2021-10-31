@@ -113,6 +113,7 @@
 
             yield return new WaitForSecondsRealtime(duration);
 
+            CatLog.Log("슬로우 타임 종료");
             GameManager.Instance.TimeDefault();
         }
     }

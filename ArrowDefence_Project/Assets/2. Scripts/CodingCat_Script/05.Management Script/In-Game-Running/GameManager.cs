@@ -82,7 +82,7 @@
                                    string mainArrowObjTag, string mainArrowLessObjTag, int mainArrowObjPoolQuantity,
                                    string subArrowObjTag,  string subArrowLessObjTag,  int subArrowPoolQuantity)
         {
-            CCPlayerData.equipments.SetupEquipments(bowObjInitPos, bowObjParentTr, 
+            CCPlayerData.equipments.InitEquipments(bowObjInitPos, bowObjParentTr, 
                                                     mainArrowObjTag, mainArrowLessObjTag, mainArrowObjPoolQuantity,
                                                     subArrowObjTag, subArrowLessObjTag, subArrowPoolQuantity);
         }
@@ -112,7 +112,49 @@
             else        arrowIconSprite_s = null;
         }
 
-        public AccessorySkillSlot.SkillSlotInitData[] InitACSP_SlotData()
+        public BattleSceneRoute.ArrowSwapSlotInitData[] ReturnArrowSlotData()
+        {
+            var equips = CCPlayerData.equipments;
+
+            bool activeMain, activeSub;
+            Sprite mainSprite, subSprite;
+            System.Action mainCallback, subCallback;
+
+            activeMain = equips.IsEquippedArrowMain();
+            if(activeMain)
+            {
+                mainSprite   = equips.GetMainArrow().GetSprite;
+                mainCallback = () => Controller().ArrowSwap(LOAD_ARROW_TYPE.ARROW_MAIN);
+            }
+            else
+            {
+                mainSprite   = null;
+                mainCallback = null;
+            }
+
+            activeSub = equips.IsEquippedArrowSub();
+            if(activeSub)
+            {
+                subSprite   = equips.GetSubArrow().GetSprite;
+                subCallback = () => Controller().ArrowSwap(LOAD_ARROW_TYPE.ARROW_SUB);
+            }
+            else
+            {
+                subSprite   = null;
+                subCallback = null;
+            }
+
+            BattleSceneRoute.ArrowSwapSlotInitData[] datas 
+                = new BattleSceneRoute.ArrowSwapSlotInitData[2]
+                { new BattleSceneRoute.ArrowSwapSlotInitData(activeMain, mainSprite, mainCallback),
+                  new BattleSceneRoute.ArrowSwapSlotInitData(activeSub, subSprite, subCallback) };
+
+            //List.ToArray로 반환하는게 나은가
+
+            return datas;
+        }
+
+        public AccessorySkillSlot.ActiveSkillSlotInitData[] ReturnSkillSlotData()
         {
             //PlayerData의 악세서리 스킬 비교해서 active형태 스킬이면 Slot Setting 해주는 작업해주면된다.
             //장신구 스킬 슬롯 만드는 방식으로 화살 스왑 방식도 교체해주면 될듯..?
@@ -125,8 +167,8 @@
             //이렇게 하면 되려나
 
             //List -> ToArray Return
-            System.Collections.Generic.List<AccessorySkillSlot.SkillSlotInitData> skillDataList 
-                = new System.Collections.Generic.List<AccessorySkillSlot.SkillSlotInitData>();
+            System.Collections.Generic.List<AccessorySkillSlot.ActiveSkillSlotInitData> skillDataList 
+                = new System.Collections.Generic.List<AccessorySkillSlot.ActiveSkillSlotInitData>();
 
             var accessories = CCPlayerData.equipments.GetAccessories();
             for (int i = 0; i < accessories.Length; i++)
@@ -143,7 +185,7 @@
                             //skillDatas[i].InitSkillData(slowTime.IconSprite, slowTime.TimeSlowRatio, false, 
                             //    SKILL_ACTIVATIONS_TYPE.COOLDOWN_ACTIVE,
                             //    (mono) => slowTime.ActiveSlowTime(mono));
-                            skillDataList.Add(new AccessorySkillSlot.SkillSlotInitData(slowTime.IconSprite, slowTime.Cooldown, false,
+                            skillDataList.Add(new AccessorySkillSlot.ActiveSkillSlotInitData(slowTime.IconSprite, slowTime.Cooldown, false,
                                              SKILL_ACTIVATIONS_TYPE.COOLDOWN_ACTIVE,
                                              (mono) => slowTime.ActiveSlowTime(mono),
                                              (mono) => slowTime.ActiveSkill(mono)));

@@ -155,6 +155,8 @@
             }
         }
 
+        private void OnDestroy() => instance = null;
+
         private void BowBegan(Vector2 pos)
         {
             //Pause 상태거나, Battle Clear된 상태라면 활을 당길 수 없음

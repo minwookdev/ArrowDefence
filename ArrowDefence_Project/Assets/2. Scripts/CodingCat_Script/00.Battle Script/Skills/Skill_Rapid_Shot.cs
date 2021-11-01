@@ -7,6 +7,7 @@
     {
         private byte arrowCount;
         private float shotDelay;
+        private WaitForSeconds rapidShotWait = new WaitForSeconds(0.5f);
 
         //WaitForSeconds waitForSec = new WaitForSeconds(0.2f);
         ///Default 
@@ -20,6 +21,17 @@
         {
             this.arrowCount = arrowcount;
             this.shotDelay  = delay;
+        }
+
+        /// <summary>
+        /// Constructor using Skill Data Scriptableobject. (Main)
+        /// </summary>
+        /// <param name="data"></param>
+        public Skill_Rapid_Shot(SkillDataRapidShot data)
+            : base(data.SkillId, data.SkillName, data.SkillDesc, data.SkillLevel, data.SkillType, data.SkillIconSprite)
+        {
+            this.arrowCount = data.ArrowShotCount;
+            this.shotDelay  = data.ShotInterval;
         }
 
         public override void BowSpecialSkill(float anglez, Transform parent, MonoBehaviour mono, 
@@ -36,7 +48,7 @@
         private IEnumerator RapidShot(Transform arrowParent, Vector3 arrowInitScale, Vector3 arrowInitPos, 
                                       float facingVec, Vector2 force, string poolTag)
         {
-            yield return null;
+            yield return rapidShotWait;
 
             //CatLog.Log("Bow Special Effect Occured :: Rapid Shot");
 

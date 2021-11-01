@@ -79,12 +79,18 @@
         #region PLAYER_GEAR
 
         public void InitEquipments(Transform bowObjInitPos, Transform bowObjParentTr, 
-                                   string mainArrowObjTag, string mainArrowLessObjTag, int mainArrowObjPoolQuantity,
-                                   string subArrowObjTag,  string subArrowLessObjTag,  int subArrowPoolQuantity)
+                                    int mainArrowObjPoolQuantity, int subArrowPoolQuantity)
         {
             CCPlayerData.equipments.InitEquipments(bowObjInitPos, bowObjParentTr, 
-                                                    mainArrowObjTag, mainArrowLessObjTag, mainArrowObjPoolQuantity,
-                                                    subArrowObjTag, subArrowLessObjTag, subArrowPoolQuantity);
+                                                   mainArrowObjPoolQuantity, subArrowPoolQuantity);
+        }
+
+        public void InitEquipments(Transform bowinitpos, Transform bowparent, int mainarrowpoolquantity, int subarrowpoolquantity,
+                                   out BattleSceneRoute.ArrowSwapSlotInitData[] arrowslotdata,
+                                   out AccessorySkillSlot.ActiveSkillSlotInitData[] skillslotdata)
+        {
+            CCPlayerData.equipments.InitEquipments(bowinitpos, bowparent, mainarrowpoolquantity, subarrowpoolquantity);
+            arrowslotdata = ReturnArrowSlotData(); skillslotdata = ReturnSkillSlotData();
         }
 
         public void SetBowPullingStop(bool isStop)
@@ -156,16 +162,6 @@
 
         public AccessorySkillSlot.ActiveSkillSlotInitData[] ReturnSkillSlotData()
         {
-            //PlayerData의 악세서리 스킬 비교해서 active형태 스킬이면 Slot Setting 해주는 작업해주면된다.
-            //장신구 스킬 슬롯 만드는 방식으로 화살 스왑 방식도 교체해주면 될듯..?
-            //배열 리턴할때는 무조건 할당해야된다 null이라도..
-            //AccessorySkillSlot.SkillSlotInitData[] skillDatas = new AccessorySkillSlot.SkillSlotInitData[3]
-            //    { new AccessorySkillSlot.SkillSlotInitData(),
-            //      new AccessorySkillSlot.SkillSlotInitData(),
-            //      new AccessorySkillSlot.SkillSlotInitData()}; 
-            //-> 이렇게 하면 null 뱉어버리는데 이거 원인좀 분석해보자
-            //이렇게 하면 되려나
-
             //List -> ToArray Return
             System.Collections.Generic.List<AccessorySkillSlot.ActiveSkillSlotInitData> skillDataList 
                 = new System.Collections.Generic.List<AccessorySkillSlot.ActiveSkillSlotInitData>();
@@ -185,9 +181,9 @@
                             //skillDatas[i].InitSkillData(slowTime.IconSprite, slowTime.TimeSlowRatio, false, 
                             //    SKILL_ACTIVATIONS_TYPE.COOLDOWN_ACTIVE,
                             //    (mono) => slowTime.ActiveSlowTime(mono));
-                            skillDataList.Add(new AccessorySkillSlot.ActiveSkillSlotInitData(slowTime.IconSprite, slowTime.Cooldown, false,
+                            skillDataList.Add(new AccessorySkillSlot.ActiveSkillSlotInitData(
+                                             slowTime.IconSprite, slowTime.Cooldown, false,
                                              SKILL_ACTIVATIONS_TYPE.COOLDOWN_ACTIVE,
-                                             (mono) => slowTime.ActiveSlowTime(mono),
                                              (mono) => slowTime.ActiveSkill(mono)));
                         }
                         else

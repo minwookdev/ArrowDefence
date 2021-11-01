@@ -189,9 +189,7 @@
             return boolArray;
         }
 
-        public void InitEquipments(Transform bowObjectInitPos, Transform bowObjectParentTr,
-                                    string mainArrowObjTag, string mainArrowLessObjTag, int mainArrowPoolQuantity,
-                                    string subArrowObjTag,  string subArrowLessObjTag,  int subArrowPoolQuantity)
+        public void InitEquipments(Transform bowObjectInitPos, Transform bowObjectParentTr, int mainArrowPoolQuantity, int subArrowPoolQuantity)
         {
             //Bow Object needs to reload Arrow from Start Method, Arrow Object must first Init.
             if (IsEquippedArrowMain()) EquippedArrow_f.Init(AD_Data.POOLTAG_MAINARROW, AD_Data.POOLTAG_MAINARROW_LESS, mainArrowPoolQuantity);

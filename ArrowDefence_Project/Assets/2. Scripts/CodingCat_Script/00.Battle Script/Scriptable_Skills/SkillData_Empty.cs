@@ -1,7 +1,5 @@
 ﻿namespace ActionCat
 {
-    using UnityEngine;
-
     /// <summary>
     /// Bow Skill Scriptable Object
     /// Create it through the ActionCat Menu.
@@ -15,7 +13,7 @@
 
         public void OnEnable()
         {
-            SkillData = new Skill_Empty(SkillId, SkillName, SkillDesc, SkillLevel, SkillType, SkillIconSprite);
+            SkillData = new Skill_Empty(this);
         }
     }
 }

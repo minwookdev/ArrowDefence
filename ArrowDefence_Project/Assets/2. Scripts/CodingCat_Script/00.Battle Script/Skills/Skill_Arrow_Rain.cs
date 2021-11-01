@@ -26,6 +26,17 @@
             this.shotDelay  = delay;
         }
 
+        /// <summary>
+        /// Constructor using Skill Data Scriptableobject. (Main)
+        /// </summary>
+        /// <param name="data"></param>
+        public Skill_Arrow_Rain(SkillDataArrowRain data)
+            : base(data.SkillId, data.SkillName, data.SkillDesc, data.SkillLevel, data.SkillType, data.SkillIconSprite)
+        {
+            this.arrowCount = data.ArrowShotCount;
+            this.shotDelay  = data.ShotInterval;
+        }
+
         public override void BowSpecialSkill(float anglez, Transform arrowParent, MonoBehaviour mono, 
                                              Vector3 initscale, Vector3 initpos, Vector2 force, LOAD_ARROW_TYPE type)
         {

@@ -23,6 +23,17 @@
             this.spreadAngle = spreadangle;
         }
 
+        /// <summary>
+        /// Constructor using Skill Data Scriptableobject. (Main)
+        /// </summary>
+        /// <param name="data"></param>
+        public Skill_Multiple_Shot(SkillDataSpreadShot data)
+            : base(data.SkillId, data.SkillName, data.SkillDesc, data.SkillLevel, data.SkillType, data.SkillIconSprite)
+        {
+            this.arrowCount  = data.ArrowShotCount;
+            this.spreadAngle = data.SpreadAngle;
+        }
+
         public override void BowSpecialSkill(float anglez, Transform parent, MonoBehaviour mono, 
                                              Vector3 initScale, Vector3 initPos, Vector2 arrowForce, LOAD_ARROW_TYPE arrowType)
         {

@@ -71,7 +71,7 @@
             //    bowGameObject.AddComponent(effectScript);
             //}
 
-            if (specialEffect != null) specialEffect.Setup();
+            if (specialEffect != null) specialEffect.Init();
 
             //사실 그냥 이렇게 하면되긴하네 GameObject 형에 직접적으로 컴포넌트를 붙이는 거니깐
             //bowGameObject.AddComponent<AcEffect_AimSight>();

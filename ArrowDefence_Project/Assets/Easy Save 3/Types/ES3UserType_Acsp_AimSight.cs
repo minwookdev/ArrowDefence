@@ -4,7 +4,7 @@ using UnityEngine;
 namespace ES3Types
 {
 	[UnityEngine.Scripting.Preserve]
-	[ES3PropertiesAttribute("lineMaterial", "LineWidth", "id", "name", "desc", "effectType", "level", "iconSprite")]
+	[ES3PropertiesAttribute("lineMaterial", "lineWidth", "id", "name", "desc", "effectType", "level", "iconSprite")]
 	public class ES3UserType_Acsp_AimSight : ES3ObjectType
 	{
 		public static ES3Type Instance = null;
@@ -17,7 +17,7 @@ namespace ES3Types
 			var instance = (ActionCat.Acsp_AimSight)obj;
 			
 			writer.WritePropertyByRef("lineMaterial", instance.lineMaterial);
-			writer.WriteProperty("LineWidth", instance.LineWidth, ES3Type_float.Instance);
+			writer.WriteProperty("lineWidth", instance.lineWidth, ES3Type_float.Instance);
 			writer.WritePrivateField("id", instance);
 			writer.WritePrivateField("name", instance);
 			writer.WritePrivateField("desc", instance);
@@ -37,8 +37,8 @@ namespace ES3Types
 					case "lineMaterial":
 						instance.lineMaterial = reader.Read<UnityEngine.Material>(ES3Type_Material.Instance);
 						break;
-					case "LineWidth":
-						instance.LineWidth = reader.Read<System.Single>(ES3Type_float.Instance);
+					case "lineWidth":
+						instance.lineWidth = reader.Read<System.Single>(ES3Type_float.Instance);
 						break;
 					case "id":
 					reader.SetPrivateField("id", reader.Read<System.String>(), instance);

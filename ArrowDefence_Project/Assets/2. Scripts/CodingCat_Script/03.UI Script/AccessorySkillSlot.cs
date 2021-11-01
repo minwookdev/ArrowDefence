@@ -18,19 +18,15 @@
             public Sprite SkillIconSprite { get; private set; }
             public float MaxCount { get; private set; } = 0f;
             public bool IsPrepared { get; private set; } = false;
-            public Action<MonoBehaviour> SkillCallback { get; private set; } // <- Clear
-
             public Func<MonoBehaviour, float> SkillFunc { get; private set; }
 
             public ActiveSkillSlotInitData(Sprite iconsprite, float maxcount, bool isprepared,
-                                           SKILL_ACTIVATIONS_TYPE type, Action<MonoBehaviour> callback,
-                                           Func<MonoBehaviour, float> skillfunc)
+                                           SKILL_ACTIVATIONS_TYPE type, Func<MonoBehaviour, float> skillfunc)
             {
                 SkillIconSprite = iconsprite;
                 MaxCount        = maxcount;
                 IsPrepared      = isprepared;
                 ActiveType      = type;
-                SkillCallback   = callback;
                 SkillFunc       = skillfunc;
             }
         }

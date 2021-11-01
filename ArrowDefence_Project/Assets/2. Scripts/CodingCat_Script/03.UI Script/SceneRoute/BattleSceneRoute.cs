@@ -232,8 +232,6 @@
 
         public void InitArrowSlots(ArrowSwapSlotInitData[] datas)
         {
-            CatLog.Log($"Datas Length : {datas.Length}");
-
             for (int i = 0; i < datas.Length; i++)
             {
                 if (i == 0)      //Main Arrow Swap Slot

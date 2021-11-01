@@ -18,8 +18,7 @@
 
         private void OnEnable()
         {
-            SkillData = new Acsp_AimSight(SkillId, SkillName, SkillDesc, EffectType, SkillLevel, SkillIconSprite,
-                                          LineRenderMat, LineWidth);
+            SkillData = new Acsp_AimSight(this);
         }
     }
 }

@@ -42,18 +42,18 @@
 
         public AccessorySPEffect() { }
 
-        public abstract void Setup();
+        public abstract void Init();
     }
 
     public class Acsp_AimSight : AccessorySPEffect, IToString
     {
         public Material lineMaterial;
-        public float LineWidth = 0.050f;
+        public float lineWidth = 0.050f;
 
-        public override void Setup()
+        public override void Init()
         {
             //Battle Scene이 시작되면 Bow GameObject에 Accessory Effect Component를 Add 해줌
-            GameGlobal.GetBowGameObjectInScene().AddComponent<SPEffect_AimSight>().Initialize(lineMaterial, LineWidth);
+            GameGlobal.GetBowGameObjectInScene().AddComponent<SPEffect_AimSight>().Initialize(lineMaterial, lineWidth);
         }
 
         public override string ToString() => "Aim Sight";
@@ -62,7 +62,18 @@
             base(id, name, desc, type, level, sprite)
         {
             lineMaterial = lineMat;
-            LineWidth    = width;
+            lineWidth    = width;
+        }
+
+        /// <summary>
+        /// Constructor using Skill Data Scriptableobject. (Main)
+        /// </summary>
+        /// <param name="data"></param>
+        public Acsp_AimSight(SkillDataAimSight data)
+            : base(data.SkillId, data.SkillName, data.SkillDesc, data.EffectType, data.SkillLevel, data.SkillIconSprite)
+        {
+            lineMaterial = data.LineRenderMat;
+            lineWidth    = data.LineWidth;
         }
 
         /// <summary>
@@ -79,7 +90,7 @@
 
         public float Cooldown { get => cooldown; }
 
-        public override void Setup()
+        public override void Init()
         {
             return;
         }
@@ -95,11 +106,6 @@
         }
 
         public Acsp_SlowTime() : base() { }
-
-        public void ActiveSlowTime(MonoBehaviour mono)
-        {
-            mono.StartCoroutine(SlowTimeCo());
-        }
 
         public float ActiveSkill(MonoBehaviour mono)
         {

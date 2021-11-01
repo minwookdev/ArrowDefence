@@ -102,9 +102,7 @@
             OnIncreaseClearGauge += IncreaseClearGauge;
 
             //Init-GameObject Player's Equipments
-            GameManager.Instance.InitEquipments(BowInitPosition, ParentTransform,
-                                                AD_Data.POOLTAG_MAINARROW, AD_Data.POOLTAG_MAINARROW_LESS, 1,
-                                                AD_Data.POOLTAG_SUBARROW,  AD_Data.POOLTAG_SUBARROW_LESS, 1);
+            //GameManager.Instance.InitEquipments(BowInitPosition, ParentTransform, 1, 1);
 
             //Init-Arrow Slots -> out 키워드 너무 많다 수정하자
             //PlayerData.Equipments와 관련된 로직이기 때문에, Progresser에서 GameManager 참조하여 처리
@@ -117,12 +115,21 @@
             //                            () => { GameManager.Instance.Controller().ArrowSwap(LOAD_ARROW_TYPE.ARROW_SUB); });
 
             //Init-Arrow Swap Slots
-            var arrowSwapDatas = GameManager.Instance.ReturnArrowSlotData();
-            battleSceneUI.InitArrowSlots(arrowSwapDatas);
+            //var arrowSwapDatas = GameManager.Instance.ReturnArrowSlotData();
+            //battleSceneUI.InitArrowSlots(arrowSwapDatas);
 
             //Init-Accessory Skill Slots
-            var accessorySkillDatas = GameManager.Instance.ReturnSkillSlotData();
-            battleSceneUI.InitSkillSlots(accessorySkillDatas);
+            //var accessorySkillDatas = GameManager.Instance.ReturnSkillSlotData();
+            //battleSceneUI.InitSkillSlots(accessorySkillDatas);
+
+            //Init-Player Equipments [Init Pool, Arrow Swap Slot Data, Skill Slot Data]
+            BattleSceneRoute.ArrowSwapSlotInitData[]     arrowSwapSlotDatas;
+            AccessorySkillSlot.ActiveSkillSlotInitData[] accessorySkillSlotDatas;
+            GameManager.Instance.InitEquipments(BowInitPosition, ParentTransform, 1, 1, out arrowSwapSlotDatas, out accessorySkillSlotDatas);
+
+            //Init-Arrow, Skill Slots
+            battleSceneUI.InitArrowSlots(arrowSwapSlotDatas);
+            battleSceneUI.InitSkillSlots(accessorySkillSlotDatas);
 
             //Init-GameManager Event [TEST] (추후 특수효과 발동 및 특수 이벤트에 활용 예정)
             GameManager.Instance.MonsterHitEvent     += () => CatLog.Log("On Monster Hit");

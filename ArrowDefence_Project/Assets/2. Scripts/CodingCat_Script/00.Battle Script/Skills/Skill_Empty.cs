@@ -12,6 +12,16 @@
 
         }
 
+        /// <summary>
+        /// Constructor using Skill Data Scriptableobject. (Main)
+        /// </summary>
+        /// <param name="data"></param>
+        public Skill_Empty(SkillData_Empty data)
+            : base(data.SkillId, data.SkillName, data.SkillDesc, data.SkillLevel, data.SkillType, data.SkillIconSprite)
+        {
+
+        }
+
         public override void BowSpecialSkill(float facingVec, Transform arrowParent, MonoBehaviour mono, 
                                              Vector3 initScale, Vector3 arrowInitPos, Vector2 force, LOAD_ARROW_TYPE arrowType)
         {

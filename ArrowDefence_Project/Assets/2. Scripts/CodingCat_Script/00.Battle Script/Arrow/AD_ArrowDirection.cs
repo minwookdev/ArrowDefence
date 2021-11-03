@@ -1,5 +1,6 @@
 ﻿namespace ActionCat
 {
+    using System;
     using UnityEngine;
 
     public class AD_ArrowDirection : MonoBehaviour, IPoolObject
@@ -16,14 +17,26 @@
         private Rigidbody2D arrowRigidBody;
         private float arrowAngle = 0f;
         private AD_Arrow adArrow;
+        private Transform tr;
+
+        //Arrow Skill Trigger
+        Action onAir;
+        Action onHit;
 
         private void Start()
         {
+            //Init-Component
+            tr = GetComponent<Transform>();
+
             //Screen top-left, bottom-right 계산
             topLeftScreenPoint     = Camera.main.ScreenToWorldPoint(new Vector2(0, Screen.height));
             bottomRightScreenPoint = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, 0));
             arrowRigidBody         = gameObject.GetComponent<Rigidbody2D>();
             adArrow                = gameObject.GetComponent<AD_Arrow>();
+
+            //Init-Arrow Skill
+            onAir += OnAir;
+            onHit += OnHit;
         }
 
         private void Update()
@@ -31,15 +44,33 @@
             //Get Velocity of the Arrow
             velocity = arrowRigidBody.velocity;
 
-            if(velocity.magnitude != 0 && !arrowRigidBody.isKinematic)
+            //Arrow Fired
+            if(velocity.magnitude != 0 && arrowRigidBody.isKinematic == false)
             {
                 //Calculate the angle if the arrow
-                this.arrowAngle = (Mathf.Atan2(velocity.x, -velocity.y) * Mathf.Rad2Deg + 180);
+                //this.arrowAngle = (Mathf.Atan2(velocity.x, -velocity.y) * Mathf.Rad2Deg + 180);
                 //Set Rotation of the Arrow
-                transform.rotation = Quaternion.AngleAxis(arrowAngle, transform.forward);
+                //transform.rotation = Quaternion.AngleAxis(arrowAngle, transform.forward);
+
+                //Arrow Direction Update
+                //OnAir();
+                onAir();
                 //Check the Arrow Bounds
-                this.CheckArrowBounds();
+                CheckArrowBounds();
             }
+        }
+
+        void OnAir()
+        {
+            //Calculate the angle if the arrow
+            arrowAngle = (Mathf.Atan2(velocity.x, -velocity.y) * Mathf.Rad2Deg + 180);
+            //Set Rotation of the Arrow
+            tr.rotation = Quaternion.AngleAxis(arrowAngle, tr.forward);
+        }
+
+        void OnHit()
+        {
+            DisableObject_Req(this.gameObject);
         }
 
         //arrow Position is Out of Screen, then Destroy the Arrow (When Arrow Firing).
@@ -88,8 +119,16 @@
         {
             if(coll.gameObject.layer == LayerMask.NameToLayer(AD_Data.LAYER_MONSTER))
             {
-                DisableObject_Req(this.gameObject);
+                //DisableObject_Req(this.gameObject);
+                onHit();
             }
         }
+
+        private void OnDestroy()
+        {
+            onHit -= OnHit;
+            onAir -= OnAir;
+        }
     }
+
 }

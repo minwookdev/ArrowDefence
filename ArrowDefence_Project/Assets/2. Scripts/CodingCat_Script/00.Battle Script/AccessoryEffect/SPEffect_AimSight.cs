@@ -137,14 +137,14 @@
             if (laserLine.startColor.a < lineStartAlpha)
             {
                 currentStartColor = laserLine.startColor;
-                currentStartColor.a += Time.deltaTime * alphaChangeSpeed;
+                currentStartColor.a += Time.unscaledDeltaTime * alphaChangeSpeed;
                 laserLine.startColor = currentStartColor;
             }
 
             if (laserLine.endColor.a < lineEndAlpha)
             {
                 currentEndColor = laserLine.endColor;
-                currentEndColor.a += Time.deltaTime * alphaChangeSpeed;
+                currentEndColor.a += Time.unscaledDeltaTime * alphaChangeSpeed;
                 laserLine.endColor = currentEndColor;
             }
         }

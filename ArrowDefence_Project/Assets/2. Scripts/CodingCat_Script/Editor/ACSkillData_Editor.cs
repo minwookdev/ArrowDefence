@@ -315,5 +315,18 @@ public static class CreateAcspDataAsset
         EditorUtility.FocusProjectWindow();
         Selection.activeObject = asset;
     }
+
+    [MenuItem("ActionCat/Scriptable Object/RFEF/DamageUP")]
+    public static void CreateRFEFDamageUp()
+    {
+        string assetPath = "Assets/05. Scriptable_Object/SkillAsset/AccessorySkillAsset/RFEF/DamageUP.asset";
+        var asset = ScriptableObject.CreateInstance<RFDataDamageUp>();
+        AssetDatabase.CreateAsset(asset, assetPath);
+        AssetDatabase.SaveAssets();
+        AssetDatabase.Refresh();
+
+        EditorUtility.FocusProjectWindow();
+        Selection.activeObject = asset;
+    }
 }
 

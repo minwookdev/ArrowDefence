@@ -71,6 +71,9 @@ public class MainSceneRoute : MonoBehaviour
     public TMPro.TextMeshProUGUI MessageText;
     Sequence messageSeq;
 
+    [Header("SAVE & LOAD")]
+    public bool isAutoLoad;
+
     public enum STAGELIST
     {
         STAGE_FOREST  = 1,
@@ -111,6 +114,10 @@ public class MainSceneRoute : MonoBehaviour
                             .Join(MessageText.transform.DOShakePosition(1f, 5f, 15, 90, false, true))
                             .SetAutoKill(false)
                             .Pause(); //Disable Auto Start
+
+        //Auto Load SaveData
+        if (isAutoLoad)
+            ActionCat.GameManager.Instance.AutoLoadUserData();
     }
 
     public void Message(string msg)

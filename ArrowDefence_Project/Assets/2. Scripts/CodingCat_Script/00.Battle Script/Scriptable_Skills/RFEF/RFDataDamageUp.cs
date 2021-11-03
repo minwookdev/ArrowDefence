@@ -2,7 +2,6 @@
 {
     using UnityEngine;
 
-    [CreateAssetMenu(fileName = "DamageUp_Asset", menuName = "Scriptable Object Asset/RFEF.SkillData_Asset/DamageUp_Asset")]
     public class RFDataDamageUp : AccessoryRFSkillData
     {
         public int DamageIncreaseValue;

@@ -277,7 +277,7 @@
                     currentClickPosition - initialTouchPos;
 
                 //change bow angle depending on touch or click position. *Mathf.Clamp, *Mathf.LerpAngle.
-                this.bowAngle = Mathf.Clamp(Mathf.LerpAngle(bowAngle, Mathf.Atan2(direction.x, -direction.y) * Mathf.Rad2Deg + 90, Time.deltaTime * SmoothRotateSpeed),
+                this.bowAngle = Mathf.Clamp(Mathf.LerpAngle(bowAngle, Mathf.Atan2(direction.x, -direction.y) * Mathf.Rad2Deg + 90, Time.unscaledDeltaTime * SmoothRotateSpeed),
                             minBowAngle, maxBowAngle);
 
                 //Set Direction of the Bow.
@@ -496,7 +496,7 @@
                 if(isBowPulling)
                 {
                     arrowPosition = LoadedArrow.transform.position;
-                    arrowPosition = Vector3.MoveTowards(arrowPosition, LeftClampPoint.position, Time.deltaTime * ArrowPullingSpeed);
+                    arrowPosition = Vector3.MoveTowards(arrowPosition, LeftClampPoint.position, Time.unscaledDeltaTime * ArrowPullingSpeed);
                     LoadedArrow.transform.position = arrowPosition;
                     
                     //Arrow Direction * Force

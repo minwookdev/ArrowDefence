@@ -23,6 +23,7 @@
         private GAMEPLATFORM gamePlatform;
         private GAMESTATE    gameState = GAMESTATE.STATE_BEFOREBATTLE;
         private float fixedDeltaTime;
+        private bool  isLoadedUserData = false;
 
         /// <summary>
         /// Is Dev Mode Control Value
@@ -182,7 +183,7 @@
                             //    SKILL_ACTIVATIONS_TYPE.COOLDOWN_ACTIVE,
                             //    (mono) => slowTime.ActiveSlowTime(mono));
                             skillDataList.Add(new AccessorySkillSlot.ActiveSkillSlotInitData(
-                                             slowTime.IconSprite, slowTime.Cooldown, false,
+                                             accessories[i].GetSprite, slowTime.Cooldown, false,
                                              SKILL_ACTIVATIONS_TYPE.COOLDOWN_ACTIVE,
                                              (mono) => slowTime.ActiveSkill(mono)));
                         }
@@ -363,6 +364,27 @@
 
             DropItem item = new DropItem(GameGlobal.RandomIntInArray(minimunChanceOfItem.QuantityRange), minimunChanceOfItem.ItemAsset);
             return item;
+        }
+
+        #endregion
+
+        #region SAVE_LOAD
+
+        public void SaveUserData()
+        {
+            CCPlayerData.SaveUserData();
+        }
+
+        public void LoadUserData()
+        {
+            CCPlayerData.LoadUserData();
+        }
+
+        public void AutoLoadUserData()
+        {
+            if (isLoadedUserData == false)
+                LoadUserData();
+            isLoadedUserData = true;
         }
 
         #endregion

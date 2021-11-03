@@ -16,6 +16,7 @@
         private float arrowAngle = 0f;
 
         private bool isLaunched = false;
+        private Transform tr;
 
         [SerializeField]
         private GameObject trailObject;
@@ -23,10 +24,20 @@
         [SerializeField]
         private Rigidbody2D rBody;
 
+        //Arrow Skill Action
+        System.Action onHit;
+        System.Action onAir;
+
         private void Awake()
         {
+            //Init-Component
             rBody       = gameObject.GetComponent<Rigidbody2D>();
+            tr          = gameObject.GetComponent<Transform>();
             trailObject = transform.GetChild(2).GetChild(0).gameObject;
+
+            //Init-Arrow Skill
+            onHit += OnHit;
+            onAir += OnAir;
         }
 
         private void Start()
@@ -43,9 +54,11 @@
             if(velocity.magnitude != 0 && isLaunched == true)
             {
                 //Calculate the angle if the arrow
-                arrowAngle = (Mathf.Atan2(velocity.x, -velocity.y) * Mathf.Rad2Deg + 180);
+                //arrowAngle = (Mathf.Atan2(velocity.x, -velocity.y) * Mathf.Rad2Deg + 180);
                 //Set Rotation of the Arrow
-                transform.rotation = Quaternion.AngleAxis(arrowAngle, transform.forward);
+                //transform.rotation = Quaternion.AngleAxis(arrowAngle, transform.forward);
+
+                onAir();
                 CheckArrowBounds();
             }
         }
@@ -56,6 +69,12 @@
             this.rBody.velocity = Vector2.zero;
             this.trailObject.SetActive(false);
             this.isLaunched = false;
+        }
+
+        private void OnDestroy()
+        {
+            onAir -= OnAir;
+            onHit -= OnHit;
         }
 
         private void CheckArrowBounds()
@@ -73,12 +92,25 @@
             }
         }
 
+        void OnHit() => DisableObject_Req(this.gameObject);
+
+        void OnAir()
+        {
+            //Calc Arrow Angle
+            arrowAngle  = (Mathf.Atan2(velocity.x, -velocity.y) * Mathf.Rad2Deg + 180); //transform.up?
+            tr.rotation = Quaternion.AngleAxis(arrowAngle, tr.forward);
+        }
+
         public void DisableObject_Req(GameObject target) => CCPooler.ReturnToPool(target, 0);
 
         public void ShotArrow(Vector2 force)
         {
             isLaunched = true;
-            rBody.AddForce(force, ForceMode2D.Force);
+            //Force to Arrow RigidBody
+            rBody.velocity = force;
+            //or [Used AddForce]
+            //rBody.AddForce(force, ForceMode2D.Impulse); //-> recommend
+            //rBody.AddForce(force, ForceMode2D.Force);
 
             trailObject.SetActive(true);
             trailObject.GetComponent<TrailRenderer>().Clear();
@@ -88,7 +120,8 @@
         {
             if(coll.gameObject.layer == LayerMask.NameToLayer(AD_Data.LAYER_MONSTER))
             {
-                DisableObject_Req(this.gameObject);
+                //DisableObject_Req(this.gameObject);
+                onHit();
             }
         }
     }

@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2bdcf03d18a58e3429ec4a48a2be872a, type: 3}
-  m_Name: Item_Broken_Ring
+  m_Name: 1005-Tough_String
   m_EditorClassIdentifier: 
   Item_Type: 1
-  Item_Grade: 1
-  Item_Id: 1003
-  Item_Amount: 1
-  Item_Name: Broken Ring
-  Item_Desc: A ring with a devil's enchantment. (I think it can be fixed and used)
-  Item_Sprite: {fileID: 21300000, guid: 5846e4684219e4f0888eac702223eb68, type: 3}
+  Item_Grade: 0
+  Item_Id: 1005
+  Item_Amount: 3
+  Item_Name: Tough String
+  Item_Desc: "It is a tough string that can be\n used as a bow string."
+  Item_Sprite: {fileID: 21300000, guid: a66999db2f473304cba28a8d8ff44f90, type: 3}

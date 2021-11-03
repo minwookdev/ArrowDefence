@@ -153,6 +153,15 @@
                 case GAMESTATE.STATE_BOSSBATTLE   : OnUpdateBossBattle();   break;
                 case GAMESTATE.STATE_ENDBATTLE    : OnUpdateEndBattle();    break;
             }
+
+            if(Input.GetKeyDown(KeyCode.I))
+            {
+                GameManager.Instance.TimeScaleSet(0.5f);
+            }
+            if(Input.GetKeyDown(KeyCode.O))
+            {
+                GameManager.Instance.TimeDefault();
+            }
         }
 
         private void OnDestroy()

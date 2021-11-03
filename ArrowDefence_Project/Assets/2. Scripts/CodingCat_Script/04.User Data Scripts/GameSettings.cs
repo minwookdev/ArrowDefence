@@ -10,7 +10,7 @@
 
     public class GameSettings
     {
-        PULLINGTYPE pullingType = PULLINGTYPE.AROUND_BOW_TOUCH; 
+        PULLINGTYPE pullingType = PULLINGTYPE.FREE_TOUCH; 
 
         public PULLINGTYPE PullingType { get => pullingType; }
 

@@ -75,7 +75,11 @@
             this.rBody.isKinematic = false;
             //this.rBody.gravityScale = 0;
             this.isLaunched = true;
-            this.rBody.AddForce(force, ForceMode2D.Force);
+            //Force to Arrow RigidBody 
+            rBody.velocity = force;
+            //or [Used AddForce]
+            //this.rBody.AddForce(force, ForceMode2D.Force);
+            //rBody.AddForce(force, ForceMode2D.Impulse); // -> Recommend
 
             //발사할 때 Clear 해주지 않으면 전에 있던 잔상이 남는다
             arrowTrail.gameObject.SetActive(true);

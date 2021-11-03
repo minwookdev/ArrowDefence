@@ -21,8 +21,7 @@
         public GameObject SlotGO;
         public TextMeshProUGUI TmpSkillName;
         public TextMeshProUGUI TmpSkillDesc;
-        public TextMeshProUGUI TmpSkillType;
-        public TextMeshProUGUI TmpSkillGrade;
+        public Image[] ImgSkillGradeStar = new Image[3];
         public Image ImgIcon;
 
         public bool isActiveSlotGO()
@@ -35,7 +34,6 @@
         {
             TmpSkillName.text = skillname;
             TmpSkillDesc.text = skilldesc;
-            TmpSkillType.text = skilllevel;
 
             if (skillsprite != null)
                 ImgIcon.sprite = skillsprite;
@@ -51,7 +49,7 @@
                 //Clean up Skill Slot variables
                 TmpSkillName.text = "";
                 TmpSkillDesc.text = "";
-                TmpSkillType.text = "";
+
                 //TmpSkillGrade.text = "";
                 //ImgIcon.sprite = null;
 

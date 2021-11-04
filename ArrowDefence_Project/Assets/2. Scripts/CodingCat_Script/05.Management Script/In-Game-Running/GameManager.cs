@@ -207,6 +207,13 @@
                 return null;
         }
 
+        public ArrowSkill InitArrowSkill(Transform arrowtransform, Rigidbody2D rigidbody)
+        {
+            var newSkill = new ReboundArrow();
+            newSkill.Init(arrowtransform, rigidbody);
+            return newSkill;
+        }
+
         #endregion
 
         #region BATTLE

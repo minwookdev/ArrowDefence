@@ -24,9 +24,9 @@
         [SerializeField]
         private Rigidbody2D rBody;
 
-        //Arrow Skill Action
-        System.Action onHit;
-        System.Action onAir;
+        //Arrow Skill Data
+        ArrowSkill arrowSkill = null;
+        bool isInitSkill      = false;
 
         private void Awake()
         {
@@ -36,8 +36,9 @@
             trailObject = transform.GetChild(2).GetChild(0).gameObject;
 
             //Init-Arrow Skill
-            onHit += OnHit;
-            onAir += OnAir;
+            //arrowSkill = GameManager.Instance.InitArrowSkill(tr, rBody);
+            if (arrowSkill != null)
+                isInitSkill = true;
         }
 
         private void Start()
@@ -58,12 +59,11 @@
                 //Set Rotation of the Arrow
                 //transform.rotation = Quaternion.AngleAxis(arrowAngle, transform.forward);
 
-                onAir();
+                OnAir();
                 CheckArrowBounds();
             }
         }
 
-        //private void OnDisable() => this.isLaunched = false;
         private void OnDisable()
         {
             this.rBody.velocity = Vector2.zero;
@@ -73,8 +73,18 @@
 
         private void OnDestroy()
         {
-            onAir -= OnAir;
-            onHit -= OnHit;
+            arrowSkill = null;
+        }
+
+        /// <summary>
+        /// Executed after being inited in the object pool.
+        /// </summary>
+        /// <param name="skill"></param>
+        public void InitSkill(ArrowSkill skill)
+        {
+            arrowSkill  = skill;
+            isInitSkill = true;
+            CatLog.Log("is Arrow Skill Init !");
         }
 
         private void CheckArrowBounds()
@@ -120,8 +130,22 @@
         {
             if(coll.gameObject.layer == LayerMask.NameToLayer(AD_Data.LAYER_MONSTER))
             {
-                //DisableObject_Req(this.gameObject);
-                onHit();
+                //if (isInitSkill)
+                //    arrowSkill.OnHit();
+                //else
+                //    CatLog.Log("Arrow Skill is NULL !");
+                OnHit();
+            }
+        }
+
+        private void OnTriggerEnter2D(Collider2D coll)
+        {
+            if(coll.gameObject.layer == LayerMask.NameToLayer(AD_Data.LAYER_MONSTER))
+            {
+                if (isInitSkill)
+                    arrowSkill.OnHit(coll.gameObject, this);
+                else
+                    OnHit();
             }
         }
     }

@@ -70,6 +70,13 @@
 
         private void OnTriggerEnter2D(Collider2D coll)
         {
+            if(coll.gameObject.layer == LayerMask.NameToLayer(AD_Data.LAYER_ARROW_LESS))
+            {
+                GameManager.Instance.MonsterLessHitEvent();
+                float damageCount = Random.Range(10f, 30f);
+                OnHitObject(damageCount);
+            }
+
             if (coll.gameObject.layer == LayerMask.NameToLayer(AD_Data.LAYER_DISABLELINE))
             {
                 BattleProgresser.OnDecreasePlayerHealthPoint(5f);

@@ -2,7 +2,7 @@
 {
     using UnityEngine;
 
-    public class AD_Arrow_less : MonoBehaviour, IPoolObject
+    public class AD_Arrow_less : MonoBehaviour, IPoolObject, IArrowObject
     {
         //Screen Limit Variable
         private Vector2 topLeftScreenPoint;
@@ -36,7 +36,7 @@
             trailObject = transform.GetChild(2).GetChild(0).gameObject;
 
             //Init-Arrow Skill
-            //arrowSkill = GameManager.Instance.InitArrowSkill(tr, rBody);
+            arrowSkill = GameManager.Instance.InitArrowSkill(tr, rBody);
             if (arrowSkill != null)
                 isInitSkill = true;
         }
@@ -59,6 +59,10 @@
                 //Set Rotation of the Arrow
                 //transform.rotation = Quaternion.AngleAxis(arrowAngle, transform.forward);
 
+                //if (isInitSkill)
+                //    arrowSkill.OnAir();
+                //else
+                //    OnAir();
                 OnAir();
                 CheckArrowBounds();
             }
@@ -143,7 +147,11 @@
             if(coll.gameObject.layer == LayerMask.NameToLayer(AD_Data.LAYER_MONSTER))
             {
                 if (isInitSkill)
-                    arrowSkill.OnHit(coll.gameObject, this);
+                {
+                    bool isDisableArrow = arrowSkill.OnHit(coll, this);
+                    if (isDisableArrow)
+                        DisableObject_Req(gameObject);
+                }
                 else
                     OnHit();
             }

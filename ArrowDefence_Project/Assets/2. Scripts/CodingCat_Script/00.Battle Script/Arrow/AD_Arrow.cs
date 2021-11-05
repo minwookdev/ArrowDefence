@@ -22,8 +22,6 @@
         private Rigidbody2D rBody;
         private PolygonCollider2D polyCollider;
 
-        ArrowSkill arrowSkill;
-
         private void Start()
         {
             //if (ReferenceEquals(rBody, null)) rBody = gameObject.GetComponent<Rigidbody2D

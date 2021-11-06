@@ -118,6 +118,67 @@ public class MainSceneRoute : MonoBehaviour
         //Auto Load SaveData
         if (isAutoLoad)
             ActionCat.GameManager.Instance.AutoLoadUserData();
+
+        //
+        //string[] stringArray = new string[] { "Sun", "Mon", "Tue" };
+        //string log = "";
+        //foreach (var item in stringArray)
+        //{
+        //    log += item;
+        //}
+        //CatLog.Log(log); log = "";
+        //GameGlobal.ArrayForeach<string>(stringArray, 
+        //    (x) => 
+        //    { if (x == "Sun")
+        //            x = "Wed";
+        //    });
+        //GameGlobal.ArrayForeach<string>(stringArray, (x) => log += x);
+        //CatLog.Log(log); log = "";
+        //GameGlobal.ArrayForeach<string>(stringArray, (x) => x = "Empty");
+        //GameGlobal.ArrayForeach<string>(stringArray, (x) => log += x);
+        //CatLog.Log(log); log = "";
+
+        //int[] intArray = new int[] { 0, 1, 2 };
+        //string log = "";
+        //GameGlobal.ArrayForeach<int>(ref intArray, (x) => log += x.ToString());
+        //CatLog.Log(log);
+        //log = "";
+        //GameGlobal.ArrayForeach<int>(ref intArray, (x) => { x = 0; log += x.ToString(); });
+        //CatLog.Log(log);
+        //log = "";
+        //foreach (var item in intArray)
+        //{
+        //    log += item.ToString();
+        //} CatLog.Log(log); log = "";
+        //
+        //string[] stringArray = new string[] { "Sun", "Mon", "Tue" };
+        //GameGlobal.ArrayForeach<string>(ref stringArray, (x) => log += x);
+        //CatLog.Log(log);
+        //log = "";
+        //GameGlobal.ArrayForeach<string>(ref stringArray, (x) => { 
+        //    x    = "Empty";
+        //    log += x;
+        //}); CatLog.Log(log);
+        //
+        //string logi = "";
+        //foreach (var item in stringArray)
+        //{
+        //    logi += item;
+        //} CatLog.Log(logi); logi = "";
+        //
+        //Array.ForEach(stringArray, (x) => x = "Empty");
+        //foreach (var item in stringArray)
+        //{
+        //    logi += item;
+        //} CatLog.Log(logi); logi = "";
+
+        //string[] stringArray = new string[] { "DOG", "CAT", "RABBIT" };
+        //string log = "";
+        //GameGlobal.ArrayForeach<string>(stringArray, (x) => log += x);
+        //CatLog.Log(log); log = "";
+        //stringArray = GameGlobal.ReturnArrayForeach<string>(stringArray, (x) => x = "empty");
+        //GameGlobal.ArrayForeach<string>(stringArray, (x) => log += x);
+        //CatLog.Log(log); log = "";
     }
 
     public void Message(string msg)

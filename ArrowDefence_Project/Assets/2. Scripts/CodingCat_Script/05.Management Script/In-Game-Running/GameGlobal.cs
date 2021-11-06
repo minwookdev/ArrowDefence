@@ -1,5 +1,6 @@
 ﻿namespace ActionCat
 {
+    using System.Collections.Generic;
     using UnityEngine;
 
     public static class GameGlobal
@@ -8,21 +9,36 @@
         public static Vector3 ArrowScale = new Vector3(1.5f, 1.5f, 1f);
         public static readonly int RandomIntRangeCorrection = 1;
 
-        public static int RandomIndexInRange(int[] value)
+        /// <summary>
+        /// int 배열에서 무작위 "index"를 반환합니다.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static int RandomIndexInArray(int[] value)
         {
-            int randomIndexInRange = Random.Range(0, value.Length);
+            int randomIndexInRange = UnityEngine.Random.Range(0, value.Length);
             return randomIndexInRange;
         }
 
-        public static void RandomIntInRange(int[] randomArray, ref int value)
+        /// <summary>
+        /// int 배열에서 무작위 요소를 result에 할당합니다.
+        /// </summary>
+        /// <param name="intarray">Length가 1이상인 배열</param>
+        /// <param name="result"></param>
+        public static void RandomIntInRange(int[] intarray, ref int result)
         {
-            if (randomArray.Length <= 1) return;
+            if (intarray.Length <= 0) return;
 
-            int randomIndex = GameGlobal.RandomIndexInRange(randomArray);
-            int valueOfRange = randomArray[randomIndex];
-            value = valueOfRange;
+            int randomIndex = GameGlobal.RandomIndexInArray(intarray);
+            int valueOfRange = intarray[randomIndex];
+            result = valueOfRange;
         }
 
+        /// <summary>
+        /// Int배열에서 랜덤한 Index의 값을 반환합니다.
+        /// </summary>
+        /// <param name="intArray"></param>
+        /// <returns></returns>
         public static int RandomIntInArray(int[] intArray)
         {
             if (intArray.Length <= 0)
@@ -31,7 +47,7 @@
                 return 1;
             }
 
-            int valueOfArray = intArray[GameGlobal.RandomIndexInRange(intArray)];
+            int valueOfArray = intArray[GameGlobal.RandomIndexInArray(intArray)];
             return valueOfArray;
         }
 
@@ -72,6 +88,96 @@
         {
             Vector3 vector = new Vector3(position.x, position.y, 90f);
             return vector;
+        }
+
+        public static T[] ArrayRemoveAll<T>(T[] array, System.Predicate<T> predicate)
+        {
+            List<T> list = new List<T>(array);
+            list.RemoveAll(predicate);
+
+            //for (int i = 0; i < list.Count; i++)
+            //{
+            //    if(predicate(list[i]))
+            //    {
+            //        list.Remove(list[i]);
+            //        i = 0;
+            //    }
+            //}
+
+            return list.ToArray();
+        }
+
+        public static T[] ArrayRemoveAt<T>(T[] array, int index)
+        {
+            if (array.Length <= index)
+            {
+                CatLog.WLog("Target Index Number is bigger than, Array Size");
+                return array;
+            }
+
+            List<T> list = new List<T>(array);
+            list.RemoveAt(index);
+            return list.ToArray();
+        }
+
+        /// <summary>
+        /// 매개변수로 들어온 Array는 본 메서드에서 직접 수정될 수 없습니다. 선언적 루프입니다.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="array"></param>
+        /// <param name="action"></param>
+        public static void ArrayForeach<T>(T[] array, System.Action<T> action)
+        {
+            if (array.Length <= 0 || action is null)
+                return;
+
+            for (int i = 0; i < array.Length; i++)
+            {
+                action(array[i]);
+            }
+        }
+
+        /// <summary>
+        /// 배열을 직접 조건에 따라 수정하여 반환합니다.
+        /// 요소제거는 RemoveAll, RemoveAt을 사용합시다.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="array"></param>
+        /// <param name="action"></param>
+        /// <returns></returns>
+        //public static T[] ReturnArrayForeach<T>(T[] array, System.Action<T> action)
+        //{
+        //    if (array is null || action is null) return array;
+        //
+        //    List<T> tempList = new List<T>(array);
+        //    //tempList.ForEach((x) => action(x));
+        //
+        //    for (int i = 0; i < tempList.Count; i++)
+        //    {
+        //        action(tempList[i]);
+        //    }
+        //
+        //    return tempList.ToArray();
+        //} // -> 이 방법도 안댐 ㅎ
+
+        /// <summary>
+        /// Swap Value
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="lhs"></param>
+        /// <param name="rhs"></param>
+        public static void Swap<T>(ref T lhs, ref T rhs)
+        {
+            T temp;
+            temp = lhs;
+            lhs  = rhs;
+            rhs  = temp;
+        }
+
+        static void TEST()
+        {
+            List<string> intList = new List<string>();
+            intList.RemoveAll((x) => x == "string" || x == "int");
         }
     }
 

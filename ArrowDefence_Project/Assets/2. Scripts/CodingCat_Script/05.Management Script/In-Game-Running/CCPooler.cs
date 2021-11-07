@@ -283,6 +283,12 @@
             CCPooler._inst = null;
         }
 
+        /// <summary>
+        /// Pool Object Prefab을 등록하고 Pool 관리대상 Pool Dictionary에 추가합니다.
+        /// </summary>
+        /// <param name="tag"></param>
+        /// <param name="size"></param>
+        /// <param name="prefab"></param>
         public static void AddPoolList(string tag, int size, GameObject prefab)
         {
             Pool pool = new Pool() { tag = tag, size = size, prefab = prefab };
@@ -312,5 +318,54 @@
             if (tr) return tr;
             else    return null;
         }
+
+        #region FIND_POOL_OBJECT
+
+        /// <summary>
+        /// Pool Tag로 Pool 관리 대상 Object를 반환합니다
+        /// </summary>
+        public static GameObject[] FindPoolObjectsWithTag(string pooltag)
+        {
+            if (_inst.poolDictionary.ContainsKey(pooltag) == false)
+                throw new Exception($"Pool With Tag {pooltag} doesn't Exist");
+        
+            Stack<GameObject> poolStack = _inst.poolDictionary[pooltag];
+            return poolStack.ToArray();
+        }
+
+        public static int GetPoolStackSize(string tag)
+        {
+            if (_inst.poolDictionary.ContainsKey(tag) == false)
+                throw new Exception($"Pool With Tag {tag} doesn't Exist");
+
+            Stack<GameObject> poolStack = _inst.poolDictionary[tag];
+            return poolStack.Count;
+        }
+
+        // -> 활성화 해서 사용하려는 Object는 Pool Stack에서 Pop되어 사용하기 때문에
+        //    현재로써는 활성화된 Object만 따로 잡아낼 수 없다. 결과는 항상 Length가 0인 배열을 반환.
+        /// <summary>
+        /// Pool Tag로 Pool관리 대상 [활성화된] Object를 반환합니다. 
+        /// </summary>
+        /// <param name="pooltag"></param>
+        /// <returns></returns>
+        //public static GameObject[] FindAlivePoolObjectsWidthTag(string pooltag)
+        //{
+        //    if(_inst.poolDictionary.ContainsKey(pooltag) == false)
+        //        throw new Exception($"Pool With Tag {pooltag} doesn't Exist");
+        //
+        //    List<GameObject> poolList = _inst.poolDictionary[pooltag].ToList();
+        //    for (int i = poolList.Count - 1; i >= 0; i--)
+        //    {
+        //        if (poolList[i].activeSelf == false)
+        //            poolList.Remove(poolList[i]);
+        //    }
+        //
+        //    return poolList.ToArray();
+        //}
+        //
+
+        #endregion
+
     }
 }

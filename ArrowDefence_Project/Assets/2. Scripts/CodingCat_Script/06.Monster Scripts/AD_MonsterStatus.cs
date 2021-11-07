@@ -55,6 +55,9 @@
 
         public void OnHitObject(float damage)
         {
+            //Active Monster Hit Event
+            GameManager.Instance.MonsterHitEvent();
+
             //Decrease Monster's Health Point
             currentHealthPoint -= damage;
 
@@ -70,12 +73,12 @@
 
         private void OnTriggerEnter2D(Collider2D coll)
         {
-            if(coll.gameObject.layer == LayerMask.NameToLayer(AD_Data.LAYER_ARROW_LESS))
-            {
-                GameManager.Instance.MonsterLessHitEvent();
-                float damageCount = Random.Range(10f, 30f);
-                OnHitObject(damageCount);
-            }
+            //if(coll.gameObject.layer == LayerMask.NameToLayer(AD_Data.LAYER_ARROW_LESS))
+            //{
+            //    GameManager.Instance.MonsterLessHitEvent();
+            //    float damageCount = Random.Range(10f, 30f);
+            //    OnHitObject(damageCount);
+            //}
 
             if (coll.gameObject.layer == LayerMask.NameToLayer(AD_Data.LAYER_DISABLELINE))
             {
@@ -87,18 +90,17 @@
         private void OnCollisionEnter2D(Collision2D coll)
         {
             if (coll.gameObject.layer == LayerMask.NameToLayer(AD_Data.LAYER_ARROW))
-            {
-                GameManager.Instance.MonsterHitEvent();
+            {   
                 float damageCount = Random.Range(30f, 80f);
                 OnHitObject(damageCount);
             }
 
-            if(coll.gameObject.layer == LayerMask.NameToLayer(AD_Data.LAYER_ARROW_LESS))
-            {
-                GameManager.Instance.MonsterLessHitEvent();
-                float damageCount = Random.Range(10f, 30f);
-                OnHitObject(damageCount);
-            }
+            //if(coll.gameObject.layer == LayerMask.NameToLayer(AD_Data.LAYER_ARROW_LESS))
+            //{
+            //    GameManager.Instance.MonsterLessHitEvent();
+            //    float damageCount = Random.Range(10f, 30f);
+            //    OnHitObject(damageCount);
+            //}
         }
 
         private void OnEnable()

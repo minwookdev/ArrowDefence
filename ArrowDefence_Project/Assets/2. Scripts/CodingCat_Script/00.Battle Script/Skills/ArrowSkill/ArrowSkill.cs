@@ -31,6 +31,7 @@
         }
 
         //void -> bool형태로 바꿔서 TriggerEnter2D에서 반환받을 때, Disable할지 유지할지 결정내리면 되겠다.
+        //shooter도 저장해서 Collider2D만 매개변수로 받아도 괜찮을것같다
         public override bool OnHit(Collider2D target, IArrowObject shooter)
         {
 
@@ -50,6 +51,8 @@
                 //연쇄횟수 체크
                 if(currentChainCount >= maxChainCount)
                 {
+                    //Monster Hit 처리
+                    target.SendMessage("OnHitObject", Random.Range(10f, 30f), SendMessageOptions.DontRequireReceiver);
                     Clear(); return true;
                     //arrow.DisableObject_Req(arrowTr.gameObject); return true;
                 }
@@ -57,6 +60,9 @@
                 //현재 연쇄횟수 중첩 및 마지막 적 저장
                 currentChainCount++;
                 lastHitTarget = target.gameObject;
+
+                //Monster hit 처리
+                target.SendMessage("OnHitObject", Random.Range(10f, 30f), SendMessageOptions.DontRequireReceiver);
             }
 
             //if (currentChainCount >= maxChainCount) //return
@@ -77,14 +83,16 @@
             //arrow.DisableObject_Req(arrowTr.gameObject);
             //이거 최적화 안하면 진짜 엄청 무겁겠다..한두번 발동도 아니고 이건 뭐,
 
-            //■■■■■■■■■■■■■ Arrow Skill Active 절차 개시
+            //■■■■■■■■■■■■■ Rebound Arrow Skill : Active 절차 개시 ■■■■■■■■■■■■■
             Collider2D[] hitColliders = Physics2D.OverlapCircleAll(arrowTr.position, 5f);
             if (hitColliders.Length == 0) //return
             {
+                //주변에 Rebound할 대상 객체가 없는 경우 제거처리
                 Clear(); return true;
+
                 //arrow.DisableObject_Req(arrowTr.gameObject);
                 //return true;
-            }
+            } //->
             else
             {
                 //방금 hit한 대상의 Collider가 있는지 검사 순회, target collider list에서 제거.
@@ -114,10 +122,22 @@
 
             if (monsterColliders.Count <= 0)
             {
-                Clear();
-                return true;
+                Clear(); return true;
                 //arrow.DisableObject_Req(arrow.gameObject); return true;
             }
+
+            //■■■■■■■■■■■■■■■ Target Init(new) ■■■■■■■■■■■■■■■
+            //List<Collider2D> collList = new List<Collider2D>(hitColliders);
+            //for (int i = collList.Count - 1; i >= 0; i--) //Reverse Loop [Remove Array Element]
+            //{
+            //    //중복 발동 대상과 Monster가 아닌 Collider는 예외처리.
+            //    if (collList[i] == target || collList[i].CompareTag(AD_Data.OBJECT_TAG_MONSTER) == false)
+            //        collList.Remove(collList[i]);
+            //}
+            //if(collList.Count <= 0) //예외처리후 타겟이 없으면 비활성화 처리.
+            //{
+            //    Clear(); return true;
+            //}
 
             //몬스터 대상이 아닌 객체를 필터링하는 절차와 중복 몬스터 제거순회 과정을 한번에 진행해버리면 되겠다
             //필터링 과정 하나로 통합.

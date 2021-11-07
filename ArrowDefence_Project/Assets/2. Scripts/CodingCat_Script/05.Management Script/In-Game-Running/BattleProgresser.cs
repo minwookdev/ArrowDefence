@@ -156,11 +156,12 @@
 
             if(Input.GetKeyDown(KeyCode.I))
             {
-                GameManager.Instance.TimeScaleSet(0.5f);
+
             }
             if(Input.GetKeyDown(KeyCode.O))
             {
-                GameManager.Instance.TimeDefault();
+                string monsterPoolStackCount = CCPooler.GetPoolStackSize(AD_Data.POOLTAG_MONSTER_NORMAL).ToString();
+                CatLog.Log($"Mosnter Dictionary Pool Stack Count : {monsterPoolStackCount}");
             }
         }
 

@@ -19,6 +19,239 @@
         public abstract void Clear();
     }
 
+    public abstract class AttackActiveTypeAS : ArrowSkill
+    {
+        
+    }
+
+    public abstract class AirActiveTypeAS : ArrowSkill
+    {
+
+    }
+
+    public abstract class AdditionalProjectilesAS : ArrowSkill
+    {
+    
+    }
+
+    public class ArrowSkillSets
+    {
+        ARROWSKILL_ACTIVETYPE activeType;
+        AttackActiveTypeAS attackActiveSkill;
+        AirActiveTypeAS airActiveSkill;
+        AdditionalProjectilesAS additionalProjectilesSkill;
+
+        public ArrowSkillSets(ArrowSkill[] arrowskills)
+        {
+            if(arrowskills.Length > 3)
+            {
+                CatLog.WLog("Arrow Skills parameter Size Over 3");
+                return;
+            }
+
+            for (int i = 0; i < arrowskills.Length; i++)
+            {
+                switch (arrowskills[i])
+                {
+                    case AttackActiveTypeAS attackType:
+                        break;
+                    case AirActiveTypeAS airType: 
+                        break;
+                    case AdditionalProjectilesAS addProjectilesType: 
+                        break;
+                    default: 
+                        break;
+                }
+            }
+
+            GameGlobal.ArrayForeach<ArrowSkill>(arrowskills, (data) =>
+            {
+                switch (data)
+                {
+                    case AttackActiveTypeAS attackType:       InitAttackTypeSkill(attackType);             break;
+                    case AirActiveTypeAS airType:             InitAirTypeSkill(airType);                   break;
+                    case AdditionalProjectilesAS addProjType: InitAdditionalProjectilesSkill(addProjType); break;
+                    default: break;
+                }
+            });
+
+            
+        }
+
+        void InitAttackTypeSkill(AttackActiveTypeAS skillData)
+        {
+            if (attackActiveSkill == null)
+                attackActiveSkill = skillData;
+            else
+                CatLog.WLog($"중복 Arrow SkillData {skillData}가 Init되었습니다.");
+
+            //여기서부터 만들어주면 어떨까..? 차례대로 조립해나가는거지 !
+            //Attack Type이 없으면 -> TYPE_EMPTY -> Air 타입있으면 -> TYPE_AIR -> Add Proj타입 있으면 ->TYPE_AIR_PROJ
+            //시도해보자
+        }
+
+        void InitAirTypeSkill(AirActiveTypeAS skillData)
+        {
+            if (airActiveSkill == null)
+                airActiveSkill = skillData;
+            else
+                CatLog.WLog($"중복 Arrow SkillData {skillData}가 Init되었습니다.");
+        }
+
+        void InitAdditionalProjectilesSkill(AdditionalProjectilesAS skillData)
+        {
+            if (additionalProjectilesSkill == null)
+                additionalProjectilesSkill = skillData;
+            else
+                CatLog.WLog($"중복 Arrow SkillData {skillData}가 Init되었습니다.");
+        }
+
+        void InitActiveType()
+        {
+            //이딴식으로 하면 안된다 테스트니깐 일단 이렇게 진행하고, 로직개선 하자
+            if (attackActiveSkill == null && airActiveSkill == null && additionalProjectilesSkill == null)
+            {
+
+            }
+            else if(attackActiveSkill != null && airActiveSkill == null && additionalProjectilesSkill == null)
+            {
+
+            }
+            else if (attackActiveSkill != null && airActiveSkill != null && additionalProjectilesSkill == null)
+            {
+
+            }
+            else //모든 Type의 Skill이 Init된 경우
+            {
+
+            }
+        }
+    }
+
+    /// <summary>
+    /// 보류.
+    /// </summary>
+    public class ArrowSkillSetGenenerater
+    {
+        ARROWSKILL_ACTIVETYPE activeType;
+        AttackActiveTypeAS attackTypeSkillFst;
+        AttackActiveTypeAS attackTypeSkillSec;
+        AirActiveTypeAS airTypeSkill;
+
+        /// <summary>
+        /// Generate Attack Type Skill Sets
+        /// </summary>
+        /// <param name="atkType"></param>
+        public ArrowSkillSetGenenerater(AttackActiveTypeAS atkType)
+        {
+            attackTypeSkillFst = atkType;
+            attackTypeSkillSec = null;
+            airTypeSkill       = null;
+
+            //activeType = ARROWSKILL_ACTIVETYPE.ACTIVETYPE_ATTACK;
+        }
+
+        /// <summary>
+        /// Generate Air Type Skill Sets
+        /// </summary>
+        /// <param name="airType"></param>
+        public ArrowSkillSetGenenerater(AirActiveTypeAS airType)
+        {
+            attackTypeSkillFst = null;
+            attackTypeSkillSec = null;
+            airTypeSkill = airType;
+
+            //activeType = ARROWSKILL_ACTIVETYPE.ACTIVETYPE_AIR;
+        }
+
+        /// <summary>
+        /// Generate Attack 2 Attack Type Skill Sets
+        /// </summary>
+        /// <param name="atkTypeFst"></param>
+        /// <param name="atkTypeSec"></param>
+        public ArrowSkillSetGenenerater(AttackActiveTypeAS atkTypeFst, AttackActiveTypeAS atkTypeSec)
+        {
+            attackTypeSkillFst = atkTypeFst;
+            attackTypeSkillSec = atkTypeSec;
+            airTypeSkill       = null;
+
+            //activeType = ARROWSKILL_ACTIVETYPE.ACTIVETYPE_ATTACKnATTACK;
+        }
+
+        /// <summary>
+        /// Generate 1 Attack, 1 Air Skill Sets
+        /// </summary>
+        /// <param name="atkTypeFst"></param>
+        /// <param name="atkTypeSec"></param>
+        /// <param name="airType"></param>
+        public ArrowSkillSetGenenerater(AttackActiveTypeAS atkTypeFst, AirActiveTypeAS airType)
+        {
+            attackTypeSkillFst = atkTypeFst;
+            attackTypeSkillSec = null;
+            airTypeSkill       = airType;
+
+            //activeType = ARROWSKILL_ACTIVETYPE.ACTIVETYPE_ATTACKnAIR;
+        }
+
+        /// <summary>
+        /// Copy Class Arrow Skill Generater
+        /// </summary>
+        /// <param name="skillgenerater"></param>
+        public ArrowSkillSetGenenerater(ArrowSkillSetGenenerater skillgenerater)
+        {
+            attackTypeSkillFst = skillgenerater.attackTypeSkillFst;
+            attackTypeSkillSec = skillgenerater.attackTypeSkillSec;
+            airTypeSkill       = skillgenerater.airTypeSkill;
+            activeType         = skillgenerater.activeType;
+        }
+
+        //■■■■■■■■■■■■■ TYPE III.ATTACK & ATTACK
+        //■■■■■■■■■■■■■ TYPE IV.ATTACK & AIR
+
+        //public bool OnHit()
+        //{
+        //    switch (activeType)
+        //    {
+        //        case ARROWSKILL_ACTIVETYPE.ACTIVETYPE_EMPTY:         break;
+        //        case ARROWSKILL_ACTIVETYPE.ACTIVETYPE_ATTACK:        break;
+        //        case ARROWSKILL_ACTIVETYPE.ACTIVETYPE_AIR:           break;
+        //        case ARROWSKILL_ACTIVETYPE.ACTIVETYPE_ATTACKnATTACK: break;
+        //        case ARROWSKILL_ACTIVETYPE.ACTIVETYPE_ATTACKnAIR:    break;
+        //        default:                                             break;
+        //    }
+        //}
+        //
+        //public void OnAir()
+        //{
+        //    switch (activeType)
+        //    {
+        //        case ARROWSKILL_ACTIVETYPE.ACTIVETYPE_EMPTY:         break;
+        //        case ARROWSKILL_ACTIVETYPE.ACTIVETYPE_ATTACK:        break;
+        //        case ARROWSKILL_ACTIVETYPE.ACTIVETYPE_AIR:           break;
+        //        case ARROWSKILL_ACTIVETYPE.ACTIVETYPE_ATTACKnATTACK: break;
+        //        case ARROWSKILL_ACTIVETYPE.ACTIVETYPE_ATTACKnAIR:    break;
+        //        default:                                             break;
+        //    }
+        //}
+        //
+        ////■■■■■■■■■■■■■ TYPE I.ATTACK
+        //void SkillActiveTypeAttack(Collider2D coll, IArrowObject arrow)
+        //{
+        //    attackTypeSkillFst.OnHit(coll, arrow);
+        //}
+        //
+        ////■■■■■■■■■■■■■ TYPE II.AIR
+        //void SkillActiveTypeAir()
+        //{
+        //
+        //}
+        //
+        //bool SkillActiveTypeAttacknAttack(Collider2D coll, IArrowObject arrow)
+        //{
+        //    attackTypeSkillFst.OnHit(coll, arrow); attackTypeSkillSec.OnHit(coll, arrow);
+        //}
+    }
+
     public class ReboundArrow : ArrowSkill
     {
         GameObject lastHitTarget;
@@ -34,12 +267,12 @@
         //shooter도 저장해서 Collider2D만 매개변수로 받아도 괜찮을것같다
         public override bool OnHit(Collider2D target, IArrowObject shooter)
         {
-
             //if(ReferenceEquals(alreadyHitTarget, target) == false)
             //{
             //
             //}
 
+            //■■■■■■■■■■■■■ I Availablity Arrow Skill : 중복 다겟 및 연쇄 횟수 체크 ■■■■■■■■■■■■■
             //최근에 Hit처리한 객체와 동일한 객체와 다시 충돌될 경우, return 처리
             //해당 Monster Object를 무시함 [같은 객체에게 스킬 효과를 터트릴 수 없음]
             if (lastHitTarget == target.gameObject)
@@ -83,7 +316,7 @@
             //arrow.DisableObject_Req(arrowTr.gameObject);
             //이거 최적화 안하면 진짜 엄청 무겁겠다..한두번 발동도 아니고 이건 뭐,
 
-            //■■■■■■■■■■■■■ Rebound Arrow Skill : Active 절차 개시 ■■■■■■■■■■■■■
+            //■■■■■■■■■■■■■ II Rebound Arrow Skill : Active 절차 개시 ■■■■■■■■■■■■■
             Collider2D[] hitColliders = Physics2D.OverlapCircleAll(arrowTr.position, 5f);
             if (hitColliders.Length == 0) //return
             {
@@ -126,7 +359,7 @@
                 //arrow.DisableObject_Req(arrow.gameObject); return true;
             }
 
-            //■■■■■■■■■■■■■■■ Target Init(new) ■■■■■■■■■■■■■■■
+            //■■■■■■■■■■■■■■■ II Target Init[New Type] [절차 최적화] ■■■■■■■■■■■■■■■
             //List<Collider2D> collList = new List<Collider2D>(hitColliders);
             //for (int i = collList.Count - 1; i >= 0; i--) //Reverse Loop [Remove Array Element]
             //{

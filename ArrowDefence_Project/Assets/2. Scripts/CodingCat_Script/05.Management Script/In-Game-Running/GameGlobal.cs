@@ -248,6 +248,17 @@
         KILLCOUNT_ACTIVE,
         HITSCOUNT_ACTIVE
     }
+    /// <summary>
+    /// 정의. ARROW SKILL 발동 타입
+    /// </summary>
+    public enum ARROWSKILL_ACTIVETYPE
+    {
+        EMPTY,
+        ATTACK,
+        ATTACK_AIR,
+        ATTACK_ADDPROJ,
+        FULL,
+    }
     #endregion
 
     #region ENUMS_ITEM

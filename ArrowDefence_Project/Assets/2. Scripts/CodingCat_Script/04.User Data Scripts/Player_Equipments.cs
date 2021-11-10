@@ -189,6 +189,15 @@
             return boolArray;
         }
 
+        #region INIT_EQUIPMENTS_IN_BATTLE
+
+        /// <summary>
+        /// Battle Scene에서 Init처리되야할 요소들 처리
+        /// </summary>
+        /// <param name="bowObjectInitPos"></param>
+        /// <param name="bowObjectParentTr"></param>
+        /// <param name="mainArrowPoolQuantity"></param>
+        /// <param name="subArrowPoolQuantity"></param>
         public void InitEquipments(Transform bowObjectInitPos, Transform bowObjectParentTr, int mainArrowPoolQuantity, int subArrowPoolQuantity)
         {
             //Bow Object needs to reload Arrow from Start Method, Arrow Object must first Init.
@@ -201,6 +210,17 @@
                 if (accessory != null) accessory.Init();
             }
         }
+
+        /// <summary>
+        /// Battle Scene에서 Release처리 되어야할 요소들 처리
+        /// </summary>
+        public void ReleaseEquipments()
+        {
+            if (IsEquippedArrowMain()) EquippedArrow_f.Release();
+            if (IsEquippedArrowSub())  EquippedArrow_s.Release();
+        }
+
+        #endregion
 
         /// <summary>
         /// Clear Equipped Item Class

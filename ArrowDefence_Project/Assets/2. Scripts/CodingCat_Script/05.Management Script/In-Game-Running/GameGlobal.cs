@@ -253,12 +253,23 @@
     /// </summary>
     public enum ARROWSKILL_ACTIVETYPE
     {
-        EMPTY,
-        ATTACK,
+        FULL,
         ATTACK_AIR,
         ATTACK_ADDPROJ,
-        FULL,
+        ATTACK,
+        AIR_ADDPROJ,
+        AIR,
+        ADDPROJ,
+        EMPTY,
     }
+    ///[7] TTT : FULL SKILL
+    ///[8] TTF : ATK, AIR
+    ///[9] TFT : ATK, ADD PROJ
+    ///[10] TFF : ATK
+    ///[11] FTT : AIR, ADD PROJ
+    ///[12] FTF : AIR
+    ///[13] FFT : ADD PROJ
+    ///[14] FFF : EMPTY
     #endregion
 
     #region ENUMS_ITEM

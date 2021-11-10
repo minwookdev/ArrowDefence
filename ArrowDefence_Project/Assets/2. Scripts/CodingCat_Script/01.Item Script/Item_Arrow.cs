@@ -4,11 +4,25 @@
 
     public class Item_Arrow : Item_Equipment
     {
+        //Required Saving Variables
+        //Arrow Prefab
         private GameObject MainArrowObject;
         private GameObject LessArrowObject;
+        //Arrow Skill Class
+        private ArrowSkill arrowSkillFst;
+        private ArrowSkill arrowSkillSec;
 
-        //private Arrow_Skill arrowSkill;
-        //화살 전용 특수효과를 어떻게 담을지
+        //↘Not Save This Class, This is Temp Arrow SkillSets Class
+        ArrowSkillSet arrowSkillSets;
+        public ArrowSkillSet ArrowSkillSets { 
+            get 
+            {
+                if (arrowSkillSets != null)
+                    return arrowSkillSets;
+                else
+                    return null;
+            }
+        }
 
         public Item_Arrow (ItemData_Equip_Arrow item) : base()
         {
@@ -91,8 +105,30 @@
                 return;
             }
 
+            //TEMP : TEST
+            arrowSkillFst = new ReboundArrow();
+
+            //Create Arrow SkillSets Instances
+            if (arrowSkillFst == null && arrowSkillSec == null)
+                arrowSkillSets = null;
+            else
+            {
+                var arrowSkills = new ArrowSkill[2] { arrowSkillFst, arrowSkillSec };
+                arrowSkillSets = new ArrowSkillSet(arrowSkills);
+                CatLog.Log($"Arrow Item : {Item_Name} is Init Skills");
+            }
+
+            //Create Pools of Arrow Object
             CCPooler.AddPoolList(mainArrowObjTag, poolQuantity, MainArrowObject);
             CCPooler.AddPoolList(lessArrowObjTag, poolQuantity, LessArrowObject);
+        }
+
+        public void Release()
+        {
+            //Clear Arrow Skill Sets Class 
+            if (arrowSkillSets == null)
+                return;
+            arrowSkillSets = null;
         }
     }
 }

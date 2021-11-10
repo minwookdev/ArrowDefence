@@ -158,6 +158,7 @@
                                     ImgFade.gameObject.SetActive(true);
                                     ReleaseBattleScene();}) //OnComplete로 옮겨주기
                    .OnComplete(() => { GameManager.Instance.SetBowPullingStop(false);
+                                       GameManager.Instance.ReleaseEquipments();
                                        SceneLoader.Instance.LoadScene(AD_Data.SCENE_MAIN);
                    });
         }

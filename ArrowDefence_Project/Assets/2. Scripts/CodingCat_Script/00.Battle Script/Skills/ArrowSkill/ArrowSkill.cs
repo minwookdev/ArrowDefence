@@ -8,264 +8,49 @@
         protected Transform arrowTr;
         protected Rigidbody2D rBody;
 
+        //Arrow Skill 자체는 한번만 해놓으면 되지만, Init함수는 각 Arrow별로 한번씩은 잡아줘야한다.
+        //각각의 Arrow별로 Transform과 RigidBody를 사용하기 때문.
         public virtual void Init(Transform tr, Rigidbody2D rigid)
         {
             arrowTr = tr;
             rBody   = rigid;
         }
 
-        public abstract void OnAir();
-        public abstract bool OnHit(Collider2D target, IArrowObject shooter);
         public abstract void Clear();
     }
 
     public abstract class AttackActiveTypeAS : ArrowSkill
     {
-        
+        protected IArrowObject arrow;
+
+        public virtual void Init(Transform tr, Rigidbody2D rigidbody, IArrowObject arrow)
+        {
+            base.Init(tr, rigidbody);
+            this.arrow = arrow;
+        }
+
+        public abstract bool OnHit(Collider2D target);
     }
 
     public abstract class AirActiveTypeAS : ArrowSkill
     {
-
+        public abstract void OnAir();
     }
 
-    public abstract class AdditionalProjectilesAS : ArrowSkill
+    public abstract class AddProjTypeAS : ArrowSkill
     {
-    
+        public abstract void OnHit();
     }
 
-    public class ArrowSkillSets
-    {
-        ARROWSKILL_ACTIVETYPE activeType;
-        AttackActiveTypeAS attackActiveSkill;
-        AirActiveTypeAS airActiveSkill;
-        AdditionalProjectilesAS additionalProjectilesSkill;
-
-        public ArrowSkillSets(ArrowSkill[] arrowskills)
-        {
-            if(arrowskills.Length > 3)
-            {
-                CatLog.WLog("Arrow Skills parameter Size Over 3");
-                return;
-            }
-
-            for (int i = 0; i < arrowskills.Length; i++)
-            {
-                switch (arrowskills[i])
-                {
-                    case AttackActiveTypeAS attackType:
-                        break;
-                    case AirActiveTypeAS airType: 
-                        break;
-                    case AdditionalProjectilesAS addProjectilesType: 
-                        break;
-                    default: 
-                        break;
-                }
-            }
-
-            GameGlobal.ArrayForeach<ArrowSkill>(arrowskills, (data) =>
-            {
-                switch (data)
-                {
-                    case AttackActiveTypeAS attackType:       InitAttackTypeSkill(attackType);             break;
-                    case AirActiveTypeAS airType:             InitAirTypeSkill(airType);                   break;
-                    case AdditionalProjectilesAS addProjType: InitAdditionalProjectilesSkill(addProjType); break;
-                    default: break;
-                }
-            });
-
-            
-        }
-
-        void InitAttackTypeSkill(AttackActiveTypeAS skillData)
-        {
-            if (attackActiveSkill == null)
-                attackActiveSkill = skillData;
-            else
-                CatLog.WLog($"중복 Arrow SkillData {skillData}가 Init되었습니다.");
-
-            //여기서부터 만들어주면 어떨까..? 차례대로 조립해나가는거지 !
-            //Attack Type이 없으면 -> TYPE_EMPTY -> Air 타입있으면 -> TYPE_AIR -> Add Proj타입 있으면 ->TYPE_AIR_PROJ
-            //시도해보자
-        }
-
-        void InitAirTypeSkill(AirActiveTypeAS skillData)
-        {
-            if (airActiveSkill == null)
-                airActiveSkill = skillData;
-            else
-                CatLog.WLog($"중복 Arrow SkillData {skillData}가 Init되었습니다.");
-        }
-
-        void InitAdditionalProjectilesSkill(AdditionalProjectilesAS skillData)
-        {
-            if (additionalProjectilesSkill == null)
-                additionalProjectilesSkill = skillData;
-            else
-                CatLog.WLog($"중복 Arrow SkillData {skillData}가 Init되었습니다.");
-        }
-
-        void InitActiveType()
-        {
-            //이딴식으로 하면 안된다 테스트니깐 일단 이렇게 진행하고, 로직개선 하자
-            if (attackActiveSkill == null && airActiveSkill == null && additionalProjectilesSkill == null)
-            {
-
-            }
-            else if(attackActiveSkill != null && airActiveSkill == null && additionalProjectilesSkill == null)
-            {
-
-            }
-            else if (attackActiveSkill != null && airActiveSkill != null && additionalProjectilesSkill == null)
-            {
-
-            }
-            else //모든 Type의 Skill이 Init된 경우
-            {
-
-            }
-        }
-    }
-
-    /// <summary>
-    /// 보류.
-    /// </summary>
-    public class ArrowSkillSetGenenerater
-    {
-        ARROWSKILL_ACTIVETYPE activeType;
-        AttackActiveTypeAS attackTypeSkillFst;
-        AttackActiveTypeAS attackTypeSkillSec;
-        AirActiveTypeAS airTypeSkill;
-
-        /// <summary>
-        /// Generate Attack Type Skill Sets
-        /// </summary>
-        /// <param name="atkType"></param>
-        public ArrowSkillSetGenenerater(AttackActiveTypeAS atkType)
-        {
-            attackTypeSkillFst = atkType;
-            attackTypeSkillSec = null;
-            airTypeSkill       = null;
-
-            //activeType = ARROWSKILL_ACTIVETYPE.ACTIVETYPE_ATTACK;
-        }
-
-        /// <summary>
-        /// Generate Air Type Skill Sets
-        /// </summary>
-        /// <param name="airType"></param>
-        public ArrowSkillSetGenenerater(AirActiveTypeAS airType)
-        {
-            attackTypeSkillFst = null;
-            attackTypeSkillSec = null;
-            airTypeSkill = airType;
-
-            //activeType = ARROWSKILL_ACTIVETYPE.ACTIVETYPE_AIR;
-        }
-
-        /// <summary>
-        /// Generate Attack 2 Attack Type Skill Sets
-        /// </summary>
-        /// <param name="atkTypeFst"></param>
-        /// <param name="atkTypeSec"></param>
-        public ArrowSkillSetGenenerater(AttackActiveTypeAS atkTypeFst, AttackActiveTypeAS atkTypeSec)
-        {
-            attackTypeSkillFst = atkTypeFst;
-            attackTypeSkillSec = atkTypeSec;
-            airTypeSkill       = null;
-
-            //activeType = ARROWSKILL_ACTIVETYPE.ACTIVETYPE_ATTACKnATTACK;
-        }
-
-        /// <summary>
-        /// Generate 1 Attack, 1 Air Skill Sets
-        /// </summary>
-        /// <param name="atkTypeFst"></param>
-        /// <param name="atkTypeSec"></param>
-        /// <param name="airType"></param>
-        public ArrowSkillSetGenenerater(AttackActiveTypeAS atkTypeFst, AirActiveTypeAS airType)
-        {
-            attackTypeSkillFst = atkTypeFst;
-            attackTypeSkillSec = null;
-            airTypeSkill       = airType;
-
-            //activeType = ARROWSKILL_ACTIVETYPE.ACTIVETYPE_ATTACKnAIR;
-        }
-
-        /// <summary>
-        /// Copy Class Arrow Skill Generater
-        /// </summary>
-        /// <param name="skillgenerater"></param>
-        public ArrowSkillSetGenenerater(ArrowSkillSetGenenerater skillgenerater)
-        {
-            attackTypeSkillFst = skillgenerater.attackTypeSkillFst;
-            attackTypeSkillSec = skillgenerater.attackTypeSkillSec;
-            airTypeSkill       = skillgenerater.airTypeSkill;
-            activeType         = skillgenerater.activeType;
-        }
-
-        //■■■■■■■■■■■■■ TYPE III.ATTACK & ATTACK
-        //■■■■■■■■■■■■■ TYPE IV.ATTACK & AIR
-
-        //public bool OnHit()
-        //{
-        //    switch (activeType)
-        //    {
-        //        case ARROWSKILL_ACTIVETYPE.ACTIVETYPE_EMPTY:         break;
-        //        case ARROWSKILL_ACTIVETYPE.ACTIVETYPE_ATTACK:        break;
-        //        case ARROWSKILL_ACTIVETYPE.ACTIVETYPE_AIR:           break;
-        //        case ARROWSKILL_ACTIVETYPE.ACTIVETYPE_ATTACKnATTACK: break;
-        //        case ARROWSKILL_ACTIVETYPE.ACTIVETYPE_ATTACKnAIR:    break;
-        //        default:                                             break;
-        //    }
-        //}
-        //
-        //public void OnAir()
-        //{
-        //    switch (activeType)
-        //    {
-        //        case ARROWSKILL_ACTIVETYPE.ACTIVETYPE_EMPTY:         break;
-        //        case ARROWSKILL_ACTIVETYPE.ACTIVETYPE_ATTACK:        break;
-        //        case ARROWSKILL_ACTIVETYPE.ACTIVETYPE_AIR:           break;
-        //        case ARROWSKILL_ACTIVETYPE.ACTIVETYPE_ATTACKnATTACK: break;
-        //        case ARROWSKILL_ACTIVETYPE.ACTIVETYPE_ATTACKnAIR:    break;
-        //        default:                                             break;
-        //    }
-        //}
-        //
-        ////■■■■■■■■■■■■■ TYPE I.ATTACK
-        //void SkillActiveTypeAttack(Collider2D coll, IArrowObject arrow)
-        //{
-        //    attackTypeSkillFst.OnHit(coll, arrow);
-        //}
-        //
-        ////■■■■■■■■■■■■■ TYPE II.AIR
-        //void SkillActiveTypeAir()
-        //{
-        //
-        //}
-        //
-        //bool SkillActiveTypeAttacknAttack(Collider2D coll, IArrowObject arrow)
-        //{
-        //    attackTypeSkillFst.OnHit(coll, arrow); attackTypeSkillSec.OnHit(coll, arrow);
-        //}
-    }
-
-    public class ReboundArrow : ArrowSkill
+    public class ReboundArrow : AttackActiveTypeAS
     {
         GameObject lastHitTarget;
         int currentChainCount = 0;  //현재 연쇄횟수
         int maxChainCount     = 1;  //최대 연쇄횟수
 
-        public override void OnAir()
-        {
-            //CatLog.Log("");
-        }
-
         //void -> bool형태로 바꿔서 TriggerEnter2D에서 반환받을 때, Disable할지 유지할지 결정내리면 되겠다.
         //shooter도 저장해서 Collider2D만 매개변수로 받아도 괜찮을것같다
-        public override bool OnHit(Collider2D target, IArrowObject shooter)
+        public override bool OnHit(Collider2D target)
         {
             //if(ReferenceEquals(alreadyHitTarget, target) == false)
             //{
@@ -376,7 +161,7 @@
             //필터링 과정 하나로 통합.
 
             //Transform bestTargetTr = null; //-> Vector2 Type으로 변경 (참조값이라 중간에 추적중인 Monster Tr 사라지면 에러)
-            Vector3 monsterPos     = Vector3.zero; //Position 저장
+            Vector3 monsterPos     = Vector3.zero; //Transform이 아닌 Position 저장
             float closestDistSqr   = Mathf.Infinity;
             for (int i = 0; i < monsterColliders.Count; i++)
             {
@@ -391,7 +176,11 @@
 
             arrowTr.rotation = Quaternion.Euler(0f, 0f,
                                Quaternion.FromToRotation(Vector3.up, monsterPos - arrowTr.position).eulerAngles.z);
-            shooter.ShotArrow(arrowTr.up * 18f);
+            arrow.ShotArrow(arrowTr.up * 18f);
+
+            //var rot = Quaternion.Euler(0f, 0f,
+            //          Quaternion.FromToRotation(Vector3.up, monsterPos - arrowTr.position).eulerAngles.z);
+            //arrow.ShotArrow(rot, arrowTr.up * 18f); 
             return false;
         }
 
@@ -402,17 +191,17 @@
         }
     }
 
-    public class GuidanceArrow : ArrowSkill
+    public class GuidanceArrow : AirActiveTypeAS
     {
         public override void OnAir()
         {
             throw new System.NotImplementedException();
         }
 
-        public override bool OnHit(Collider2D target, IArrowObject shooter)
-        {
-            throw new System.NotImplementedException();
-        }
+        //public override bool OnHit(Collider2D target, IArrowObject shooter)
+        //{
+        //    throw new System.NotImplementedException();
+        //}
 
         public override void Clear()
         {
@@ -420,14 +209,9 @@
         }
     }
 
-    public class SplitArrow : ArrowSkill
+    public class SplitArrow : AttackActiveTypeAS
     {
-        public override void OnAir()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public override bool OnHit(Collider2D target, IArrowObject shooter)
+        public override bool OnHit(Collider2D target)
         {
             throw new System.NotImplementedException();
         }

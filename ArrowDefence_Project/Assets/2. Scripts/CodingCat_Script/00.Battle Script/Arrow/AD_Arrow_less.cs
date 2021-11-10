@@ -25,8 +25,9 @@
         private Rigidbody2D rBody;
 
         //Arrow Skill Data
-        ArrowSkill arrowSkill = null;
-        bool isInitSkill      = false;
+        ArrowSkillSet arrowSkillSets  = null;
+        bool isInitSkill              = false;
+
 
         private void Awake()
         {
@@ -34,11 +35,6 @@
             rBody       = gameObject.GetComponent<Rigidbody2D>();
             tr          = gameObject.GetComponent<Transform>();
             trailObject = transform.GetChild(2).GetChild(0).gameObject;
-
-            //Init-Arrow Skill
-            arrowSkill = GameManager.Instance.InitArrowSkill(tr, rBody);
-            if (arrowSkill != null)
-                isInitSkill = true;
         }
 
         private void Start()
@@ -46,6 +42,14 @@
             //Init Screen top-left, bottom-right
             topLeftScreenPoint     = Camera.main.ScreenToWorldPoint(new Vector2(0, Screen.height));
             bottomRightScreenPoint = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, 0));
+
+            //Init-Arrow Skill
+            arrowSkillSets = GameManager.Instance.GetArrowSkillSets(gameObject.name);
+            if (arrowSkillSets != null)
+            {
+                isInitSkill = true;
+                arrowSkillSets.Init(tr, rBody, this);
+            }
         }
 
         private void Update()
@@ -77,18 +81,7 @@
 
         private void OnDestroy()
         {
-            arrowSkill = null;
-        }
-
-        /// <summary>
-        /// Executed after being inited in the object pool.
-        /// </summary>
-        /// <param name="skill"></param>
-        public void InitSkill(ArrowSkill skill)
-        {
-            arrowSkill  = skill;
-            isInitSkill = true;
-            CatLog.Log("is Arrow Skill Init !");
+            arrowSkillSets = null;
         }
 
         private void CheckArrowBounds()
@@ -106,7 +99,11 @@
             }
         }
 
-        void OnHit() => DisableObject_Req(this.gameObject);
+        void OnHit(GameObject target)
+        {
+            target.SendMessage("OnHitObject", Random.Range(10f, 30f), SendMessageOptions.DontRequireReceiver);
+            DisableObject_Req(gameObject);
+        }
 
         void OnAir()
         {
@@ -117,6 +114,10 @@
 
         public void DisableObject_Req(GameObject target) => CCPooler.ReturnToPool(target, 0);
 
+        /// <summary>
+        /// Arrow Shot Method [No Rotation]
+        /// </summary>
+        /// <param name="force"></param>
         public void ShotArrow(Vector2 force)
         {
             isLaunched = true;
@@ -130,6 +131,23 @@
             trailObject.GetComponent<TrailRenderer>().Clear();
         }
 
+        /// <summary>
+        /// Arrow Shot Method
+        /// </summary>
+        /// <param name="rotation"></param>
+        /// <param name="force"></param>
+        public void ShotArrow(Quaternion rotation, Vector2 force)
+        {
+            tr.rotation = rotation;
+
+            isLaunched = true;
+            rBody.velocity = force;
+
+            trailObject.SetActive(true);
+            trailObject.GetComponent<TrailRenderer>().Clear();
+            //Trail 미리 캐싱해놓기 -> trailObject를 TrailRenderer 컴포넌트로 가지고 있음 안되나?
+        }
+
         private void OnCollisionEnter2D(Collision2D coll)
         {
             if(coll.gameObject.layer == LayerMask.NameToLayer(AD_Data.LAYER_MONSTER))
@@ -138,7 +156,7 @@
                 //    arrowSkill.OnHit();
                 //else
                 //    CatLog.Log("Arrow Skill is NULL !");
-                OnHit();
+                OnHit(coll.gameObject);
             }
         }
 
@@ -148,12 +166,12 @@
             {
                 if (isInitSkill)
                 {
-                    bool isDisableArrow = arrowSkill.OnHit(coll, this);
+                    bool isDisableArrow = arrowSkillSets.OnHit(coll, this);
                     if (isDisableArrow)
                         DisableObject_Req(gameObject);
                 }
                 else
-                    OnHit();
+                    OnHit(coll.gameObject);
             }
         }
     }

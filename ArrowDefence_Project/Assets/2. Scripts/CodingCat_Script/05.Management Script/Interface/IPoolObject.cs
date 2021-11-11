@@ -7,5 +7,5 @@ public interface IArrowObject
 {
     void ShotArrow(UnityEngine.Vector2 force);
 
-    void ShotArrow(UnityEngine.Quaternion rotation, UnityEngine.Vector2 force);
+    void ShotArrow(UnityEngine.Vector3 target, UnityEngine.Vector2 force);
 }

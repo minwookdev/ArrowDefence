@@ -1,5 +1,6 @@
 ﻿namespace ActionCat
 {
+    using System.Collections;
     using UnityEngine;
 
     public class AD_Arrow_less : MonoBehaviour, IPoolObject, IArrowObject
@@ -67,6 +68,7 @@
                 //    arrowSkill.OnAir();
                 //else
                 //    OnAir();
+
                 OnAir();
                 CheckArrowBounds();
             }
@@ -115,7 +117,7 @@
         public void DisableObject_Req(GameObject target) => CCPooler.ReturnToPool(target, 0);
 
         /// <summary>
-        /// Arrow Shot Method [No Rotation]
+        /// Shot Arrow
         /// </summary>
         /// <param name="force"></param>
         public void ShotArrow(Vector2 force)
@@ -132,32 +134,58 @@
         }
 
         /// <summary>
-        /// Arrow Shot Method
+        /// Shot Arrow With Rotate
         /// </summary>
         /// <param name="rotation"></param>
         /// <param name="force"></param>
-        public void ShotArrow(Quaternion rotation, Vector2 force)
+        public void ShotArrow(Vector3 targetPos, Vector2 force)
         {
-            tr.rotation = rotation;
+            //isLaunched  = false;
+            //tr.rotation = rotation;
+            //transform.rotation = rotation;
+
+            tr.rotation = Quaternion.Euler(0f, 0f, Quaternion.FromToRotation(Vector3.up, targetPos - tr.position).eulerAngles.z);
+            
+            isLaunched     = true;
+            //rBody.velocity = force;
+            rBody.velocity = tr.up * 18f;
+
+            //force 받고있던게 문제네..입력 받을당시의 force는 Vector2인 Struct이고 값 복사 일어나니까 무조건 정면이라는걸 생각못했다
+            
+            trailObject.SetActive(true);
+            trailObject.GetComponent<TrailRenderer>().Clear();
+            //Trail 미리 캐싱해놓기 -> trailObject를 TrailRenderer 컴포넌트로 가지고 있음 안되나?
+
+            //Start Coroutine
+            //StartCoroutine(ShotArrowWithTarget(targetPos, force));
+        }
+
+        IEnumerator ShotArrowWithTarget(Vector3 target, Vector2 force)
+        {
+            //방향을 잡아줘버리기도 전에 들어가버려서 그렇다
+            tr.rotation = Quaternion.Euler(0f, 0f, Quaternion.FromToRotation(Vector3.up, target - tr.position).eulerAngles.z);
+
+            //1 Frame Wait
+            yield return null;
 
             isLaunched = true;
             rBody.velocity = force;
 
             trailObject.SetActive(true);
             trailObject.GetComponent<TrailRenderer>().Clear();
-            //Trail 미리 캐싱해놓기 -> trailObject를 TrailRenderer 컴포넌트로 가지고 있음 안되나?
         }
 
         private void OnCollisionEnter2D(Collision2D coll)
         {
-            if(coll.gameObject.layer == LayerMask.NameToLayer(AD_Data.LAYER_MONSTER))
-            {
-                //if (isInitSkill)
-                //    arrowSkill.OnHit();
-                //else
-                //    CatLog.Log("Arrow Skill is NULL !");
-                OnHit(coll.gameObject);
-            }
+            //Change Logic -> Trigger Check
+            //if(coll.gameObject.layer == LayerMask.NameToLayer(AD_Data.LAYER_MONSTER))
+            //{
+            //    //if (isInitSkill)
+            //    //    arrowSkill.OnHit();
+            //    //else
+            //    //    CatLog.Log("Arrow Skill is NULL !");
+            //    OnHit(coll.gameObject);
+            //}
         }
 
         private void OnTriggerEnter2D(Collider2D coll)
@@ -166,6 +194,7 @@
             {
                 if (isInitSkill)
                 {
+                    //isLaunched = false; //Handling islaunched False for Arrow object Rotate.
                     bool isDisableArrow = arrowSkillSets.OnHit(coll, this);
                     if (isDisableArrow)
                         DisableObject_Req(gameObject);

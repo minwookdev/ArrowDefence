@@ -113,8 +113,7 @@
                 arrowSkillSets = null;
             else
             {
-                var arrowSkills = new ArrowSkill[2] { arrowSkillFst, arrowSkillSec };
-                arrowSkillSets = new ArrowSkillSet(arrowSkills);
+                arrowSkillSets = new ArrowSkillSet(arrowSkillFst, arrowSkillSec);
                 CatLog.Log($"Arrow Item : {Item_Name} is Init Skills");
             }
 

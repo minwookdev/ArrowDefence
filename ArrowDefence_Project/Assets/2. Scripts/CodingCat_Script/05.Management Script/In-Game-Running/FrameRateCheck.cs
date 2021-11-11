@@ -72,7 +72,7 @@
             while (true)
             {
                 yield return new WaitForSeconds(15f);
-                worstFps = 100f;
+                worstFps = 100f;    //100fps 보다 낮으면 표시됨 (100프레임 넘어가는 환경에서는 무의미)
             }
         }
 

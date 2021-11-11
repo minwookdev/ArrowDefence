@@ -5,35 +5,37 @@
     public class ArrowSkillSet
     {
         ARROWSKILL_ACTIVETYPE activeType;
-        AttackActiveTypeAS attackActiveSkill;
-        AirActiveTypeAS airActiveSkill;
-        AddProjTypeAS additionalProjectilesSkill;
+        AttackActiveTypeAS attackActiveSkill     = null;
+        AirActiveTypeAS airActiveSkill           = null;
+        AddProjTypeAS additionalProjectilesSkill = null;
 
         #region CONSTRCTOR
 
         /// <summary>
-        /// Create New Arrow Skill Sets
+        /// 생성자 I. Arrow Item에서 '원본 Skill Set Class' 생성.
+        /// Current Max ArrowSkill Count : 2
         /// </summary>
         /// <param name="arrowskills"></param>
-        public ArrowSkillSet(ArrowSkill[] arrowskills)
+        public ArrowSkillSet(ArrowSkill arrowSkillFst, ArrowSkill arrowSkillSec)
         {
-            //현재 화살이 가질 수 있는 최대 스킬 가짓 수 : 2
-            if(arrowskills.Length > 2)
+            //First Arrow Skill Init
+            if(arrowSkillFst != null)
             {
-                CatLog.WLog("Arrow Skill Array Size Over 2");
-                return;
+                switch (arrowSkillFst)
+                {
+                    case AttackActiveTypeAS attackType: InitAttackTypeSkill(attackType);             break;
+                    case AirActiveTypeAS       airType: InitAirTypeSkill(airType);                   break;
+                    case AddProjTypeAS     addProjType: InitAdditionalProjectilesSkill(addProjType); break;
+                    default: break;
+                }
             }
 
-            //Skill Class Init
-            for (int i = 0; i < arrowskills.Length; i++)
+            //Seconds Arrow Skill Init
+            if(arrowSkillSec != null)
             {
-                switch (arrowskills[i])
-                {
-                    case AttackActiveTypeAS  attackType: InitAttackTypeSkill(attackType);                  break;
-                    case AirActiveTypeAS        airType: InitAirTypeSkill(airType);                        break;
-                    case AddProjTypeAS addProjTypeSkill: InitAdditionalProjectilesSkill(addProjTypeSkill); break;
-                    default: break; //null
-                }
+                if (arrowSkillSec is AttackActiveTypeAS atkType)     InitAttackTypeSkill(atkType);
+                else if (arrowSkillSec is AirActiveTypeAS airType)   InitAirTypeSkill(airType);
+                else if (arrowSkillSec is AddProjTypeAS addProjType) InitAdditionalProjectilesSkill(addProjType);
             }
 
             //Start Active Type Init
@@ -42,7 +44,7 @@
         }
 
         /// <summary>
-        /// Constrctor For Copy Origin Arrow Skill Sets Class.
+        /// 생성자 II. GameManager에서 각각의 Arrow Prefab으로 원본 Skill Set Class를 복사하여 뿌려지는 생성자.
         /// </summary>
         /// <param name="skillsets"></param>
         public ArrowSkillSet(ArrowSkillSet skillsets)
@@ -52,7 +54,7 @@
 
             //이렇게 하면 결국엔 똑같은Skill Class의 주소값을 참조하게 되는 꼴이네..
             //여기서 또 새로운 Skill Class로 할당을 해줘야 제대로 각각의 Skill을 가지고있게 되는 꼴이네 결국엔
-            activeType                 = skillsets.activeType;
+            activeType = skillsets.activeType;
             //타입은 상관없는데 만약에 이러한 방식으로 Arrow Skill을 불러온다고 하면 Skill Class들은 깊은 복사를 해야만 한다.
 
             //attackActiveSkill          = skillsets.attackActiveSkill;
@@ -66,8 +68,8 @@
             {
                 switch (skillsets.attackActiveSkill)
                 {
-                    case ReboundArrow reboundArrow: attackActiveSkill = new ReboundArrow(); break;
-                    case SplitArrow splitArrow:     attackActiveSkill = new SplitArrow(); break;
+                    case ReboundArrow reboundArrow: attackActiveSkill = new ReboundArrow(reboundArrow); break;
+                    case SplitArrow     splitArrow: attackActiveSkill = new SplitArrow(splitArrow);     break;
                     default: attackActiveSkill = null; break; //else
                 }
             }
@@ -77,8 +79,7 @@
             {
                 switch (skillsets.airActiveSkill)
                 {
-                    case GuidanceArrow guidanceArrow:
-                        airActiveSkill = new GuidanceArrow(); break;
+                    case GuidanceArrow guidanceArrow: airActiveSkill = new GuidanceArrow(guidanceArrow); break;
                     default: airActiveSkill = null; break; //else
                 }
             }
@@ -102,7 +103,7 @@
             if (attackActiveSkill == null)
                 attackActiveSkill = skillData;
             else
-                CatLog.WLog($"중복 Arrow SkillData {skillData}가 Init되었습니다.");
+                CatLog.WLog($"중복 Type Arrow Skill: {skillData}가 Init되었습니다.");
         }
 
         void InitAirTypeSkill(AirActiveTypeAS skillData)
@@ -110,7 +111,7 @@
             if (airActiveSkill == null)
                 airActiveSkill = skillData;
             else
-                CatLog.WLog($"중복 Arrow SkillData {skillData}가 Init되었습니다.");
+                CatLog.WLog($"중복 Type Arrow Skill: {skillData}가 Init되었습니다.");
         }
 
         void InitAdditionalProjectilesSkill(AddProjTypeAS skillData)
@@ -118,7 +119,7 @@
             if (additionalProjectilesSkill == null)
                 additionalProjectilesSkill = skillData;
             else
-                CatLog.WLog($"중복 Arrow SkillData {skillData}가 Init되었습니다.");
+                CatLog.WLog($"중복 Type Arrow Skill: {skillData}가 Init되었습니다.");
         }
 
         /// <summary>

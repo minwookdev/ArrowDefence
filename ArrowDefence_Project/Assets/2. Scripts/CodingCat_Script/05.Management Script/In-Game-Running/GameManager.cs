@@ -207,13 +207,6 @@
                 return null;
         }
 
-        public ArrowSkill InitArrowSkill(Transform arrowtransform, Rigidbody2D rigidbody)
-        {
-            var newSkill = new ReboundArrow();
-            newSkill.Init(arrowtransform, rigidbody);
-            return newSkill;
-        }
-
         public ArrowSkillSet GetArrowSkillSets(string tag)
         {
             if (tag == AD_Data.POOLTAG_MAINARROW || tag == AD_Data.POOLTAG_MAINARROW_LESS)

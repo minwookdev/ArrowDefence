@@ -174,13 +174,15 @@
                 }
             }
 
-            arrowTr.rotation = Quaternion.Euler(0f, 0f,
-                               Quaternion.FromToRotation(Vector3.up, monsterPos - arrowTr.position).eulerAngles.z);
-            arrow.ShotArrow(arrowTr.up * 18f);
+            //arrowTr.rotation = Quaternion.Euler(0f, 0f,
+            //                   Quaternion.FromToRotation(Vector3.up, monsterPos - arrowTr.position).eulerAngles.z);
+            //arrow.ShotArrow(arrowTr.up * 18f);
 
             //var rot = Quaternion.Euler(0f, 0f,
             //          Quaternion.FromToRotation(Vector3.up, monsterPos - arrowTr.position).eulerAngles.z);
             //arrow.ShotArrow(rot, arrowTr.up * 18f); 
+
+            arrow.ShotArrow(monsterPos, arrowTr.up * 18f);
             return false;
         }
 
@@ -188,6 +190,20 @@
         {
             lastHitTarget     = null;
             currentChainCount = 0;
+        }
+
+        /// <summary>
+        /// Copy Class Constructor
+        /// </summary>
+        /// <param name="origin"></param>
+        public ReboundArrow(ReboundArrow origin)
+        {
+            maxChainCount = origin.maxChainCount;
+        }
+
+        public ReboundArrow()
+        {
+            maxChainCount = 1;
         }
     }
 
@@ -207,6 +223,15 @@
         {
             throw new System.NotImplementedException();
         }
+
+        /// <summary>
+        /// Copy Class Constructor
+        /// </summary>
+        /// <param name="guidanceArrow"></param>
+        public GuidanceArrow(GuidanceArrow guidanceArrow)
+        {
+
+        }
     }
 
     public class SplitArrow : AttackActiveTypeAS
@@ -219,6 +244,15 @@
         public override void Clear()
         {
             throw new System.NotImplementedException();
+        }
+
+        /// <summary>
+        /// Copy Class Constructor
+        /// </summary>
+        /// <param name="splitArrow"></param>
+        public SplitArrow(SplitArrow splitArrow)
+        {
+
         }
     }
 }

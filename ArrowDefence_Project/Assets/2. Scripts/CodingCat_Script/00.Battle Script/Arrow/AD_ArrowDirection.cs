@@ -3,7 +3,7 @@
     using System;
     using UnityEngine;
 
-    public class AD_ArrowDirection : MonoBehaviour, IPoolObject
+    public class AD_ArrowDirection : MonoBehaviour
     {
         //Screen Limit Variable
         private Vector2 topLeftScreenPoint;
@@ -16,27 +16,21 @@
         private Vector2 velocity;
         private Rigidbody2D arrowRigidBody;
         private float arrowAngle = 0f;
-        private AD_Arrow adArrow;
         private Transform tr;
 
-        //Arrow Skill Trigger
-        Action onAir;
-        Action onHit;
+        //Main Arrow Component
+        private AD_Arrow adArrow;
 
         private void Start()
         {
             //Init-Component
             tr = GetComponent<Transform>();
 
-            //Screen top-left, bottom-right 계산
+            //Init-Screen top-left, bottom-right
             topLeftScreenPoint     = Camera.main.ScreenToWorldPoint(new Vector2(0, Screen.height));
             bottomRightScreenPoint = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, 0));
             arrowRigidBody         = gameObject.GetComponent<Rigidbody2D>();
             adArrow                = gameObject.GetComponent<AD_Arrow>();
-
-            //Init-Arrow Skill
-            onAir += OnAir;
-            onHit += OnHit;
         }
 
         private void Update()
@@ -47,20 +41,13 @@
             //Arrow Fired
             if(velocity.magnitude != 0 && arrowRigidBody.isKinematic == false)
             {
-                //Calculate the angle if the arrow
-                //this.arrowAngle = (Mathf.Atan2(velocity.x, -velocity.y) * Mathf.Rad2Deg + 180);
-                //Set Rotation of the Arrow
-                //transform.rotation = Quaternion.AngleAxis(arrowAngle, transform.forward);
-
-                //Arrow Direction Update
-                //OnAir();
-                onAir();
-                //Check the Arrow Bounds
-                CheckArrowBounds();
+                
+                CalcAngle();        //Arrow Direction Update
+                CheckArrowBounds(); //Check the Arrow Bounds
             }
         }
 
-        void OnAir()
+        void CalcAngle()
         {
             //Calculate the angle if the arrow
             arrowAngle = (Mathf.Atan2(velocity.x, -velocity.y) * Mathf.Rad2Deg + 180);
@@ -68,12 +55,9 @@
             tr.rotation = Quaternion.AngleAxis(arrowAngle, tr.forward);
         }
 
-        void OnHit()
-        {
-            DisableObject_Req(this.gameObject);
-        }
-
-        //arrow Position is Out of Screen, then Destroy the Arrow (When Arrow Firing).
+        /// <summary>
+        /// arrow Position is Out of Screen, then Destroy the Arrow (When Arrow Firing).
+        /// </summary>
         private void CheckArrowBounds()
         {
             //Get the Position of the Arrow
@@ -82,53 +66,14 @@
             xIn = (arrowPosition.x >= topLeftScreenPoint.x - offset.x && arrowPosition.x <= bottomRightScreenPoint.x + offset.x);
             yIn = (arrowPosition.y >= bottomRightScreenPoint.y - offset.y && arrowPosition.y <= topLeftScreenPoint.y + offset.y);
 
+            //Arrow Out of Screen
             if(!(xIn && yIn))
             {
-                //화면 밖으로 나가면 Disable
-                DisableObject_Req(this.gameObject);
-                //DisableArrow();
+                adArrow.DisableRequest(gameObject);
                 return;
             }
         }
 
-        //private void DisableArrow()
-        //{
-        //    this.arrowRigidBody.isKinematic = true;
-        //    adArrow.arrowTrail.gameObject.SetActive(false);
-        //    CCPooler.ReturnToPool(this.gameObject, 0);
-        //
-        //    //gameObject.SetActive(false);
-        //    //Disable 하기전에 SerParent 하면 스케일이랑 좌표 난리난다. 항상 SetParent할 경우 Disable 후에 부모바꿔줄것.
-        //    //CCPooler.ReturnToPool 실행으로 비활성화 요청
-        //}
-
-        /// <summary>
-        /// 화면밖으로 나가거나 몬스터에 충돌되어 Disable처리되고, ObjectPooler에 비활성화 요청
-        /// </summary>
-        /// <param name="target"></param>
-        public void DisableObject_Req(GameObject target)
-        {
-            this.arrowRigidBody.isKinematic = true;
-            adArrow.arrowTrail.gameObject.SetActive(false);
-            adArrow.OnDisableCollider();
-
-            CCPooler.ReturnToPool(target, 0);
-        }
-
-        private void OnCollisionEnter2D(Collision2D coll)
-        {
-            if(coll.gameObject.layer == LayerMask.NameToLayer(AD_Data.LAYER_MONSTER))
-            {
-                //DisableObject_Req(this.gameObject);
-                onHit();
-            }
-        }
-
-        private void OnDestroy()
-        {
-            onHit -= OnHit;
-            onAir -= OnAir;
-        }
     }
 
 }

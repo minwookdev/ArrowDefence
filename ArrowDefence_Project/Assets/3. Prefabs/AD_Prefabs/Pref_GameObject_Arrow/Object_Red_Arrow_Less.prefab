@@ -355,6 +355,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   trailObject: {fileID: 1773074856053835185}
+  trailRender: {fileID: 1773074856063532811}
   rBody: {fileID: 1773074856053835192}
 --- !u!1 &1773074856053835199
 GameObject:

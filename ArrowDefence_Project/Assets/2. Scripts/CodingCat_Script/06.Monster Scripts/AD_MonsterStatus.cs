@@ -49,9 +49,9 @@
             //}
         }
 
-        public void DisableObject_Req(GameObject target) => CCPooler.ReturnToPool(target);
+        public void DisableRequest(GameObject target) => CCPooler.ReturnToPool(target);
 
-        public void OnStageClear() => DisableObject_Req(this.gameObject);
+        public void OnStageClear() => DisableRequest(this.gameObject);
 
         public void OnHitObject(float damage)
         {
@@ -67,7 +67,7 @@
             if(currentHealthPoint <= 0)
             {
                 isDeath = true;
-                DisableObject_Req(this.gameObject);
+                DisableRequest(this.gameObject);
             }
         }
 
@@ -83,7 +83,7 @@
             if (coll.gameObject.layer == LayerMask.NameToLayer(AD_Data.LAYER_DISABLELINE))
             {
                 BattleProgresser.OnDecreasePlayerHealthPoint(5f);
-                DisableObject_Req(this.gameObject);
+                DisableRequest(this.gameObject);
             }
         }
 

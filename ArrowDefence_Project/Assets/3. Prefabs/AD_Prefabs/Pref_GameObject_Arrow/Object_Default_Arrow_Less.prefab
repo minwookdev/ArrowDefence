@@ -421,6 +421,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   trailObject: {fileID: 3548661466032091842}
+  trailRender: {fileID: 3548661466022692984}
   rBody: {fileID: 3548661466032091851}
 --- !u!50 &3548661466032091851
 Rigidbody2D:

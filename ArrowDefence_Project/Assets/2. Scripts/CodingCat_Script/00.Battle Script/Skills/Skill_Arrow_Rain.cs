@@ -126,7 +126,7 @@
                 if(arrow)
                 {
                     arrow.gameObject.transform.rotation = Quaternion.Euler(0f, 0f, CalculateAngle(arrow.transform.position, randomdest));
-                    arrow.ShotArrow(arrow.transform.up * force);
+                    arrow.ShotArrow(arrow.transform.up); // * force.magnitude;
                 }
 
                 if(isActiveDebugLine)

@@ -12,11 +12,10 @@
         private ArrowSkill arrowSkillFst;
         private ArrowSkill arrowSkillSec;
 
-        //↘Not Save This Class, This is Temp Arrow SkillSets Class
+        //↘Not Save This SkillSet Class
         ArrowSkillSet arrowSkillSets;
         public ArrowSkillSet ArrowSkillSets { 
-            get 
-            {
+            get {
                 if (arrowSkillSets != null)
                     return arrowSkillSets;
                 else

@@ -115,7 +115,7 @@
                 var arrow = CCPooler.SpawnFromPool<AD_Arrow_less>(poolTag, parent, arrowScale, arrowPos,
                                                                   Quaternion.Euler(0f, 0f, tempRotation - 90f));
                 if (arrow)
-                    arrow.ShotArrow(new Vector2(Mathf.Cos(tempRotation * Mathf.Deg2Rad), Mathf.Sin(tempRotation * Mathf.Deg2Rad)) * force.magnitude);
+                    arrow.ShotArrow(new Vector2(Mathf.Cos(tempRotation * Mathf.Deg2Rad), Mathf.Sin(tempRotation * Mathf.Deg2Rad))); // * force.magnitude;
             }
         }
 

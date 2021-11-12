@@ -2,7 +2,7 @@
 {
     using UnityEngine;
 
-    public class AD_Arrow : MonoBehaviour
+    public class AD_Arrow : MonoBehaviour, IPoolObject, IArrowObject
     {
         //The Left, Right Clamp Point for the Arrow.
         [Header("COMPONENT")]
@@ -96,6 +96,48 @@
 
         public void OnDisableCollider() => this.polyCollider.enabled = false;
 
+        public void DisableRequest(GameObject target)
+        {
+            rBody.isKinematic = true;
+            arrowTrail.gameObject.SetActive(false);
+            polyCollider.enabled = false;
+
+            CCPooler.ReturnToPool(target, 0);
+
+            //객체가 Disable되기전에 SetParent메서드로 부모객체가 바뀌어버리면 
+            //보통은 스케일과 좌표가 난리가 난다. 어떤 객체던 SetParent하기전에 Disable후 부모를 바꿔줄 것.
+            //(현재는 CCPooler에 비활성화를 요청하도록 로직 변경)
+        }
+
         #endregion
+
+        void OnTriggerEnter2D(Collider2D coll)
+        {
+            if(coll.gameObject.layer == LayerMask.NameToLayer(AD_Data.LAYER_MONSTER))
+            {
+
+            }
+        }
+
+        void OnHit(GameObject target)
+        {
+            target.SendMessage("OnHitObject", Random.Range(30f, 50f), SendMessageOptions.DontRequireReceiver);
+            DisableRequest(gameObject);
+        }
+
+        public void ShotArrow(Vector2 force)
+        {
+
+        }
+
+        public void ShotArrow(Vector3 target)
+        {
+
+        }
+
+        public void ForceArrow(Vector3 target)
+        {
+
+        }
     }
 }

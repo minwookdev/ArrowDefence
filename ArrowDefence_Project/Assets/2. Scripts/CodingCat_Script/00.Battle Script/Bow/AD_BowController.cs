@@ -517,19 +517,14 @@
                 CatLog.WLog("Bow State is Pulling or Same Type of arrow currently loaded");
                 return;
             }
-            
+
             //장전된 화살 Disable 처리하고 Arrow 관련 변수정리, Pool에서 화살을 꺼내서 장전
             if (LoadedArrow != null)
-                LoadedArrow.GetComponent<AD_Arrow>().DisableRequest(LoadedArrow);
+                ArrowComponent.DisableRequest(LoadedArrow);
             AD_BowRope.instance.arrowCatchPoint  = null;
             LoadedArrow   = null; ArrowComponent = null;
             loadArrowType = type;
             StartCoroutine(ArrowReload());
-        }
-
-        private void ActiveSkill()
-        {
-
         }
     }
 }

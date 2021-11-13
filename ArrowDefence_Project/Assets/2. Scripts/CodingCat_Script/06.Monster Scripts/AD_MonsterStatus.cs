@@ -89,11 +89,11 @@
 
         private void OnCollisionEnter2D(Collision2D coll)
         {
-            if (coll.gameObject.layer == LayerMask.NameToLayer(AD_Data.LAYER_ARROW))
-            {   
-                float damageCount = Random.Range(30f, 80f);
-                OnHitObject(damageCount);
-            }
+            //if (coll.gameObject.layer == LayerMask.NameToLayer(AD_Data.LAYER_ARROW))
+            //{   
+            //    float damageCount = Random.Range(30f, 80f);
+            //    OnHitObject(damageCount);
+            //}
 
             //if(coll.gameObject.layer == LayerMask.NameToLayer(AD_Data.LAYER_ARROW_LESS))
             //{

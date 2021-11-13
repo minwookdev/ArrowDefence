@@ -194,7 +194,7 @@
 
                 foreach (var monster in monsters)
                 {
-                    monster.SendMessage("DisableObject_Req", monster, SendMessageOptions.DontRequireReceiver);
+                    monster.SendMessage("DisableRequest", monster, SendMessageOptions.DontRequireReceiver);
                 }
 
                 currentClearCount = MaxClearCount;

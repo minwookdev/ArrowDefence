@@ -38,8 +38,8 @@
         private void Awake()
         {
             //Init-Component
-            rBody       = gameObject.GetComponent<Rigidbody2D>();
-            tr          = gameObject.GetComponent<Transform>();
+            rBody = gameObject.GetComponent<Rigidbody2D>();
+            tr    = gameObject.GetComponent<Transform>();
         }
 
         private void Start()
@@ -61,10 +61,14 @@
         {
             velocity = rBody.velocity;
 
+            //Arrow Launched
             if(velocity.magnitude != 0 && isLaunched == true)
             {
-                OnAir();
+                CalcAngle();
                 CheckArrowBounds();
+
+                if (isInitSkill)
+                    arrowSkillSets.OnAir();
             }
         }
 
@@ -73,6 +77,11 @@
             rBody.velocity = Vector2.zero;
             trailRender.gameObject.SetActive(false);
             isLaunched = false;
+
+            //충돌하지 못하고, 화면 밖으로 벗어났을 때, Clear처리
+            if (isInitSkill == false)
+                return;
+            arrowSkillSets.Clear();
         }
 
         private void OnDestroy()
@@ -101,7 +110,7 @@
             DisableRequest(gameObject);
         }
 
-        void OnAir()
+        void CalcAngle()
         {
             //Calc Arrow Angle
             arrowAngle  = (Mathf.Atan2(velocity.x, -velocity.y) * Mathf.Rad2Deg + 180);
@@ -114,11 +123,11 @@
         /// Shot Directly to Direction
         /// </summary>
         /// <param name="force">applied as normalized</param>
-        public void ShotArrow(Vector2 force)
+        public void ShotToDirectly(Vector2 direction)
         {
             isLaunched = true;
             //Force to Arrow RigidBody
-            rBody.velocity = force.normalized * forceMagnitude;
+            rBody.velocity = direction.normalized * forceMagnitude;
             //or [Used AddForce]
             //rBody.AddForce(force, ForceMode2D.Impulse); //-> recommend
             //rBody.AddForce(force, ForceMode2D.Force);
@@ -133,7 +142,7 @@
         /// Shot with Target Position
         /// </summary>
         /// <param name="targetPosition">Shot to Target Position</param>
-        public void ShotArrow(Vector3 targetPosition)
+        public void ShotToTarget(Vector3 targetPosition)
         {
             //Rotate the Arrow Angle
             tr.rotation = Quaternion.Euler(0f, 0f, Quaternion.FromToRotation(Vector3.up, targetPosition - tr.position).eulerAngles.z);
@@ -157,7 +166,7 @@
         /// The Shot method used by the Skill Class.
         /// </summary>
         /// <param name="target"></param>
-        public void ForceArrow(Vector3 target)
+        public void ForceToTarget(Vector3 target)
         {
             //Rotate Direction to target position
             tr.rotation = Quaternion.Euler(0f, 0f, Quaternion.FromToRotation(Vector3.up, target - tr.position).eulerAngles.z);

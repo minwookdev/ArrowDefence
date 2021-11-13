@@ -99,7 +99,7 @@
 
                 if (ccArrow)
                 {
-                    ccArrow.ShotArrow(ccArrow.transform.up); // * force.magnitude;
+                    ccArrow.ShotToDirectly(ccArrow.transform.up); // * force.magnitude;
                     arrowcount++;
                 }
             }

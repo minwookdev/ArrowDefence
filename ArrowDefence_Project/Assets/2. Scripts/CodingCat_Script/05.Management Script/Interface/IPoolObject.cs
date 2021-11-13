@@ -5,9 +5,9 @@
 
 public interface IArrowObject
 {
-    void ShotArrow(UnityEngine.Vector2 force);
+    void ShotToDirectly(UnityEngine.Vector2 force);
 
-    void ShotArrow(UnityEngine.Vector3 target);
+    void ShotToTarget(UnityEngine.Vector3 target);
 
-    void ForceArrow(UnityEngine.Vector3 target);
+    void ForceToTarget(UnityEngine.Vector3 target);
 }

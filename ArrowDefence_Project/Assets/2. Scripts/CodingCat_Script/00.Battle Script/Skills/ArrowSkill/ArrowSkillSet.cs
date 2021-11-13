@@ -9,6 +9,9 @@
         AirActiveTypeAS airSkill    = null;
         AddProjTypeAS addProjSkill  = null;
 
+        //temp
+        Transform tempTr;
+
         #region CONSTRUCTOR
 
         /// <summary>
@@ -187,13 +190,13 @@
         public void Init(Transform arrowTr, Rigidbody2D rigidBody, IArrowObject arrow)
         {
             if (addProjSkill != null)
-                addProjSkill.Init(arrowTr, rigidBody);
+                addProjSkill.Init(arrowTr, rigidBody, arrow);
 
             if (hitSkill != null)
                 hitSkill.Init(arrowTr, rigidBody, arrow);
 
             if (airSkill != null)
-                airSkill.Init(arrowTr, rigidBody);
+                airSkill.Init(arrowTr, rigidBody, arrow);
         }
 
         #endregion
@@ -203,11 +206,11 @@
             switch (activeType)
             {
                 case ARROWSKILL_ACTIVETYPE.FULL:           return ActiveAtkAddProj(collider); 
-                case ARROWSKILL_ACTIVETYPE.ATTACK_AIR:     return ActiveAtk(collider);        
+                case ARROWSKILL_ACTIVETYPE.ATTACK_AIR:     return ActiveAtkAir(collider);        
                 case ARROWSKILL_ACTIVETYPE.ATTACK_ADDPROJ: return ActiveAtkAddProj(collider);
                 case ARROWSKILL_ACTIVETYPE.ATTACK:         return ActiveAtk(collider);
                 case ARROWSKILL_ACTIVETYPE.AIR_ADDPROJ:    return ActiveAddProj();
-                case ARROWSKILL_ACTIVETYPE.AIR:            return true;
+                case ARROWSKILL_ACTIVETYPE.AIR:            return AirSkillHit();
                 case ARROWSKILL_ACTIVETYPE.ADDPROJ:        return ActiveAddProj();
                 case ARROWSKILL_ACTIVETYPE.EMPTY:          return true;
                 default:                                   return true;
@@ -216,7 +219,17 @@
 
         public void OnAir()
         {
-
+            switch (activeType)
+            {
+                case ARROWSKILL_ACTIVETYPE.FULL:        ActiveAir(); break;
+                case ARROWSKILL_ACTIVETYPE.ATTACK_AIR:  ActiveAir(); break;
+                case ARROWSKILL_ACTIVETYPE.ATTACK_ADDPROJ:           break;
+                case ARROWSKILL_ACTIVETYPE.ATTACK:                   break;
+                case ARROWSKILL_ACTIVETYPE.AIR_ADDPROJ: ActiveAir(); break;
+                case ARROWSKILL_ACTIVETYPE.AIR:         ActiveAir(); break;
+                case ARROWSKILL_ACTIVETYPE.ADDPROJ:                  break;
+                case ARROWSKILL_ACTIVETYPE.EMPTY:                    break;
+            }
         }
 
         #region Functions by Active Type
@@ -236,8 +249,41 @@
 
         bool ActiveAddProj()
         {
-            addProjSkill.OnHit();
+            addProjSkill.OnHit(); airSkill.Clear();
             return true;
+        }
+
+        bool ActiveAtkAir(Collider2D collider)
+        {
+            bool isDisable = hitSkill.OnHit(collider, out tempTr);
+            if (isDisable == false)
+                airSkill.OnHit(tempTr);
+            else
+                airSkill.Clear();
+            return isDisable;
+        }
+
+        void ActiveAir()
+        {
+            airSkill.OnAir();
+        }
+
+        bool AirSkillHit()
+        {
+            airSkill.Clear(); return true;
+        }
+
+        public void Clear()
+        {
+            if (hitSkill != null)
+                hitSkill.Clear();
+            if (airSkill != null)
+                airSkill.Clear();
+            if (addProjSkill != null)
+                addProjSkill.Clear();
+
+            //이것도 타입에 따라서 나눠서 처리할 것.
+            //Clear때마다 계속 체크하면 낭비인거같다
         }
 
         #endregion

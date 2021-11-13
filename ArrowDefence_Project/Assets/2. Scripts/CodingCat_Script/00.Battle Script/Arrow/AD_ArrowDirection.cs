@@ -41,7 +41,6 @@
             //Arrow Fired
             if(velocity.magnitude != 0 && arrowRigidBody.isKinematic == false)
             {
-                
                 CalcAngle();        //Arrow Direction Update
                 CheckArrowBounds(); //Check the Arrow Bounds
             }

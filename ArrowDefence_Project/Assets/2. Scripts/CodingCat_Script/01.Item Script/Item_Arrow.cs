@@ -104,7 +104,7 @@
                 return;
             }
 
-            //TEMP : TEST
+            //TEMP : SKILL TEST
             arrowSkillFst = new ReboundArrow();
 
             //Create Arrow SkillSets Instances

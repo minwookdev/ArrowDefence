@@ -21,6 +21,12 @@
         //private float powerFactor = 2000;
         private Rigidbody2D rBody;
         private PolygonCollider2D polyCollider;
+        Transform arrowTr;
+
+        //Skill Variables
+        bool isInitSkill    = false;
+        bool isDisableArrow = false;
+        ArrowSkillSet arrowSkillSets = null;
 
         private void Start()
         {
@@ -28,31 +34,43 @@
             //Initial Arrow Childs
             if (arrowChatchPoint == null) arrowChatchPoint = transform.GetChild(2);
             if (arrowTrail == null) arrowTrail = transform.GetChild(2).GetChild(0).GetComponent<TrailRenderer>();
+            arrowTr = GetComponent<Transform>();
             rBody = gameObject.GetComponent<Rigidbody2D>();
             rBody.gravityScale = 0f;
 
-            if (polyCollider == null) polyCollider = transform.GetChild(0).GetComponent<PolygonCollider2D>();
+            if (polyCollider == null) polyCollider = arrowTr.GetChild(0).GetComponent<PolygonCollider2D>();
             polyCollider.enabled = false;
 
             //Init-Arrow Skill
-            
+            arrowSkillSets = GameManager.Instance.GetArrowSkillSets(gameObject.name);
+            if(arrowSkillSets != null)
+            {
+                isInitSkill = true;
+                arrowSkillSets.Init(arrowTr, rBody, this);
+            }
         }
 
         private void Update()
         {
             if (!isLaunched)
             {
-                ClampPosition();
-                //CalculatePower();
+                ClampPosition(); //CalculatePower();
+            }
+            else
+            {
+                if (isInitSkill)
+                    arrowSkillSets.OnAir();
             }
         }
 
-        private void OnDisable() => this.isLaunched = false;
+        void OnDisable() => isLaunched = false;
+
+        void OnDestroy() => arrowSkillSets = null;
 
         private void ClampPosition()
         {
             //Get the Current Position of the Arrow
-            arrowPosition = transform.position;
+            arrowPosition = arrowTr.position;
             //Clamp the X Y position Between min and Max Points
             arrowPosition.x = Mathf.Clamp(arrowPosition.x, Mathf.Min(rightClampPoint.position.x, leftClampPoint.position.x),
                                                            Mathf.Max(rightClampPoint.position.x, leftClampPoint.position.x));
@@ -60,39 +78,8 @@
                                                            Mathf.Max(rightClampPoint.position.y, leftClampPoint.position.y));
 
             //Set new Position for the Arrow
-            transform.position = arrowPosition;
+            arrowTr.position = arrowPosition;
         }
-
-        private void CalculatePower()
-        {
-            //this.power = Vector2.Distance(transform.position, rightClampPoint.position) * powerFactor;
-        }
-
-        public void ShotArrow(Vector2 force, Transform parent)
-        {
-            //부모바꿔준 상태에서 발사
-            //발사되고 난 뒤에 SetParent로 Canvas의 Child로 바꿔주지 않으면 활 각도 돌릴때마다 자식으로 취급되서 날아가면서 화살각도가 휘어버린다
-            //발사할 때는 보정 필요함 뒤에 false 붙이면 이상한 곳에서 날아감;
-            transform.SetParent(parent);
-
-            this.rBody.isKinematic = false;
-            //this.rBody.gravityScale = 0;
-            this.isLaunched = true;
-            //Force to Arrow RigidBody 
-            rBody.velocity = force;
-            //or [Used AddForce]
-            //this.rBody.AddForce(force, ForceMode2D.Force);
-            //rBody.AddForce(force, ForceMode2D.Impulse); // -> Recommend
-
-            //발사할 때 Clear 해주지 않으면 전에 있던 잔상이 남는다
-            arrowTrail.gameObject.SetActive(true);
-            arrowTrail.Clear();
-
-            //Poly Collider가 활성되는 순간 충돌 가능
-            polyCollider.enabled = true;
-        }
-
-        #region PROPERTIES
 
         public void OnDisableCollider() => this.polyCollider.enabled = false;
 
@@ -100,7 +87,7 @@
         {
             rBody.isKinematic = true;
             arrowTrail.gameObject.SetActive(false);
-            polyCollider.enabled = false;
+            polyCollider.enabled = false;   //Disable Collider -> Block Collision
 
             CCPooler.ReturnToPool(target, 0);
 
@@ -109,13 +96,18 @@
             //(현재는 CCPooler에 비활성화를 요청하도록 로직 변경)
         }
 
-        #endregion
-
         void OnTriggerEnter2D(Collider2D coll)
         {
             if(coll.gameObject.layer == LayerMask.NameToLayer(AD_Data.LAYER_MONSTER))
             {
-
+                if (isInitSkill)
+                {
+                    isDisableArrow = arrowSkillSets.OnHit(coll);
+                    if (isDisableArrow)
+                        DisableRequest(gameObject);
+                }
+                else
+                    OnHit(coll.gameObject);
             }
         }
 
@@ -125,19 +117,85 @@
             DisableRequest(gameObject);
         }
 
-        public void ShotArrow(Vector2 force)
+        void OnAir()
         {
 
         }
 
-        public void ShotArrow(Vector3 target)
+        /// <summary>
+        /// Shot Used Bow Object
+        /// </summary>
+        /// <param name="force"></param>
+        /// <param name="parent"></param>
+        public void ShotArrow(Vector2 force, Transform parent)
         {
+            //Battle Scene Main Canvas의 Transform을 매개변수로 받음
+            //발사 처리 후, 부모객체를 바꿔주지 않으면 활의 자식으로 남아있게 되어, 활의 회전을 따라가버리는 문제가 생긴다
+            //부모 변경처리 함수에는 보정처리는 true이다. 보정이 들어가지 않으면, 좌표와 스케일이 난리남 [기본값 : true]
+            arrowTr.SetParent(parent);
 
+            ShotToDirectly(force);
         }
 
-        public void ForceArrow(Vector3 target)
+        /// <summary>
+        /// Shot Directly to Direction
+        /// </summary>
+        /// <param name="force"></param>
+        public void ShotToDirectly(Vector2 force)
         {
+            rBody.isKinematic = false;
+            isLaunched = true;
 
+            //this.rBody.gravityScale = 0; //-> Modify in Start Method
+            rBody.velocity = force;
+            //or [Used AddForce]
+            //this.rBody.AddForce(force, ForceMode2D.Force);
+            //rBody.AddForce(force, ForceMode2D.Impulse); // -> Recommend
+
+            //Trail Clear  
+            arrowTrail.gameObject.SetActive(true);
+            arrowTrail.Clear();
+
+            //Enable Collider -> Allow Collision
+            polyCollider.enabled = true;
         }
+
+        /// <summary>
+        /// Shot with Target Position
+        /// </summary>
+        /// <param name="target"></param>
+        public void ShotToTarget(Vector3 target)
+        {
+            rBody.isKinematic = false;
+
+            //Change Rotation to Target Position
+            arrowTr.rotation = Quaternion.Euler(0f, 0f, Quaternion.FromToRotation(Vector3.up, target - arrowTr.position).eulerAngles.z);
+            isLaunched = true;
+
+            //Fires an arrow rotated in the direction of the target with force in a straight line.
+            rBody.velocity = arrowTr.up * ArrowPower;
+
+            //Clear TrailRender
+            arrowTrail.gameObject.SetActive(true);
+            arrowTrail.Clear();
+        }
+
+        /// <summary>
+        /// The Shot method used by the Skill Class.
+        /// </summary>
+        /// <param name="target"></param>
+        public void ForceToTarget(Vector3 target)
+        {
+            arrowTr.rotation = Quaternion.Euler(0f, 0f, Quaternion.FromToRotation(Vector3.up, target - arrowTr.position).eulerAngles.z);
+            rBody.velocity = arrowTr.up * ArrowPower;
+
+            //Clear Arrow Trail
+            arrowTrail.Clear();
+        }
+
+        //private void CalculatePower()
+        //{
+        //    this.power = Vector2.Distance(transform.position, rightClampPoint.position) * powerFactor;
+        //}
     }
 }

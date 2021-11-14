@@ -258,6 +258,10 @@
         float currentSearchTime = 0f;
         float scanRadius = 3f;
 
+        //Chasing Speed value
+        float speed = 18f;
+        float rotateSpeed = 200f;
+
         //Target Colliders
         Collider2D[] colliders = null;
 
@@ -284,13 +288,16 @@
             else //Target Transform Find
             {
                 //Chase Target Monster Transform
-                arrow.ForceToTarget(targetTr.position);
+                //arrow.ForceToTarget(targetTr.position);
+                Homing(targetTr);
 
                 //Target Position으로 Z축방향 돌려버리는 로직이라 어떨지 모르겠음
                 //Target Transform을 잡지 못하고 있음
                 //Less Arrow 같은 경우에, 축이 화살의 뒷 끝부분이라 Monster객체를 정확하게 맞추지 못하는 현상이 발생하고
                 //Main Arrow 같은 경우에, 비주얼적으로 이쁘게 날아가지 않는다.
                 //호밍 미사일과 같은 효과를 주어서 미적으로 아름답게 날아가도록 처리가 필요.
+
+                
             }
             
             //유도탄 로직 적용해보기
@@ -336,6 +343,21 @@
 
                 return optimalTargetTr;
             }
+        }
+
+        void Homing(Transform targetTr)
+        {
+            //if (targetTr == null) return; //-> 호출부에서 예외처리 되고있기 때문에 따로 안해줌
+            Vector2 direction = (Vector2)targetTr.position - rBody.position;
+            direction.Normalize(); //Only Direction
+
+            //Only Used Z angle : 2D
+            float rotateAmount = Vector3.Cross(direction, arrowTr.up).z;
+
+            rBody.angularVelocity = -rotateAmount * rotateSpeed;
+
+            //Force To Arrow Forward
+            rBody.velocity = arrowTr.up * 18f;
         }
 
         /// <summary>

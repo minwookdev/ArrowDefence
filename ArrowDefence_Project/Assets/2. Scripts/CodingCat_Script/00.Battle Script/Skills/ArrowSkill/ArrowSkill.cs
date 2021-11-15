@@ -260,11 +260,11 @@
         bool isFindTarget    = false;
         float searchInterval = .1f;
         float currentSearchTime = 0f;
-        float scanRadius        = 3f;
-
+        float scanRadius        = 3f;   //정확히 이 ScanRange가 얼마정도되는지 테스트 필요.
+                                        //기즈모 사이즈 파악해서 ReboundArrow 범위와 같이 조정해주기
         //Chasing Speed value
-        float speed       = 12f;
-        float rotateSpeed = 600f;
+        float speed       = 6f;
+        float rotateSpeed = 800f;
 
         //Target Colliders
         Collider2D[] colliders = null;
@@ -272,31 +272,28 @@
         //Call Every Frames
         public override void OnUpdate()
         {
-            //Target Transform Not Found
-            if (targetTr == null)
-            {
-                currentSearchTime += Time.deltaTime;
-                if (currentSearchTime >= searchInterval)
+            if (targetTr == null) { //Target Not Found
+                currentSearchTime -= Time.deltaTime;
+                if(currentSearchTime <= 0)
                 {
+                    //Target Search Interval
                     targetTr = SearchTarget();
-                    currentSearchTime = 0f;
+                    currentSearchTime = searchInterval;
                 }
 
                 isFindTarget = false;
             }
-            else //Target Transform Find
+            else { //Target Found
                 isFindTarget = true;
-            
-            //화살에 맞고 타겟이 죽어도 여기에서는 제대로 인지하지 못하는것같다.
-            //Target이 Disable되어도 계속 찾다가 그 타겟이 Respawn되면 다시 또 그 타겟을 찾아간다 ->fix예정
+
+                //Target GameObject Alive Check
+                if (targetTr.gameObject.activeSelf == false)
+                    targetTr = null;
+            }
         }
 
         public override void OnFixedUpdate()
         {
-            //if (isFindTarget == false)
-            //    return;
-            //Homing(targetTr);
-
             if (isFindTarget)
                 Homing(targetTr);
             else
@@ -345,6 +342,8 @@
 
                 return optimalTargetTr;
             }
+
+            //Search Target에서 못빠져나오는 현상 발생 [간헐적] 원인 분석중
         }
 
         void Homing(Transform targetTr)
@@ -365,9 +364,16 @@
         void DirectionFix()
         {
             if (rBody.angularVelocity > 0f)
+            {
                 rBody.angularVelocity = 0f;
+                arrow.ShotToDirectly(arrowTr.up);
+            }
+        }
 
-            CatLog.Log("FIXED DIRECTION CALLED");
+        public override void Init(Transform tr, Rigidbody2D rigid, IArrowObject arrowInter)
+        {
+            base.Init(tr, rigid, arrowInter);
+            currentSearchTime = searchInterval;
         }
 
         /// <summary>

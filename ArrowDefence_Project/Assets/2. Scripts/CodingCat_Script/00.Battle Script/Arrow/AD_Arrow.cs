@@ -201,6 +201,20 @@
             arrowTrail.Clear();
         }
 
+        #region GIZMOS
+        //void OnDrawGizmosSelected() {
+        //    float radius = 3f;
+        //    Gizmos.color = Color.red;
+        //    Gizmos.DrawWireSphere(arrowTr.position, radius);
+        //}
+
+        void OnDrawGizmos() {
+            float radius = 3f;
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(arrowTr.position, radius);
+        }
+        #endregion
+
         //private void CalculatePower()
         //{
         //    this.power = Vector2.Distance(transform.position, rightClampPoint.position) * powerFactor;

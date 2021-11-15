@@ -59,17 +59,29 @@
 
         private void Update()
         {
-            velocity = rBody.velocity;
+            //velocity = rBody.velocity;
 
             //Arrow Launched
-            if(velocity.magnitude != 0 && isLaunched == true)
-            {
-                CalcAngle();
-                CheckArrowBounds();
+            //if(velocity.magnitude != 0 && isLaunched == true)
+            //{
+            //    //CalcAngle(); //아나..증말
+            //    CheckArrowBounds();
+            //}
+            //
+            //if (isLaunched)
+            //    arrowSkillSets.OnUpdate();
 
-                if (isInitSkill)
-                    arrowSkillSets.OnAir();
+            if(isLaunched == true) {
+                CheckArrowBounds();
+                if (isInitSkill == true)
+                    arrowSkillSets.OnUpdate();
             }
+        }
+
+        private void FixedUpdate()
+        {
+            if (isInitSkill)
+                arrowSkillSets.OnFixedUpdate();
         }
 
         private void OnDisable()
@@ -78,7 +90,7 @@
             trailRender.gameObject.SetActive(false);
             isLaunched = false;
 
-            //충돌하지 못하고, 화면 밖으로 벗어났을 때, Clear처리
+            //SkillSets가 init되어있을때, 비활성화 시 Clear처리.
             if (isInitSkill == false)
                 return;
             arrowSkillSets.Clear();
@@ -98,7 +110,6 @@
 
             if (!(xIn && yIn))
             {
-                //DisableArrow();
                 DisableRequest(this.gameObject);
                 return;
             }

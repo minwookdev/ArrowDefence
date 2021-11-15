@@ -33,12 +33,11 @@
 
     public abstract class AirActiveTypeAS : ArrowSkill
     {
-        public abstract void OnAir();
+        public virtual void OnHit(Transform tr) { }
 
-        public virtual void OnHit(Transform tr)
-        {
+        public abstract void OnUpdate();
 
-        }
+        public virtual void OnFixedUpdate() { }
     }
 
     public abstract class AddProjTypeAS : ArrowSkill
@@ -48,7 +47,7 @@
 
     public class ReboundArrow : AttackActiveTypeAS
     {
-        GameObject lastHitTarget;
+        GameObject lastHitTarget = null;
         int currentChainCount = 0;  //현재 연쇄횟수
         int maxChainCount     = 2;  //최대 연쇄횟수
         float scanRange       = 5f; //Monster 인식 범위
@@ -61,6 +60,7 @@
             //해당 Monster Object를 무시함 [같은 객체에게 스킬 효과를 터트릴 수 없음]
             if (lastHitTarget == target.gameObject)
             {
+                //동일한 대상 객체 무시
                 return false;
             }
             else
@@ -68,26 +68,25 @@
                 //연쇄횟수 체크
                 if(currentChainCount >= maxChainCount)
                 {
-                    //Monster Hit 처리
+                    //Monster Hit : 최대 연쇄횟수 도달
                     target.SendMessage("OnHitObject", Random.Range(10f, 30f), SendMessageOptions.DontRequireReceiver);
-                    Clear(); return true;
-                    //arrow.DisableObject_Req(arrowTr.gameObject); return true;
+                    return true;
                 }
 
                 //현재 연쇄횟수 중첩 및 마지막 적 저장
                 currentChainCount++;
                 lastHitTarget = target.gameObject;
 
-                //Monster hit 처리
+                //Monster hit
                 target.SendMessage("OnHitObject", Random.Range(10f, 30f), SendMessageOptions.DontRequireReceiver);
             }
 
             //■■■■■■■■■■■■■■■ II Rebound Arrow Skill : Active 절차 개시 ■■■■■■■■■■■■■■■
             Collider2D[] hitColliders = Physics2D.OverlapCircleAll(arrowTr.position, scanRange);
-            if (hitColliders.Length == 0) //return
+            if (hitColliders.Length == 0)
             {
-                //주변에 Rebound할 대상 객체가 없는 경우 소멸
-                Clear(); return true;
+                //주변에 bound 대상 객체가 없는 경우 화살 소멸
+                return true;
             } //->
             #region LEGACY
             //else
@@ -123,6 +122,7 @@
             //    //arrow.DisableObject_Req(arrow.gameObject); return true;
             //}
             #endregion
+
             //■■■■■■■■■■■■■■■ III. Optimal target selection [절차 최적화] ■■■■■■■■■■■■■■■
             List<Collider2D> monsterColliders = new List<Collider2D>(hitColliders);
             for (int i = monsterColliders.Count - 1; i >= 0; i--) //Reverse Loop [Remove Array Element]
@@ -133,7 +133,7 @@
             }
             if(monsterColliders.Count <= 0) //예외처리후 타겟이 없으면 비활성화 처리.
             {
-                Clear(); return true;
+                return true;
             }
 
             //Transform bestTargetTr = null; //-> Vector2 Type으로 변경 (참조값이라 중간에 추적중인 Monster Tr 사라지면 에러)
@@ -176,7 +176,8 @@
                 {
                     //Monster Hit 처리
                     target.SendMessage("OnHitObject", Random.Range(10f, 30f), SendMessageOptions.DontRequireReceiver);
-                    Clear(); targetTr = null; return true;
+                    targetTr = null; 
+                    return true;
                     //arrow.DisableObject_Req(arrowTr.gameObject); return true;
                 }
 
@@ -192,7 +193,8 @@
             if (hitColliders.Length == 0) //return
             {
                 //주변에 Rebound할 대상 객체가 없는 경우 소멸
-                Clear(); targetTr = null; return true;
+                targetTr = null; 
+                return true;
             }
             //■■■■■■■■■■■■■■■ III. Optimal target selection [절차 최적화] ■■■■■■■■■■■■■■■
             List<Collider2D> monsterColliders = new List<Collider2D>(hitColliders);
@@ -204,7 +206,8 @@
             }
             if (monsterColliders.Count <= 0) //예외처리후 타겟이 없으면 비활성화 처리.
             {
-                Clear(); targetTr = null; return true;
+                targetTr = null; 
+                return true;
             }
 
             Transform bestTargetTr = null;     //-> Target Transform에 넘겨줄 주소
@@ -254,53 +257,50 @@
     public class GuidanceArrow : AirActiveTypeAS
     {
         Transform targetTr   = null;
-        float searchInterval = .7f;
+        bool isFindTarget    = false;
+        float searchInterval = .1f;
         float currentSearchTime = 0f;
-        float scanRadius = 3f;
+        float scanRadius        = 3f;
 
         //Chasing Speed value
-        float speed = 18f;
-        float rotateSpeed = 200f;
+        float speed       = 12f;
+        float rotateSpeed = 600f;
 
         //Target Colliders
         Collider2D[] colliders = null;
 
         //Call Every Frames
-        public override void OnAir()
+        public override void OnUpdate()
         {
-            //1. Find a Target Monster Object Logic State 
-            //1-a. if Find a Monster -> Stop Find Logic Update, Get Next 2
-            //1-b. if Not Found a Monster -> Restart Find Monster Logic (Update Every n Seconds)
-            //2. Start position change to target position
-
             //Target Transform Not Found
-            if(targetTr == null)
+            if (targetTr == null)
             {
                 currentSearchTime += Time.deltaTime;
                 if (currentSearchTime >= searchInterval)
                 {
                     targetTr = SearchTarget();
                     currentSearchTime = 0f;
-
-                    CatLog.Log("Target 탐지중");
                 }
+
+                isFindTarget = false;
             }
             else //Target Transform Find
-            {
-                //Chase Target Monster Transform
-                //arrow.ForceToTarget(targetTr.position);
-                Homing(targetTr);
-
-                //Target Position으로 Z축방향 돌려버리는 로직이라 어떨지 모르겠음
-                //Target Transform을 잡지 못하고 있음
-                //Less Arrow 같은 경우에, 축이 화살의 뒷 끝부분이라 Monster객체를 정확하게 맞추지 못하는 현상이 발생하고
-                //Main Arrow 같은 경우에, 비주얼적으로 이쁘게 날아가지 않는다.
-                //호밍 미사일과 같은 효과를 주어서 미적으로 아름답게 날아가도록 처리가 필요.
-
-                
-            }
+                isFindTarget = true;
             
-            //유도탄 로직 적용해보기
+            //화살에 맞고 타겟이 죽어도 여기에서는 제대로 인지하지 못하는것같다.
+            //Target이 Disable되어도 계속 찾다가 그 타겟이 Respawn되면 다시 또 그 타겟을 찾아간다 ->fix예정
+        }
+
+        public override void OnFixedUpdate()
+        {
+            //if (isFindTarget == false)
+            //    return;
+            //Homing(targetTr);
+
+            if (isFindTarget)
+                Homing(targetTr);
+            else
+                DirectionFix();
         }
 
         public override void OnHit(Transform tr)
@@ -312,8 +312,10 @@
 
         public override void Clear()
         {
-            targetTr = null;
+            targetTr  = null;
+            colliders = null;
             currentSearchTime = 0f;
+            isFindTarget      = false;
         }
 
         Transform SearchTarget()
@@ -357,7 +359,15 @@
             rBody.angularVelocity = -rotateAmount * rotateSpeed;
 
             //Force To Arrow Forward
-            rBody.velocity = arrowTr.up * 18f;
+            rBody.velocity = arrowTr.up * speed;
+        }
+
+        void DirectionFix()
+        {
+            if (rBody.angularVelocity > 0f)
+                rBody.angularVelocity = 0f;
+
+            CatLog.Log("FIXED DIRECTION CALLED");
         }
 
         /// <summary>

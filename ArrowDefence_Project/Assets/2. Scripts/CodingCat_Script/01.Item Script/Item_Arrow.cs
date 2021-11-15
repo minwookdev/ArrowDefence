@@ -105,7 +105,7 @@
             }
 
             //TEMP : SKILL TEST
-            arrowSkillFst = new ReboundArrow();
+            arrowSkillFst = new GuidanceArrow();
 
             //Create Arrow SkillSets Instances
             if (arrowSkillFst == null && arrowSkillSec == null)

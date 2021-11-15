@@ -37,12 +37,11 @@
         {
             //Get Velocity of the Arrow
             velocity = arrowRigidBody.velocity;
-
-            //Arrow Fired
-            if(velocity.magnitude != 0 && arrowRigidBody.isKinematic == false)
-            {
-                CalcAngle();        //Arrow Direction Update
+            //
+            //When Arrow Fired
+            if(velocity.magnitude != 0 && arrowRigidBody.isKinematic == false) {
                 CheckArrowBounds(); //Check the Arrow Bounds
+                //CalcAngle();      //Arrow Direction Update
             }
         }
 

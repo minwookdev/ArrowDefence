@@ -420,9 +420,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 501263655bfeeb2469ad78cbae96c707, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  trailObject: {fileID: 3548661466032091842}
   trailRender: {fileID: 3548661466022692984}
   rBody: {fileID: 3548661466032091851}
+  forceMagnitude: 18
 --- !u!50 &3548661466032091851
 Rigidbody2D:
   serializedVersion: 4
@@ -443,7 +443,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 4
+  m_Constraints: 0
 --- !u!1 &3548661466032091862
 GameObject:
   m_ObjectHideFlags: 0

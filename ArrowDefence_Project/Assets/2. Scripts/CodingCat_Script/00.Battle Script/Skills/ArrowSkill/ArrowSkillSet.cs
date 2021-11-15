@@ -205,36 +205,52 @@
         {
             switch (activeType)
             {
-                case ARROWSKILL_ACTIVETYPE.FULL:           return ActiveAtkAddProj(collider); 
+                case ARROWSKILL_ACTIVETYPE.FULL:           return ActiveFull(collider); 
                 case ARROWSKILL_ACTIVETYPE.ATTACK_AIR:     return ActiveAtkAir(collider);        
                 case ARROWSKILL_ACTIVETYPE.ATTACK_ADDPROJ: return ActiveAtkAddProj(collider);
                 case ARROWSKILL_ACTIVETYPE.ATTACK:         return ActiveAtk(collider);
-                case ARROWSKILL_ACTIVETYPE.AIR_ADDPROJ:    return ActiveAddProj();
-                case ARROWSKILL_ACTIVETYPE.AIR:            return AirSkillHit();
-                case ARROWSKILL_ACTIVETYPE.ADDPROJ:        return ActiveAddProj();
-                case ARROWSKILL_ACTIVETYPE.EMPTY:          return true;
+                case ARROWSKILL_ACTIVETYPE.AIR_ADDPROJ:    return ActiveAddProj(); // <- 공격 판정 없음
+                case ARROWSKILL_ACTIVETYPE.AIR:            return DefaultHit(collider);
+                case ARROWSKILL_ACTIVETYPE.ADDPROJ:        return ActiveAddProj(); // <- 공격 판정 없음
+                case ARROWSKILL_ACTIVETYPE.EMPTY:          return true; //Empty인 경우는 SkillSets 자체가 성립할 수 없다
                 default:                                   return true;
             }
         }
 
-        public void OnAir()
+        public void OnUpdate()
         {
             switch (activeType)
             {
-                case ARROWSKILL_ACTIVETYPE.FULL:        ActiveAir(); break;
-                case ARROWSKILL_ACTIVETYPE.ATTACK_AIR:  ActiveAir(); break;
-                case ARROWSKILL_ACTIVETYPE.ATTACK_ADDPROJ:           break;
-                case ARROWSKILL_ACTIVETYPE.ATTACK:                   break;
-                case ARROWSKILL_ACTIVETYPE.AIR_ADDPROJ: ActiveAir(); break;
-                case ARROWSKILL_ACTIVETYPE.AIR:         ActiveAir(); break;
-                case ARROWSKILL_ACTIVETYPE.ADDPROJ:                  break;
-                case ARROWSKILL_ACTIVETYPE.EMPTY:                    break;
+                case ARROWSKILL_ACTIVETYPE.FULL:        UpdateOnAir(); break;
+                case ARROWSKILL_ACTIVETYPE.ATTACK_AIR:  UpdateOnAir(); break;
+                case ARROWSKILL_ACTIVETYPE.AIR_ADDPROJ: UpdateOnAir(); break;
+                case ARROWSKILL_ACTIVETYPE.AIR:         UpdateOnAir(); break;
+                default:                                               break;
             }
         }
 
-        #region Functions by Active Type
-        ///AIR TYPE은 아직 OnHit쪽에서 해줄게 없어서 따로 구현안함, 추후에 Air Type Skill 어떻게 구현되냐에 따라
-        ///함수 따로 만들어서 사용할 것.
+        public void OnFixedUpdate()
+        {
+            switch (activeType)
+            {
+                case ARROWSKILL_ACTIVETYPE.FULL:        FixedUpdateOnAir(); break;
+                case ARROWSKILL_ACTIVETYPE.ATTACK_AIR:  FixedUpdateOnAir(); break;
+                case ARROWSKILL_ACTIVETYPE.AIR_ADDPROJ: FixedUpdateOnAir(); break;
+                case ARROWSKILL_ACTIVETYPE.AIR:         FixedUpdateOnAir(); break;
+                default:                                                    break;
+            }
+        }
+
+        #region ACTIVE_SKILL
+
+        bool ActiveFull(Collider2D collider)
+        {
+            addProjSkill.OnHit();
+            bool isDisable = hitSkill.OnHit(collider, out tempTr);
+            if (isDisable == false)
+                airSkill.OnHit(tempTr);
+            return isDisable;
+        }
 
         bool ActiveAtkAddProj(Collider2D collider)
         {
@@ -249,41 +265,62 @@
 
         bool ActiveAddProj()
         {
-            addProjSkill.OnHit(); airSkill.Clear();
+            addProjSkill.OnHit();
             return true;
         }
 
         bool ActiveAtkAir(Collider2D collider)
         {
             bool isDisable = hitSkill.OnHit(collider, out tempTr);
-            if (isDisable == false)
+            if (isDisable == false) //Disable되는 상황이 아닐 경우만 Transform 보내줌
                 airSkill.OnHit(tempTr);
-            else
-                airSkill.Clear();
             return isDisable;
         }
 
-        void ActiveAir()
-        {
-            airSkill.OnAir();
-        }
+        void UpdateOnAir() => airSkill.OnUpdate();
 
-        bool AirSkillHit()
-        {
-            airSkill.Clear(); return true;
-        }
+        void FixedUpdateOnAir() => airSkill.OnFixedUpdate();
 
+        #endregion
+
+        #region CLEAR
+
+        /// <summary>
+        /// Call When Disable Arrow. if the Init SkillSets
+        /// </summary>
         public void Clear()
         {
-            if (hitSkill != null)
-                hitSkill.Clear();
-            if (airSkill != null)
-                airSkill.Clear();
-            if (addProjSkill != null)
-                addProjSkill.Clear();
+            switch (activeType)
+            {
+                case ARROWSKILL_ACTIVETYPE.FULL:           ClearHit(); ClearAir(); ClearAddProj(); break;
+                case ARROWSKILL_ACTIVETYPE.ATTACK_AIR:     ClearHit(); ClearAir();                 break;
+                case ARROWSKILL_ACTIVETYPE.ATTACK_ADDPROJ: ClearHit(); ClearAddProj();             break;
+                case ARROWSKILL_ACTIVETYPE.ATTACK:         ClearHit();                             break;
+                case ARROWSKILL_ACTIVETYPE.AIR_ADDPROJ:    ClearAir(); ClearAddProj();             break;
+                case ARROWSKILL_ACTIVETYPE.AIR:            ClearAir();                             break;
+                case ARROWSKILL_ACTIVETYPE.ADDPROJ:        ClearAddProj();                         break;
+            }
+        }
 
-            //이것도 타입에 따라서 나눠서 처리할 것.
-            //Clear때마다 계속 체크하면 낭비인거같다
+        void ClearHit() => hitSkill.Clear();
+
+        void ClearAir() => airSkill.Clear();
+
+        void ClearAddProj() => addProjSkill.Clear();
+
+        #endregion
+
+        #region DEFAULT
+
+        bool DefaultHit(Collider2D collider)
+        {
+            collider.SendMessage("OnHitObject", Random.Range(30f, 50f), SendMessageOptions.DontRequireReceiver);
+            return true;
+        }
+
+        void DefaultAir()
+        {
+
         }
 
         #endregion

@@ -26,6 +26,7 @@
         //Skill Variables
         bool isInitSkill    = false;
         bool isDisableArrow = false;
+        [SerializeField]
         ArrowSkillSet arrowSkillSets = null;
 
         private void Start()
@@ -52,18 +53,30 @@
 
         private void Update()
         {
-            if (!isLaunched)
-            {
+            if (isLaunched == false) {
                 ClampPosition(); //CalculatePower();
             }
-            else
-            {
-                if (isInitSkill)
-                    arrowSkillSets.OnAir();
+            else {
+                if (isInitSkill == true)
+                    arrowSkillSets.OnUpdate();
             }
         }
 
-        void OnDisable() => isLaunched = false;
+        void FixedUpdate()
+        {
+            if(isLaunched == true) {
+                if (isInitSkill == true)
+                    arrowSkillSets.OnFixedUpdate();
+            }
+        }
+
+        void OnDisable()
+        {
+            isLaunched = false;
+
+            if (isInitSkill == true)
+                arrowSkillSets.Clear();
+        }
 
         void OnDestroy() => arrowSkillSets = null;
 
@@ -115,11 +128,6 @@
         {
             target.SendMessage("OnHitObject", Random.Range(30f, 50f), SendMessageOptions.DontRequireReceiver);
             DisableRequest(gameObject);
-        }
-
-        void OnAir()
-        {
-
         }
 
         /// <summary>

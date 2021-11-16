@@ -50,8 +50,7 @@
 
             //Init-Arrow Skill with Pool-tag params
             arrowSkillSets = GameManager.Instance.GetArrowSkillSets(gameObject.name);
-            if (arrowSkillSets != null)
-            {
+            if (arrowSkillSets != null) {
                 isInitSkill = true;
                 arrowSkillSets.Init(tr, rBody, this);
             }
@@ -96,10 +95,7 @@
             arrowSkillSets.Clear();
         }
 
-        private void OnDestroy()
-        {
-            arrowSkillSets = null;
-        }
+        private void OnDestroy() => arrowSkillSets = null;
 
         private void CheckArrowBounds()
         {
@@ -108,8 +104,8 @@
             xIn = (arrowPosition.x >= topLeftScreenPoint.x - offset.x && arrowPosition.x <= bottomRightScreenPoint.x + offset.x);
             yIn = (arrowPosition.y >= bottomRightScreenPoint.y - offset.y && arrowPosition.y <= topLeftScreenPoint.y + offset.y);
 
-            if (!(xIn && yIn))
-            {
+            //Out of Screen
+            if (!(xIn && yIn)) {
                 DisableRequest(this.gameObject);
                 return;
             }
@@ -126,6 +122,9 @@
             //Calc Arrow Angle
             arrowAngle  = (Mathf.Atan2(velocity.x, -velocity.y) * Mathf.Rad2Deg + 180);
             tr.rotation = Quaternion.AngleAxis(arrowAngle, tr.forward);
+
+            ///Description
+            ///AD_Arrow에 작성함.
         }
 
         public void DisableRequest(GameObject target) => CCPooler.ReturnToPool(target, 0);

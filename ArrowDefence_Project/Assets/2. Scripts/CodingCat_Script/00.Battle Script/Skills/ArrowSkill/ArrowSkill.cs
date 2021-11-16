@@ -52,22 +52,23 @@
         int maxChainCount     = 2;  //최대 연쇄횟수
         float scanRange       = 5f; //Monster 인식 범위
 
+        //temp colliders
+        Collider2D[] tempCollArray    = null;
+        List<Collider2D> tempCollList = null;
+
         //return true : DisableArrow || false : IgnoreCollision
         public override bool OnHit(Collider2D target)
         {
             //■■■■■■■■■■■■■ I. Availablity Arrow Skill : 중복 다겟 및 연쇄 횟수 체크 ■■■■■■■■■■■■■
             //최근에 Hit처리한 객체와 동일한 객체와 다시 충돌될 경우, return 처리
             //해당 Monster Object를 무시함 [같은 객체에게 스킬 효과를 터트릴 수 없음]
-            if (lastHitTarget == target.gameObject)
-            {
-                //동일한 대상 객체 무시
+            if (lastHitTarget == target.gameObject) {
+                //동일한 객체에 재-충돌 무시
                 return false;
             }
-            else
-            {
+            else {
                 //연쇄횟수 체크
-                if(currentChainCount >= maxChainCount)
-                {
+                if(currentChainCount >= maxChainCount) {
                     //Monster Hit : 최대 연쇄횟수 도달
                     target.SendMessage("OnHitObject", Random.Range(10f, 30f), SendMessageOptions.DontRequireReceiver);
                     return true;
@@ -82,9 +83,8 @@
             }
 
             //■■■■■■■■■■■■■■■ II Rebound Arrow Skill : Active 절차 개시 ■■■■■■■■■■■■■■■
-            Collider2D[] hitColliders = Physics2D.OverlapCircleAll(arrowTr.position, scanRange);
-            if (hitColliders.Length == 0)
-            {
+            tempCollArray = Physics2D.OverlapCircleAll(arrowTr.position, scanRange);
+            if (tempCollArray.Length == 0) {
                 //주변에 bound 대상 객체가 없는 경우 화살 소멸
                 return true;
             } //->
@@ -123,15 +123,15 @@
             //}
             #endregion
 
-            //■■■■■■■■■■■■■■■ III. Optimal target selection [절차 최적화] ■■■■■■■■■■■■■■■
-            List<Collider2D> monsterColliders = new List<Collider2D>(hitColliders);
-            for (int i = monsterColliders.Count - 1; i >= 0; i--) //Reverse Loop [Remove Array Element]
+            //■■■■■■■■■■■■■■■ III. Optimal target selection ■■■■■■■■■■■■■■■
+            tempCollList = new List<Collider2D>(tempCollArray);
+            for (int i = tempCollList.Count - 1; i >= 0; i--) //Reverse Loop [Remove Array Element]
             {
-                //중복 발동 대상과 Monster가 아닌 Collider는 예외처리.
-                if (monsterColliders[i] == target || monsterColliders[i].CompareTag(AD_Data.OBJECT_TAG_MONSTER) == false)
-                    monsterColliders.Remove(monsterColliders[i]);
+                //중복 발동 대상과 Monster Layer가 아닌 Collider는 예외처리.
+                if (tempCollList[i] == target || tempCollList[i].CompareTag(AD_Data.OBJECT_TAG_MONSTER) == false)
+                    tempCollList.Remove(tempCollList[i]);
             }
-            if(monsterColliders.Count <= 0) //예외처리후 타겟이 없으면 비활성화 처리.
+            if(tempCollList.Count <= 0) //예외처리후 타겟이 없으면 비활성화 처리.
             {
                 return true;
             }
@@ -139,14 +139,14 @@
             //Transform bestTargetTr = null; //-> Vector2 Type으로 변경 (참조값이라 중간에 추적중인 Monster Tr 사라지면 에러)
             Vector3 monsterPos     = Vector3.zero; //Transform이 아닌 Position 저장
             float closestDistSqr   = Mathf.Infinity;
-            for (int i = 0; i < monsterColliders.Count; i++)
+            for (int i = 0; i < tempCollList.Count; i++)
             {
-                Vector2 directionToTarget = monsterColliders[i].transform.position - arrowTr.position;
+                Vector2 directionToTarget = tempCollList[i].transform.position - arrowTr.position;
                 float distSqr = directionToTarget.sqrMagnitude;
                 if(distSqr < closestDistSqr)
                 {
                     closestDistSqr = distSqr;
-                    monsterPos     = monsterColliders[i].transform.position;
+                    monsterPos     = tempCollList[i].transform.position;
                 }
             }
 
@@ -163,17 +163,27 @@
         /// <returns></returns>
         public override bool OnHit(Collider2D target, out Transform targetTr)
         {
-            //■■■■■■■■■■■■■ I. Availablity Arrow Skill : 중복 다겟 및 연쇄 횟수 체크 ■■■■■■■■■■■■■
-            if (lastHitTarget == target.gameObject)
-            {
-                targetTr = null;
-                return false;
+            //■■■■■■■■■■■■■ I. Availablity Arrow Skill : 중복 타겟 및 연쇄 횟수 체크 ■■■■■■■■■■■■■
+            if (lastHitTarget == target.gameObject) {
+                //Air Skill과 Link된 함수는 중복대상과 다시 충돌 시, 근처의 다른 대상을 탐색후 반환하는 로직을 추가.
+                tempCollArray = Physics2D.OverlapCircleAll(arrowTr.position, scanRange, 1 << LayerMask.NameToLayer(AD_Data.LAYER_MONSTER));
+                tempCollList = new List<Collider2D>(tempCollArray);
+                for (int i = tempCollList.Count - 1; i >= 0; i--) {
+                    if (tempCollList[i].gameObject == lastHitTarget)
+                        tempCollList.Remove(tempCollList[i]);
+                }
+                
+                //마지막으로 hit된 대상 거르고, 주변에 다른 타겟이 없다면 null return
+                if(tempCollList.Count <= 0) {
+                    targetTr = null;
+                    return false;
+                }
 
-                //Air Skill과 연계되어야 하는 경우 중복 대상이라면 주변의 다른 객체를 탐색해서 매개변수로
-                //들어온 targetTr에 할당해서 내보내면 어떨까..
+                //Scan범위에 다른 대상이 존재하는 경우 [랜덤 목표 산출] [거리를 비교해서 찾지 않음]
+                targetTr = tempCollList[Random.Range(0, tempCollList.Count)].transform;
+                return false;
             }
-            else
-            {
+            else {
                 //연쇄횟수 체크
                 if (currentChainCount >= maxChainCount)
                 {
@@ -192,22 +202,22 @@
                 target.SendMessage("OnHitObject", Random.Range(10f, 30f), SendMessageOptions.DontRequireReceiver);
             }
             //■■■■■■■■■■■■■■■ II Rebound Arrow Skill : Active 절차 개시 ■■■■■■■■■■■■■■■
-            Collider2D[] hitColliders = Physics2D.OverlapCircleAll(arrowTr.position, scanRange);
-            if (hitColliders.Length == 0) //return
+            tempCollArray = Physics2D.OverlapCircleAll(arrowTr.position, scanRange);
+            if (tempCollArray.Length == 0) //return
             {
                 //주변에 Rebound할 대상 객체가 없는 경우 소멸
                 targetTr = null; 
                 return true;
             }
-            //■■■■■■■■■■■■■■■ III. Optimal target selection [절차 최적화] ■■■■■■■■■■■■■■■
-            List<Collider2D> monsterColliders = new List<Collider2D>(hitColliders);
-            for (int i = monsterColliders.Count - 1; i >= 0; i--) //Reverse Loop [Remove Array Element]
+            //■■■■■■■■■■■■■■■ III. Optimal target selection ■■■■■■■■■■■■■■■
+            tempCollList = new List<Collider2D>(tempCollArray);
+            for (int i = tempCollList.Count - 1; i >= 0; i--) //Reverse Loop [Remove Array Element]
             {
                 //중복 발동 대상과 Monster가 아닌 Collider는 예외처리.
-                if (monsterColliders[i] == target || monsterColliders[i].CompareTag(AD_Data.OBJECT_TAG_MONSTER) == false)
-                    monsterColliders.Remove(monsterColliders[i]);
+                if (tempCollList[i] == target || tempCollList[i].CompareTag(AD_Data.OBJECT_TAG_MONSTER) == false)
+                    tempCollList.Remove(tempCollList[i]);
             }
-            if (monsterColliders.Count <= 0) //예외처리후 타겟이 없으면 비활성화 처리.
+            if (tempCollList.Count <= 0) //예외처리후 타겟이 없으면 비활성화 처리.
             {
                 targetTr = null; 
                 return true;
@@ -216,15 +226,15 @@
             Transform bestTargetTr = null;         //-> Target Transform에 넘겨줄 주소
             Vector3 monsterPos     = Vector3.zero; //Transform이 아닌 Position 저장
             float closestDistSqr   = Mathf.Infinity;
-            for (int i = 0; i < monsterColliders.Count; i++)
+            for (int i = 0; i < tempCollList.Count; i++)
             {
-                Vector2 directionToTarget = monsterColliders[i].transform.position - arrowTr.position;
+                Vector2 directionToTarget = tempCollList[i].transform.position - arrowTr.position;
                 float distSqr = directionToTarget.sqrMagnitude;
                 if (distSqr < closestDistSqr)
                 {
                     closestDistSqr = distSqr;
-                    monsterPos = monsterColliders[i].transform.position;
-                    bestTargetTr = monsterColliders[i].transform;
+                    monsterPos     = tempCollList[i].transform.position;
+                    bestTargetTr   = tempCollList[i].transform;
                 }
             }
 
@@ -457,4 +467,23 @@
 
         }
     }
+
+    public class PiercingArrow : AttackActiveTypeAS
+    {
+        public override bool OnHit(Collider2D target)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override bool OnHit(Collider2D target, out Transform targetTr)
+        {
+            return base.OnHit(target, out targetTr);
+        }
+
+        public override void Clear()
+        {
+            throw new System.NotImplementedException();
+        }
+    }
+
 }

@@ -1,6 +1,5 @@
 ﻿namespace ActionCat
 {
-    using System;
     using UnityEngine;
 
     public class AD_ArrowDirection : MonoBehaviour
@@ -35,9 +34,9 @@
 
         private void Update()
         {
-            //Get Velocity of the Arrow
-            velocity = arrowRigidBody.velocity;
-            //
+            //Get Velocity of the Arrow //CalcAngle Verriables
+            //velocity = arrowRigidBody.velocity;
+
             //When Arrow Fired
             if(velocity.magnitude != 0 && arrowRigidBody.isKinematic == false) {
                 CheckArrowBounds(); //Check the Arrow Bounds
@@ -51,6 +50,11 @@
             arrowAngle = (Mathf.Atan2(velocity.x, -velocity.y) * Mathf.Rad2Deg + 180);
             //Set Rotation of the Arrow
             tr.rotation = Quaternion.AngleAxis(arrowAngle, tr.forward);
+
+            ///Description
+            ///이게 아마 예전 버전의 프로젝트에서 현재 rigidbody의 velocity direction에 따라서
+            ///화살이 사출되고, 중력에 따라 화살이 포물선을 그리도록 헤드 파트부터 떨어지도록 하는 코드 일 것이다
+            ///현재는 사용되지 않는다.
         }
 
         /// <summary>
@@ -65,8 +69,7 @@
             yIn = (arrowPosition.y >= bottomRightScreenPoint.y - offset.y && arrowPosition.y <= topLeftScreenPoint.y + offset.y);
 
             //Arrow Out of Screen
-            if(!(xIn && yIn))
-            {
+            if(!(xIn && yIn)) {
                 adArrow.DisableRequest(gameObject);
                 return;
             }

@@ -22,8 +22,7 @@
         public ArrowSkillSet(ArrowSkill arrowSkillFst, ArrowSkill arrowSkillSec)
         {
             //First Arrow Skill Init
-            if(arrowSkillFst != null)
-            {
+            if(arrowSkillFst != null) {
                 switch (arrowSkillFst)
                 {
                     case AttackActiveTypeAS attackType: InitAttackTypeSkill(attackType);             break;
@@ -34,8 +33,7 @@
             }
 
             //Seconds Arrow Skill Init
-            if(arrowSkillSec != null)
-            {
+            if(arrowSkillSec != null) {
                 if (arrowSkillSec is AttackActiveTypeAS atkType)     InitAttackTypeSkill(atkType);
                 else if (arrowSkillSec is AirActiveTypeAS airType)   InitAirTypeSkill(airType);
                 else if (arrowSkillSec is AddProjTypeAS addProjType) InitAdditionalProjectilesSkill(addProjType);
@@ -59,31 +57,25 @@
             activeType = skillsets.activeType;
 
             //Clone-Arrow Skill Classes
-            if(skillsets.hitSkill != null)
-            {
-                switch (skillsets.hitSkill)
-                {
+            if(skillsets.hitSkill != null) {
+                switch (skillsets.hitSkill) {
                     case ReboundArrow reboundArrow: hitSkill = new ReboundArrow(reboundArrow); break;
                     case SplitArrow     splitArrow: hitSkill = new SplitArrow(splitArrow);     break;
-                    default: hitSkill = null; break; //else
+                    default:                        hitSkill = null;                           break; //else
                 }
             }
 
             //Clone-Air Active Type Skill
-            if(skillsets.airSkill != null)
-            {
-                switch (skillsets.airSkill)
-                {
+            if(skillsets.airSkill != null) {
+                switch (skillsets.airSkill) {
                     case HomingArrow homingArrow: airSkill = new HomingArrow(homingArrow); break;
-                    default: airSkill = null; break; //else
+                    default:                      airSkill = null;                         break; //else
                 }
             }
 
             //Clone-Additional Projectile Type Skill
-            if(skillsets.addProjSkill != null)
-            {
-                switch (skillsets.addProjSkill)
-                {
+            if(skillsets.addProjSkill != null) {
+                switch (skillsets.addProjSkill) {
                     default: break;
                 }
             }
@@ -182,7 +174,7 @@
         }
 
         /// <summary>
-        /// 각각의 ArrowObject에서 ArrowSkillSet Class를 할당받고 실행.
+        /// Init-Arrow Skill Sets
         /// </summary>
         /// <param name="arrowTr"></param>
         /// <param name="rigidBody"></param>
@@ -241,7 +233,7 @@
             }
         }
 
-        #region ACTIVE_SKILL
+        #region ON-HIT-CALLBACK
 
         bool ActiveFull(Collider2D collider)
         {
@@ -276,14 +268,15 @@
                 airSkill.CallbackOnHit(tempTr);
             return isDisable;
 
-            ///만약 중복 대상을 AirSkill이 Target Transform으로 잡고 있는 상황이고,
-            ///atk Skill에서 같은 대상 객체와 충돌하면 현재 airSkill에 tempTransform에 null을 할당한 채로
-            ///매개변수로써 보내줌으로 AirSkill에서 다른 대상 객체를 탐색하도록 한다.
-            ///그야말로, 살아있는 화살이 되는 셈이다 반칙같은
-            ///
-            ///중복 대상이라도 합리적으로 Hit할 방법을 생각해보자
-            ///Rebound에서 만약에 중복 대상을 다시 hit한 상황이라면 주변에 다른 Object를 찾아서 넣어주는 방식으로 처리해보면 어떨까..?
+            ///tempTr을 Hitskill의 OnHit함수로 매개변수로써 보내고, 
+            ///OnHit함수에서 적절한 타겟을 찾게되어 tempTr에 null이 아닌 값이 할당되면
+            ///OnAir에서 업데이트로 목표를 찾는 로직을 실행하지 않고 바로 
+            ///targetTransform을 사용하여 효과를 실행시킬 수 있게된다.
         }
+
+        #endregion
+
+        #region ON-AIR-UPDATE
 
         void UpdateOnAir() => airSkill.OnUpdate();
 
@@ -322,6 +315,7 @@
 
         bool DefaultHit(Collider2D collider)
         {
+            //Air Skill만 존재하는 경우, Monster가 대미지를 받는 로직만 적용. 추후 대미지 관련 코드가 구현되면 적용할 것.
             collider.SendMessage("OnHitObject", Random.Range(30f, 50f), SendMessageOptions.DontRequireReceiver);
             return true;
         }

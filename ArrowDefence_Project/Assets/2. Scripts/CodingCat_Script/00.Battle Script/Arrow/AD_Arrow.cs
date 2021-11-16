@@ -111,10 +111,8 @@
 
         void OnTriggerEnter2D(Collider2D coll)
         {
-            if(coll.gameObject.layer == LayerMask.NameToLayer(AD_Data.LAYER_MONSTER))
-            {
-                if (isInitSkill)
-                {
+            if(coll.gameObject.layer == LayerMask.NameToLayer(AD_Data.LAYER_MONSTER)) {
+                if (isInitSkill) {
                     isDisableArrow = arrowSkillSets.OnHit(coll);
                     if (isDisableArrow)
                         DisableRequest(gameObject);

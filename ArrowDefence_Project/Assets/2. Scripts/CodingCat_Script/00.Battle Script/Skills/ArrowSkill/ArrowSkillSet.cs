@@ -74,7 +74,7 @@
             {
                 switch (skillsets.airSkill)
                 {
-                    case GuidanceArrow guidanceArrow: airSkill = new GuidanceArrow(guidanceArrow); break;
+                    case HomingArrow homingArrow: airSkill = new HomingArrow(homingArrow); break;
                     default: airSkill = null; break; //else
                 }
             }
@@ -248,7 +248,7 @@
             addProjSkill.OnHit();
             bool isDisable = hitSkill.OnHit(collider, out tempTr);
             if (isDisable == false)
-                airSkill.OnHit(tempTr);
+                airSkill.CallbackOnHit(tempTr);
             return isDisable;
         }
 
@@ -273,8 +273,16 @@
         {
             bool isDisable = hitSkill.OnHit(collider, out tempTr);
             if (isDisable == false) //Disable되는 상황이 아닐 경우만 Transform 보내줌
-                airSkill.OnHit(tempTr);
+                airSkill.CallbackOnHit(tempTr);
             return isDisable;
+
+            ///만약 중복 대상을 AirSkill이 Target Transform으로 잡고 있는 상황이고,
+            ///atk Skill에서 같은 대상 객체와 충돌하면 현재 airSkill에 tempTransform에 null을 할당한 채로
+            ///매개변수로써 보내줌으로 AirSkill에서 다른 대상 객체를 탐색하도록 한다.
+            ///그야말로, 살아있는 화살이 되는 셈이다 반칙같은
+            ///
+            ///중복 대상이라도 합리적으로 Hit할 방법을 생각해보자
+            ///Rebound에서 만약에 중복 대상을 다시 hit한 상황이라면 주변에 다른 Object를 찾아서 넣어주는 방식으로 처리해보면 어떨까..?
         }
 
         void UpdateOnAir() => airSkill.OnUpdate();

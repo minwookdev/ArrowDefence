@@ -153,9 +153,9 @@
         {
             rBody.isKinematic = false;
             isLaunched = true;
-
             //this.rBody.gravityScale = 0; //-> Modify in Start Method
-            rBody.velocity = force;
+
+            rBody.velocity = force.normalized * ArrowPower;
             //or [Used AddForce]
             //this.rBody.AddForce(force, ForceMode2D.Force);
             //rBody.AddForce(force, ForceMode2D.Impulse); // -> Recommend
@@ -208,11 +208,11 @@
         //    Gizmos.DrawWireSphere(arrowTr.position, radius);
         //}
 
-        void OnDrawGizmos() {
-            float radius = 3f;
-            Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(arrowTr.position, radius);
-        }
+        //void OnDrawGizmos() {
+        //    float radius = 3f;
+        //    Gizmos.color = Color.red;
+        //    Gizmos.DrawWireSphere(arrowTr.position, radius);
+        //}
         #endregion
 
         //private void CalculatePower()

@@ -33,7 +33,7 @@
 
     public abstract class AirActiveTypeAS : ArrowSkill
     {
-        public virtual void OnHit(Transform tr) { }
+        public virtual void CallbackOnHit(Transform tr) { }
 
         public abstract void OnUpdate();
 
@@ -168,6 +168,9 @@
             {
                 targetTr = null;
                 return false;
+
+                //Air Skill과 연계되어야 하는 경우 중복 대상이라면 주변의 다른 객체를 탐색해서 매개변수로
+                //들어온 targetTr에 할당해서 내보내면 어떨까..
             }
             else
             {
@@ -210,9 +213,9 @@
                 return true;
             }
 
-            Transform bestTargetTr = null;     //-> Target Transform에 넘겨줄 주소
-            Vector3 monsterPos = Vector3.zero; //Transform이 아닌 Position 저장
-            float closestDistSqr = Mathf.Infinity;
+            Transform bestTargetTr = null;         //-> Target Transform에 넘겨줄 주소
+            Vector3 monsterPos     = Vector3.zero; //Transform이 아닌 Position 저장
+            float closestDistSqr   = Mathf.Infinity;
             for (int i = 0; i < monsterColliders.Count; i++)
             {
                 Vector2 directionToTarget = monsterColliders[i].transform.position - arrowTr.position;
@@ -254,25 +257,29 @@
         }
     }
 
-    public class GuidanceArrow : AirActiveTypeAS
+    public class HomingArrow : AirActiveTypeAS
     {
         Transform targetTr   = null;
         bool isFindTarget    = false;
-        float searchInterval = .1f;
-        float currentSearchTime = 0f;
-        float scanRadius        = 3f;   //정확히 이 ScanRange가 얼마정도되는지 테스트 필요.
-                                        //기즈모 사이즈 파악해서 ReboundArrow 범위와 같이 조정해주기
+        float searchInterval = .1f;     //Find Target Update Interval
+        float currentSearchTime = 0f;   //Current Search Time
+        float scanRadius        = 3f;   //Detection Range
+                                       
         //Chasing Speed value
         float speed       = 6f;
         float rotateSpeed = 800f;
 
         //Target Colliders
         Collider2D[] colliders = null;
+        bool isFixDirection    = false;
 
         //Call Every Frames
-        public override void OnUpdate()
+        public override void OnUpdate() 
         {
             if (targetTr == null) { //Target Not Found
+                isFindTarget = false;
+
+                //Update Target Find Interval
                 currentSearchTime -= Time.deltaTime;
                 if(currentSearchTime <= 0)
                 {
@@ -280,10 +287,8 @@
                     targetTr = SearchTarget();
                     currentSearchTime = searchInterval;
                 }
-
-                isFindTarget = false;
             }
-            else { //Target Found
+            else {  //Target Found
                 isFindTarget = true;
 
                 //Target GameObject Alive Check
@@ -300,10 +305,13 @@
                 DirectionFix();
         }
 
-        public override void OnHit(Transform tr)
+        /// <summary>
+        /// Link with Hit Type Skill
+        /// </summary>
+        /// <param name="tr">target transform</param>
+        public override void CallbackOnHit(Transform tr)
         {
-            if (tr == null)
-                return;
+            if (tr == null) return;
             targetTr = tr;
         }
 
@@ -318,7 +326,7 @@
         Transform SearchTarget()
         {
             colliders = Physics2D.OverlapCircleAll(arrowTr.position, scanRadius, 1 << LayerMask.NameToLayer(AD_Data.LAYER_MONSTER));
-            CatLog.Log($"Catch Monster Colliders Count : {colliders.Length.ToString()}");
+            //CatLog.Log($"Catch Monster Colliders Count : {colliders.Length.ToString()}");
             if (colliders.Length <= 0)      // No Collider Detected.
                 return null;
             else if (colliders.Length == 1) // One Collider Detected.
@@ -343,12 +351,18 @@
                 return optimalTargetTr;
             }
 
-            //Search Target에서 못빠져나오는 현상 발생 [간헐적] 원인 분석중
+            //Target을 찾지못하면 DirectionFix들어가서 현재 바라보고있는 방향으로 바로 쏴줘야하는데
+            //Homing의 speed로 계속 받고있는건가
+            //속도도 조건을 주어서 해결완료.
+            //Rebound Arrow와 같이 묶였을때, 중복 대상은 Target으로 잡지 않아야 하는데 잡아버리는 문제 발견.
         }
 
         void Homing(Transform targetTr)
         {
             //if (targetTr == null) return; //-> 호출부에서 예외처리 되고있기 때문에 따로 안해줌
+            //Fix Direction after Non-target
+            isFixDirection = false;
+
             Vector2 direction = (Vector2)targetTr.position - rBody.position;
             direction.Normalize(); //Only Direction
 
@@ -363,11 +377,39 @@
 
         void DirectionFix()
         {
-            if (rBody.angularVelocity > 0f)
+            //if (rBody.angularVelocity > 0f)
+            //{
+            //    rBody.angularVelocity = 0f;
+            //    arrow.ShotToDirectly(arrowTr.up);
+            //}
+
+            //Fix Direction Once. (used isFixDirection)
+            //if(isFixDirection == false)
+            //{
+            //    if(rBody.angularVelocity > 0f)
+            //    {
+            //        rBody.angularVelocity = 0f;
+            //        arrow.ShotToDirectly(arrowTr.up);
+            //    }
+            //
+            //    isFixDirection = true;
+            //}
+
+            //Fix Direction -> 이대로면 화살이 느려지지는 않지만, 계속 Update들어오게 되서 왠지 좀 싫음 
+            //rBody.angularVelocity = 0f;
+            //arrow.ShotToDirectly(arrowTr.up);
+
+            //Direction Fix 들어왔을 때, 한번만 잡아주는 방법으로 진행하고 싶음
+            if(isFixDirection == false)
             {
-                rBody.angularVelocity = 0f;
-                arrow.ShotToDirectly(arrowTr.up);
+                if(rBody.angularVelocity > 0f || rBody.velocity.magnitude < 10f)
+                {
+                    rBody.angularVelocity = 0f;
+                    arrow.ShotToDirectly(arrowTr.up);
+                } isFixDirection = true;
             }
+
+            //다섯판정도 테스트 진행 봄
         }
 
         public override void Init(Transform tr, Rigidbody2D rigid, IArrowObject arrowInter)
@@ -380,7 +422,7 @@
         /// Copy Class Constructor
         /// </summary>
         /// <param name="guidanceArrow"></param>
-        public GuidanceArrow(GuidanceArrow guidanceArrow)
+        public HomingArrow(HomingArrow homingarrow)
         {
             
         }
@@ -388,7 +430,7 @@
         /// <summary>
         /// TEMP Constructor
         /// </summary>
-        public GuidanceArrow()
+        public HomingArrow()
         {
 
         }

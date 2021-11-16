@@ -12185,7 +12185,7 @@ MonoBehaviour:
   ParentTransform: {fileID: 1757660976}
   BowInitPosition: {fileID: 377625007}
   MaxPlayerHealth: 200
-  MaxClearCount: 100
+  MaxClearCount: 300
   ClearSlider: {fileID: 1285843479}
   PlayerHealthSlider: {fileID: 1031677355}
   EnemyBossHealthSlider: {fileID: 14942452}

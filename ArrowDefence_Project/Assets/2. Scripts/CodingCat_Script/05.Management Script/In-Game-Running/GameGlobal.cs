@@ -239,6 +239,16 @@
         RFEFFECT_INCREASE_HEALTH
     }
     /// <summary>
+    /// 정의. 구현된 Arrow Skill Type
+    /// </summary>
+    public enum ARROWSKILL
+    {
+        SKILL_REBOUND,
+        SKILL_HOMING,
+        SKILL_SPLIT,
+        SKILL_PIERCING,
+    }
+    /// <summary>
     /// 정의. Skill 발동 UI 타입
     /// </summary>
     public enum SKILL_ACTIVATIONS_TYPE

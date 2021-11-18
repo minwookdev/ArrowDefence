@@ -12,7 +12,7 @@
         private ArrowSkill arrowSkillFst;
         private ArrowSkill arrowSkillSec;
 
-        //↘Not Save This SkillSet Class
+        //↘Not Save This SkillSet Class [TEMP]
         ArrowSkillSet arrowSkillSets;
         public ArrowSkillSet ArrowSkillSets { 
             get {
@@ -103,10 +103,6 @@
                 CatLog.ELog($"{Item_Name} is Arrow GameObject is NULL, return Function");
                 return;
             }
-
-            //TEMP : SKILL TEST
-            arrowSkillFst = new HomingArrow();
-            arrowSkillSec = new ReboundArrow();
 
             //Create Arrow SkillSets Instances
             if (arrowSkillFst == null && arrowSkillSec == null)

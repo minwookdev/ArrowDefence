@@ -402,12 +402,20 @@ public class ArrowItemData_Editor : Editor
         GUILayout.Label(ItemData_Editor.ArrowItemInfoText, EditorStyles.boldLabel);
 
         GUILayout.BeginVertical("GroupBox");
-
+        GUILayout.Label("Prefab", EditorStyles.boldLabel);
         item.MainArrowObj = (GameObject)EditorGUILayout.ObjectField(ItemData_Editor.ArrowMainObjectText, item.MainArrowObj,
                                                                     typeof(GameObject), allowSceneObjects: false);
 
         item.LessArrowObj = (GameObject)EditorGUILayout.ObjectField(ItemData_Editor.ArrowLessObjectText, item.LessArrowObj,
                                                                     typeof(GameObject), allowSceneObjects: false);
+
+        GUILayout.Space(5f);
+        GUILayout.Label("Skill Slots", EditorStyles.boldLabel);
+        item.ArrowSkillFst = (ArrowSkillData)EditorGUILayout.ObjectField("Skill Slot Fisrt", item.ArrowSkillFst,
+                                                        typeof(ArrowSkillData), allowSceneObjects: false);
+
+        item.ArrowSkillSec = (ArrowSkillData)EditorGUILayout.ObjectField("Skill Slot Seconds", item.ArrowSkillSec,
+                                                        typeof(ArrowSkillData), allowSceneObjects: false);
 
         GUILayout.EndVertical();
 

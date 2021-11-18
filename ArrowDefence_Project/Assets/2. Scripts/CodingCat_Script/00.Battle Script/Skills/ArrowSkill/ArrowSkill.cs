@@ -29,6 +29,8 @@
         {
             targetTr = null; return true;
         }
+
+        public abstract void OnExit(Collider2D target);
     }
 
     public abstract class AirActiveTypeAS : ArrowSkill
@@ -173,15 +175,33 @@
                         tempCollList.Remove(tempCollList[i]);
                 }
                 
-                //마지막으로 hit된 대상 거르고, 주변에 다른 타겟이 없다면 null return
+                //마지막으로 hit된 대상 거르고, 주변에 다른 타겟이 없다면 Hit처리 후 비활성화
                 if(tempCollList.Count <= 0) {
+                    target.SendMessage("OnHitObject", Random.Range(10f, 30f), SendMessageOptions.DontRequireReceiver);
                     targetTr = null;
-                    return false;
+                    return true;
                 }
 
                 //Scan범위에 다른 대상이 존재하는 경우 [랜덤 목표 산출] [거리를 비교해서 찾지 않음]
                 targetTr = tempCollList[Random.Range(0, tempCollList.Count)].transform;
                 return false;
+
+                ///Description
+                ///A. 현재 로직상에서 중복 대상과 Hit된 경우는 호밍화살과 연계된 상황에서 
+                ///   첫 대상과 hit되고 두번째 Target을 찾아가던 중 Target이 다른화살에 의해 비활성화
+                ///   처리되고, 호밍화살에서 다시 첫 대상을 찾아가는 상황에서 자주 발생한다.
+                ///B. 이 경우 원래 로직에서는 중복 대상이기 때문에 hit처리하지 않고, 계속 대상에 무의미한 hit를
+                ///   수행하는 모습을 보였다. 이 때문에 Air Skill (Homing)과 연계된 경우 중복 대상일 경우
+                ///   주변의 다른 타겟이 있는지 확인한 이후, 다른 타겟이 있다면 hit처리를 무시하고 대상
+                ///   Target의 Transform을 할당하여 내보내는 처리를 하고, 대상외 다른 적절한 타겟이 없다면
+                ///   hit처리 후 비활성화를 요청한다.
+                ///C. 야기되는 문제는 첫 대상에 hit된 후, 화살의 회전 로직으로 인해 다시금 충돌되는 상황에서의
+                ///   처리 문제이지만, 이 경우는 첫 충돌 이후, 다른 대상 타겟을 찾았고 연계횟수 중첩이후
+                ///   대미지 처리가 들어간 후 다른 Target Transform을 찾았을 때 라는 것을 의미한다.
+                ///   결국에 첫 충돌이후 비활성화되지 않았으면 주변의 다른 대상이 분명히 있고
+                ///   다시 충돌한다고 해도 hit처리 및 비활성화 처리가 들어가지 않게되고, 다른 Target Transform을
+                ///   전달한다는 말이다.
+                ///D. 논리상 문제는 없을것으로 판단.
             }
             else {
                 //연쇄횟수 체크
@@ -201,6 +221,7 @@
                 //Monster hit 처리
                 target.SendMessage("OnHitObject", Random.Range(10f, 30f), SendMessageOptions.DontRequireReceiver);
             }
+
             //■■■■■■■■■■■■■■■ II Rebound Arrow Skill : Active 절차 개시 ■■■■■■■■■■■■■■■
             tempCollArray = Physics2D.OverlapCircleAll(arrowTr.position, scanRange);
             if (tempCollArray.Length == 0) //return
@@ -209,6 +230,7 @@
                 targetTr = null; 
                 return true;
             }
+
             //■■■■■■■■■■■■■■■ III. Optimal target selection ■■■■■■■■■■■■■■■
             tempCollList = new List<Collider2D>(tempCollArray);
             for (int i = tempCollList.Count - 1; i >= 0; i--) //Reverse Loop [Remove Array Element]
@@ -238,10 +260,15 @@
                 }
             }
 
-            //■■■■■■■■■■■■■■■ III. Force to Target Position ■■■■■■■■■■■■■■■
+            //■■■■■■■■■■■■■■■ IV. Force to Target Position ■■■■■■■■■■■■■■■
             targetTr = bestTargetTr; 
             arrow.ForceToTarget(monsterPos);
             return false;
+        }
+
+        public override void OnExit(Collider2D target)
+        {
+            throw new System.NotImplementedException();
         }
 
         public override void Clear()
@@ -260,10 +287,14 @@
             scanRange     = origin.scanRange;
         }
 
-        public ReboundArrow()
+        /// <summary>
+        /// Create Skill Class Data in Skill Scripable Object
+        /// </summary>
+        /// <param name="item"></param>
+        public ReboundArrow(DataRebound item)
         {
-            maxChainCount = 2;
-            scanRange = 5f;
+            scanRange     = item.ScanRadius;
+            maxChainCount = item.MaxChainCount;
         }
     }
 
@@ -369,7 +400,7 @@
 
         void Homing(Transform targetTr)
         {
-            //if (targetTr == null) return; //-> 호출부에서 예외처리 되고있기 때문에 따로 안해줌
+            if (targetTr == null) return; //Call Safety
             //Fix Direction after Non-target
             isFixDirection = false;
 
@@ -432,9 +463,24 @@
         /// Copy Class Constructor
         /// </summary>
         /// <param name="guidanceArrow"></param>
-        public HomingArrow(HomingArrow homingarrow)
+        public HomingArrow(HomingArrow origin)
         {
-            
+            searchInterval = origin.searchInterval;
+            scanRadius     = origin.scanRadius;
+            speed          = origin.speed;
+            rotateSpeed    = origin.rotateSpeed;
+        }
+
+        /// <summary>
+        /// Create Skill Data in Skill Scriptable Object
+        /// </summary>
+        /// <param name="data"></param>
+        public HomingArrow(DataHoming data)
+        {
+            searchInterval = data.TargetSearchInterval;
+            scanRadius     = data.ScanRadius;
+            speed          = data.HomingSpeed;
+            rotateSpeed    = data.HomingRotateSpeed;
         }
 
         /// <summary>
@@ -449,6 +495,11 @@
     public class SplitArrow : AttackActiveTypeAS
     {
         public override bool OnHit(Collider2D target)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override void OnExit(Collider2D target)
         {
             throw new System.NotImplementedException();
         }
@@ -470,19 +521,105 @@
 
     public class PiercingArrow : AttackActiveTypeAS
     {
+        public byte currentChainCount = 0;
+        public byte maxChainCount;
+
+        public GameObject lastHitTarget = null;
+
+        float tempRadius = 5f;
+
+        /// <summary>
+        /// return true == DisableArrow || false == aliveArrow
+        /// </summary>
+        /// <param name="target"></param>
+        /// <returns></returns>
         public override bool OnHit(Collider2D target)
         {
-            throw new System.NotImplementedException();
+            if (lastHitTarget == target.gameObject) {
+                //Ignore Duplicate Target
+                return false;
+            }
+            else {
+                if (currentChainCount >= maxChainCount) {
+                    //Hit 처리 후 화살객체 Disable
+                    target.SendMessage("OnHitObject", Random.Range(10f, 30f), SendMessageOptions.DontRequireReceiver);
+                    return true;
+                }
+
+                //연쇄횟수 중첩 및 타겟 저장
+                currentChainCount++;
+                lastHitTarget = target.gameObject;
+
+                //Monster Hit 처리
+                target.SendMessage("OnHitObject", Random.Range(10f, 30f), SendMessageOptions.DontRequireReceiver);
+            } return false;
         }
 
+        /// <summary>
+        /// Linked Air Type Skill
+        /// </summary>
+        /// <param name="target"></param>
+        /// <param name="targetTr"></param>
+        /// <returns></returns>
         public override bool OnHit(Collider2D target, out Transform targetTr)
         {
-            return base.OnHit(target, out targetTr);
+            if(lastHitTarget == target.gameObject) {
+                //Ignore Duplicate Target
+                targetTr = null; return false;
+            }
+            else {
+                if(currentChainCount >= maxChainCount) {
+                    //Hit처리 후 Arrow Object Disable 요청
+                    target.SendMessage("OnHitObject", Random.Range(10f, 30f), SendMessageOptions.DontRequireReceiver);
+                    targetTr = null; return true;
+                }
+
+                //연쇄 횟수 중첩 및 타겟 저장
+                currentChainCount++;
+                lastHitTarget = target.gameObject;
+
+                target.SendMessage("OnHitObject", Random.Range(10f, 30f), SendMessageOptions.DontRequireReceiver);
+            }
+
+            //Air Skill과 연계된 경우, 주변의 Random Monster Target을 넘겨줌
+            var collList = new List<Collider2D>(
+            Physics2D.OverlapCircleAll(arrowTr.position, tempRadius,
+                                       1 << LayerMask.NameToLayer(AD_Data.LAYER_MONSTER)));
+            for (int i = collList.Count - 1; i >= 0 ; i--) {
+                if (collList[i].gameObject == lastHitTarget)
+                    collList.Remove(collList[i]);
+            }
+
+            if(collList.Count <= 0) {
+                targetTr = null;
+                return false;
+            }
+            else {
+                targetTr = collList[Random.Range(0, collList.Count)].transform;
+                return false;
+            }
+        }
+
+        public override void OnExit(Collider2D target)
+        {
+            //저장 객체 초기화
+            if (lastHitTarget == target.gameObject)
+                lastHitTarget = null;
         }
 
         public override void Clear()
         {
-            throw new System.NotImplementedException();
+            currentChainCount = 0;
+        }
+
+        public PiercingArrow(PiercingArrow origin)
+        {
+            maxChainCount = origin.maxChainCount;
+        }
+
+        public PiercingArrow(DataPiercing data)
+        {
+            maxChainCount = data.MaxChainCount;
         }
     }
 

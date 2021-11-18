@@ -53,19 +53,20 @@
             if (skillsets == null)
                 return;
 
-            //Clone-(struct)Active-Type
+            // Clone-(struct)Active-Type
             activeType = skillsets.activeType;
 
-            //Clone-Arrow Skill Classes
+            // Clone-Arrow Skill Classes
             if(skillsets.hitSkill != null) {
                 switch (skillsets.hitSkill) {
-                    case ReboundArrow reboundArrow: hitSkill = new ReboundArrow(reboundArrow); break;
-                    case SplitArrow     splitArrow: hitSkill = new SplitArrow(splitArrow);     break;
-                    default:                        hitSkill = null;                           break; //else
+                    case ReboundArrow reboundArrow:   hitSkill = new ReboundArrow(reboundArrow);   break;
+                    case SplitArrow     splitArrow:   hitSkill = new SplitArrow(splitArrow);       break;
+                    case PiercingArrow piercingArrow: hitSkill = new PiercingArrow(piercingArrow); break;
+                    default:                          hitSkill = null;                             break; //else
                 }
             }
 
-            //Clone-Air Active Type Skill
+            // Clone-Air Active Type Skill
             if(skillsets.airSkill != null) {
                 switch (skillsets.airSkill) {
                     case HomingArrow homingArrow: airSkill = new HomingArrow(homingArrow); break;
@@ -73,7 +74,7 @@
                 }
             }
 
-            //Clone-Additional Projectile Type Skill
+            // Clone-Additional Projectile Type Skill
             if(skillsets.addProjSkill != null) {
                 switch (skillsets.addProjSkill) {
                     default: break;
@@ -230,6 +231,17 @@
                 case ARROWSKILL_ACTIVETYPE.AIR_ADDPROJ: FixedUpdateOnAir(); break;
                 case ARROWSKILL_ACTIVETYPE.AIR:         FixedUpdateOnAir(); break;
                 default:                                                    break;
+            }
+        }
+
+        public void OnExit(Collider2D target)
+        {
+            switch (activeType) {
+                case ARROWSKILL_ACTIVETYPE.FULL:           hitSkill.OnExit(target); break;
+                case ARROWSKILL_ACTIVETYPE.ATTACK_AIR:     hitSkill.OnExit(target); break;
+                case ARROWSKILL_ACTIVETYPE.ATTACK_ADDPROJ: hitSkill.OnExit(target); break;
+                case ARROWSKILL_ACTIVETYPE.ATTACK:         hitSkill.OnExit(target); break;
+                default: break;
             }
         }
 

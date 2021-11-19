@@ -11490,7 +11490,7 @@ MonoBehaviour:
   battlePop: {fileID: 1771620631}
   itemInfoPop: {fileID: 777685805}
   MessageText: {fileID: 571249810}
-  isAutoLoad: 1
+  isAutoLoad: 0
 --- !u!4 &360124951
 Transform:
   m_ObjectHideFlags: 0

@@ -187,16 +187,23 @@
 
         private void OnTriggerEnter2D(Collider2D coll)
         {
-            if(coll.gameObject.layer == LayerMask.NameToLayer(AD_Data.LAYER_MONSTER))
-            {
-                if (isInitSkill)
-                {
+            if(coll.gameObject.layer == LayerMask.NameToLayer(AD_Data.LAYER_MONSTER)) {
+                if (isInitSkill) {
                     isDisableArrow = arrowSkillSets.OnHit(coll);
                     if (isDisableArrow)
                         DisableRequest(gameObject);
                 }
                 else
                     OnHit(coll.gameObject);
+            }
+        }
+
+        private void OnTriggerExit2D(Collider2D coll)
+        {
+            if(coll.gameObject.layer == LayerMask.NameToLayer(AD_Data.LAYER_MONSTER)) {
+                if(isInitSkill) {
+                    arrowSkillSets.OnExit(coll);
+                }
             }
         }
     }

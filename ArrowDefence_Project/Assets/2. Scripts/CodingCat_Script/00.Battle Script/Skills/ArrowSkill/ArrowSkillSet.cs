@@ -15,68 +15,73 @@
         #region CONSTRUCTOR
 
         /// <summary>
-        /// 생성자 I. Arrow Item에서 '원본 Skill Set Class' 생성.
-        /// Current Max ArrowSkill Count : 2
+        /// Constructor I. Arrow Item Class에서 Origin Arrow Skill Sets Class 생성.
         /// </summary>
-        /// <param name="arrowskills"></param>
-        public ArrowSkillSet(ArrowSkill arrowSkillFst, ArrowSkill arrowSkillSec)
+        /// <param name="skillInfoFst"></param>
+        /// <param name="skillInfoSec"></param>
+        public ArrowSkillSet(ASInfo skillInfoFst, ASInfo skillInfoSec)
         {
-            //First Arrow Skill Init
-            if(arrowSkillFst != null) {
-                switch (arrowSkillFst)
+            //First Arrow SkillData Init
+            if(skillInfoFst != null) {
+                switch (skillInfoFst.ActiveType)
                 {
-                    case AttackActiveTypeAS attackType: InitAttackTypeSkill(attackType);             break;
-                    case AirActiveTypeAS       airType: InitAirTypeSkill(airType);                   break;
-                    case AddProjTypeAS     addProjType: InitAdditionalProjectilesSkill(addProjType); break;
+                    case ARROWSKILL_ACTIVETYPE.ATTACK:  InitHitTypeSkill(skillInfoFst.SkillData);     break;
+                    case ARROWSKILL_ACTIVETYPE.AIR:     InitAirTypeSkill(skillInfoFst.SkillData);     break;
+                    case ARROWSKILL_ACTIVETYPE.ADDPROJ: InitAddProjTypeSkill(skillInfoFst.SkillData); break;
+                    default: break;
+                }
+            }
+            //Seconds Arrow SkillData Init
+            if(skillInfoSec != null) {
+                switch (skillInfoSec.ActiveType)
+                {
+                    case ARROWSKILL_ACTIVETYPE.ATTACK:  InitHitTypeSkill(skillInfoSec.SkillData);     break;
+                    case ARROWSKILL_ACTIVETYPE.AIR:     InitAirTypeSkill(skillInfoSec.SkillData);     break;
+                    case ARROWSKILL_ACTIVETYPE.ADDPROJ: InitAddProjTypeSkill(skillInfoSec.SkillData); break;
                     default: break;
                 }
             }
 
-            //Seconds Arrow Skill Init
-            if(arrowSkillSec != null) {
-                if (arrowSkillSec is AttackActiveTypeAS atkType)     InitAttackTypeSkill(atkType);
-                else if (arrowSkillSec is AirActiveTypeAS airType)   InitAirTypeSkill(airType);
-                else if (arrowSkillSec is AddProjTypeAS addProjType) InitAdditionalProjectilesSkill(addProjType);
-            }
-
-            //Start Active Type Init
+            //Start SkillSets Activate Type Init
             activeType = InitArrowSkillActiveType(0);
             CatLog.Log($"Arrow SkillSets Active Type : {activeType.ToString()}");
         }
 
+
         /// <summary>
-        /// 생성자 II. GameManager에서 각각의 Arrow Prefab으로 원본 Skill Set Class를 복사하여 뿌려지는 생성자.
+        /// Constructor II. Copy origin ArrowSkillSets Class.
         /// </summary>
-        /// <param name="skillsets"></param>
-        public ArrowSkillSet(ArrowSkillSet skillsets)
+        /// <param name="origin"></param>
+        /// <param name="num"></param>
+        public ArrowSkillSet(ArrowSkillSet origin)
         {
-            if (skillsets == null)
-                return;
+            //Clone-Active Type
+            activeType = origin.activeType;
 
-            // Clone-(struct)Active-Type
-            activeType = skillsets.activeType;
-
-            // Clone-Arrow Skill Classes
-            if(skillsets.hitSkill != null) {
-                switch (skillsets.hitSkill) {
-                    case ReboundArrow reboundArrow:   hitSkill = new ReboundArrow(reboundArrow);   break;
-                    case SplitArrow     splitArrow:   hitSkill = new SplitArrow(splitArrow);       break;
-                    case PiercingArrow piercingArrow: hitSkill = new PiercingArrow(piercingArrow); break;
-                    default:                          hitSkill = null;                             break; //else
+            //Clone-Hit Type Skill
+            if(origin.hitSkill != null) {
+                switch (origin.hitSkill)
+                {
+                    case ReboundArrow rebound:   hitSkill = new ReboundArrow(rebound);   break;
+                    case PiercingArrow piercing: hitSkill = new PiercingArrow(piercing); break;
+                    default: break;
                 }
             }
 
-            // Clone-Air Active Type Skill
-            if(skillsets.airSkill != null) {
-                switch (skillsets.airSkill) {
-                    case HomingArrow homingArrow: airSkill = new HomingArrow(homingArrow); break;
-                    default:                      airSkill = null;                         break; //else
+            //Clone-Air Type Skill
+            if(origin.airSkill != null) {
+                switch (origin.airSkill)
+                {
+                    case HomingArrow homing: airSkill = new HomingArrow(homing); break;
+                    default: break;
                 }
             }
 
-            // Clone-Additional Projectile Type Skill
-            if(skillsets.addProjSkill != null) {
-                switch (skillsets.addProjSkill) {
+            //Clone-Additional Projectiles Typ Skil
+            if (origin.addProjSkill != null) {
+                switch (origin.addProjSkill)
+                {
+                    case SplitArrow split: addProjSkill = new SplitArrow(split); break;
                     default: break;
                 }
             }
@@ -86,28 +91,46 @@
 
         #region INIT
 
-        void InitAttackTypeSkill(AttackActiveTypeAS skillData)
-        {
-            if (hitSkill == null)
-                hitSkill = skillData;
-            else
-                CatLog.WLog($"중복 Type Arrow Skill: {skillData}가 Init되었습니다.");
+        void InitHitTypeSkill(ArrowSkill skillData) {
+            if(hitSkill != null) {
+                CatLog.ELog($"Error : 중복된 ActiveType의 ArrowSkill {skillData}이(가) 할당되었습니다. [ATTACK]"); 
+                return;
+            }
+
+            if(skillData is AttackActiveTypeAS hitTypeSkill) {
+                hitSkill = hitTypeSkill;
+            }
+            else {
+                CatLog.WLog($"{skillData}는(은) AttackActivate Type이 아닙니다.");
+            }
         }
 
-        void InitAirTypeSkill(AirActiveTypeAS skillData)
-        {
-            if (airSkill == null)
-                airSkill = skillData;
-            else
-                CatLog.WLog($"중복 Type Arrow Skill: {skillData}가 Init되었습니다.");
+        void InitAirTypeSkill(ArrowSkill skillData) {
+            if (airSkill != null) {
+                CatLog.ELog($"Error : 중복된 ActiveType의 ArrowSkill {skillData}이(가) 할당되었습니다. [AIR]");
+                return;
+            }
+
+            if (skillData is AirActiveTypeAS airTypeSkill) {
+                airSkill = airTypeSkill;
+            }
+            else {
+                CatLog.WLog($"{skillData}는(은) AirActivate Type이 아닙니다.");
+            }
         }
 
-        void InitAdditionalProjectilesSkill(AddProjTypeAS skillData)
-        {
-            if (addProjSkill == null)
-                addProjSkill = skillData;
-            else
-                CatLog.WLog($"중복 Type Arrow Skill: {skillData}가 Init되었습니다.");
+        void InitAddProjTypeSkill(ArrowSkill skillData) {
+            if(addProjSkill != null) {
+                CatLog.ELog($"Error : 중복된 ActiveType의 ArrowSkill {skillData}이(가) 할당되었습니다. [ADD PROJECTILES]");
+                return;
+            }
+
+            if(skillData is AddProjTypeAS addProjTypeSkill) {
+                addProjSkill = addProjTypeSkill;
+            }
+            else {
+                CatLog.WLog($"{skillData}는(은) Additional Projectiles Type이 아닙니다.");
+            }
         }
 
         /// <summary>
@@ -245,6 +268,23 @@
             }
         }
 
+        /// <summary>
+        /// Call When Disable Arrow. if the Init SkillSets
+        /// </summary>
+        public void Clear()
+        {
+            switch (activeType)
+            {
+                case ARROWSKILL_ACTIVETYPE.FULL:           ClearHit(); ClearAir(); ClearAddProj(); break;
+                case ARROWSKILL_ACTIVETYPE.ATTACK_AIR:     ClearHit(); ClearAir();                 break;
+                case ARROWSKILL_ACTIVETYPE.ATTACK_ADDPROJ: ClearHit(); ClearAddProj();             break;
+                case ARROWSKILL_ACTIVETYPE.ATTACK:         ClearHit();                             break;
+                case ARROWSKILL_ACTIVETYPE.AIR_ADDPROJ:    ClearAir(); ClearAddProj();             break;
+                case ARROWSKILL_ACTIVETYPE.AIR:            ClearAir();                             break;
+                case ARROWSKILL_ACTIVETYPE.ADDPROJ:        ClearAddProj();                         break;
+            }
+        }
+
         #region ON-HIT-CALLBACK
 
         bool ActiveFull(Collider2D collider)
@@ -298,22 +338,7 @@
 
         #region CLEAR
 
-        /// <summary>
-        /// Call When Disable Arrow. if the Init SkillSets
-        /// </summary>
-        public void Clear()
-        {
-            switch (activeType)
-            {
-                case ARROWSKILL_ACTIVETYPE.FULL:           ClearHit(); ClearAir(); ClearAddProj(); break;
-                case ARROWSKILL_ACTIVETYPE.ATTACK_AIR:     ClearHit(); ClearAir();                 break;
-                case ARROWSKILL_ACTIVETYPE.ATTACK_ADDPROJ: ClearHit(); ClearAddProj();             break;
-                case ARROWSKILL_ACTIVETYPE.ATTACK:         ClearHit();                             break;
-                case ARROWSKILL_ACTIVETYPE.AIR_ADDPROJ:    ClearAir(); ClearAddProj();             break;
-                case ARROWSKILL_ACTIVETYPE.AIR:            ClearAir();                             break;
-                case ARROWSKILL_ACTIVETYPE.ADDPROJ:        ClearAddProj();                         break;
-            }
-        }
+
 
         void ClearHit() => hitSkill.Clear();
 

@@ -44,8 +44,7 @@
 
             //Init-Arrow Skill
             arrowSkillSets = GameManager.Instance.GetArrowSkillSets(gameObject.name);
-            if(arrowSkillSets != null)
-            {
+            if(arrowSkillSets != null) {
                 isInitSkill = true;
                 arrowSkillSets.Init(arrowTr, rBody, this);
             }
@@ -119,6 +118,15 @@
                 }
                 else
                     OnHit(coll.gameObject);
+            }
+        }
+
+        void OnTriggerExit2D(Collider2D coll)
+        {
+            if(coll.gameObject.layer == LayerMask.NameToLayer(AD_Data.LAYER_MONSTER)) {
+                if(isInitSkill == true) {
+                    arrowSkillSets.OnExit(coll);
+                }
             }
         }
 

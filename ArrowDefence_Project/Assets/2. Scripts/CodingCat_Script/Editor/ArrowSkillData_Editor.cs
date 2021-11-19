@@ -213,7 +213,7 @@ public class PiercingArrowDataEditor : ArrowSkillData_Editor
         DrawDefaultSkillData();
 
         #region PIERCING_ARROW_DATA
-        GUILayout.Label("Piercing Arrow Info");
+        GUILayout.Label("Piercing Arrow Info", EditorStyles.boldLabel);
         EditorGUILayout.BeginVertical("GroupBox");
 
         //Max Chain Count Property

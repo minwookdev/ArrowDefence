@@ -19,4 +19,4 @@ MonoBehaviour:
   SkillType: 3
   IconSprite: {fileID: 0}
   ActiveType: 3
-  MaxChainCount: 2
+  MaxChainCount: 1

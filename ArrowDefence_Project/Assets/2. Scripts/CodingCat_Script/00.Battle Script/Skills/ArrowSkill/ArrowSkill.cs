@@ -492,19 +492,14 @@
         }
     }
 
-    public class SplitArrow : AttackActiveTypeAS
+    public class SplitArrow : AddProjTypeAS
     {
-        public override bool OnHit(Collider2D target)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public override void OnExit(Collider2D target)
-        {
-            throw new System.NotImplementedException();
-        }
-
         public override void Clear()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override void OnHit()
         {
             throw new System.NotImplementedException();
         }
@@ -528,6 +523,8 @@
 
         float tempRadius = 5f;
 
+        ///관통 횟수에 따른 데미지 감소효과 구현필요.
+
         /// <summary>
         /// return true == DisableArrow || false == aliveArrow
         /// </summary>
@@ -542,7 +539,7 @@
             else {
                 if (currentChainCount >= maxChainCount) {
                     //Hit 처리 후 화살객체 Disable
-                    target.SendMessage("OnHitObject", Random.Range(10f, 30f), SendMessageOptions.DontRequireReceiver);
+                    target.SendMessage("OnHitObject", Random.Range(30f, 5f), SendMessageOptions.DontRequireReceiver);
                     return true;
                 }
 
@@ -551,7 +548,7 @@
                 lastHitTarget = target.gameObject;
 
                 //Monster Hit 처리
-                target.SendMessage("OnHitObject", Random.Range(10f, 30f), SendMessageOptions.DontRequireReceiver);
+                target.SendMessage("OnHitObject", Random.Range(30f, 50f), SendMessageOptions.DontRequireReceiver);
             } return false;
         }
 

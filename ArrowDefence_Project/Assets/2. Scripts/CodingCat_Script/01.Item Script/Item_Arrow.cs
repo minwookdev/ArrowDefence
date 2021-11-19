@@ -8,12 +8,12 @@
         //Arrow Prefab
         private GameObject MainArrowObject;
         private GameObject LessArrowObject;
-        //Arrow Skill Class
-        private ArrowSkill arrowSkillFst;
-        private ArrowSkill arrowSkillSec;
+        //Arrow Skill Data Class
+        ASInfo arrowSkillInfoFst;
+        ASInfo arrowSkillInfoSec;
 
         //↘Not Save This SkillSet Class [TEMP]
-        ArrowSkillSet arrowSkillSets;
+        ArrowSkillSet arrowSkillSets = null;
         public ArrowSkillSet ArrowSkillSets { 
             get {
                 if (arrowSkillSets != null)
@@ -33,20 +33,16 @@
             this.Item_Sprite = item.Item_Sprite;
             this.Item_Grade  = item.Item_Grade;
 
+            //Init Arrow Prefab
             this.MainArrowObject = item.MainArrowObj;
             this.LessArrowObject = item.LessArrowObj;
-        }
 
-        public Item_Arrow(int id, string name, Sprite sprite, ITEMGRADE grade, GameObject main, GameObject less) : base()
-        {
-            this.EquipType = EQUIP_ITEMTYPE.EQUIP_ARROW;
-            this.Item_Id = id;
-            this.Item_Name = name;
-            this.Item_Sprite = sprite;
-            this.Item_Grade = grade;
-
-            this.MainArrowObject = main;
-            this.LessArrowObject = less;
+            //Init Arrow Skill Information
+            //Init-Arrow Skill Info
+            if (item.ArrowSkillFst != null)
+                this.arrowSkillInfoFst = new ASInfo(item.ArrowSkillFst);
+            if (item.ArrowSkillSec != null)
+                this.arrowSkillInfoSec = new ASInfo(item.ArrowSkillSec);
         }
 
         public Item_Arrow(Item_Arrow item) : base()
@@ -59,8 +55,13 @@
             this.Item_Sprite = item.Item_Sprite;
             this.Item_Grade  = item.Item_Grade;
 
+            //Init Arrow Prefab
             this.MainArrowObject = item.MainArrowObject;
             this.LessArrowObject = item.LessArrowObject;
+
+            //Init Arrow Skill Data
+            this.arrowSkillInfoFst = item.arrowSkillInfoFst;
+            this.arrowSkillInfoSec = item.arrowSkillInfoSec;
         }
 
         /// <summary>
@@ -105,11 +106,11 @@
             }
 
             //Create Arrow SkillSets Instances
-            if (arrowSkillFst == null && arrowSkillSec == null)
+            if (arrowSkillInfoFst == null && arrowSkillInfoSec == null)
                 arrowSkillSets = null;
             else
             {
-                arrowSkillSets = new ArrowSkillSet(arrowSkillFst, arrowSkillSec);
+                arrowSkillSets = new ArrowSkillSet(arrowSkillInfoFst, arrowSkillInfoSec);
                 CatLog.Log($"Arrow Item : {Item_Name} is Init Skills");
             }
 

@@ -19,15 +19,18 @@
             public float MaxCount { get; private set; } = 0f;
             public bool IsPrepared { get; private set; } = false;
             public Func<MonoBehaviour, float> SkillFunc { get; private set; }
+            public Action StopEffectAction { get; private set; }
 
             public ActiveSkillSlotInitData(Sprite iconsprite, float maxcount, bool isprepared,
-                                           SKILL_ACTIVATIONS_TYPE type, Func<MonoBehaviour, float> skillfunc)
+                                           SKILL_ACTIVATIONS_TYPE type, Func<MonoBehaviour, float> skillfunc,
+                                           Action stopskilleffect)
             {
-                SkillIconSprite = iconsprite;
-                MaxCount        = maxcount;
-                IsPrepared      = isprepared;
-                ActiveType      = type;
-                SkillFunc       = skillfunc;
+                SkillIconSprite  = iconsprite;
+                MaxCount         = maxcount;
+                IsPrepared       = isprepared;
+                ActiveType       = type;
+                SkillFunc        = skillfunc;
+                StopEffectAction = stopskilleffect;
             }
         }
 
@@ -51,14 +54,17 @@
         private float duration;
 
         private bool isPreparedSkillActive = false;
+        private bool isEffectActivation    = false;
         private SKILL_ACTIVATIONS_TYPE skillActiveType;
         private EventTrigger eventTrigger;
 
         //Skill Callback
-        System.Action<MonoBehaviour> skillCallback;
-        Func<MonoBehaviour, float> skillFunc;
+        //Active Skill Callback
+        Func<MonoBehaviour, float> activeSkillFunc;
+        //Stop Skill Effect
+        Action stopSkillAction;
 
-        void Init(SKILL_ACTIVATIONS_TYPE type, Sprite skillicon)
+        void InitDefault(SKILL_ACTIVATIONS_TYPE type, Sprite skillicon)
         {
             eventTrigger = GetComponent<EventTrigger>();
             skillActiveType = type;
@@ -71,7 +77,7 @@
 
         public void InitCoolDownSkillButton(ActiveSkillSlotInitData data)
         {
-            Init(data.ActiveType, data.SkillIconSprite);
+            InitDefault(data.ActiveType, data.SkillIconSprite);
 
             if (coolDownMask == null || coolDownTmp == null)
             {
@@ -88,6 +94,7 @@
             coolDownTmp.text = "";
 
             InitEventTriggerCallback(data.SkillFunc);
+            InitEffectStop(data.StopEffectAction);
         }
 
         public void InitStackingSkillButton(ActiveSkillSlotInitData data)
@@ -136,7 +143,7 @@
 
             //Update-UI-Element
             //coolDownTmp.text = (currentCoolDown > 0f) ? currentCoolDown.ToString("F0") : "";
-            coolDownTmp.text = (currentCoolDown > 0f) ? Mathf.CeilToInt(currentCoolDown).ToString() : "";
+            coolDownTmp.text = (currentCoolDown > 0f && currentCoolDown < maxCoolDown) ? Mathf.CeilToInt(currentCoolDown).ToString() : "";
             coolDownMask.fillAmount = currentCoolDown / maxCoolDown;
         }
 
@@ -154,6 +161,32 @@
         {
 
         }
+
+        #region STOP_SKILL [END BATTLE]
+
+        /// <summary>
+        /// Disable Activating Skill Button
+        /// </summary>
+        void InitEffectStop(Action action)
+        {
+            stopSkillAction = action;
+
+            //if the End Battle, Stop Effect Coroutine and Disable Effect Use
+            GameManager.Instance.AddEventEndBattle(() => {
+                if (isEffectActivation == true) {
+                    StopCoroutine(ActiveSkillCo());
+                    stopSkillAction();
+                    CatLog.Log("ACSP 발동 강제종료 처리 실행.");
+                }
+
+                //Slot Disable Effect
+                isPreparedSkillActive   = false;
+                coolDownTmp.text        = "";
+                coolDownMask.fillAmount = 1f;
+            });
+        }
+
+        #endregion
 
         public void DecreaseSkillCoolDown()
         {
@@ -175,15 +208,14 @@
             //skillSlotEntry.callback.AddListener((data) => callback());
             //eventTrigger.triggers.Add(skillSlotEntry);
 
-            skillFunc = callback;
+            activeSkillFunc = callback;
             GameManager.Instance.PreventionPulling(eventTrigger);
         }
 
         void IPointerClickHandler.OnPointerClick(PointerEventData eventData)
         {
-            //스킬 발동 가능여부 판단해서 스킬 발동해줌
-            if (isPreparedSkillActive)
-            {
+            //효과 발동 가능여부 판단해서 스킬 발동해줌
+            if (isPreparedSkillActive) {
                 StartCoroutine(ActiveSkillCo());
             }
             else
@@ -192,8 +224,9 @@
 
         IEnumerator ActiveSkillCo()
         {
-            duration = skillFunc(GameManager.Instance.Controller());
-            coolDownMask.fillAmount = 1f;
+            isEffectActivation = true;
+            duration = activeSkillFunc(GameManager.Instance.Controller());
+            currentCoolDown = maxCoolDown;
 
             //Wait For Skill Duration
             while (duration > 0)
@@ -203,8 +236,9 @@
             }
 
             CatLog.Log("Active Skill 발동 종료 초기화 진행");
-            currentCoolDown = maxCoolDown;
+            
             isPreparedSkillActive = false;
+            isEffectActivation    = false;
         }
     }
 }

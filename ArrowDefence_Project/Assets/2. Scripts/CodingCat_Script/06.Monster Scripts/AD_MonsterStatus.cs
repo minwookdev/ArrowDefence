@@ -1,10 +1,8 @@
 ﻿namespace ActionCat
 {
-    using System.Collections;
     using UnityEngine;
     using DG.Tweening;
     
-
     public class AD_MonsterStatus : MonoBehaviour, IPoolObject, IDamageable
     {
         [Header("MONSTER STATUS DATA")]
@@ -56,7 +54,7 @@
         public void OnHitObject(float damage)
         {
             //Active Monster Hit Event
-            GameManager.Instance.MonsterHitEvent();
+            GameManager.Instance.CallMonsterHitEvent();
 
             //Decrease Monster's Health Point
             currentHealthPoint -= damage;
@@ -131,7 +129,7 @@
             {
                 //연속된 빠른 화살에 계속 Hit될 경우 OnHit메서드에 넣을 경우 여러번 이벤트가 발생할 수 있어서
                 //OnDisable 에서 따로 처리하고 있다.
-                GameManager.Instance.MonsterDeathEvent();   //Active Test Event
+                GameManager.Instance.CallMonsterDeathEvent();
                 BattleProgresser.OnDropItemChance(dropCorrection);
                 BattleProgresser.OnIncreaseClearGauge(clearGaugeIncreaseValue);
             }

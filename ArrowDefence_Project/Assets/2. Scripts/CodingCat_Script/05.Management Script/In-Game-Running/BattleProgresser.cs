@@ -53,6 +53,7 @@
         [Range(100, 1200)] 
         public float MaxClearCount = 100;
         private float currentClearCount = 0f;
+        float tempClearCount = 0f;
 
         [Header("SLIDER'S")]
         public Slider ClearSlider;
@@ -78,10 +79,10 @@
         private BattleSceneRoute battleSceneUI;
         private MonsterSpawner   monsterSpawner;
 
-        public delegate void OnIncreaseValue(float value);
-        public static OnIncreaseValue OnIncreaseClearGauge;
-        public static OnIncreaseValue OnDropItemChance;
-        public static OnIncreaseValue OnDecreasePlayerHealthPoint;
+        public delegate void ValueEventHandler(float value);
+        public static ValueEventHandler OnIncreaseClearGauge;
+        public static ValueEventHandler OnDropItemChance;
+        public static ValueEventHandler OnDecreasePlayerHealthPoint;
         //위에 두놈 하나로 묶어도 괜찮겠다 -> 몬스터를 Kill하면 무조건 발동되는 이벤트들이라서
 
         private void Start()
@@ -101,6 +102,7 @@
 
             OnIncreaseClearGauge += IncreaseClearGauge;
 
+            #region OLD
             //Init-GameObject Player's Equipments
             //GameManager.Instance.InitEquipments(BowInitPosition, ParentTransform, 1, 1);
 
@@ -121,6 +123,7 @@
             //Init-Accessory Skill Slots
             //var accessorySkillDatas = GameManager.Instance.ReturnSkillSlotData();
             //battleSceneUI.InitSkillSlots(accessorySkillDatas);
+            #endregion 
 
             //Init-Player Equipments [Init Pool, Arrow Swap Slot Data, Skill Slot Data]
             BattleSceneRoute.ArrowSwapSlotInitData[]     arrowSwapSlotDatas;
@@ -132,9 +135,15 @@
             battleSceneUI.InitSkillSlots(accessorySkillSlotDatas);
 
             //Init-GameManager Event [TEST] (추후 특수효과 발동 및 특수 이벤트에 활용 예정)
-            GameManager.Instance.MonsterHitEvent     += () => CatLog.Log("On Monster Hit");
-            GameManager.Instance.MonsterDeathEvent   += () => CatLog.Log("On Monster Death");
-            GameManager.Instance.MonsterLessHitEvent += () => CatLog.Log("On Monster Hit Less Arrow");
+            GameManager.Instance.AddEventMonsterHit(() => CatLog.Log("On Monster Hit"));
+            GameManager.Instance.AddEventMonsterLessHit(() => CatLog.Log("On Monster Death"));
+            GameManager.Instance.AddEventMonsterDeath(() => CatLog.Log("On Monster Hit Less Arrow"));
+
+            //Init-Battle State Callback Event
+            GameManager.Instance.AddEventEndBattle(() => { 
+                GameManager.Instance.SetBowPullingStop(true);
+                DisableMonsterAll();
+            });
 
             //Init-Player Health Point [TEST] (플레이어 임시 체력, 추후 PlayerData에서 수치 받아오도록 설정)
             currentPlayerHealth = MaxPlayerHealth;
@@ -160,8 +169,7 @@
             }
             if(Input.GetKeyDown(KeyCode.O))
             {
-                string monsterPoolStackCount = CCPooler.GetPoolStackSize(AD_Data.POOLTAG_MONSTER_NORMAL).ToString();
-                CatLog.Log($"Mosnter Dictionary Pool Stack Count : {monsterPoolStackCount}");
+                GameManager.Instance.ReleaseAccessory();
             }
         }
 
@@ -176,7 +184,7 @@
             if (GameManager.Instance != null)
             {
                 GameManager.Instance.ReleaseDropList();
-                GameManager.Instance.ReleaseEvent();
+                GameManager.Instance.ReleaseAllEvent();
             }
         }
 
@@ -184,24 +192,18 @@
 
         public void IncreaseClearGauge(float value)
         {
-            currentClearCount += value;
+            //Safe Calculate
+            tempClearCount = currentClearCount + value;
 
-            if(currentClearCount >= MaxClearCount)
-            {
-                //살아있는 몬스터들 비활성화
-                GameObject[] monsters = GameObject.FindGameObjectsWithTag(AD_Data.OBJECT_TAG_MONSTER);
-                CatLog.Log($"Tag Monster's Count : {monsters.Length}"); //Scene에 활성화된 Monster 개체만 담는것을 확인
-
-                foreach (var monster in monsters)
-                {
-                    monster.SendMessage("DisableRequest", monster, SendMessageOptions.DontRequireReceiver);
-                }
-
+            if (tempClearCount < MaxClearCount) {
+                currentClearCount = tempClearCount;
+            }
+            else if (tempClearCount >= MaxClearCount) {
                 currentClearCount = MaxClearCount;
             }
 
-            if (ClearSlider != null)
-            {
+            //Increase Clear Slider Value [if the caching ui.slider]
+            if (ClearSlider != null) {
                 float dest = currentClearCount / MaxClearCount;
                 ClearSlider.DOValue(dest, 1f);
             }
@@ -248,6 +250,16 @@
             //ClearSlider.value = clearSliderDest;
             //adding Time.deltaTime will probably never add to a full Number, this is just rounding Slider value
             //so it's exactly what we want
+        }
+
+        void DisableMonsterAll() {
+            GameObject[] monsters = GameObject.FindGameObjectsWithTag(AD_Data.OBJECT_TAG_MONSTER);
+            CatLog.Log($"Tag Monster's Count : {monsters.Length}, All Monster's Disable");
+            foreach (var monster in monsters) {
+                monster.SendMessage(nameof(IPoolObject.DisableRequest), monster, SendMessageOptions.DontRequireReceiver);
+            }
+            ///Scene에 Enable Monster개체를 비 활성화 처리
+            ///GameObject.Enable된 개체만 Monsters에 담기는것을 확인.
         }
 
         #endregion
@@ -345,11 +357,11 @@
 
         private void OnUpdateInBattle()
         {
+            //Is Game Clear
             if(currentClearCount >= MaxClearCount)
             {
                 CurrentGameState = GameManager.Instance.GameState;
-                GameManager.Instance.SetGameState(GAMESTATE.STATE_ENDBATTLE, () => 
-                GameManager.Instance.SetBowPullingStop(true));
+                GameManager.Instance.SetGameState(GAMESTATE.STATE_ENDBATTLE, GameManager.Instance.CallEndBattleEvent());
             }
         }
 

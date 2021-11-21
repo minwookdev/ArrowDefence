@@ -41,12 +41,13 @@
 
         public bool IsDevMode { get => isDevMode; }
 
-        //Event
-        public delegate void HitEventHandler();
-        public HitEventHandler MonsterHitEvent;
-        public HitEventHandler MonsterDeathEvent;
-        public HitEventHandler MonsterLessHitEvent;
-
+        //Event Monster
+        public delegate void BattleEventHandler();
+        BattleEventHandler MonsterHitEvent;
+        BattleEventHandler MonsterLessHitEvent;
+        BattleEventHandler MonsterDeathEvent;
+        //Event Battle State
+        BattleEventHandler OnStateEndBattle;
 
         private void Start() => this.fixedDeltaTime = Time.fixedDeltaTime;
 
@@ -185,12 +186,11 @@
                             skillDataList.Add(new AccessorySkillSlot.ActiveSkillSlotInitData(
                                              accessories[i].GetSprite, slowTime.Cooldown, false,
                                              SKILL_ACTIVATIONS_TYPE.COOLDOWN_ACTIVE,
-                                             (mono) => slowTime.ActiveSkill(mono)));
+                                             (mono) => slowTime.ActiveSkill(mono),
+                                             () => slowTime.OnStop()));
                         }
-                        else
-                        {
+                        else {
                             CatLog.ELog("Accessory Skill Casting failed");
-                            //skillDatas[i] = null;
                         }
                     }
                 }
@@ -242,16 +242,29 @@
             CCPlayerData.equipments.ReleaseEquipments();
         }
 
+        public void ReleaseAccessory()
+        {
+            CCPlayerData.equipments.Release_Accessory(0);
+        }
+
         #endregion
 
         #region BATTLE
 
+        /// <summary>
+        /// Set Battle State no params
+        /// </summary>
+        /// <param name="gameState"></param>
         public void SetGameState(GAMESTATE gameState) => this.gameState = gameState;
 
-        public void SetGameState(GAMESTATE gameState, System.Action callback)
+        /// <summary>
+        /// Set Battle State with Event Handler
+        /// </summary>
+        /// <param name="gameState"></param>
+        /// <param name="handler"></param>
+        public void SetGameState(GAMESTATE gameState, BattleEventHandler handler)
         {
-            this.gameState = gameState;
-            callback();
+            this.gameState = gameState; handler();
         }
 
         public void ResumeBattle()
@@ -266,12 +279,7 @@
             TimePause();
         }
 
-        public void ReleaseEvent()
-        {
-            if (MonsterHitEvent != null)     MonsterHitEvent = null;
-            if (MonsterDeathEvent != null)   MonsterDeathEvent = null;
-            if (MonsterLessHitEvent != null) MonsterLessHitEvent = null;
-        }
+
 
         /// <summary>
         /// Battle Scene의 각종 버튼 이벤트에서 Bow Pulling을 방지하는 메서드입니다.
@@ -330,6 +338,12 @@
         {
             Time.timeScale      = 0f;
             Time.fixedDeltaTime = this.fixedDeltaTime * Time.timeScale;
+        }
+
+        public bool IsTimeDefault()
+        {
+            bool isTimeDefault = (Time.timeScale == 1f) ? true : false;
+            return isTimeDefault;
         }
 
         #endregion
@@ -420,6 +434,60 @@
             if (isLoadedUserData == false)
                 LoadUserData();
             isLoadedUserData = true;
+        }
+
+        #endregion
+
+        #region STATE_EVENT_HANDLER
+
+        public void AddEventEndBattle(System.Action action) {
+            var newDelegate = new BattleEventHandler(action);
+            OnStateEndBattle += newDelegate;
+        }
+
+        public void ReleaseAllEvent() {
+            //Release Monster
+            MonsterHitEvent     = null;
+            MonsterDeathEvent   = null;
+            MonsterLessHitEvent = null;
+
+            //Release Battle State
+            OnStateEndBattle = null;
+        }
+
+        public BattleEventHandler CallEndBattleEvent() {
+            return this.OnStateEndBattle;
+        }
+
+        #endregion
+
+        #region MONSTER_EVENT_HANDLER
+
+        public void AddEventMonsterHit(System.Action action) {
+            var newEvent = new BattleEventHandler(action);
+            MonsterHitEvent += newEvent;
+        }
+
+        public void AddEventMonsterLessHit(System.Action action) {
+            var newEvent = new BattleEventHandler(action);
+            MonsterLessHitEvent += newEvent;
+        }
+
+        public void AddEventMonsterDeath(System.Action action) {
+            var newEvent = new BattleEventHandler(action);
+            MonsterDeathEvent += newEvent;
+        }
+
+        public BattleEventHandler CallMonsterHitEvent() {
+            return MonsterHitEvent;
+        }
+
+        public BattleEventHandler CallMonsterLessHitEvent() {
+            return MonsterLessHitEvent;
+        }
+
+        public BattleEventHandler CallMonsterDeathEvent() {
+            return MonsterDeathEvent;
         }
 
         #endregion

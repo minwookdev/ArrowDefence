@@ -18,10 +18,8 @@
         public string Description { get => desc; }
         public ACSP_TYPE SpEffectType { get => effectType; }
         public SKILL_LEVEL Level { get => level; }
-        public Sprite IconSprite
-        {
-            get
-            {
+        public Sprite IconSprite {
+            get {
                 if (iconSprite != null)
                     return iconSprite;
                 else
@@ -42,7 +40,15 @@
 
         public AccessorySPEffect() { }
 
+        /// <summary>
+        /// 특수효과 슬롯에 이벤트로 할당될 함수.
+        /// </summary>
         public abstract void Init();
+
+        /// <summary>
+        /// 특수효과 발동 중 배틀 종료처리 되었을 때 효과 중지처리.
+        /// </summary>
+        public virtual void OnStop() { return; }
     }
 
     public class Acsp_AimSight : AccessorySPEffect, IToString
@@ -96,6 +102,11 @@
         }
 
         public override string ToString() => "Slow Time";
+
+        public override void OnStop()
+        {
+            GameManager.Instance.TimeDefault();
+        }
 
         public Acsp_SlowTime(SkillDataSlowTime data) : 
             base(data.SkillId, data.SkillName, data.SkillDesc, data.EffectType, data.SkillLevel, data.SkillIconSprite)

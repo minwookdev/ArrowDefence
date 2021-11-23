@@ -25,4 +25,4 @@ MonoBehaviour:
   LessArrowObj: {fileID: 1773074856053835197, guid: 2e3c1d20f506af54fba56591badc541e,
     type: 3}
   ArrowSkillFst: {fileID: 11400000, guid: 09b518c9490417c4c82df0eaec30ee7e, type: 2}
-  ArrowSkillSec: {fileID: 11400000, guid: 09b518c9490417c4c82df0eaec30ee7e, type: 2}
+  ArrowSkillSec: {fileID: 0}

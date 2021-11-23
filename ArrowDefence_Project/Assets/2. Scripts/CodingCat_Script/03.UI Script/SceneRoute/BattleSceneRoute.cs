@@ -155,19 +155,22 @@
             ImgFade.DOFade(1f, FadeTime)
                    .SetUpdate(true)
                    .OnStart(() => { ImgFade.blocksRaycasts = false;
-                                    ImgFade.gameObject.SetActive(true);
-                                    ReleaseBattleScene();}) //OnComplete로 옮겨주기
-                   .OnComplete(() => { GameManager.Instance.SetBowPullingStop(false);
-                                       GameManager.Instance.ReleaseEquipments();
-                                       SceneLoader.Instance.LoadScene(AD_Data.SCENE_MAIN);
-                   });
+                                    ImgFade.gameObject.SetActive(true);}) 
+                   .OnComplete(() => { ReleaseBattleScene();
+                                       SceneLoader.Instance.LoadScene(AD_Data.SCENE_MAIN);});
         }
 
         /// <summary>
-        /// Main Scene이 Load되기 전 정리되어야할 로직들 처리
+        /// Main Scene으로 넘어가기 전, Release되어야 할 로직들의 처리
         /// </summary>
-        private void ReleaseBattleScene()
+        void ReleaseBattleScene()
         {
+            //Bow Pulling Stop = false; 없어도 상관없음
+            GameManager.Instance.SetBowPullingStop(false);
+
+            //Release Player Equipments
+            GameManager.Instance.ReleaseEquipments();
+
             //Release CCPooler 
             CCPooler.DestroyCCPooler();
 

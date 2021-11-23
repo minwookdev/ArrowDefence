@@ -3,6 +3,7 @@
     using System;
     using UnityEngine;
     using UnityEngine.UI;
+    using UnityEngine.EventSystems;
     using TMPro;
     using ActionCat.Data;
 
@@ -60,6 +61,314 @@
 
     public class ItemInfoPop : MonoBehaviour
     {
+        [System.Serializable]
+        public class ItemPopupIntegrated {
+            //Default Item Info
+            [SerializeField] Transform  parent;
+            [SerializeField] GameObject popupGameObject;
+            [SerializeField] Image img_ItemIcon;
+            [SerializeField] Image img_Frame;
+            [SerializeField] TextMeshProUGUI tmp_ItemName;
+            [SerializeField] TextMeshProUGUI tmp_ItemDesc;
+            [SerializeField] TextMeshProUGUI tmp_ItemType;
+            [SerializeField] TextMeshProUGUI tmp_ItemCount;
+            [SerializeField] Button btn_SellItem;
+            [SerializeField] Button btn_Fuse;
+
+            //Equip & Release Entry
+            [SerializeField] EventTrigger btn_Equip;
+            [SerializeField] EventTrigger btn_Release;
+            EventTrigger.Entry equipEntry;
+            EventTrigger.Entry releaseEntry;
+
+            //Item Address
+            AD_item itemAddress;
+
+            //Equipment Item Info
+            [SerializeField] SkillSlot[] SkillSlots;
+
+            public void EnablePopup_Material(AD_item address, Sprite frame) {
+                //Default Item Data Setting
+                tmp_ItemName.text   = address.GetName;
+                tmp_ItemDesc.text   = address.GetDesc;
+                tmp_ItemType.text   = "MATERIAL";
+                tmp_ItemCount.text  = address.GetAmount.ToString();
+                img_ItemIcon.sprite = address.GetSprite;
+                img_Frame.sprite    = frame;
+
+                //Check Description GameObject [TESTING]
+                if (tmp_ItemDesc.gameObject.activeSelf == false)
+                    tmp_ItemDesc.gameObject.SetActive(true);
+
+                //Enable Button
+                btn_SellItem.gameObject.SetActive(true);
+                btn_Fuse.gameObject.SetActive(true);
+
+                //Get Item Address
+                itemAddress = address;
+
+                //Enable Popup
+                popupGameObject.SetActive(true);
+            }
+
+            public void EnablePopup_Consumable(AD_item address, Sprite frame) {
+                //Default Item Data Setting
+                tmp_ItemName.text   = address.GetName;
+                tmp_ItemDesc.text   = address.GetDesc;
+                tmp_ItemType.text   = "CONSUMABLE";
+                tmp_ItemCount.text  = address.GetAmount.ToString();
+                img_ItemIcon.sprite = address.GetSprite;
+                img_Frame.sprite    = frame;
+
+                //Check Description GameObject [TESTING]
+                if (tmp_ItemDesc.gameObject.activeSelf == false)
+                    tmp_ItemDesc.gameObject.SetActive(true);
+
+                //Enable Button
+                btn_SellItem.gameObject.SetActive(true);
+                btn_Fuse.gameObject.SetActive(true);
+
+                //Get Item Address
+                itemAddress = address;
+
+                //Enable Popup
+                popupGameObject.SetActive(true);
+            }
+
+            public void EnablePopup_Bow(Item_Bow address, Sprite frame) {
+                //Default Item Data Setting
+                tmp_ItemName.text   = address.GetName;
+                tmp_ItemDesc.text   = address.GetDesc;
+                tmp_ItemType.text   = "MATERIAL";
+                tmp_ItemCount.text  = "";
+                img_ItemIcon.sprite = address.GetSprite;
+                img_Frame.sprite    = frame;
+
+                //Disable Equipment Item Description [TESTING]
+                tmp_ItemDesc.gameObject.SetActive(false);
+
+                //Enable Skill Slots
+                var skills = address.GetSkills();
+                for (int i = 0; i < skills.Length; i++) {
+                    if(skills[i] != null) {
+                        SkillSlots[i].ActiveSlot(skills[i].Name, skills[i].Description,
+                                                 skills[i].Level.ToString(), skills[i].IconSprite);
+                    }
+                    else {
+                        SkillSlots[i].DisableSlot();
+                    }
+                }
+
+                bool isAvailableEquip = false;
+                if (ReferenceEquals(CCPlayerData.equipments.GetBowItem(), address) == false) {
+                    isAvailableEquip = true;
+                }
+                
+                if(isAvailableEquip == true) { //현재 장착중인 아이템이 아닌 경우 : 장착 버튼 활성화
+                    //init-Equip EventEntry
+                    equipEntry = new EventTrigger.Entry();
+                    equipEntry.eventID = EventTriggerType.PointerClick;
+                    equipEntry.callback.AddListener((eventdata) => EventEntryEquipBow(address));
+                    btn_Equip.triggers.Add(equipEntry);
+                }
+                else { //현재 장착중인 아이템인 경우 : 해제 버튼 활성화
+                    //Init-Release EventEntry
+                    releaseEntry = new EventTrigger.Entry();
+                    releaseEntry.eventID = EventTriggerType.PointerClick;
+                    releaseEntry.callback.AddListener((eventdata) => EventEntryReleaseBow());
+                    btn_Release.triggers.Add(releaseEntry);
+                }
+
+                //Enable Condition-Match Button
+                SwitchEquipButton(isAvailableEquip);
+
+                //Get Item Address
+                itemAddress = address;
+
+                //Enable Popup
+                popupGameObject.SetActive(true);
+            }
+
+            public void EnablePopup_Arrow(Item_Arrow address, Sprite frame) {
+                //Default Item Data Setting
+                tmp_ItemName.text   = address.GetName;
+                tmp_ItemDesc.text   = address.GetDesc;
+                tmp_ItemType.text   = "ARROW";
+                tmp_ItemCount.text  = "";
+                img_ItemIcon.sprite = address.GetSprite;
+                img_Frame.sprite    = frame;
+
+                //Disable Equipment item Description [TESTING]
+                tmp_ItemDesc.gameObject.SetActive(false);
+
+                //Enable Skill Slots
+                // -> 구현 예정 현재 장착중인 Arrow 와 address비교해서 Main인지 Sub인지 파악 후 스킬 띄워주면 될듯?
+
+                //Check address Item is Equipped ?
+                bool isEquippedItem = (ReferenceEquals(CCPlayerData.equipments.GetMainArrow(), address) ||
+                                       ReferenceEquals(CCPlayerData.equipments.GetSubArrow(),  address)) ? false : true;
+                //Init-EventEntry Condition-Match
+                if(isEquippedItem) {
+                    //Equip EventTrigger Event Add
+                    equipEntry = new EventTrigger.Entry();
+                    equipEntry.eventID = EventTriggerType.PointerClick;
+                    equipEntry.callback.AddListener((eventdata) => EventEntryEquipArrow(address));
+                    btn_Equip.triggers.Add(equipEntry);
+                }
+                else {
+                    //Release EventTrigger Event Add
+                    releaseEntry = new EventTrigger.Entry();
+                    releaseEntry.eventID = EventTriggerType.PointerClick;
+                    releaseEntry.callback.AddListener((eventdata) => EventEntryReleaseArrow(address));
+                    btn_Release.triggers.Add(releaseEntry);
+                }
+
+                //Enable Condition-Match Button
+                SwitchEquipButton(isEquippedItem);
+
+                //Get Item Address
+                itemAddress = address;
+
+                //Enable Popup
+                popupGameObject.SetActive(true);
+            }
+
+            public void EnablePopup_Artifact(Item_Accessory address, Sprite frame) {
+                //Default Item Data Setting
+                tmp_ItemName.text   = address.GetName;
+                tmp_ItemDesc.text   = address.GetDesc;
+                tmp_ItemType.text   = "ARTIFACT";
+                tmp_ItemCount.text  = "";
+                img_ItemIcon.sprite = address.GetSprite;
+                img_Frame.sprite    = frame;
+
+                //Disable Equipment Item Description [TESTING]
+                tmp_ItemDesc.gameObject.SetActive(false);
+
+                //Enable Skill-Slots
+                var spEffect = address.SPEffect;
+                if(spEffect != null) {
+                    SkillSlots[0].ActiveSlot(spEffect.Name, spEffect.Description, 
+                                             spEffect.Level.ToString(), spEffect.IconSprite);
+                }
+                else {
+                    SkillSlots[0].DisableSlot();
+                }
+
+                //장착중 유물 체크, 장착 슬롯 확인작업.
+                byte artifactIdx    = 0; 
+                bool isEquippedItem = false;
+                foreach (var artifact in CCPlayerData.equipments.GetAccessories()) {
+                    if(ReferenceEquals(artifact, address)) {
+                        isEquippedItem = true; 
+                        break;
+                    }
+                    artifactIdx++;
+                }
+
+                //현재 Equipment에 장착중인 유물 아이템.
+                if(isEquippedItem == true) {
+                    //Release Button Event 할당하고, Button 활성화
+                    releaseEntry = new EventTrigger.Entry();
+                    releaseEntry.eventID = EventTriggerType.PointerClick;   // ↓ 클로저 확인 필요 NULL 잡는지 확인
+                    releaseEntry.callback.AddListener((eventdata) => EventEntryReleaseArtifact(artifactIdx));
+                    btn_Release.triggers.Add(releaseEntry);
+
+                    SwitchEquipButton(false);
+                }
+                else { //장착중인 유물아이템이 아님.
+                    //Equip Button Event 할당 후, Button 활성화
+                    equipEntry = new EventTrigger.Entry();
+                    equipEntry.eventID = EventTriggerType.PointerClick;
+                    equipEntry.callback.AddListener((eventdata) => EventEntryEquipArtifact(address));
+                    btn_Equip.triggers.Add(equipEntry);
+
+                    SwitchEquipButton(true);
+                }
+
+                //Get Item Address
+                itemAddress = address;
+
+                //Enable Popup
+                popupGameObject.SetActive(true);
+            }
+
+            public void DisablePopup() {
+                //Clear Default Item Info
+                tmp_ItemName.text = "";
+                tmp_ItemDesc.text = "";
+                tmp_ItemType.text = "";
+                tmp_ItemCount.text = "";
+
+                //Clear Skill Slots
+                foreach (var skillslot in SkillSlots) {
+                    skillslot.DisableSlot();
+                }
+
+                //Clear Event Entry
+                equipEntry   = null;
+                releaseEntry = null;
+
+                //Clear EventTriggers
+                btn_Equip.triggers.Clear(); 
+                btn_Release.triggers.Clear();
+
+                //Disable Release, Equip Button
+                btn_Equip.gameObject.SetActive(false);
+                btn_Release.gameObject.SetActive(false);
+
+                //Clear item Address
+                itemAddress = null;
+
+                //Disable Popup
+                popupGameObject.SetActive(false);
+            }
+
+            #region EVENT_TRIGGER
+
+            void SwitchEquipButton(bool isActiveEquipButton) {
+                if(isActiveEquipButton == true) {
+                    btn_Equip.gameObject.SetActive(true);
+                    btn_Release.gameObject.SetActive(false);
+                }
+                else {
+                    btn_Equip.gameObject.SetActive(false);
+                    btn_Release.gameObject.SetActive(true);
+                }
+            }
+
+            void EventEntryEquipBow(Item_Bow item) {
+                CCPlayerData.equipments.Equip_BowItem(item);
+                SwitchEquipButton(false);
+            }
+
+            void EventEntryReleaseBow() {
+                CCPlayerData.equipments.Release_BowItem();
+                SwitchEquipButton(true);
+            }
+
+            void EventEntryEquipArrow(Item_Arrow item) {
+                UI_Equipments.Instance.OpenChoosePanel(SlotChoosePop.SLOTPANELTYPE.SLOT_ARROW, item);
+            }
+
+            void EventEntryReleaseArrow(Item_Arrow item) {
+                if (ReferenceEquals(CCPlayerData.equipments.GetMainArrow(), item) == true)
+                    CCPlayerData.equipments.Release_ArrowItem();
+                else CCPlayerData.equipments.Release_SubArrow();
+            }
+
+            void EventEntryEquipArtifact(Item_Accessory item) {
+                UI_Equipments.Instance.OpenChoosePanel(SlotChoosePop.SLOTPANELTYPE.SLOT_ACCESSORY, item);
+            }
+
+            void EventEntryReleaseArtifact(byte idx) {
+                CCPlayerData.equipments.Release_Accessory(idx);
+            }
+
+            #endregion
+        }
+
+
         [Serializable]
         public class ItemPop_Normal
         {
@@ -413,7 +722,8 @@
         public ItemPop_Equip_Bow ItemPop_Bow;           //Equipment Bow Item Popup
         public ItemPop_Equip_Arrow ItemPop_Arrow;       //Equipment Arrow Item Popup
         public ItemPop_Equip_Accessory ItemPop_Access;  //Equipment Accessory Item Popup
-        private Popup_Type       popType = Popup_Type.None; //현재 열려있는 팝업
+        [SerializeField] ItemPopupIntegrated itemPopup; //통합 아이템 팝업
+        private Popup_Type       popType = Popup_Type.None; //현재 열려있는 팝업타입
 
         /*
             index[0] Material Item, Consumable Item

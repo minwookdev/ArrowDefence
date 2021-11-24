@@ -211,7 +211,7 @@
 
         public void DecreaseHealthGauge(float value)
         {
-            currentPlayerHealth -= value;
+            //currentPlayerHealth -= value;
 
             float tempHealth = currentPlayerHealth;
             tempHealth -= value;

@@ -59,11 +59,29 @@
         }
     }
 
+    [System.Serializable]
+    public class AbilitySlot {
+        [SerializeField] GameObject[] slots;
+
+        public void EnableSlot() {
+            foreach (var slot in slots) {
+                slot.gameObject.SetActive(true);
+            }
+        }
+
+        public void DisableSlot() {
+            foreach (var slot in slots) {
+                slot.gameObject.SetActive(false);
+            }
+        }
+    }
+
     public class ItemInfoPop : MonoBehaviour
     {
         [System.Serializable]
         public class ItemPopupIntegrated {
             //Default Item Info
+            [Header("Default Item Info")]
             [SerializeField] Transform  parent;
             [SerializeField] GameObject popupGameObject;
             [SerializeField] Image img_ItemIcon;
@@ -76,18 +94,25 @@
             [SerializeField] Button btn_Fuse;
 
             //Equip & Release Entry
+            [Header("Equip & Release Button")]
+            [SerializeField] GameObject equipmentButtonGroup;
             [SerializeField] EventTrigger btn_Equip;
             [SerializeField] EventTrigger btn_Release;
             EventTrigger.Entry equipEntry;
             EventTrigger.Entry releaseEntry;
 
+            //Equipment Item Info
+            [Header("Skill Slot")]
+            [SerializeField] SkillSlot[] SkillSlots;
+
+            //Ability Slots
+            [Header("Ability Slots")]
+            [SerializeField] AbilitySlot abilitySlots;
+
             //Item Address
             AD_item itemAddress;
 
-            //Equipment Item Info
-            [SerializeField] SkillSlot[] SkillSlots;
-
-            public void EnablePopup_Material(AD_item address, Sprite frame) {
+            public void EnablePopup_Material(Item_Material address, Sprite frame) {
                 //Default Item Data Setting
                 tmp_ItemName.text   = address.GetName;
                 tmp_ItemDesc.text   = address.GetDesc;
@@ -100,9 +125,18 @@
                 if (tmp_ItemDesc.gameObject.activeSelf == false)
                     tmp_ItemDesc.gameObject.SetActive(true);
 
+                //Disable Ability Slots
+                abilitySlots.DisableSlot();
+
+                //Disable All SkillSlots
+                DisableSkillSlot();
+
+                //Disable Equip & Release Button Group
+                equipmentButtonGroup.gameObject.SetActive(false);
+
                 //Enable Button
-                btn_SellItem.gameObject.SetActive(true);
-                btn_Fuse.gameObject.SetActive(true);
+                //btn_SellItem.gameObject.SetActive(true);
+                //btn_Fuse.gameObject.SetActive(true);
 
                 //Get Item Address
                 itemAddress = address;
@@ -111,7 +145,7 @@
                 popupGameObject.SetActive(true);
             }
 
-            public void EnablePopup_Consumable(AD_item address, Sprite frame) {
+            public void EnablePopup_Consumable(Item_Consumable address, Sprite frame) {
                 //Default Item Data Setting
                 tmp_ItemName.text   = address.GetName;
                 tmp_ItemDesc.text   = address.GetDesc;
@@ -124,9 +158,18 @@
                 if (tmp_ItemDesc.gameObject.activeSelf == false)
                     tmp_ItemDesc.gameObject.SetActive(true);
 
+                //Disable Ability Slots
+                abilitySlots.DisableSlot();
+
+                //Disable All Skill Slot
+                DisableSkillSlot();
+
+                //Disable Equipments Button Group
+                equipmentButtonGroup.gameObject.SetActive(false);
+
                 //Enable Button
-                btn_SellItem.gameObject.SetActive(true);
-                btn_Fuse.gameObject.SetActive(true);
+                //btn_SellItem.gameObject.SetActive(true);
+                //btn_Fuse.gameObject.SetActive(true);
 
                 //Get Item Address
                 itemAddress = address;
@@ -146,6 +189,9 @@
 
                 //Disable Equipment Item Description [TESTING]
                 tmp_ItemDesc.gameObject.SetActive(false);
+
+                //Active Ability Slots
+                abilitySlots.EnableSlot();
 
                 //Enable Skill Slots
                 var skills = address.GetSkills();
@@ -201,6 +247,9 @@
                 //Disable Equipment item Description [TESTING]
                 tmp_ItemDesc.gameObject.SetActive(false);
 
+                //Enable Ability Slots
+                abilitySlots.EnableSlot();
+
                 //Enable Skill Slots
                 // -> 구현 예정 현재 장착중인 Arrow 와 address비교해서 Main인지 Sub인지 파악 후 스킬 띄워주면 될듯?
 
@@ -244,6 +293,9 @@
 
                 //Disable Equipment Item Description [TESTING]
                 tmp_ItemDesc.gameObject.SetActive(false);
+
+                //Enable Ability slots
+                abilitySlots.EnableSlot();
 
                 //Enable Skill-Slots
                 var spEffect = address.SPEffect;
@@ -293,7 +345,7 @@
                 popupGameObject.SetActive(true);
             }
 
-            public void DisablePopup() {
+            void DisablePopup() {
                 //Clear Default Item Info
                 tmp_ItemName.text = "";
                 tmp_ItemDesc.text = "";
@@ -317,6 +369,9 @@
                 btn_Equip.gameObject.SetActive(false);
                 btn_Release.gameObject.SetActive(false);
 
+                //Disable Equipments Button Group
+                equipmentButtonGroup.gameObject.SetActive(false);    
+
                 //Clear item Address
                 itemAddress = null;
 
@@ -327,6 +382,9 @@
             #region EVENT_TRIGGER
 
             void SwitchEquipButton(bool isActiveEquipButton) {
+                //Active Equip & Release Button Group
+                equipmentButtonGroup.gameObject.SetActive(true);
+
                 if(isActiveEquipButton == true) {
                     btn_Equip.gameObject.SetActive(true);
                     btn_Release.gameObject.SetActive(false);
@@ -338,31 +396,63 @@
             }
 
             void EventEntryEquipBow(Item_Bow item) {
-                CCPlayerData.equipments.Equip_BowItem(item);
-                SwitchEquipButton(false);
+                CCPlayerData.equipments.Equip_BowItem(item); 
+                Close();
             }
 
             void EventEntryReleaseBow() {
-                CCPlayerData.equipments.Release_BowItem();
-                SwitchEquipButton(true);
+                CCPlayerData.equipments.Release_BowItem(); 
+                Close();
             }
 
             void EventEntryEquipArrow(Item_Arrow item) {
                 UI_Equipments.Instance.OpenChoosePanel(SlotChoosePop.SLOTPANELTYPE.SLOT_ARROW, item);
+                Close();
             }
 
             void EventEntryReleaseArrow(Item_Arrow item) {
                 if (ReferenceEquals(CCPlayerData.equipments.GetMainArrow(), item) == true)
                     CCPlayerData.equipments.Release_ArrowItem();
                 else CCPlayerData.equipments.Release_SubArrow();
+                Close();
             }
 
             void EventEntryEquipArtifact(Item_Accessory item) {
                 UI_Equipments.Instance.OpenChoosePanel(SlotChoosePop.SLOTPANELTYPE.SLOT_ACCESSORY, item);
+                Close();
             }
 
             void EventEntryReleaseArtifact(byte idx) {
                 CCPlayerData.equipments.Release_Accessory(idx);
+                Close();
+            }
+
+            #endregion
+
+            #region SKILL_SLOTS
+
+            void DisableSkillSlot() {
+                foreach (var slot in SkillSlots) {
+                    slot.DisableSlot();
+                }
+            }
+
+            #endregion
+
+            #region ABILITY_SLOTS
+
+            #endregion
+
+            #region CLOSE_POPUP
+
+            public void Close() {
+                //Update Inventory, Equipments UI
+                UI_Equipments.Instance.UpdateEquipUI();
+                UI_Inventory.InvenUpdate();
+
+                //Close Self
+                DisablePopup();
+                parent.gameObject.SetActive(false);
             }
 
             #endregion
@@ -722,8 +812,8 @@
         public ItemPop_Equip_Bow ItemPop_Bow;           //Equipment Bow Item Popup
         public ItemPop_Equip_Arrow ItemPop_Arrow;       //Equipment Arrow Item Popup
         public ItemPop_Equip_Accessory ItemPop_Access;  //Equipment Accessory Item Popup
-        [SerializeField] ItemPopupIntegrated itemPopup; //통합 아이템 팝업
-        private Popup_Type       popType = Popup_Type.None; //현재 열려있는 팝업타입
+        [SerializeField] ItemPopupIntegrated itemPopup; //통합 아이템 팝업 [모든 아이템 종류의 정보 팝업을 하나로 관리]
+        private Popup_Type       popType = Popup_Type.None; //현재 열려있는 팝업타입 통합되면 Type 필요없을듯
 
         /*
             index[0] Material Item, Consumable Item
@@ -735,13 +825,19 @@
 
         public void Open_Popup_ConItem(Item_Consumable item)
         {
-            ItemPop.EnablePopup(item, Frames[(int)item.GetGrade]);
+            //ItemPop.EnablePopup(item, Frames[(int)item.GetGrade]);
+
+            //Enable Integrated Item Popup
+            itemPopup.EnablePopup_Consumable(item, Frames[(int)item.GetGrade]);
             popType = Popup_Type.Popup_NormalItem;
         }
 
         public void Open_Popup_MatItem(Item_Material item)
         {
-            ItemPop.EnablePopup(item, Frames[(int)item.GetGrade]);
+            //ItemPop.EnablePopup(item, Frames[(int)item.GetGrade]);
+
+            //Enable Integrated Item Popup
+            itemPopup.EnablePopup_Material(item, Frames[(int)item.GetGrade]);
             popType = Popup_Type.Popup_NormalItem;
         }
 
@@ -755,6 +851,32 @@
                 default: break;
             }
         }
+
+        #region OPEN_POPUP
+
+        public void OpenPopup_MaterialItem(Item_Material item) {
+            gameObject.SetActive(true);
+            itemPopup.EnablePopup_Material(item, Frames[(int)item.GetGrade]);
+        }
+
+        public void OpenPopup_ConsumableItem(Item_Consumable item) {
+            gameObject.SetActive(true);
+            itemPopup.EnablePopup_Consumable(item, Frames[(int)item.GetGrade]);
+        }
+
+        public void OpenPopup_EquipmentItem(Item_Equipment equipItem) {
+            gameObject.SetActive(true);
+            switch (equipItem) {
+                case Item_Bow bow: 
+                    itemPopup.EnablePopup_Bow(bow, Frames[(int)bow.GetGrade]); break;
+                case Item_Arrow arrow: 
+                    itemPopup.EnablePopup_Arrow(arrow, Frames[(int)arrow.GetGrade]); break;
+                case Item_Accessory artifact: 
+                    itemPopup.EnablePopup_Artifact(artifact, Frames[(int)artifact.GetGrade]); break;
+            }
+        }
+
+        #endregion
 
         #region BUTTON_METHOD
 
@@ -844,6 +966,10 @@
 
             popType = Popup_Type.None;
             this.gameObject.SetActive(false);
+        }
+
+        public void Close() {
+            itemPopup.Close();
         }
 
         #endregion

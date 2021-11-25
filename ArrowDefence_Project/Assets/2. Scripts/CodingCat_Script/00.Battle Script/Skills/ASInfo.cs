@@ -9,6 +9,7 @@
         SKILL_LEVEL level;
         ARROWSKILL type;
         ARROWSKILL_ACTIVETYPE activeType;
+        UnityEngine.Sprite iconSprite;
         ArrowSkill skillData;
 
         //PROPERTIES
@@ -21,11 +22,13 @@
             }
         }
 
-        public ARROWSKILL_ACTIVETYPE ActiveType{
-            get{
-                return activeType;
-            }
-        }
+        public string SkillId { get => id; }
+        public string SkillName { get => name; }
+        public string SkillDesc { get => desc; }
+        public SKILL_LEVEL SkillLevel { get => level; }
+        public ARROWSKILL SkillType { get => type; }
+        public ARROWSKILL_ACTIVETYPE ActiveType { get => activeType; }
+        public UnityEngine.Sprite IconSprite { get => iconSprite; }
 
         /// <summary>
         /// Create New Arrow Skill Information to Item
@@ -39,6 +42,7 @@
             level      = so.SkillLevel;
             type       = so.SkillType;
             activeType = so.ActiveType;
+            iconSprite = so.IconSprite;
             skillData  = so.ArrowSkill;
         }
 
@@ -54,6 +58,7 @@
             level      = origin.level;
             type       = origin.type;
             activeType = origin.activeType;
+            iconSprite = origin.iconSprite;
             skillData  = origin.skillData;
         }
 

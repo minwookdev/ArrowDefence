@@ -13,8 +13,10 @@ MonoBehaviour:
   m_Name: ReboundArrow
   m_EditorClassIdentifier: 
   SkillId: 
-  SkillName: 
-  SkillDesc: 
+  SkillName: Rebound Arrow
+  SkillDesc: "Fires an arrow that travels between enemies [n] times. \nEach attack
+    reduces damage by [n%].\n(\rAs the skill level increases, the recognition range
+    increases.)"
   SkillLevel: 0
   SkillType: 0
   IconSprite: {fileID: 0}

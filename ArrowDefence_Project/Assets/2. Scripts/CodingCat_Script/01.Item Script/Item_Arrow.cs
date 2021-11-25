@@ -22,6 +22,15 @@
                     return null;
             }
         }
+        
+        public ASInfo[] ArrowSkillInfos {
+            get {
+                ASInfo[] skillinfo = new ASInfo[2] {
+                    arrowSkillInfoFst, arrowSkillInfoSec
+                };
+                return skillinfo;
+            }
+        }
 
         public Item_Arrow (ItemData_Equip_Arrow item) : base()
         {

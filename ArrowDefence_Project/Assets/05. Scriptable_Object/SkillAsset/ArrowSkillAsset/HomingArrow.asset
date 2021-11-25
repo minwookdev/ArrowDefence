@@ -13,11 +13,12 @@ MonoBehaviour:
   m_Name: HomingArrow
   m_EditorClassIdentifier: 
   SkillId: 
-  SkillName: 
-  SkillDesc: 
+  SkillName: Homing Arrow
+  SkillDesc: "An Arrow that tracks enemies \nwithin a certain range."
   SkillLevel: 0
   SkillType: 1
   IconSprite: {fileID: 0}
+  ActiveType: 5
   TargetSearchInterval: 0.1
   ScanRadius: 3
   HomingSpeed: 6

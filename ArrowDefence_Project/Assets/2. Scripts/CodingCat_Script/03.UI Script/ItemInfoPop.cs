@@ -31,16 +31,42 @@
             else                   return false;
         }
 
-        public void ActiveSlot(string skillname, string skilldesc, string skilllevel, Sprite skillsprite)
-        {
-            TmpSkillName.text = skillname;
-            TmpSkillDesc.text = skilldesc;
+        public void ActiveSlot(string name, string desc, SKILL_LEVEL skillLevel, Sprite iconSprite) {
+            TmpSkillName.text = name;
+            TmpSkillDesc.text = desc;
 
-            if (skillsprite != null)
-                ImgIcon.sprite = skillsprite;
+            //Skill Icon Sprite
+            if (iconSprite != null)
+                ImgIcon.sprite = iconSprite;
 
+            //Setting Grade Star Image
+            SetGradeStar(skillLevel);
+
+            //Active Skill Slot Object
             if (SlotGO.activeSelf == false)
                 SlotGO.SetActive(true);
+        }
+
+        void SetGradeStar(SKILL_LEVEL level) {
+            switch (level)
+            {
+                case SKILL_LEVEL.LEVEL_LOW:    EnableStar(1); break;
+                case SKILL_LEVEL.LEVEL_MEDIUM: EnableStar(2); break;
+                case SKILL_LEVEL.LEVEL_HIGH:   EnableStar(3); break;
+                case SKILL_LEVEL.LEVEL_UNIQUE: EnableStar(3); break;
+                default: EnableStar(0); break;
+            }
+        }
+
+        void EnableStar(byte count) {
+            for (int i = 0; i < ImgSkillGradeStar.Length; i++) {
+                if(i < count) {
+                    ImgSkillGradeStar[i].gameObject.SetActive(true);
+                }
+                else {
+                    ImgSkillGradeStar[i].gameObject.SetActive(false);
+                }
+            }
         }
 
         public void DisableSlot()
@@ -126,7 +152,7 @@
                     tmp_ItemDesc.gameObject.SetActive(true);
 
                 //Disable Ability Slots
-                abilitySlots.DisableSlot();
+                DisableAbilitySlot();
 
                 //Disable All SkillSlots
                 DisableSkillSlot();
@@ -159,7 +185,7 @@
                     tmp_ItemDesc.gameObject.SetActive(true);
 
                 //Disable Ability Slots
-                abilitySlots.DisableSlot();
+                DisableAbilitySlot();
 
                 //Disable All Skill Slot
                 DisableSkillSlot();
@@ -198,7 +224,7 @@
                 for (int i = 0; i < skills.Length; i++) {
                     if(skills[i] != null) {
                         SkillSlots[i].ActiveSlot(skills[i].Name, skills[i].Description,
-                                                 skills[i].Level.ToString(), skills[i].IconSprite);
+                                                 skills[i].Level, skills[i].IconSprite);
                     }
                     else {
                         SkillSlots[i].DisableSlot();
@@ -251,7 +277,16 @@
                 abilitySlots.EnableSlot();
 
                 //Enable Skill Slots
-                // -> 구현 예정 현재 장착중인 Arrow 와 address비교해서 Main인지 Sub인지 파악 후 스킬 띄워주면 될듯?
+                var skills = address.ArrowSkillInfos;   //Get Skill Array Size : 2
+                for (int i = 0; i < skills.Length; i++) {
+                    if(skills[i] != null) {
+                        SkillSlots[i].ActiveSlot(skills[i].SkillName, skills[i].SkillDesc,
+                                                 skills[i].SkillLevel, skills[i].IconSprite);
+                    }
+                    else {
+                        SkillSlots[i].DisableSlot();
+                    }
+                }
 
                 //Check address Item is Equipped ?
                 bool isEquippedItem = (ReferenceEquals(CCPlayerData.equipments.GetMainArrow(), address) ||
@@ -301,11 +336,11 @@
                 var spEffect = address.SPEffect;
                 if(spEffect != null) {
                     SkillSlots[0].ActiveSlot(spEffect.Name, spEffect.Description, 
-                                             spEffect.Level.ToString(), spEffect.IconSprite);
+                                             spEffect.Level, spEffect.IconSprite);
                 }
                 else {
                     SkillSlots[0].DisableSlot();
-                }
+                }   SkillSlots[1].DisableSlot();    //현재 Special Effect는 무조건 한개뿐임. 두번째 슬롯 비활성화.
 
                 //장착중 유물 체크, 장착 슬롯 확인작업.
                 byte artifactIdx    = 0; 
@@ -441,6 +476,10 @@
 
             #region ABILITY_SLOTS
 
+            void DisableAbilitySlot() {
+                abilitySlots.DisableSlot();
+            }
+
             #endregion
 
             #region CLOSE_POPUP
@@ -543,7 +582,7 @@
                     if (item.GetSkills()[i] != null) 
                         SkillSlots[i].ActiveSlot(item.GetSkill(i).Name, 
                                                  item.GetSkill(i).Description,
-                                                 item.GetSkill(i).Level.ToString(),
+                                                 item.GetSkill(i).Level,
                                                  item.GetSkill(i).IconSprite);
                     else                                
                         SkillSlots[i].DisableSlot();
@@ -730,7 +769,7 @@
                         if (itemAddress.SPEffect != null)
                             SkillSlots[i].ActiveSlot(itemAddress.SPEffect.Name,
                                                      itemAddress.SPEffect.Description,
-                                                     itemAddress.SPEffect.Level.ToString(),
+                                                     itemAddress.SPEffect.Level,
                                                      itemAddress.SPEffect.IconSprite);
                         else
                             SkillSlots[i].DisableSlot();
@@ -852,7 +891,7 @@
             }
         }
 
-        #region OPEN_POPUP
+        #region OPEN_POPUP_NEW
 
         public void OpenPopup_MaterialItem(Item_Material item) {
             gameObject.SetActive(true);

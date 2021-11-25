@@ -58,7 +58,7 @@ public class ArrowSkillData_Editor : Editor
         EditorGUILayout.PropertyField(nameProp);
 
         //Skill Desc Field
-        EditorGUILayout.PropertyField(descProp);
+        GUILayout.Label("Description");
         descProp.stringValue = EditorGUILayout.TextArea(descProp.stringValue, GUILayout.Height(50f));
 
         //Type Field [LOCK]

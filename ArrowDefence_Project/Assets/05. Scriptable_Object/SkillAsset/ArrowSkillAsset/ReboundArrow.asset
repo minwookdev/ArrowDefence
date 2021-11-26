@@ -19,7 +19,7 @@ MonoBehaviour:
     increases.)"
   SkillLevel: 0
   SkillType: 0
-  IconSprite: {fileID: 0}
+  IconSprite: {fileID: 21300000, guid: 8737d79d123e0d04f937e3c2d6c062f3, type: 3}
   ActiveType: 3
   ScanRadius: 5
   MaxChainCount: 2

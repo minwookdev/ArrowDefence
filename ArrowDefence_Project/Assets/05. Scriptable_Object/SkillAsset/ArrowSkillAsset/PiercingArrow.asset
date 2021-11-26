@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SkillId: 
   SkillName: Piercing Arrow
-  SkillDesc: "Inflicts damage equal to [n%] of attack power \nand has a [n%] chance
-    to pierce\n enemies up to [n] times."
+  SkillDesc: "Deals [n%] of attack power \nand has a  [n%] chance to \npenetrate
+    up to [n] times."
   SkillLevel: 0
   SkillType: 3
-  IconSprite: {fileID: 0}
+  IconSprite: {fileID: 21300000, guid: c670bb2c0b2ac49419861ff2f20d7eb4, type: 3}
   ActiveType: 3
   MaxChainCount: 1

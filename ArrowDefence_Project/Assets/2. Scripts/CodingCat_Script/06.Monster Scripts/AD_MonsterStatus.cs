@@ -1,5 +1,6 @@
 ﻿namespace ActionCat
 {
+    using System.Collections;
     using UnityEngine;
     using DG.Tweening;
     
@@ -12,15 +13,17 @@
 
         [Header("MONSTER HIT")]
         public Color HitColor;
+        bool isColorChanging = false;
+        float fadeTime = 0.5f;
 
         //Monster Status Value
         private float currentHealthPoint;
         private float currentManaPoint;
         //private float tempMonsterHealthPoint;
         //private bool isChangingColor = false;
-        private bool isDeath         = false;
+        private bool isDeath = false;
         private SpriteRenderer sprite;
-        private Color startColor;
+        Color startColor;
         Sequence hitSeq;
 
         //Battle Related Variables
@@ -37,6 +40,7 @@
                                        .Prepend(sprite.DOColor(HitColor, 0.01f))
                                        .Append(sprite.DOColor(startColor, 1f))
                                        .Pause();
+
         }
 
         private void Update()
@@ -60,56 +64,39 @@
             currentHealthPoint -= damage;
 
             //Hit Effect
-            HitColorChange();
+            //HitColorChange(); //-> Origin
+            OnHitColorChange();
 
-            if(currentHealthPoint <= 0)
-            {
+            if(currentHealthPoint <= 0) {
                 isDeath = true;
                 DisableRequest(this.gameObject);
             }
         }
 
-        private void OnTriggerEnter2D(Collider2D coll)
-        {
-            //if(coll.gameObject.layer == LayerMask.NameToLayer(AD_Data.LAYER_ARROW_LESS))
-            //{
-            //    GameManager.Instance.MonsterLessHitEvent();
-            //    float damageCount = Random.Range(10f, 30f);
-            //    OnHitObject(damageCount);
-            //}
-
-            if (coll.gameObject.layer == LayerMask.NameToLayer(AD_Data.LAYER_DISABLELINE))
-            {
+        private void OnTriggerEnter2D(Collider2D coll) {
+            if (coll.gameObject.layer == LayerMask.NameToLayer(AD_Data.LAYER_DISABLELINE)) {
                 BattleProgresser.OnDecreasePlayerHealthPoint(5f);
                 DisableRequest(this.gameObject);
             }
         }
 
-        private void OnCollisionEnter2D(Collision2D coll)
-        {
-            //if (coll.gameObject.layer == LayerMask.NameToLayer(AD_Data.LAYER_ARROW))
-            //{   
-            //    float damageCount = Random.Range(30f, 80f);
-            //    OnHitObject(damageCount);
-            //}
-
-            //if(coll.gameObject.layer == LayerMask.NameToLayer(AD_Data.LAYER_ARROW_LESS))
-            //{
-            //    GameManager.Instance.MonsterLessHitEvent();
-            //    float damageCount = Random.Range(10f, 30f);
-            //    OnHitObject(damageCount);
-            //}
-        }
-
-        private void OnEnable()
-        {
+        private void OnEnable() {
             this.currentHealthPoint = MaxMonsterHP;
             this.currentManaPoint   = MaxMonsterMP;
 
             isDeath = false;
 
-            if (sprite != null)
-                sprite.color = sprite.color;
+            //Recovery Color
+            //if(sprite.color != startColor) {
+            //    sprite.color = startColor;
+            //}
+            //-> Component Get 하기전에 잡아버림
+            if(sprite != null) {
+                sprite.color = startColor;
+            }
+
+            //if (sprite != null)
+            //    sprite.color = sprite.color;
         }
 
         private void OnDisable()
@@ -123,12 +110,16 @@
 
             //monster hit Sequence 진행중에 MainMenu로 돌아가거나 ApplicationQuit Event
             //발생하면 DoTween 에러를 방지
-            sprite.DOKill();
+            //sprite.DOKill();
 
-            if(isDeath)
-            {
-                //연속된 빠른 화살에 계속 Hit될 경우 OnHit메서드에 넣을 경우 여러번 이벤트가 발생할 수 있어서
-                //OnDisable 에서 따로 처리하고 있다.
+            //Stop if Color Change Coroutine is in progress
+            if(isColorChanging == true) {
+                StopCoroutine(HitColorCo());
+                isColorChanging = false;
+            }
+
+            //Disabled by being hit by arrows or other objects
+            if (isDeath) {
                 GameManager.Instance.CallMonsterDeathEvent();
                 BattleProgresser.OnDropItemChance(dropCorrection);
                 BattleProgresser.OnIncreaseClearGauge(clearGaugeIncreaseValue);
@@ -144,6 +135,33 @@
             //      .OnComplete(() => isChangingColor = false);
 
             hitSeq.Restart();
+        }
+
+        void OnHitColorChange() {
+            if(isColorChanging == true) {
+                StopCoroutine(HitColorCo());
+            }
+
+            StartCoroutine(HitColorCo());
+        }
+
+        IEnumerator HitColorCo() {
+            isColorChanging = true;
+            float progress  = 0f;
+            float speed = 1 / fadeTime;
+
+            while (progress < 1) {
+                progress += Time.deltaTime * speed;
+                sprite.color = Color.Lerp(HitColor, startColor, progress);
+                yield return null;
+            }
+
+            //
+            if(sprite.color != startColor) {
+                sprite.color = startColor;
+            }
+
+            isColorChanging = false;
         }
     }
 }

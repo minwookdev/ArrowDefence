@@ -79,13 +79,17 @@
         private BattleSceneRoute battleSceneUI;
         private MonsterSpawner   monsterSpawner;
 
+        //각종 게임 진행 수치관련 대리자
         public delegate void ValueEventHandler(float value);
         public static ValueEventHandler OnIncreaseClearGauge;
         public static ValueEventHandler OnDropItemChance;
         public static ValueEventHandler OnDecreasePlayerHealthPoint;
-        //위에 두놈 하나로 묶어도 괜찮겠다 -> 몬스터를 Kill하면 무조건 발동되는 이벤트들이라서
 
-        private void Start()
+        //Wait For ObjectPooler Variables //의미없는 수준이었기 때문에 주석처리 해둠.
+        //float poolerWaitTime = 0f;
+        //Coroutine waitCo = null;
+
+        IEnumerator Start()
         {
             //Init-GameManager
             battleSceneUI  = GetComponent<BattleSceneRoute>();
@@ -94,8 +98,7 @@
             CurrentGameState = GameManager.Instance.GameState;
 
             //Init-Delegate
-            if (DropListAsset != null)
-            {
+            if (DropListAsset != null) {
                 GameManager.Instance.InitialDroplist(this.DropListAsset);
                 OnDropItemChance += OnDropItemRoll;
             }
@@ -124,6 +127,16 @@
             //var accessorySkillDatas = GameManager.Instance.ReturnSkillSlotData();
             //battleSceneUI.InitSkillSlots(accessorySkillDatas);
             #endregion 
+
+            //Start Wait Timer
+            //waitCo = StartCoroutine(WaitObjectPooler());
+
+            //Wait Until Object-Pooler
+            yield return new WaitUntil(() => CCPooler.IsInitialized == true);
+
+            //Stop Timer and Output TimeCount
+            //StopCoroutine(waitCo);
+            //CatLog.Log($"[BattleProgresser] CCPooler Waiting Time : {poolerWaitTime.ToString()}");
 
             //Init-Player Equipments [Init Pool, Arrow Swap Slot Data, Skill Slot Data]
             BattleSceneRoute.ArrowSwapSlotInitData[]     arrowSwapSlotDatas;
@@ -390,5 +403,17 @@
         #region GAMEMANAGER_CALLBACK
 
         #endregion
+        //Time.time Timer 참고.
+        //IEnumerator WaitObjectPooler() {
+        //    float startTime = Time.time;
+        //    while (poolerWaitTime < 3f)
+        //    {
+        //        poolerWaitTime = Time.time - startTime;
+        //        yield return null;
+        //    }
+        //
+        //    CatLog.ELog("Battle Progresser : CCPooler Wait Time Over, Stop Editor.");
+        //    Debug.Break();
+        //}
     }
 }

@@ -39,6 +39,10 @@
             UpdateEquipUI();
         }
 
+        private void OnDestroy() {
+            Instance = null;
+        }
+
         public void UpdateEquipUI()
         {
             var equipment = CCPlayerData.equipments;

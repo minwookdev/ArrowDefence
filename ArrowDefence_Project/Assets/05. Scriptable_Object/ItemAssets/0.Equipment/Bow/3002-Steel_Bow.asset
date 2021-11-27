@@ -23,4 +23,4 @@ MonoBehaviour:
   BowGameObject: {fileID: 3549159203555372210, guid: 764bffb09a29bf440b61e0c0c511064e,
     type: 3}
   SkillAsset_f: {fileID: 11400000, guid: 97062504f2a4e58418b96af3a5af4888, type: 2}
-  SkillAsset_s: {fileID: 11400000, guid: 8fc08db059ce576488c3db5a4393a80a, type: 2}
+  SkillAsset_s: {fileID: 0}

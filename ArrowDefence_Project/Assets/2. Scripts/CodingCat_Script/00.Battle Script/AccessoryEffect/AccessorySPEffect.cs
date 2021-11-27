@@ -118,9 +118,10 @@
 
         public Acsp_SlowTime() : base() { }
 
-        public float ActiveSkill(MonoBehaviour mono)
-        {
-            mono.StartCoroutine(SlowTimeCo());
+        public float ActiveSkill(MonoBehaviour mono) {
+            //mono.StartCoroutine(SlowTimeCo());
+
+            GameManager.Instance.TimeScaleSet(timeSlowRatio);
             return duration;
         }
 

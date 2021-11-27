@@ -13,25 +13,28 @@
 
         [Header("MONSTER HIT")]
         public Color HitColor;
-        bool isColorChanging = false;
         float fadeTime = 0.5f;
 
         //Monster Status Value
         private float currentHealthPoint;
         private float currentManaPoint;
+        private bool isDeath = false;
+
         //private float tempMonsterHealthPoint;
         //private bool isChangingColor = false;
-        private bool isDeath = false;
-        private SpriteRenderer sprite;
-        Color startColor;
+
+        SpriteRenderer sprite;
         Sequence hitSeq;
 
         //Battle Related Variables
         private float dropCorrection = 5f;
         private float clearGaugeIncreaseValue = 10f;
 
-        private void Start()
-        {
+        //Monster Hit Color
+        Coroutine hitColorChangeCo = null;
+        Color startColor;
+
+        private void Start() {
             sprite     = GetComponent<SpriteRenderer>();
             startColor = sprite.color;
 
@@ -40,11 +43,9 @@
                                        .Prepend(sprite.DOColor(HitColor, 0.01f))
                                        .Append(sprite.DOColor(startColor, 1f))
                                        .Pause();
-
         }
 
-        private void Update()
-        {
+        private void Update() {
             //if(GameManager.Instance.GameState == GAMESTATE.STATE_ENDBATTLE)
             //{
             //    //Battle이 끝남에 따라 자체적으로 비활성화 처리로직 들어가도 된다 
@@ -63,8 +64,7 @@
             //Decrease Monster's Health Point
             currentHealthPoint -= damage;
 
-            //Hit Effect
-            //HitColorChange(); //-> Origin
+            //OnHit Effect (Change Color)
             OnHitColorChange();
 
             if(currentHealthPoint <= 0) {
@@ -87,16 +87,10 @@
             isDeath = false;
 
             //Recovery Color
-            //if(sprite.color != startColor) {
-            //    sprite.color = startColor;
-            //}
-            //-> Component Get 하기전에 잡아버림
             if(sprite != null) {
+                //Sprite Null Check
                 sprite.color = startColor;
             }
-
-            //if (sprite != null)
-            //    sprite.color = sprite.color;
         }
 
         private void OnDisable()
@@ -113,9 +107,14 @@
             //sprite.DOKill();
 
             //Stop if Color Change Coroutine is in progress
-            if(isColorChanging == true) {
-                StopCoroutine(HitColorCo());
-                isColorChanging = false;
+            //if(isColorChanging == true) {
+            //    StopCoroutine(HitColorCo());
+            //    isColorChanging = false;
+            //}
+
+            //Stop Hit Color Change Coroutine
+            if(hitColorChangeCo != null) {
+                StopCoroutine(hitColorChangeCo);
             }
 
             //Disabled by being hit by arrows or other objects
@@ -128,25 +127,18 @@
 
         private void HitColorChange()
         {
-            //isChangingColor = true;
-            //sprite.color    = HitColor;
-            //
-            //sprite.DOColor(startColor, 1f)
-            //      .OnComplete(() => isChangingColor = false);
-
             hitSeq.Restart();
         }
 
         void OnHitColorChange() {
-            if(isColorChanging == true) {
-                StopCoroutine(HitColorCo());
+            if(hitColorChangeCo != null) { //이미 실행중인 Coroutine이 있다면 정지 처리 후 실행
+                StopCoroutine(hitColorChangeCo);
             }
 
-            StartCoroutine(HitColorCo());
+            hitColorChangeCo = StartCoroutine(HitColorCo());
         }
 
         IEnumerator HitColorCo() {
-            isColorChanging = true;
             float progress  = 0f;
             float speed = 1 / fadeTime;
 
@@ -160,8 +152,6 @@
             if(sprite.color != startColor) {
                 sprite.color = startColor;
             }
-
-            isColorChanging = false;
         }
     }
 }

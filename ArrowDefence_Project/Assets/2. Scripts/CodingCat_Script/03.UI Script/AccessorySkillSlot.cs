@@ -59,10 +59,9 @@
         private EventTrigger eventTrigger;
 
         //Skill Callback
-        //Active Skill Callback
-        Func<MonoBehaviour, float> activeSkillFunc;
-        //Stop Skill Effect
-        Action stopSkillAction;
+        Func<MonoBehaviour, float> activeSkillFunc = null;  //Skill Effect
+        Action stopSkillAction  = null;                     //Skill Effect Stop
+        Coroutine skillEffectCo = null;                     //Skill Effect Coroutine
 
         void InitDefault(SKILL_ACTIVATIONS_TYPE type, Sprite skillicon)
         {
@@ -79,8 +78,7 @@
         {
             InitDefault(data.ActiveType, data.SkillIconSprite);
 
-            if (coolDownMask == null || coolDownTmp == null)
-            {
+            if (coolDownMask == null || coolDownTmp == null) {
                 CatLog.WLog("CoolDown Mask or CoolDown Count Text is null");
                 return;
             }
@@ -174,9 +172,9 @@
             //if the End Battle, Stop Effect Coroutine and Disable Effect Use
             GameManager.Instance.AddEventEndBattle(() => {
                 if (isEffectActivation == true) {
-                    StopCoroutine(ActiveSkillCo());
+                    StopCoroutine(skillEffectCo);
                     stopSkillAction();
-                    CatLog.Log("ACSP 발동 강제종료 처리 실행.");
+                    CatLog.Log("ACSP 발동 강제종료 처리.");
                 }
 
                 //Slot Disable Effect
@@ -216,7 +214,7 @@
         {
             //효과 발동 가능여부 판단해서 스킬 발동해줌
             if (isPreparedSkillActive) {
-                StartCoroutine(ActiveSkillCo());
+                skillEffectCo = StartCoroutine(ActiveSkillCo());
             }
             else
                 CatLog.Log("Skill Not Prepared !");
@@ -236,7 +234,8 @@
             }
 
             CatLog.Log("Active Skill 발동 종료 초기화 진행");
-            
+
+            stopSkillAction();
             isPreparedSkillActive = false;
             isEffectActivation    = false;
         }

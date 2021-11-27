@@ -4,7 +4,7 @@ using UnityEngine;
 namespace ES3Types
 {
 	[UnityEngine.Scripting.Preserve]
-	[ES3PropertiesAttribute("MainArrowObject", "LessArrowObject", "EquipType", "Item_Id", "Item_Name", "Item_Desc", "Item_Amount", "Item_Sprite", "Item_Type", "Item_Grade")]
+	[ES3PropertiesAttribute("MainArrowObject", "LessArrowObject", "arrowSkillInfoFst", "arrowSkillInfoSec", "EquipType", "Item_Id", "Item_Name", "Item_Desc", "Item_Amount", "Item_Sprite", "Item_Type", "Item_Grade")]
 	public class ES3UserType_Item_Arrow : ES3ObjectType
 	{
 		public static ES3Type Instance = null;
@@ -18,6 +18,8 @@ namespace ES3Types
 			
 			writer.WritePrivateFieldByRef("MainArrowObject", instance);
 			writer.WritePrivateFieldByRef("LessArrowObject", instance);
+			writer.WritePrivateField("arrowSkillInfoFst", instance);
+			writer.WritePrivateField("arrowSkillInfoSec", instance);
 			writer.WritePrivateField("EquipType", instance);
 			writer.WritePrivateField("Item_Id", instance);
 			writer.WritePrivateField("Item_Name", instance);
@@ -41,6 +43,12 @@ namespace ES3Types
 					break;
 					case "LessArrowObject":
 					reader.SetPrivateField("LessArrowObject", reader.Read<UnityEngine.GameObject>(), instance);
+					break;
+					case "arrowSkillInfoFst":
+					reader.SetPrivateField("arrowSkillInfoFst", reader.Read<ActionCat.ASInfo>(), instance);
+					break;
+					case "arrowSkillInfoSec":
+					reader.SetPrivateField("arrowSkillInfoSec", reader.Read<ActionCat.ASInfo>(), instance);
 					break;
 					case "EquipType":
 					reader.SetPrivateField("EquipType", reader.Read<ActionCat.EQUIP_ITEMTYPE>(), instance);

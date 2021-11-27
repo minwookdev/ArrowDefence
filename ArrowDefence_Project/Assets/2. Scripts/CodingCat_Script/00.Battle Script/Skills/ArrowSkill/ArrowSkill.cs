@@ -296,23 +296,30 @@
             scanRange     = item.ScanRadius;
             maxChainCount = item.MaxChainCount;
         }
+
+        /// <summary>
+        /// Public Empty Constructor for ES3
+        /// </summary>
+        public ReboundArrow() {
+
+        }
     }
 
     public class HomingArrow : AirActiveTypeAS
     {
-        Transform targetTr   = null;
-        bool isFindTarget    = false;
-        float searchInterval = .1f;     //Find Target Update Interval
-        float currentSearchTime = 0f;   //Current Search Time
-        float scanRadius        = 3f;   //Detection Range
+        Transform targetTr      = null;    //temp Target Transform
+        float currentSearchTime = 0f;   //Current Target Search Time
+        bool isFindTarget       = false;
                                        
-        //Chasing Speed value
-        float speed       = 6f;
-        float rotateSpeed = 800f;
-
         //Target Colliders
         Collider2D[] colliders = null;
         bool isFixDirection    = false;
+
+        //Saving Variables
+        float searchInterval = .1f;  //Find Target Update Interval
+        float scanRadius     = 3f;   //Detection Range
+        float speed          = 6f;   //Target Chasing Speed Value
+        float rotateSpeed    = 800f; //Target Chasing Rotate Speed Value
 
         //Call Every Frames
         public override void OnUpdate() 
@@ -486,8 +493,7 @@
         /// <summary>
         /// TEMP Constructor
         /// </summary>
-        public HomingArrow()
-        {
+        public HomingArrow() {
 
         }
     }
@@ -618,6 +624,11 @@
         {
             maxChainCount = data.MaxChainCount;
         }
+
+        /// <summary>
+        /// Public Empty Constructor for ES3
+        /// </summary>
+        public PiercingArrow() { }
     }
 
 }

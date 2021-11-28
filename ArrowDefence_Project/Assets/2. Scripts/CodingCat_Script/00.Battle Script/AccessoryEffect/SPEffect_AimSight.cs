@@ -61,7 +61,8 @@
 
                 if (rayhit)  //무언가에 부딫혔을때 **문제되었던 부분 정리하기
                 {
-                    if (rayhit.collider.CompareTag(AD_Data.OBJECT_TAG_MONSTER)) laserLine.SetPosition(1, GameGlobal.FixedVectorOnScreen(rayhit.point));
+                    if (rayhit.collider.CompareTag(AD_Data.OBJECT_TAG_MONSTER))
+                        laserLine.SetPosition(1, GameGlobal.FixedVectorOnScreen(rayhit.point));
                     else laserLine.SetPosition(1, LineStartPoint.position + (LineStartPoint.right * rayDistance));
                 }
                 else laserLine.SetPosition(1, LineStartPoint.position + (LineStartPoint.right * rayDistance));

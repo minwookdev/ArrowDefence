@@ -32,6 +32,8 @@
         private float colorTime = 0f;
         Color tempColor;
         Color colorAlphaZero;
+        Vector3 tempPivotPos;
+        Vector3 tempTouchPos;
 
         private void Awake() => Instance = this;
 
@@ -91,8 +93,11 @@
         {
             if (isInitialize == false) return;
 
-            ObjectCenterPivotImage.transform.position = GameGlobal.FixedVectorOnScreen(startPos);
-            ObjectTouchPosImage.transform.position    = GameGlobal.FixedVectorOnScreen(endPos);
+            //Update Temp Position
+            FixPos(startPos, endPos);
+
+            ObjectCenterPivotImage.transform.position = tempPivotPos;
+            ObjectTouchPosImage.transform.position    = tempTouchPos;
             isDrawLine = true;
         }
 
@@ -115,8 +120,11 @@
         {
             if (isInitialize == false) return;
 
-            ObjectCenterPivotImage.transform.position = GameGlobal.FixedVectorOnScreen(startPos);
-            ObjectTouchPosImage.transform.position    = GameGlobal.FixedVectorOnScreen(endPos);
+            //Update Temp Position
+            FixPos(startPos, endPos);
+
+            ObjectCenterPivotImage.transform.position = tempPivotPos;
+            ObjectTouchPosImage.transform.position    = tempTouchPos;
             isDrawLine = true;
 
             //Lerp Color
@@ -129,8 +137,8 @@
         {
             if(isDrawLine)
             {
-                ObjectLineRender.SetPosition(0, GameGlobal.FixedVectorOnScreen(ObjectTouchPosImage.transform.position));
-                ObjectLineRender.SetPosition(1, GameGlobal.FixedVectorOnScreen(ObjectCenterPivotImage.transform.position));
+                ObjectLineRender.SetPosition(0, ObjectTouchPosImage.transform.position);
+                ObjectLineRender.SetPosition(1, ObjectCenterPivotImage.transform.position);
 
                 EnableObjectsAlpha();
             }
@@ -237,6 +245,11 @@
                                     .OnStart(() => isColored = true);
                 }
             }
+        }
+
+        void FixPos(Vector3 pivotPos, Vector3 touchPos) {
+            tempPivotPos = new Vector3(pivotPos.x, pivotPos.y, 0f);
+            tempTouchPos = new Vector3(touchPos.x, touchPos.y, 0f);
         }
     }
 }

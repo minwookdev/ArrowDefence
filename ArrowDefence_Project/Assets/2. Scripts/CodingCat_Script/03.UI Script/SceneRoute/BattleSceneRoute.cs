@@ -57,7 +57,7 @@
         [SerializeField] GameObject prefHitsType;
         [SerializeField] GameObject prefkillType;
 
-        private float screenZpos = 90f;
+        private float screenZpos = 0f;
         private LineRenderer arrowLimitLine;
         private Vector2 topLeftPoint;
         private Vector2 bottomRightPoint;

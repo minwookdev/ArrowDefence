@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85b041e0ff5f89e41b19a84369197493, type: 3}
+  m_Name: 3006-Wood_Bow
+  m_EditorClassIdentifier: 
+  Item_Type: 2
+  Item_Grade: 0
+  Item_Id: 3006
+  Item_Amount: 1
+  Item_Name: Wood Bow
+  Item_Desc: 
+  Item_Sprite: {fileID: 21300000, guid: 7bc86be53e2b7154d9a35aedab9e4c94, type: 3}
+  Equip_Type: 0
+  BowGameObject: {fileID: 2772393570774568332, guid: 94fbb0808b1b74f43b4e4ad92904d9ca,
+    type: 3}
+  SkillAsset_f: {fileID: 0}
+  SkillAsset_s: {fileID: 0}

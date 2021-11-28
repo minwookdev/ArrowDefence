@@ -80,7 +80,7 @@
             //몬스터 소환해놓고 각종 변수 (위치, 회전 등) 설정해주고
             randomPosX = UnityEngine.Random.Range(topLeftPoint.x, bottomRightPoint.x);
             randomPosY = UnityEngine.Random.Range(bottomRightPoint.y, topLeftPoint.y);
-            Vector3 spawnPos = new Vector3(randomPosX, randomPosY, 90f);
+            Vector3 spawnPos = new Vector3(randomPosX, randomPosY, 0f);
 
             yield return null;
 
@@ -97,7 +97,7 @@
 #if UNITY_EDITOR
         public void MonsterDebug(string monsterTag, Vector2 spawnPos)
         {
-            CCPooler.SpawnFromPool(monsterTag, GameGlobal.FixedVectorOnScreen(spawnPos), Quaternion.identity);
+            CCPooler.SpawnFromPool(monsterTag, spawnPos, Quaternion.identity);
         }
 #endif
     }

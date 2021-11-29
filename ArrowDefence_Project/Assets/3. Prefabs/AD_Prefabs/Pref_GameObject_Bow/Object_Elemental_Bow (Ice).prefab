@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1790275043095577396}
   m_Layer: 8
-  m_Name: ClampPoint_Left
+  m_Name: ClampPoint_Bottom
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -165,8 +165,8 @@ MonoBehaviour:
   TouchRadius: 1
   PullableRadius: 1
   BowCenterPointImg: {fileID: 7432606157785209578}
-  RightClampPoint: {fileID: 1790275044804970797}
-  LeftClampPoint: {fileID: 1790275043095577396}
+  ClampPointTop: {fileID: 1790275044804970797}
+  ClampPointBottom: {fileID: 1790275043095577396}
   SmoothRotateSpeed: 12
   ArrowPullingSpeed: 2
   ArrowComponent: {fileID: 0}
@@ -703,7 +703,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1790275044804970797}
   m_Layer: 8
-  m_Name: ClampPoint_Right
+  m_Name: ClampPoint_Top
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

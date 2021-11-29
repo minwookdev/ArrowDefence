@@ -163,11 +163,11 @@ RectTransform:
   - {fileID: 4517517999093292285}
   - {fileID: 4517517997514872548}
   m_Father: {fileID: 4517517997932246187}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 61.4, y: 0}
+  m_AnchoredPosition: {x: 46.9, y: -0}
   m_SizeDelta: {x: 90, y: 35}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &4517517997514872555
@@ -180,7 +180,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4517517997514872548}
   m_Layer: 8
-  m_Name: ClampPoint_Right
+  m_Name: ClampPoint_Top
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -215,7 +215,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4517517997550367739}
   m_Layer: 8
-  m_Name: Rope_Left
+  m_Name: Rope_Point_Left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -237,7 +237,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -6, y: 122}
+  m_AnchoredPosition: {x: -10.7, y: 140.7}
   m_SizeDelta: {x: 10, y: 10}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &4517517997684806311
@@ -383,7 +383,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4517517997810908339}
   m_Layer: 8
-  m_Name: Rope_Right
+  m_Name: Rope_Point_Right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -405,7 +405,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -6, y: -122}
+  m_AnchoredPosition: {x: -11.8, y: -143.6}
   m_SizeDelta: {x: 10, y: 10}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &4517517997914890961
@@ -420,12 +420,12 @@ GameObject:
   - component: {fileID: 4517517997914890924}
   - component: {fileID: 4517517997914890963}
   m_Layer: 8
-  m_Name: Bow_Image
+  m_Name: Bow_Image_temp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &4517517997914890962
 RectTransform:
   m_ObjectHideFlags: 0
@@ -513,6 +513,7 @@ RectTransform:
   m_Children:
   - {fileID: 4517517998196540568}
   - {fileID: 4517517997914890962}
+  - {fileID: 8511398618282934115}
   - {fileID: 4517517998388811856}
   - {fileID: 4517517997372370290}
   - {fileID: 4239044934442883132}
@@ -552,8 +553,8 @@ MonoBehaviour:
   TouchRadius: 1
   PullableRadius: 1
   BowCenterPointImg: {fileID: 4705361034708059427}
-  RightClampPoint: {fileID: 4517517997514872548}
-  LeftClampPoint: {fileID: 4517517999093292285}
+  ClampPointTop: {fileID: 4517517997514872548}
+  ClampPointBottom: {fileID: 4517517999093292285}
   SmoothRotateSpeed: 12
   ArrowPullingSpeed: 2
   ArrowComponent: {fileID: 0}
@@ -666,11 +667,11 @@ RectTransform:
   - {fileID: 4517517997684806304}
   - {fileID: 4517517997230594079}
   m_Father: {fileID: 4517517997932246187}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 22.5, y: 0}
+  m_AnchoredPosition: {x: 19.7, y: 0}
   m_SizeDelta: {x: 45, y: 300}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &4517517998388811857
@@ -703,7 +704,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4517517999093292285}
   m_Layer: 8
-  m_Name: ClampPoint_Left
+  m_Name: ClampPoint_Bottom
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -758,7 +759,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4517517997932246187}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -795,6 +796,80 @@ MonoBehaviour:
   m_Sprite: {fileID: 21300000, guid: de2fa06e6a3b94358828b74d01606c02, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!1 &5755334320281322235
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8511398618282934115}
+  - component: {fileID: 511467517790830269}
+  - component: {fileID: 7093675544330542424}
+  m_Layer: 8
+  m_Name: Bow_Image
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &8511398618282934115
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5755334320281322235}
+  m_LocalRotation: {x: 0, y: 0, z: -0.94176435, w: 0.33627358}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4517517997932246187}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -140.7}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -18, y: 5.3}
+  m_SizeDelta: {x: 270, y: 270}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &511467517790830269
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5755334320281322235}
+  m_CullTransparentMesh: 0
+--- !u!114 &7093675544330542424
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5755334320281322235}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 0
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: e0f4b52d7688e674db7cd2f09f6ec9f2, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1

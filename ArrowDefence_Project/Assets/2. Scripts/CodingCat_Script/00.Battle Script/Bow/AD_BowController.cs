@@ -9,14 +9,14 @@
         public static AD_BowController instance;
 
         [Header("GENERAL")]
-        public Camera MainCam;
+        public Camera MainCam = null;
         private Touch screenTouch;
         
         [Header("BOW CONTROL VARIABLES")]
         public float TouchRadius    = 1f;
         public float PullableRadius = 1f;
         public Image BowCenterPointImg;
-        public Transform RightClampPoint, LeftClampPoint;
+        public Transform ClampPointTop, ClampPointBottom;
         [Range(1f, 20f)] public float SmoothRotateSpeed = 12f;
         [Range(1f, 3f)]  public float ArrowPullingSpeed = 1f;
 
@@ -68,19 +68,12 @@
         private void Start()
         {
             //Initialize Main Camera Object
-            if (MainCam == null) MainCam = Camera.main;
+            MainCam = Camera.main;
             currentPullType = Data.CCPlayerData.settings.PullingType;
 
             //Initialize variables For Arrow to be Loaded
-            if(RightClampPoint == null || LeftClampPoint == null)
-            {
-                LeftClampPoint  = this.transform.GetChild(3).GetChild(0);
-                RightClampPoint = this.transform.GetChild(3).GetChild(1);
-
-                if(transform.GetChild(3).name != "Bow_ClampPoints")
-                {
-                    CatLog.WLog("Bow Clamp Point is in the wrong Location. Check The Bow");
-                }
+            if(ClampPointTop == null || ClampPointBottom == null) {
+                CatLog.ELog("Bow Controller : Clamp Point is Not Cached."); CatLog.Break();
             }
 
             ArrowParentTr = transform.parent;
@@ -443,15 +436,15 @@
             //                         RightClampPoint.position, Quaternion.identity);
 
             if (loadArrowType == LOAD_ARROW_TYPE.ARROW_MAIN)
-                LoadedArrow = CCPooler.SpawnFromPool(AD_Data.POOLTAG_MAINARROW, transform, initArrowScale, RightClampPoint.position, Quaternion.identity);
+                LoadedArrow = CCPooler.SpawnFromPool(AD_Data.POOLTAG_MAINARROW, transform, initArrowScale, ClampPointTop.position, Quaternion.identity);
             else if (loadArrowType == LOAD_ARROW_TYPE.ARROW_SUB)
-                LoadedArrow = CCPooler.SpawnFromPool(AD_Data.POOLTAG_SUBARROW, transform, initArrowScale, RightClampPoint.position, Quaternion.identity);
+                LoadedArrow = CCPooler.SpawnFromPool(AD_Data.POOLTAG_SUBARROW, transform, initArrowScale, ClampPointTop.position, Quaternion.identity);
 
             LoadedArrow.transform.localEulerAngles = initArrowRot;
 
             ArrowComponent = LoadedArrow.GetComponent<AD_Arrow>();
-            ArrowComponent.leftClampPoint  = this.LeftClampPoint;
-            ArrowComponent.rightClampPoint = this.RightClampPoint;
+            ArrowComponent.leftClampPoint  = this.ClampPointBottom;
+            ArrowComponent.rightClampPoint = this.ClampPointTop;
 
 #endregion
         }
@@ -464,7 +457,7 @@
             if (IsPullingStop)
             {
                 if (LoadedArrow != null)
-                    LoadedArrow.transform.position = RightClampPoint.transform.position;
+                    LoadedArrow.transform.position = ClampPointTop.transform.position;
                 DrawTouchPos.Instance.ReleaseTouchLine();
                 isBowPullBegan = false; isBowPulling = false;
             }
@@ -496,7 +489,7 @@
                 if(isBowPulling)
                 {
                     arrowPosition = LoadedArrow.transform.position;
-                    arrowPosition = Vector3.MoveTowards(arrowPosition, LeftClampPoint.position, Time.unscaledDeltaTime * ArrowPullingSpeed);
+                    arrowPosition = Vector3.MoveTowards(arrowPosition, ClampPointBottom.position, Time.unscaledDeltaTime * ArrowPullingSpeed);
                     LoadedArrow.transform.position = arrowPosition;
                     
                     //Arrow Direction * Force
@@ -504,7 +497,7 @@
                 }
                 else
                 {
-                    LoadedArrow.transform.position = RightClampPoint.position;
+                    LoadedArrow.transform.position = ClampPointTop.position;
                 }
             }
         }

@@ -7,7 +7,8 @@
     {
         private byte arrowCount;
         private float shotDelay;
-        private WaitForSeconds rapidShotWait = new WaitForSeconds(0.2f);
+
+        WaitForSeconds rapidShotWait = new WaitForSeconds(0.2f);
 
         //WaitForSeconds waitForSec = new WaitForSeconds(0.2f);
         ///Default 

@@ -150,7 +150,7 @@ GameObject:
   - component: {fileID: 4613396934045542669}
   - component: {fileID: 4613396934045542668}
   m_Layer: 9
-  m_Name: Pref_Arrow_04_HardSteel
+  m_Name: Pref_Arrow_04_Steel_hard
   m_TagString: ArrowDefence_Arrow
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -195,7 +195,7 @@ MonoBehaviour:
   arrowTrail: {fileID: 4613396934038311871}
   leftClampPoint: {fileID: 0}
   rightClampPoint: {fileID: 0}
-  ArrowPower: 18
+  ArrowPower: 20
   isLaunched: 0
 --- !u!114 &4613396934045542669
 MonoBehaviour:
@@ -256,7 +256,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4613396934045542667}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -10.8, z: 0}
   m_LocalScale: {x: 19.721737, y: 14.163654, z: 14.010235}
   m_Children: []
   m_Father: {fileID: 4613396934034285489}
@@ -376,7 +376,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4613396934045542671}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.09999593, y: 0.17422482, z: 0}
+  m_LocalPosition: {x: -0.09999593, y: -10.625776, z: 0}
   m_LocalScale: {x: 24.268085, y: 17.428726, z: 17.239944}
   m_Children: []
   m_Father: {fileID: 4613396934034285489}
@@ -485,7 +485,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4613396934045542673}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -77.8, z: 9.9999895}
+  m_LocalPosition: {x: 0, y: -88.600006, z: 9.9999895}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4613396934045906225}
@@ -525,7 +525,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -44}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 1.5, y: -32.5}
+  m_AnchoredPosition: {x: 1.5, y: -43.300003}
   m_SizeDelta: {x: 1, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!212 &3055873010825613998
@@ -564,8 +564,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 863014967
+  m_SortingLayer: 9
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 729e251ee1690724398971805c2973af, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

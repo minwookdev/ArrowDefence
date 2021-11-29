@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85b041e0ff5f89e41b19a84369197493, type: 3}
+  m_Name: 3007-Enhanced_Wooden
+  m_EditorClassIdentifier: 
+  Item_Type: 2
+  Item_Grade: 0
+  Item_Id: 3007
+  Item_Amount: 1
+  Item_Name: Enhanced Wooden Bow
+  Item_Desc: 
+  Item_Sprite: {fileID: 21300000, guid: e0f4b52d7688e674db7cd2f09f6ec9f2, type: 3}
+  Equip_Type: 0
+  BowGameObject: {fileID: 4517517997932246186, guid: d2014b5e14f65f4458283a2707c9be4d,
+    type: 3}
+  SkillAsset_f: {fileID: 11400000, guid: 520120a42f020a644b355ed8ca3469fd, type: 2}
+  SkillAsset_s: {fileID: 0}

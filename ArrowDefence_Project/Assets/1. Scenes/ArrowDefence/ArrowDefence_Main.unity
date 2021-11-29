@@ -30726,7 +30726,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 1049111
+    m_Bits: 1050391
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -45517,7 +45517,7 @@ GameObject:
   - component: {fileID: 1486058754}
   - component: {fileID: 1486058753}
   - component: {fileID: 1486058752}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Canvas_Main
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -45581,8 +45581,8 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 0
-  m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingLayerID: -1356431715
+  m_SortingOrder: 2
   m_TargetDisplay: 0
 --- !u!224 &1486058755
 RectTransform:

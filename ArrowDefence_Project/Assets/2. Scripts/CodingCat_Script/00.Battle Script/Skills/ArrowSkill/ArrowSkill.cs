@@ -23,6 +23,8 @@
 
     public abstract class AttackActiveTypeAS : ArrowSkill
     {
+        protected GameObject lastHitTarget = null;
+
         public abstract bool OnHit(Collider2D target);
 
         public virtual bool OnHit(Collider2D target, out Transform targetTr)
@@ -30,7 +32,15 @@
             targetTr = null; return true;
         }
 
-        public abstract void OnExit(Collider2D target);
+        public virtual void OnExit(Collider2D target) {
+            //Hit처리 되면서 대상 객체가 비활성화 처리됨과 동시에 Exit함수가 들어오면 NULL잡음.
+            //if (target == null) return;
+
+            //저장된 마지막 타격 객체 제거
+            if (target != null && target == lastHitTarget.gameObject) {
+                lastHitTarget = null;
+            }
+        }
     }
 
     public abstract class AirActiveTypeAS : ArrowSkill
@@ -49,7 +59,6 @@
 
     public class ReboundArrow : AttackActiveTypeAS
     {
-        GameObject lastHitTarget = null;
         int currentChainCount = 0;  //현재 연쇄횟수
         int maxChainCount     = 2;  //최대 연쇄횟수
         float scanRange       = 5f; //Monster 인식 범위
@@ -264,11 +273,6 @@
             targetTr = bestTargetTr; 
             arrow.ForceToTarget(monsterPos);
             return false;
-        }
-
-        public override void OnExit(Collider2D target)
-        {
-            throw new System.NotImplementedException();
         }
 
         public override void Clear()
@@ -525,8 +529,6 @@
         public byte currentChainCount = 0;
         public byte maxChainCount;
 
-        public GameObject lastHitTarget = null;
-
         float tempRadius = 5f;
 
         ///관통 횟수에 따른 데미지 감소효과 구현필요.
@@ -601,13 +603,6 @@
                 targetTr = collList[Random.Range(0, collList.Count)].transform;
                 return false;
             }
-        }
-
-        public override void OnExit(Collider2D target)
-        {
-            //저장 객체 초기화
-            if (lastHitTarget == target.gameObject)
-                lastHitTarget = null;
         }
 
         public override void Clear()

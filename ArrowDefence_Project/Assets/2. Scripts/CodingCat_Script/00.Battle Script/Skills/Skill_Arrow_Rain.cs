@@ -49,12 +49,12 @@
             //{
             //    //This Random initial Position is Arrow's Local Position
             //    //var randomArrowPos = new Vector3(Random.Range(-360, 360 + 1),
-            //    //                                 Random.Range(-675, -790 - 1), 90f);
+            //    //                                 Random.Range(-675, -790 - 1), 0f);
             //    //Setting Random Pos at Global Pos
             //    var randomArrowPos = new Vector3(Random.Range(-4f, 4f), 
-            //                                     Random.Range(-7.5f, -8.75f), 90f);
+            //                                     Random.Range(-7.5f, -8.75f), 0f);
             //    var randomdest     = new Vector3(Random.Range(-3.5f, 3.5f),
-            //                                     Random.Range(6f, 4f), 90f);
+            //                                     Random.Range(6f, 4f), 0f);
             //
             //    //randomArrow Pos in Global World Position -> Debugging Used
             //    /* left-top     : -4, -7.5
@@ -83,7 +83,7 @@
             //    if(poolArrow)
             //    {
             //        // LocalPosition이 아닌 Position 으로 좌표잡을수 있도록 변경 -> 변경 완료
-            //        //poolArrow.transform.localPosition = new Vector3(randomArrowPos.x, randomArrowPos.y, 90f);
+            //        //poolArrow.transform.localPosition = new Vector3(randomArrowPos.x, randomArrowPos.y, 0f);
             //        poolArrow.gameObject.transform.rotation = Quaternion.Euler(0f, 0f, CalculateAngle(poolArrow.transform.position, randomdest));
             //        poolArrow.ShotArrow(poolArrow.transform.up * force.magnitude);
             //    }
@@ -112,9 +112,9 @@
                 yield return new WaitForSeconds(shotDelay);
 
                 var randomArrowPos = new Vector3(Random.Range(-4f, 4f),
-                                                 Random.Range(-7.5f, -8.75f), 90f);
+                                                 Random.Range(-7.5f, -8.75f), 0f);
                 var randomdest     = new Vector3(Random.Range(-3.5f, 3.5f),
-                                                 Random.Range(6f, 4f), 90f);
+                                                 Random.Range(6f, 4f), 0f);
 
                 //randomArrow Pos in Global World Position -> Debugging Used
                 /* left-top     : -4, -7.5
@@ -165,16 +165,16 @@
         private string matPath         = "Assets/99. ArrowDefence_Resources/Materials/rope.mat";
         private string makerSpritePath = @"Assets\98. MinWook_Assets\Trajectory Aimer 2D\Sprites\Circle.png";
 
-        Vector3[] arrowInitialLine = new Vector3[5] { new Vector3(-4f, -7.5f, 90f),
-                                                      new Vector3(4f, -7.5f, 90f),
-                                                      new Vector3(4f, -8.75f, 90f),
-                                                      new Vector3(-4f, -8.75f, 90f),
-                                                      new Vector3(-4f, -7.5f, 90f)};
-        Vector3[] arrowDestLine = new Vector3[5] { new Vector3(-3.5f, 6f, 90f),
-                                                   new Vector3(3.5f, 6f, 90f),
-                                                   new Vector3(3.5f, 4f, 90f),
-                                                   new Vector3(-3.5f, 4f, 90f),
-                                                   new Vector3(-3.5f, 6f, 90f)};
+        Vector3[] arrowInitialLine = new Vector3[5] { new Vector3(-4f, -7.5f, 0f),
+                                                      new Vector3(4f, -7.5f, 0f),
+                                                      new Vector3(4f, -8.75f, 0f),
+                                                      new Vector3(-4f, -8.75f, 0f),
+                                                      new Vector3(-4f, -7.5f, 0f)};
+        Vector3[] arrowDestLine = new Vector3[5] { new Vector3(-3.5f, 6f, 0f),
+                                                   new Vector3(3.5f, 6f, 0f),
+                                                   new Vector3(3.5f, 4f, 0f),
+                                                   new Vector3(-3.5f, 4f, 0f),
+                                                   new Vector3(-3.5f, 6f, 0f)};
         private float lineWidth = 0.1f;
         private byte posCount = 5;
         private Material lineMat;
@@ -213,9 +213,9 @@
             posMarker.transform.SetParent(arrowParent, true);
             posMarker.transform.localScale = new Vector2(20f, 20f);
             posMarker.transform.position = destPos;
-            //posMarker.transform.position.z = 90f;
+            //posMarker.transform.position.z = 0f;
             Vector3 swap = posMarker.transform.position;
-            swap.z = 90f;
+            swap.z = 0f;
             posMarker.transform.position = swap;
             posMarker.AddComponent<SpriteRenderer>().sprite =
                (Sprite)Instantiate(AssetDatabase.LoadAssetAtPath<Sprite>(makerSpritePath));

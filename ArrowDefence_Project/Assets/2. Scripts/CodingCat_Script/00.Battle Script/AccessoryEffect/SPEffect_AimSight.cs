@@ -47,7 +47,7 @@
             bowController = GetComponent<AD_BowController>();
 
             //Initial Line Start Position
-            LineStartPoint = bowController.LeftClampPoint;
+            LineStartPoint = bowController.ClampPointBottom;
         }
 
         private void Update()

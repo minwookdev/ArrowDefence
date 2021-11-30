@@ -71,8 +71,8 @@
         private void Awake()
         {
             //Camera Resolution Initialize
-            GameManager.Instance.ResolutionPortrait(Camera.main);
-            GameManager.Instance.ResolutionPortrait(UICamera);
+            //GameManager.Instance.ResolutionPortrait(Camera.main);
+            //GameManager.Instance.ResolutionPortrait(UICamera);
 
         }
 

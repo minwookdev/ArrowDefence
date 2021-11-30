@@ -6,12 +6,16 @@ public static class AD_Data
     /// <summary>
     /// Scene Name String Data
     /// </summary>
+    //SCENE STRING
     public static readonly string SCENE_TITLE         = "ArrowDefence_Title";
     public static readonly string SCENE_MAIN          = "ArrowDefence_Main";
     public static readonly string SCENE_LOADING       = "ArrowDefence_Loading";
-    public static readonly string SCENE_BATTLE_DEV    = "ArrowDefence_Battle_00";
-    public static readonly string SCENE_BATTLE_FOREST = "ArrowDefence_Battle_01";
-    public static readonly string SCENE_BATTLE_DESERT = "ArrowDefence_Battle_02";
+    public static readonly string SCENE_BATTLE_DEV    = "ArrowDefence_Battle_Dev";
+    //BATTLE SCENE STRING 
+    public static readonly string SCENE_BATTLE_FOREST_NORMAL  = "ArrowDefence_Battle_Forest_Normal";
+    public static readonly string SCENE_BATTLE_FOREST_HARD    = "ArrowDefence_Battle_Forest_Hard";
+    public static readonly string SCENE_BATTLE_DUNGEON_NORMAL = "ArrowDefence_Battle_Dungeon_Normal";
+    public static readonly string SCENE_BATTLE_DUNGEON_HARD   = "ArrowDefence_Battle_Dungeon_Hard";
 
     /// <summary>
     /// Stage Info Panel Battle Stage Name String Data

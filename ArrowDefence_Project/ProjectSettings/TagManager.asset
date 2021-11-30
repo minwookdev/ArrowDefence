@@ -48,16 +48,16 @@ TagManager:
   - name: Map:Ground
     uniqueID: 2425651459
     locked: 0
-  - name: Map:Objects
+  - name: Map:GroundDeco
     uniqueID: 4250941897
     locked: 0
-  - name: 
+  - name: Map:GroundShadow
     uniqueID: 4189426099
     locked: 0
-  - name: Object:Monster
+  - name: Map:Wall
     uniqueID: 293537937
     locked: 0
-  - name: 
+  - name: Object:Monster
     uniqueID: 389775653
     locked: 0
   - name: Map:Building
@@ -72,6 +72,9 @@ TagManager:
   - name: Object:Arrow
     uniqueID: 863014967
     locked: 0
-  - name: New Layer
+  - name: 
     uniqueID: 1612283651
+    locked: 0
+  - name: 
+    uniqueID: 1102946179
     locked: 0

@@ -10,17 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 85b041e0ff5f89e41b19a84369197493, type: 3}
-  m_Name: 3007-Enhanced_Wooden
+  m_Name: 3010-short_po
   m_EditorClassIdentifier: 
   Item_Type: 2
-  Item_Grade: 0
-  Item_Id: 3007
+  Item_Grade: 2
+  Item_Id: 3010
   Item_Amount: 1
-  Item_Name: Enhanced Wooden Bow
+  Item_Name: Polished Short Bow
   Item_Desc: 
-  Item_Sprite: {fileID: 21300000, guid: e0f4b52d7688e674db7cd2f09f6ec9f2, type: 3}
+  Item_Sprite: {fileID: 21300000, guid: 5b1d727934739434b9b323b3b805b7fa, type: 3}
   Equip_Type: 0
-  BowGameObject: {fileID: 4517517997932246186, guid: d2014b5e14f65f4458283a2707c9be4d,
+  BowGameObject: {fileID: 9141343339605111555, guid: 61b8d4b836e9eb544b2f4970d1a3146d,
     type: 3}
-  SkillAsset_f: {fileID: 11400000, guid: 520120a42f020a644b355ed8ca3469fd, type: 2}
+  SkillAsset_f: {fileID: 0}
   SkillAsset_s: {fileID: 0}

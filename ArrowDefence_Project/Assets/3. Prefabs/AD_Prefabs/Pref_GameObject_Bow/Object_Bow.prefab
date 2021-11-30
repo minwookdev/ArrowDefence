@@ -215,6 +215,7 @@ GameObject:
   - component: {fileID: 1797254673156858289}
   - component: {fileID: 1797254673156858303}
   - component: {fileID: 1797254673156858302}
+  - component: {fileID: 8668787785208765453}
   m_Layer: 8
   m_Name: Object_Bow
   m_TagString: ArrowDefence_Bow
@@ -282,6 +283,20 @@ MonoBehaviour:
   ArrowComponent: {fileID: 0}
   ArrowParentTr: {fileID: 0}
   LoadedArrow: {fileID: 0}
+--- !u!114 &8668787785208765453
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1797254673156858288}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be9cfe934b1a19a479f2866fdc6e7803, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ImageBattleBow: {fileID: 1797254673173133257}
+  SpriteBow: {fileID: 21300014, guid: 12d07bba8937097498344cea8f2922d0, type: 3}
 --- !u!1 &1797254673173133259
 GameObject:
   m_ObjectHideFlags: 0

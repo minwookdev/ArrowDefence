@@ -10,17 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 85b041e0ff5f89e41b19a84369197493, type: 3}
-  m_Name: 3008-Elden
+  m_Name: 3007-wooden_en
   m_EditorClassIdentifier: 
   Item_Type: 2
   Item_Grade: 1
-  Item_Id: 3008
+  Item_Id: 3007
   Item_Amount: 1
-  Item_Name: 
+  Item_Name: Enhanced Wooden Bow
   Item_Desc: 
-  Item_Sprite: {fileID: 21300000, guid: 6ee6b6e32c9fb734199ab65444c3aa1a, type: 3}
+  Item_Sprite: {fileID: 21300000, guid: e0f4b52d7688e674db7cd2f09f6ec9f2, type: 3}
   Equip_Type: 0
-  BowGameObject: {fileID: 1199833956013647908, guid: 041bd895a42effe48be785b5607c723e,
+  BowGameObject: {fileID: 4517517997932246186, guid: d2014b5e14f65f4458283a2707c9be4d,
     type: 3}
-  SkillAsset_f: {fileID: 11400000, guid: 8fc08db059ce576488c3db5a4393a80a, type: 2}
+  SkillAsset_f: {fileID: 11400000, guid: 520120a42f020a644b355ed8ca3469fd, type: 2}
   SkillAsset_s: {fileID: 0}

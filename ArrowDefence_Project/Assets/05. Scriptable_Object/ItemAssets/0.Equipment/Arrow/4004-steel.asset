@@ -10,19 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bf2d431614543144c88942f47ae83b63, type: 3}
-  m_Name: 4003-ironArrow
+  m_Name: 4004-steel
   m_EditorClassIdentifier: 
   Item_Type: 2
-  Item_Grade: 0
-  Item_Id: 4003
+  Item_Grade: 1
+  Item_Id: 4004
   Item_Amount: 1
-  Item_Name: Iron Arrow
+  Item_Name: Steel Arrow
   Item_Desc: 
-  Item_Sprite: {fileID: 21300000, guid: 597738adf4e1c1542b4e8fea019cedbb, type: 3}
+  Item_Sprite: {fileID: 21300000, guid: e442fdcc5a634d14daedef9c815a9baa, type: 3}
   Equip_Type: 1
-  MainArrowObj: {fileID: 1123326281355546838, guid: aa3b31143ec88dd4aa84c997f7e1a284,
+  MainArrowObj: {fileID: 2957477139567338875, guid: 8f15211a26bb28743a54c7cf90cabb46,
     type: 3}
-  LessArrowObj: {fileID: 599512309587492333, guid: 049926a43c83bc74285d9985d195d661,
+  LessArrowObj: {fileID: 4854250247361223595, guid: 48d81cbefb2be6340b4f84a290cde580,
     type: 3}
-  ArrowSkillFst: {fileID: 11400000, guid: a947278377de35645989528dc16ce14b, type: 2}
+  ArrowSkillFst: {fileID: 0}
   ArrowSkillSec: {fileID: 0}

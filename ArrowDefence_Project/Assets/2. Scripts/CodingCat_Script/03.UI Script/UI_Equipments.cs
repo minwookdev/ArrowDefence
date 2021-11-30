@@ -2,6 +2,7 @@
 {
     using ActionCat.Data;
     using UnityEngine;
+    using UnityEngine.UI;
 
     public class UI_Equipments : MonoBehaviour
     {
@@ -26,6 +27,9 @@
         [Header("Choose Equipment Slot Panel")]
         [SerializeField] private SlotChoosePop choosePanel;
 
+        [Header("Show case")]
+        [SerializeField] Image imageShowcase = null;
+
         /*
            EquipSlot Update 되는 시점 : 인벤토리 UI 열린 시점, 
                                        장비 아이템을 장착 시점, 
@@ -48,14 +52,20 @@
             var equipment = CCPlayerData.equipments;
 
             //Equipment Item : Bow
-            if(equipment.IsEquippedBow())
-            {
+            if(equipment.IsEquippedBow()) {
+                var item = equipment.GetBowItem();
+
+                //Init-Bow Slot
                 BowItem_Slot.gameObject.SetActive(true);
-                BowItem_Slot.Setup(CCPlayerData.equipments.GetBowItem());
+                BowItem_Slot.Setup(item);
+
+                //Init-Bow ShowCase
+                UpdateShowcase(item);
             }
-            else
-            {
-                if (BowItem_Slot.gameObject.activeSelf) BowItem_Slot.Clear();
+            else {
+                if (BowItem_Slot.gameObject.activeSelf)
+                    BowItem_Slot.Clear();
+                imageShowcase.enabled = false;
             }
 
             //Equipment Item : Arrow (Main)
@@ -104,59 +114,28 @@
             }
         }
 
-        public void OpenChoosePanel(SlotChoosePop.SLOTPANELTYPE type, Item_Equipment itemAddress)
-        {
-            //choosePanel.gameObject.SetActive(true);
+        public void OpenChoosePanel(SlotChoosePop.SLOTPANELTYPE type, Item_Equipment itemAddress) {
             choosePanel.Setup(type, itemAddress);
         }
 
-        //public static void Update_EquipUI()
-        //{
-        //    //Bow Item Slot
-        //    if(CCPlayerData.equipments.IsEquipBow())
-        //    {
-        //        Instance.BowItem_Slot.gameObject.SetActive(true);
-        //        Instance.BowItem_Slot.Setup(CCPlayerData.equipments.GetBowItem());
-        //    }
-        //    else
-        //    {
-        //        if (Instance.BowItem_Slot.gameObject.activeSelf) Instance.BowItem_Slot.Clear();
-        //    }
-        //
-        //    //Arrow Item Main Slot
-        //    if (CCPlayerData.equipments.IsEquipMainArrow())
-        //    {
-        //        Instance.ArrowItem_Slot0.gameObject.SetActive(true);
-        //        Instance.ArrowItem_Slot0.Setup(CCPlayerData.equipments.GetMainArrow());
-        //    }
-        //    else
-        //    {
-        //        if (Instance.ArrowItem_Slot0.gameObject.activeSelf) Instance.ArrowItem_Slot0.Clear();
-        //    }
-        //
-        //    //Arrow Item Sub Slot
-        //    if (CCPlayerData.equipments.IsEquipSubArrow())
-        //    {
-        //        Instance.ArrowItem_Slot1.gameObject.SetActive(true);
-        //        Instance.ArrowItem_Slot1.Setup(CCPlayerData.equipments.GetSubArrow());
-        //    }
-        //    else
-        //    {
-        //        if (Instance.ArrowItem_Slot1.gameObject.activeSelf) Instance.ArrowItem_Slot1.Clear();
-        //    }
-        //
-        //    //Accessory Item Slot 
-        //    if(CCPlayerData.equipments.IsEquipAccessory())
-        //    {
-        //        Instance.EquipItem_Slot_0.gameObject.SetActive(true);
-        //        Instance.EquipItem_Slot_0.Setup(CCPlayerData.equipments.GetAccessory());
-        //    }
-        //    else
-        //    {
-        //        if (Instance.EquipItem_Slot_0.gameObject.activeSelf) Instance.EquipItem_Slot_0.Clear();
-        //    }
-        //}
+        void UpdateShowcase(Item_Bow item) {
+            if (item.GetBowObject() == null) {
+                imageShowcase.enabled = false; 
+                return;
+            }
 
-        //public static void 
+            if(item.GetBowObject().TryGetComponent<BowSprite>(out BowSprite bowSprite)) {
+                if(bowSprite.GetUISprite() == null) {
+                    imageShowcase.enabled = false; 
+                    return;
+                }
+
+                imageShowcase.enabled = true;
+                imageShowcase.sprite = bowSprite.GetUISprite();
+            }
+            else {
+                imageShowcase.enabled = false;
+            }
+        }
     }
 }

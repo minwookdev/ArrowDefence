@@ -56,7 +56,7 @@
         {
             int w = Screen.width, h = Screen.height;
 
-            rect = new Rect(0f, 175f, w, h * 4 / 100);
+            rect = new Rect(0f, 0f, w, h * 4 / 100);
 
             style = new GUIStyle();
             style.alignment = TextAnchor.UpperLeft;
@@ -79,7 +79,7 @@
 
         void Update()
         {
-            deltaTime += (Time.deltaTime - deltaTime) * 0.1f;
+            deltaTime += (Time.unscaledDeltaTime - deltaTime) * 0.1f;
         }
 
         void OnGUI()//소스로 GUI 표시.

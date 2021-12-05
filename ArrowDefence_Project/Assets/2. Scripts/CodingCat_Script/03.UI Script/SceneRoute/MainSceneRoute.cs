@@ -121,6 +121,10 @@ public class MainSceneRoute : MonoBehaviour
 
     }
 
+    private void OnDestroy() {
+        _inst = null;
+    }
+
     public void Message(string msg)
     {
         if (MessageText != null)
@@ -152,6 +156,17 @@ public class MainSceneRoute : MonoBehaviour
             //_inst.itemInfoPop.Open_Popup_EquipItem(equipItem); 
             default: break;
         }
+    }
+
+    public static void Fade(Action action) {
+        _inst.ImgFade.DOFade(1f, _inst.FadeTime)
+                     .OnStart(() => {
+                         _inst.ImgFade.blocksRaycasts = false;
+                         _inst.ImgFade.gameObject.SetActive(true);
+                     })
+                     .OnComplete(() => {
+                         action();
+                     });
     }
 
     public void OpenMenuItem(GameObject target)
@@ -240,33 +255,33 @@ public class MainSceneRoute : MonoBehaviour
                       });
     }
 
-    public void StageSelect(int stagedata)
-    {
-        Action<string> actPopup = (str) =>
-        {
-            battlePop.SelectStage = str;
-            battlePop.gameObject.SetActive(true);
-        };
-
-        switch (stagedata)
-        {
-            case (int)STAGELIST.STAGE_DEV:
-                actPopup(AD_Data.STAGEINFO_DEV);
-                break;
-            case (int)STAGELIST.STAGE_FOREST:
-                actPopup(AD_Data.STAGEINFO_FOREST);
-                break;
-            case (int)STAGELIST.STAGE_DESERT:
-                actPopup(AD_Data.STAGEINFO_DESERT);
-                break;
-            case (int)STAGELIST.STAGE_DUNGEON:
-                actPopup(AD_Data.STAGEINFO_DUNGEON);
-                break;
-            default:
-                CatLog.WLog("Not Support This Stage");
-                break;
-        }
-    }
+    //public void StageSelect(int stagedata)
+    //{
+    //    Action<string> actPopup = (str) =>
+    //    {
+    //        battlePop.stageInfo = str;
+    //        battlePop.gameObject.SetActive(true);
+    //    };
+    //
+    //    switch (stagedata)
+    //    {
+    //        case (int)STAGELIST.STAGE_DEV:
+    //            actPopup(AD_Data.STAGEINFO_DEV);
+    //            break;
+    //        case (int)STAGELIST.STAGE_FOREST:
+    //            actPopup(AD_Data.STAGEINFO_FOREST);
+    //            break;
+    //        case (int)STAGELIST.STAGE_DESERT:
+    //            actPopup(AD_Data.STAGEINFO_DESERT);
+    //            break;
+    //        case (int)STAGELIST.STAGE_DUNGEON:
+    //            actPopup(AD_Data.STAGEINFO_DUNGEON);
+    //            break;
+    //        default:
+    //            CatLog.WLog("Not Support This Stage");
+    //            break;
+    //    }
+    //}
 
     public void Button_ClosePopup(GameObject obj)
     {
@@ -310,4 +325,12 @@ public class MainSceneRoute : MonoBehaviour
                });
 
     }
+
+    #region BATTLE_POPUP
+
+    public void BattleStageSelector(int idx) {
+        battlePop.EnablePopup(idx);
+    }
+
+    #endregion
 }

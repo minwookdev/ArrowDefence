@@ -1,0 +1,120 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3204541759480302800
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3204541759480302799}
+  - component: {fileID: 3204541759480302798}
+  - component: {fileID: 3204541759480302796}
+  - component: {fileID: 3204541759480302795}
+  m_Layer: 0
+  m_Name: SceneRouteObj
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3204541759480302799
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3204541759480302800}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 90}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3204541759480302798
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3204541759480302800}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b874476ef2ee2849b439fc39141d798, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  IsVisible: 1
+  LineWidth: 0.1
+  DefaultLineMat: {fileID: 10756, guid: 0000000000000000e000000000000000, type: 0}
+  isOnFPS: 1
+  ImgFade: {fileID: 0}
+  FadeTime: 1
+  PausePanel: {fileID: 0}
+  ResultPanel: {fileID: 0}
+  GameOverPanel: {fileID: 0}
+  PanelOpenFadeTime: 0.5
+  SlotParentTr: {fileID: 0}
+  DropItemSlotPref: {fileID: 5984624412175565113, guid: 07963ed1caf360a429dfd7b2ee79fd4d,
+    type: 3}
+  DropItemSlots: []
+  mainArrowSlot: {fileID: 0}
+  subArrowSlot: {fileID: 0}
+  specialArrowSlot: {fileID: 0}
+  skillSlotTr: {fileID: 0}
+  prefCooldownType: {fileID: 8603381215424117483, guid: 77b99c919336ebe42a4ba1065eb14415,
+    type: 3}
+  prefChargingType: {fileID: 1487578310220286010, guid: a0d9a01f43e6a1643b1f00f8cfef5b44,
+    type: 3}
+  prefHitsType: {fileID: 5960462813511267407, guid: 7be17370b84c0644f96bfc56cd7b5fd4,
+    type: 3}
+  prefkillType: {fileID: 2739246953676750907, guid: 6e10ca916b782284fb32ecab29e543ca,
+    type: 3}
+  BattleSceneUICanvas: {fileID: 0}
+  UICamera: {fileID: 0}
+--- !u!114 &3204541759480302796
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3204541759480302800}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6867096f57d1d2143ac618c6f55644af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TopLeft: {x: -3.5, y: 10, z: 90}
+  BottomRight: {x: 3.5, y: 8, z: 90}
+  monsterPref: {fileID: 2117330865147067910, guid: 40d1d771a1a397747af99ffc6adc9852,
+    type: 3}
+  spawnTimer: 0
+--- !u!114 &3204541759480302795
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3204541759480302800}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0180c68b6b8ea574e9a63dd369c0474b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  StartBattleDelay: 3
+  EndBattleDelay: 2
+  ParentTransform: {fileID: 0}
+  BowInitPosition: {fileID: 0}
+  MaxPlayerHealth: 200
+  MaxClearCount: 300
+  ClearSlider: {fileID: 0}
+  PlayerHealthSlider: {fileID: 0}
+  EnemyBossHealthSlider: {fileID: 0}
+  SliderSmoothTime: 2
+  CurrentGameState: 0
+  DropListAsset: {fileID: 11400000, guid: 834b46e9df025194da792695df7f4b4b, type: 2}
+  StageDropCorrection: 30
+  dropItemList: []
+  IsDebugClearStage: 0
+  IsDebugMonsterLogics: 0

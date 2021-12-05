@@ -17,4 +17,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/1. Scenes/ArrowDefence/ArrowDefence_BattleScene/ArrowDefence_Battle_Dev.unity
     guid: a312859d3776ca64b9daf77e7968e09c
+  - enabled: 1
+    path: Assets/1. Scenes/ArrowDefence/ArrowDefence_BattleScene/ArrowDefence_Battle_Forest_Normal.unity
+    guid: 39c4609395b8fe842b3c24b1e19fd3b4
+  - enabled: 1
+    path: Assets/1. Scenes/ArrowDefence/ArrowDefence_BattleScene/ArrowDefence_Battle_Dungeon_Normal.unity
+    guid: b72477f165631d34a8213a64fb4a4332
   m_configObjects: {}

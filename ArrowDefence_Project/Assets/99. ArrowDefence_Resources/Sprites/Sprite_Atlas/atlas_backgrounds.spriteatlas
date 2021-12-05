@@ -1,0 +1,86 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!687078895 &4343727234628468602
+SpriteAtlas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: atlas_backgrounds
+  m_EditorData:
+    serializedVersion: 2
+    textureSettings:
+      serializedVersion: 2
+      anisoLevel: 1
+      compressionQuality: 50
+      maxTextureSize: 2048
+      textureCompression: 0
+      filterMode: 1
+      generateMipMaps: 0
+      readable: 0
+      crunchedCompression: 0
+      sRGB: 1
+    platformSettings:
+    - serializedVersion: 3
+      m_BuildTarget: Android
+      m_MaxTextureSize: 2048
+      m_ResizeAlgorithm: 0
+      m_TextureFormat: 47
+      m_TextureCompression: 1
+      m_CompressionQuality: 50
+      m_CrunchedCompression: 0
+      m_AllowsAlphaSplitting: 0
+      m_Overridden: 1
+      m_AndroidETC2FallbackOverride: 0
+      m_ForceMaximumCompressionQuality_BC6H_BC7: 0
+    packingSettings:
+      serializedVersion: 2
+      padding: 4
+      blockOffset: 1
+      allowAlphaSplitting: 0
+      enableRotation: 0
+      enableTightPacking: 1
+    variantMultiplier: 1
+    packables:
+    - {fileID: 2800000, guid: 84dc1a245502346868ad5f59f0eeed49, type: 3}
+    - {fileID: 2800000, guid: 38bdd50ae121147ddbc4fb9bc6d728c4, type: 3}
+    - {fileID: 2800000, guid: 4990d2d8739754d3db79fc681354aad9, type: 3}
+    - {fileID: 2800000, guid: 9969b146d9aec445d826739007e3424c, type: 3}
+    - {fileID: 2800000, guid: 7f5c149ac1a164cbcb6c8452a8c8c699, type: 3}
+    - {fileID: 2800000, guid: 8bbefee662f294a3fb981da800b631d3, type: 3}
+    - {fileID: 2800000, guid: 4a1cd64bfef544134884a5a0d55d6542, type: 3}
+    - {fileID: 2800000, guid: 89017a4beb74c4e928ec79a3fbb0463f, type: 3}
+    - {fileID: 2800000, guid: c4798f352fc384a67805a12072b96772, type: 3}
+    - {fileID: 2800000, guid: 9c42f2118907047d289b55a9609ce20f, type: 3}
+    - {fileID: 2800000, guid: 743fc551622034093a11efcbcb9d49fc, type: 3}
+    - {fileID: 2800000, guid: d19724e297461444a88f7bbb61aa4934, type: 3}
+    bindAsDefault: 1
+  m_MasterAtlas: {fileID: 0}
+  m_PackedSprites:
+  - {fileID: 21300000, guid: 9c42f2118907047d289b55a9609ce20f, type: 3}
+  - {fileID: 7803171745462721284, guid: 743fc551622034093a11efcbcb9d49fc, type: 3}
+  - {fileID: 21300000, guid: d19724e297461444a88f7bbb61aa4934, type: 3}
+  - {fileID: 21300000, guid: 84dc1a245502346868ad5f59f0eeed49, type: 3}
+  - {fileID: 21300000, guid: c4798f352fc384a67805a12072b96772, type: 3}
+  - {fileID: 21300000, guid: 9969b146d9aec445d826739007e3424c, type: 3}
+  - {fileID: 21300000, guid: 8bbefee662f294a3fb981da800b631d3, type: 3}
+  - {fileID: 21300000, guid: 4990d2d8739754d3db79fc681354aad9, type: 3}
+  - {fileID: 384262645948542492, guid: 38bdd50ae121147ddbc4fb9bc6d728c4, type: 3}
+  - {fileID: -3464876302821893888, guid: 7f5c149ac1a164cbcb6c8452a8c8c699, type: 3}
+  - {fileID: 1102511138014544295, guid: 4a1cd64bfef544134884a5a0d55d6542, type: 3}
+  - {fileID: 21300000, guid: 89017a4beb74c4e928ec79a3fbb0463f, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - play_continue_bg
+  - top_status_bg_0
+  - common_popup_btn_close_bg
+  - common_bg_empty
+  - pause_deco_line
+  - common_popup_bg_top
+  - common_whitebox
+  - common_popup_bg
+  - common_btn_small_bg_0
+  - common_screen_dim_bg_0
+  - home_submenu_bg_0
+  - guide_book_detail_line
+  m_Tag: atlas_backgrounds
+  m_IsVariant: 0

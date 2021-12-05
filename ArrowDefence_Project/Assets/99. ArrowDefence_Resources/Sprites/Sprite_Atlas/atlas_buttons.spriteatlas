@@ -1,0 +1,86 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!687078895 &4343727234628468602
+SpriteAtlas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: atlas_buttons
+  m_EditorData:
+    serializedVersion: 2
+    textureSettings:
+      serializedVersion: 2
+      anisoLevel: 1
+      compressionQuality: 50
+      maxTextureSize: 2048
+      textureCompression: 0
+      filterMode: 1
+      generateMipMaps: 0
+      readable: 0
+      crunchedCompression: 0
+      sRGB: 1
+    platformSettings:
+    - serializedVersion: 3
+      m_BuildTarget: Android
+      m_MaxTextureSize: 1024
+      m_ResizeAlgorithm: 0
+      m_TextureFormat: 47
+      m_TextureCompression: 1
+      m_CompressionQuality: 50
+      m_CrunchedCompression: 0
+      m_AllowsAlphaSplitting: 0
+      m_Overridden: 1
+      m_AndroidETC2FallbackOverride: 0
+      m_ForceMaximumCompressionQuality_BC6H_BC7: 0
+    packingSettings:
+      serializedVersion: 2
+      padding: 4
+      blockOffset: 1
+      allowAlphaSplitting: 0
+      enableRotation: 0
+      enableTightPacking: 1
+    variantMultiplier: 1
+    packables:
+    - {fileID: 2800000, guid: 91e63ba8a3e074c49914de9bd3c3e995, type: 3}
+    - {fileID: 2800000, guid: 6900647849bf74c2daec9082ae11cc1c, type: 3}
+    - {fileID: 2800000, guid: 68b35d2059b8c46e0a98e53628e9b3af, type: 3}
+    - {fileID: 2800000, guid: 19a745caa897a41759d4b8b5d0b482f2, type: 3}
+    - {fileID: 2800000, guid: 2dd4604925f264cb1990818641361190, type: 3}
+    - {fileID: 2800000, guid: 6a63ef398306547be8cad5f83b8994a3, type: 3}
+    - {fileID: 2800000, guid: ae9f8677ca3c24a7c80d7217a941f886, type: 3}
+    - {fileID: 2800000, guid: 58cda3db815934e15b198221e05d69cf, type: 3}
+    - {fileID: 2800000, guid: bc3b44f533e4b4efabcd60774a4257f9, type: 3}
+    - {fileID: 2800000, guid: 0b29ca37e82c442a58508328c4509fea, type: 3}
+    - {fileID: 2800000, guid: 7c9169de7543a47c7a1a49f13864a321, type: 3}
+    - {fileID: 2800000, guid: 6b587243587f44a9f9a2b44d4bfa5560, type: 3}
+    bindAsDefault: 1
+  m_MasterAtlas: {fileID: 0}
+  m_PackedSprites:
+  - {fileID: 2969678862317009722, guid: 68b35d2059b8c46e0a98e53628e9b3af, type: 3}
+  - {fileID: -8092616183726542678, guid: 6b587243587f44a9f9a2b44d4bfa5560, type: 3}
+  - {fileID: 21300000, guid: bc3b44f533e4b4efabcd60774a4257f9, type: 3}
+  - {fileID: -6275191271189760509, guid: 0b29ca37e82c442a58508328c4509fea, type: 3}
+  - {fileID: -4189922956459317181, guid: ae9f8677ca3c24a7c80d7217a941f886, type: 3}
+  - {fileID: 6616375705706489589, guid: 6900647849bf74c2daec9082ae11cc1c, type: 3}
+  - {fileID: 21300000, guid: 91e63ba8a3e074c49914de9bd3c3e995, type: 3}
+  - {fileID: 2665930108083454080, guid: 6a63ef398306547be8cad5f83b8994a3, type: 3}
+  - {fileID: 346016010000759473, guid: 2dd4604925f264cb1990818641361190, type: 3}
+  - {fileID: 8907393020666943449, guid: 19a745caa897a41759d4b8b5d0b482f2, type: 3}
+  - {fileID: 21300000, guid: 58cda3db815934e15b198221e05d69cf, type: 3}
+  - {fileID: -7205862678162377740, guid: 7c9169de7543a47c7a1a49f13864a321, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - common_btn_bluegray_0
+  - title_btn_start_0
+  - common_circle_dark
+  - home_button_play_0
+  - common_btn_yellow_0
+  - common_btn_blue_0
+  - btn_circle_dark
+  - common_btn_green_0
+  - common_btn_gray_0
+  - common_btn_disable_0
+  - btn_icon_funtion_pause
+  - home_menu_btn_0
+  m_Tag: atlas_buttons
+  m_IsVariant: 0

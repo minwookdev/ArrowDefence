@@ -53,12 +53,12 @@ SpriteAtlas:
     - {fileID: 2800000, guid: bc3b44f533e4b4efabcd60774a4257f9, type: 3}
     - {fileID: 2800000, guid: 0b29ca37e82c442a58508328c4509fea, type: 3}
     - {fileID: 2800000, guid: 7c9169de7543a47c7a1a49f13864a321, type: 3}
-    - {fileID: 2800000, guid: 6b587243587f44a9f9a2b44d4bfa5560, type: 3}
+    - {fileID: 2800000, guid: 4aab4045b426c4d269a2f99a1dcc88de, type: 3}
     bindAsDefault: 1
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
   - {fileID: 2969678862317009722, guid: 68b35d2059b8c46e0a98e53628e9b3af, type: 3}
-  - {fileID: -8092616183726542678, guid: 6b587243587f44a9f9a2b44d4bfa5560, type: 3}
+  - {fileID: 21300000, guid: 4aab4045b426c4d269a2f99a1dcc88de, type: 3}
   - {fileID: 21300000, guid: bc3b44f533e4b4efabcd60774a4257f9, type: 3}
   - {fileID: -6275191271189760509, guid: 0b29ca37e82c442a58508328c4509fea, type: 3}
   - {fileID: -4189922956459317181, guid: ae9f8677ca3c24a7c80d7217a941f886, type: 3}
@@ -71,7 +71,7 @@ SpriteAtlas:
   - {fileID: -7205862678162377740, guid: 7c9169de7543a47c7a1a49f13864a321, type: 3}
   m_PackedSpriteNamesToIndex:
   - common_btn_bluegray_0
-  - title_btn_start_0
+  - play_btn_fast
   - common_circle_dark
   - home_button_play_0
   - common_btn_yellow_0

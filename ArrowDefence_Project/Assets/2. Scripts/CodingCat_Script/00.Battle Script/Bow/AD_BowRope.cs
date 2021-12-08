@@ -1,7 +1,5 @@
 ﻿namespace ActionCat
 {
-    using System.Collections;
-    using System.Collections.Generic;
     using UnityEngine;
 
     public class AD_BowRope : MonoBehaviour
@@ -27,9 +25,9 @@
 		public Transform arrowCatchPoint;
 
 		/// <summary>
-		/// The color of the rope.
+		/// The color of the rope. [now white]
 		/// </summary>
-		public Color color;
+		public Color color = new Color(1f, 1f, 1f, 1f);
 
 		/// <summary>
 		/// The width of the rope.
@@ -64,7 +62,6 @@
 
 			rope2.startWidth = width.x;
 			rope2.endWidth = width.y;
-
 
 			//Setting up material color
 			ropeMaterial.color = color;

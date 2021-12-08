@@ -269,7 +269,8 @@
             GameObject[] monsters = GameObject.FindGameObjectsWithTag(AD_Data.OBJECT_TAG_MONSTER);
             CatLog.Log($"Tag Monster's Count : {monsters.Length}, All Monster's Disable");
             foreach (var monster in monsters) {
-                monster.SendMessage(nameof(IPoolObject.DisableRequest), monster, SendMessageOptions.DontRequireReceiver);
+                monster.SendMessage(nameof(MonsterController.ChangeState),
+                                    MONSTERSTATE.DEATH, SendMessageOptions.DontRequireReceiver);
             }
             ///Scene에 Enable Monster개체를 비 활성화 처리
             ///GameObject.Enable된 개체만 Monsters에 담기는것을 확인.

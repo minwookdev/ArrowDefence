@@ -371,10 +371,11 @@
             //}
             #endregion
             //장전되어 있는 화살이 없거나 isPulling 않들어왔을때 Return
-            if (LoadedArrow == null || isBowPulling == false)
-            {
+            if (LoadedArrow == null || isBowPulling == false) {
                 CatLog.WLog("Can't Launch the Arrow"); return;
-            } isBowPulling = false;
+            } 
+            
+            isBowPulling = false;
 
             AD_BowRope.instance.arrowCatchPoint = null;
 
@@ -513,7 +514,7 @@
 
             //장전된 화살 Disable 처리하고 Arrow 관련 변수정리, Pool에서 화살을 꺼내서 장전
             if (LoadedArrow != null)
-                ArrowComponent.DisableRequest(LoadedArrow);
+                ArrowComponent.DisableRequest();
             AD_BowRope.instance.arrowCatchPoint  = null;
             LoadedArrow   = null; ArrowComponent = null;
             loadArrowType = type;

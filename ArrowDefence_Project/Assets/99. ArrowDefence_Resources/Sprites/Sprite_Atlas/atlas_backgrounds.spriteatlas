@@ -23,7 +23,7 @@ SpriteAtlas:
     platformSettings:
     - serializedVersion: 3
       m_BuildTarget: Android
-      m_MaxTextureSize: 1024
+      m_MaxTextureSize: 2048
       m_ResizeAlgorithm: 0
       m_TextureFormat: 47
       m_TextureCompression: 1
@@ -51,11 +51,16 @@ SpriteAtlas:
     - {fileID: 2800000, guid: 4a1cd64bfef544134884a5a0d55d6542, type: 3}
     - {fileID: 2800000, guid: d19724e297461444a88f7bbb61aa4934, type: 3}
     - {fileID: 2800000, guid: 743fc551622034093a11efcbcb9d49fc, type: 3}
+    - {fileID: 2800000, guid: 9c42f2118907047d289b55a9609ce20f, type: 3}
+    - {fileID: 2800000, guid: 50bb820dd9c2a4a289d136ab2825c2e6, type: 3}
+    - {fileID: 2800000, guid: 6b587243587f44a9f9a2b44d4bfa5560, type: 3}
     bindAsDefault: 1
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
+  - {fileID: 21300000, guid: 9c42f2118907047d289b55a9609ce20f, type: 3}
   - {fileID: 7803171745462721284, guid: 743fc551622034093a11efcbcb9d49fc, type: 3}
   - {fileID: 21300000, guid: d19724e297461444a88f7bbb61aa4934, type: 3}
+  - {fileID: -8092616183726542678, guid: 6b587243587f44a9f9a2b44d4bfa5560, type: 3}
   - {fileID: 21300000, guid: 84dc1a245502346868ad5f59f0eeed49, type: 3}
   - {fileID: 21300000, guid: 9969b146d9aec445d826739007e3424c, type: 3}
   - {fileID: 21300000, guid: 8bbefee662f294a3fb981da800b631d3, type: 3}
@@ -63,9 +68,12 @@ SpriteAtlas:
   - {fileID: 384262645948542492, guid: 38bdd50ae121147ddbc4fb9bc6d728c4, type: 3}
   - {fileID: -3464876302821893888, guid: 7f5c149ac1a164cbcb6c8452a8c8c699, type: 3}
   - {fileID: 1102511138014544295, guid: 4a1cd64bfef544134884a5a0d55d6542, type: 3}
+  - {fileID: 21300000, guid: 50bb820dd9c2a4a289d136ab2825c2e6, type: 3}
   m_PackedSpriteNamesToIndex:
+  - play_continue_bg(no atlas packing)
   - top_status_bg_0
   - common_popup_btn_close_bg
+  - title_btn_start_0
   - common_bg_empty
   - common_popup_bg_top
   - common_whitebox
@@ -73,5 +81,6 @@ SpriteAtlas:
   - common_btn_small_bg_0
   - common_screen_dim_bg_0
   - home_submenu_bg_0
+  - character_bottom_bg_small
   m_Tag: atlas_backgrounds
   m_IsVariant: 0

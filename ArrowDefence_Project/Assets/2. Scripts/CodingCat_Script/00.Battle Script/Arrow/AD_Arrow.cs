@@ -108,13 +108,21 @@
             //(현재는 CCPooler에 비활성화를 요청하도록 로직 변경)
         }
 
+        public void DisableRequest() {
+            rBody.isKinematic = true;
+            arrowTrail.gameObject.SetActive(false);
+            polyCollider.enabled = false;
+
+            CCPooler.ReturnToPool(gameObject, 0);
+        }
+
         void OnTriggerEnter2D(Collider2D coll)
         {
             if(coll.gameObject.layer == LayerMask.NameToLayer(AD_Data.LAYER_MONSTER)) {
                 if (isInitSkill) {
                     isDisableArrow = arrowSkillSets.OnHit(coll);
                     if (isDisableArrow)
-                        DisableRequest(gameObject);
+                        DisableRequest();
                 }
                 else
                     OnHit(coll.gameObject);
@@ -132,8 +140,8 @@
 
         void OnHit(GameObject target)
         {
-            target.SendMessage("OnHitObject", Random.Range(30f, 50f), SendMessageOptions.DontRequireReceiver);
-            DisableRequest(gameObject);
+            target.SendMessage(nameof(IDamageable.OnHitObject), Random.Range(30f, 50f), SendMessageOptions.DontRequireReceiver);
+            DisableRequest();
         }
 
         /// <summary>

@@ -54,7 +54,9 @@
 
         public void DisableRequest(GameObject target) => CCPooler.ReturnToPool(target);
 
-        public void OnStageClear() => DisableRequest(this.gameObject);
+        public void DisableRequest() => CCPooler.ReturnToPool(gameObject);
+
+        public void OnStageClear() => DisableRequest();
 
         public void OnHitObject(float damage)
         {
@@ -69,14 +71,14 @@
 
             if(currentHealthPoint <= 0) {
                 isDeath = true;
-                DisableRequest(this.gameObject);
+                DisableRequest();
             }
         }
 
         private void OnTriggerEnter2D(Collider2D coll) {
             if (coll.gameObject.layer == LayerMask.NameToLayer(AD_Data.LAYER_DISABLELINE)) {
                 BattleProgresser.OnDecreasePlayerHealthPoint(5f);
-                DisableRequest(this.gameObject);
+                DisableRequest();
             }
         }
 

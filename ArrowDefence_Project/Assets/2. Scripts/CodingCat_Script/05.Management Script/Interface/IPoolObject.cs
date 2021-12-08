@@ -1,6 +1,8 @@
 ﻿public interface IPoolObject
 {
     void DisableRequest(UnityEngine.GameObject target);
+
+    void DisableRequest();
 }
 
 public interface IArrowObject

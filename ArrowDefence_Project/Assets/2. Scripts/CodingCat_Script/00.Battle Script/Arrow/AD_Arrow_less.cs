@@ -106,15 +106,15 @@
 
             //Out of Screen
             if (!(xIn && yIn)) {
-                DisableRequest(this.gameObject);
+                DisableRequest();
                 return;
             }
         }
 
         void OnHit(GameObject target)
         {
-            target.SendMessage("OnHitObject", Random.Range(10f, 30f), SendMessageOptions.DontRequireReceiver);
-            DisableRequest(gameObject);
+            target.SendMessage(nameof(IDamageable.OnHitObject), Random.Range(10f, 30f), SendMessageOptions.DontRequireReceiver);
+            DisableRequest();
         }
 
         void CalcAngle()
@@ -128,6 +128,8 @@
         }
 
         public void DisableRequest(GameObject target) => CCPooler.ReturnToPool(target, 0);
+
+        public void DisableRequest() => CCPooler.ReturnToPool(gameObject, 0);
 
         /// <summary>
         /// Shot Directly to Direction
@@ -191,7 +193,7 @@
                 if (isInitSkill) {
                     isDisableArrow = arrowSkillSets.OnHit(coll);
                     if (isDisableArrow)
-                        DisableRequest(gameObject);
+                        DisableRequest();
                 }
                 else
                     OnHit(coll.gameObject);

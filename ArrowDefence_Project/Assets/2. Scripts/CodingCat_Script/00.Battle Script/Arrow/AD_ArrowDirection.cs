@@ -35,7 +35,7 @@
         private void Update()
         {
             //Get Velocity of the Arrow //CalcAngle Verriables
-            //velocity = arrowRigidBody.velocity;
+            velocity = arrowRigidBody.velocity;
 
             //When Arrow Fired
             if(velocity.magnitude != 0 && arrowRigidBody.isKinematic == false) {
@@ -63,14 +63,14 @@
         private void CheckArrowBounds()
         {
             //Get the Position of the Arrow
-            arrowPosition = transform.position;
+            arrowPosition = tr.position;
 
             xIn = (arrowPosition.x >= topLeftScreenPoint.x - offset.x && arrowPosition.x <= bottomRightScreenPoint.x + offset.x);
             yIn = (arrowPosition.y >= bottomRightScreenPoint.y - offset.y && arrowPosition.y <= topLeftScreenPoint.y + offset.y);
 
             //Arrow Out of Screen
             if(!(xIn && yIn)) {
-                adArrow.DisableRequest(gameObject);
+                adArrow.DisableRequest();
                 return;
             }
         }

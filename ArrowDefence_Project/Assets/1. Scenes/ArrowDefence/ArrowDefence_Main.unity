@@ -10064,7 +10064,7 @@ GameObject:
   m_Component:
   - component: {fileID: 242047063}
   m_Layer: 0
-  m_Name: -------------MAP--------------
+  m_Name: ---------------MAP-----------------
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11085,7 +11085,7 @@ GameObject:
   m_Component:
   - component: {fileID: 264834229}
   m_Layer: 0
-  m_Name: -----------SYSTEM------------
+  m_Name: --------------SYSTEM--------------
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -73341,7 +73341,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1600834660}
   m_Layer: 0
-  m_Name: ------------- UI ---------------
+  m_Name: ---------------- UI ------------------
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -83655,7 +83655,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1834816195}
   m_Layer: 0
-  m_Name: -----------CANVAS------------
+  m_Name: -------------CANVAS---------------
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -87157,7 +87157,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1918924510}
   m_Layer: 0
-  m_Name: -----------CAMERA------------
+  m_Name: -------------CAMERA---------------
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

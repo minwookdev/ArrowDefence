@@ -37,6 +37,8 @@ public static class AD_Data
     /// CCPooler Tag String Data with Monster's
     /// </summary>
     public static readonly string POOLTAG_MONSTER_NORMAL = "Monster_Normal";
+    public static readonly string POOLTAG_MONSTER_FREQ   = "Monster_Freq";
+    public static readonly string POOLTAG_MONSTER_ELITE  = "Monster_Elite";
 
     /// <summary>
     /// Unity Layer Mask string Data

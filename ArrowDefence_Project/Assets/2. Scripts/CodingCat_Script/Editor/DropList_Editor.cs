@@ -56,12 +56,21 @@ public class DropList_Editor : Editor
         EditorGUI.EndDisabledGroup();
         EditorGUILayout.EndHorizontal();
 
+        EditorGUILayout.BeginHorizontal();
+        if(GUILayout.Button("Fold Out")) {
+            throw new System.NotImplementedException();
+        }
+        if(GUILayout.Button("Fold In")) {
+            throw new System.NotImplementedException();
+        }
+        EditorGUILayout.EndHorizontal();
+
         //EditorGUILayout.PropertyField(dropListProp);
 
         for (int i = 0; i < dropListProp.arraySize; i++)
         {
             EditorGUILayout.BeginVertical("GroupBox");
-            EditorGUILayout.PropertyField(dropListProp.GetArrayElementAtIndex(i), new GUIContent("DROP ITEM" + i));
+            EditorGUILayout.PropertyField(dropListProp.GetArrayElementAtIndex(i), new GUIContent("DROP ITEM " + i));
             EditorGUILayout.EndVertical();
 
             //dropListProp.GetArrayElementAtIndex(i).Find
@@ -89,7 +98,7 @@ public class DropTableArrayDraw : PropertyDrawer
         correctionPos.x = correctionPos.x + 5f;
 
         //Inspector ▼ 모양의 여닫기
-        if(property.isExpanded == EditorGUI.Foldout(correctionPos, property.isExpanded, label))
+        if(property.isExpanded = EditorGUI.Foldout(correctionPos, property.isExpanded, label))
         {
             //Array 내부 원소당 높이 합쳐서 16이상
             if(position.height > 16f)
@@ -100,7 +109,7 @@ public class DropTableArrayDraw : PropertyDrawer
                 //contentPosition.y += 18f;
             }
             int indent = EditorGUI.indentLevel;
-            EditorGUI.indentLevel = 1;
+            EditorGUI.indentLevel = 0;
             EditorGUILayout.BeginVertical();
             //Array 내부 변수 하나씩 다 잡아줌. 따로 원하는 위치에 하고싶은 경우 EditorGUI.PropertyField() 사용
             //Rect는 position을 변형하여 사용해주면 된다

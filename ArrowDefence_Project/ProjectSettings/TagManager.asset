@@ -22,7 +22,7 @@ TagManager:
   - ObjectArrowLess
   - ObjectMonster
   - DisableCollider
-  - 
+  - AttackGuideLine
   - 
   - 
   - 
@@ -51,22 +51,22 @@ TagManager:
   - name: Map:GroundDeco
     uniqueID: 4250941897
     locked: 0
-  - name: Map:Shadow
+  - name: Object:Monster
     uniqueID: 4189426099
     locked: 0
-  - name: Map:Wall
+  - name: 
     uniqueID: 293537937
     locked: 0
-  - name: Map:WallsDeco
+  - name: Map:Shadow
     uniqueID: 389775653
     locked: 0
-  - name: Object:Monster
+  - name: Map:Wall
     uniqueID: 879352621
     locked: 0
-  - name: Map:Rooftop
+  - name: Map:WallsDeco
     uniqueID: 1856344157
     locked: 0
-  - name: 
+  - name: Map:Rooftop
     uniqueID: 2938535581
     locked: 0
   - name: Skill Effect
@@ -83,4 +83,10 @@ TagManager:
     locked: 0
   - name: 
     uniqueID: 180860417
+    locked: 0
+  - name: 
+    uniqueID: 3758325025
+    locked: 0
+  - name: 
+    uniqueID: 1762243827
     locked: 0

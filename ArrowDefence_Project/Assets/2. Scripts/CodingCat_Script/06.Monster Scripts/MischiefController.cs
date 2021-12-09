@@ -1,30 +1,60 @@
 ﻿namespace ActionCat {
     using UnityEngine;
 
-    [RequireComponent(typeof(Rigidbody2D), typeof(Animator))]
+    [RequireComponent(typeof(Rigidbody2D), typeof(Animator), typeof(CapsuleCollider2D))]
     public class MischiefController : MonsterController {
         [Header("COMPONENT")]
         [SerializeField] Animator    anim;
         [SerializeField] Rigidbody2D rigid;
 
         [Header("MOVEMENT")]
-        public float InitMoveSpeed = 0.5f;
+        public float InitMoveSpeed  = 0.5f;
+        public float AttackInterval = 2f;
 
         //Animator State
         int animState = Animator.StringToHash("state");
+        int atkState  = Animator.StringToHash("attack");
 
         //Monster Property
         float speed = 0f;
+        float attackTimer    = 0f;
+        float attackInterval = 0f;
+        bool isFindWall = false;
 
         void Start() {
+            //Init-Component
+            ComponentInit();
+
             //Init-Property
-            speed = InitMoveSpeed;
+            speed          = InitMoveSpeed; 
+            attackInterval = AttackInterval;
             StateStart(MONSTERSTATE.IDLE);
         }
 
         void OnEnable() {
             //State Start
             ChangeState(MONSTERSTATE.IDLE);
+        }
+
+        private void OnTriggerEnter2D(Collider2D coll) {
+            if(coll.gameObject.layer == LayerMask.NameToLayer("AttackGuideLine")) {
+                isFindWall = true;
+            }
+        }
+
+        private void OnTriggerExit2D(Collider2D coll) {
+            if(coll.gameObject.layer == LayerMask.NameToLayer("AttackGuideLine")) {
+                isFindWall = false;
+            }
+        }
+
+        void ComponentInit() {
+            if(anim == null) {
+                anim = GetComponent<Animator>();
+            }
+            if(rigid == null) {
+                rigid = GetComponent<Rigidbody2D>();
+            }
         }
 
         protected override void STATE_IDLE(STATEFLOW flow) {
@@ -38,9 +68,9 @@
         protected override void STATE_MOVE(STATEFLOW flow) {
             switch (flow)
             {
-                case STATEFLOW.ENTER:  WalkStart(); break;
-                case STATEFLOW.UPDATE: break;
-                case STATEFLOW.EXIT:   break;
+                case STATEFLOW.ENTER:  WalkStart();  break;
+                case STATEFLOW.UPDATE: WalkUpdate(); break;
+                case STATEFLOW.EXIT:   WalkExit();   break;
             }
         }
 
@@ -52,9 +82,27 @@
             }
         }
 
+        protected override void STATE_ATTACK(STATEFLOW flow) {
+            switch (flow) {
+                case STATEFLOW.ENTER:  AttackStart();  break;
+                case STATEFLOW.UPDATE: AttackUpdate(); break;
+                case STATEFLOW.EXIT:   AttackExit();   break;
+            }
+        }
+
         void WalkStart() {
             anim.SetInteger(animState, 1);
             rigid.velocity = Vector2.down * speed;
+        }
+
+        void WalkUpdate() {
+            if(isFindWall == true) {
+                ChangeState(MONSTERSTATE.ATTACK);
+            }
+        }
+
+        void WalkExit() {
+            rigid.velocity = Vector2.zero;
         }
 
         void IdleStart() {
@@ -68,9 +116,31 @@
             }
         }
 
+        void AttackStart() {
+            //Set Animation on Idle
+            anim.SetInteger(animState, 0);
+        }
+
+        void AttackUpdate() {
+            attackTimer += Time.deltaTime;
+            if(attackTimer >= attackInterval) {
+                anim.SetTrigger(atkState);
+                attackTimer = 0f;
+            }
+        }
+
+        void AttackExit() {
+            attackTimer = 0f;
+        }
+
         void DeathStart() {
             anim.SetInteger(animState, 3);
-            rigid.velocity = Vector2.zero;
         }
+
+        #region ANIMATION_EVENT
+        public void WallAttack() {
+            //Damage On Player Health Point !!!
+        }
+        #endregion
     }
 }

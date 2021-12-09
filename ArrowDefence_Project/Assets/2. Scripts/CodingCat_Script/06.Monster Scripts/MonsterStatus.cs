@@ -30,7 +30,7 @@
         Coroutine colorCo;
 
         private void Start() {
-            sprite = GetComponent<SpriteRenderer>();
+            InitComponent();
             startColor = sprite.color;
         }
 
@@ -65,6 +65,18 @@
             if(collider.gameObject.layer == LayerMask.NameToLayer(AD_Data.LAYER_DISABLELINE)) {
                 BattleProgresser.OnDecreasePlayerHealthPoint(10f);
                 DisableRequest();
+            }
+        }
+
+        void InitComponent() {
+            if (monsterState == null) {
+                monsterState = GetComponent<MonsterController>();
+            }
+            if (sprite == null) {
+                sprite = GetComponent<SpriteRenderer>();
+            }
+            if (coll == null) {
+                coll = GetComponent<CapsuleCollider2D>();
             }
         }
 

@@ -25,7 +25,7 @@
 
         //Skill Variables
         bool isInitSkill    = false;
-        bool isDisableArrow = false;
+        bool isCollision    = false;
         [SerializeField]
         ArrowSkillSet arrowSkillSets = null;
 
@@ -71,10 +71,16 @@
 
         void OnDisable()
         {
-            isLaunched = false;
+            isLaunched  = false;
+            isCollision = false;
 
-            if (isInitSkill == true)
+            if (isInitSkill == true){
                 arrowSkillSets.Clear();
+            }
+        }
+
+        void OnEnable() {
+            isCollision = false;
         }
 
         void OnDestroy() => arrowSkillSets = null;
@@ -116,30 +122,31 @@
             CCPooler.ReturnToPool(gameObject, 0);
         }
 
-        void OnTriggerEnter2D(Collider2D coll)
-        {
+        void OnTriggerEnter2D(Collider2D coll) {
             if(coll.gameObject.layer == LayerMask.NameToLayer(AD_Data.LAYER_MONSTER)) {
-                if (isInitSkill) {
-                    isDisableArrow = arrowSkillSets.OnHit(coll);
-                    if (isDisableArrow)
+                if (isInitSkill == true) {
+                    if(arrowSkillSets.OnHit(coll) == true) {
                         DisableRequest();
+                    }
                 }
-                else
-                    OnHit(coll.gameObject);
+                else { //중복 피격 방지
+                    if(isCollision == false) {
+                        OnHit(coll.gameObject);
+                    }
+                }
             }
         }
 
-        void OnTriggerExit2D(Collider2D coll)
-        {
-            if(coll.gameObject.layer == LayerMask.NameToLayer(AD_Data.LAYER_MONSTER)) {
-                if(isInitSkill == true) {
+        void OnTriggerExit2D(Collider2D coll) {
+            if(isInitSkill == true) {
+                if(coll.gameObject.layer == LayerMask.NameToLayer(AD_Data.LAYER_MONSTER)) {
                     arrowSkillSets.OnExit(coll);
                 }
             }
         }
 
-        void OnHit(GameObject target)
-        {
+        void OnHit(GameObject target) {
+            isCollision = true;
             target.SendMessage(nameof(IDamageable.OnHitObject), Random.Range(30f, 50f), SendMessageOptions.DontRequireReceiver);
             DisableRequest();
         }

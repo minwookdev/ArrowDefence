@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SkillId: 
   SkillName: Damage-UP
-  SkillDesc: 
+  SkillDesc: Attack power is increased by [n]%.
   EffectType: 1
   DamageIncreaseValue: 25

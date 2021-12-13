@@ -17,7 +17,7 @@ MonoBehaviour:
   Item_Id: 4001
   Item_Amount: 1
   Item_Name: Steel Arrow
-  Item_Desc: 
+  Item_Desc: TESTING.
   Item_Sprite: {fileID: 21300000, guid: e4ba42abb72b4496f934f1a517f64fea, type: 3}
   Equip_Type: 1
   MainArrowObj: {fileID: 6145561601560700122, guid: 72e101e4e68e4cd4a973db42b6f4c64b,

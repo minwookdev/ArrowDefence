@@ -1,19 +1,6 @@
 ﻿namespace ActionCat {
     using UnityEngine;
 
-    public enum MONSTERSTATE {
-        IDLE   = 0,
-        MOVE   = 1,
-        ATTACK = 2,
-        DEATH  = 3,
-    }
-
-    public enum STATEFLOW {
-        ENTER,
-        UPDATE,
-        EXIT,
-    }
-
     public class MonsterController : MonoBehaviour {
         MONSTERSTATE currentState = MONSTERSTATE.IDLE;
 
@@ -111,6 +98,14 @@
                 case STATEFLOW.EXIT:   break;
                 default: CatLog.ELog("this Flow is Not Implemented."); break;
             }
+        }
+
+        #endregion
+
+        #region HIT
+
+        public virtual void OnHit() {
+            new System.NotImplementedException("OnHit function Not override on Controller.");
         }
 
         #endregion

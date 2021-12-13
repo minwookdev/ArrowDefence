@@ -17,7 +17,7 @@ MonoBehaviour:
   Item_Id: 3009
   Item_Amount: 1
   Item_Name: Enhanced Short Bow
-  Item_Desc: 
+  Item_Desc: "\rIt is a short but destructive bow. [Enhanced]"
   Item_Sprite: {fileID: 21300000, guid: 0b94ab189a6fb984693f32ca9bbe430b, type: 3}
   Equip_Type: 0
   BowGameObject: {fileID: 9109711390793288980, guid: 7bc33ee977ccfa5438506e65fcae0f2e,

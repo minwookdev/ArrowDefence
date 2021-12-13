@@ -17,7 +17,7 @@ MonoBehaviour:
   Item_Id: 4005
   Item_Amount: 1
   Item_Name: Hardned Steel Arrow
-  Item_Desc: 
+  Item_Desc: "\rSteel arrows found in any game. \n[Hardnded]"
   Item_Sprite: {fileID: 21300000, guid: 729e251ee1690724398971805c2973af, type: 3}
   Equip_Type: 1
   MainArrowObj: {fileID: 4613396934045542665, guid: 325eb93314050af4da019cb4aa867d31,

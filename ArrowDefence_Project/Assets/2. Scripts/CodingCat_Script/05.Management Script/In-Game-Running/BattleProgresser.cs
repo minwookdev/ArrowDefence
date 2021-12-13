@@ -175,15 +175,6 @@
                 case GAMESTATE.STATE_BOSSBATTLE   : OnUpdateBossBattle();   break;
                 case GAMESTATE.STATE_ENDBATTLE    : OnUpdateEndBattle();    break;
             }
-
-            if(Input.GetKeyDown(KeyCode.I))
-            {
-
-            }
-            if(Input.GetKeyDown(KeyCode.O))
-            {
-                GameManager.Instance.ReleaseAccessory();
-            }
         }
 
         private void OnDestroy()
@@ -228,13 +219,21 @@
 
             float tempHealth = currentPlayerHealth;
             tempHealth -= value;
-            if (tempHealth > 0)
+            if (tempHealth > 0) {
                 currentPlayerHealth = tempHealth;
-            else
-                currentPlayerHealth = 0;
 
-            if(PlayerHealthSlider != null)
-            {
+                //Player's Hit Effect Output
+                battleSceneUI.OnHitScreen();
+                CineCam.Inst.ShakeCamera(5f, .2f);
+            }
+            else {
+                currentPlayerHealth = 0;
+                if(GameManager.Instance.GameState != GAMESTATE.STATE_GAMEOVER) {
+                    //GameOver Write
+                }
+            }
+                
+            if(PlayerHealthSlider != null) {
                 float dest = currentPlayerHealth / MaxPlayerHealth;
                 PlayerHealthSlider.DOValue(dest, 0.5f);
             }
@@ -269,8 +268,8 @@
             GameObject[] monsters = GameObject.FindGameObjectsWithTag(AD_Data.OBJECT_TAG_MONSTER);
             CatLog.Log($"Tag Monster's Count : {monsters.Length}, All Monster's Disable");
             foreach (var monster in monsters) {
-                monster.SendMessage(nameof(MonsterController.ChangeState),
-                                    MONSTERSTATE.DEATH, SendMessageOptions.DontRequireReceiver);
+                monster.SendMessage(nameof(MonsterState.StateChanger),
+                                    STATETYPE.DEATH, SendMessageOptions.DontRequireReceiver);
             }
             ///Scene에 Enable Monster개체를 비 활성화 처리
             ///GameObject.Enable된 개체만 Monsters에 담기는것을 확인.

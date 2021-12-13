@@ -30,9 +30,9 @@
         private float forceMagnitude = 18f; //Default Force : 18f
 
         //Arrow Skill Data
-        ArrowSkillSet arrowSkillSets  = null;
-        bool isInitSkill              = false;
-        bool isDisableArrow           = false;
+        ArrowSkillSet arrowSkillSets = null;
+        bool isInitSkill = false;
+        bool isCollision = false;
 
 
         private void Awake()
@@ -55,6 +55,8 @@
                 arrowSkillSets.Init(tr, rBody, this);
             }
         }
+
+        void OnEnable() => isCollision = false;
 
         private void Update()
         {
@@ -111,8 +113,8 @@
             }
         }
 
-        void OnHit(GameObject target)
-        {
+        void OnHit(GameObject target) {
+            isCollision = true;
             target.SendMessage(nameof(IDamageable.OnHitObject), Random.Range(10f, 30f), SendMessageOptions.DontRequireReceiver);
             DisableRequest();
         }
@@ -191,12 +193,15 @@
         {
             if(coll.gameObject.layer == LayerMask.NameToLayer(AD_Data.LAYER_MONSTER)) {
                 if (isInitSkill) {
-                    isDisableArrow = arrowSkillSets.OnHit(coll);
-                    if (isDisableArrow)
+                    if(arrowSkillSets.OnHit(coll) == true) {
                         DisableRequest();
+                    }
                 }
-                else
-                    OnHit(coll.gameObject);
+                else {
+                    if(isCollision == false) {
+                        OnHit(coll.gameObject);
+                    }
+                }
             }
         }
 

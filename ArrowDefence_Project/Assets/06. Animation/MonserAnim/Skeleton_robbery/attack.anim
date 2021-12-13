@@ -47,7 +47,7 @@ AnimationClip:
       value: {fileID: 8622511796720992729, guid: 1874b8f327d955d4a8276b3f8775b5c4,
         type: 3}
     attribute: m_Sprite
-    path: 
+    path: monster_model
     classID: 212
     script: {fileID: 0}
   m_SampleRate: 60
@@ -58,7 +58,7 @@ AnimationClip:
   m_ClipBindingConstant:
     genericBindings:
     - serializedVersion: 2
-      path: 0
+      path: 2708295324
       attribute: 0
       script: {fileID: 0}
       typeID: 212
@@ -98,4 +98,11 @@ AnimationClip:
   m_EulerEditorCurves: []
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
-  m_Events: []
+  m_Events:
+  - time: 0.5
+    functionName: OnDamageWall
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0

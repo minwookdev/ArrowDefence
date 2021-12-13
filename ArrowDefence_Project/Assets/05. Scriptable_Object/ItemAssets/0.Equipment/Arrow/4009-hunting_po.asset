@@ -17,7 +17,9 @@ MonoBehaviour:
   Item_Id: 4009
   Item_Amount: 1
   Item_Name: Polished Hunting Arrow
-  Item_Desc: 
+  Item_Desc: 'A nice hunting arrow with purple feathers.
+
+    [Polished]'
   Item_Sprite: {fileID: 21300000, guid: 0d6c8a18cba27c243ab0dc43afd9bbbd, type: 3}
   Equip_Type: 1
   MainArrowObj: {fileID: 1877318309827916244, guid: 27f4e985fc302244ca075b55b67dc9c6,

@@ -1,5 +1,6 @@
 ﻿namespace ActionCat
 {
+	using System.Collections;
     using UnityEngine;
 
     public class AD_BowRope : MonoBehaviour
@@ -69,15 +70,20 @@
 			//Setting up ropes material
 			rope1.material = ropeMaterial;
 			rope2.material = ropeMaterial;
+
+			StartCoroutine(DrawRope());
 		}
 
-		void LateUpdate()
-		{
+		//void Update() {
+		//	DrawRope();
+		//}
+
+		void RopeUpdate() {
 			//Draw the rope(top,bottom) of the bow
-			if (arrowCatchPoint == null)
-			{
+			if (arrowCatchPoint == null) {
 				rope1.SetPosition(0, bowLeftPoint.position);
 				rope1.SetPosition(1, bowRightPoint.position);
+
 				rope2.SetPosition(0, Vector3.zero);
 				rope2.SetPosition(1, Vector3.zero);
 
@@ -89,6 +95,34 @@
 
 			rope2.SetPosition(0, arrowCatchPoint.position);
 			rope2.SetPosition(1, bowRightPoint.position);
+		}
+
+		IEnumerator DrawRope(){
+			while(GameManager.Instance.GameState != GAMESTATE.STATE_ENDBATTLE) {
+				yield return null;
+				//Draw the rope(top,bottom) of the bow
+				if (arrowCatchPoint == null) { //Before Pulling The Bow.
+					rope1.SetPosition(0, bowLeftPoint.position);
+					rope1.SetPosition(1, bowRightPoint.position);
+
+					rope2.SetPosition(0, Vector3.zero);
+					rope2.SetPosition(1, Vector3.zero);
+				}
+				else {						   //Pulling Start.
+					rope1.SetPosition(0, bowLeftPoint.position);
+					rope1.SetPosition(1, arrowCatchPoint.position);
+
+					rope2.SetPosition(0, arrowCatchPoint.position);
+					rope2.SetPosition(1, bowRightPoint.position);
+				}
+			}
+
+			//Battle End. Set Last Rope Position.
+			rope1.SetPosition(0, bowLeftPoint.position);
+			rope1.SetPosition(1, bowRightPoint.position);
+
+			rope2.SetPosition(0, Vector3.zero);
+			rope2.SetPosition(1, Vector3.zero);
 		}
 	}
 }

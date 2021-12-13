@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SkillId: 
   SkillName: SPREAD SHOT
-  SkillDesc: Fires an arrow that spreads in a fan-shaped direction.
+  SkillDesc: "Fires an arrow in a sector of the [n] direction. \nEach arrow is [n]%
+    of attack power.\r"
   SkillType: 1
   SkillLevel: 0
   SkillIconSprite: {fileID: 21300000, guid: a029fc7e9de73e1498ba9fa5b68279f7, type: 3}

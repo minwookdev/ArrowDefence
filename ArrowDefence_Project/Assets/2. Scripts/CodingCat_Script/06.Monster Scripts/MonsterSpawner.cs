@@ -56,17 +56,6 @@
                 case GAMESTATE.STATE_ENDBATTLE:                    break;
                 default:                                           break;
             }
-
-            if (Input.GetKeyDown(KeyCode.O))
-            {
-                Action action = () => {
-                    if (monsterPrefNormal != null)
-                    {
-                        
-                    }
-                }; action();
-            }
-
         }
 
         private void SpawnMonster()

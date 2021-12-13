@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SkillId: 
   SkillName: Homing Arrow
-  SkillDesc: "An Arrow that tracks enemies \nwithin a certain range."
+  SkillDesc: "Tracks enemies in the air. \n[The range at which the arrow finds \nenemies
+    increases depending on the grade.]\r\n"
   SkillLevel: 0
   SkillType: 1
   IconSprite: {fileID: 21300000, guid: 54bac695f3849e7468504e3c1aae52af, type: 3}

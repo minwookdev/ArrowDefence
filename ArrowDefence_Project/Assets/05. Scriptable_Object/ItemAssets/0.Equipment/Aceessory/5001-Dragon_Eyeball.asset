@@ -17,7 +17,7 @@ MonoBehaviour:
   Item_Id: 5001
   Item_Amount: 1
   Item_Name: Dragon's Eye
-  Item_Desc: 
+  Item_Desc: "\rThe eye that once colored the world with doom is\n illuminating everything."
   Item_Sprite: {fileID: 21300000, guid: 4f7b6ffe7b0e2488c8e98abcd0a85dea, type: 3}
   Equip_Type: 2
   MaxNumberOfEffect: 0

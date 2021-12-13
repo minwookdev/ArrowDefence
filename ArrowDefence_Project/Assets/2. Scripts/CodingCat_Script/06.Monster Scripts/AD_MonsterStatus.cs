@@ -127,8 +127,7 @@
             }
         }
 
-        private void HitColorChange()
-        {
+        private void HitColorChange() {
             hitSeq.Restart();
         }
 

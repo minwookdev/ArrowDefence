@@ -3,18 +3,17 @@
     using UnityEngine;
     using ActionCat.Data;
 
-    public enum GAMESTATE
-    {
+    public enum GAMESTATE {
         STATE_BEFOREBATTLE,
         STATE_INBATTLE,
         STATE_BOSSBATTLE,
-        STATE_ENDBATTLE
+        STATE_ENDBATTLE,
+        STATE_GAMEOVER,
     }
 
     public class GameManager : Singleton<GameManager>
     {
-        public enum GAMEPLATFORM
-        { 
+        public enum GAMEPLATFORM { 
             PLATFORM_PC,
             PLATFORM_MOBILE
         }

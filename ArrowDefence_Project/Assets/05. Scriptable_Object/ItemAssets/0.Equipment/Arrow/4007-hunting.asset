@@ -17,7 +17,7 @@ MonoBehaviour:
   Item_Id: 4007
   Item_Amount: 1
   Item_Name: Hunting Arrow
-  Item_Desc: 
+  Item_Desc: A nice hunting arrow with purple feathers.
   Item_Sprite: {fileID: 21300000, guid: 87d9f984912c42c49bdf7a619c6d59b8, type: 3}
   Equip_Type: 1
   MainArrowObj: {fileID: 6285782674715417405, guid: b3d26cc0c05d98b45b8d3eda3a5d81e3,

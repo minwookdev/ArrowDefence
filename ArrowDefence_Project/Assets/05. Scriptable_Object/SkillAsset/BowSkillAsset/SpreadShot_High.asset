@@ -14,8 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SkillId: 
   SkillName: 
-  SkillDesc: 
+  SkillDesc: "Fires an arrow in a sector of the [n] direction. \nEach arrow is [n]%
+    of attack power.\r\n"
   SkillType: 1
   SkillLevel: 2
+  SkillIconSprite: {fileID: 0}
   ArrowShotCount: 15
   SpreadAngle: 30

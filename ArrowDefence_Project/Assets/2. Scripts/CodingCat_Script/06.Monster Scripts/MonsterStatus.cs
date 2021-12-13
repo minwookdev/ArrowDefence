@@ -2,26 +2,27 @@
     using System.Collections;
     using UnityEngine;
 
-    [RequireComponent(typeof(MonsterController))]
+    //[RequireComponent(typeof(MonsterController))]
     public class MonsterStatus : MonoBehaviour, IPoolObject, IDamageable {
         [Header("COMPONENT")]
-        [SerializeField] MonsterController monsterState;
+        [SerializeField] MonsterState monsterState;
         [SerializeField] SpriteRenderer sprite;
-        [SerializeField] CapsuleCollider2D coll;
 
-        [Header("STATUS DATA")] //추후 Scriptable Object 처리.
+        [Header("STATUS DATA")] //Scriptable Object 처리.
         public float MaxMonsterHP = 100f;
         public float MaxMonsterMP = 50f;
         public float ItemDropCorrection = 5f;
         public float GaugeIncreaseValue = 10f;
+        public float AttackDamage = 5f;
 
         [Header("SIMPLE HIT COLOR")]
-        public bool isActiveHitColor = true;
+        public bool isActiveHitColor = false;
         public Color HitColor;
 
         //Status value
         float currentHealthPoint = 0f;
         float currentManaPoint   = 0f;
+        float damageCount   = 0f;
         bool isDeath = false;
 
         //Simple Hit Color Change
@@ -32,6 +33,7 @@
         private void Start() {
             InitComponent();
             startColor = sprite.color;
+            damageCount = AttackDamage;
         }
 
         private void OnEnable() {
@@ -40,7 +42,6 @@
 
             //Disable by Arrow
             if (isDeath == true) {
-                coll.enabled = true;
                 sprite.color = startColor;
                 isDeath = false;
             }
@@ -70,13 +71,10 @@
 
         void InitComponent() {
             if (monsterState == null) {
-                monsterState = GetComponent<MonsterController>();
+                monsterState = GetComponent<MonsterState>();
             }
             if (sprite == null) {
                 sprite = GetComponent<SpriteRenderer>();
-            }
-            if (coll == null) {
-                coll = GetComponent<CapsuleCollider2D>();
             }
         }
 
@@ -96,6 +94,9 @@
             //Active Monster Hit Event
             GameManager.Instance.CallMonsterHitEvent();
 
+            //Play Hit Animation
+            monsterState.OnHit();
+
             //Decrease Monster's Health Point
             currentHealthPoint -= damage;
 
@@ -106,8 +107,7 @@
 
             //On Monster Death
             if(currentHealthPoint <= 0 && isDeath == false) {
-                coll.enabled = false;
-                monsterState.ChangeState(MONSTERSTATE.DEATH);
+                monsterState.StateChanger(STATETYPE.DEATH);
                 isDeath = true;
             }
         }
@@ -117,6 +117,13 @@
         /// </summary>
         public void OnMonsterDeath() {
             DisableRequest();
+        }
+
+        /// <summary>
+        /// Animation Event
+        /// </summary>
+        public void OnDamageWall() {
+            BattleProgresser.OnDecreasePlayerHealthPoint(damageCount);
         }
 
         #endregion

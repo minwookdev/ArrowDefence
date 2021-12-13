@@ -29,6 +29,7 @@
         public float LineWidth = 0.1f;
         public Material DefaultLineMat;
         public bool isOnFPS = false;
+        public bool isActiveScreenHit = true;
 
         [Header("START FADE OPTION")]
         public CanvasGroup ImgFade;
@@ -57,6 +58,13 @@
         [SerializeField] GameObject prefHitsType;
         [SerializeField] GameObject prefkillType;
 
+        [Header("HIT SCREEN")]
+        [SerializeField] Material hitScreenMaterial = null;
+        public float ScreenHitFadeTime = .5f;
+        public float ScreenHitAlpha = 0.3f;
+        float hitFadeTimer = 0f;
+        string generalAlpha = "_Alpha";
+
         private float screenZpos = 0f;
         private LineRenderer arrowLimitLine;
         private Vector2 topLeftPoint;
@@ -67,14 +75,6 @@
         [Header("ITEM SLOT TOOLTIP")]
         public Canvas BattleSceneUICanvas;
         public Camera UICamera;
-
-        private void Awake()
-        {
-            //Camera Resolution Initialize
-            //GameManager.Instance.ResolutionPortrait(Camera.main);
-            //GameManager.Instance.ResolutionPortrait(UICamera);
-
-        }
 
         void Start()
         {
@@ -124,6 +124,21 @@
                 gameObject.AddComponent<FrameRateCheck>();
 
             #endregion
+        }
+
+        void Update() {
+            HitScreenUpdate();
+
+            if(Input.GetKeyDown(KeyCode.I)) {
+                OnHitScreen();
+            }
+        }
+
+        void OnDisable() {
+            //Hit Screen Fade Color Check
+            if(hitScreenMaterial.GetFloat(generalAlpha) != 0f) {
+                hitScreenMaterial.SetFloat(generalAlpha, 0f);
+            }
         }
 
         #region BUTTON_EVENT
@@ -380,6 +395,25 @@
                     case SKILL_ACTIVATIONS_TYPE.HITSCOUNT_ACTIVE: break;
 
                     default: break;
+                }
+            }
+        }
+
+        #endregion
+
+        #region SCREEN_HIT
+
+        public void OnHitScreen() {
+            hitScreenMaterial.SetFloat(generalAlpha, ScreenHitAlpha);
+            hitFadeTimer = ScreenHitFadeTime;
+        }
+
+        void HitScreenUpdate() {
+            if(hitFadeTimer > 0f) {
+                hitFadeTimer -= Time.unscaledDeltaTime;
+                hitScreenMaterial.SetFloat(generalAlpha, Mathf.Lerp(ScreenHitAlpha, 0f, (1 - (hitFadeTimer / ScreenHitFadeTime))));
+                if(hitFadeTimer <= 0f) {
+                    hitScreenMaterial.SetFloat(generalAlpha, 0f);
                 }
             }
         }

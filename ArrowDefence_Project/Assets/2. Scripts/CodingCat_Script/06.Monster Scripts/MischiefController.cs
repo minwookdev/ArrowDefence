@@ -1,19 +1,22 @@
 ﻿namespace ActionCat {
     using UnityEngine;
 
-    [RequireComponent(typeof(Rigidbody2D), typeof(Animator), typeof(CapsuleCollider2D))]
+    [RequireComponent(typeof(Rigidbody2D), typeof(CapsuleCollider2D))]
     public class MischiefController : MonsterController {
         [Header("COMPONENT")]
         [SerializeField] Animator    anim;
         [SerializeField] Rigidbody2D rigid;
+        [SerializeField] CapsuleCollider2D coll;
 
         [Header("MOVEMENT")]
         public float InitMoveSpeed  = 0.5f;
         public float AttackInterval = 2f;
 
-        //Animator State
+        //Animator Parameters
         int animState = Animator.StringToHash("state");
         int atkState  = Animator.StringToHash("attack");
+        int hitParams = Animator.StringToHash("hit");
+        int runParams = Animator.StringToHash("isRun");
 
         //Monster Property
         float speed = 0f;
@@ -50,10 +53,13 @@
 
         void ComponentInit() {
             if(anim == null) {
-                anim = GetComponent<Animator>();
+                CatLog.ELog("Animator Controller Not Caching.");
             }
             if(rigid == null) {
                 rigid = GetComponent<Rigidbody2D>();
+            }
+            if(coll == null) {
+                coll = GetComponent<CapsuleCollider2D>();
             }
         }
 
@@ -77,8 +83,8 @@
         protected override void STATE_DEATH(STATEFLOW flow) {
             switch (flow) {
                 case STATEFLOW.ENTER: DeathStart(); break;
-                case STATEFLOW.UPDATE: break;
-                case STATEFLOW.EXIT:   break;
+                case STATEFLOW.UPDATE:              break;
+                case STATEFLOW.EXIT:  DeathExit();  break;
             }
         }
 
@@ -135,11 +141,20 @@
 
         void DeathStart() {
             anim.SetInteger(animState, 3);
+            coll.enabled = false;
+        }
+
+        void DeathExit() {
+            coll.enabled = true;
         }
 
         #region ANIMATION_EVENT
         public void WallAttack() {
             //Damage On Player Health Point !!!
+        }
+
+        public override void OnHit() {
+            anim.SetTrigger(hitParams);
         }
         #endregion
     }

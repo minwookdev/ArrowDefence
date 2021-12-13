@@ -10,6 +10,7 @@
 
         [Header("GENERAL")]
         public Camera MainCam = null;
+        [SerializeField] BowSprite bowSprite;
         private Touch screenTouch;
         
         [Header("BOW CONTROL VARIABLES")]
@@ -387,6 +388,12 @@
 
             LoadedArrow    = null;
             ArrowComponent = null;
+
+            //Active Shot Impact
+            bowSprite.ActiveImpact();
+
+            //Active Camera Shake
+            CineCam.Inst.ShakeCamera(5f, .1f);
 
             //ReLoad Logic Start
             StartCoroutine(this.ArrowReload());

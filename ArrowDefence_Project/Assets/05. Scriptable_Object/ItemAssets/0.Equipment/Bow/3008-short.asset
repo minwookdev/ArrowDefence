@@ -17,7 +17,7 @@ MonoBehaviour:
   Item_Id: 3008
   Item_Amount: 1
   Item_Name: Short Bow
-  Item_Desc: 
+  Item_Desc: "\rIt is a short but destructive bow."
   Item_Sprite: {fileID: 21300000, guid: 6ee6b6e32c9fb734199ab65444c3aa1a, type: 3}
   Equip_Type: 0
   BowGameObject: {fileID: 1199833956013647908, guid: 041bd895a42effe48be785b5607c723e,

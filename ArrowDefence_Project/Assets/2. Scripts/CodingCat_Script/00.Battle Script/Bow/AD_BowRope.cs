@@ -45,11 +45,9 @@
 		/// </summary>
 		public static AD_BowRope instance;
 
-		private void Awake()
-		{
+		private void Awake() {
 			//static Instance Settings
-			if (instance == null)
-			{
+			if (instance == null) { 
 				instance = this;
 			}
 		}
@@ -74,9 +72,9 @@
 			StartCoroutine(DrawRope());
 		}
 
-		//void Update() {
-		//	DrawRope();
-		//}
+		private void OnDisable() {
+			RestoreAlpha();
+		}
 
 		void RopeUpdate() {
 			//Draw the rope(top,bottom) of the bow
@@ -123,6 +121,30 @@
 
 			rope2.SetPosition(0, Vector3.zero);
 			rope2.SetPosition(1, Vector3.zero);
+		}
+
+		/// <summary>
+		/// 로프 알파 값 변경. 올인원 쉐이더 사용 시 로직 변경해야함.
+		/// </summary>
+		/// <param name="isRewind"></param>
+		public void RopeAlpha(bool isRewind) {
+			var tempColor = ropeMaterial.color;
+			if(isRewind == false) {
+				tempColor.a = 0f;
+				ropeMaterial.color = tempColor;
+			}
+			else {
+				tempColor.a = 1f;
+				ropeMaterial.color = tempColor;
+			}
+		}
+
+		void RestoreAlpha() {
+			var tempColor = ropeMaterial.color;
+			if(tempColor.a != 1f) {
+				tempColor.a = 1f;
+				ropeMaterial.color = tempColor;
+			}
 		}
 	}
 }

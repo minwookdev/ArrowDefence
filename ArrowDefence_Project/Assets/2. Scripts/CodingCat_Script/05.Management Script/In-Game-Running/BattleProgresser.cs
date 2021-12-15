@@ -48,6 +48,7 @@
         public Transform BowInitPosition;
         public float MaxPlayerHealth = 200f;
         private float currentPlayerHealth;
+        float tempPlayerHealth = 0f;
 
         [Header("STAGE CLEAR COUNT")]
         [Range(100, 1200)] 
@@ -63,8 +64,7 @@
         private float clearSliderDest;
 
         [Header("CURRENT BATTLE STATE")]
-        [ReadOnly]
-        public GAMESTATE CurrentGameState;
+        [ReadOnly] public GAMESTATE CurrentGameState;
 
         [Header("DROP LIST FOR THIS STAGE")]
         public ItemDropList DropListAsset;
@@ -73,8 +73,9 @@
         private List<DropItem> dropItemList = new List<DropItem>();
 
         [Header("DEBUG OPTION")]
-        public bool IsDebugClearStage = false;
+        public bool IsDebugClearStage    = false;
         public bool IsDebugMonsterLogics = false;
+        public bool IsDebugGameOver      = false;
 
         private BattleSceneRoute battleSceneUI;
         private MonsterSpawner   monsterSpawner;
@@ -103,31 +104,6 @@
                 OnDropItemChance += OnDropItemRoll;
             }
 
-            OnIncreaseClearGauge += IncreaseClearGauge;
-
-            #region OLD
-            //Init-GameObject Player's Equipments
-            //GameManager.Instance.InitEquipments(BowInitPosition, ParentTransform, 1, 1);
-
-            //Init-Arrow Slots -> out 키워드 너무 많다 수정하자
-            //PlayerData.Equipments와 관련된 로직이기 때문에, Progresser에서 GameManager 참조하여 처리
-            //bool arrowSlot_m, arrowSlot_s;
-            //Sprite iconSprite_m, iconSprite_s;
-            //GameManager.Instance.InitArrowSlotData(out arrowSlot_m, out arrowSlot_s, out iconSprite_m, out iconSprite_s);
-
-            //battleSceneUI.InitArrowSlots(arrowSlot_m, arrowSlot_s, iconSprite_m, iconSprite_s,
-            //                            () => { GameManager.Instance.Controller().ArrowSwap(LOAD_ARROW_TYPE.ARROW_MAIN); },
-            //                            () => { GameManager.Instance.Controller().ArrowSwap(LOAD_ARROW_TYPE.ARROW_SUB); });
-
-            //Init-Arrow Swap Slots
-            //var arrowSwapDatas = GameManager.Instance.ReturnArrowSlotData();
-            //battleSceneUI.InitArrowSlots(arrowSwapDatas);
-
-            //Init-Accessory Skill Slots
-            //var accessorySkillDatas = GameManager.Instance.ReturnSkillSlotData();
-            //battleSceneUI.InitSkillSlots(accessorySkillDatas);
-            #endregion 
-
             //Start Wait Timer
             //waitCo = StartCoroutine(WaitObjectPooler());
 
@@ -153,49 +129,58 @@
             GameManager.Instance.AddEventMonsterDeath(() => CatLog.Log("On Monster Hit Less Arrow"));
 
             //Init-Battle State Callback Event
-            GameManager.Instance.AddEventEndBattle(() => { 
+            GameManager.Instance.AddListnerEndBattle(() => { 
                 GameManager.Instance.SetBowPullingStop(true);
-                DisableMonsterAll();
+                KillAllMonsters();
+            });
+            GameManager.Instance.AddListnerGameOver(() => {
+                GameManager.Instance.SetBowPullingStop(true);
             });
 
             //Init-Player Health Point [TEST] (플레이어 임시 체력, 추후 PlayerData에서 수치 받아오도록 설정)
             currentPlayerHealth = MaxPlayerHealth;
             OnDecreasePlayerHealthPoint += DecreaseHealthGauge;
+            OnIncreaseClearGauge += IncreaseClearGauge;
 
             //Progresser Ready For Battle State Running
             isInitialized = true;
         }
 
-        private void Update()
-        {
-            switch (GameManager.Instance.GameState)
-            {
+        private void Update() {
+            switch (GameManager.Instance.GameState) {
                 case GAMESTATE.STATE_BEFOREBATTLE : OnUpdateBeforeBattle(); break;
                 case GAMESTATE.STATE_INBATTLE     : OnUpdateInBattle();     break;
                 case GAMESTATE.STATE_BOSSBATTLE   : OnUpdateBossBattle();   break;
                 case GAMESTATE.STATE_ENDBATTLE    : OnUpdateEndBattle();    break;
+                case GAMESTATE.STATE_GAMEOVER     : OnUpdateGameOver();     break;
+            }
+
+            if(Input.GetKeyDown(KeyCode.I)) {
+                OnIncreaseClearGauge(300);
             }
         }
 
-        private void OnDestroy()
-        {
+        private void OnDestroy() {
+            //씬 이동 시 변수 정리.
+            //게임 수치관련 이벤트 해제.
             OnIncreaseClearGauge        -= IncreaseClearGauge;
             OnDropItemChance            -= OnDropItemRoll;
             OnDecreasePlayerHealthPoint -= DecreaseHealthGauge;
 
             //Clear 처리 후, Main Scene으로 넘어가는 경우가 아닌 ApplicationQuit 되어 버리는 경우
             //GameManager가 먼저 지워질 수 있다.
-            if (GameManager.Instance != null)
-            {
+            if (GameManager.Instance != null) {
                 GameManager.Instance.ReleaseDropList();
                 GameManager.Instance.ReleaseAllEvent();
+                GameManager.Instance.ReleaseEquipments();
+
+                GameManager.Instance.SetBowPullingStop(false);
             }
         }
 
         #region GAUGE_CONTROLLER
 
-        public void IncreaseClearGauge(float value)
-        {
+        public void IncreaseClearGauge(float value) {
             //Safe Calculate
             tempClearCount = currentClearCount + value;
 
@@ -217,20 +202,16 @@
         {
             //currentPlayerHealth -= value;
 
-            float tempHealth = currentPlayerHealth;
-            tempHealth -= value;
-            if (tempHealth > 0) {
-                currentPlayerHealth = tempHealth;
+            tempPlayerHealth = currentPlayerHealth;
+            tempPlayerHealth -= value;
+            if (tempPlayerHealth > 0) {
+                currentPlayerHealth = tempPlayerHealth;
 
                 //Player's Hit Effect Output
-                battleSceneUI.OnHitScreen();
-                CineCam.Inst.ShakeCamera(5f, .2f);
+                ActivePlayerDamageEffect();
             }
             else {
                 currentPlayerHealth = 0;
-                if(GameManager.Instance.GameState != GAMESTATE.STATE_GAMEOVER) {
-                    //GameOver Write
-                }
             }
                 
             if(PlayerHealthSlider != null) {
@@ -264,7 +245,7 @@
             //so it's exactly what we want
         }
 
-        void DisableMonsterAll() {
+        void KillAllMonsters() {
             GameObject[] monsters = GameObject.FindGameObjectsWithTag(AD_Data.OBJECT_TAG_MONSTER);
             CatLog.Log($"Tag Monster's Count : {monsters.Length}, All Monster's Disable");
             foreach (var monster in monsters) {
@@ -273,6 +254,14 @@
             }
             ///Scene에 Enable Monster개체를 비 활성화 처리
             ///GameObject.Enable된 개체만 Monsters에 담기는것을 확인.
+        }
+
+        void ActivePlayerDamageEffect() {
+            //Active Red Panel 
+            battleSceneUI.OnHitScreen();
+
+            //Active Camera Shake
+            CineCam.Inst.ShakeCamera(5f, .2f);
         }
 
         #endregion
@@ -317,52 +306,37 @@
 
         #endregion
 
-        #region UPDATE_BATTLE_PROGRESS
+        #region UPDATE_BATTLE_STATE
 
         private void OnUpdateBeforeBattle()
         {
-#if UNITY_EDITOR
-            //Debug : Stage Clear, Get All Item's in DropList Asset
-            if(isInitialized && IsDebugClearStage == true)
-            {
-                startWaitingTime += Time.deltaTime;
+            if (isInitialized == false) return;
 
-                if(startWaitingTime >= StartBattleDelay)
-                {
-                    //Output Msg
-                    CatLog.WLog(StringColor.YELLOW, $"DEBUGGING MODE TRUE : STAGE CLEAR, ALL DROP LIST ITEM ADDED");
-
-                    //All DropList Item Assets in Drop Item List (Debug)
-                    foreach (var item in DropListAsset.DropTableArray)
-                    {
+            startWaitingTime += Time.deltaTime;
+            if(startWaitingTime >= StartBattleDelay) {
+                if (IsDebugClearStage) {
+                    //Debug 1. Stage Clear, Get All Item's in DropList Asset
+                    CatLog.WLog(StringColor.YELLOW, "DEBUGGING MODE TRUE : ALL DROP ITEM LIST.");
+                    foreach (var item in DropListAsset.DropTableArray) {
                         AddItemInDropItems(new DropItem(GameGlobal.RandomIntInArray(item.QuantityRange), item.ItemAsset));
                     }
-
-                    //Out of Before Battle State 
-                    CurrentGameState = GameManager.Instance.GameState;
-                    GameManager.Instance.SetGameState(GAMESTATE.STATE_ENDBATTLE); return;
+                    //GameState Set Clear Game
+                    GameManager.Instance.SetGameState(GAMESTATE.STATE_ENDBATTLE);
                 }
-            }
-            //Debug : Monster Logic Test
-            if(isInitialized && IsDebugMonsterLogics == true)
-            {
-                startWaitingTime += Time.deltaTime;
-
-                if(startWaitingTime >= StartBattleDelay)
-                {
-                    monsterSpawner.MonsterDebug(AD_Data.POOLTAG_MONSTER_NORMAL, new Vector2(-0.05f, 4.5f));
-                    startWaitingTime = 0f;
+                else if (IsDebugMonsterLogics) {
+                    //Debug 2. Monster Logic Testing
+                    CatLog.WLog(StringColor.YELLOW, "DEBUGGING MODE TRUE : MONSTER LOGIC TEST.");
                 }
-            }
-#endif
-            if (isInitialized && IsDebugClearStage    == false
-                              && IsDebugMonsterLogics == false)
-            {
-                startWaitingTime += Time.deltaTime;
-
-                if (startWaitingTime >= StartBattleDelay)
-                {
-                    CurrentGameState = GameManager.Instance.GameState;
+                else if (IsDebugGameOver) {
+                    //Debug 3. Go GameOver State
+                    CatLog.WLog(StringColor.YELLOW, "DEBUGGING MODE TRUE : GAME OVER.");
+                    //GameState Set GameOver
+                    GameManager.Instance.SetGameState(GAMESTATE.STATE_GAMEOVER);
+                }
+                else {
+                    //Normal Battle Start
+                    CatLog.Log("Start Battle ! [Normal Game Mode]");
+                    //GameState Set In-Battle
                     GameManager.Instance.SetGameState(GAMESTATE.STATE_INBATTLE);
                 }
             }
@@ -370,16 +344,20 @@
 
         private void OnUpdateInBattle()
         {
-            //Is Game Clear
-            if(currentClearCount >= MaxClearCount)
-            {
-                CurrentGameState = GameManager.Instance.GameState;
-                GameManager.Instance.SetGameState(GAMESTATE.STATE_ENDBATTLE, GameManager.Instance.CallEndBattleEvent());
+            //is Game Clear
+            if(currentClearCount >= MaxClearCount) {
+                CurrentGameState = GameManager.Instance.GameState; //testing variables
+                GameManager.Instance.SetGameState(GAMESTATE.STATE_ENDBATTLE, GameManager.Instance.EventBattleEnd());
+            }
+
+            //is Game Over
+            if(currentPlayerHealth <= 0f) {
+                GameManager.Instance.SetGameState(GAMESTATE.STATE_GAMEOVER, 
+                                                  GameManager.Instance.EventGameOver());
             }
         }
 
-        private void OnUpdateBossBattle()
-        {
+        private void OnUpdateBossBattle() {
 
         }
 
@@ -388,11 +366,23 @@
             if (IsResult == false)
                 endWaitingTime += Time.deltaTime;
             
-            if (endWaitingTime >= EndBattleDelay)
-            {
+            if (endWaitingTime >= EndBattleDelay) {
                 IsResult = true;
                 DropItemsAddInventory();
                 battleSceneUI.OnEnableResultPanel(dropItemList);
+
+                endWaitingTime = 0f;
+            }
+        }
+
+        void OnUpdateGameOver() {
+            if(IsResult == false) {
+                endWaitingTime += Time.unscaledDeltaTime;
+            }
+
+            if(endWaitingTime >= EndBattleDelay) {
+                IsResult = true;
+                battleSceneUI.OnEnableGameOverPanel();
 
                 endWaitingTime = 0f;
             }

@@ -49,16 +49,23 @@ MonoBehaviour:
   LineWidth: 0.1
   DefaultLineMat: {fileID: 10756, guid: 0000000000000000e000000000000000, type: 0}
   isOnFPS: 1
+  isActiveScreenHit: 1
   ImgFade: {fileID: 0}
   FadeTime: 1
   PausePanel: {fileID: 0}
-  ResultPanel: {fileID: 0}
-  GameOverPanel: {fileID: 0}
   PanelOpenFadeTime: 0.5
+  ResultPanel: {fileID: 0}
   SlotParentTr: {fileID: 0}
   DropItemSlotPref: {fileID: 5984624412175565113, guid: 07963ed1caf360a429dfd7b2ee79fd4d,
     type: 3}
   DropItemSlots: []
+  overPanel: {fileID: 0}
+  overFrontPanel: {fileID: 0}
+  overLogo: {fileID: 0}
+  overBackPanel: {fileID: 0}
+  canvasGroupOverButton: {fileID: 0}
+  tmp_tips: {fileID: 0}
+  StageTips: 
   mainArrowSlot: {fileID: 0}
   subArrowSlot: {fileID: 0}
   specialArrowSlot: {fileID: 0}
@@ -71,6 +78,9 @@ MonoBehaviour:
     type: 3}
   prefkillType: {fileID: 2739246953676750907, guid: 6e10ca916b782284fb32ecab29e543ca,
     type: 3}
+  hitScreenMaterial: {fileID: 2100000, guid: 049556744e731da46a8a0809dc2ecc78, type: 2}
+  ScreenHitFadeTime: 0.5
+  ScreenHitAlpha: 0.4
   BattleSceneUICanvas: {fileID: 0}
   UICamera: {fileID: 0}
 --- !u!114 &3204541759480302796
@@ -85,10 +95,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6867096f57d1d2143ac618c6f55644af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  stageDiff: 0
   TopLeft: {x: -3.5, y: 10, z: 90}
   BottomRight: {x: 3.5, y: 8, z: 90}
-  monsterPref: {fileID: 2117330865147067910, guid: 40d1d771a1a397747af99ffc6adc9852,
-    type: 3}
+  monsterPrefNormal: {fileID: 0}
+  monsterPrefFreq: {fileID: 0}
+  monsterPrefElite: {fileID: 0}
   spawnTimer: 0
 --- !u!114 &3204541759480302795
 MonoBehaviour:
@@ -102,7 +114,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0180c68b6b8ea574e9a63dd369c0474b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  StartBattleDelay: 3
+  StartBattleDelay: 2
   EndBattleDelay: 2
   ParentTransform: {fileID: 0}
   BowInitPosition: {fileID: 0}
@@ -118,3 +130,4 @@ MonoBehaviour:
   dropItemList: []
   IsDebugClearStage: 0
   IsDebugMonsterLogics: 0
+  IsDebugGameOver: 0

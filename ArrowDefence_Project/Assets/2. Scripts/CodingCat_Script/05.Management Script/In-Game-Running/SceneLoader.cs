@@ -20,16 +20,23 @@
         {
             NextScene = targetScene;
 
-            try
-            {
+            try {
                 SceneManager.LoadScene(loadingScene);
             }
-            catch
-            {
+            catch {
                 string failedMsg = string.Format("{0} :: {1}", "SceneManagement", "Failed Load Scene");
                 CatLog.ELog(failedMsg);
                 throw;
             }
+        }
+
+        public void ReloadScene() {
+            NextScene = SceneManager.GetActiveScene().name;
+            SceneManager.LoadScene(loadingScene);
+        }
+
+        public string GetCurrentSceneName() {
+            return SceneManager.GetActiveScene().name;
         }
     }
 }

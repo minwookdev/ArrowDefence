@@ -45,8 +45,10 @@
         BattleEventHandler MonsterHitEvent;
         BattleEventHandler MonsterLessHitEvent;
         BattleEventHandler MonsterDeathEvent;
+
         //Event Battle State
         BattleEventHandler OnStateEndBattle;
+        BattleEventHandler OnStateGameOver;
 
         private void Start() => this.fixedDeltaTime = Time.fixedDeltaTime;
 
@@ -241,11 +243,6 @@
             CCPlayerData.equipments.ReleaseEquipments();
         }
 
-        public void ReleaseAccessory()
-        {
-            CCPlayerData.equipments.Release_Accessory(0);
-        }
-
         #endregion
 
         #region BATTLE
@@ -261,8 +258,7 @@
         /// </summary>
         /// <param name="gameState"></param>
         /// <param name="handler"></param>
-        public void SetGameState(GAMESTATE gameState, BattleEventHandler handler)
-        {
+        public void SetGameState(GAMESTATE gameState, BattleEventHandler handler) {
             this.gameState = gameState; handler();
         }
 
@@ -439,9 +435,12 @@
 
         #region STATE_EVENT_HANDLER
 
-        public void AddEventEndBattle(System.Action action) {
-            var newDelegate = new BattleEventHandler(action);
-            OnStateEndBattle += newDelegate;
+        public void AddListnerEndBattle(System.Action action) {
+            OnStateEndBattle += new BattleEventHandler(action);
+        }
+
+        public void AddListnerGameOver(System.Action action) {
+            OnStateGameOver += new BattleEventHandler(action);
         }
 
         public void ReleaseAllEvent() {
@@ -452,10 +451,15 @@
 
             //Release Battle State
             OnStateEndBattle = null;
+            OnStateGameOver  = null;
         }
 
-        public BattleEventHandler CallEndBattleEvent() {
+        public BattleEventHandler EventBattleEnd() {
             return this.OnStateEndBattle;
+        }
+
+        public BattleEventHandler EventGameOver() {
+            return this.OnStateGameOver;
         }
 
         #endregion

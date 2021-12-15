@@ -54,16 +54,14 @@
                 case GAMESTATE.STATE_INBATTLE:     SpawnMonster(); break;
                 case GAMESTATE.STATE_BOSSBATTLE:                   break;
                 case GAMESTATE.STATE_ENDBATTLE:                    break;
-                default:                                           break;
+                case GAMESTATE.STATE_GAMEOVER:                     break;
             }
         }
 
-        private void SpawnMonster()
-        {
+        private void SpawnMonster() {
             spawnTimer -= Time.deltaTime;
 
-            if(spawnTimer <= 0)
-            {
+            if(spawnTimer <= 0) {
                 StartCoroutine(Spawn());
                 spawnTimer = UnityEngine.Random.Range(spawnIntervalMin, spawnIntervalMax + 1);
             }

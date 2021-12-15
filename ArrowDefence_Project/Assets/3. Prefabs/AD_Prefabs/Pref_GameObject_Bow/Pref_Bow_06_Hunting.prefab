@@ -85,6 +85,7 @@ GameObject:
   - component: {fileID: 6069731367018269437}
   - component: {fileID: 7651767513000680169}
   - component: {fileID: 4141777913868190885}
+  - component: {fileID: 2721758683798115982}
   m_Layer: 8
   m_Name: Bow_Image
   m_TagString: Untagged
@@ -131,7 +132,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 2100000, guid: ca5a2893f90211f448cccf12246bbe55, type: 2}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 0
   m_Maskable: 1
@@ -148,6 +149,22 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &2721758683798115982
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4454196987728277905}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee158225ee1e59f4791627785501d950, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shaderTypes: 0
+  normalStrenght: 5
+  normalSmoothing: 1
+  computingNormal: 0
 --- !u!1 &6278583038288767845
 GameObject:
   m_ObjectHideFlags: 0
@@ -662,6 +679,7 @@ GameObject:
   - component: {fileID: 6278583039945066393}
   - component: {fileID: 6278583039945066391}
   - component: {fileID: 6278583039945066390}
+  - component: {fileID: 2477782537349438244}
   m_Layer: 8
   m_Name: Pref_Bow_06_Hunting
   m_TagString: ArrowDefence_Bow
@@ -719,6 +737,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MainCam: {fileID: 0}
+  bowSprite: {fileID: 0}
   TouchRadius: 1
   PullableRadius: 1
   BowCenterPointImg: {fileID: 2945279677610440209}
@@ -729,6 +748,27 @@ MonoBehaviour:
   ArrowComponent: {fileID: 0}
   ArrowParentTr: {fileID: 0}
   LoadedArrow: {fileID: 0}
+--- !u!114 &2477782537349438244
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6278583039945066392}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be9cfe934b1a19a479f2866fdc6e7803, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ImageBattleBow: {fileID: 4141777913868190885}
+  SpriteBow: {fileID: 21300000, guid: 0b2e8f9e81e13c5439938f5c8c250ee6, type: 3}
+  bowMaterial: {fileID: 2100000, guid: ca5a2893f90211f448cccf12246bbe55, type: 2}
+  StartHitEffectBlend: 0.1
+  StartChromAberrAmount: 0.25
+  StartFishEyeAmount: 0.2
+  StartPinchAmount: 0.05
+  totalFadeTime: 0.3
+  FadeBurnTime: 1
 --- !u!1 &6278583039962255843
 GameObject:
   m_ObjectHideFlags: 0

@@ -170,11 +170,11 @@
             stopSkillAction = action;
 
             //if the End Battle, Stop Effect Coroutine and Disable Effect Use
-            GameManager.Instance.AddEventEndBattle(() => {
+            GameManager.Instance.AddListnerEndBattle(() => {
                 if (isEffectActivation == true) {
                     StopCoroutine(skillEffectCo);
                     stopSkillAction();
-                    CatLog.Log("ACSP 발동 강제종료 처리.");
+                    CatLog.Log("Accessory Special Effect 강제종료.");
                 }
 
                 //Slot Disable Effect
@@ -182,6 +182,15 @@
                 coolDownTmp.text        = "";
                 coolDownMask.fillAmount = 1f;
             });
+
+            GameManager.Instance.AddListnerGameOver(() => {
+                if (isEffectActivation == true) {
+                    StopCoroutine(skillEffectCo);
+                    stopSkillAction();
+                    CatLog.Log("Accessory Special Effect 강제 종료.");
+                } 
+            });
+
         }
 
         #endregion
@@ -213,7 +222,7 @@
         void IPointerClickHandler.OnPointerClick(PointerEventData eventData)
         {
             //효과 발동 가능여부 판단해서 스킬 발동해줌
-            if (isPreparedSkillActive) {
+            if (isPreparedSkillActive && isEffectActivation == false) {
                 skillEffectCo = StartCoroutine(ActiveSkillCo());
             }
             else

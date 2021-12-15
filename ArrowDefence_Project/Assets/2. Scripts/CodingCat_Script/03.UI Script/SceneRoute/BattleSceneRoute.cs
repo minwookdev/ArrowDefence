@@ -1,19 +1,19 @@
 ﻿namespace ActionCat
 {
+    using System.Collections.Generic;
     using UnityEngine;
     using UnityEngine.UI;
     using UnityEngine.EventSystems;
+    using TMPro;
     using DG.Tweening;
-    using System.Collections.Generic;
+    using Games.UI;
 
     public class BattleSceneRoute : MonoBehaviour
     {
-        public class ArrowSwapSlotInitData
-        {
+        public class ArrowSwapSlotInitData {
             public bool IsActiveSlot { get; private set; }
             public Sprite IconSprite { get; private set; }
             public System.Action SlotCallback { get; private set; }
-
             public ArrowSwapSlotInitData(bool isactiveslot, Sprite iconsprite, System.Action callback)
             {
                 IsActiveSlot = isactiveslot;
@@ -31,20 +31,29 @@
         public bool isOnFPS = false;
         public bool isActiveScreenHit = true;
 
-        [Header("START FADE OPTION")]
+        [Header("ENTERING SCENE FADE OPTION")]
         public CanvasGroup ImgFade;
         public float FadeTime = 1.0f;
 
-        [Header("PANEL's")]
+        [Header("PAUSE PANEL VARIABLES")]
         public GameObject PausePanel;
-        public GameObject ResultPanel;
-        public GameObject GameOverPanel;
         public float PanelOpenFadeTime = 0.5f;
 
-        [Header("RESULT PANEL VARIABLE's")]
+        [Header("RESULT PANEL VARIABLES")]
+        public GameObject ResultPanel;
         public Transform SlotParentTr;
         public GameObject DropItemSlotPref;
         public List<UI_ItemDataSlot> DropItemSlots;
+
+        [Header("GAMEOVER PANEL VARIABLES")]
+        [SerializeField] GameObject overPanel = null;
+        [SerializeField] GameObject overFrontPanel = null;
+        [SerializeField] Transform overLogo = null;
+        [SerializeField] Image overBackPanel = null;
+        [SerializeField] CanvasGroup canvasGroupOverButton = null;
+        [SerializeField] TextMeshProUGUI tmp_tips = null;
+        [TextArea(3, 5)] public string StageTips = "";
+        Sequence overSeq = null;
 
         [Header("ARROW SLOT")]
         [SerializeField] EventTrigger mainArrowSlot;
@@ -61,7 +70,7 @@
         [Header("HIT SCREEN")]
         [SerializeField] Material hitScreenMaterial = null;
         public float ScreenHitFadeTime = .5f;
-        public float ScreenHitAlpha = 0.3f;
+        public float ScreenHitAlpha = 0.4f;
         float hitFadeTimer = 0f;
         string generalAlpha = "_Alpha";
 
@@ -141,62 +150,7 @@
             }
         }
 
-        #region BUTTON_EVENT
-
-        public void Btn_OpenPausePanel()
-        {
-            PausePanel.GetComponent<CanvasGroup>()
-                      .DOFade(1f, PanelOpenFadeTime)
-                      .SetUpdate(true)
-                      .OnStart(() => { PausePanel.GetComponent<CanvasGroup>().blocksRaycasts = false;
-                                       PausePanel.SetActive(true);
-                                       GameManager.Instance.PauseBattle();})
-                      .OnComplete(() => PausePanel.GetComponent<CanvasGroup>().blocksRaycasts = true);
-        }
-
-        public void Btn_ContinueGame()
-        {
-            PausePanel.GetComponent<CanvasGroup>()
-                      .DOFade(0f, PanelOpenFadeTime)
-                      .SetUpdate(true)
-                      .OnStart(() => PausePanel.GetComponent<CanvasGroup>().blocksRaycasts = false)
-                      .OnComplete(() => { PausePanel.SetActive(false);
-                                          GameManager.Instance.ResumeBattle();
-                      });
-        }
-
-        public void Btn_LoadMainScene()
-        {
-            ImgFade.DOFade(1f, FadeTime)
-                   .SetUpdate(true)
-                   .OnStart(() => { ImgFade.blocksRaycasts = false;
-                                    ImgFade.gameObject.SetActive(true);}) 
-                   .OnComplete(() => { ReleaseBattleScene();
-                                       SceneLoader.Instance.LoadScene(AD_Data.SCENE_MAIN);});
-        }
-
-        /// <summary>
-        /// Main Scene으로 넘어가기 전, Release되어야 할 로직들의 처리
-        /// </summary>
-        void ReleaseBattleScene()
-        {
-            //Bow Pulling Stop = false; 없어도 상관없음
-            GameManager.Instance.SetBowPullingStop(false);
-
-            //Release Player Equipments
-            GameManager.Instance.ReleaseEquipments();
-
-            //Release CCPooler 
-            CCPooler.DestroyCCPooler();
-
-            //Release Item Info Tooltip
-            ActionCat.Games.UI.ItemTooltip.Instance.ReleaseParent();
-        }
-
-        #endregion
-
-        private void OnSceneEnteringFadeOut()
-        {
+        private void OnSceneEnteringFadeOut() {
             if (GameManager.Instance.IsDevMode) return;
 
             //씬 진입 시 alpha 값 바꾸기 전 상황이 나오는 지 체크, alpha 값 바꿔주기 전 상황이 나오면
@@ -215,8 +169,70 @@
                    });
         }
 
-        public void OnEnableResultPanel(List<DropItem> items)
+        #region BUTTON_EVENT
+
+        public void Btn_OpenPausePanel()
         {
+            PausePanel.GetComponent<CanvasGroup>()
+                      .DOFade(1f, PanelOpenFadeTime)
+                      .SetUpdate(true)
+                      .OnStart(() => { PausePanel.GetComponent<CanvasGroup>().blocksRaycasts = false;
+                                       PausePanel.SetActive(true);
+                                       GameManager.Instance.PauseBattle();})
+                      .OnComplete(() => PausePanel.GetComponent<CanvasGroup>().blocksRaycasts = true);
+        }
+
+        public void Btn_ContinueGame() {
+            PausePanel.GetComponent<CanvasGroup>()
+                      .DOFade(0f, PanelOpenFadeTime)
+                      .SetUpdate(true)
+                      .OnStart(() => PausePanel.GetComponent<CanvasGroup>().blocksRaycasts = false)
+                      .OnComplete(() => { PausePanel.SetActive(false);
+                                          GameManager.Instance.ResumeBattle();
+                      });
+        }
+
+        public void Btn_LoadMainScene() {
+            ImgFade.DOFade(1f, FadeTime)
+                   .SetUpdate(true)
+                   .OnStart(() => { ImgFade.blocksRaycasts = false;
+                                    ImgFade.gameObject.SetActive(true);
+                   }) 
+                   .OnComplete(() => { TooltipRelease();
+                                       SceneLoader.Instance.LoadScene(AD_Data.SCENE_MAIN);
+                   });
+        }
+
+        public void Btn_ReloadScene() {
+            ImgFade.DOFade(1f, FadeTime)
+                   .SetUpdate(true)
+                   .OnStart(() => {
+                       ImgFade.blocksRaycasts = false;
+                       ImgFade.gameObject.SetActive(true);
+                   })
+                   .OnComplete(() => {
+                       TooltipRelease();
+                       SceneLoader.Instance.ReloadScene();
+                   });
+        }
+
+        public void Btn_Resurrection() {
+            //1. Kill All Monster's
+            //2. Return the GameManager.GameState is In-Game State.
+        }
+
+        /// <summary>
+        /// Item Tooltip Release
+        /// </summary>
+        void TooltipRelease() {
+            //Release Item Info Tooltip
+            ItemTooltip.Instance.ReleaseParent();
+        }
+
+        #endregion
+
+        #region ENABLE_POPUP
+        public void OnEnableResultPanel(List<DropItem> items) {
             if (ResultPanel.activeSelf) return;
 
             ResultPanel.SetActive(true);
@@ -246,6 +262,46 @@
                 DropItemSlots[i].Setup(items[i].ItemAsset, items[i].Quantity, BattleSceneUICanvas, UICamera);
             }
         }
+
+        public void OnEnableGameOverPanel() {
+            //GameOver Back Panel Alpha Set.
+            var tempBackPanelColor = overBackPanel.color;
+            var backPanelOriginAlpha = tempBackPanelColor.a;
+            tempBackPanelColor.a = 0f;
+            overBackPanel.color = tempBackPanelColor;
+            //Prepare Logo Position Set. (Save Origin Position.)
+            var tempPos = overLogo.position;
+            var originPos = tempPos;
+            tempPos.y += 10f;
+            overLogo.position = tempPos;
+            //Button Group Fade Out
+            canvasGroupOverButton.alpha = 0f;
+            //Clear Tips String
+            tmp_tips.text = "";
+
+            overPanel.SetActive(true);
+            overSeq = DOTween.Sequence()
+                             .Append(overLogo.DOMove(originPos, 1f))
+                             .Prepend(overBackPanel.DOFade(backPanelOriginAlpha, .5f))
+                             .Append(canvasGroupOverButton.DOFade(1f, 0.3f))
+                             .Insert(1f, tmp_tips.DOText(StageTips, 2f))
+                             .OnComplete(() => overFrontPanel.SetActive(false));
+            //Don't set SetAutoKill because no re-run is required.
+        }
+
+        /// <summary>
+        /// Skip Panel Touch Event
+        /// </summary>
+        public void OnGameOverPanelSkip() {
+            if(overSeq.IsPlaying()) {
+                overSeq.Complete(); //Skipping GameOver Sequence.
+            }
+
+            //Disable Front Panel
+            overFrontPanel.SetActive(false);
+        }
+
+        #endregion 
 
         #region BATTLE_SLOTS
 
@@ -404,7 +460,7 @@
         #region SCREEN_HIT
 
         public void OnHitScreen() {
-            hitScreenMaterial.SetFloat(generalAlpha, ScreenHitAlpha);
+            //hitScreenMaterial.SetFloat(generalAlpha, ScreenHitAlpha);
             hitFadeTimer = ScreenHitFadeTime;
         }
 

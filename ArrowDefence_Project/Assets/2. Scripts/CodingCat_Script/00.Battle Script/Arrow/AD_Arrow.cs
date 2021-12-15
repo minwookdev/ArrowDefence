@@ -9,6 +9,7 @@
         public Transform arrowChatchPoint;
         public TrailRenderer arrowTrail;
         public Transform leftClampPoint, rightClampPoint;
+        [SerializeField] SpriteRenderer arrowSprite = null;
 
         [Header("SHOOTING")]
         public float ArrowPower;
@@ -29,8 +30,7 @@
         [SerializeField]
         ArrowSkillSet arrowSkillSets = null;
 
-        private void Start()
-        {
+        private void Start() {
             //if (ReferenceEquals(rBody, null)) rBody = gameObject.GetComponent<Rigidbody2D
             //Initial Arrow Childs
             if (arrowChatchPoint == null) arrowChatchPoint = transform.GetChild(2);
@@ -220,6 +220,18 @@
 
             //Clear Arrow Trail
             arrowTrail.Clear();
+        }
+
+        public void SpriteAlpha(bool isRewind) {
+            var tempColor = arrowSprite.color;
+            if(isRewind == false) {
+                tempColor.a = 0f;
+                arrowSprite.color = tempColor;
+            }
+            else {
+                tempColor.a = 1f;
+                arrowSprite.color = tempColor;
+            }
         }
 
         #region GIZMOS

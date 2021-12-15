@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5650404569896369805}
   m_Layer: 11
   m_Name: monster_model
-  m_TagString: Monster
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -111,7 +111,7 @@ GameObject:
   - component: {fileID: 113046968025189153}
   m_Layer: 11
   m_Name: shadow
-  m_TagString: Monster
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -235,6 +235,7 @@ MonoBehaviour:
   MaxMonsterMP: 50
   ItemDropCorrection: 5
   GaugeIncreaseValue: 10
+  AttackDamage: 5
   isActiveHitColor: 0
   HitColor: {r: 1, g: 0.19339621, b: 0.19339621, a: 1}
 --- !u!114 &8114667805450639416

@@ -321,6 +321,7 @@ MonoBehaviour:
   arrowTrail: {fileID: 1123326281364875872}
   leftClampPoint: {fileID: 0}
   rightClampPoint: {fileID: 0}
+  arrowSprite: {fileID: 7311252437251513649}
   ArrowPower: 20
   isLaunched: 0
 --- !u!114 &1123326281355546834

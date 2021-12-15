@@ -90,8 +90,19 @@
             //Init Load Arrow Type : 장전될 화살 타입 정의
             loadArrowType = GameManager.Instance.LoadArrowType();
 
-            //yield return new WaitUntil(() => CCPooler.IsInitialized);
             StartCoroutine(this.ArrowReload());
+
+            //게임오버 이벤트에 Burn Effect 추가. Resurrection 구현 시 추가적인 로직 구현 필요.
+            GameManager.Instance.AddListnerGameOver(() => { 
+                //Active Burn Fade Effect.
+                bowSprite.ActiveBurn(false);
+                //Bow Rope Material Alpha Change.
+                AD_BowRope.instance.RopeAlpha(false);
+                //if Loaded Arrow, Change Sprite color Alpha.
+                if (ArrowComponent != null) {
+                    ArrowComponent.SpriteAlpha(false);
+                }
+            });
         }
 
         private void Update()
@@ -164,8 +175,7 @@
                 default: break;
             }
 
-            if(AD_BowRope.instance.arrowCatchPoint == null && ArrowComponent != null)
-            {
+            if(AD_BowRope.instance.arrowCatchPoint == null && ArrowComponent != null) {
                 AD_BowRope.instance.arrowCatchPoint = ArrowComponent.arrowChatchPoint;
             }
 
@@ -376,9 +386,10 @@
                 CatLog.WLog("Can't Launch the Arrow"); return;
             } 
             
-            isBowPulling = false;
-
+            //로프 해제.
             AD_BowRope.instance.arrowCatchPoint = null;
+
+            isBowPulling = false;
 
             ArrowComponent.ShotArrow(arrowForce, ArrowParentTr);
 
@@ -416,8 +427,7 @@
             CatLog.Log("Save First Touch Position");
         }
 
-        private IEnumerator ArrowReload()
-        {
+        private IEnumerator ArrowReload() {
 #region ORIGIN_RELAOD
             //var arrow = CatPoolManager.Instance.LoadNormalArrow(this);
             //
@@ -437,11 +447,7 @@
 #endregion
 
 #region POOL_RELOAD
-
             yield return null;
-
-            //LoadedArrow = CCPooler.SpawnFromPool(AD_Data.POOLTAG_MAINARROW, this.transform, initArrowScale,
-            //                         RightClampPoint.position, Quaternion.identity);
 
             if (loadArrowType == LOAD_ARROW_TYPE.ARROW_MAIN)
                 LoadedArrow = CCPooler.SpawnFromPool(AD_Data.POOLTAG_MAINARROW, transform, initArrowScale, ClampPointTop.position, Quaternion.identity);
@@ -453,7 +459,6 @@
             ArrowComponent = LoadedArrow.GetComponent<AD_Arrow>();
             ArrowComponent.leftClampPoint  = this.ClampPointBottom;
             ArrowComponent.rightClampPoint = this.ClampPointTop;
-
 #endregion
         }
 

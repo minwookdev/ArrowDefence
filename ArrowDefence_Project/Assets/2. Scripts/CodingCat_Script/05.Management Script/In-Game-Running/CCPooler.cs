@@ -63,6 +63,11 @@
             }
         }
 
+        void OnDestroy() {
+            //자체적으로 static Instance 해제처리.
+            CCPooler._inst = null;
+        }
+
         #region SPAWN_FROM_POOL_METHOD
 
         public static GameObject SpawnFromPool(string tag, Vector3 position, Quaternion rotation) =>
@@ -275,12 +280,6 @@
             //obj.SetActive(false);   //Spawn 하고 비활성화 시 ReturnToPool을 실행하므로 Stack에 Push 된다
             ReturnToPool(obj);
             return obj;
-        }
-
-        public static void DestroyCCPooler()
-        {
-            Destroy(CCPooler._inst.gameObject);
-            CCPooler._inst = null;
         }
 
         /// <summary>

@@ -119,6 +119,7 @@ public class MainSceneRoute : MonoBehaviour
         if (isAutoLoad)
             ActionCat.GameManager.Instance.AutoLoadUserData();
 
+
     }
 
     private void OnDestroy() {
@@ -158,14 +159,15 @@ public class MainSceneRoute : MonoBehaviour
         }
     }
 
-    public static void Fade(Action action) {
+    public static void Fade(Action startAction, Action completeAction) {
         _inst.ImgFade.DOFade(1f, _inst.FadeTime)
                      .OnStart(() => {
                          _inst.ImgFade.blocksRaycasts = false;
                          _inst.ImgFade.gameObject.SetActive(true);
+                         startAction();
                      })
                      .OnComplete(() => {
-                         action();
+                         completeAction();
                      });
     }
 

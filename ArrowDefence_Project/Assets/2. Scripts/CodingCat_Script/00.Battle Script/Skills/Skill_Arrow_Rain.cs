@@ -37,7 +37,7 @@
             this.shotDelay  = data.ShotInterval;
         }
 
-        public override void BowSpecialSkill(float anglez, Transform arrowParent, MonoBehaviour mono, 
+        public override void BowSpecialSkill(float anglez, Transform arrowParent, MonoBehaviour mono, ref DamageStruct damage,
                                              Vector3 initscale, Vector3 initpos, Vector2 force, LOAD_ARROW_TYPE type)
         {
             #region LEGACY_CODE
@@ -102,10 +102,10 @@
             //}
             #endregion
             string poolTag = (type == LOAD_ARROW_TYPE.ARROW_MAIN) ? AD_Data.POOLTAG_MAINARROW_LESS : AD_Data.POOLTAG_SUBARROW_LESS;
-            mono.StartCoroutine(RainArrow(poolTag, arrowParent, initscale, force));
+            mono.StartCoroutine(RainArrow(poolTag, arrowParent, damage, initscale, force));
         }
 
-        IEnumerator RainArrow(string poolTag, Transform arrowparent, Vector3 arrowscale, Vector2 force)
+        IEnumerator RainArrow(string poolTag, Transform arrowparent, DamageStruct damage, Vector3 arrowscale, Vector2 force)
         {
             for (int i = 0; i < arrowCount; i++)
             {
@@ -126,7 +126,7 @@
                 if(arrow)
                 {
                     arrow.gameObject.transform.rotation = Quaternion.Euler(0f, 0f, CalculateAngle(arrow.transform.position, randomdest));
-                    arrow.ShotToDirectly(arrow.transform.up); // * force.magnitude;
+                    arrow.ShotToDirectly(arrow.transform.up, damage); // * force.magnitude;
                 }
 
                 if(isActiveDebugLine)

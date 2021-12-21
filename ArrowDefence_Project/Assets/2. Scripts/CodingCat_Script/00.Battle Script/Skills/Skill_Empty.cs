@@ -22,10 +22,9 @@
 
         }
 
-        public override void BowSpecialSkill(float facingVec, Transform arrowParent, MonoBehaviour mono, 
-                                             Vector3 initScale, Vector3 arrowInitPos, Vector2 force, LOAD_ARROW_TYPE arrowType)
-        {
-            return;
+        public override void BowSpecialSkill(float facingVec, Transform arrowParent, MonoBehaviour mono, ref DamageStruct damage,
+                                             Vector3 initScale, Vector3 arrowInitPos, Vector2 force, LOAD_ARROW_TYPE arrowType) {
+            throw new System.NotImplementedException();
         }
     }
 }

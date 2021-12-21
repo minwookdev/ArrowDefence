@@ -7,18 +7,15 @@
     {
         [Header("Bow Item Data")]
         public GameObject BowGameObject;
-        //public BOWSKILL_TYPE FirstSkill_Type;
-        //public BOWSKILL_TYPE SecondSkill_Type;
-        //public AD_BowSkill BowSkill_First;
-        //public AD_BowSkill BowSkill_Second;
         public BowSkillData SkillAsset_f;
         public BowSkillData SkillAsset_s;
 
+        //Inherence Ability
+        [Range(1.2f, 3f)] public float FullChargedMultiplier = 1.2f;
+
         //PROPERTY
-        public AD_BowSkill SkillFst
-        {
-            get
-            {
+        public AD_BowSkill SkillFst {
+            get {
                 if (SkillAsset_f != null)
                     return SkillAsset_f.Skill();
                 else
@@ -26,10 +23,8 @@
             }
         }
 
-        public AD_BowSkill SkillSec
-        {
-            get
-            {
+        public AD_BowSkill SkillSec {
+            get {
                 if (SkillAsset_s != null)
                     return SkillAsset_s.Skill();
                 else
@@ -37,35 +32,25 @@
             }
         }
 
-        public ItemData_Equip_Bow() : base()
-        {
+        public ItemData_Equip_Bow() : base() {
             Equip_Type = EQUIP_ITEMTYPE.EQUIP_BOW;
         }
 
-        public void OnEnable() { }
+        public void OnEnable() {
+            AbilitySetup();
+        }
 
-        private void SetBowSkills()
-        {
-            //switch (FirstSkill_Type)
-            //{
-            //    case BOWSKILL_TYPE.SKILL_NULL:        BowSkill_First = null;                      break;
-            //    case BOWSKILL_TYPE.SKILL_SPREAD_SHOT: BowSkill_First = new Skill_Multiple_Shot(); break;
-            //    case BOWSKILL_TYPE.SKILL_RAPID_SHOT:  BowSkill_First = new Skill_Rapid_Shot();    break;
-            //    case BOWSKILL_TYPE.SKILL_ARROW_RAIN:  BowSkill_First = new Skill_Arrow_Rain();    break;
-            //    default: break;
+        private void AbilitySetup() {
+            System.Collections.Generic.List<Ability> tempAbility = new System.Collections.Generic.List<Ability>();
+            if(BaseDamage > 0f) {
+                tempAbility.Add(new AbilityDamage(BaseDamage));
+            }
+            //if(CriticalHitChance > 0f) {
+            //    tempAbility.Add(new AbilityCriti)
             //}
-            //
-            //switch (SecondSkill_Type)
-            //{
-            //    case BOWSKILL_TYPE.SKILL_NULL:        BowSkill_Second = null;                      break;
-            //    case BOWSKILL_TYPE.SKILL_SPREAD_SHOT: BowSkill_Second = new Skill_Multiple_Shot(); break;
-            //    case BOWSKILL_TYPE.SKILL_RAPID_SHOT:  BowSkill_Second = new Skill_Rapid_Shot();    break;
-            //    case BOWSKILL_TYPE.SKILL_ARROW_RAIN:  BowSkill_Second = new Skill_Arrow_Rain();    break;
-            //    default: break;
-            //}
-            //
-            //if (BowSkill_First != null)  CatLog.Log($"{this.Item_Name} Enabled Bow Skill : {BowSkill_First.ToString()}");
-            //if (BowSkill_Second != null) CatLog.Log($"{this.Item_Name} Enabled Bow Skill : {BowSkill_Second.ToString()}");
+
+            //Init Ability Array
+            abilityDatas = tempAbility.ToArray();
         }
     }
 

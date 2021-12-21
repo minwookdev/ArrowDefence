@@ -139,7 +139,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 5b1d727934739434b9b323b3b805b7fa, type: 3}
+  m_Sprite: {fileID: 21300000, guid: a03e8c455e753ea4fbe9acdac1e348f2, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -357,8 +357,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9141343339605111554}
-  - component: {fileID: 9141343339605111564}
   - component: {fileID: 9141343339605111565}
+  - component: {fileID: 9141343339605111564}
   - component: {fileID: 866493767449040399}
   m_Layer: 8
   m_Name: Pref_Bow_05_Short_polished
@@ -392,18 +392,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 280}
   m_SizeDelta: {x: 100, y: 225}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &9141343339605111564
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9141343339605111555}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ff7a33b25e950aa43b006abafdc68b56, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &9141343339605111565
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -417,7 +405,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MainCam: {fileID: 0}
-  bowSprite: {fileID: 0}
+  bowSprite: {fileID: 866493767449040399}
+  bowAbility: {fileID: 9141343339605111564}
   TouchRadius: 1
   PullableRadius: 1
   BowCenterPointImg: {fileID: 81395836077589130}
@@ -428,6 +417,18 @@ MonoBehaviour:
   ArrowComponent: {fileID: 0}
   ArrowParentTr: {fileID: 0}
   LoadedArrow: {fileID: 0}
+--- !u!114 &9141343339605111564
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9141343339605111555}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff7a33b25e950aa43b006abafdc68b56, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &866493767449040399
 MonoBehaviour:
   m_ObjectHideFlags: 0

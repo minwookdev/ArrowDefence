@@ -18,7 +18,7 @@ MonoBehaviour:
   Item_Amount: 1
   Item_Name: Polished Hunting Bow
   Item_Desc: 
-  Item_Sprite: {fileID: 21300000, guid: 82f008121bbb3a443b7942a26b820ee4, type: 3}
+  Item_Sprite: {fileID: 21300000, guid: 1935a3e65bc442b46824793402b5e447, type: 3}
   Equip_Type: 0
   BowGameObject: {fileID: 5063279129060135535, guid: 757a4754cd126084ba8d4e697409ed45,
     type: 3}

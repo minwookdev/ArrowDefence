@@ -13,6 +13,10 @@ public class TitleSceneRoute : MonoBehaviour
     public Image ImgFade = null;
     public float FadeTime = 2.0f;
 
+    public void Start() {
+
+    }
+
     #region Action_Btn
 
     public void BtnLoadMain()

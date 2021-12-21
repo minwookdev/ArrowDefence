@@ -7,6 +7,8 @@
 
 public interface IArrowObject
 {
+    void ShotToDirectly(UnityEngine.Vector2 force, ActionCat.DamageStruct damage);
+
     void ShotToDirectly(UnityEngine.Vector2 force);
 
     void ShotToTarget(UnityEngine.Vector3 target);

@@ -25,9 +25,9 @@
     {
         protected GameObject lastHitTarget = null;
 
-        public abstract bool OnHit(Collider2D target);
+        public abstract bool OnHit(Collider2D target, ref DamageStruct damage);
 
-        public virtual bool OnHit(Collider2D target, out Transform targetTr)
+        public virtual bool OnHit(Collider2D target, out Transform targetTr, ref DamageStruct damage)
         {
             targetTr = null; return true;
         }
@@ -37,9 +37,18 @@
             //if (target == null) return;
 
             //저장된 마지막 타격 객체 제거
-            if (target != null && target == lastHitTarget.gameObject) {
-                lastHitTarget = null;
+            //if (target != null && target.gameObject == lastHitTarget) {
+            //    lastHitTarget = null;
+            //}
+
+            //개선식
+            if (target != null) {
+                if (target.gameObject == lastHitTarget) {
+                    lastHitTarget = null;
+                }
+                else return;
             }
+            else return;
         }
     }
 
@@ -68,7 +77,7 @@
         List<Collider2D> tempCollList = null;
 
         //return true : DisableArrow || false : IgnoreCollision
-        public override bool OnHit(Collider2D target)
+        public override bool OnHit(Collider2D target, ref DamageStruct damage)
         {
             //■■■■■■■■■■■■■ I. Availablity Arrow Skill : 중복 다겟 및 연쇄 횟수 체크 ■■■■■■■■■■■■■
             //최근에 Hit처리한 객체와 동일한 객체와 다시 충돌될 경우, return 처리
@@ -81,7 +90,7 @@
                 //연쇄횟수 체크
                 if(currentChainCount >= maxChainCount) {
                     //Monster Hit : 최대 연쇄횟수 도달
-                    target.SendMessage("OnHitObject", Random.Range(10f, 30f), SendMessageOptions.DontRequireReceiver);
+                    target.GetComponent<IDamageable>().OnHitObject(ref damage);
                     return true;
                 }
 
@@ -90,7 +99,7 @@
                 lastHitTarget = target.gameObject;
 
                 //Monster hit
-                target.SendMessage("OnHitObject", Random.Range(10f, 30f), SendMessageOptions.DontRequireReceiver);
+                target.GetComponent<IDamageable>().OnHitObject(ref damage);
             }
 
             //■■■■■■■■■■■■■■■ II Rebound Arrow Skill : Active 절차 개시 ■■■■■■■■■■■■■■■
@@ -172,7 +181,7 @@
         /// <param name="target"></param>
         /// <param name="targetTr"></param>
         /// <returns></returns>
-        public override bool OnHit(Collider2D target, out Transform targetTr)
+        public override bool OnHit(Collider2D target, out Transform targetTr, ref DamageStruct damage)
         {
             //■■■■■■■■■■■■■ I. Availablity Arrow Skill : 중복 타겟 및 연쇄 횟수 체크 ■■■■■■■■■■■■■
             if (lastHitTarget == target.gameObject) {
@@ -186,7 +195,7 @@
                 
                 //마지막으로 hit된 대상 거르고, 주변에 다른 타겟이 없다면 Hit처리 후 비활성화
                 if(tempCollList.Count <= 0) {
-                    target.SendMessage("OnHitObject", Random.Range(10f, 30f), SendMessageOptions.DontRequireReceiver);
+                    target.GetComponent<IDamageable>().OnHitObject(ref damage);
                     targetTr = null;
                     return true;
                 }
@@ -217,7 +226,7 @@
                 if (currentChainCount >= maxChainCount)
                 {
                     //Monster Hit 처리
-                    target.SendMessage("OnHitObject", Random.Range(10f, 30f), SendMessageOptions.DontRequireReceiver);
+                    target.GetComponent<IDamageable>().OnHitObject(ref damage);
                     targetTr = null; 
                     return true;
                     //arrow.DisableObject_Req(arrowTr.gameObject); return true;
@@ -228,7 +237,7 @@
                 lastHitTarget = target.gameObject;
 
                 //Monster hit 처리
-                target.SendMessage("OnHitObject", Random.Range(10f, 30f), SendMessageOptions.DontRequireReceiver);
+                target.GetComponent<IDamageable>().OnHitObject(ref damage);
             }
 
             //■■■■■■■■■■■■■■■ II Rebound Arrow Skill : Active 절차 개시 ■■■■■■■■■■■■■■■
@@ -538,7 +547,7 @@
         /// </summary>
         /// <param name="target"></param>
         /// <returns></returns>
-        public override bool OnHit(Collider2D target)
+        public override bool OnHit(Collider2D target, ref DamageStruct damage)
         {
             if (lastHitTarget == target.gameObject) {
                 //Ignore Duplicate Target
@@ -547,7 +556,7 @@
             else {
                 if (currentChainCount >= maxChainCount) {
                     //Hit 처리 후 화살객체 Disable
-                    target.SendMessage("OnHitObject", Random.Range(30f, 5f), SendMessageOptions.DontRequireReceiver);
+                    target.GetComponent<IDamageable>().OnHitObject(ref damage);
                     return true;
                 }
 
@@ -556,7 +565,7 @@
                 lastHitTarget = target.gameObject;
 
                 //Monster Hit 처리
-                target.SendMessage("OnHitObject", Random.Range(30f, 50f), SendMessageOptions.DontRequireReceiver);
+                target.GetComponent<IDamageable>().OnHitObject(ref damage);
             } return false;
         }
 
@@ -566,7 +575,7 @@
         /// <param name="target"></param>
         /// <param name="targetTr"></param>
         /// <returns></returns>
-        public override bool OnHit(Collider2D target, out Transform targetTr)
+        public override bool OnHit(Collider2D target, out Transform targetTr, ref DamageStruct damage)
         {
             if(lastHitTarget == target.gameObject) {
                 //Ignore Duplicate Target
@@ -575,7 +584,7 @@
             else {
                 if(currentChainCount >= maxChainCount) {
                     //Hit처리 후 Arrow Object Disable 요청
-                    target.SendMessage("OnHitObject", Random.Range(10f, 30f), SendMessageOptions.DontRequireReceiver);
+                    target.GetComponent<IDamageable>().OnHitObject(ref damage);
                     targetTr = null; return true;
                 }
 
@@ -583,7 +592,7 @@
                 currentChainCount++;
                 lastHitTarget = target.gameObject;
 
-                target.SendMessage("OnHitObject", Random.Range(10f, 30f), SendMessageOptions.DontRequireReceiver);
+                target.GetComponent<IDamageable>().OnHitObject(ref damage);
             }
 
             //Air Skill과 연계된 경우, 주변의 Random Monster Target을 넘겨줌

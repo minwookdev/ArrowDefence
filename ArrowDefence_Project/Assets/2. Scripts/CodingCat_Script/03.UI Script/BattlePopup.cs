@@ -49,7 +49,8 @@ public class BattlePopup : MonoBehaviour {
         }
 
         //Load a Sceen with tag string
-        MainSceneRoute.Fade(() => SceneLoader.Instance.LoadScene(stageTag));
+        MainSceneRoute.Fade(() => ActionCat.Data.CCPlayerData.equipments.UpdatePlayerStatus(), 
+                            () => SceneLoader.Instance.LoadScene(stageTag)); ;
     }
 
     #endregion

@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SkillId: 0103
   SkillName: RAIN ARROW
-  SkillDesc: "\rArrows pouring down like rain in the enemy direction\r\nFires up
-    to [n] times. [n]% of attack power."
+  SkillDesc: An arrow that bounces up to [n] times in the direction of nearby enemies
+    on hit.
   SkillType: 3
   SkillLevel: 0
   SkillIconSprite: {fileID: 21300000, guid: 33d2e28416d37144b8a32c7e4a52a6e7, type: 3}

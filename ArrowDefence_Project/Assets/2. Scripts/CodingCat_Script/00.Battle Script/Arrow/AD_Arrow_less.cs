@@ -30,6 +30,7 @@
         private float forceMagnitude = 18f; //Default Force : 18f
 
         //Arrow Skill Data
+        DamageStruct damageStruct;
         ArrowSkillSet arrowSkillSets = null;
         bool isInitSkill = false;
         bool isCollision = false;
@@ -115,7 +116,8 @@
 
         void OnHit(GameObject target) {
             isCollision = true;
-            target.SendMessage(nameof(IDamageable.OnHitObject), Random.Range(10f, 30f), SendMessageOptions.DontRequireReceiver);
+            //target.SendMessage(nameof(IDamageable.OnHitObject), Random.Range(10f, 30f), SendMessageOptions.DontRequireReceiver);
+            target.GetComponent<IDamageable>().OnHitObject(ref damageStruct);
             DisableRequest();
         }
 
@@ -137,8 +139,24 @@
         /// Shot Directly to Direction
         /// </summary>
         /// <param name="force">applied as normalized</param>
-        public void ShotToDirectly(Vector2 direction)
-        {
+        public void ShotToDirectly(Vector2 direction, DamageStruct damage) {
+            isLaunched = true;
+            //Force to Arrow RigidBody
+            rBody.velocity = direction.normalized * forceMagnitude;
+            //or [Used AddForce]
+            //rBody.AddForce(force, ForceMode2D.Impulse); //-> recommend
+            //rBody.AddForce(force, ForceMode2D.Force);
+            //Save Force.magnitude
+
+            //Get Damage Struct
+            damageStruct = damage;
+
+            //Clear TrailRender
+            trailRender.gameObject.SetActive(true);
+            trailRender.Clear();
+        }
+
+        public void ShotToDirectly(Vector2 direction) {
             isLaunched = true;
             //Force to Arrow RigidBody
             rBody.velocity = direction.normalized * forceMagnitude;
@@ -193,7 +211,7 @@
         {
             if(coll.gameObject.layer == LayerMask.NameToLayer(AD_Data.LAYER_MONSTER)) {
                 if (isInitSkill) {
-                    if(arrowSkillSets.OnHit(coll) == true) {
+                    if(arrowSkillSets.OnHit(coll, ref damageStruct) == true) {
                         DisableRequest();
                     }
                 }
@@ -205,13 +223,14 @@
             }
         }
 
-        private void OnTriggerExit2D(Collider2D coll)
-        {
+        private void OnTriggerExit2D(Collider2D coll) {
             if(coll.gameObject.layer == LayerMask.NameToLayer(AD_Data.LAYER_MONSTER)) {
                 if(isInitSkill) {
                     arrowSkillSets.OnExit(coll);
                 }
             }
         }
+
+
     }
 }

@@ -18,9 +18,13 @@ MonoBehaviour:
   Item_Amount: 1
   Item_Name: Hunting Bow
   Item_Desc: 
-  Item_Sprite: {fileID: 21300000, guid: 0b2e8f9e81e13c5439938f5c8c250ee6, type: 3}
+  Item_Sprite: {fileID: 21300000, guid: 9e7beea0aff391b4588bd9b684d1a64a, type: 3}
   Equip_Type: 0
+  BaseDamage: 200
+  CriticalHitChance: 0
+  CriticalMultiplier: 1
   BowGameObject: {fileID: 6278583039945066392, guid: adf40239908c9784c8dce0492e065af5,
     type: 3}
-  SkillAsset_f: {fileID: 0}
+  SkillAsset_f: {fileID: 11400000, guid: 8fc08db059ce576488c3db5a4393a80a, type: 2}
   SkillAsset_s: {fileID: 0}
+  FullChargedMultiplier: 1.2

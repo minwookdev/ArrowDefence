@@ -27,8 +27,10 @@
         //Skill Variables
         bool isInitSkill    = false;
         bool isCollision    = false;
-        [SerializeField]
         ArrowSkillSet arrowSkillSets = null;
+
+        //Damage Veriables
+        DamageStruct damageStruct;
 
         private void Start() {
             //if (ReferenceEquals(rBody, null)) rBody = gameObject.GetComponent<Rigidbody2D
@@ -69,8 +71,7 @@
             }
         }
 
-        void OnDisable()
-        {
+        void OnDisable() {
             isLaunched  = false;
             isCollision = false;
 
@@ -125,7 +126,7 @@
         void OnTriggerEnter2D(Collider2D coll) {
             if(coll.gameObject.layer == LayerMask.NameToLayer(AD_Data.LAYER_MONSTER)) {
                 if (isInitSkill == true) {
-                    if(arrowSkillSets.OnHit(coll) == true) {
+                    if(arrowSkillSets.OnHit(coll, ref damageStruct) == true) {
                         DisableRequest();
                     }
                 }
@@ -147,7 +148,8 @@
 
         void OnHit(GameObject target) {
             isCollision = true;
-            target.SendMessage(nameof(IDamageable.OnHitObject), Random.Range(30f, 50f), SendMessageOptions.DontRequireReceiver);
+            //target.SendMessage(nameof(IDamageable.OnHitObject), damageStruct, SendMessageOptions.DontRequireReceiver);
+            target.GetComponent<IDamageable>().OnHitObject(ref damageStruct);
             DisableRequest();
         }
 
@@ -156,11 +158,12 @@
         /// </summary>
         /// <param name="force"></param>
         /// <param name="parent"></param>
-        public void ShotArrow(Vector2 force, Transform parent)
+        public void ShotArrow(Vector2 force, DamageStruct damage, Transform parent)
         {
             //Battle Scene Main Canvas의 Transform을 매개변수로 받음
             //발사 처리 후, 부모객체를 바꿔주지 않으면 활의 자식으로 남아있게 되어, 활의 회전을 따라가버리는 문제가 생긴다
             //부모 변경처리 함수에는 보정처리는 true이다. 보정이 들어가지 않으면, 좌표와 스케일이 난리남 [기본값 : true]
+            damageStruct = damage;
             arrowTr.SetParent(parent);
 
             ShotToDirectly(force);
@@ -232,6 +235,10 @@
                 tempColor.a = 1f;
                 arrowSprite.color = tempColor;
             }
+        }
+
+        public void ShotToDirectly(Vector2 force, DamageStruct damage) {
+            throw new System.NotImplementedException();
         }
 
         #region GIZMOS

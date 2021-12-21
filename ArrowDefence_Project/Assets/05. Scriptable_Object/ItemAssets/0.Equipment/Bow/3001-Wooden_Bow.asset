@@ -20,7 +20,11 @@ MonoBehaviour:
   Item_Desc: A crude bow made of wood.
   Item_Sprite: {fileID: 21300000, guid: 415bf3ed0fe604b39b622d949713cb24, type: 3}
   Equip_Type: 0
+  BaseDamage: 0
+  CriticalHitChance: 0
+  CriticalMultiplier: 1
   BowGameObject: {fileID: 1797254673156858288, guid: c44c9d4c930acdb42b41979ed4c3088b,
     type: 3}
   SkillAsset_f: {fileID: 11400000, guid: 520120a42f020a644b355ed8ca3469fd, type: 2}
   SkillAsset_s: {fileID: 0}
+  FullChargedMultiplier: 1.2

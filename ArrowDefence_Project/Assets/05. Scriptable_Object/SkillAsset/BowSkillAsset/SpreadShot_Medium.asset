@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b13b54036fbabc4187d555e760b5c8a, type: 3}
+  m_Name: SpreadShot_Medium
+  m_EditorClassIdentifier: 
+  SkillId: 
+  SkillName: SPREAD SHOT
+  SkillDesc: 'Fires an arrow in a sector of the [n] direction. Each arrow is [n]%
+    of attack power.
+
+'
+  SkillType: 1
+  SkillLevel: 1
+  SkillIconSprite: {fileID: 21300000, guid: a029fc7e9de73e1498ba9fa5b68279f7, type: 3}
+  ArrowShotCount: 5
+  SpreadAngle: 20

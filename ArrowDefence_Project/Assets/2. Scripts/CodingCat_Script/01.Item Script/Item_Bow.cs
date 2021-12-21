@@ -62,6 +62,8 @@
             this.bowGameObject = item.BowGameObject;
             this.bowSkill_Fst  = item.SkillFst;
             this.bowSkill_Sec  = item.SkillSec;
+
+            this.abilities = item.abilityDatas;
         }
 
         /// <summary>
@@ -81,6 +83,8 @@
             this.bowGameObject = item.bowGameObject;
             this.bowSkill_Fst  = item.bowSkill_Fst;
             this.bowSkill_Sec  = item.bowSkill_Sec;
+
+            this.abilities = item.abilities;
         }
 
         /// <summary>
@@ -99,7 +103,7 @@
             return null;
         }
 
-        public AD_BowSkill[] GetSkills()
+        public AD_BowSkill[] GetSkillsOrNull()
         {
             //AD_BowSkill[] skills = new AD_BowSkill[2] { this.bowSkill_Fst, 
             //                                            this.bowSkill_Sec};

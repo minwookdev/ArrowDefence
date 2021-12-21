@@ -217,17 +217,17 @@
 
         #endregion
 
-        public bool OnHit(Collider2D collider)
+        public bool OnHit(Collider2D collider, ref DamageStruct damage)
         {
             switch (activeType)
             {
-                case ARROWSKILL_ACTIVETYPE.FULL:           return ActiveFull(collider); 
-                case ARROWSKILL_ACTIVETYPE.ATTACK_AIR:     return ActiveAtkAir(collider);        
-                case ARROWSKILL_ACTIVETYPE.ATTACK_ADDPROJ: return ActiveAtkAddProj(collider);
-                case ARROWSKILL_ACTIVETYPE.ATTACK:         return ActiveAtk(collider);
-                case ARROWSKILL_ACTIVETYPE.AIR_ADDPROJ:    return ActiveAddProj(); // <- 공격 판정 없음
-                case ARROWSKILL_ACTIVETYPE.AIR:            return DefaultHit(collider);
-                case ARROWSKILL_ACTIVETYPE.ADDPROJ:        return ActiveAddProj(); // <- 공격 판정 없음
+                case ARROWSKILL_ACTIVETYPE.FULL:           return ActiveFull(collider, ref damage); 
+                case ARROWSKILL_ACTIVETYPE.ATTACK_AIR:     return ActiveAtkAir(collider, ref damage);        
+                case ARROWSKILL_ACTIVETYPE.ATTACK_ADDPROJ: return ActiveAtkAddProj(collider, ref damage);
+                case ARROWSKILL_ACTIVETYPE.ATTACK:         return ActiveAtk(collider, ref damage);
+                case ARROWSKILL_ACTIVETYPE.AIR_ADDPROJ:    return ActiveAddProj(collider, ref damage);
+                case ARROWSKILL_ACTIVETYPE.AIR:            return DefaultHit(collider, ref damage);
+                case ARROWSKILL_ACTIVETYPE.ADDPROJ:        return ActiveAddProj(collider, ref damage);
                 case ARROWSKILL_ACTIVETYPE.EMPTY:          return true; //Empty인 경우는 SkillSets 자체가 성립할 수 없다
                 default:                                   return true;
             }
@@ -257,8 +257,7 @@
             }
         }
 
-        public void OnExit(Collider2D target)
-        {
+        public void OnExit(Collider2D target) {
             switch (activeType) {
                 case ARROWSKILL_ACTIVETYPE.FULL:           hitSkill.OnExit(target); break;
                 case ARROWSKILL_ACTIVETYPE.ATTACK_AIR:     hitSkill.OnExit(target); break;
@@ -287,35 +286,33 @@
 
         #region ON-HIT-CALLBACK
 
-        bool ActiveFull(Collider2D collider)
-        {
+        bool ActiveFull(Collider2D collider, ref DamageStruct damage) {
             addProjSkill.OnHit();
-            bool isDisable = hitSkill.OnHit(collider, out tempTr);
+            bool isDisable = hitSkill.OnHit(collider, out tempTr, ref damage);
             if (isDisable == false)
                 airSkill.CallbackOnHit(tempTr);
             return isDisable;
         }
 
-        bool ActiveAtkAddProj(Collider2D collider)
-        {
+        bool ActiveAtkAddProj(Collider2D collider, ref DamageStruct damage) {
             addProjSkill.OnHit();
-            return hitSkill.OnHit(collider);
+            return hitSkill.OnHit(collider, ref damage);
         }
 
-        bool ActiveAtk(Collider2D collider)
+        bool ActiveAtk(Collider2D collider, ref DamageStruct damage)
         {
-            return hitSkill.OnHit(collider);
+            return hitSkill.OnHit(collider, ref damage);
         }
 
-        bool ActiveAddProj()
-        {
+        bool ActiveAddProj(Collider2D coll, ref DamageStruct damage) {
             addProjSkill.OnHit();
+            coll.GetComponent<IDamageable>().OnHitObject(ref damage);
             return true;
         }
 
-        bool ActiveAtkAir(Collider2D collider)
+        bool ActiveAtkAir(Collider2D collider, ref DamageStruct damage)
         {
-            bool isDisable = hitSkill.OnHit(collider, out tempTr);
+            bool isDisable = hitSkill.OnHit(collider, out tempTr, ref damage);
             if (isDisable == false) //Disable되는 상황이 아닐 경우만 Transform 보내줌
                 airSkill.CallbackOnHit(tempTr);
             return isDisable;
@@ -350,10 +347,11 @@
 
         #region DEFAULT
 
-        bool DefaultHit(Collider2D collider)
+        bool DefaultHit(Collider2D collider, ref DamageStruct damage)
         {
             //Air Skill만 존재하는 경우, Monster가 대미지를 받는 로직만 적용. 추후 대미지 관련 코드가 구현되면 적용할 것.
-            collider.SendMessage("OnHitObject", Random.Range(30f, 50f), SendMessageOptions.DontRequireReceiver);
+            //collider.SendMessage("OnHitObject", Random.Range(30f, 50f), SendMessageOptions.DontRequireReceiver);
+            collider.GetComponent<IDamageable>().OnHitObject(ref damage);
             return true;
         }
 

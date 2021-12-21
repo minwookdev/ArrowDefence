@@ -206,12 +206,12 @@ public class ItemInfo
 
         this.EquipType = item.GetEquipType().ToString();
 
-        for (int i = 0; i < item.GetSkills().Length; i++)
+        for (int i = 0; i < item.GetSkillsOrNull().Length; i++)
         {
-            if(item.GetSkills()[i] != null)
+            if(item.GetSkillsOrNull()[i] != null)
             {
-                if (i == 0) SkillString_0 = item.GetSkills()[i].ToString();
-                else if (i == 1)            item.GetSkills()[i].ToString();
+                if (i == 0) SkillString_0 = item.GetSkillsOrNull()[i].ToString();
+                else if (i == 1)            item.GetSkillsOrNull()[i].ToString();
             }
             else
             {

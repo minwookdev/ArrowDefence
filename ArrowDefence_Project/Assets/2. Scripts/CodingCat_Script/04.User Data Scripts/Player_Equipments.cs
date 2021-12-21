@@ -39,6 +39,7 @@
                 CCPlayerData.inventory.DelItem(item);
             }
 
+            //CCPlayerData.status.UpdateMainWeaponAbility(this);
             CatLog.Log($"{this.EquippedBow.GetName} 아이템이 장착되었습니다 : 활");
         }
 
@@ -225,14 +226,17 @@
         /// <summary>
         /// Clear Equipped Item Class
         /// </summary>
-        public void Clear()
-        {
+        public void Clear() {
             this.EquippedBow         = null;
             this.EquippedArrow_f     = null;
             this.EquippedArrow_s     = null;
             this.EquippedAccessory_f = null;
             this.EquippedAccessory_s = null;
             this.EquippedAccessory_t = null;
+        }
+
+        public void UpdatePlayerStatus() {
+            CCPlayerData.status.UpdateAbility(this);
         }
     }
 }

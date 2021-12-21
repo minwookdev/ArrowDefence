@@ -15,6 +15,12 @@
         [Header("PLAYER DATA")]
         public AD_PlayerData playerData;
 
+        [Header("Ads")]
+        [SerializeField] Image ImgInterstitialAds = null;
+        [SerializeField] Image ImgRewardAds = null;
+        [SerializeField] Color ColorNotReady;
+        Color enabledColor;
+
         private float endPosX;
         private float startPosX;
         private bool isOpen = false;
@@ -32,6 +38,42 @@
             startPosX = panelRect.localPosition.x;
             endPosX = startPosX + panelRect.rect.width;
         }
+
+        private void Start() {
+            //광고 매니저 초기화
+            AdsManager.Instance.InitAdsManager();
+            enabledColor = ImgInterstitialAds.color;
+        }
+
+        private void Update() {
+            //Check the Ready interstitialAds
+            if(AdsManager.Instance.IsReadyInterstitialAds()) {
+                ImgInterstitialAds.color = enabledColor;
+            }
+            else {   
+                ImgInterstitialAds.color = ColorNotReady;
+            }
+
+            //Check The Ready RewardAds
+            if(AdsManager.Instance.IsReadyRewardAds()) {
+                ImgRewardAds.color = enabledColor;
+            }
+            else {
+                ImgRewardAds.color = ColorNotReady;
+            }
+        }
+
+        #region ADS_BUTTON
+
+        public void OnShowinterstitialAds() {
+            AdsManager.Instance.ShowInterstitialAds();
+        }
+
+        public void OnShowRewardedAds() {
+            AdsManager.Instance.ShowRewardedAds();
+        }
+
+        #endregion
 
         #region BUTTON_METHOD
 

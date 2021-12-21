@@ -58,6 +58,10 @@
 
         public void OnStageClear() => DisableRequest();
 
+        public void OnHitObject(ref DamageStruct damage) {
+
+        }
+
         public void OnHitObject(float damage)
         {
             //Active Monster Hit Event

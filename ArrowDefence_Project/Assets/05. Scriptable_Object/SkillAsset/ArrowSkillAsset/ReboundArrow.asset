@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SkillId: 
   SkillName: Rebound Arrow
-  SkillDesc: "An arrow that bounces up to [n] times \nin the direction of nearby
-    enemies on hit. \nEach attack increases [n%] damage."
+  SkillDesc: An arrow that bounces up to [n] times in the direction of nearby enemies
+    on hit.
   SkillLevel: 0
   SkillType: 0
   IconSprite: {fileID: 21300000, guid: 8737d79d123e0d04f937e3c2d6c062f3, type: 3}

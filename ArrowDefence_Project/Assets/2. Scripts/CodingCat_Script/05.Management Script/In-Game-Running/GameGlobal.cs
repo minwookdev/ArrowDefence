@@ -181,6 +181,10 @@
             List<string> intList = new List<string>();
             intList.RemoveAll((x) => x == "string" || x == "int");
         }
+
+        public static int GetCriticalChance() {
+            return UnityEngine.Random.Range(0, 100 + 1);
+        }
     }
 
     #region ENUMS_BATTLE

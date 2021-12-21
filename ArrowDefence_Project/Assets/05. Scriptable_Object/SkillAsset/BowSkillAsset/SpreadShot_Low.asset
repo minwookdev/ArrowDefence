@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SkillId: 
   SkillName: SPREAD SHOT
-  SkillDesc: "Fires an arrow in a sector of the [n] direction. \nEach arrow is [n]%
+  SkillDesc: "Fires an arrow in a sector of the [n] direction. Each arrow is [n]%
     of attack power.\r"
   SkillType: 1
   SkillLevel: 0

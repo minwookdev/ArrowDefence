@@ -19,12 +19,18 @@ MonoBehaviour:
   - ItemAsset: {fileID: 11400000, guid: f8cf2d491cdbd38409db2b0178418dce, type: 2}
     DropChance: 40
     QuantityRange: 0400000005000000
-  - ItemAsset: {fileID: 11400000, guid: 2a445904b5855114f872d1826d693bcf, type: 2}
-    DropChance: 16
+  - ItemAsset: {fileID: 11400000, guid: 35e318914cb3bb445b2ba96680d7eacc, type: 2}
+    DropChance: 3
     QuantityRange: 01000000
-  - ItemAsset: {fileID: 11400000, guid: 4281f4c496660d946b11d546253599bd, type: 2}
-    DropChance: 1.5
+  - ItemAsset: {fileID: 11400000, guid: 534308bb287ef8147b6442afbe44fbda, type: 2}
+    DropChance: 3
     QuantityRange: 01000000
-  - ItemAsset: {fileID: 11400000, guid: 5e2d003e93cf37c4c95dc232f4de4b0f, type: 2}
-    DropChance: 2.5
+  - ItemAsset: {fileID: 11400000, guid: 088849ea12174c24f8a1c1c32a281d2d, type: 2}
+    DropChance: 5
+    QuantityRange: 01000000
+  - ItemAsset: {fileID: 11400000, guid: ff271f23b6bff6e4d8e272b2ea31189d, type: 2}
+    DropChance: 5
+    QuantityRange: 01000000
+  - ItemAsset: {fileID: 11400000, guid: 51b9c684aac8b7a47b44f7e6e0848cf4, type: 2}
+    DropChance: 4
     QuantityRange: 01000000

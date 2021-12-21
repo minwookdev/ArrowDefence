@@ -14,6 +14,8 @@
         public float ItemDropCorrection = 5f;
         public float GaugeIncreaseValue = 10f;
         public float AttackDamage = 5f;
+        public short Armorating = 0;
+        public byte CriticalResist = 0;
 
         [Header("SIMPLE HIT COLOR")]
         public bool isActiveHitColor = false;
@@ -89,6 +91,24 @@
         public void DisableRequest(GameObject target) => CCPooler.ReturnToPool(target);
 
         public void DisableRequest() => CCPooler.ReturnToPool(gameObject);
+
+        public void OnHitObject(ref DamageStruct damage) {
+            //Active Monster Hit Event
+            GameManager.Instance.CallMonsterHitEvent();
+
+            //Play Monster Hit Animation
+            monsterState.OnHit();
+
+            //Decrease Monster Health Point
+            currentHealthPoint -= damage.GetFinalCalcDamage(Armorating, CriticalResist);
+            CatLog.Log($"Damage : {damage.GetFinalCalcDamage(Armorating, CriticalResist)} 수치 전달.");
+
+            //Check Monster Death
+            if(currentHealthPoint <= 0f && isDeath == false) {
+                monsterState.StateChanger(STATETYPE.DEATH);
+                isDeath = true;
+            }
+        }
 
         public void OnHitObject(float damage) {
             //Active Monster Hit Event

@@ -14,10 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tempItems:
   - {fileID: 11400000, guid: 7587c4bee74573e49a959676141e9625, type: 2}
-  - {fileID: 11400000, guid: fb5d7c8d27f72f94e89e5c9f6d67fb7d, type: 2}
-  - {fileID: 11400000, guid: 35e318914cb3bb445b2ba96680d7eacc, type: 2}
-  - {fileID: 11400000, guid: 72823e18fb719e14d9a140709fa2bddc, type: 2}
-  - {fileID: 11400000, guid: 9c39ae69e7cff464f9752e9da948ef20, type: 2}
   - {fileID: 11400000, guid: 3ce585abda3f33649b15939f2942a838, type: 2}
   - {fileID: 11400000, guid: 4281f4c496660d946b11d546253599bd, type: 2}
-  - {fileID: 11400000, guid: d1268d0ee00fac84a9429c766fd2edff, type: 2}

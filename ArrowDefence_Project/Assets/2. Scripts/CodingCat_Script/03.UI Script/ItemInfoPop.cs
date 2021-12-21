@@ -25,8 +25,7 @@
         public Image[] ImgSkillGradeStar = new Image[3];
         public Image ImgIcon;
 
-        public bool isActiveSlotGO()
-        {
+        public bool isActiveSlotGO() {
             if (SlotGO.activeSelf) return true;
             else                   return false;
         }
@@ -87,17 +86,75 @@
 
     [System.Serializable]
     public class AbilitySlot {
-        [SerializeField] GameObject[] slots;
+        [System.Serializable]
+        public class Slots {
+            [SerializeField] GameObject parent = null;
+            [SerializeField] TextMeshProUGUI abilityName = null;
+            [SerializeField] GameObject[] enableStars = null;
 
-        public void EnableSlot() {
-            foreach (var slot in slots) {
-                slot.gameObject.SetActive(true);
+            public void EnableSlot(Ability ability) {
+                //Set Grade Star
+                int tempLength = 0;
+                for (int i = 0; i < ability.GetGrade(); i++) {
+                    enableStars[i].SetActive(true);
+                    tempLength++;
+                }
+
+                if(tempLength <= enableStars.Length - 1) {
+                    for (int i = tempLength; i < enableStars.Length; i++) {
+                        enableStars[i].SetActive(false);
+                    }
+                }
+                //Set Ability Name
+                abilityName.text = ability.GetName();
+                //Active Parent GameObject
+                parent.SetActive(true);
+            }
+
+            public void DisableSlot() {
+                foreach (var star in enableStars) {
+                    star.SetActive(false);
+                }
+                abilityName.text = "";
+                parent.SetActive(false);
+            }
+
+            public bool IsActiveSlot() {
+                return parent.activeSelf;
             }
         }
 
-        public void DisableSlot() {
-            foreach (var slot in slots) {
-                slot.gameObject.SetActive(false);
+        [SerializeField] Slots[] abilitySlots = null;
+
+        public void EnableSlot() {
+            //foreach (var slot in slots) {
+            //    slot.gameObject.SetActive(true);
+            //}
+        }
+
+        public void EnableSlots(Ability[] abilities) {
+            if(abilities == null || abilities.Length > 5) {
+                DisableSlots();
+                return;
+            }
+
+            int count = abilitySlots.Length;
+            for (int i = 0; i < abilities.Length; i++) {
+                abilitySlots[i].EnableSlot(abilities[i]);
+                count--;
+            }
+
+            //남은 슬롯 비활성화
+            if(count > 0) {
+                for (int i = abilitySlots.Length - 1; i >= abilitySlots.Length - count; i--) {
+                    abilitySlots[i].DisableSlot();
+                }
+            }
+        }
+
+        public void DisableSlots() {
+            for (int i = 0; i < abilitySlots.Length; i++) {
+                abilitySlots[i].DisableSlot();
             }
         }
     }
@@ -138,6 +195,17 @@
             //Item Address
             AD_item itemAddress;
 
+            public void FixDescriptionRectSize(string itemDesc) {
+                var rectTransform = tmp_ItemDesc.gameObject.GetComponent<RectTransform>();
+                Vector2 tempSizeDelta = rectTransform.sizeDelta;
+                if (itemDesc.Length <= 10)      tempSizeDelta.y = 15f;
+                else if (itemDesc.Length <= 40) tempSizeDelta.y = 60f;
+                else if (itemDesc.Length <= 80) tempSizeDelta.y = 80f;
+                else                            tempSizeDelta.y = 100f;
+                rectTransform.sizeDelta = tempSizeDelta;
+                CatLog.Log($"Item Description String Length : {itemDesc.Length}");
+            }
+
             public void EnablePopup_Material(Item_Material address, Sprite frame) {
                 //Default Item Data Setting
                 tmp_ItemName.text   = address.GetName;
@@ -147,9 +215,8 @@
                 img_ItemIcon.sprite = address.GetSprite;
                 img_Frame.sprite    = frame;
 
-                //Check Description GameObject [TESTING]
-                if (tmp_ItemDesc.gameObject.activeSelf == false)
-                    tmp_ItemDesc.gameObject.SetActive(true);
+                //Item Description Size Rect
+                FixDescriptionRectSize(address.GetDesc);
 
                 //Disable Ability Slots
                 DisableAbilitySlot();
@@ -180,9 +247,8 @@
                 img_ItemIcon.sprite = address.GetSprite;
                 img_Frame.sprite    = frame;
 
-                //Check Description GameObject [TESTING]
-                if (tmp_ItemDesc.gameObject.activeSelf == false)
-                    tmp_ItemDesc.gameObject.SetActive(true);
+                //Fix description rect size.
+                FixDescriptionRectSize(address.GetDesc);
 
                 //Disable Ability Slots
                 DisableAbilitySlot();
@@ -213,14 +279,14 @@
                 img_ItemIcon.sprite = address.GetSprite;
                 img_Frame.sprite    = frame;
 
-                //Disable Equipment Item Description [TESTING]
-                tmp_ItemDesc.gameObject.SetActive(false);
+                //Fix item Description Rect Size.
+                FixDescriptionRectSize(address.GetDesc);
 
                 //Active Ability Slots
-                abilitySlots.EnableSlot();
+                abilitySlots.EnableSlots(address.AbilitiesOrNull);
 
                 //Enable Skill Slots
-                var skills = address.GetSkills();
+                var skills = address.GetSkillsOrNull();
                 for (int i = 0; i < skills.Length; i++) {
                     if(skills[i] != null) {
                         SkillSlots[i].ActiveSlot(skills[i].Name, skills[i].Description,
@@ -270,11 +336,11 @@
                 img_ItemIcon.sprite = address.GetSprite;
                 img_Frame.sprite    = frame;
 
-                //Disable Equipment item Description [TESTING]
-                tmp_ItemDesc.gameObject.SetActive(false);
+                //Fix Item Description Rect Size.
+                FixDescriptionRectSize(address.GetDesc);
 
                 //Enable Ability Slots
-                abilitySlots.EnableSlot();
+                abilitySlots.EnableSlots(address.AbilitiesOrNull);
 
                 //Enable Skill Slots
                 var skills = address.ArrowSkillInfos;   //Get Skill Array Size : 2
@@ -326,11 +392,11 @@
                 img_ItemIcon.sprite = address.GetSprite;
                 img_Frame.sprite    = frame;
 
-                //Disable Equipment Item Description [TESTING]
-                tmp_ItemDesc.gameObject.SetActive(false);
+                //Fix Item Description Rect Size.
+                FixDescriptionRectSize(address.GetDesc);
 
                 //Enable Ability slots
-                abilitySlots.EnableSlot();
+                abilitySlots.EnableSlots(address.AbilitiesOrNull);
 
                 //Enable Skill-Slots
                 var spEffect = address.SPEffect;
@@ -391,6 +457,9 @@
                 foreach (var skillslot in SkillSlots) {
                     skillslot.DisableSlot();
                 }
+
+                //Clear Ability Slots
+                abilitySlots.DisableSlots();
 
                 //Clear Event Entry
                 equipEntry   = null;
@@ -477,7 +546,7 @@
             #region ABILITY_SLOTS
 
             void DisableAbilitySlot() {
-                abilitySlots.DisableSlot();
+                abilitySlots.DisableSlots();
             }
 
             #endregion
@@ -577,9 +646,9 @@
                 Image_Frame.sprite = sprite;
                 itemAddress        = item;
 
-                for (int i = 0; i < item.GetSkills().Length; i++)
+                for (int i = 0; i < item.GetSkillsOrNull().Length; i++)
                 {
-                    if (item.GetSkills()[i] != null) 
+                    if (item.GetSkillsOrNull()[i] != null) 
                         SkillSlots[i].ActiveSlot(item.GetSkill(i).Name, 
                                                  item.GetSkill(i).Description,
                                                  item.GetSkill(i).Level,

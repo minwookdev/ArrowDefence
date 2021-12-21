@@ -10,8 +10,10 @@
 
         [Header("GENERAL")]
         public Camera MainCam = null;
-        [SerializeField] BowSprite bowSprite;
         private Touch screenTouch;
+        [SerializeField] BowSprite bowSprite;
+        [SerializeField] AD_BowAbility bowAbility;
+        DamageStruct damageStruct;
         
         [Header("BOW CONTROL VARIABLES")]
         public float TouchRadius    = 1f;
@@ -52,7 +54,7 @@
         /// <summary>
         /// Bow Skills Delegate
         /// </summary>
-        public delegate void BowSkillsDel(float anglez, Transform parent, MonoBehaviour mono, 
+        public delegate void BowSkillsDel(float anglez, Transform parent, MonoBehaviour mono, ref DamageStruct damage,
                                           Vector3 initscale, Vector3 initpos, Vector2 force, LOAD_ARROW_TYPE type);
         public BowSkillsDel BowSkillSet;
 
@@ -103,6 +105,13 @@
                     ArrowComponent.SpriteAlpha(false);
                 }
             });
+
+            if(bowAbility == null) {
+                bowAbility = GetComponent<AD_BowAbility>();
+            }
+            //Init-Bow Skill and Current Slot Damage Struct.
+            damageStruct = bowAbility.GetDamage(loadArrowType);
+            bowAbility.AddListnerToSkillDel(ref BowSkillSet);
         }
 
         private void Update()
@@ -386,15 +395,14 @@
                 CatLog.WLog("Can't Launch the Arrow"); return;
             } 
             
-            //로프 해제.
+            //로프 해제
             AD_BowRope.instance.arrowCatchPoint = null;
 
             isBowPulling = false;
-
-            ArrowComponent.ShotArrow(arrowForce, ArrowParentTr);
+            ArrowComponent.ShotArrow(arrowForce, damageStruct, ArrowParentTr);
 
             //Active Bow Skill
-            BowSkillSet?.Invoke(transform.eulerAngles.z, ArrowParentTr, this, initArrowScale,
+            BowSkillSet?.Invoke(transform.eulerAngles.z, ArrowParentTr, this, ref damageStruct, initArrowScale,
                                 ArrowComponent.arrowChatchPoint.transform.position, arrowForce, loadArrowType);
 
             LoadedArrow    = null;
@@ -518,8 +526,7 @@
         public void ArrowSwap(LOAD_ARROW_TYPE type)
         {
             //조준중 또는 스왑하려는 화살과 동일된 타입의 화살의 경우 스왑 불가
-            if (isBowPullBegan || loadArrowType == type)
-            {
+            if (isBowPullBegan || loadArrowType == type) {
                 CatLog.WLog("Bow State is Pulling or Same Type of arrow currently loaded");
                 return;
             }
@@ -530,7 +537,10 @@
             AD_BowRope.instance.arrowCatchPoint  = null;
             LoadedArrow   = null; ArrowComponent = null;
             loadArrowType = type;
+            damageStruct = bowAbility.GetDamage(loadArrowType);
             StartCoroutine(ArrowReload());
         }
+
+
     }
 }

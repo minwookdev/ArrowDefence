@@ -18,7 +18,7 @@ MonoBehaviour:
   Item_Amount: 1
   Item_Name: Enhanced Hunting Bow
   Item_Desc: 
-  Item_Sprite: {fileID: 21300000, guid: 63edf27b2ebc46341af074fa61d40926, type: 3}
+  Item_Sprite: {fileID: 21300000, guid: 1dea5b1437d2ff34fbac12c302ec3de2, type: 3}
   Equip_Type: 0
   BowGameObject: {fileID: 7438080295175813248, guid: 91c357be7e9d1724c8d73dd1d0536a99,
     type: 3}

@@ -34,9 +34,8 @@
             this.spreadAngle = data.SpreadAngle;
         }
 
-        public override void BowSpecialSkill(float anglez, Transform parent, MonoBehaviour mono, 
-                                             Vector3 initScale, Vector3 initPos, Vector2 arrowForce, LOAD_ARROW_TYPE arrowType)
-        {
+        public override void BowSpecialSkill(float anglez, Transform parent, MonoBehaviour mono, ref DamageStruct damage,
+                                             Vector3 initScale, Vector3 initPos, Vector2 arrowForce, LOAD_ARROW_TYPE arrowType) {
             //float facingRotation = Mathf.Atan2(facingVec.y, facingVec.x) * Mathf.Rad2Deg; //this mean's transform.up..?
 
             #region LEGACY_CODE
@@ -95,12 +94,12 @@
             //}
 
             #endregion
-            SpreadShot(anglez, arrowType, parent, initScale, initPos, arrowForce);
+            SpreadShot(anglez, arrowType, parent, ref damage, initScale, initPos, arrowForce);
         }
     
 
-        void SpreadShot(float bowEulerAngleZ, LOAD_ARROW_TYPE arrowType, Transform parent, Vector3 arrowScale, Vector3 arrowPos, Vector2 force)
-        {
+        void SpreadShot(float bowEulerAngleZ, LOAD_ARROW_TYPE arrowType, Transform parent, ref DamageStruct damage,
+            Vector3 arrowScale, Vector3 arrowPos, Vector2 force) {
             float startRotation = bowEulerAngleZ + spreadAngle / 2f;
             float angleIncrease = spreadAngle / ((float)arrowCount - 1f);
 
@@ -115,7 +114,7 @@
                 var arrow = CCPooler.SpawnFromPool<AD_Arrow_less>(poolTag, parent, arrowScale, arrowPos,
                                                                   Quaternion.Euler(0f, 0f, tempRotation - 90f));
                 if (arrow)
-                    arrow.ShotToDirectly(new Vector2(Mathf.Cos(tempRotation * Mathf.Deg2Rad), Mathf.Sin(tempRotation * Mathf.Deg2Rad))); // * force.magnitude;
+                    arrow.ShotToDirectly(new Vector2(Mathf.Cos(tempRotation * Mathf.Deg2Rad), Mathf.Sin(tempRotation * Mathf.Deg2Rad)), damage); // * force.magnitude;
             }
         }
 

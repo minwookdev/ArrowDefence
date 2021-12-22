@@ -23,7 +23,7 @@
             }
         }
         
-        public ASInfo[] ArrowSkillInfos {
+        public ASInfo[] SkillInfosOrNull {
             get {
                 ASInfo[] skillinfo = new ASInfo[2] {
                     arrowSkillInfoFst, arrowSkillInfoSec
@@ -46,12 +46,14 @@
             this.MainArrowObject = item.MainArrowObj;
             this.LessArrowObject = item.LessArrowObj;
 
-            //Init Arrow Skill Information
             //Init-Arrow Skill Info
             if (item.ArrowSkillFst != null)
                 this.arrowSkillInfoFst = new ASInfo(item.ArrowSkillFst);
             if (item.ArrowSkillSec != null)
                 this.arrowSkillInfoSec = new ASInfo(item.ArrowSkillSec);
+
+            //Init-Ability Info
+            this.abilities = item.abilityDatas;
         }
 
         public Item_Arrow(Item_Arrow item) : base()
@@ -71,6 +73,9 @@
             //Init Arrow Skill Data
             this.arrowSkillInfoFst = item.arrowSkillInfoFst;
             this.arrowSkillInfoSec = item.arrowSkillInfoSec;
+
+            //Init-Ability Info
+            this.abilities = item.abilities;
         }
 
         /// <summary>

@@ -34,3 +34,18 @@ public enum STATEFLOW {
 }
 
 #endregion
+
+public enum ABILITY_TYPE {
+    //NONE
+    NONE           = 0,
+    //BOW PROPERTY
+    DAMAGE         = 1,
+    CHARGEDAMAGE   = 2,
+    CRITICALCHANCE = 3,
+    CRITICALDAMAGE = 4,
+    ARMORPENETRATE = 5,
+    //ARROW PROPERTY
+    DAMAGEINC      = 6,
+    ARROWSPEED     = 7,
+    //ACCESSORY PROPERTY
+}

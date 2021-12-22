@@ -200,7 +200,8 @@ MonoBehaviour:
   arrowTrail: {fileID: 1877318309820681058}
   leftClampPoint: {fileID: 0}
   rightClampPoint: {fileID: 0}
-  ArrowPower: 18
+  arrowSprite: {fileID: 0}
+  ArrowPower: 24
   isLaunched: 0
 --- !u!114 &1877318309827916240
 MonoBehaviour:

@@ -100,7 +100,8 @@
                     tempLength++;
                 }
 
-                if(tempLength <= enableStars.Length - 1) {
+                //Disable remaining star
+                if(tempLength < enableStars.Length) {
                     for (int i = tempLength; i < enableStars.Length; i++) {
                         enableStars[i].SetActive(false);
                     }
@@ -134,8 +135,7 @@
 
         public void EnableSlots(Ability[] abilities) {
             if(abilities == null || abilities.Length > 5) {
-                DisableSlots();
-                return;
+                DisableAllSlots(); return;
             }
 
             int count = abilitySlots.Length;
@@ -144,7 +144,7 @@
                 count--;
             }
 
-            //남은 슬롯 비활성화
+            //Disable remaining slots.
             if(count > 0) {
                 for (int i = abilitySlots.Length - 1; i >= abilitySlots.Length - count; i--) {
                     abilitySlots[i].DisableSlot();
@@ -152,7 +152,7 @@
             }
         }
 
-        public void DisableSlots() {
+        public void DisableAllSlots() {
             for (int i = 0; i < abilitySlots.Length; i++) {
                 abilitySlots[i].DisableSlot();
             }
@@ -195,28 +195,34 @@
             //Item Address
             AD_item itemAddress;
 
-            public void FixDescriptionRectSize(string itemDesc) {
+            void FixDescriptionRectSize(string itemDesc) {
                 var rectTransform = tmp_ItemDesc.gameObject.GetComponent<RectTransform>();
                 Vector2 tempSizeDelta = rectTransform.sizeDelta;
                 if (itemDesc.Length <= 10)      tempSizeDelta.y = 15f;
-                else if (itemDesc.Length <= 40) tempSizeDelta.y = 60f;
-                else if (itemDesc.Length <= 80) tempSizeDelta.y = 80f;
-                else                            tempSizeDelta.y = 100f;
+                else if (itemDesc.Length <= 40) tempSizeDelta.y = 75f;
+                else if (itemDesc.Length <= 80) tempSizeDelta.y = 90f;
+                else                            tempSizeDelta.y = 105f;
                 rectTransform.sizeDelta = tempSizeDelta;
                 CatLog.Log($"Item Description String Length : {itemDesc.Length}");
             }
 
-            public void EnablePopup_Material(Item_Material address, Sprite frame) {
-                //Default Item Data Setting
-                tmp_ItemName.text   = address.GetName;
-                tmp_ItemDesc.text   = address.GetDesc;
-                tmp_ItemType.text   = "MATERIAL";
-                tmp_ItemCount.text  = address.GetAmount.ToString();
-                img_ItemIcon.sprite = address.GetSprite;
-                img_Frame.sprite    = frame;
+            void SetDefaultItemInfo(AD_item item, string type, bool isCounting, Sprite frame) {
+                tmp_ItemName.text = item.GetName;
+                tmp_ItemDesc.text = item.GetDesc;
+                tmp_ItemType.text = type;
+                if (isCounting)
+                     tmp_ItemCount.text = item.GetAmount.ToString();
+                else tmp_ItemCount.text = "";
+                img_ItemIcon.sprite = item.GetSprite;
+                img_Frame.sprite = frame;
 
-                //Item Description Size Rect
-                FixDescriptionRectSize(address.GetDesc);
+                //Item Description Rect Size Setting.
+                FixDescriptionRectSize(item.GetDesc);
+            }
+
+            public void EnablePopup_Material(Item_Material address, Sprite frame) {
+                //Enable Default Item Info.
+                SetDefaultItemInfo(address, "MATERIAL", true, frame);
 
                 //Disable Ability Slots
                 DisableAbilitySlot();
@@ -240,15 +246,7 @@
 
             public void EnablePopup_Consumable(Item_Consumable address, Sprite frame) {
                 //Default Item Data Setting
-                tmp_ItemName.text   = address.GetName;
-                tmp_ItemDesc.text   = address.GetDesc;
-                tmp_ItemType.text   = "CONSUMABLE";
-                tmp_ItemCount.text  = address.GetAmount.ToString();
-                img_ItemIcon.sprite = address.GetSprite;
-                img_Frame.sprite    = frame;
-
-                //Fix description rect size.
-                FixDescriptionRectSize(address.GetDesc);
+                SetDefaultItemInfo(address, "CONSUMABLE", true, frame);
 
                 //Disable Ability Slots
                 DisableAbilitySlot();
@@ -272,15 +270,7 @@
 
             public void EnablePopup_Bow(Item_Bow address, Sprite frame) {
                 //Default Item Data Setting
-                tmp_ItemName.text   = address.GetName;
-                tmp_ItemDesc.text   = address.GetDesc;
-                tmp_ItemType.text   = "MATERIAL";
-                tmp_ItemCount.text  = "";
-                img_ItemIcon.sprite = address.GetSprite;
-                img_Frame.sprite    = frame;
-
-                //Fix item Description Rect Size.
-                FixDescriptionRectSize(address.GetDesc);
+                SetDefaultItemInfo(address, "BOW", false, frame);
 
                 //Active Ability Slots
                 abilitySlots.EnableSlots(address.AbilitiesOrNull);
@@ -302,7 +292,7 @@
                     isAvailableEquip = true;
                 }
                 
-                if(isAvailableEquip == true) { //현재 장착중인 아이템이 아닌 경우 : 장착 버튼 활성화
+                if (isAvailableEquip == true) { //현재 장착중인 아이템이 아닌 경우 : 장착 버튼 활성화
                     //init-Equip EventEntry
                     equipEntry = new EventTrigger.Entry();
                     equipEntry.eventID = EventTriggerType.PointerClick;
@@ -329,21 +319,13 @@
 
             public void EnablePopup_Arrow(Item_Arrow address, Sprite frame) {
                 //Default Item Data Setting
-                tmp_ItemName.text   = address.GetName;
-                tmp_ItemDesc.text   = address.GetDesc;
-                tmp_ItemType.text   = "ARROW";
-                tmp_ItemCount.text  = "";
-                img_ItemIcon.sprite = address.GetSprite;
-                img_Frame.sprite    = frame;
-
-                //Fix Item Description Rect Size.
-                FixDescriptionRectSize(address.GetDesc);
+                SetDefaultItemInfo(address, "ARROW", false, frame);
 
                 //Enable Ability Slots
                 abilitySlots.EnableSlots(address.AbilitiesOrNull);
 
                 //Enable Skill Slots
-                var skills = address.ArrowSkillInfos;   //Get Skill Array Size : 2
+                var skills = address.SkillInfosOrNull;   //Get Skill Array Size : 2
                 for (int i = 0; i < skills.Length; i++) {
                     if(skills[i] != null) {
                         SkillSlots[i].ActiveSlot(skills[i].SkillName, skills[i].SkillDesc,
@@ -385,20 +367,12 @@
 
             public void EnablePopup_Artifact(Item_Accessory address, Sprite frame) {
                 //Default Item Data Setting
-                tmp_ItemName.text   = address.GetName;
-                tmp_ItemDesc.text   = address.GetDesc;
-                tmp_ItemType.text   = "ARTIFACT";
-                tmp_ItemCount.text  = "";
-                img_ItemIcon.sprite = address.GetSprite;
-                img_Frame.sprite    = frame;
-
-                //Fix Item Description Rect Size.
-                FixDescriptionRectSize(address.GetDesc);
+                SetDefaultItemInfo(address, "ARTIFACT", false, frame);
 
                 //Enable Ability slots
                 abilitySlots.EnableSlots(address.AbilitiesOrNull);
 
-                //Enable Skill-Slots
+                //Enable Skill-Slots (Artifact Special Skill Max : Only 1)
                 var spEffect = address.SPEffect;
                 if(spEffect != null) {
                     SkillSlots[0].ActiveSlot(spEffect.Name, spEffect.Description, 
@@ -406,7 +380,7 @@
                 }
                 else {
                     SkillSlots[0].DisableSlot();
-                }   SkillSlots[1].DisableSlot();    //현재 Special Effect는 무조건 한개뿐임. 두번째 슬롯 비활성화.
+                }   SkillSlots[1].DisableSlot(); //Secondary Slot is Always Disable.
 
                 //장착중 유물 체크, 장착 슬롯 확인작업.
                 byte artifactIdx    = 0; 
@@ -459,7 +433,7 @@
                 }
 
                 //Clear Ability Slots
-                abilitySlots.DisableSlots();
+                abilitySlots.DisableAllSlots();
 
                 //Clear Event Entry
                 equipEntry   = null;
@@ -546,7 +520,7 @@
             #region ABILITY_SLOTS
 
             void DisableAbilitySlot() {
-                abilitySlots.DisableSlots();
+                abilitySlots.DisableAllSlots();
             }
 
             #endregion

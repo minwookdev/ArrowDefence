@@ -72,14 +72,25 @@
             MaxDamagePer       = origin.MaxDamagePer;
         }
 
-        public void UpdateAbility(float rawdamage) {
-            RawDamage = rawdamage;
+        public void UpdateAbility(float damage, float arrowIncDamage, byte critChance, float critMultiplier) {
+            RawDamage          = damage * arrowIncDamage;
+            CriticalChance     = critChance;
+            CriticalMultiplier = critMultiplier;
         }
     }
 
     public class PlayerStatus {
         AbilityStruct MainSlotStr;
         AbilityStruct SubSlotStr;
+
+        //Bow Ability Properties
+        float tempDamage;
+        float tempCritDmgMultiplier;
+        float tempChargedDmgMultiplier;
+        byte  tempCritChance;
+
+        //Arrow Ability Properties
+
 
         public void InitDamageStruct(Player_Equipments equip) {
             float bowDamage = 0f;
@@ -99,20 +110,55 @@
         }
 
         public void UpdateAbility(Player_Equipments equip) {
-            float tempDamage = 0f;
+            //Update Bow Abilities
+            tempDamage = 0f; tempCritChance = 0; tempCritDmgMultiplier = 1.5f; tempChargedDmgMultiplier = 1.2f;
             if(equip.IsEquippedBow() == true) {
                 var abilities = equip.GetBowItem().AbilitiesOrNull;
                 if(abilities != null) {
                     for (int i = 0; i < abilities.Length; i++) {
-                        if(abilities[i] is AbilityDamage abilityDamage) {
-                            tempDamage = abilityDamage.GetCount();
+                        switch (abilities[i]) {
+                            case AbilityDamage damage: tempDamage                             = damage.GetCount();                            break;
+                            case AbilityChargedDamage chargedDamage: tempChargedDmgMultiplier = chargedDamage.GetCount();                     break;
+                            case AbilityCritChance critChance: tempCritChance                 = System.Convert.ToByte(critChance.GetCount()); break;
+                            case AbilityCritDamage critDamage: tempCritDmgMultiplier          = critDamage.GetCount();                        break;
+                            default: throw new System.NotImplementedException("This Ability Type is Not Implemented !");
                         }
                     }
                 }
             }
 
-            MainSlotStr.UpdateAbility(tempDamage);
-            SubSlotStr.UpdateAbility(tempDamage);
+            //Update Arrow Ability : Main
+            float tempMainArrowIncDamage = 1f;
+            if(equip.IsEquippedArrowMain() == true) {
+                var abilities = equip.GetMainArrow().AbilitiesOrNull;
+                if(abilities != null) {
+                    for (int i = 0; i < abilities.Length; i++) {
+                        switch (abilities[i]) {
+                            case AbilityIncDamageRate incDamage: tempMainArrowIncDamage = incDamage.GetCount(); break;
+                            case AbilitySpeed speed:                                                            break;
+                            default: throw new System.NotImplementedException("This Ability Type is Not Implemented !");
+                        }
+                    }
+                }
+            }
+
+            //Update Arrow Ability : Sub
+            float tempSubArrowIncDamage = 1f;
+            if(equip.IsEquippedArrowSub() == true) {
+                var abilities = equip.GetSubArrow().AbilitiesOrNull;
+                if(abilities != null) {
+                    for (int i = 0; i < abilities.Length; i++) {
+                        switch (abilities[i]) {
+                            case AbilityIncDamageRate incDamage: tempSubArrowIncDamage = incDamage.GetCount(); break;
+                            case AbilitySpeed speed:                                                           break;
+                            default: throw new System.NotImplementedException("This Ability Type is Not Implemented !");
+                        }
+                    }
+                }
+            }
+
+            MainSlotStr.UpdateAbility(tempDamage, tempMainArrowIncDamage, tempCritChance, tempCritDmgMultiplier);
+            SubSlotStr.UpdateAbility(tempDamage, tempSubArrowIncDamage, tempCritChance, tempCritDmgMultiplier);
         }
 
         public void UpdateSubWeaponAbiltiy() {

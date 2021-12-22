@@ -303,7 +303,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   trailRender: {fileID: 599512309596702555}
   rBody: {fileID: 599512309587492328}
-  forceMagnitude: 20
+  forceMagnitude: 18
 --- !u!50 &599512309587492328
 Rigidbody2D:
   serializedVersion: 4

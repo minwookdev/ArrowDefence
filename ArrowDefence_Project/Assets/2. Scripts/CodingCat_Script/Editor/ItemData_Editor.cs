@@ -200,9 +200,9 @@ public class BowItemData_Editor : Editor
         item = (ItemData_Equip_Bow)target;
 
         serialObject = new SerializedObject(target);
-        abilDamageProp        = serialObject.FindProperty(nameof(ItemData_Equip.BaseDamage));
-        abilCritChanceProp    = serialObject.FindProperty(nameof(ItemData_Equip.CriticalHitChance));
-        abilCritDmgProp       = serialObject.FindProperty(nameof(ItemData_Equip.CriticalMultiplier));
+        abilDamageProp        = serialObject.FindProperty(nameof(ItemData_Equip_Bow.BaseDamage));
+        abilCritChanceProp    = serialObject.FindProperty(nameof(ItemData_Equip_Bow.CriticalHitChance));
+        abilCritDmgProp       = serialObject.FindProperty(nameof(ItemData_Equip_Bow.CriticalDamageMultiplier));
         abilChargedDamageProp = serialObject.FindProperty(nameof(ItemData_Equip_Bow.FullChargedMultiplier));
 
         var texture = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/99. ArrowDefence_Resources/Sprites/Scene_Main/Sprite_Icon/icon_star_grade_l.png");
@@ -444,9 +444,38 @@ public class ArrowItemData_Editor : Editor
 {
     ItemData_Equip_Arrow item;
 
-    public void OnEnable()
-    {
+    SerializedObject serialObject;
+    SerializedProperty incDamageProp;
+    SerializedProperty speedProp;
+
+    //Is Ability Tap Foldout
+    bool isAbilityTapFoldout = false;
+    //Star Texture
+    Texture2D enableStarTexture = null;
+    Texture2D disableStarTexture = null;
+
+    public void OnEnable() {
         item = (ItemData_Equip_Arrow)target;
+
+        serialObject  = new SerializedObject(target);
+        incDamageProp = serialObject.FindProperty(nameof(ItemData_Equip_Arrow.DamageInc));
+        speedProp     = serialObject.FindProperty(nameof(ItemData_Equip_Arrow.Speed));
+
+        var texture = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/99. ArrowDefence_Resources/Sprites/Scene_Main/Sprite_Icon/icon_star_grade_l.png");
+        if (texture == null) {
+            CatLog.WLog("Star Texture is Null");
+        }
+        else {
+            enableStarTexture = texture;
+        }
+
+        var disableTexture = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/99. ArrowDefence_Resources/Sprites/Scene_Main/Sprite_Icon/icon_star_grade_l_d.png");
+        if (disableTexture != null) {
+            disableStarTexture = disableTexture;
+        }
+        else {
+            CatLog.Log("Disable Star Textrue is Null");
+        }
     }
 
     public override void OnInspectorGUI()
@@ -506,6 +535,44 @@ public class ArrowItemData_Editor : Editor
 
         #endregion
 
+        #region ABILITY_INFO
+
+        GUILayout.Label("ABILITY INFO", EditorStyles.boldLabel);
+        GUILayout.BeginVertical("GroupBox");
+        var tempIndent = EditorGUI.indentLevel;
+        EditorGUI.indentLevel = 1;
+        isAbilityTapFoldout = EditorGUILayout.Foldout(isAbilityTapFoldout, "Ability Sliders");
+        EditorGUI.indentLevel = tempIndent;
+        if(isAbilityTapFoldout == true) {
+            #region ABILITY_SPEED
+            var speed = speedProp.floatValue;
+            if (speed <= 18)      DrawStar(0);
+            else if (speed <= 20) DrawStar(1);
+            else if (speed <= 22) DrawStar(2);
+            else if (speed <= 24) DrawStar(3);
+            else if (speed <= 26) DrawStar(4);
+            else if (speed <= 28) DrawStar(5);
+            else                  DrawStar(0);
+            //Draw Proeprty
+            EditorGUILayout.PropertyField(speedProp); 
+            #endregion
+            #region ABILITY_INC_DAMAGE
+            var damage = incDamageProp.floatValue;
+            if (damage <= 0f)       DrawStar(0);
+            else if (damage <= 6f)  DrawStar(1);
+            else if (damage <= 12f) DrawStar(2);
+            else if (damage <= 18f) DrawStar(3);
+            else if (damage <= 24f) DrawStar(4);
+            else if (damage <= 30f) DrawStar(5);
+            else                    DrawStar(0);
+            //Draw Property
+            EditorGUILayout.PropertyField(incDamageProp); 
+            #endregion
+        }
+        GUILayout.EndVertical();
+
+        #endregion
+
         #region ARROW_ITEM_INFO
 
         GUILayout.Label(ItemData_Editor.ArrowItemInfoText, EditorStyles.boldLabel);
@@ -547,6 +614,24 @@ public class ArrowItemData_Editor : Editor
         GUILayout.EndVertical();
 
         //serializedObject.ApplyModifiedProperties();
+    }
+
+    void DrawStar(byte enable) {
+        byte maxStarCount = 5;
+        GUILayout.BeginHorizontal();
+        for (int i = 0; i < enable; i++) {
+            maxStarCount--;
+            //Draw Enable Texture
+            GUILayout.Label(enableStarTexture, GUILayout.Width(30f), GUILayout.Height(30f));
+        }
+
+        if (maxStarCount > 0) {
+            for (int i = 0; i < maxStarCount; i++) {
+                //Draw Disable Texture
+                GUILayout.Label(disableStarTexture, GUILayout.Width(30f), GUILayout.Height(30f));
+            }
+        }
+        GUILayout.EndHorizontal();
     }
 }
 

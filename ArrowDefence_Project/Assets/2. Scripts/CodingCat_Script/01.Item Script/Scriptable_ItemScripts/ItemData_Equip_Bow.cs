@@ -11,7 +11,10 @@
         public BowSkillData SkillAsset_s;
 
         //Inherence Ability
+        [Range(0f, 500f)] public float BaseDamage = 0f;
+        [Range(1.5f, 3f)] public float CriticalDamageMultiplier = 1.5f;
         [Range(1.2f, 3f)] public float FullChargedMultiplier = 1.2f;
+        [Range(0, 30)]    public int CriticalHitChance = 0;
 
         //PROPERTY
         public AD_BowSkill SkillFst {
@@ -37,20 +40,38 @@
         }
 
         public void OnEnable() {
-            AbilitySetup();
+            InitBowAbilities();
         }
 
-        private void AbilitySetup() {
+        private void InitBowAbilities() {
             System.Collections.Generic.List<Ability> tempAbility = new System.Collections.Generic.List<Ability>();
-            if(BaseDamage > 0f) {
+            //1. Add Base Damage Ability.
+            if (BaseDamage > 0f) {
                 tempAbility.Add(new AbilityDamage(BaseDamage));
             }
-            //if(CriticalHitChance > 0f) {
-            //    tempAbility.Add(new AbilityCriti)
-            //}
+            //2. Add Critical Hit Chance Ability.
+            if (CriticalHitChance > 0) {
+                //Convert To Byte, Check the Byte Range.
+                if (CriticalHitChance < 0 || CriticalHitChance > 255) {
+                    CatLog.WLog($"Bow Item : {Item_Name}, Critical Hit Chance value is Out of Range. {CriticalHitChance}");
+                }
+                else {
+                    tempAbility.Add(new AbilityCritChance(System.Convert.ToByte(CriticalHitChance)));
+                }
+            }
+            //3. Add Critical Hit Damage Ability.
+            if (CriticalDamageMultiplier > 1.5f) {
+                tempAbility.Add(new AbilityCritDamage(CriticalDamageMultiplier));
+            }
+            //4. Add Ability Charged Damage Multiplier.
+            if (FullChargedMultiplier > 1.2f) {
+                tempAbility.Add(new AbilityChargedDamage(FullChargedMultiplier));
+            }
 
-            //Init Ability Array
-            abilityDatas = tempAbility.ToArray();
+            //Final. if the tempAbility Length is Bigger than 1, Init the Ability Array.
+            if(tempAbility.Count > 0) {
+                abilityDatas = tempAbility.ToArray();
+            }
         }
     }
 

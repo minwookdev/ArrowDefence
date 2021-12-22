@@ -103,8 +103,7 @@ public class MainSceneRoute : MonoBehaviour
         //Fade Effect When Etnering The Battle Scene (if Don't Work This Function, Enable The DEV Variable)
         this.OnSceneEnteringFadeOut();
 
-        if (openMenuTime <= closeMenuTime)
-        {
+        if (openMenuTime <= closeMenuTime) {
             CatLog.WLog("OpenMenuTime is less than CloseMenuTime.");
         }
 

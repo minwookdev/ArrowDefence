@@ -433,7 +433,7 @@ MonoBehaviour:
   leftClampPoint: {fileID: 0}
   rightClampPoint: {fileID: 0}
   arrowSprite: {fileID: 7202392001256061893}
-  ArrowPower: 20
+  ArrowPower: 18
   isLaunched: 0
 --- !u!114 &2957477139567338879
 MonoBehaviour:

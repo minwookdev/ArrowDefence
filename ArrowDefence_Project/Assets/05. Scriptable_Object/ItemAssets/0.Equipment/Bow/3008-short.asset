@@ -20,11 +20,11 @@ MonoBehaviour:
   Item_Desc: "\rIt is a short but destructive bow."
   Item_Sprite: {fileID: 21300000, guid: e8ccb263751616e41870c46d05876789, type: 3}
   Equip_Type: 0
-  BaseDamage: 110
-  CriticalHitChance: 0
-  CriticalMultiplier: 1
   BowGameObject: {fileID: 1199833956013647908, guid: 041bd895a42effe48be785b5607c723e,
     type: 3}
   SkillAsset_f: {fileID: 11400000, guid: 97062504f2a4e58418b96af3a5af4888, type: 2}
   SkillAsset_s: {fileID: 0}
-  FullChargedMultiplier: 1.2
+  BaseDamage: 110
+  CriticalDamageMultiplier: 1.5
+  FullChargedMultiplier: 1.5
+  CriticalHitChance: 5

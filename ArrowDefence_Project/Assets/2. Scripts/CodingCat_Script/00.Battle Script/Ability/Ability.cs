@@ -10,14 +10,14 @@
 
 
     public class AbilityDamage : Ability {
-        private float damageCount;
+        private short damageCount;
 
         public override float GetCount() {
             return damageCount;
         }
 
         public override string GetName() {
-            return "DAMAGE";
+            return "Damage";
         }
 
         public override byte GetGrade() {
@@ -33,9 +33,9 @@
             throw new System.NotImplementedException();
         }
 
-        public AbilityDamage(float damage) {
+        public AbilityDamage(int damage) {
             abilityType = ABILITY_TYPE.DAMAGE;
-            damageCount = damage;
+            damageCount = System.Convert.ToInt16(damage);
         }
 
         public AbilityDamage() {
@@ -62,7 +62,7 @@
         }
 
         public override string GetName() {
-            return "CHARGED SHOT";
+            return "Charged Shot";
         }
 
         public override bool Upgrade() {
@@ -97,7 +97,7 @@
         }
 
         public override string GetName() {
-            return "CRITICAL CHANCE";
+            return "Critical Chance";
         }
 
         public override bool Upgrade() {
@@ -132,7 +132,7 @@
         }
 
         public override string GetName() {
-            return "CRITICAL DAMAGE";
+            return "Critical Damage";
         }
 
         public override bool Upgrade() {
@@ -166,7 +166,7 @@
         }
 
         public override string GetName() {
-            return "ARROW SPEED";
+            return "Arrow Speed";
         }
 
         public override bool Upgrade() {
@@ -201,7 +201,7 @@
         }
 
         public override string GetName() {
-            return "INCREASE DAMAGE";
+            return "Increase Damage";
         }
 
         public override bool Upgrade() {

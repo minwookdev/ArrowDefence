@@ -289,7 +289,7 @@ public class BowItemData_Editor : Editor
         EditorGUI.indentLevel = tempIndent;
         if (isAbilityTapFoldout == true) {
             #region ABILITY_DAMAGE
-            var damageCount = abilDamageProp.floatValue;
+            var damageCount = abilDamageProp.intValue;
             if (damageCount <= 100)      DrawStar(1);
             else if (damageCount <= 200) DrawStar(2);
             else if (damageCount <= 300) DrawStar(3);
@@ -558,13 +558,13 @@ public class ArrowItemData_Editor : Editor
             #endregion
             #region ABILITY_INC_DAMAGE
             var damage = incDamageProp.floatValue;
-            if (damage <= 0f)       DrawStar(0);
-            else if (damage <= 6f)  DrawStar(1);
-            else if (damage <= 12f) DrawStar(2);
-            else if (damage <= 18f) DrawStar(3);
-            else if (damage <= 24f) DrawStar(4);
-            else if (damage <= 30f) DrawStar(5);
-            else                    DrawStar(0);
+            if (damage <= 1f)        DrawStar(0);
+            else if (damage <= 1.1f) DrawStar(1);
+            else if (damage <= 1.2f) DrawStar(2);
+            else if (damage <= 1.3f) DrawStar(3);
+            else if (damage <= 1.4f) DrawStar(4);
+            else if (damage <= 1.5f) DrawStar(5);
+            else                     DrawStar(0);
             //Draw Property
             EditorGUILayout.PropertyField(incDamageProp); 
             #endregion

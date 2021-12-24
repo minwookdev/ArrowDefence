@@ -2,10 +2,10 @@
 {
     public static class CCPlayerData
     {
-        public static AD_Inventory      inventory  = new AD_Inventory();
+        public static AD_Inventory inventory       = new AD_Inventory();
         public static Player_Equipments equipments = new Player_Equipments();
-        public static PlayerStatus          status = new PlayerStatus();
-        public static GameSettings        settings = new GameSettings();
+        public static PlayerAbility ability        = new PlayerAbility();
+        public static GameSettings settings        = new GameSettings();
 
         static readonly string KEY_INVENTORY = "KEY_INVENTORY";
         static readonly string KEY_EQUIPMENT = "KEY_EQUIPMENT";
@@ -57,9 +57,6 @@
                 CatLog.Log("성공적으로 Settings를 불러왔습니다.");
             }
             else CatLog.WLog("ES3 Game Settings KEY값이 없습니다.");
-
-            //Init-Damage Struct
-            status.InitDamageStruct(equipments);
         }
     }
 }

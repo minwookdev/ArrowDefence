@@ -11,7 +11,7 @@
         public BowSkillData SkillAsset_s;
 
         //Inherence Ability
-        [Range(0f, 500f)] public float BaseDamage = 0f;
+        [Range(0, 500)]   public int BaseDamage = 0;
         [Range(1.5f, 3f)] public float CriticalDamageMultiplier = 1.5f;
         [Range(1.2f, 3f)] public float FullChargedMultiplier = 1.2f;
         [Range(0, 30)]    public int CriticalHitChance = 0;
@@ -46,7 +46,7 @@
         private void InitBowAbilities() {
             System.Collections.Generic.List<Ability> tempAbility = new System.Collections.Generic.List<Ability>();
             //1. Add Base Damage Ability.
-            if (BaseDamage > 0f) {
+            if (BaseDamage > 0f && BaseDamage <= 32767) {
                 tempAbility.Add(new AbilityDamage(BaseDamage));
             }
             //2. Add Critical Hit Chance Ability.

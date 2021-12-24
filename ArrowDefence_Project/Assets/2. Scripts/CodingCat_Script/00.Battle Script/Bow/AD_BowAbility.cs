@@ -3,9 +3,9 @@
     using UnityEngine;
 
     public class AD_BowAbility : MonoBehaviour {
-        //Ability Struct (Main, Sub).
-        private AbilityStruct mainSlotStr;
-        private AbilityStruct subSlotStr;
+        //Slot Ability Class.
+        PlayerAbilitySlot mainSlotAbility = null;
+        PlayerAbilitySlot subSlotAbility  = null;
 
         //Is Initialized Ability Struct.
         bool isInitAbility = false;
@@ -25,35 +25,24 @@
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
-        public DamageStruct GetDamage(LOAD_ARROW_TYPE type) {
+        public DamageStruct GetDamage(LOAD_ARROW_TYPE type, bool isCharged) {
             if(isInitAbility == false) {
                 isInitAbility = InitAbilityReturnBool();
             }
 
-            switch (type) {
-                case LOAD_ARROW_TYPE.ARROW_MAIN: //Return Damage Struct used Ability Slot Values..
-                    return new DamageStruct(mainSlotStr.RawDamage, 
-                                            mainSlotStr.CriticalChance,
-                                            mainSlotStr.CriticalMultiplier, 
-                                            mainSlotStr.ArmorPenetrating);
-                case LOAD_ARROW_TYPE.ARROW_SUB:
-                    return new DamageStruct(subSlotStr.RawDamage, 
-                                            subSlotStr.CriticalChance,
-                                            subSlotStr.CriticalMultiplier, 
-                                            subSlotStr.ArmorPenetrating);
-                default: 
-                    return new DamageStruct(0f, 0, 0f, 0);
+            switch (type) { //Return Damage Struct used Ability Slot Values..
+                case LOAD_ARROW_TYPE.ARROW_MAIN: return new DamageStruct(mainSlotAbility, isCharged);
+                case LOAD_ARROW_TYPE.ARROW_SUB:  return new DamageStruct(subSlotAbility,  isCharged);
+                default:                         return new DamageStruct();
             }
         }
 
         private bool InitAbilityReturnBool() {
             if (CCPlayerData.equipments.IsEquippedArrowMain()) {
-                mainSlotStr = new AbilityStruct(CCPlayerData.status.GetMainSlotAbility());
-                CatLog.Log($"Main Arrow Slot Damage is {mainSlotStr.RawDamage}");
+                mainSlotAbility = new PlayerAbilitySlot(CCPlayerData.ability.GetAbilitySlotMain());
             }
             if(CCPlayerData.equipments.IsEquippedArrowSub()) {
-                subSlotStr = new AbilityStruct(CCPlayerData.status.GetSubSlotAbility());
-                CatLog.Log($"Sub Arrow Slot Damage is {subSlotStr.RawDamage}");
+                subSlotAbility  = new PlayerAbilitySlot(CCPlayerData.ability.GetAbilitySubSlot());
             }
             return true;
         }

@@ -117,8 +117,6 @@ public class MainSceneRoute : MonoBehaviour
         //Auto Load SaveData
         if (isAutoLoad)
             ActionCat.GameManager.Instance.AutoLoadUserData();
-
-
     }
 
     private void OnDestroy() {

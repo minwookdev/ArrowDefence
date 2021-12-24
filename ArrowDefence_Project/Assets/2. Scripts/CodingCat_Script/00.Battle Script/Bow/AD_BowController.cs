@@ -26,6 +26,7 @@
         private PULLINGTYPE currentPullType;     //조준 타입 변경 -> Player Settings로 부터 받아오는 Enum Data
         private bool isBowPulling   = false;     //활이 일정거리 이상 당겨져서 회전할 수 있는 상태
         private bool isBowPullBegan = false;     //Bow Pull State Variables
+        private bool isChargedShot  = false;
         private float maxBowAngle, minBowAngle;  //Min, Max BowAngle Variables
         private float bowAngle;                  //The Angle Variable (angle between Click point and Bow).
         private Vector2 limitTouchPosVec;        //Bow GameObject와 거리를 비교할 벡터
@@ -110,7 +111,9 @@
                 bowAbility = GetComponent<AD_BowAbility>();
             }
             //Init-Bow Skill and Current Slot Damage Struct.
-            damageStruct = bowAbility.GetDamage(loadArrowType);
+            //damageStruct = bowAbility.GetDamage(loadArrowType);
+            CatLog.Log(StringColor.YELLOW, $"Damage Struct SizeOf : {System.Runtime.InteropServices.Marshal.SizeOf(typeof(DamageStruct))}");
+            CatLog.Log(StringColor.YELLOW, $"Damage Struct SizeOf : {System.Runtime.InteropServices.Marshal.SizeOf(damageStruct)}");
             bowAbility.AddListnerToSkillDel(ref BowSkillSet);
         }
 
@@ -369,8 +372,7 @@
             DrawTouchPos.Instance.ReleaseTouchLine();
         }
 
-        private void LaunchTheArrow()
-        {
+        private void LaunchTheArrow() {
             #region OLD
             //일정 이상 당겨져야 발사되도록 할 조건
             //if (arrowForce.magnitude < requiredLaunchForce)
@@ -395,13 +397,16 @@
                 CatLog.WLog("Can't Launch the Arrow"); return;
             } 
             
-            //로프 해제
+            //Release Bow Rope
             AD_BowRope.instance.arrowCatchPoint = null;
-
+            //Release Bow Pulling State
             isBowPulling = false;
-            ArrowComponent.ShotArrow(arrowForce, damageStruct, ArrowParentTr);
 
-            //Active Bow Skill
+            //Update Damage Struct -> changed Bow Moved Method
+            damageStruct = bowAbility.GetDamage(loadArrowType, isChargedShot);
+
+            //Shot Arrow & Active Skill.
+            ArrowComponent.ShotArrow(arrowForce, damageStruct, ArrowParentTr);
             BowSkillSet?.Invoke(transform.eulerAngles.z, ArrowParentTr, this, ref damageStruct, initArrowScale,
                                 ArrowComponent.arrowChatchPoint.transform.position, arrowForce, loadArrowType);
 
@@ -537,7 +542,7 @@
             AD_BowRope.instance.arrowCatchPoint  = null;
             LoadedArrow   = null; ArrowComponent = null;
             loadArrowType = type;
-            damageStruct = bowAbility.GetDamage(loadArrowType);
+            //damageStruct = bowAbility.GetDamage(loadArrowType);
             StartCoroutine(ArrowReload());
         }
 

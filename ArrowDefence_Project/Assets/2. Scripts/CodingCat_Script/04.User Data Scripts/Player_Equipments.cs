@@ -235,8 +235,8 @@
             this.EquippedAccessory_t = null;
         }
 
-        public void UpdatePlayerStatus() {
-            CCPlayerData.status.UpdateAbility(this);
+        public void UpdatePlayerAbility() {
+            CCPlayerData.ability.UpdateAbility(this);
         }
     }
 }

@@ -28,10 +28,11 @@ public static class AD_Data
     /// <summary>
     /// CCPooler Tag String Data Player's Objects
     /// </summary>
-    public static readonly string POOLTAG_MAINARROW      = "MainArrow";
-    public static readonly string POOLTAG_MAINARROW_LESS = "MainArrow_Less";
-    public static readonly string POOLTAG_SUBARROW       = "SubArrow";
-    public static readonly string POOLTAG_SUBARROW_LESS  = "SubArrow_Less";
+    public static readonly string POOLTAG_MAINARROW       = "MainArrow";
+    public static readonly string POOLTAG_MAINARROW_LESS  = "MainArrow_Less";
+    public static readonly string POOLTAG_SUBARROW        = "SubArrow";
+    public static readonly string POOLTAG_SUBARROW_LESS   = "SubArrow_Less";
+    public static readonly string POOLTAG_FLOATING_DAMAGE = "FloatingDamage";
 
     /// <summary>
     /// CCPooler Tag String Data with Monster's

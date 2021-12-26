@@ -1,6 +1,6 @@
 ﻿public interface IPoolObject
-{
-    void DisableRequest(UnityEngine.GameObject target);
+{   
+    void DisableRequest(UnityEngine.GameObject target); //제거 대상
 
     void DisableRequest();
 }

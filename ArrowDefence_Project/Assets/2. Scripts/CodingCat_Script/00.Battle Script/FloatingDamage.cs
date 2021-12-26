@@ -3,7 +3,7 @@
     using UnityEngine.UI;
     using TMPro;
 
-    public class FloatingDamage : MonoBehaviour {
+    public class FloatingDamage : MonoBehaviour, IPoolObject {
         [Header("COMPONENT")] //Caching This Properties.
         [SerializeField] Transform floatingTr     = null;
         [SerializeField] TextMeshProUGUI tmpCount = null;
@@ -14,15 +14,12 @@
         public float MoveDuration = 1f;
         public float MoveDistance = 1f;
         public float FadeDuration = 0.5f;
+
+        [Header("OPTIONS")]
+        [SerializeField] bool isScale = false;
         
         //private variables
         bool isCritical = false;
-
-        void Update() {
-            if(Input.GetKeyDown(KeyCode.A)) {
-                OnFloating("30", new Vector2(0f, 1f));
-            }
-        }
 
         public void OnFloating(string countstring, Vector2 direction) {
             StartCoroutine(FloatingProgress(countstring, direction, isReverse:false));
@@ -62,7 +59,11 @@
             tmpCount.text = "";
 
             //Disable GameObejct (this action is stop the coroutine)
-            gameObject.SetActive(false);
+            DisableRequest();
         }
+
+        public void DisableRequest(GameObject target) => CCPooler.ReturnToPool(target);
+
+        public void DisableRequest() => CCPooler.ReturnToPool(gameObject);
     }
 }

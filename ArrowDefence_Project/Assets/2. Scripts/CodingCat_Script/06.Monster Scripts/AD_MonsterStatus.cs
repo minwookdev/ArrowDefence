@@ -158,5 +158,15 @@
                 sprite.color = startColor;
             }
         }
+
+        public void OnHitWithDirection(ref DamageStruct damage, Vector3 angles)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void OnHitWithAngle(ref DamageStruct damage, float angle)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

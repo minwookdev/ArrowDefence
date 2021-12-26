@@ -86,11 +86,15 @@
 
         #endregion
 
-        #region ON_DAMAGE
+        #region POOL-OBJECT
 
         public void DisableRequest(GameObject target) => CCPooler.ReturnToPool(target);
 
         public void DisableRequest() => CCPooler.ReturnToPool(gameObject);
+
+        #endregion
+
+        #region ON_DAMAGE
 
         public void OnHitObject(ref DamageStruct damage) {
             //Active Monster Hit Event
@@ -99,9 +103,12 @@
             //Play Monster Hit Animation
             monsterState.OnHit();
 
-            //Decrease Monster Health Point
-            currentHealthPoint -= damage.GetFinalCalcDamage(Armorating, CriticalResist);
-            CatLog.Log($"Damage : {damage.GetFinalCalcDamage(Armorating, CriticalResist)} 수치 전달.");
+            //Decrease Monster Health
+            var gettingDamage = damage.GetFinalCalcDamage(Armorating, CriticalResist);
+            currentHealthPoint -= gettingDamage;
+
+            //Floating to Damage
+            DamageFloater.Instance.OnFloating(gettingDamage, transform.position, new Vector2(0f, -1f));
 
             //Check Monster Death
             if(currentHealthPoint <= 0f && isDeath == false) {
@@ -130,6 +137,13 @@
                 monsterState.StateChanger(STATETYPE.DEATH);
                 isDeath = true;
             }
+        }
+        public void OnHitWithDirection(ref DamageStruct damage, Vector3 angles) {
+            throw new System.NotImplementedException();
+        }
+
+        public void OnHitWithAngle(ref DamageStruct damage, float angle) {
+            throw new System.NotImplementedException();
         }
 
         /// <summary>
@@ -173,6 +187,8 @@
                 sprite.color = startColor;
             }
         }
+
+
 
         #endregion
     }

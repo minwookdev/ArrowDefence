@@ -310,6 +310,26 @@
                 CatLog.ELog($"{pool.tag} : ReturnToPool 메서드가 중복 작성되었습니다.");
         }
 
+        /// <summary>
+        /// Add Pool List, with Other Parent Transform.
+        /// </summary>
+        /// <param name="tag"></param>
+        /// <param name="size"></param>
+        /// <param name="prefab"></param>
+        /// <param name="parent"></param>
+        public static void AddPoolList(string tag, int size, GameObject prefab, Transform parent) {
+            Pool pool = new Pool() { tag = tag, size = size, prefab = prefab };
+            _inst.poolInstanceList.Add(pool);                            //1. Add PoolInstance List.
+            _inst.poolDictionary.Add(pool.tag, new Stack<GameObject>()); //2. Add PoolDictaionary.
+            _inst.ParentList.Add(parent);                                //3. Add Parent Transform to Parent List.
+            for (int i = 0; i < pool.size; i++) {
+                _inst.CreateNewObject(pool.tag, pool.prefab, parent);    //4. Create Prefab GameObject as much as Size.
+            }
+
+            if (_inst.poolDictionary[pool.tag].Count <= 0)              CatLog.ELog($"{pool.tag} : Missing Return to Pool Method.");
+            else if (_inst.poolDictionary[pool.tag].Count != pool.size) CatLog.ELog($"{pool.tag} : Method has been Duplicated.");
+        }
+
         private Transform FindParentTransform(string tag)
         {
             Transform tr = ParentList.Find(x => x.name == tag);

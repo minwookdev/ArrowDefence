@@ -26,7 +26,7 @@
         }
 
         public float GetFinalCalcDamageOut(short monsterArmorating, byte monsterCritResist, out bool isCritical) {
-            isCritical = (GameGlobal.GetCriticalChance() < CritChance - monsterCritResist) ? true : false;                            //   out critical result.
+            isCritical = (GameGlobal.GetCritChance() < CritChance - monsterCritResist) ? true : false;                                //   out critical result.
             var globalAbility = Data.CCPlayerData.ability.GlobalAbilityField;                                                         //   get Global Ability
             float finCalcDamage = UnityEngine.Random.Range(Damage * globalAbility.MinDamagePer, Damage * globalAbility.MaxDamagePer); // * Min ~ * Max per
             finCalcDamage = (isCritical) ? finCalcDamage * CritMulti : finCalcDamage;                                                 // * Calc Critical result
@@ -38,7 +38,7 @@
         public float GetFinalCalcDamage(short monsterArmorating, byte monsterCritResist) {
             var globalAbility = Data.CCPlayerData.ability.GlobalAbilityField;                                                              //   get Global Ability
             float finCalcDamage = UnityEngine.Random.Range(Damage * globalAbility.MinDamagePer, Damage * globalAbility.MaxDamagePer);      // * Min ~ * Max
-            finCalcDamage = (GameGlobal.GetCriticalChance() < CritChance - monsterCritResist) ? finCalcDamage * CritMulti : finCalcDamage; // * Calc Critical
+            finCalcDamage = (GameGlobal.GetCritChance() < CritChance - monsterCritResist) ? finCalcDamage * CritMulti : finCalcDamage;     // * Calc Critical
             finCalcDamage = (monsterArmorating - ArmorPene > 0f) ? finCalcDamage - (monsterArmorating - ArmorPene) : finCalcDamage;        //   Calc Armor Penetrating
             finCalcDamage = (finCalcDamage < 1f) ? 1f : UnityEngine.Mathf.Round(finCalcDamage);                                            //   Damage Rounding Calc.
             return finCalcDamage;

@@ -126,16 +126,19 @@
         void OnTriggerEnter2D(Collider2D coll) {
             if(coll.gameObject.layer == LayerMask.NameToLayer(AD_Data.LAYER_MONSTER)) {
                 if (isInitSkill == true) {
-                    if(arrowSkillSets.OnHit(coll, ref damageStruct) == true) {
+                    if(arrowSkillSets.OnHit(coll, ref damageStruct, coll.ClosestPoint(arrowTr.position), GameGlobal.RotateToVector2(arrowTr.eulerAngles.z))) {
                         DisableRequest();
                     }
                 }
                 else { //중복 피격 방지
                     if(isCollision == false) {
-                        OnHit(coll.gameObject);
+                        OnHit(coll.gameObject, coll.ClosestPoint(arrowTr.position), GameGlobal.RotateToVector2(arrowTr.eulerAngles.z));
                     }
                 }
             }
+
+            //Get Collision Contact Point 
+            
         }
 
         void OnTriggerExit2D(Collider2D coll) {
@@ -146,10 +149,9 @@
             }
         }
 
-        void OnHit(GameObject target) {
+        void OnHit(GameObject target, Vector3 contactPoint, Vector2 direction) {
             isCollision = true;
-            //target.SendMessage(nameof(IDamageable.OnHitObject), damageStruct, SendMessageOptions.DontRequireReceiver);
-            target.GetComponent<IDamageable>().OnHitObject(ref damageStruct);
+            target.GetComponent<IDamageable>().OnHitWithDirection(ref damageStruct, contactPoint, direction);
             DisableRequest();
         }
 

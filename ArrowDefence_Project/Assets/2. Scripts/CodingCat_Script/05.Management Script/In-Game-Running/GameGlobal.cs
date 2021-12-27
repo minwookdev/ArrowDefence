@@ -176,14 +176,18 @@
             rhs  = temp;
         }
 
-        static void TEST()
-        {
-            List<string> intList = new List<string>();
-            intList.RemoveAll((x) => x == "string" || x == "int");
+        /// <summary>
+        /// Get Random int 0~100 [include 100]
+        /// </summary>
+        /// <returns></returns>
+        public static int GetCritChance() {
+            return UnityEngine.Random.Range(0, 100 + 1);
         }
 
-        public static int GetCriticalChance() {
-            return UnityEngine.Random.Range(0, 100 + 1);
+        public static Vector2 RotateToVector2(float degree) {
+            Quaternion rotation = Quaternion.Euler(0f, 0f, degree);
+            Vector2 vector = rotation * Vector2.down;
+            return vector;
         }
     }
 

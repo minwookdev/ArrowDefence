@@ -103,12 +103,10 @@
             //Play Monster Hit Animation
             monsterState.OnHit();
 
-            //Decrease Monster Health
-            var gettingDamage = damage.GetFinalCalcDamage(Armorating, CriticalResist);
+            //Decrease Monster Health with Floating Damage, static rotation, no critical
+            var gettingDamage = damage.GetFinalCalcDamageOut(Armorating, CriticalResist, out bool isCritical);
             currentHealthPoint -= gettingDamage;
-
-            //Floating to Damage
-            DamageFloater.Instance.OnFloating(gettingDamage, transform.position, new Vector2(0f, -1f));
+            DamageFloater.Instance.OnFloatingWithScale(gettingDamage, transform.position, new Vector2(0f, -1f), isCritical);
 
             //Check Monster Death
             if(currentHealthPoint <= 0f && isDeath == false) {
@@ -138,11 +136,31 @@
                 isDeath = true;
             }
         }
-        public void OnHitWithDirection(ref DamageStruct damage, Vector3 angles) {
-            throw new System.NotImplementedException();
+
+        public void OnHitWithDirection(ref DamageStruct damage, Vector3 contactPoint, Vector3 direction) {
+            //Active Monster Hit Event
+            GameManager.Instance.CallMonsterHitEvent();
+
+            //Play Monster Hit Animation
+            monsterState.OnHit();
+
+            //Decrease Monster Health Point with Floating Damage
+            var recieveDamage = damage.GetFinalCalcDamage(Armorating, CriticalResist);
+            currentHealthPoint -= recieveDamage;
+            DamageFloater.Instance.OnFloatingWithScale(recieveDamage, contactPoint, direction, iscritical: false);
+
+            //Check Monster Death
+            if(currentHealthPoint <= 0 && isDeath == false) {
+                monsterState.StateChanger(STATETYPE.DEATH);
+                isDeath = true;
+            }
         }
 
         public void OnHitWithAngle(ref DamageStruct damage, float angle) {
+            throw new System.NotImplementedException();
+        }
+
+        public void OnHitWithQuaternion(ref DamageStruct damage, Quaternion quaternion) {
             throw new System.NotImplementedException();
         }
 

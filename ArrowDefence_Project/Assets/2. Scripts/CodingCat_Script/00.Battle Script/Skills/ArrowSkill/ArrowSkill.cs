@@ -1,16 +1,18 @@
-﻿namespace ActionCat
-{
+﻿namespace ActionCat {
     using System.Collections.Generic;
     using UnityEngine;
 
-    public abstract class ArrowSkill
-    {
+    public abstract class ArrowSkill {
         protected Transform arrowTr;
         protected Rigidbody2D rBody;
         protected IArrowObject arrow;
 
-        //Arrow Skill 자체는 한번만 해놓으면 되지만, Init함수는 각 Arrow별로 한번씩은 잡아줘야한다.
-        //각각의 Arrow별로 Transform과 RigidBody를 사용하기 때문.
+        /// <summary>
+        /// Arrow classes that use skill must use init.
+        /// </summary>
+        /// <param name="tr">Arrow Transform</param>
+        /// <param name="rigid">Arrow Rigid Body 2D</param>
+        /// <param name="arrowInter">Interface Arrow Object</param>
         public virtual void Init(Transform tr, Rigidbody2D rigid, IArrowObject arrowInter)
         {
             arrowTr = tr;
@@ -25,10 +27,9 @@
     {
         protected GameObject lastHitTarget = null;
 
-        public abstract bool OnHit(Collider2D target, ref DamageStruct damage);
+        public abstract bool OnHit(Collider2D target, ref DamageStruct damage, Vector3 contact, Vector2 direction);
 
-        public virtual bool OnHit(Collider2D target, out Transform targetTr, ref DamageStruct damage)
-        {
+        public virtual bool OnHit(Collider2D target, out Transform targetTr, ref DamageStruct damage, Vector3 contact, Vector2 direction) {
             targetTr = null; return true;
         }
 
@@ -77,7 +78,7 @@
         List<Collider2D> tempCollList = null;
 
         //return true : DisableArrow || false : IgnoreCollision
-        public override bool OnHit(Collider2D target, ref DamageStruct damage)
+        public override bool OnHit(Collider2D target, ref DamageStruct damage, Vector3 contact, Vector2 direction)
         {
             //■■■■■■■■■■■■■ I. Availablity Arrow Skill : 중복 다겟 및 연쇄 횟수 체크 ■■■■■■■■■■■■■
             //최근에 Hit처리한 객체와 동일한 객체와 다시 충돌될 경우, return 처리
@@ -90,7 +91,7 @@
                 //연쇄횟수 체크
                 if(currentChainCount >= maxChainCount) {
                     //Monster Hit : 최대 연쇄횟수 도달
-                    target.GetComponent<IDamageable>().OnHitObject(ref damage);
+                    target.GetComponent<IDamageable>().OnHitWithDirection(ref damage, contact, direction);
                     return true;
                 }
 
@@ -99,7 +100,7 @@
                 lastHitTarget = target.gameObject;
 
                 //Monster hit
-                target.GetComponent<IDamageable>().OnHitObject(ref damage);
+                target.GetComponent<IDamageable>().OnHitWithDirection(ref damage, contact, direction);
             }
 
             //■■■■■■■■■■■■■■■ II Rebound Arrow Skill : Active 절차 개시 ■■■■■■■■■■■■■■■
@@ -181,7 +182,7 @@
         /// <param name="target"></param>
         /// <param name="targetTr"></param>
         /// <returns></returns>
-        public override bool OnHit(Collider2D target, out Transform targetTr, ref DamageStruct damage)
+        public override bool OnHit(Collider2D target, out Transform targetTr, ref DamageStruct damage, Vector3 contact, Vector2 direction)
         {
             //■■■■■■■■■■■■■ I. Availablity Arrow Skill : 중복 타겟 및 연쇄 횟수 체크 ■■■■■■■■■■■■■
             if (lastHitTarget == target.gameObject) {
@@ -195,7 +196,7 @@
                 
                 //마지막으로 hit된 대상 거르고, 주변에 다른 타겟이 없다면 Hit처리 후 비활성화
                 if(tempCollList.Count <= 0) {
-                    target.GetComponent<IDamageable>().OnHitObject(ref damage);
+                    target.GetComponent<IDamageable>().OnHitWithDirection(ref damage, contact, direction);
                     targetTr = null;
                     return true;
                 }
@@ -226,7 +227,7 @@
                 if (currentChainCount >= maxChainCount)
                 {
                     //Monster Hit 처리
-                    target.GetComponent<IDamageable>().OnHitObject(ref damage);
+                    target.GetComponent<IDamageable>().OnHitWithDirection(ref damage, contact, direction);
                     targetTr = null; 
                     return true;
                     //arrow.DisableObject_Req(arrowTr.gameObject); return true;
@@ -237,7 +238,7 @@
                 lastHitTarget = target.gameObject;
 
                 //Monster hit 처리
-                target.GetComponent<IDamageable>().OnHitObject(ref damage);
+                target.GetComponent<IDamageable>().OnHitWithDirection(ref damage, contact, direction);
             }
 
             //■■■■■■■■■■■■■■■ II Rebound Arrow Skill : Active 절차 개시 ■■■■■■■■■■■■■■■
@@ -547,7 +548,7 @@
         /// </summary>
         /// <param name="target"></param>
         /// <returns></returns>
-        public override bool OnHit(Collider2D target, ref DamageStruct damage)
+        public override bool OnHit(Collider2D target, ref DamageStruct damage, Vector3 contactpoint, Vector2 direction)
         {
             if (lastHitTarget == target.gameObject) {
                 //Ignore Duplicate Target
@@ -556,7 +557,7 @@
             else {
                 if (currentChainCount >= maxChainCount) {
                     //Hit 처리 후 화살객체 Disable
-                    target.GetComponent<IDamageable>().OnHitObject(ref damage);
+                    target.GetComponent<IDamageable>().OnHitWithDirection(ref damage, contactpoint, direction);
                     return true;
                 }
 
@@ -565,7 +566,7 @@
                 lastHitTarget = target.gameObject;
 
                 //Monster Hit 처리
-                target.GetComponent<IDamageable>().OnHitObject(ref damage);
+                target.GetComponent<IDamageable>().OnHitWithDirection(ref damage, contactpoint, direction);
             } return false;
         }
 
@@ -575,7 +576,7 @@
         /// <param name="target"></param>
         /// <param name="targetTr"></param>
         /// <returns></returns>
-        public override bool OnHit(Collider2D target, out Transform targetTr, ref DamageStruct damage)
+        public override bool OnHit(Collider2D target, out Transform targetTr, ref DamageStruct damage, Vector3 contactpoint, Vector2 direction)
         {
             if(lastHitTarget == target.gameObject) {
                 //Ignore Duplicate Target
@@ -584,7 +585,7 @@
             else {
                 if(currentChainCount >= maxChainCount) {
                     //Hit처리 후 Arrow Object Disable 요청
-                    target.GetComponent<IDamageable>().OnHitObject(ref damage);
+                    target.GetComponent<IDamageable>().OnHitWithDirection(ref damage, contactpoint, direction);
                     targetTr = null; return true;
                 }
 
@@ -592,7 +593,7 @@
                 currentChainCount++;
                 lastHitTarget = target.gameObject;
 
-                target.GetComponent<IDamageable>().OnHitObject(ref damage);
+                target.GetComponent<IDamageable>().OnHitWithDirection(ref damage, contactpoint, direction);
             }
 
             //Air Skill과 연계된 경우, 주변의 Random Monster Target을 넘겨줌

@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 5687336831451063617}
   - component: {fileID: 5687336831451063620}
   - component: {fileID: 5687336831451063623}
-  - component: {fileID: 5687336831451063622}
   m_Layer: 0
   m_Name: tmp_counting
   m_TagString: Untagged
@@ -135,22 +134,6 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &5687336831451063622
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5687336831451063616}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ee158225ee1e59f4791627785501d950, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  shaderTypes: 0
-  normalStrenght: 5
-  normalSmoothing: 1
-  computingNormal: 0
 --- !u!1 &5687336831716775239
 GameObject:
   m_ObjectHideFlags: 0
@@ -278,11 +261,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   floatingTr: {fileID: 5687336831927777178}
   tmpCount: {fileID: 5687336831451063623}
-  imageCrit: {fileID: 5687336831716775237}
+  criticalImage: {fileID: 5687336831716775239}
   canvasGroup: {fileID: 5687336831927777176}
   MoveDuration: 1
   MoveDistance: 1
   FadeDuration: 0.5
+  TargetScale: {x: 2, y: 2, z: 1}
+  IsReverse: 0
 --- !u!225 &5687336831927777176
 CanvasGroup:
   m_ObjectHideFlags: 0

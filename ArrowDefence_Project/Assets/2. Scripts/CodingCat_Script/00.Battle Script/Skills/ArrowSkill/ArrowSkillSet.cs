@@ -217,19 +217,16 @@
 
         #endregion
 
-        public bool OnHit(Collider2D collider, ref DamageStruct damage)
-        {
-            switch (activeType)
-            {
-                case ARROWSKILL_ACTIVETYPE.FULL:           return ActiveFull(collider, ref damage); 
-                case ARROWSKILL_ACTIVETYPE.ATTACK_AIR:     return ActiveAtkAir(collider, ref damage);        
-                case ARROWSKILL_ACTIVETYPE.ATTACK_ADDPROJ: return ActiveAtkAddProj(collider, ref damage);
-                case ARROWSKILL_ACTIVETYPE.ATTACK:         return ActiveAtk(collider, ref damage);
-                case ARROWSKILL_ACTIVETYPE.AIR_ADDPROJ:    return ActiveAddProj(collider, ref damage);
-                case ARROWSKILL_ACTIVETYPE.AIR:            return DefaultHit(collider, ref damage);
-                case ARROWSKILL_ACTIVETYPE.ADDPROJ:        return ActiveAddProj(collider, ref damage);
-                case ARROWSKILL_ACTIVETYPE.EMPTY:          return true; //Empty인 경우는 SkillSets 자체가 성립할 수 없다
-                default:                                   return true;
+        public bool OnHit(Collider2D collider, ref DamageStruct damage, Vector3 contactPos, Vector2 direction) {
+            switch (activeType) {
+                case ARROWSKILL_ACTIVETYPE.FULL:           return HitFull(collider, ref damage, contactPos, direction); 
+                case ARROWSKILL_ACTIVETYPE.ATTACK_AIR:     return HitAtkAir(collider, ref damage, contactPos, direction);        
+                case ARROWSKILL_ACTIVETYPE.ATTACK_ADDPROJ: return HitAtkProj(collider, ref damage, contactPos, direction);
+                case ARROWSKILL_ACTIVETYPE.ATTACK:         return HitAtk(collider, ref damage, contactPos, direction);
+                case ARROWSKILL_ACTIVETYPE.AIR_ADDPROJ:    return HitProj(collider, ref damage, contactPos, direction);
+                case ARROWSKILL_ACTIVETYPE.AIR:            return HitDefault(collider, ref damage, contactPos, direction);
+                case ARROWSKILL_ACTIVETYPE.ADDPROJ:        return HitProj(collider, ref damage, contactPos, direction);
+                default:                                   return false;
             }
         }
 
@@ -263,17 +260,15 @@
                 case ARROWSKILL_ACTIVETYPE.ATTACK_AIR:     hitSkill.OnExit(target); break;
                 case ARROWSKILL_ACTIVETYPE.ATTACK_ADDPROJ: hitSkill.OnExit(target); break;
                 case ARROWSKILL_ACTIVETYPE.ATTACK:         hitSkill.OnExit(target); break;
-                default: break;
+                default:                                                            break;
             }
         }
 
         /// <summary>
         /// Call When Disable Arrow. if the Init SkillSets
         /// </summary>
-        public void Clear()
-        {
-            switch (activeType)
-            {
+        public void Clear() {
+            switch (activeType) {
                 case ARROWSKILL_ACTIVETYPE.FULL:           ClearHit(); ClearAir(); ClearAddProj(); break;
                 case ARROWSKILL_ACTIVETYPE.ATTACK_AIR:     ClearHit(); ClearAir();                 break;
                 case ARROWSKILL_ACTIVETYPE.ATTACK_ADDPROJ: ClearHit(); ClearAddProj();             break;
@@ -286,33 +281,31 @@
 
         #region ON-HIT-CALLBACK
 
-        bool ActiveFull(Collider2D collider, ref DamageStruct damage) {
+        bool HitFull(Collider2D collider, ref DamageStruct damage, Vector3 contactpoint, Vector2 direction) {
             addProjSkill.OnHit();
-            bool isDisable = hitSkill.OnHit(collider, out tempTr, ref damage);
+            bool isDisable = hitSkill.OnHit(collider, out tempTr, ref damage, contactpoint, direction);
             if (isDisable == false)
                 airSkill.CallbackOnHit(tempTr);
             return isDisable;
         }
 
-        bool ActiveAtkAddProj(Collider2D collider, ref DamageStruct damage) {
+        bool HitAtkProj(Collider2D collider, ref DamageStruct damage, Vector3 contactpoint, Vector2 direction) {
             addProjSkill.OnHit();
-            return hitSkill.OnHit(collider, ref damage);
+            return hitSkill.OnHit(collider, ref damage, contactpoint, direction);
         }
 
-        bool ActiveAtk(Collider2D collider, ref DamageStruct damage)
-        {
-            return hitSkill.OnHit(collider, ref damage);
+        bool HitAtk(Collider2D collider, ref DamageStruct damage, Vector3 contactpoint, Vector2 direction) {
+            return hitSkill.OnHit(collider, ref damage, contactpoint, direction);
         }
 
-        bool ActiveAddProj(Collider2D coll, ref DamageStruct damage) {
+        bool HitProj(Collider2D coll, ref DamageStruct damage, Vector3 contactPos, Vector2 direction) {
             addProjSkill.OnHit();
-            coll.GetComponent<IDamageable>().OnHitObject(ref damage);
-            return true;
+            return HitDefault(coll, ref damage, contactPos, direction);
         }
 
-        bool ActiveAtkAir(Collider2D collider, ref DamageStruct damage)
+        bool HitAtkAir(Collider2D collider, ref DamageStruct damage, Vector3 contactpoint, Vector2 direction)
         {
-            bool isDisable = hitSkill.OnHit(collider, out tempTr, ref damage);
+            bool isDisable = hitSkill.OnHit(collider, out tempTr, ref damage, contactpoint, direction);
             if (isDisable == false) //Disable되는 상황이 아닐 경우만 Transform 보내줌
                 airSkill.CallbackOnHit(tempTr);
             return isDisable;
@@ -335,8 +328,6 @@
 
         #region CLEAR
 
-
-
         void ClearHit() => hitSkill.Clear();
 
         void ClearAir() => airSkill.Clear();
@@ -347,12 +338,16 @@
 
         #region DEFAULT
 
-        bool DefaultHit(Collider2D collider, ref DamageStruct damage)
-        {
-            //Air Skill만 존재하는 경우, Monster가 대미지를 받는 로직만 적용. 추후 대미지 관련 코드가 구현되면 적용할 것.
-            //collider.SendMessage("OnHitObject", Random.Range(30f, 50f), SendMessageOptions.DontRequireReceiver);
-            collider.GetComponent<IDamageable>().OnHitObject(ref damage);
-            return true;
+        /// <summary>
+        /// Only Use Air Type Skill.
+        /// </summary>
+        /// <param name="collider"></param>
+        /// <param name="damage"></param>
+        /// <param name="contactPos"></param>
+        /// <param name="direction"></param>
+        /// <returns></returns>
+        bool HitDefault(Collider2D collider, ref DamageStruct damage, Vector3 contactPos, Vector2 direction) {
+            collider.GetComponent<IDamageable>().OnHitWithDirection(ref damage, contactPos, direction); return true;
         }
 
         void DefaultAir()

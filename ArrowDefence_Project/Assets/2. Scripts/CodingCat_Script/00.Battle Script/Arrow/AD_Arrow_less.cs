@@ -114,10 +114,9 @@
             }
         }
 
-        void OnHit(GameObject target) {
+        void OnHit(GameObject target, Vector3 contactPoint, Vector2 direction) {
             isCollision = true;
-            //target.SendMessage(nameof(IDamageable.OnHitObject), Random.Range(10f, 30f), SendMessageOptions.DontRequireReceiver);
-            target.GetComponent<IDamageable>().OnHitObject(ref damageStruct);
+            target.GetComponent<IDamageable>().OnHitWithDirection(ref damageStruct, contactPoint, direction);
             DisableRequest();
         }
 
@@ -211,13 +210,13 @@
         {
             if(coll.gameObject.layer == LayerMask.NameToLayer(AD_Data.LAYER_MONSTER)) {
                 if (isInitSkill) {
-                    if(arrowSkillSets.OnHit(coll, ref damageStruct) == true) {
+                    if(arrowSkillSets.OnHit(coll, ref damageStruct, coll.ClosestPoint(tr.position), GameGlobal.RotateToVector2(tr.eulerAngles.z))) {
                         DisableRequest();
                     }
                 }
                 else {
                     if(isCollision == false) {
-                        OnHit(coll.gameObject);
+                        OnHit(coll.gameObject, coll.ClosestPoint(tr.position), GameGlobal.RotateToVector2(tr.eulerAngles.z));
                     }
                 }
             }

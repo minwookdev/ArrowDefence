@@ -35,9 +35,14 @@
             _inst = null;
         }
 
-        public void OnFloating(float value, Vector3 position, Vector2 direction) {
+        public void OnFloating(float value, Vector3 position, Vector2 direction, bool iscritical) {
             var damage = CCPooler.SpawnFromPool<FloatingDamage>(AD_Data.POOLTAG_FLOATING_DAMAGE, position, Quaternion.identity);
-            damage.OnFloating(value.ToString(), direction);
+            damage.OnFloating(value.ToString(), direction, iscritical);
+        }
+
+        public void OnFloatingWithScale(float value, Vector3 position, Vector2 direction, bool iscritical) {
+            var damage = CCPooler.SpawnFromPool<FloatingDamage>(AD_Data.POOLTAG_FLOATING_DAMAGE, position, Quaternion.identity);
+            damage.OnFloatingWithScale(value.ToString(), direction, iscritical);
         }
     }
 }

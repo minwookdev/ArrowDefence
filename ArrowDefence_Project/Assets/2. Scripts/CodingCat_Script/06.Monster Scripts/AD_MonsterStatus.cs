@@ -159,12 +159,17 @@
             }
         }
 
-        public void OnHitWithDirection(ref DamageStruct damage, Vector3 angles)
+        public void OnHitWithDirection(ref DamageStruct damage, Vector3 contactPoint, Vector3 direction)
         {
             throw new System.NotImplementedException();
         }
 
         public void OnHitWithAngle(ref DamageStruct damage, float angle)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void OnHitWithQuaternion(ref DamageStruct damage, Quaternion quaternion)
         {
             throw new System.NotImplementedException();
         }

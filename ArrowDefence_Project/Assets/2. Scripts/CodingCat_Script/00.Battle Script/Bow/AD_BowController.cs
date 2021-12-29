@@ -45,7 +45,7 @@
         [ReadOnly] public GameObject LoadedArrow;
 
         //private float requiredLaunchForce = 250f;
-        private bool launchArrow = false;
+        private bool isLaunch = false;
         private Vector2 arrowForce;
         private Vector3 arrowPosition;
         private Vector3 initArrowScale = new Vector3(1.5f, 1.5f, 0f);
@@ -93,7 +93,8 @@
             //Init Load Arrow Type : 장전될 화살 타입 정의
             loadArrowType = GameManager.Instance.LoadArrowType();
 
-            StartCoroutine(this.ArrowReload());
+            //Load Arrow From CCPooler.
+            Reload();
 
             //게임오버 이벤트에 Burn Effect 추가. Resurrection 구현 시 추가적인 로직 구현 필요.
             GameManager.Instance.AddListnerGameOver(() => { 
@@ -110,6 +111,7 @@
             if(bowAbility == null) {
                 bowAbility = GetComponent<AD_BowAbility>();
             }
+
             //Init-Bow Skill and Current Slot Damage Struct.
             //damageStruct = bowAbility.GetDamage(loadArrowType);
             CatLog.Log(StringColor.YELLOW, $"Damage Struct SizeOf : {System.Runtime.InteropServices.Marshal.SizeOf(typeof(DamageStruct))}");
@@ -160,36 +162,36 @@
                 this.BowMoved(Input.mousePosition);
             }
 #endif
-            ArrowPosUpdate();
+            //Arrow Position Update
+            UpdateArrowPosition();
         }
 
         private void FixedUpdate()
         {
-            if (launchArrow)
-            {
-                this.LaunchTheArrow();
-                launchArrow = false;
+            if (isLaunch == true) {
+                Launch();
+                isLaunch = false;
             }
         }
 
         private void OnDestroy() => instance = null;
 
-        private void BowBegan(Vector2 pos)
-        {
-            //Pause 상태거나, Battle Clear된 상태라면 활을 당길 수 없음
-            if (IsPullingStop == true) return;
+        private void BowBegan(Vector2 pos) {
+            //Stop Pulling or Arrow Component is null return Pull Began.
+            if (IsPullingStop == true || ArrowComponent == null) return;
 
-            switch (currentPullType)
-            {
-                case PULLINGTYPE.AROUND_BOW_TOUCH: if (CheckTouchRaius(pos) == false) return;       break;  //Type1. 활 주변의 일정거리 터치 조준
-                case PULLINGTYPE.FREE_TOUCH:           SetInitialTouchPos(pos);                     break;  //Type2. 터치한 곳 기준 활 조준
-                case PULLINGTYPE.AUTOMATIC:            CatLog.Log("Not Support This Pulling Type"); break;  //Type3. 자동 사격 (미구현)
-                default: break;
+            switch (currentPullType) {
+                case PULLINGTYPE.AROUND_BOW_TOUCH: if (PullTypeTouchAround(pos) == false) return; break; //Type 0.-활 주변의 일정거리 터치 조준
+                case PULLINGTYPE.FREE_TOUCH:           PullTypeTouchFree(pos);                    break; //Type 1.-터치한 곳 기준 활 조준
+                case PULLINGTYPE.AUTOMATIC: throw new System.NotImplementedException();                  //Type 3.-자동 사격 (미구현)
             }
 
-            if(AD_BowRope.instance.arrowCatchPoint == null && ArrowComponent != null) {
-                AD_BowRope.instance.arrowCatchPoint = ArrowComponent.arrowChatchPoint;
-            }
+            //if(AD_BowRope.instance.arrowCatchPoint == null && ArrowComponent != null) {
+            //    AD_BowRope.instance.arrowCatchPoint = ArrowComponent.CatchTr;
+            //}
+
+            //Rope Catch Point Set.
+            AD_BowRope.instance.SetCatchPoint(ArrowComponent.CatchTr);
 
             isBowPullBegan = true;
         }
@@ -312,7 +314,7 @@
                 else if (currentPullType == PULLINGTYPE.FREE_TOUCH)  DrawTouchPos.Instance.DrawTouchLine(currentClickPosition, initialTouchPos, false);
             }
 
-            CheckPauseBattle();
+            StopPullingChecker();
 
             #endregion
 
@@ -360,19 +362,22 @@
             #endregion
         }
 
-        private void BowReleased(Vector2 pos)
-        {
-            if (isBowPullBegan)
-            {
-                currentClickPosition = MainCam.ScreenToWorldPoint(pos);
-                launchArrow    = true;  //Check LaunchArrow The FixedUpdate.
-                isBowPullBegan = false;
+        private void BowReleased(Vector2 pos) {
+            currentClickPosition = MainCam.ScreenToWorldPoint(pos);
+
+            if(isBowPullBegan == true) {    // 1. Check Pull Began.
+                if (isBowPulling == true) { // 2. Check Pulling. (this is completely Pulled)
+                    isLaunch  = true;       // 3. if the completely Pulled, launch trigge On.
+                    isBowPulling = false;   // Release Pulling State.
+                }
+                isBowPullBegan  = false;    // Release Pull Began State.
             }
 
+            //Erase Touch Line
             DrawTouchPos.Instance.ReleaseTouchLine();
         }
 
-        private void LaunchTheArrow() {
+        private void Launch() {
             #region OLD
             //일정 이상 당겨져야 발사되도록 할 조건
             //if (arrowForce.magnitude < requiredLaunchForce)
@@ -391,16 +396,17 @@
             //    LoadedArrow.transform.position = RightClampPoint.transform.position;
             //    return;
             //}
-            #endregion
+
             //장전되어 있는 화살이 없거나 isPulling 않들어왔을때 Return
-            if (LoadedArrow == null || isBowPulling == false) {
-                CatLog.WLog("Can't Launch the Arrow"); return;
-            } 
-            
+            //if (LoadedArrow == null || isBowPulling == false) {
+            //    CatLog.WLog("Can't Launch the Arrow"); return;
+            //}
+            #endregion
+            //Pull Stop while reloading Arrow.
+            IsPullingStop = true;
+
             //Release Bow Rope
-            AD_BowRope.instance.arrowCatchPoint = null;
-            //Release Bow Pulling State
-            isBowPulling = false;
+            AD_BowRope.instance.CatchPointClear();
 
             //Update Damage Struct -> changed Bow Moved Method
             damageStruct = bowAbility.GetDamage(loadArrowType, isChargedShot);
@@ -408,36 +414,33 @@
             //Shot Arrow & Active Skill.
             ArrowComponent.ShotArrow(arrowForce, damageStruct, ArrowParentTr);
             BowSkillSet?.Invoke(transform.eulerAngles.z, ArrowParentTr, this, ref damageStruct, initArrowScale,
-                                ArrowComponent.arrowChatchPoint.transform.position, arrowForce, loadArrowType);
+                                ArrowComponent.CatchTr.position, arrowForce, loadArrowType);
 
+            //Release GameObject and Component Arrow.
             LoadedArrow    = null;
             ArrowComponent = null;
 
-            //Active Shot Impact
+            //Active Shot Impact Effect
             bowSprite.ActiveImpact();
 
             //Active Camera Shake
             CineCam.Inst.ShakeCamera(5f, .1f);
 
-            //ReLoad Logic Start
-            StartCoroutine(this.ArrowReload());
+            //Arrow Reload
+            Reload();
+
+            //Release Pulling Stop State
+            IsPullingStop = false;
         }
 
-        private bool CheckTouchRaius(Vector2 pos)
-        {
-            this.limitTouchPosVec = MainCam.ScreenToWorldPoint(pos);
-            
-            float touchDistanceFromBow = (limitTouchPosVec - (Vector2)transform.position).magnitude;
-
-            if (touchDistanceFromBow <= TouchRadius) return true;
-            else                                     return false;
+        bool PullTypeTouchAround(Vector2 touchPos) {
+            Vector2 currentTouchPos = MainCam.ScreenToWorldPoint(touchPos);
+            float distFromBow = (currentTouchPos - (Vector2)transform.position).magnitude;
+            return (distFromBow <= TouchRadius) ? true : false;
         }
 
-        private void SetInitialTouchPos(Vector2 pos)
-        {
-            initialTouchPos = MainCam.ScreenToWorldPoint(pos);
-
-            CatLog.Log("Save First Touch Position");
+        void PullTypeTouchFree(Vector2 touchPos) {
+            initialTouchPos = MainCam.ScreenToWorldPoint(touchPos);
         }
 
         private IEnumerator ArrowReload() {
@@ -463,29 +466,41 @@
             yield return null;
 
             if (loadArrowType == LOAD_ARROW_TYPE.ARROW_MAIN)
-                LoadedArrow = CCPooler.SpawnFromPool(AD_Data.POOLTAG_MAINARROW, transform, initArrowScale, ClampPointTop.position, Quaternion.identity);
+                LoadedArrow = CCPooler.SpawnFromPool(AD_Data.POOLTAG_MAINARROW, transform, initArrowScale, ClampPointTop.position, Quaternion.Euler(initArrowRot));
             else if (loadArrowType == LOAD_ARROW_TYPE.ARROW_SUB)
-                LoadedArrow = CCPooler.SpawnFromPool(AD_Data.POOLTAG_SUBARROW, transform, initArrowScale, ClampPointTop.position, Quaternion.identity);
+                LoadedArrow = CCPooler.SpawnFromPool(AD_Data.POOLTAG_SUBARROW, transform, initArrowScale, ClampPointTop.position, Quaternion.Euler(initArrowRot));
 
-            LoadedArrow.transform.localEulerAngles = initArrowRot;
+            //origin code 
+            //LoadedArrow.transform.localEulerAngles = initArrowRot;
 
             ArrowComponent = LoadedArrow.GetComponent<AD_Arrow>();
-            ArrowComponent.leftClampPoint  = this.ClampPointBottom;
-            ArrowComponent.rightClampPoint = this.ClampPointTop;
+            ArrowComponent.bottomClampTr  = this.ClampPointBottom;
+            ArrowComponent.topClampTr = this.ClampPointTop;
+
+            //Get Arrow Component
+            //ArrowComponent = LoadedArrow.GetComponent<AD_Arrow>().Reload(ClampPointBottom, ClampPointTop);
 #endregion
+        }
+
+        void Reload() {
+            switch (loadArrowType) { //Reload Arrow by Current Equipped Arrow Type.
+                case LOAD_ARROW_TYPE.ARROW_MAIN: LoadedArrow = CCPooler.SpawnFromPool(AD_Data.POOLTAG_MAINARROW, transform, initArrowScale, ClampPointTop.position, Quaternion.identity); break;
+                case LOAD_ARROW_TYPE.ARROW_SUB:  LoadedArrow = CCPooler.SpawnFromPool(AD_Data.POOLTAG_SUBARROW,  transform, initArrowScale, ClampPointTop.position, Quaternion.identity); break;
+            }
+
+            //Get Arrow Component with init Clamp Points.
+            ArrowComponent = LoadedArrow.GetComponent<AD_Arrow>().Reload(ClampPointBottom, ClampPointTop, initArrowRot);
         }
 
         /// <summary>
         /// 화살이 당겨진 상황에서 클리어, 일시정지 들어오면 당기고있는 상태 해제
         /// </summary>
-        private void CheckPauseBattle()
-        {
-            if (IsPullingStop)
-            {
+        private void StopPullingChecker() {
+            if (IsPullingStop == true) {
                 if (LoadedArrow != null)
                     LoadedArrow.transform.position = ClampPointTop.transform.position;
-                DrawTouchPos.Instance.ReleaseTouchLine();
                 isBowPullBegan = false; isBowPulling = false;
+                DrawTouchPos.Instance.ReleaseTouchLine();
             }
         }
 
@@ -508,12 +523,9 @@
             //}
         }
 
-        private void ArrowPosUpdate()
-        {
-            if(LoadedArrow != null)
-            {
-                if(isBowPulling)
-                {
+        private void UpdateArrowPosition() {
+            if(LoadedArrow != null) {
+                if(isBowPulling) {
                     arrowPosition = LoadedArrow.transform.position;
                     arrowPosition = Vector3.MoveTowards(arrowPosition, ClampPointBottom.position, Time.unscaledDeltaTime * ArrowPullingSpeed);
                     LoadedArrow.transform.position = arrowPosition;
@@ -521,8 +533,7 @@
                     //Arrow Direction * Force
                     arrowForce = LoadedArrow.transform.up * ArrowComponent.ArrowPower;
                 }
-                else
-                {
+                else {
                     LoadedArrow.transform.position = ClampPointTop.position;
                 }
             }
@@ -543,7 +554,8 @@
             LoadedArrow   = null; ArrowComponent = null;
             loadArrowType = type;
             //damageStruct = bowAbility.GetDamage(loadArrowType);
-            StartCoroutine(ArrowReload());
+            //StartCoroutine(ArrowReload());
+            Reload();
         }
 
 

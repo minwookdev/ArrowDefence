@@ -1,6 +1,5 @@
 ﻿namespace ActionCat {
     using UnityEngine;
-    using UnityEngine.UI;
     using TMPro;
 
     public class FloatingDamage : MonoBehaviour, IPoolObject {

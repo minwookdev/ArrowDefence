@@ -145,9 +145,9 @@
             monsterState.OnHit();
 
             //Decrease Monster Health Point with Floating Damage
-            var recieveDamage = damage.GetFinalCalcDamage(Armorating, CriticalResist);
+            var recieveDamage = damage.GetFinalCalcDamageOut(Armorating, CriticalResist, out bool isCritical);
             currentHealthPoint -= recieveDamage;
-            DamageFloater.Instance.OnFloatingWithScale(recieveDamage, contactPoint, direction, iscritical: false);
+            DamageFloater.Instance.OnFloatingWithScale(recieveDamage, contactPoint, direction, isCritical);
 
             //Check Monster Death
             if(currentHealthPoint <= 0 && isDeath == false) {

@@ -189,6 +189,22 @@
             Vector2 vector = rotation * Vector2.down;
             return vector;
         }
+
+        //Place rect transform to have the same dimensions as 'other'. even if they don't have same Parent.
+        //Relatively non-extensive.
+        //NOTICE - also modifies scale of your RectTransform to match the scale of other
+        public static void MatchOther(this RectTransform rt, RectTransform other) {
+            Vector2 myPrevPivot = rt.pivot; //?
+            myPrevPivot = other.pivot;
+            rt.position = other.position;
+
+            rt.localScale = other.localScale;
+
+            rt.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, other.rect.width);
+            rt.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, other.rect.height);
+            //rectTrasnform.ForceUpdateRectTransform(); -> needed before we adjust pivot a second time?
+            rt.pivot = myPrevPivot;
+        }
     }
 
     #region ENUMS_BATTLE

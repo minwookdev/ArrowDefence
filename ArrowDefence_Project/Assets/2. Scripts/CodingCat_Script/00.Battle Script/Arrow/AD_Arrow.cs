@@ -6,10 +6,17 @@
     {
         //The Left, Right Clamp Point for the Arrow.
         [Header("COMPONENT")]
-        public Transform arrowChatchPoint;
-        public TrailRenderer arrowTrail;
-        public Transform leftClampPoint, rightClampPoint;
+        [SerializeField] Transform arrowTr;
+        [SerializeField] Rigidbody2D rBody;
+        [Tooltip("This is Arrow Head Polygon Collider")]
+        [SerializeField] PolygonCollider2D polyCollider;
+        [SerializeField] TrailRenderer arrowTrail;
         [SerializeField] SpriteRenderer arrowSprite = null;
+        [SerializeField] Transform arrowCatchTransform;
+
+        [Header("COMPONENT OTHERS")]
+        public Transform bottomClampTr;
+        public Transform topClampTr;
 
         [Header("SHOOTING")]
         public float ArrowPower;
@@ -20,9 +27,6 @@
 
         //Launch Power for the Arrow
         //private float powerFactor = 2000;
-        private Rigidbody2D rBody;
-        private PolygonCollider2D polyCollider;
-        Transform arrowTr;
 
         //Skill Variables
         bool isInitSkill    = false;
@@ -32,16 +36,20 @@
         //Damage Veriables
         DamageStruct damageStruct;
 
-        private void Start() {
-            //if (ReferenceEquals(rBody, null)) rBody = gameObject.GetComponent<Rigidbody2D
-            //Initial Arrow Childs
-            if (arrowChatchPoint == null) arrowChatchPoint = transform.GetChild(2);
-            if (arrowTrail == null) arrowTrail = transform.GetChild(2).GetChild(0).GetComponent<TrailRenderer>();
-            arrowTr = GetComponent<Transform>();
-            rBody = gameObject.GetComponent<Rigidbody2D>();
-            rBody.gravityScale = 0f;
+        //Catch Point Proeprty
+        public Transform CatchTr { get => arrowCatchTransform; }
 
-            if (polyCollider == null) polyCollider = arrowTr.GetChild(0).GetComponent<PolygonCollider2D>();
+        void InitComponent() {
+            if (arrowTr == null) arrowTr = GetComponent<Transform>();
+            if (rBody   == null) rBody   = GetComponent<Rigidbody2D>();
+            if (polyCollider == null) CatLog.ELog("Arrow Main : Collider Not Cached.", true);
+            if (arrowTrail   == null) CatLog.ELog("Arrow Main : TrailRenderer Not Cached.", true);
+            if (arrowSprite  == null) CatLog.ELog("Arrow Main : Sprite Renderer Not Cached.", true);
+        }
+
+        private void Start() {
+            InitComponent();
+            rBody.gravityScale   = 0f;
             polyCollider.enabled = false;
 
             //Init-Arrow Skill
@@ -91,16 +99,29 @@
             //Get the Current Position of the Arrow
             arrowPosition = arrowTr.position;
             //Clamp the X Y position Between min and Max Points
-            arrowPosition.x = Mathf.Clamp(arrowPosition.x, Mathf.Min(rightClampPoint.position.x, leftClampPoint.position.x),
-                                                           Mathf.Max(rightClampPoint.position.x, leftClampPoint.position.x));
-            arrowPosition.y = Mathf.Clamp(arrowPosition.y, Mathf.Min(rightClampPoint.position.y, leftClampPoint.position.y),
-                                                           Mathf.Max(rightClampPoint.position.y, leftClampPoint.position.y));
+            arrowPosition.x = Mathf.Clamp(arrowPosition.x, Mathf.Min(topClampTr.position.x, bottomClampTr.position.x),
+                                                           Mathf.Max(topClampTr.position.x, bottomClampTr.position.x));
+            arrowPosition.y = Mathf.Clamp(arrowPosition.y, Mathf.Min(topClampTr.position.y, bottomClampTr.position.y),
+                                                           Mathf.Max(topClampTr.position.y, bottomClampTr.position.y));
 
             //Set new Position for the Arrow
             arrowTr.position = arrowPosition;
         }
 
         public void OnDisableCollider() => this.polyCollider.enabled = false;
+        
+        /// <summary>
+        /// init clamp positions and return arrow component
+        /// </summary>
+        /// <param name="bottomClampPoint">Transform Bottom Clamp Position</param>
+        /// <param name="topClampPoint">Transform Top Clamp position</param>
+        /// <returns></returns>
+        public AD_Arrow Reload(Transform bottomClampPoint, Transform topClampPoint, Vector3 rotation) {
+            bottomClampTr  = bottomClampPoint;  //Init Clamp Point Bottom
+            topClampTr = topClampPoint;     //Init Clamp Point Top
+            arrowTr.localEulerAngles = rotation; //Init Arrow Rotation
+            return this;
+        }
 
         public void DisableRequest(GameObject target)
         {

@@ -1,4 +1,4 @@
-﻿namespace ActionCat.Experimantal {
+﻿namespace ActionCat.Experimental {
     using UnityEngine;
 
     public class RotateTemp : MonoBehaviour {

@@ -146,5 +146,13 @@
 				ropeMaterial.color = tempColor;
 			}
 		}
+
+		public void SetCatchPoint(Transform catchPointTr) {
+			arrowCatchPoint = catchPointTr;
+		}
+
+		public void CatchPointClear() {
+			arrowCatchPoint = null;
+		}
 	}
 }

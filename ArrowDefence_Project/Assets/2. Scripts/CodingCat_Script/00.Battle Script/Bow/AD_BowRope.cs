@@ -52,6 +52,10 @@
 			}
 		}
 
+		private void OnDestroy() {
+			instance = null;
+		}
+
 		// Use this for initialization
 		void Start()
 		{

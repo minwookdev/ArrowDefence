@@ -1,6 +1,7 @@
 ﻿namespace ActionCat
 {
     using UnityEngine;
+    using ActionCat.Interface;
 
     public class Skill_Multiple_Shot : AD_BowSkill, IToString
     {
@@ -114,7 +115,7 @@
                 var arrow = CCPooler.SpawnFromPool<AD_Arrow_less>(poolTag, parent, arrowScale, arrowPos,
                                                                   Quaternion.Euler(0f, 0f, tempRotation - 90f));
                 if (arrow)
-                    arrow.ShotToDirectly(new Vector2(Mathf.Cos(tempRotation * Mathf.Deg2Rad), Mathf.Sin(tempRotation * Mathf.Deg2Rad)), damage); // * force.magnitude;
+                    arrow.ShotToDirection(new Vector2(Mathf.Cos(tempRotation * Mathf.Deg2Rad), Mathf.Sin(tempRotation * Mathf.Deg2Rad)), damage); // * force.magnitude;
             }
         }
 

@@ -1,4 +1,5 @@
 ﻿namespace ActionCat {
+    using ActionCat.Interface;
     using UnityEngine;
     using TMPro;
 
@@ -101,8 +102,6 @@
             //Disable GameObejct (this action is stop the coroutine)
             DisableRequest();
         }
-
-        public void DisableRequest(GameObject target) => CCPooler.ReturnToPool(target);
 
         public void DisableRequest() => CCPooler.ReturnToPool(gameObject);
     }

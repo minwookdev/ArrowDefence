@@ -196,11 +196,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8331987b02608c4b973083bb036bf47, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  arrowChatchPoint: {fileID: 1877318309828275684}
+  arrowTr: {fileID: 1877318309816662892}
+  rBody: {fileID: 1877318309827916241}
+  polyCollider: {fileID: 1935260571541183760}
   arrowTrail: {fileID: 1877318309820681058}
-  leftClampPoint: {fileID: 0}
-  rightClampPoint: {fileID: 0}
-  arrowSprite: {fileID: 0}
+  arrowSprite: {fileID: 1459469563125184194}
+  arrowCatchTransform: {fileID: 1877318309828275684}
+  bottomClampTr: {fileID: 0}
+  topClampTr: {fileID: 0}
   ArrowPower: 24
   isLaunched: 0
 --- !u!114 &1877318309827916240

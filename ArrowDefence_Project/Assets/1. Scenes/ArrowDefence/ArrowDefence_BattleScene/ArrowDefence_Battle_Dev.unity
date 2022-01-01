@@ -15003,7 +15003,7 @@ PrefabInstance:
     - target: {fileID: 3204541759480302795, guid: 75155828b9866ee4dbb6eb1c6d7a0a62,
         type: 3}
       propertyPath: MaxClearCount
-      value: 100
+      value: 300
       objectReference: {fileID: 0}
     - target: {fileID: 3204541759480302795, guid: 75155828b9866ee4dbb6eb1c6d7a0a62,
         type: 3}

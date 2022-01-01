@@ -2,6 +2,7 @@
 {
     using System.Collections;
     using UnityEngine;
+    using ActionCat.Interface;
 
     public class Skill_Rapid_Shot : AD_BowSkill
     {
@@ -98,7 +99,7 @@
 
                 if (ccArrow)
                 {
-                    ccArrow.ShotToDirectly(ccArrow.transform.up, damage); // * force.magnitude;
+                    ccArrow.ShotToDirection(ccArrow.transform.up, damage); // * force.magnitude;
                     arrowcount++;
                 }
             }

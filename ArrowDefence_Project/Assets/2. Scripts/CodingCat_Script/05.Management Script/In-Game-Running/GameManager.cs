@@ -133,7 +133,7 @@
             if(activeMain)
             {
                 mainSprite   = equips.GetMainArrow().GetSprite;
-                mainCallback = () => Controller().ArrowSwap(LOAD_ARROW_TYPE.ARROW_MAIN);
+                mainCallback = () => Controller().Swap(LOAD_ARROW_TYPE.ARROW_MAIN);
             }
             else
             {
@@ -145,7 +145,7 @@
             if(activeSub)
             {
                 subSprite   = equips.GetSubArrow().GetSprite;
-                subCallback = () => Controller().ArrowSwap(LOAD_ARROW_TYPE.ARROW_SUB);
+                subCallback = () => Controller().Swap(LOAD_ARROW_TYPE.ARROW_SUB);
             }
             else
             {

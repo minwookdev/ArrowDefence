@@ -1,6 +1,7 @@
 ﻿namespace ActionCat
 {
     using UnityEngine;
+    using ActionCat.Interface;
 
     [System.Serializable]
     public abstract class AccessorySPEffect

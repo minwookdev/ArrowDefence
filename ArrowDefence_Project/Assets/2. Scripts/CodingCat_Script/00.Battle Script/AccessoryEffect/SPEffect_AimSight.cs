@@ -24,8 +24,7 @@
         /// </summary>
         /// <param name="lineMat">Material LineRenderer</param>
         /// <param name="lineWidth">LineRenderer Width (Recommen [0.010 ~ 0.5])</param>
-        public void Initialize(Material lineMat, float lineWidth)
-        {
+        public void Initialize(Material lineMat, float lineWidth) {
             //Initial LineRender Variables
             lineRenderMat   = lineMat;
             lineRenderWidth = lineWidth;
@@ -52,7 +51,7 @@
 
         private void Update()
         {
-            if (bowController.IsBowPulling)
+            if (bowController.IsStatePulling() == true)
             {
                 RaycastHit2D rayhit = Physics2D.Raycast(LineStartPoint.position, LineStartPoint.right, rayDistance);
                 //Debug.DrawRay(LineStartPoint.position, LineStartPoint.right * rayDistance, Color.green); //Debugging

@@ -1,4 +1,5 @@
 ﻿namespace ActionCat {
+    using ActionCat.Interface;
     using System.Collections;
     using UnityEngine;
 
@@ -88,72 +89,91 @@
 
         #region POOL-OBJECT
 
-        public void DisableRequest(GameObject target) => CCPooler.ReturnToPool(target);
-
         public void DisableRequest() => CCPooler.ReturnToPool(gameObject);
 
         #endregion
 
         #region ON_DAMAGE
 
-        public void OnHitObject(ref DamageStruct damage) {
-            //Active Monster Hit Event
-            GameManager.Instance.CallMonsterHitEvent();
-
-            //Play Monster Hit Animation
-            monsterState.OnHit();
-
-            //Decrease Monster Health with Floating Damage, static rotation, no critical
-            var gettingDamage = damage.GetFinalCalcDamageOut(Armorating, CriticalResist, out bool isCritical);
-            currentHealthPoint -= gettingDamage;
-            DamageFloater.Instance.OnFloatingWithScale(gettingDamage, transform.position, new Vector2(0f, -1f), isCritical);
-
-            //Check Monster Death
-            if(currentHealthPoint <= 0f && isDeath == false) {
-                monsterState.StateChanger(STATETYPE.DEATH);
-                isDeath = true;
-            }
-        }
-
-        public void OnHitObject(float damage) {
-            //Active Monster Hit Event
-            GameManager.Instance.CallMonsterHitEvent();
-
-            //Play Hit Animation
-            monsterState.OnHit();
-
-            //Decrease Monster's Health Point
-            currentHealthPoint -= damage;
-
-            //is Active Simple Hit Effect?
-            if(isActiveHitColor == true) {
-                OnHitColorChange();
-            }
-
-            //On Monster Death
-            if(currentHealthPoint <= 0 && isDeath == false) {
-                monsterState.StateChanger(STATETYPE.DEATH);
-                isDeath = true;
-            }
-        }
-
         public void OnHitWithDirection(ref DamageStruct damage, Vector3 contactPoint, Vector3 direction) {
-            //Active Monster Hit Event
-            GameManager.Instance.CallMonsterHitEvent();
+            //if the Monster is already Death, Failed Hit.
+            if (currentHealthPoint <= 0 || isDeath == true) {
+                return;
+            }
 
-            //Play Monster Hit Animation
-            monsterState.OnHit();
-
-            //Decrease Monster Health Point with Floating Damage
+            //Recieve Final Calculated Damage
             var recieveDamage = damage.GetFinalCalcDamageOut(Armorating, CriticalResist, out bool isCritical);
             currentHealthPoint -= recieveDamage;
             DamageFloater.Instance.OnFloatingWithScale(recieveDamage, contactPoint, direction, isCritical);
 
-            //Check Monster Death
+            //Play Monster Hit Animation
+            monsterState.OnHit();
+
+            //Active Event Hit Event.
+            GameManager.Instance.CallMonsterHitEvent();
+
+            //Monster is Death ?
             if(currentHealthPoint <= 0 && isDeath == false) {
                 monsterState.StateChanger(STATETYPE.DEATH);
+
+                //======================[this logic is need Duplicate Activating test]====================
+                GameManager.Instance.CallMonsterDeathEvent();
+                BattleProgresser.OnDropItemChance(ItemDropCorrection);
+                BattleProgresser.OnIncreaseClearGauge(GaugeIncreaseValue);
+                //========================================================================================
+
                 isDeath = true;
             }
+        }
+
+        public bool OnHitWithResult(ref DamageStruct damage, Vector3 point, Vector2 direction) {
+            //Monster is already Death, Failed Hit.
+            if(currentHealthPoint <= 0 || isDeath == true) {
+                return false;
+            }
+
+            //Recieve Final Calculated Damage
+            var recieveDamage = damage.GetFinalCalcDamageOut(Armorating, CriticalResist, out bool isCritical);
+            currentHealthPoint -= recieveDamage;
+            DamageFloater.Instance.OnFloatingWithScale(recieveDamage, point, direction, isCritical);
+
+            //Play Monster Hit Animation
+            monsterState.OnHit();
+
+            //Call Event Monster Hit
+            GameManager.Instance.CallMonsterHitEvent();
+
+            //Monster is Death ?
+            if(currentHealthPoint <= 0 && isDeath == false) {
+                monsterState.StateChanger(STATETYPE.DEATH);
+
+                //======================[this logic is need Duplicate Activating test]====================
+                GameManager.Instance.CallMonsterDeathEvent();
+                BattleProgresser.OnDropItemChance(ItemDropCorrection);
+                BattleProgresser.OnIncreaseClearGauge(GaugeIncreaseValue);
+                //========================================================================================
+
+                isDeath = true;
+            }
+
+            return true;
+        }
+
+        public bool IsAlive() {
+            if(isDeath == true || currentHealthPoint <= 0) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+
+        public void OnHitObject(ref DamageStruct damage) {
+            throw new System.NotImplementedException();
+        }
+
+        public void OnHitObject(float damage) {
+            throw new System.NotImplementedException();
         }
 
         public void OnHitWithAngle(ref DamageStruct damage, float angle) {
@@ -176,6 +196,13 @@
         /// </summary>
         public void OnDamageWall() {
             BattleProgresser.OnDecreasePlayerHealthPoint(damageCount);
+        }
+
+        /// <summary>
+        /// Animation Event
+        /// </summary>
+        public void OnDropReward() {
+
         }
 
         #endregion
@@ -205,8 +232,6 @@
                 sprite.color = startColor;
             }
         }
-
-
 
         #endregion
     }

@@ -132,8 +132,7 @@
         {
 #if ENABLE_LOG
             UnityEngine.Debug.LogError(msg);
-            if(isStopEditor)
-            {
+            if(isStopEditor) {
                 UnityEngine.Debug.Break();
             }
             //UnityEngine.Debug.

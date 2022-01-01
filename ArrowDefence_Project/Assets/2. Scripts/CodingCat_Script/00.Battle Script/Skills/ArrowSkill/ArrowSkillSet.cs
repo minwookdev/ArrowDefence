@@ -1,5 +1,6 @@
 ﻿namespace ActionCat
 {
+    using ActionCat.Interface;
     using UnityEngine;
 
     public class ArrowSkillSet
@@ -285,7 +286,7 @@
             addProjSkill.OnHit();
             bool isDisable = hitSkill.OnHit(collider, out tempTr, ref damage, contactpoint, direction);
             if (isDisable == false)
-                airSkill.CallbackOnHit(tempTr);
+                airSkill.OnHitCallback(tempTr);
             return isDisable;
         }
 
@@ -307,7 +308,7 @@
         {
             bool isDisable = hitSkill.OnHit(collider, out tempTr, ref damage, contactpoint, direction);
             if (isDisable == false) //Disable되는 상황이 아닐 경우만 Transform 보내줌
-                airSkill.CallbackOnHit(tempTr);
+                airSkill.OnHitCallback(tempTr);
             return isDisable;
 
             ///tempTr을 Hitskill의 OnHit함수로 매개변수로써 보내고, 
@@ -347,7 +348,7 @@
         /// <param name="direction"></param>
         /// <returns></returns>
         bool HitDefault(Collider2D collider, ref DamageStruct damage, Vector3 contactPos, Vector2 direction) {
-            collider.GetComponent<IDamageable>().OnHitWithDirection(ref damage, contactPos, direction); return true;
+            return collider.GetComponent<IDamageable>().OnHitWithResult(ref damage, contactPos, direction);
         }
 
         void DefaultAir()

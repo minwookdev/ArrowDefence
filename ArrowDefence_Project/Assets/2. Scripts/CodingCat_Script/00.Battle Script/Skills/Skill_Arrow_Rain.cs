@@ -1,5 +1,6 @@
 ﻿namespace ActionCat
 {
+    using ActionCat.Interface;
     using System.Collections;
     using UnityEditor;
     using UnityEngine;
@@ -126,7 +127,7 @@
                 if(arrow)
                 {
                     arrow.gameObject.transform.rotation = Quaternion.Euler(0f, 0f, CalculateAngle(arrow.transform.position, randomdest));
-                    arrow.ShotToDirectly(arrow.transform.up, damage); // * force.magnitude;
+                    arrow.ShotToDirection(arrow.transform.up, damage); // * force.magnitude;
                 }
 
                 if(isActiveDebugLine)

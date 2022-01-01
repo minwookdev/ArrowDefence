@@ -1,4 +1,5 @@
 ﻿namespace ActionCat {
+    using ActionCat.Interface;
     using System.Collections.Generic;
     using UnityEngine;
 
@@ -23,8 +24,7 @@
         public abstract void Clear();
     }
 
-    public abstract class AttackActiveTypeAS : ArrowSkill
-    {
+    public abstract class AttackActiveTypeAS : ArrowSkill {
         protected GameObject lastHitTarget = null;
 
         public abstract bool OnHit(Collider2D target, ref DamageStruct damage, Vector3 contact, Vector2 direction);
@@ -53,127 +53,76 @@
         }
     }
 
-    public abstract class AirActiveTypeAS : ArrowSkill
-    {
-        public virtual void CallbackOnHit(Transform tr) { }
+    public abstract class AirActiveTypeAS : ArrowSkill {
+        public virtual void OnHitCallback(Transform tr) { }
 
         public abstract void OnUpdate();
 
         public virtual void OnFixedUpdate() { }
     }
 
-    public abstract class AddProjTypeAS : ArrowSkill
-    {
+    public abstract class AddProjTypeAS : ArrowSkill {
         public abstract void OnHit();
     }
 
-    public class ReboundArrow : AttackActiveTypeAS
-    {
-        int currentChainCount = 0;  //현재 연쇄횟수
-        int maxChainCount     = 2;  //최대 연쇄횟수
-        float scanRange       = 5f; //Monster 인식 범위
+    public class ReboundArrow : AttackActiveTypeAS {
+        //Save Variables
+        int maxChainCount = 2;  // Max Chain Count
+        float scanRange   = 5f; // Monster Detect Range
 
-        //temp colliders
-        Collider2D[] tempCollArray    = null;
+        //Temp Variables
         List<Collider2D> tempCollList = null;
+        int currentChainCount         = 0;  // Current Chain Count
 
-        //return true : DisableArrow || false : IgnoreCollision
-        public override bool OnHit(Collider2D target, ref DamageStruct damage, Vector3 contact, Vector2 direction)
-        {
-            //■■■■■■■■■■■■■ I. Availablity Arrow Skill : 중복 다겟 및 연쇄 횟수 체크 ■■■■■■■■■■■■■
+        public override bool OnHit(Collider2D target, ref DamageStruct damage, Vector3 contact, Vector2 direction) {
+            //=============================================[ PHASE I. ACTIVATING & TARGET CHECKER ]=========================================================
             //최근에 Hit처리한 객체와 동일한 객체와 다시 충돌될 경우, return 처리
             //해당 Monster Object를 무시함 [같은 객체에게 스킬 효과를 터트릴 수 없음]
-            if (lastHitTarget == target.gameObject) {
-                //동일한 객체에 재-충돌 무시
-                return false;
+            if (lastHitTarget == target.gameObject) {    // Same Target Check
+                return false;                            // Ignore
             }
             else {
-                //연쇄횟수 체크
-                if(currentChainCount >= maxChainCount) {
-                    //Monster Hit : 최대 연쇄횟수 도달
-                    target.GetComponent<IDamageable>().OnHitWithDirection(ref damage, contact, direction);
-                    return true;
+                // Max Chain : Try On Hit and Disable
+                if (currentChainCount >= maxChainCount) { //Try OnHit
+                    return target.GetComponent<IDamageable>().OnHitWithResult(ref damage, contact, direction);
                 }
 
-                //현재 연쇄횟수 중첩 및 마지막 적 저장
-                currentChainCount++;
-                lastHitTarget = target.gameObject;
-
-                //Monster hit
-                target.GetComponent<IDamageable>().OnHitWithDirection(ref damage, contact, direction);
+                // Not Max Chain : Try Activate Skill
+                if (target.GetComponent<IDamageable>().OnHitWithResult(ref damage, contact, direction)) { //Try OnHit
+                    currentChainCount++;
+                    lastHitTarget = target.gameObject;
+                }
+                else { //if Failed OnHit, Ignore
+                    return false;
+                }
             }
+            //==============================================================================================================================================
 
-            //■■■■■■■■■■■■■■■ II Rebound Arrow Skill : Active 절차 개시 ■■■■■■■■■■■■■■■
-            tempCollArray = Physics2D.OverlapCircleAll(arrowTr.position, scanRange);
-            if (tempCollArray.Length == 0) {
-                //주변에 bound 대상 객체가 없는 경우 화살 소멸
-                return true;
-            } //->
-            #region LEGACY
-            //else
-            //{
-            //    //방금 hit한 대상의 Collider가 있는지 검사 순회, target collider list에서 제거.
-            //    for (int i = 0; i < hitColliders.Length; i++)
-            //    {
-            //        if(hitColliders[i] == target)
-            //        {
-            //            List<Collider2D> tempCollList = new List<Collider2D>(hitColliders);
-            //            tempCollList.RemoveAt(i);
-            //            hitColliders = tempCollList.ToArray(); break;
-            //
-            //            //for (int j = 0; j < hitColliders.Length; j++)
-            //            //{
-            //            //    tempCollList.Add(hitColliders[j]);
-            //            //}
-            //        }
-            //    }
-            //}
-            //
-            ////Monster가 아닌 객체들 걸러내기
-            //List<Collider2D> monsterColliders = new List<Collider2D>();
-            //foreach (var coll in hitColliders)
-            //{
-            //    if (coll.CompareTag(AD_Data.OBJECT_TAG_MONSTER))
-            //        monsterColliders.Add(coll);
-            //}
-            //
-            //if (monsterColliders.Count <= 0)
-            //{
-            //    Clear(); return true;
-            //    //arrow.DisableObject_Req(arrow.gameObject); return true;
-            //}
-            #endregion
+            //================================================[ PHASE II. REBOUND TARGET FINDER ]===========================================================
+            tempCollList = new List<Collider2D>(Physics2D.OverlapCircleAll(arrowTr.position, scanRange, 1 << LayerMask.NameToLayer(AD_Data.LAYER_MONSTER)));
+            var duplicateTarget = tempCollList.Find(element => element == target);
+            if (duplicateTarget != null) tempCollList.Remove(duplicateTarget);  // Remove Duplicate Target
+            if (tempCollList.Count <= 0) return true;                           // Rebound Target Not Found -> Disable.
+            //==============================================================================================================================================
 
-            //■■■■■■■■■■■■■■■ III. Optimal target selection ■■■■■■■■■■■■■■■
-            tempCollList = new List<Collider2D>(tempCollArray);
-            for (int i = tempCollList.Count - 1; i >= 0; i--) //Reverse Loop [Remove Array Element]
-            {
-                //중복 발동 대상과 Monster Layer가 아닌 Collider는 예외처리.
-                if (tempCollList[i] == target || tempCollList[i].CompareTag(AD_Data.OBJECT_TAG_MONSTER) == false)
-                    tempCollList.Remove(tempCollList[i]);
-            }
-            if(tempCollList.Count <= 0) //예외처리후 타겟이 없으면 비활성화 처리.
-            {
-                return true;
-            }
-
-            //Transform bestTargetTr = null; //-> Vector2 Type으로 변경 (참조값이라 중간에 추적중인 Monster Tr 사라지면 에러)
-            Vector3 monsterPos     = Vector3.zero; //Transform이 아닌 Position 저장
+            //==============================================[ PHASE III. CALCULATE TARGET'S DISTANCE ]======================================================
+            //Transform bestTargetTr = null;       // Used Transform is Instability
+            Vector3 monsterPos     = Vector3.zero; // Transform이 아닌 Vector Type 사용.
             float closestDistSqr   = Mathf.Infinity;
-            for (int i = 0; i < tempCollList.Count; i++)
-            {
+            for (int i = 0; i < tempCollList.Count; i++) {
                 Vector2 directionToTarget = tempCollList[i].transform.position - arrowTr.position;
                 float distSqr = directionToTarget.sqrMagnitude;
-                if(distSqr < closestDistSqr)
-                {
+                if(distSqr < closestDistSqr) {
                     closestDistSqr = distSqr;
                     monsterPos     = tempCollList[i].transform.position;
                 }
             }
+            //==============================================================================================================================================
 
-            //■■■■■■■■■■■■■■■ III. Force to Target Position ■■■■■■■■■■■■■■■
+            //================================================[ PHASE IV. FORCE TO TARGET POSITION ]========================================================
             arrow.ForceToTarget(monsterPos);
             return false;
+            //==============================================================================================================================================
         }
 
         /// <summary>
@@ -182,111 +131,67 @@
         /// <param name="target"></param>
         /// <param name="targetTr"></param>
         /// <returns></returns>
-        public override bool OnHit(Collider2D target, out Transform targetTr, ref DamageStruct damage, Vector3 contact, Vector2 direction)
-        {
-            //■■■■■■■■■■■■■ I. Availablity Arrow Skill : 중복 타겟 및 연쇄 횟수 체크 ■■■■■■■■■■■■■
+        public override bool OnHit(Collider2D target, out Transform targetTr, ref DamageStruct damage, Vector3 contact, Vector2 direction) {
+            //=============================================[ PHASE I. ACTIVATING & TARGET CHECKER ]=========================================================
             if (lastHitTarget == target.gameObject) {
-                //Air Skill과 Link된 함수는 중복대상과 다시 충돌 시, 근처의 다른 대상을 탐색후 반환하는 로직을 추가.
-                tempCollArray = Physics2D.OverlapCircleAll(arrowTr.position, scanRange, 1 << LayerMask.NameToLayer(AD_Data.LAYER_MONSTER));
-                tempCollList = new List<Collider2D>(tempCollArray);
-                for (int i = tempCollList.Count - 1; i >= 0; i--) {
-                    if (tempCollList[i].gameObject == lastHitTarget)
-                        tempCollList.Remove(tempCollList[i]);
-                }
-                
-                //마지막으로 hit된 대상 거르고, 주변에 다른 타겟이 없다면 Hit처리 후 비활성화
-                if(tempCollList.Count <= 0) {
-                    target.GetComponent<IDamageable>().OnHitWithDirection(ref damage, contact, direction);
-                    targetTr = null;
-                    return true;
-                }
-
-                //Scan범위에 다른 대상이 존재하는 경우 [랜덤 목표 산출] [거리를 비교해서 찾지 않음]
-                targetTr = tempCollList[Random.Range(0, tempCollList.Count)].transform;
-                return false;
-
-                ///Description
-                ///A. 현재 로직상에서 중복 대상과 Hit된 경우는 호밍화살과 연계된 상황에서 
-                ///   첫 대상과 hit되고 두번째 Target을 찾아가던 중 Target이 다른화살에 의해 비활성화
-                ///   처리되고, 호밍화살에서 다시 첫 대상을 찾아가는 상황에서 자주 발생한다.
-                ///B. 이 경우 원래 로직에서는 중복 대상이기 때문에 hit처리하지 않고, 계속 대상에 무의미한 hit를
-                ///   수행하는 모습을 보였다. 이 때문에 Air Skill (Homing)과 연계된 경우 중복 대상일 경우
-                ///   주변의 다른 타겟이 있는지 확인한 이후, 다른 타겟이 있다면 hit처리를 무시하고 대상
-                ///   Target의 Transform을 할당하여 내보내는 처리를 하고, 대상외 다른 적절한 타겟이 없다면
-                ///   hit처리 후 비활성화를 요청한다.
-                ///C. 야기되는 문제는 첫 대상에 hit된 후, 화살의 회전 로직으로 인해 다시금 충돌되는 상황에서의
-                ///   처리 문제이지만, 이 경우는 첫 충돌 이후, 다른 대상 타겟을 찾았고 연계횟수 중첩이후
-                ///   대미지 처리가 들어간 후 다른 Target Transform을 찾았을 때 라는 것을 의미한다.
-                ///   결국에 첫 충돌이후 비활성화되지 않았으면 주변의 다른 대상이 분명히 있고
-                ///   다시 충돌한다고 해도 hit처리 및 비활성화 처리가 들어가지 않게되고, 다른 Target Transform을
-                ///   전달한다는 말이다.
-                ///D. 논리상 문제는 없을것으로 판단.
+                //Ignore Same Target for Collision Stay
+                targetTr = null; return false;
             }
             else {
-                //연쇄횟수 체크
-                if (currentChainCount >= maxChainCount)
-                {
-                    //Monster Hit 처리
-                    target.GetComponent<IDamageable>().OnHitWithDirection(ref damage, contact, direction);
+                // Max Chain : Try On Hit
+                if (currentChainCount >= maxChainCount){
                     targetTr = null; 
-                    return true;
-                    //arrow.DisableObject_Req(arrowTr.gameObject); return true;
+                    return target.GetComponent<IDamageable>().OnHitWithResult(ref damage, contact, direction);
                 }
 
-                //현재 연쇄횟수 중첩 및 마지막 적 저장
-                currentChainCount++;
-                lastHitTarget = target.gameObject;
-
-                //Monster hit 처리
-                target.GetComponent<IDamageable>().OnHitWithDirection(ref damage, contact, direction);
+                // Not Max Chain : Try OnHit and Activating Skill
+                if (target.GetComponent<IDamageable>().OnHitWithResult(ref damage, contact, direction)) {
+                    currentChainCount++;
+                    lastHitTarget = target.gameObject;
+                }
+                else{ //if Failed OnHit, Ignore
+                    targetTr = null;
+                    return false;
+                }
             }
+            //==============================================================================================================================================
 
-            //■■■■■■■■■■■■■■■ II Rebound Arrow Skill : Active 절차 개시 ■■■■■■■■■■■■■■■
-            tempCollArray = Physics2D.OverlapCircleAll(arrowTr.position, scanRange);
-            if (tempCollArray.Length == 0) //return
-            {
-                //주변에 Rebound할 대상 객체가 없는 경우 소멸
-                targetTr = null; 
+            //================================================[ PHASE II. REBOUND TARGET FINDER ]===========================================================
+            tempCollList = new List<Collider2D>(Physics2D.OverlapCircleAll(arrowTr.position, scanRange, 1 << LayerMask.NameToLayer(AD_Data.LAYER_MONSTER)));
+            var dupTarget = tempCollList.Find(element => element == target);
+            if (dupTarget != null) tempCollList.Remove(dupTarget);  //Remove Duplicate Target Monster
+            if (tempCollList.Count <= 0) {                          //Not Found Target -> Disable
+                targetTr = null;
                 return true;
             }
+            //==============================================================================================================================================
 
-            //■■■■■■■■■■■■■■■ III. Optimal target selection ■■■■■■■■■■■■■■■
-            tempCollList = new List<Collider2D>(tempCollArray);
-            for (int i = tempCollList.Count - 1; i >= 0; i--) //Reverse Loop [Remove Array Element]
-            {
-                //중복 발동 대상과 Monster가 아닌 Collider는 예외처리.
-                if (tempCollList[i] == target || tempCollList[i].CompareTag(AD_Data.OBJECT_TAG_MONSTER) == false)
-                    tempCollList.Remove(tempCollList[i]);
-            }
-            if (tempCollList.Count <= 0) //예외처리후 타겟이 없으면 비활성화 처리.
-            {
-                targetTr = null; 
-                return true;
-            }
-
-            Transform bestTargetTr = null;         //-> Target Transform에 넘겨줄 주소
-            Vector3 monsterPos     = Vector3.zero; //Transform이 아닌 Position 저장
-            float closestDistSqr   = Mathf.Infinity;
-            for (int i = 0; i < tempCollList.Count; i++)
-            {
+            //==============================================[ PHASE III. CALCULATE TARGET'S DISTANCE ]======================================================
+            Transform tempTransform = null;
+            Vector3 monsterPos      = Vector3.zero; //Rebound Target Position Save.
+            float closestDistSqr    = Mathf.Infinity;
+            for (int i = 0; i < tempCollList.Count; i++) {
                 Vector2 directionToTarget = tempCollList[i].transform.position - arrowTr.position;
                 float distSqr = directionToTarget.sqrMagnitude;
-                if (distSqr < closestDistSqr)
-                {
+                if (distSqr < closestDistSqr) {
                     closestDistSqr = distSqr;
                     monsterPos     = tempCollList[i].transform.position;
-                    bestTargetTr   = tempCollList[i].transform;
+                    tempTransform  = tempCollList[i].transform; //Sending Target Transform.
                 }
             }
+            //==============================================================================================================================================
 
-            //■■■■■■■■■■■■■■■ IV. Force to Target Position ■■■■■■■■■■■■■■■
-            targetTr = bestTargetTr; 
+            //================================================[ PHASE IV. FORCE TO TARGET POSITION ]========================================================
             arrow.ForceToTarget(monsterPos);
+            targetTr = tempTransform;
             return false;
+            //==============================================================================================================================================
         }
 
-        public override void Clear()
-        {
+        /// <summary>
+        /// call when arrow disable
+        /// </summary>
+        public override void Clear() {
             lastHitTarget     = null;
             currentChainCount = 0;
         }
@@ -319,10 +224,9 @@
         }
     }
 
-    public class HomingArrow : AirActiveTypeAS
-    {
+    public class HomingArrow : AirActiveTypeAS {
         Transform targetTr      = null;    //temp Target Transform
-        float currentSearchTime = 0f;   //Current Target Search Time
+        float currentSearchTime = 0f;      //Current Target Search Time
         bool isFindTarget       = false;
                                        
         //Target Colliders
@@ -336,45 +240,47 @@
         float rotateSpeed    = 800f; //Target Chasing Rotate Speed Value
 
         //Call Every Frames
-        public override void OnUpdate() 
-        {
-            if (targetTr == null) { //Target Not Found
-                isFindTarget = false;
+        public override void OnUpdate() {
+            //================================================[ FIND A NEW TARGET ]=======================================================
+            if (isFindTarget == false) { 
+                //Finding a new Target Transform.
+                //isFindTarget = false;
 
                 //Update Target Find Interval
                 currentSearchTime -= Time.deltaTime;
-                if(currentSearchTime <= 0)
-                {
+                if(currentSearchTime <= 0) {
                     //Target Search Interval
-                    targetTr = SearchTarget();
+                    targetTr = SearchTarget(out isFindTarget);
                     currentSearchTime = searchInterval;
                 }
             }
-            else {  //Target Found
-                isFindTarget = true;
-
-                //Target GameObject Alive Check
-                if (targetTr.gameObject.activeSelf == false)
-                    targetTr = null;
+            //==================================================[ TARGET FOUND ]==========================================================
+            else {
+                //Check the Target GameObject is Alive
+                if (targetTr == null || targetTr.gameObject.activeSelf == false) {
+                    isFindTarget = false;
+                }
             }
+            //============================================================================================================================
         }
 
-        public override void OnFixedUpdate()
-        {
-            if (isFindTarget)
+        public override void OnFixedUpdate() {
+            if (isFindTarget == true) {
                 Homing(targetTr);
-            else
+            }
+            else {
                 DirectionFix();
+            }
         }
 
         /// <summary>
         /// Link with Hit Type Skill
         /// </summary>
         /// <param name="tr">target transform</param>
-        public override void CallbackOnHit(Transform tr)
-        {
-            if (tr == null) return;
-            targetTr = tr;
+        public override void OnHitCallback(Transform tr) {
+            if (tr != null) {
+                targetTr = tr;
+            }
         }
 
         public override void Clear()
@@ -385,45 +291,46 @@
             isFindTarget      = false;
         }
 
-        Transform SearchTarget()
-        {
+        Transform SearchTarget(out bool isTargetFind) {
+            //================================================[ START TARGET FIND ]==========================================================
             colliders = Physics2D.OverlapCircleAll(arrowTr.position, scanRadius, 1 << LayerMask.NameToLayer(AD_Data.LAYER_MONSTER));
-            //CatLog.Log($"Catch Monster Colliders Count : {colliders.Length.ToString()}");
-            if (colliders.Length <= 0)      // No Collider Detected.
+            //==================================================[ NO TARGET FIND ]==========================================================
+            if (colliders.Length <= 0) { 
+                isTargetFind = false;
                 return null;
-            else if (colliders.Length == 1) // One Collider Detected.
+            }
+            //=================================================[ ONE TARGET FIND ]==========================================================
+            else if (colliders.Length == 1) {
+                isTargetFind = true;
                 return colliders[0].transform;
-            else                            // Detected 2 or More Colliders
-            {
-                float closestDistSqr      = Mathf.Infinity;
+            }
+            //================================================[ MORE TARGET FIND ]==========================================================
+            else { 
+                float closestDistSqr = Mathf.Infinity;
                 Transform optimalTargetTr = null;
                 //Check Disatance Comparison.
                 for (int i = 0; i < colliders.Length; i++)
                 {
                     //Distance Check
                     float distSqr = (colliders[i].transform.position - arrowTr.position).sqrMagnitude;
-                    if(distSqr < closestDistSqr)
+                    if (distSqr < closestDistSqr)
                     {
                         //Catch Best Monster Target Transform
                         optimalTargetTr = colliders[i].transform;
-                        closestDistSqr  = distSqr;
+                        closestDistSqr = distSqr;
                     }
                 }
 
+                isTargetFind = true;
                 return optimalTargetTr;
             }
-
-            //Target을 찾지못하면 DirectionFix들어가서 현재 바라보고있는 방향으로 바로 쏴줘야하는데
-            //Homing의 speed로 계속 받고있는건가
-            //속도도 조건을 주어서 해결완료.
-            //Rebound Arrow와 같이 묶였을때, 중복 대상은 Target으로 잡지 않아야 하는데 잡아버리는 문제 발견.
+            //==============================================================================================================================
         }
 
-        void Homing(Transform targetTr)
-        {
-            if (targetTr == null) return; //Call Safety
-            //Fix Direction after Non-target
-            isFixDirection = false;
+        void Homing(Transform targetTr) {
+            if (targetTr == null) { //Target Transform Check (call safety)
+                return;
+            }
 
             Vector2 direction = (Vector2)targetTr.position - rBody.position;
             direction.Normalize(); //Only Direction
@@ -433,45 +340,22 @@
 
             rBody.angularVelocity = -rotateAmount * rotateSpeed;
 
-            //Force To Arrow Forward
+            //Force To Arrow Forward [Delete this]
             rBody.velocity = arrowTr.up * speed;
+
+            //Set Fix Direction is false, for Non-Target.
+            isFixDirection = false;
         }
 
-        void DirectionFix()
-        {
-            //if (rBody.angularVelocity > 0f)
-            //{
-            //    rBody.angularVelocity = 0f;
-            //    arrow.ShotToDirectly(arrowTr.up);
-            //}
-
-            //Fix Direction Once. (used isFixDirection)
-            //if(isFixDirection == false)
-            //{
-            //    if(rBody.angularVelocity > 0f)
-            //    {
-            //        rBody.angularVelocity = 0f;
-            //        arrow.ShotToDirectly(arrowTr.up);
-            //    }
-            //
-            //    isFixDirection = true;
-            //}
-
-            //Fix Direction -> 이대로면 화살이 느려지지는 않지만, 계속 Update들어오게 되서 왠지 좀 싫음 
-            //rBody.angularVelocity = 0f;
-            //arrow.ShotToDirectly(arrowTr.up);
-
-            //Direction Fix 들어왔을 때, 한번만 잡아주는 방법으로 진행하고 싶음
-            if(isFixDirection == false)
-            {
-                if(rBody.angularVelocity > 0f || rBody.velocity.magnitude < 10f)
-                {
+        void DirectionFix() {
+            //if Not Found the Target Object, Force to Directly Direction.
+            if(isFixDirection == false) { //Stop Arrow Homing.
+                if (rBody.angularVelocity > 0f || rBody.velocity.magnitude < 10f) { 
                     rBody.angularVelocity = 0f;
-                    arrow.ShotToDirectly(arrowTr.up);
-                } isFixDirection = true;
+                    arrow.ForceToDirectly();
+                } 
+                isFixDirection = true;
             }
-
-            //다섯판정도 테스트 진행 봄
         }
 
         public override void Init(Transform tr, Rigidbody2D rigid, IArrowObject arrowInter)

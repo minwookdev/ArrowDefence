@@ -13,59 +13,59 @@
         private Touch screenTouch;
         [SerializeField] BowSprite bowSprite;
         [SerializeField] AD_BowAbility bowAbility;
-        DamageStruct damageStruct;
-        
+
         [Header("BOW CONTROL VARIABLES")]
-        public float TouchRadius    = 1f;
-        public float PullableRadius = 1f;
+        public float TouchRadius = 1f;
         public Image BowCenterPointImg;
         public Transform ClampPointTop, ClampPointBottom;
         [Range(1f, 20f)] public float SmoothRotateSpeed = 12f;
         [Range(1f, 3f)]  public float ArrowPullingSpeed = 1f;
 
-        private PULLINGTYPE currentPullType;     //조준 타입 변경 -> Player Settings로 부터 받아오는 Enum Data
         private bool isBowPulling   = false;     //활이 일정거리 이상 당겨져서 회전할 수 있는 상태
         private bool isBowPullBegan = false;     //Bow Pull State Variables
         private bool isChargedShot  = false;
         private float maxBowAngle, minBowAngle;  //Min, Max BowAngle Variables
         private float bowAngle;                  //The Angle Variable (angle between Click point and Bow).
-        private Vector2 limitTouchPosVec;        //Bow GameObject와 거리를 비교할 벡터
         private Vector3 initialTouchPos;         //처음 터치한 곳을 저장할 벡터
         private Vector3 direction;
         private Vector3 currentClickPosition;
         private Vector3 tempEulerAngle;
-        //private bool isPullingStartPosSet = false;    //When pulling is started, it is used to forcibly hold the position.
-                                                        //Enabled later, when using with -> PullingStartPosition();
-        public bool IsBowPulling { get { return isBowPulling; } }   //Bow Pulling Condition property (Used ACSP)
-        public bool IsPullingStop { get; set; }                     //Pulling Stop boolean For Pause, Clear Battle Scene
+        public bool IsPullingStop { get; set; }  //Pulling Stop boolean For Pause, Clear Battle Scene
 
         [Header("ARROW VARIABLES")] //Arrow Relation Variables
-        [ReadOnly] public AD_Arrow ArrowComponent;
-        [ReadOnly] public Transform ArrowParentTr;
-        [ReadOnly] public GameObject LoadedArrow;
+        [SerializeField] Transform ArrowParentTr;
+        [SerializeField] GameObject LoadedArrow;
+        [SerializeField] AD_Arrow ArrowComponent;
 
-        //private float requiredLaunchForce = 250f;
         private bool isLaunch = false;
         private Vector2 arrowForce;
         private Vector3 arrowPosition;
         private Vector3 initArrowScale = new Vector3(1.5f, 1.5f, 0f);
         private Vector3 initArrowRot   = new Vector3(0f, 0f, -90f);
-        private LOAD_ARROW_TYPE loadArrowType;
 
-        /// <summary>
-        /// Bow Skills Delegate
-        /// </summary>
+        //Enums
+        private LOAD_ARROW_TYPE loadArrowType;
+        private PULLINGTYPE currentPullType;
+
+        //Struct
+        private DamageStruct damageStruct;
+
+        //Delegate
         public delegate void BowSkillsDel(float anglez, Transform parent, MonoBehaviour mono, ref DamageStruct damage,
                                           Vector3 initscale, Vector3 initpos, Vector2 force, LOAD_ARROW_TYPE type);
-        public BowSkillsDel BowSkillSet;
+        private BowSkillsDel BowSkillSet;
 
-        #region NOT_USED_VARIABLES
+        #region NOT_USED
         //The Distance between first click and Bowlope
         //private float radius;
         //The Point on the Circumference based on radius and angle.
         //private Vector3 cPoint = Vector3.zero;
         //private Vector2 distance;
+        //private bool isPullingStartPosSet = false;    //When pulling is started, it is used to forcibly hold the position.
+        //Enabled later, when using with -> PullingStartPosition();
         #endregion
+
+        public bool IsStatePulling() => isBowPulling;
 
         private void Awake() => instance = this;
 
@@ -77,9 +77,10 @@
 
             //Initialize variables For Arrow to be Loaded
             if(ClampPointTop == null || ClampPointBottom == null) {
-                CatLog.ELog("Bow Controller : Clamp Point is Not Cached."); CatLog.Break();
+                CatLog.ELog("Bow Controller : Clamp Point is Not Cached.", true);
             }
 
+            //Init-parent
             ArrowParentTr = transform.parent;
 
             //Initialize Bow Center Pivot Image Object
@@ -113,7 +114,6 @@
             }
 
             //Init-Bow Skill and Current Slot Damage Struct.
-            //damageStruct = bowAbility.GetDamage(loadArrowType);
             CatLog.Log(StringColor.YELLOW, $"Damage Struct SizeOf : {System.Runtime.InteropServices.Marshal.SizeOf(typeof(DamageStruct))}");
             CatLog.Log(StringColor.YELLOW, $"Damage Struct SizeOf : {System.Runtime.InteropServices.Marshal.SizeOf(damageStruct)}");
             bowAbility.AddListnerToSkillDel(ref BowSkillSet);
@@ -163,11 +163,10 @@
             }
 #endif
             //Arrow Position Update
-            UpdateArrowPosition();
+            UpdateArrPosition();
         }
 
-        private void FixedUpdate()
-        {
+        private void FixedUpdate() {
             if (isLaunch == true) {
                 Launch();
                 isLaunch = false;
@@ -186,18 +185,13 @@
                 case PULLINGTYPE.AUTOMATIC: throw new System.NotImplementedException();                  //Type 3.-자동 사격 (미구현)
             }
 
-            //if(AD_BowRope.instance.arrowCatchPoint == null && ArrowComponent != null) {
-            //    AD_BowRope.instance.arrowCatchPoint = ArrowComponent.CatchTr;
-            //}
-
             //Rope Catch Point Set.
             AD_BowRope.instance.SetCatchPoint(ArrowComponent.CatchTr);
 
             isBowPullBegan = true;
         }
 
-        private void BowMoved(Vector2 pos)
-        {
+        private void BowMoved(Vector2 pos) {
             //Get CurrentClick Position
             currentClickPosition = MainCam.ScreenToWorldPoint(pos);
 
@@ -277,18 +271,15 @@
             //}
             #endregion
 
-            #region NEW_CONTROLLER
-
             float distOfPoint = (currentPullType == PULLINGTYPE.AROUND_BOW_TOUCH) ? 
                 Vector2.Distance(transform.position, currentClickPosition) : 
                 Vector2.Distance(initialTouchPos, currentClickPosition);
 
             isBowPulling = (distOfPoint > 1f) ? true : false;
 
-            if(isBowPulling)
-            {
-                //when pulling starts, correct the position once. (부자연스러워 보여서 비활성화.)
-                //PullingStartPosition(currentClickPosition);
+            if(isBowPulling) {
+                //when pulling starts, correct the position once. [DISABLE]
+                //CorrectionArrPos(currentClickPosition);
 
                 this.direction = (currentPullType == PULLINGTYPE.AROUND_BOW_TOUCH) ?
                     currentClickPosition - transform.position :
@@ -307,16 +298,14 @@
                 if (currentPullType == PULLINGTYPE.AROUND_BOW_TOUCH) DrawTouchPos.Instance.DrawTouchLine(currentClickPosition, transform.position, true);
                 else if (currentPullType == PULLINGTYPE.FREE_TOUCH)  DrawTouchPos.Instance.DrawTouchLine(currentClickPosition, initialTouchPos, true);
             }
-            else
-            {
+            else {
                 //Draw Touch Line : Color Red.
                 if (currentPullType == PULLINGTYPE.AROUND_BOW_TOUCH) DrawTouchPos.Instance.DrawTouchLine(currentClickPosition, transform.position, false);
                 else if (currentPullType == PULLINGTYPE.FREE_TOUCH)  DrawTouchPos.Instance.DrawTouchLine(currentClickPosition, initialTouchPos, false);
             }
 
-            StopPullingChecker();
-
-            #endregion
+            //Check the Pulling Stop Trigger is true
+            UpdateStopPulling();
 
             #region OLD_ARROW_LOGIC
 
@@ -408,11 +397,11 @@
             //Release Bow Rope
             AD_BowRope.instance.CatchPointClear();
 
-            //Update Damage Struct -> changed Bow Moved Method
+            //Update Damage Struct
             damageStruct = bowAbility.GetDamage(loadArrowType, isChargedShot);
 
             //Shot Arrow & Active Skill.
-            ArrowComponent.ShotArrow(arrowForce, damageStruct, ArrowParentTr);
+            ArrowComponent.ShotByBow(arrowForce, ArrowParentTr, damageStruct);
             BowSkillSet?.Invoke(transform.eulerAngles.z, ArrowParentTr, this, ref damageStruct, initArrowScale,
                                 ArrowComponent.CatchTr.position, arrowForce, loadArrowType);
 
@@ -443,45 +432,6 @@
             initialTouchPos = MainCam.ScreenToWorldPoint(touchPos);
         }
 
-        private IEnumerator ArrowReload() {
-#region ORIGIN_RELAOD
-            //var arrow = CatPoolManager.Instance.LoadNormalArrow(this);
-            //
-            //currentLoadedArrow = arrow;
-            //arrowComponent     = arrow.gameObject.GetComponent<AD_Arrow>();
-            //loadedArrowRbody   = arrow.gameObject.GetComponent<Rigidbody2D>();
-            //
-            //arrow.transform.SetParent(this.transform, false);
-            //arrow.transform.localScale                     = this.initialArrowScale;
-            //arrow.transform.localEulerAngles               = this.initialArrowRotation;
-            //arrow.transform.position   = ReturnInitArrowPos(arrow.transform.position);
-            //
-            ////Right, Left Clamp 한번만 잡아주면 다음 Active때 잡아주지 않아도 가능한지?
-            //// -> 추후 게임이 시작되기 전에 미리 Clamp 한번에 Initial해주면 어떨지?
-            //arrowComponent.leftClampPoint  = this.leftClampPoint;
-            //arrowComponent.rightClampPoint = this.rightClampPoint;
-#endregion
-
-#region POOL_RELOAD
-            yield return null;
-
-            if (loadArrowType == LOAD_ARROW_TYPE.ARROW_MAIN)
-                LoadedArrow = CCPooler.SpawnFromPool(AD_Data.POOLTAG_MAINARROW, transform, initArrowScale, ClampPointTop.position, Quaternion.Euler(initArrowRot));
-            else if (loadArrowType == LOAD_ARROW_TYPE.ARROW_SUB)
-                LoadedArrow = CCPooler.SpawnFromPool(AD_Data.POOLTAG_SUBARROW, transform, initArrowScale, ClampPointTop.position, Quaternion.Euler(initArrowRot));
-
-            //origin code 
-            //LoadedArrow.transform.localEulerAngles = initArrowRot;
-
-            ArrowComponent = LoadedArrow.GetComponent<AD_Arrow>();
-            ArrowComponent.bottomClampTr  = this.ClampPointBottom;
-            ArrowComponent.topClampTr = this.ClampPointTop;
-
-            //Get Arrow Component
-            //ArrowComponent = LoadedArrow.GetComponent<AD_Arrow>().Reload(ClampPointBottom, ClampPointTop);
-#endregion
-        }
-
         void Reload() {
             switch (loadArrowType) { //Reload Arrow by Current Equipped Arrow Type.
                 case LOAD_ARROW_TYPE.ARROW_MAIN: LoadedArrow = CCPooler.SpawnFromPool(AD_Data.POOLTAG_MAINARROW, transform, initArrowScale, ClampPointTop.position, Quaternion.identity); break;
@@ -495,7 +445,7 @@
         /// <summary>
         /// 화살이 당겨진 상황에서 클리어, 일시정지 들어오면 당기고있는 상태 해제
         /// </summary>
-        private void StopPullingChecker() {
+        void UpdateStopPulling() {
             if (IsPullingStop == true) {
                 if (LoadedArrow != null)
                     LoadedArrow.transform.position = ClampPointTop.transform.position;
@@ -504,26 +454,24 @@
             }
         }
 
-        private void PullingStartPosition(Vector3 touchPos)
-        {
-            //if(isPullingStartPosSet == false)
-            //{
-            //    //Pulling Start Action
-            //    this.direction = (currentPullType == PULLINGTYPE.AROUND_BOW_TOUCH) ?
-            //        touchPos - transform.position :
-            //        touchPos - initialTouchPos;
-            //
-            //    this.bowAngle = Mathf.Clamp(Mathf.Atan2(direction.x, -direction.y) * Mathf.Rad2Deg + 90, minBowAngle, maxBowAngle);
-            //
-            //    tempEulerAngle        = transform.eulerAngles;
-            //    tempEulerAngle.z      = bowAngle;
-            //    transform.eulerAngles = tempEulerAngle;
-            //
-            //    isPullingStartPosSet = true;
-            //}
+        void CorrectionArrPos(Vector3 touchPos) {
+            //Before use, the 'isCorrectionArrPos' declaration is required.
+            bool isCorrectionArrPos = true;
+            if(isCorrectionArrPos == false) {
+                if (currentPullType == PULLINGTYPE.AROUND_BOW_TOUCH) direction = touchPos - transform.position;
+                else if (currentPullType == PULLINGTYPE.FREE_TOUCH)  direction = touchPos - initialTouchPos;
+            
+                bowAngle = Mathf.Clamp(Mathf.Atan2(direction.x, -direction.y) * Mathf.Rad2Deg + 90, minBowAngle, maxBowAngle);
+            
+                tempEulerAngle        = transform.eulerAngles;
+                tempEulerAngle.z      = bowAngle;
+                transform.eulerAngles = tempEulerAngle;
+            
+                isCorrectionArrPos = true;
+            }
         }
 
-        private void UpdateArrowPosition() {
+        void UpdateArrPosition() {
             if(LoadedArrow != null) {
                 if(isBowPulling) {
                     arrowPosition = LoadedArrow.transform.position;
@@ -539,25 +487,67 @@
             }
         }
 
-        public void ArrowSwap(LOAD_ARROW_TYPE type)
-        {
-            //조준중 또는 스왑하려는 화살과 동일된 타입의 화살의 경우 스왑 불가
-            if (isBowPullBegan || loadArrowType == type) {
+        public void Swap(LOAD_ARROW_TYPE type) {
+            //return when Pulling or attempting to replace with the same arrowtype.
+            if (isBowPullBegan == true || loadArrowType == type) {
                 CatLog.WLog("Bow State is Pulling or Same Type of arrow currently loaded");
                 return;
             }
 
-            //장전된 화살 Disable 처리하고 Arrow 관련 변수정리, Pool에서 화살을 꺼내서 장전
-            if (LoadedArrow != null)
+            //Disable Loaded Arrow, Cleanup variables and reload Arrow.
+            if (ArrowComponent != null)
                 ArrowComponent.DisableRequest();
-            AD_BowRope.instance.arrowCatchPoint  = null;
+            AD_BowRope.instance.CatchPointClear();
             LoadedArrow   = null; ArrowComponent = null;
             loadArrowType = type;
-            //damageStruct = bowAbility.GetDamage(loadArrowType);
-            //StartCoroutine(ArrowReload());
+
             Reload();
         }
 
 
+
+        #region NOT_USED
+
+        private IEnumerator ArrowReload()
+        {
+            #region ORIGIN_RELAOD
+            //var arrow = CatPoolManager.Instance.LoadNormalArrow(this);
+            //
+            //currentLoadedArrow = arrow;
+            //arrowComponent     = arrow.gameObject.GetComponent<AD_Arrow>();
+            //loadedArrowRbody   = arrow.gameObject.GetComponent<Rigidbody2D>();
+            //
+            //arrow.transform.SetParent(this.transform, false);
+            //arrow.transform.localScale                     = this.initialArrowScale;
+            //arrow.transform.localEulerAngles               = this.initialArrowRotation;
+            //arrow.transform.position   = ReturnInitArrowPos(arrow.transform.position);
+            //
+            ////Right, Left Clamp 한번만 잡아주면 다음 Active때 잡아주지 않아도 가능한지?
+            //// -> 추후 게임이 시작되기 전에 미리 Clamp 한번에 Initial해주면 어떨지?
+            //arrowComponent.leftClampPoint  = this.leftClampPoint;
+            //arrowComponent.rightClampPoint = this.rightClampPoint;
+            #endregion
+
+            #region POOL_RELOAD
+            yield return null;
+
+            if (loadArrowType == LOAD_ARROW_TYPE.ARROW_MAIN)
+                LoadedArrow = CCPooler.SpawnFromPool(AD_Data.POOLTAG_MAINARROW, transform, initArrowScale, ClampPointTop.position, Quaternion.Euler(initArrowRot));
+            else if (loadArrowType == LOAD_ARROW_TYPE.ARROW_SUB)
+                LoadedArrow = CCPooler.SpawnFromPool(AD_Data.POOLTAG_SUBARROW, transform, initArrowScale, ClampPointTop.position, Quaternion.Euler(initArrowRot));
+
+            //origin code 
+            //LoadedArrow.transform.localEulerAngles = initArrowRot;
+
+            ArrowComponent = LoadedArrow.GetComponent<AD_Arrow>();
+            ArrowComponent.bottomClampTr = this.ClampPointBottom;
+            ArrowComponent.topClampTr = this.ClampPointTop;
+
+            //Get Arrow Component
+            //ArrowComponent = LoadedArrow.GetComponent<AD_Arrow>().Reload(ClampPointBottom, ClampPointTop);
+            #endregion
+        }
+
+        #endregion
     }
 }

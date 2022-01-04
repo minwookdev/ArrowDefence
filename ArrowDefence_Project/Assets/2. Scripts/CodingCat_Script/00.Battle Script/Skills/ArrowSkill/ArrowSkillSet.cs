@@ -3,8 +3,7 @@
     using ActionCat.Interface;
     using UnityEngine;
 
-    public class ArrowSkillSet
-    {
+    public class ArrowSkillSet {
         ARROWSKILL_ACTIVETYPE activeType;
         AttackActiveTypeAS hitSkill = null;
         AirActiveTypeAS airSkill    = null;
@@ -218,6 +217,8 @@
 
         #endregion
 
+        #region CYCLE
+
         public bool OnHit(Collider2D collider, ref DamageStruct damage, Vector3 contactPos, Vector2 direction) {
             switch (activeType) {
                 case ARROWSKILL_ACTIVETYPE.FULL:           return HitFull(collider, ref damage, contactPos, direction); 
@@ -231,10 +232,11 @@
             }
         }
 
-        public void OnUpdate()
-        {
-            switch (activeType)
-            {
+        /// <summary>
+        /// Only Use Air Skill Update
+        /// </summary>
+        public void OnUpdate() {
+            switch (activeType) {
                 case ARROWSKILL_ACTIVETYPE.FULL:        UpdateOnAir(); break;
                 case ARROWSKILL_ACTIVETYPE.ATTACK_AIR:  UpdateOnAir(); break;
                 case ARROWSKILL_ACTIVETYPE.AIR_ADDPROJ: UpdateOnAir(); break;
@@ -243,10 +245,11 @@
             }
         }
 
-        public void OnFixedUpdate()
-        {
-            switch (activeType)
-            {
+        /// <summary>
+        /// Only Use Air Skill Update 
+        /// </summary>
+        public void OnFixedUpdate() {
+            switch (activeType) {
                 case ARROWSKILL_ACTIVETYPE.FULL:        FixedUpdateOnAir(); break;
                 case ARROWSKILL_ACTIVETYPE.ATTACK_AIR:  FixedUpdateOnAir(); break;
                 case ARROWSKILL_ACTIVETYPE.AIR_ADDPROJ: FixedUpdateOnAir(); break;
@@ -264,6 +267,8 @@
                 default:                                                            break;
             }
         }
+
+        #endregion
 
         /// <summary>
         /// Call When Disable Arrow. if the Init SkillSets
@@ -319,7 +324,7 @@
 
         #endregion
 
-        #region ON-AIR-UPDATE
+        #region AIR-UPDATE
 
         void UpdateOnAir() => airSkill.OnUpdate();
 
@@ -349,11 +354,6 @@
         /// <returns></returns>
         bool HitDefault(Collider2D collider, ref DamageStruct damage, Vector3 contactPos, Vector2 direction) {
             return collider.GetComponent<IDamageable>().OnHitWithResult(ref damage, contactPos, direction);
-        }
-
-        void DefaultAir()
-        {
-
         }
 
         #endregion

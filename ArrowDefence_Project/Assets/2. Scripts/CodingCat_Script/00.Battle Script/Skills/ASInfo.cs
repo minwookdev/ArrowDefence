@@ -1,7 +1,6 @@
 ﻿namespace ActionCat
 {
-    public class ASInfo
-    {
+    public class ASInfo {
         //FIELD
         string id;
         string name;
@@ -34,8 +33,7 @@
         /// Create New Arrow Skill Information to Item
         /// </summary>
         /// <param name="so"></param>
-        public ASInfo(ArrowSkillData so)
-        {
+        public ASInfo(ArrowSkillData so) {
             id         = so.SkillId;
             name       = so.SkillName;
             desc       = so.SkillDesc;
@@ -50,8 +48,7 @@
         /// Copy Arrow Skill Information to Item
         /// </summary>
         /// <param name="origin"></param>
-        public ASInfo(ASInfo origin)
-        {
+        public ASInfo(ASInfo origin) {
             id         = origin.id;
             name       = origin.name;
             desc       = origin.desc;

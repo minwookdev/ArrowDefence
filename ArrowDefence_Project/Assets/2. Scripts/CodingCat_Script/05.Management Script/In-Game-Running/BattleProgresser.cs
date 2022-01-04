@@ -35,15 +35,19 @@
 
     public class BattleProgresser : MonoBehaviour
     {
+        [Header("COMPONENT")]
+        [SerializeField] BattleSceneRoute battleSceneUI  = null;
+        [SerializeField] MonsterSpawner   monsterSpawner = null;
+
         [Header("BATTLE PROGRESS")]
         public float StartBattleDelay = 3f;
         public float EndBattleDelay   = 2f;
-        private bool IsResult = false;
         private float startWaitingTime;
         private float endWaitingTime;
+        private bool IsResult = false;
         private bool isInitialized = false;
 
-        [Header("PLAYER's INITIALIZING")]
+        [Header("PLAYER")]
         public Transform ParentTransform;
         public Transform BowInitPosition;
         public float MaxPlayerHealth = 200f;
@@ -66,19 +70,18 @@
         [Header("CURRENT BATTLE STATE")]
         [ReadOnly] public GAMESTATE CurrentGameState;
 
-        [Header("DROP LIST FOR THIS STAGE")]
-        public ItemDropList DropListAsset;
-        [Range(0, 100)] public int StageDropCorrection;
+        [Header("DROPS")]
+        public ItemDropList DropListAsset = null;
+        [SerializeField] [Range(0, 100)] 
+        private int StageDropCorrection = 30;
         [SerializeField] 
         private List<DropItem> dropItemList = new List<DropItem>();
 
-        [Header("DEBUG OPTION")]
+        [Header("DEBUG")]
         public bool IsDebugClearStage    = false;
         public bool IsDebugMonsterLogics = false;
         public bool IsDebugGameOver      = false;
 
-        private BattleSceneRoute battleSceneUI;
-        private MonsterSpawner   monsterSpawner;
 
         //각종 게임 진행 수치관련 대리자
         public delegate void ValueEventHandler(float value);
@@ -101,7 +104,7 @@
             //Init-Delegate
             if (DropListAsset != null) {
                 GameManager.Instance.InitialDroplist(this.DropListAsset);
-                OnDropItemChance += OnDropItemRoll;
+                OnDropItemChance += OnItemDropRoll;
             }
 
             //Start Wait Timer
@@ -164,7 +167,7 @@
             //씬 이동 시 변수 정리.
             //게임 수치관련 이벤트 해제.
             OnIncreaseClearGauge        -= IncreaseClearGauge;
-            OnDropItemChance            -= OnDropItemRoll;
+            OnDropItemChance            -= OnItemDropRoll;
             OnDecreasePlayerHealthPoint -= DecreaseHealthGauge;
 
             //Clear 처리 후, Main Scene으로 넘어가는 경우가 아닌 ApplicationQuit 되어 버리는 경우
@@ -249,8 +252,7 @@
             GameObject[] monsters = GameObject.FindGameObjectsWithTag(AD_Data.OBJECT_TAG_MONSTER);
             CatLog.Log($"Tag Monster's Count : {monsters.Length}, All Monster's Disable");
             foreach (var monster in monsters) {
-                monster.SendMessage(nameof(MonsterState.StateChanger),
-                                    STATETYPE.DEATH, SendMessageOptions.DontRequireReceiver);
+                monster.SendMessage(nameof(MonsterState.StateChanger), STATETYPE.DEATH, SendMessageOptions.DontRequireReceiver);
             }
             ///Scene에 Enable Monster개체를 비 활성화 처리
             ///GameObject.Enable된 개체만 Monsters에 담기는것을 확인.
@@ -268,17 +270,14 @@
 
         #region ITEMDROP_METHOD
 
-        private void OnDropItemRoll(float dropRateCorrection)
-        {
-            if (GameManager.Instance.OnRollItemDrop(StageDropCorrection, dropRateCorrection))
-                AddItemInDropItems(GameManager.Instance.OnDropInItemList());
-            else return;
+        private void OnItemDropRoll(float dropRateCorrection) {
+            if (GameManager.Instance.OnItemDropRoll(StageDropCorrection, dropRateCorrection) == true) {
+                AddDropList(GameManager.Instance.OnItemDrop());
+            }
         }
 
-        private void AddItemInDropItems(DropItem item)
-        {
-            switch (item.ItemAsset.Item_Type)
-            {
+        private void AddDropList(DropItem item) {
+            switch (item.ItemAsset.Item_Type) {
                 case ITEMTYPE.ITEM_CONSUMABLE: StackOnDropItem(item);  break;
                 case ITEMTYPE.ITEM_MATERIAL:   StackOnDropItem(item);  break;
                 case ITEMTYPE.ITEM_EQUIPMENT:  dropItemList.Add(item); break;
@@ -286,8 +285,7 @@
             }
         }
 
-        private void StackOnDropItem(DropItem item)
-        {
+        private void StackOnDropItem(DropItem item) {
             var duplicateItem = dropItemList.Find(x => x.ItemAsset.Item_Id == item.ItemAsset.Item_Id);
             if (duplicateItem != null) duplicateItem.IncAmount(item.Quantity);
             else dropItemList.Add(item);
@@ -318,7 +316,7 @@
                     //Debug 1. Stage Clear, Get All Item's in DropList Asset
                     CatLog.WLog(StringColor.YELLOW, "DEBUGGING MODE TRUE : ALL DROP ITEM LIST.");
                     foreach (var item in DropListAsset.DropTableArray) {
-                        AddItemInDropItems(new DropItem(GameGlobal.RandomIntInArray(item.QuantityRange), item.ItemAsset));
+                        AddDropList(new DropItem(GameGlobal.RandomIntInArray(item.QuantityRange), item.ItemAsset));
                     }
                     //GameState Set Clear Game
                     GameManager.Instance.SetGameState(GAMESTATE.STATE_ENDBATTLE);

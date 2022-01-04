@@ -159,14 +159,7 @@
             return true;
         }
 
-        public bool IsAlive() {
-            if(isDeath == true || currentHealthPoint <= 0) {
-                return true;
-            }
-            else {
-                return false;
-            }
-        }
+        public bool IsAlive() => (isDeath == false || currentHealthPoint > 0) ? true : false;
 
         public void OnHitObject(ref DamageStruct damage) {
             throw new System.NotImplementedException();

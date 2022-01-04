@@ -332,7 +332,9 @@ MonoBehaviour:
 
     Item Description
 
-    Item Description'
+    Item Description
+
+'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: b34e638111c826d4fa490ff5b5439d3d, type: 2}
   m_sharedMaterial: {fileID: -3559939738470882572, guid: b34e638111c826d4fa490ff5b5439d3d,

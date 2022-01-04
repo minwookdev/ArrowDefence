@@ -4,6 +4,15 @@
 
     public class AD_Arrow_less : MonoBehaviour, IPoolObject, IArrowObject
     {
+        [Header("COMPONENT")]
+        [SerializeField] Rigidbody2D rBody;
+        [SerializeField] Transform tr;
+        [SerializeField] TrailRenderer trailRender;
+
+        [Header("VARIAVLES")]
+        [SerializeField] [Range(18f, 30f, order = 1)]
+        private float forceMagnitude = 18f; //Default Force : 18f
+
         //Screen Limit Variable
         private Vector2 topLeftScreenPoint;
         private Vector2 bottomRightScreenPoint;
@@ -14,32 +23,26 @@
         private Vector2 arrowPosition;
         private Vector2 velocity;
         private float arrowAngle = 0f;
-
-        private bool isLaunched = false;
-        private Transform tr;
+        private bool isLaunched  = false;
+        private bool isInitSkill = false;
         
-        //TrailRenderer
-        [SerializeField]
-        TrailRenderer trailRender;
-
-        [SerializeField]
-        private Rigidbody2D rBody;
-
-        [SerializeField]
-        private float forceMagnitude = 18f; //Default Force : 18f
-
-        [Header("EXPERIMENTAL")]
-        [SerializeField] Transform centerTr = null;
-
-        //Arrow Skill Data
+        //STURCT
         DamageStruct damageStruct;
+
+        //CLASS
         ArrowSkillSet arrowSkillSets = null;
-        bool isInitSkill = false;
+
+        void Components() {
+            if (rBody == null)
+                CatLog.ELog("Less Arrow : RigidBody2D is Null.");
+            if (tr == null)
+                CatLog.ELog("Less Arrow : Transform is Null");
+            if (trailRender == null)
+                CatLog.ELog("Less Arrow : TrailRenderer is Null.");
+        }
 
         private void Awake() {
-            //Init-Component
-            rBody = gameObject.GetComponent<Rigidbody2D>();
-            tr    = gameObject.GetComponent<Transform>();
+            Components();
         }
 
         private void Start() {
@@ -65,7 +68,7 @@
             //Arrow Launched
             //if(velocity.magnitude != 0 && isLaunched == true)
             //{
-            //    //CalcAngle(); //아나..증말
+            //    //CalcAngle();
             //    CheckArrowBounds();
             //}
             //

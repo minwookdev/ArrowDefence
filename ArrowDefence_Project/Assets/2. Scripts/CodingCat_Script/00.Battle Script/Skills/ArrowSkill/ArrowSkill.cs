@@ -225,28 +225,27 @@
     }
 
     public class HomingArrow : AirActiveTypeAS {
-        Transform targetTr      = null;    //temp Target Transform
-        float currentSearchTime = 0f;      //Current Target Search Time
-        bool isFindTarget       = false;
-                                       
-        //Target Colliders
-        Collider2D[] colliders = null;
-        bool isFixDirection    = false;
+        //Temp Variables 
+        Transform targetTr      = null;  //temp Target Transform
+        Collider2D[] colliders  = null;  //Temp Target Finder Colliders
+        List<Collider2D> colliderList = null;
+        bool isFindTarget       = false; //is Find a Target?
+        bool isFixDirection     = false; //Non-Target Direction
+        float currentSearchTime = 0f;    //Current Target Search Time
 
         //Saving Variables
+        float scanRadius  = 3f;   //Detection Range
+        float speed       = 6f;   //Target Chasing Speed Value
+        float rotateSpeed = 800f; //Target Chasing Rotate Speed Value
+
+        //Update Interval [Static] [Recomended = 0.1f]
         float searchInterval = .1f;  //Find Target Update Interval
-        float scanRadius     = 3f;   //Detection Range
-        float speed          = 6f;   //Target Chasing Speed Value
-        float rotateSpeed    = 800f; //Target Chasing Rotate Speed Value
 
         //Call Every Frames
         public override void OnUpdate() {
             //================================================[ FIND A NEW TARGET ]=======================================================
             if (isFindTarget == false) { 
-                //Finding a new Target Transform.
-                //isFindTarget = false;
-
-                //Update Target Find Interval
+                //Update Target Finder
                 currentSearchTime -= Time.deltaTime;
                 if(currentSearchTime <= 0) {
                     //Target Search Interval
@@ -256,9 +255,15 @@
             }
             //==================================================[ TARGET FOUND ]==========================================================
             else {
-                //Check the Target GameObject is Alive
-                if (targetTr == null || targetTr.gameObject.activeSelf == false) {
-                    isFindTarget = false;
+                //Update Target alive Check
+                currentSearchTime -= Time.deltaTime;
+                if (currentSearchTime <= 0) {
+                    //Target alive Check Interval
+                    if (targetTr.gameObject.activeSelf == false || targetTr.GetComponent<IDamageable>().IsAlive() == false) {
+                        targetTr     = null;
+                        isFindTarget = false;
+                    }
+                    currentSearchTime = searchInterval;
                 }
             }
             //============================================================================================================================
@@ -293,30 +298,29 @@
 
         Transform SearchTarget(out bool isTargetFind) {
             //================================================[ START TARGET FIND ]==========================================================
-            colliders = Physics2D.OverlapCircleAll(arrowTr.position, scanRadius, 1 << LayerMask.NameToLayer(AD_Data.LAYER_MONSTER));
+            colliderList = new List<Collider2D>(Physics2D.OverlapCircleAll(arrowTr.position, scanRadius, 1 << LayerMask.NameToLayer(AD_Data.LAYER_MONSTER)));
+            colliderList.RemoveAll(collider => collider.GetComponent<IDamageable>().IsAlive() == false); //Remove Element at already Death.
             //==================================================[ NO TARGET FIND ]==========================================================
-            if (colliders.Length <= 0) { 
+            if (colliderList.Count <= 0) { 
                 isTargetFind = false;
                 return null;
             }
             //=================================================[ ONE TARGET FIND ]==========================================================
-            else if (colliders.Length == 1) {
+            else if (colliderList.Count == 1) {
                 isTargetFind = true;
-                return colliders[0].transform;
+                return colliderList[0].transform;
             }
             //================================================[ MORE TARGET FIND ]==========================================================
             else { 
                 float closestDistSqr = Mathf.Infinity;
                 Transform optimalTargetTr = null;
                 //Check Disatance Comparison.
-                for (int i = 0; i < colliders.Length; i++)
-                {
+                for (int i = 0; i < colliderList.Count; i++) {
                     //Distance Check
-                    float distSqr = (colliders[i].transform.position - arrowTr.position).sqrMagnitude;
-                    if (distSqr < closestDistSqr)
-                    {
+                    float distSqr = (colliderList[i].transform.position - arrowTr.position).sqrMagnitude;
+                    if (distSqr < closestDistSqr) {
                         //Catch Best Monster Target Transform
-                        optimalTargetTr = colliders[i].transform;
+                        optimalTargetTr = colliderList[i].transform;
                         closestDistSqr = distSqr;
                     }
                 }
@@ -358,8 +362,7 @@
             }
         }
 
-        public override void Init(Transform tr, Rigidbody2D rigid, IArrowObject arrowInter)
-        {
+        public override void Init(Transform tr, Rigidbody2D rigid, IArrowObject arrowInter) {
             base.Init(tr, rigid, arrowInter);
             currentSearchTime = searchInterval;
         }
@@ -368,9 +371,7 @@
         /// Copy Class Constructor
         /// </summary>
         /// <param name="guidanceArrow"></param>
-        public HomingArrow(HomingArrow origin)
-        {
-            searchInterval = origin.searchInterval;
+        public HomingArrow(HomingArrow origin) {
             scanRadius     = origin.scanRadius;
             speed          = origin.speed;
             rotateSpeed    = origin.rotateSpeed;
@@ -380,9 +381,7 @@
         /// Create Skill Data in Skill Scriptable Object
         /// </summary>
         /// <param name="data"></param>
-        public HomingArrow(DataHoming data)
-        {
-            searchInterval = data.TargetSearchInterval;
+        public HomingArrow(DataHoming data) {
             scanRadius     = data.ScanRadius;
             speed          = data.HomingSpeed;
             rotateSpeed    = data.HomingRotateSpeed;
@@ -418,40 +417,44 @@
         }
     }
 
-    public class PiercingArrow : AttackActiveTypeAS
-    {
-        public byte currentChainCount = 0;
+    public class PiercingArrow : AttackActiveTypeAS {
+        //SAVE VARIABLES
         public byte maxChainCount;
 
+        //TEMP VARIABLES
+        byte currentChainCount = 0;
+        bool isResult = false;
         float tempRadius = 5f;
+        Collider2D[] tempArray = null;
 
-        ///관통 횟수에 따른 데미지 감소효과 구현필요.
+        ///관통 횟수에 따른 데미지 감소효과 구현
 
         /// <summary>
         /// return true == DisableArrow || false == aliveArrow
         /// </summary>
         /// <param name="target"></param>
         /// <returns></returns>
-        public override bool OnHit(Collider2D target, ref DamageStruct damage, Vector3 contactpoint, Vector2 direction)
-        {
-            if (lastHitTarget == target.gameObject) {
-                //Ignore Duplicate Target
+        public override bool OnHit(Collider2D target, ref DamageStruct damage, Vector3 contactpoint, Vector2 direction) {
+            //================================================[ ON HIT TARGET & INC CHAIN ]=======================================================
+            if (lastHitTarget == target.gameObject) {    //Ignore Duplicate Target
                 return false;
             }
             else {
-                if (currentChainCount >= maxChainCount) {
-                    //Hit 처리 후 화살객체 Disable
-                    target.GetComponent<IDamageable>().OnHitWithDirection(ref damage, contactpoint, direction);
-                    return true;
+                if(currentChainCount >= maxChainCount) { // Max Chain Count : Try OnHit
+                    return target.GetComponent<IDamageable>().OnHitWithResult(ref damage, contactpoint, direction);
                 }
 
-                //연쇄횟수 중첩 및 타겟 저장
-                currentChainCount++;
-                lastHitTarget = target.gameObject;
+                //Try On Hit
+                isResult = target.GetComponent<IDamageable>().OnHitWithResult(ref damage, contactpoint, direction);
+                if(isResult) {
+                    //Success OnHit
+                    currentChainCount++;
+                    lastHitTarget = target.gameObject;
+                }
 
-                //Monster Hit 처리
-                target.GetComponent<IDamageable>().OnHitWithDirection(ref damage, contactpoint, direction);
-            } return false;
+                return isResult;
+            } 
+            //====================================================================================================================================
         }
 
         /// <summary>
@@ -460,47 +463,48 @@
         /// <param name="target"></param>
         /// <param name="targetTr"></param>
         /// <returns></returns>
-        public override bool OnHit(Collider2D target, out Transform targetTr, ref DamageStruct damage, Vector3 contactpoint, Vector2 direction)
-        {
-            if(lastHitTarget == target.gameObject) {
-                //Ignore Duplicate Target
-                targetTr = null; return false;
+        public override bool OnHit(Collider2D target, out Transform targetTr, ref DamageStruct damage, Vector3 contactpoint, Vector2 direction) {
+            //================================================[ IGNORE DUPLICATE TARGET ]=========================================================
+            if (lastHitTarget == target.gameObject) {
+                targetTr = null; 
+                return false;
             }
             else {
+            //=================================================[ ARRIVAL MAX CHAINCOUNT ]=========================================================
                 if(currentChainCount >= maxChainCount) {
-                    //Hit처리 후 Arrow Object Disable 요청
-                    target.GetComponent<IDamageable>().OnHitWithDirection(ref damage, contactpoint, direction);
-                    targetTr = null; return true;
+                    targetTr = null;
+                    return target.GetComponent<IDamageable>().OnHitWithResult(ref damage, contactpoint, direction);
                 }
 
-                //연쇄 횟수 중첩 및 타겟 저장
+            //========================================================[ TRY ON HIT ]==============================================================
+                isResult = target.GetComponent<IDamageable>().OnHitWithResult(ref damage, contactpoint, direction);
+                if(isResult == false) { //Failed Target OnHit
+                    targetTr = null;
+                    return isResult;
+                }
+
+                //Success Target OnHit
                 currentChainCount++;
                 lastHitTarget = target.gameObject;
-
-                target.GetComponent<IDamageable>().OnHitWithDirection(ref damage, contactpoint, direction);
+            //====================================================================================================================================
             }
 
-            //Air Skill과 연계된 경우, 주변의 Random Monster Target을 넘겨줌
-            var collList = new List<Collider2D>(
-            Physics2D.OverlapCircleAll(arrowTr.position, tempRadius,
-                                       1 << LayerMask.NameToLayer(AD_Data.LAYER_MONSTER)));
-            for (int i = collList.Count - 1; i >= 0 ; i--) {
-                if (collList[i].gameObject == lastHitTarget)
-                    collList.Remove(collList[i]);
-            }
-
-            if(collList.Count <= 0) {
+            //==================================================[ FIND TARGET TRANSFORM ]=========================================================
+            tempArray = GameGlobal.OverlapCircleAll2D(arrowTr, tempRadius, AD_Data.LAYER_MONSTER, collider => collider.gameObject == target);
+            if(tempArray.Length <= 0) {
+                //Not Found a Target.
                 targetTr = null;
-                return false;
             }
             else {
-                targetTr = collList[Random.Range(0, collList.Count)].transform;
-                return false;
+                //Find the Target. (Random Target Sending)
+                targetTr = tempArray[Random.Range(0, tempArray.Length)].transform;
             }
+            //====================================================================================================================================
+
+            return isResult;
         }
 
-        public override void Clear()
-        {
+        public override void Clear() {
             currentChainCount = 0;
         }
 

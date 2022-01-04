@@ -184,6 +184,10 @@
             return UnityEngine.Random.Range(0, 100 + 1);
         }
 
+        public static int GetItemDropRollChance() {
+            return UnityEngine.Random.Range(1, 100 + 1);
+        }
+
         public static Vector2 RotateToVector2(float degree) {
             Quaternion rotation = Quaternion.Euler(0f, 0f, degree);
             Vector2 vector = rotation * Vector2.down;
@@ -204,6 +208,18 @@
             rt.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, other.rect.height);
             //rectTrasnform.ForceUpdateRectTransform(); -> needed before we adjust pivot a second time?
             rt.pivot = myPrevPivot;
+        }
+
+        public static Collider2D[] OverlapCircleAll2D(Transform centerTr, float radius, string layerName, System.Predicate<Collider2D> predicate) {
+            List<Collider2D> list = new List<Collider2D>(Physics2D.OverlapCircleAll(centerTr.position, radius, 1 << LayerMask.NameToLayer(layerName)));
+            list.RemoveAll(predicate);
+            return list.ToArray();
+        }
+
+        public static void OverlapCircleAll2D(out Collider2D[] array, Transform centerTr, float radius, string layername, System.Predicate<Collider2D> predicate) {
+            List<Collider2D> list = new List<Collider2D>(Physics2D.OverlapCircleAll(centerTr.position, radius, 1 << LayerMask.NameToLayer(layername)));
+            list.RemoveAll(predicate);
+            array = list.ToArray();
         }
     }
 

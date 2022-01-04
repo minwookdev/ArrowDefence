@@ -226,7 +226,7 @@
         /// </summary>
         void TooltipRelease() {
             //Release Item Info Tooltip
-            ItemTooltip.Instance.ReleaseParent();
+            ItemTooltip.Inst.ReleaseParent();
         }
 
         #endregion

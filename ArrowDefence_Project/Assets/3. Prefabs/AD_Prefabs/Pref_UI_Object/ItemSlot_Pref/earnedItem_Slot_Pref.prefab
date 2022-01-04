@@ -225,6 +225,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50415edf1673a6e40b141cec5e9b4a3e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  slotRect: {fileID: 5984624412175565118}
   ItemImg: {fileID: 7308589163855116780}
   ItemFrame: {fileID: 8930595996445056229}
   ItemStackTmp: {fileID: 6722113058798559404}
@@ -235,6 +236,8 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 1757479cd707b4180a861faf78aeccb2, type: 3}
   - {fileID: 21300000, guid: 74670eb495c42448db0be880cfa86790, type: 3}
   - {fileID: 0}
+  touchedScale: {x: 0.9, y: 0.9, z: 1}
+  scaleSpeed: 1
   TooltipOpenPressedTime: 0.5
 --- !u!1 &8177529013423363936
 GameObject:

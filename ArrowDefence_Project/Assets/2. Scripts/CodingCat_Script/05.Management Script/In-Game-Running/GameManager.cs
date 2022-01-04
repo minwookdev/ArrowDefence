@@ -345,19 +345,16 @@
 
         #region ITEM_DROP
 
-        public void InitialDroplist(ItemDropList newDropList)
-        {
+        public void InitialDroplist(ItemDropList newDropList) {
             dropListArray = newDropList.DropTableArray;
 
+            //Init Total Item Drop Chance
             totalDropChances = 0f;
-
-            //Set Drop Chance
-            foreach (var item in dropListArray)
-            {
+            foreach (var item in dropListArray) {
                 totalDropChances += item.DropChance;
             }
 
-            CatLog.Log($"Initialize Drop List : {newDropList.name}, Total Drop Chances : {totalDropChances.ToString()}");
+            CatLog.Log($"Drop List : {newDropList.name}, Total Drop Chances : {totalDropChances}");
         }
 
         public void ReleaseDropList()
@@ -368,46 +365,41 @@
             CatLog.Log("Release Drop List");
         }
 
-        public bool OnRollItemDrop(float stageDropRate, float monsterDropRateCorrection)
-        {
-            int chance = Random.Range(1, 100 + 1); //1~100의 수치
-            float totalChance = stageDropRate + monsterDropRateCorrection;
-            //최종 아이템 드랍 확률 = 스테이지 별 기본 아이템 드랍 확률 + 몬스터 각각이 가진 아이템 드랍 보정치
-
-            if (totalChance >= chance) return true;     //아이템을 획득한 경우
-            else                       return false;    //아이템을 획득하지 못한 경우
+        public bool OnItemDropRoll(float stageDropRate, float monsterDropRate) {
+            return (stageDropRate + monsterDropRate >= GameGlobal.GetItemDropRollChance()) ? true : false;
         }
 
-        public DropItem OnDropInItemList()
-        {
+        public DropItem OnItemDrop() {
             float randomPoint = Random.value * totalDropChances;
 
-            for (int i = 0; i < dropListArray.Length; i++)
-            {
-                if (randomPoint < dropListArray[i].DropChance)
-                {
-                    DropItem newItem = new DropItem(GameGlobal.RandomIntInArray(dropListArray[i].QuantityRange), dropListArray[i].ItemAsset);
-                    return newItem;
+            for (int i = 0; i < dropListArray.Length; i++) {
+                if (randomPoint < dropListArray[i].DropChance) {
+                    return new DropItem(GameGlobal.RandomIntInArray(dropListArray[i].QuantityRange), dropListArray[i].ItemAsset);
                 }
-                else
-                {
+                else {
                     randomPoint -= dropListArray[i].DropChance;
                 }
             }
 
-            var minimunChanceOfItem = dropListArray[0];
+            //Last index Item
+            var last = dropListArray.Length - 1;
+            return new DropItem(GameGlobal.RandomIntInArray(dropListArray[last].QuantityRange), dropListArray[last].ItemAsset);
 
-            for (int i = 0; i < dropListArray.Length; i++)
-            {
-                if (minimunChanceOfItem.DropChance > dropListArray[i].DropChance)
-                {
-                    //이거 만약에 가장 낮은 확률의 아이템이 두개라면 어떻게 되는지
-                    minimunChanceOfItem = dropListArray[i];
-                }
-            }
-
-            DropItem item = new DropItem(GameGlobal.RandomIntInArray(minimunChanceOfItem.QuantityRange), minimunChanceOfItem.ItemAsset);
-            return item;
+            #region GET_LOW_CAHNCE_ITEM
+            //var minimunChanceOfItem = dropListArray[0];
+            //
+            //for (int i = 0; i < dropListArray.Length; i++)
+            //{
+            //    if (minimunChanceOfItem.DropChance > dropListArray[i].DropChance)
+            //    {
+            //        //이거 만약에 가장 낮은 확률의 아이템이 두개라면 어떻게 되는지
+            //        minimunChanceOfItem = dropListArray[i];
+            //    }
+            //}
+            //
+            //DropItem item = new DropItem(GameGlobal.RandomIntInArray(minimunChanceOfItem.QuantityRange), minimunChanceOfItem.ItemAsset);
+            //return item;
+            #endregion
         }
 
         #endregion

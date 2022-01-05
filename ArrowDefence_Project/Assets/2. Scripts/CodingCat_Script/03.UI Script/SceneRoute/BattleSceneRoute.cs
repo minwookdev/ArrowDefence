@@ -259,7 +259,7 @@
             for (int i = 0; i < items.Count; i++)
             {
                 DropItemSlots[i].gameObject.SetActive(true);
-                DropItemSlots[i].Setup(items[i].ItemAsset, items[i].Quantity, BattleSceneUICanvas, UICamera);
+                DropItemSlots[i].SetSlot(items[i].ItemAsset, items[i].Quantity);
             }
         }
 

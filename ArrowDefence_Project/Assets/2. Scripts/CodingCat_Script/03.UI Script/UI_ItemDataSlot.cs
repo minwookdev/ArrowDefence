@@ -29,10 +29,10 @@
         [Header("SHOW TOOLTIP")]
         public float TooltipOpenPressedTime = .3f;
 
-        //※ Build하고 두개의 DataSlot을 동시에 터치했을때 어떻게되는지 확인하고 Tooltip 띄워주는 방식 최적화※
         //Tooltip Variables
-        private Vector2 tooltipPoint;
+        [SerializeField]
         private RectTransform tooltipParent;
+        private Vector2 tooltipPoint;
         private Camera uiCamera;
         private float pressedTime;
         private bool isTimeStart   = false;
@@ -46,17 +46,6 @@
         }
 
         private void Update() {
-            if(isTimeStart) {
-                if (pressedTime >= 0) pressedTime -= Time.deltaTime;
-                else {
-                    ActionCat.Games.UI.ItemTooltip.Inst.Expose(tooltipPoint, tooltipParent, 
-                                                                   itemDataAddress.Item_Name, itemDataAddress.Item_Desc, 
-                                                                   this.gameObject, uiCamera);
-                    isToolTipOpen = true;
-                    isTimeStart   = false;
-                }
-            }
-
             //====================================[ PRESSED SLOT ]========================================
             if(isPressed == true) {
                 if(slotRect.localScale != touchedScale) {
@@ -76,20 +65,19 @@
 
             ItemImg.sprite = address.Item_Sprite;
 
-            if (address.Item_Type != ITEMTYPE.ITEM_EQUIPMENT)
-            {
-                if (ItemStackTmp.gameObject.activeSelf == false)
-                    ItemStackTmp.gameObject.SetActive(true);
+            if (address.Item_Type != ITEMTYPE.ITEM_EQUIPMENT) {
                 ItemStackTmp.text = visibleStack.ToString();
             }
-            else ItemStackTmp.gameObject.SetActive(false);
+            else {
+                ItemStackTmp.text = GameGlobal.EMPTYSTR;
+            }
 
             //Set Item Frame according to Item Grade
             ItemFrame.sprite = Frames[(int)address.Item_Grade];
 
             //Init Tooltip Variables
             this.tooltipParent = tooltipTargetCanvas.GetComponent<RectTransform>();
-            this.uiCamera          = uiCamera;
+            this.uiCamera      = uiCamera;
         }
 
         public void SlotEnable(ItemData data, int visibleStack, Canvas targetcanvas, Camera targetCam) {
@@ -111,8 +99,28 @@
             }
 
             //Init Tooltip variables
-            tooltipParent = targetcanvas.GetComponent<RectTransform>();
+            tooltipParent = transform.parent.GetComponent<RectTransform>();
             uiCamera      = targetCam;
+        }
+
+        /// <summary>
+        /// New Set Slot
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="stack"></param>
+        public void SetSlot(ItemData data, int stack) {
+            itemDataAddress = data;
+            ItemImg.sprite  = data.Item_Sprite;
+
+            //Set Visible Item Stack <Not Disable Item Stack Text>
+            ItemStackTmp.text = (data.Item_Type == ITEMTYPE.ITEM_EQUIPMENT) ? GameGlobal.EMPTYSTR : stack.ToString();
+
+            if(isShowGrade == true) {
+                ItemFrame.sprite = Frames[(int)data.Item_Grade];
+            }
+
+            //Get Parent Canvas (to use tooltip)
+            tooltipParent = transform.parent.root.GetComponent<RectTransform>();
         }
 
         public void Clear() {
@@ -127,47 +135,16 @@
         void IPointerDownHandler.OnPointerDown(PointerEventData data) {
             //Data Slot is Pressed.
             isPressed = true;
-
-            //slotRect.localScale = touchedScale;
-            //slotRect.localScale = Vector3.MoveTowards(slotRect.localScale, touchedScale, Time.unscaledDeltaTime * scaleSpeed);
-
-            //Origin
-            //if (isToolTipOpen) return;
-            //
-            //if (isTimeStart == false) {
-            //    RectTransformUtility.ScreenPointToLocalPointInRectangle(tooltipCanvasRect, data.position, uiCamera, out tooltipPoint);
-            //    pressedTime   = TooltipOpenPressedTime;
-            //    isTimeStart   = true;
-            //}
         }
 
         void IPointerUpHandler.OnPointerUp(PointerEventData data) {
-            //Release Pointer
+            //Release 
             isPressed = false;
-
-            //slotRect.localScale = normalScale;
-
-            //Origin
-            //if(isToolTipOpen)
-            //{
-            //    ActionCat.Games.UI.ItemTooltip.Instance.Hide(this.gameObject);
-            //    isToolTipOpen = false;
-            //}
-            //
-            //isTimeStart   = false;
-            //pressedTime   = TooltipOpenPressedTime;
         }
 
         void IPointerClickHandler.OnPointerClick(PointerEventData eventData) {
-            //RectTransformUtility.ScreenPointToLocalPointInRectangle(tooltipParent, slotRect.anchoredPosition, uiCamera, out Vector2 point);
-
             //Expose ItemData Type Tooltip
-            Games.UI.ItemTooltip.Inst.ItemTooltipExpose(slotRect.position, tooltipParent, itemDataAddress, ItemFrame.sprite);
-            CatLog.Log($"Sending Position X : {slotRect.position.x}, Y : {slotRect.position.y}");
-            CatLog.Log($"Sending LocalPos X : {slotRect.localPosition.x}, Y : {slotRect.localPosition.y}");
-            CatLog.Log($"Sending Anchored X : {slotRect.anchoredPosition.x}, Y : {slotRect.anchoredPosition.y}");
-            //CatLog.Log($"{slotRect.SetSizeWithCurrentAnchors}");
-            //slotRect.anchore
+            Games.UI.ItemTooltip.Inst.Expose(slotRect.position, tooltipParent, itemDataAddress, ItemFrame.sprite, ItemStackTmp.text);
         }
     }
 }

@@ -4,10 +4,8 @@
     using UnityEngine.UI;
     using TMPro;
 
-    public class ItemTooltip : MonoBehaviour
-    {
-        static ItemTooltip _instance;
-
+    public class ItemTooltip : MonoBehaviour {
+        #region v1
         //public static ItemTooltip Instance {
         //    get {
         //        if(_instance == null) {
@@ -23,6 +21,9 @@
         //        return _instance;
         //    }
         //}
+        #endregion
+
+        static ItemTooltip _instance;
 
         public static ItemTooltip Inst {
             get {
@@ -41,6 +42,7 @@
         }
 
         [Header("COMPONENT")]
+        [SerializeField] RectTransform parentRect = null;
         [SerializeField] RectTransform tooltipRect = null;
         [SerializeField] CanvasGroup canvasGroup = null;
         [SerializeField] TextMeshProUGUI tmpName = null;
@@ -64,10 +66,6 @@
         public bool IsOpenedTooltip { get => IsOpenedTooltip; private set { } }
 
         //Fields
-        private TMPro.TextMeshProUGUI itemNameTMP = null;
-        private TMPro.TextMeshProUGUI itemDescTMP = null;
-        //private CanvasGroup canvasGroup;
-        private GameObject target;
         private bool isInitialize = false;
         WaitUntil coroutineWaitUntil = null;
         WaitForEndOfFrame coroutineWaitEndFrame = null;
@@ -83,10 +81,10 @@
         }
 
         private void Start() {
-            InitTooltip(out isInitialize);
+            Init(out isInitialize);
         }
 
-        private void InitTooltip(out bool result) {
+        void Init(out bool result) {
             //Check Tooltip Component
             if (tooltipRect == null || canvasGroup == null || tmpName == null || tmpDesc == null) {
                 CatLog.ELog("TOOLTIP ERROR : Not Caching Component."); 
@@ -113,156 +111,98 @@
             result = true;
         }
 
-        private IEnumerator ShowPopupCo(Vector2 pos, RectTransform parentCanvasRect, Camera targetCam,
-                                        string itemName, string itemDesc) {
-            yield return new WaitUntil(() => this.isInitialize);
-
-            //init Parent & Scale
-            if (parentCanvasRect != transform.parent)
-            {
-                transform.SetParent(parentCanvasRect);
-                transform.localScale = Vector3.one;
-                transform.position = parentCanvasRect.position;
-            }
-
-            //Init Item Name, Desc Text
-            itemNameTMP.text = itemName; itemDescTMP.text = itemDesc;
-
-            //Waiting One Frames Before the Calculate Position
-            yield return null;
-
-            //Init Tooltip Position
-            Vector2 initPos = (pos.x + tooltipRect.rect.width > parentCanvasRect.rect.xMax) ?
-                new Vector2(pos.x - tooltipRect.rect.width * 0.5f, pos.y + tooltipRect.rect.height * 0.5f) :
-                new Vector2(pos.x + tooltipRect.rect.width * 0.5f, pos.y + tooltipRect.rect.height * 0.5f);
-
-            //Calc Target Camera Width, Height
-            //float camHeight = 2f * targetCam.orthographicSize;
-            //float camWidth  = camHeight * targetCam.aspect;
-            //
-            //Vector2 initPos = (tooltipRect.anchoredPosition.x + tooltipRect.rect.width > parentCanvasRect.rect.width) ?
-            //    new Vector2(pos.x - tooltipRect.rect.width * 0.5f, pos.y + tooltipRect.rect.height * 0.5f) :
-            //    new Vector2(pos.x + tooltipRect.rect.width * 0.5f, pos.y + tooltipRect.rect.height * 0.5f);
-            //
-            //CatLog.Log($"X Position : {(pos.x + tooltipRect.rect.width).ToString()}" + '\n' +
-            //           $"Parent rect Width : {parentCanvasRect.rect.width}" + '\n' +
-            //           $"Cam Width : {camWidth.ToString()}");
-
-            //Vector2 initPos = new Vector2(pos.x + tooltipRect.rect.width * 0.5f, pos.y + tooltipRect.rect.height * 0.5f); ;
-
-            //anchoredPosition valueChanged : this Rect Transform anchor is Always LEFT-BOTTOM
-            tooltipRect.anchoredPosition = initPos;
-
-            //Expose Tooltip [Set Alpha]
-            canvasGroup.alpha = 1f;
-        }
-
         #region EXPOSE_HIDE_RELEASE
 
         /// <summary>
-        /// If you have used it at least once in the scene, 
-        /// you must call this method before the scene is changed to prevent it from being destroyed.
+        /// Expose Monster Data Tooltip
         /// </summary>
-        public void ReleaseParent()
-        {
-            if(gameObject.activeSelf)
-            {
-                target = null;
-                transform.SetParent(null);
-                DontDestroyOnLoad(this.gameObject);
-
-                gameObject.SetActive(false);
-            }
+        public void Expose() {
+            StartCoroutine(EnableMonsterTooltip());
         }
 
-        public void Expose(Vector2 pos, RectTransform targetCanvasRect, string itemName, string itemDesc,
-                           GameObject target, Camera targetCam) {
-            if (_instance.gameObject.activeSelf == false)
-                _instance.gameObject.SetActive(true);
-            this.target = target;
-            StartCoroutine(ShowPopupCo(pos, targetCanvasRect, targetCam, itemName, itemDesc));
-        }
-
-        public void Hide(GameObject target) {
-            if (target == this.target)
-                canvasGroup.alpha = 0f;
-        }
-
-        public void ItemTooltipExpose(Vector2 position, Transform targetCanvas, ItemData data, Sprite frame) {
-            //v1
-            ////Change parent to target Canvas
-            //if(transform.parent != targetCanvas) {
-            //    transform.SetParent(targetCanvas, false);
-            //}
-            //
-            ////Init tempSlot data
-            //itemSlotFrame.sprite = frame;
-            //itemSlotIcon.sprite  = data.Item_Sprite;
-            //itemAmountTmp.text   = (data.Item_Type == ITEMTYPE.ITEM_EQUIPMENT) ? "" : data.Item_Amount.ToString();
-            //
-            ////init tooltip data
-            //tmpName.text = data.Item_Name;
-            //tmpDesc.text = data.Item_Desc;
-            //
-            ////Set temp ItemSlot Position.
-            //itemSlotRect.position = position;
-            //
-            ////Set Tooltip Position + Correction Y Position
-            //tooltipRect.ForceUpdateRectTransforms();
-            //tooltipRect.position = position;
-            //Vector2 correction = tooltipRect.anchoredPosition;
-            //correction.y += tooltipRect.rect.height * 0.5f + tooltipSpacing;
-            //tooltipRect.anchoredPosition = correction;
-            //
-            ////tooltipPosCorrection = tooltipRect.anchoredPosition;
-            ////tooltipPosCorrection.y += tooltipRect.rect.height * 0.5f + tooltipSpacing;
-            ////tooltipRect.anchoredPosition = tooltipPosCorrection;
-            //
-            ////Active Tooltip GameObject.
-            //gameObject.SetActive(true);
-
-            //v2
-            if(gameObject.activeSelf == false) {
+        /// <summary>
+        /// Expose Item Data Tooltip
+        /// </summary>
+        /// <param name="position"></param>
+        /// <param name="targetCanvas"></param>
+        /// <param name="data"></param>
+        /// <param name="frame"></param>
+        /// <param name="amount"></param>
+        public void Expose(Vector2 position, RectTransform targetCanvas, ItemData data, Sprite frame, string amount) {
+            //Activate GameObject [Stay Alpha 0]
+            if (gameObject.activeSelf == false) {
                 gameObject.SetActive(true);
             }
-            StartCoroutine(EnableItemTooltip(position, targetCanvas, data, frame));
+            //Enable Tooltip Coroutine Start
+            StartCoroutine(EnableItemTooltip(position, targetCanvas, data, frame, amount));
         }
 
-        IEnumerator EnableItemTooltip(Vector2 position, Transform targetCanvas, ItemData data, Sprite frame) {
-            yield return coroutineWaitUntil;
+        /// <summary>
+        /// Item Data Tooltip Expose Coroutine
+        /// </summary>
+        /// <param name="position"></param>
+        /// <param name="targetCanvas"></param>
+        /// <param name="data"></param>
+        /// <param name="frame"></param>
+        /// <param name="amount"></param>
+        /// <returns></returns>
+        IEnumerator EnableItemTooltip(Vector2 position, RectTransform targetCanvas, ItemData data, Sprite frame, string amount) {
+            yield return coroutineWaitUntil; //Wait ItemTooltip Initialized..
 
-            //Change parent to target Canvas
-            if (transform.parent != targetCanvas) {
-                transform.SetParent(targetCanvas, false);
+            //Change parent to target Canvas if not Changed
+            if (parentRect.parent != targetCanvas) {
+                parentRect.SetParent(targetCanvas, false);
+                parentRect.RectResizer(Vector2.zero, Vector2.zero, Vector3.one);
             }
 
-            //Init tempSlot data
+            //Init tempSlot values
             itemSlotFrame.sprite = frame;
-            itemSlotIcon.sprite = data.Item_Sprite;
-            itemAmountTmp.text = (data.Item_Type == ITEMTYPE.ITEM_EQUIPMENT) ? "" : data.Item_Amount.ToString();
+            itemSlotIcon.sprite  = data.Item_Sprite;
+            itemAmountTmp.text   = amount;
 
-            //init tooltip data
+            //init tooltip values
             tmpName.text = data.Item_Name;
             tmpDesc.text = data.Item_Desc;
 
             //Set temp ItemSlot Position.
             itemSlotRect.position = position;
 
+            //<Wait until Tooltip Rect Size Changed> <this line is removeable>
             yield return coroutineWaitEndFrame;
 
             //Set Tooltip Position + Correction Y Position
-            //tooltipRect.ForceUpdateRectTransforms();
             tooltipRect.position = position;
             Vector2 correction = tooltipRect.anchoredPosition;
             correction.y += tooltipRect.rect.height * 0.5f + tooltipSpacing;
             tooltipRect.anchoredPosition = correction;
 
-            //tooltipPosCorrection = tooltipRect.anchoredPosition;
-            //tooltipPosCorrection.y += tooltipRect.rect.height * 0.5f + tooltipSpacing;
-            //tooltipRect.anchoredPosition = tooltipPosCorrection;
-
-            //[VISIBLE]
+            //[Ready to tooltip and tempSlot] [VISIBLE]
             canvasGroup.alpha = 1f;
+        }
+
+        /// <summary>
+        /// Monster Data Tooltip Expose Tooltip
+        /// </summary>
+        /// <returns></returns>
+        IEnumerator EnableMonsterTooltip() {
+            yield return null;
+        }
+
+        /// <summary>
+        /// If you have used it at least once in the scene, 
+        /// you must call this method before the scene is changed to prevent it from being destroyed.
+        /// </summary>
+        public void ReleaseParent() {
+            //disable Tooltip gameObject for Prevention Bounced
+            if (gameObject.activeSelf == true) {
+                gameObject.SetActive(false);
+            }
+            //<if the parent object exists, DontDestroyOnLoad cannot be executed.>
+            if (transform.parent != null) { //Release Parent.
+                transform.SetParent(null);
+            }
+            //Set DontDestroy, Prevention Create new Tooltip Object.
+            DontDestroyOnLoad(gameObject);
         }
 
         #endregion
@@ -271,7 +211,69 @@
 
         public void Hide() {
             canvasGroup.alpha = 0f;
+            gameObject.SetActive(false);
         }
+
+        #endregion
+
+        #region v1
+
+        //public void Expose(Vector2 pos, RectTransform targetCanvasRect, string itemName, string itemDesc,
+        //           GameObject target, Camera targetCam) {
+        //    if (_instance.gameObject.activeSelf == false)
+        //        _instance.gameObject.SetActive(true);
+        //    this.target = target;
+        //    StartCoroutine(ShowPopupCo(pos, targetCanvasRect, targetCam, itemName, itemDesc));
+        //}
+        //
+        //public void Hide(GameObject target) {
+        //    if (target == this.target)
+        //        canvasGroup.alpha = 0f;
+        //}
+        //
+        //private IEnumerator ShowPopupCo(Vector2 pos, RectTransform parentCanvasRect, Camera targetCam,
+        //                        string itemName, string itemDesc) {
+        //    yield return new WaitUntil(() => this.isInitialize);
+        //
+        //    //init Parent & Scale
+        //    if (parentCanvasRect != transform.parent)
+        //    {
+        //        transform.SetParent(parentCanvasRect);
+        //        transform.localScale = Vector3.one;
+        //        transform.position = parentCanvasRect.position;
+        //    }
+        //
+        //    //Init Item Name, Desc Text
+        //    itemNameTMP.text = itemName; itemDescTMP.text = itemDesc;
+        //
+        //    //Waiting One Frames Before the Calculate Position
+        //    yield return null;
+        //
+        //    //Init Tooltip Position
+        //    Vector2 initPos = (pos.x + tooltipRect.rect.width > parentCanvasRect.rect.xMax) ?
+        //        new Vector2(pos.x - tooltipRect.rect.width * 0.5f, pos.y + tooltipRect.rect.height * 0.5f) :
+        //        new Vector2(pos.x + tooltipRect.rect.width * 0.5f, pos.y + tooltipRect.rect.height * 0.5f);
+        //
+        //    //Calc Target Camera Width, Height
+        //    //float camHeight = 2f * targetCam.orthographicSize;
+        //    //float camWidth  = camHeight * targetCam.aspect;
+        //    //
+        //    //Vector2 initPos = (tooltipRect.anchoredPosition.x + tooltipRect.rect.width > parentCanvasRect.rect.width) ?
+        //    //    new Vector2(pos.x - tooltipRect.rect.width * 0.5f, pos.y + tooltipRect.rect.height * 0.5f) :
+        //    //    new Vector2(pos.x + tooltipRect.rect.width * 0.5f, pos.y + tooltipRect.rect.height * 0.5f);
+        //    //
+        //    //CatLog.Log($"X Position : {(pos.x + tooltipRect.rect.width).ToString()}" + '\n' +
+        //    //           $"Parent rect Width : {parentCanvasRect.rect.width}" + '\n' +
+        //    //           $"Cam Width : {camWidth.ToString()}");
+        //
+        //    //Vector2 initPos = new Vector2(pos.x + tooltipRect.rect.width * 0.5f, pos.y + tooltipRect.rect.height * 0.5f); ;
+        //
+        //    //anchoredPosition valueChanged : this Rect Transform anchor is Always LEFT-BOTTOM
+        //    tooltipRect.anchoredPosition = initPos;
+        //
+        //    //Expose Tooltip [Set Alpha]
+        //    canvasGroup.alpha = 1f;
+        //}
 
         #endregion
     }

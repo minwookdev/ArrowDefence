@@ -9,6 +9,8 @@
         public static Vector3 ArrowScale = new Vector3(1.5f, 1.5f, 1f);
         public static readonly int RandomIntRangeCorrection = 1;
 
+        public static readonly string EMPTYSTR = "";
+
         /// <summary>
         /// int 배열에서 무작위 "index"를 반환합니다.
         /// </summary>
@@ -208,6 +210,12 @@
             rt.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, other.rect.height);
             //rectTrasnform.ForceUpdateRectTransform(); -> needed before we adjust pivot a second time?
             rt.pivot = myPrevPivot;
+        }
+
+        public static void RectResizer(this RectTransform rect, Vector2 leftBottom, Vector2 rightTop, Vector3 scale) {
+            rect.offsetMin  = leftBottom;
+            rect.offsetMax  = rightTop;
+            rect.localScale = scale;
         }
 
         public static Collider2D[] OverlapCircleAll2D(Transform centerTr, float radius, string layerName, System.Predicate<Collider2D> predicate) {

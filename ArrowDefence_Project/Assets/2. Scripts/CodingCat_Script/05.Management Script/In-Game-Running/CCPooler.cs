@@ -64,8 +64,8 @@
         }
 
         void OnDestroy() {
-            //자체적으로 static Instance 해제처리.
-            CCPooler._inst = null;
+            //Release Instance CCPooler
+            _inst = null;
         }
 
         #region SPAWN_FROM_POOL_METHOD

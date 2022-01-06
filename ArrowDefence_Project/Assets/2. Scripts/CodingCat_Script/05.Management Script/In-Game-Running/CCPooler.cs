@@ -12,12 +12,10 @@
     public class CCPoolerEditor : Editor
     {
         const string rules = "Coding Cat Notification ! Object Pooler Rules \n" +
-                                     "1st Pool Object : Main Arrow \n" + 
-                                     "2nd Pool Object : Main Arrow-Less \n" + 
-                                     "3rd Pool Object : Sub Arrow \n" +
-                                     "4th Pool Object : Sub Arrow-Less \n" + 
-                                     "5th Pool Object : Special Arrow \n" +
-                                     "~~ The Pool target Object must contain a ReturnToPool() method.";
+                             "CCPooler의 모든 동작은 코드 컨트롤 합니다. \n" +
+                             "Pooler를 사용하여 Instantiate되는 모든 오브젝트는 비활성화 시 \n" +
+                             "IPoolObject.DisableRequest 메서드를 사용하여 비활성화를 요청합니다. \n" +
+                             "**인스펙터의 항목을 수정하지 않습니다**";
 
         public override void OnInspectorGUI()
         {
@@ -27,9 +25,7 @@
     }
 #endif
 
-    public class CCPooler : MonoBehaviour
-    {
-        //특정 오브젝트의 부모가 바뀌는 상황에서 반드시 개체는 Disable 된 상황이어야 한다.
+    public class CCPooler : MonoBehaviour {
         static CCPooler _inst;
 
         private void Awake() => _inst = this;
@@ -37,8 +33,7 @@
         Dictionary<string, Stack<GameObject>> poolDictionary;
 
         [Serializable]
-        public class Pool
-        {
+        public class Pool {
             public string tag;
             public GameObject prefab;
             public int size;
@@ -51,6 +46,9 @@
         [Header("POOL OBJECTS")]
         [SerializeField] private List<Pool> poolInstanceList = new List<Pool>();
 
+        [Header("POOL COUNTER")]
+        [SerializeField] Dictionary<string, List<GameObject>> countDictionary = null;
+
         public static bool IsInitialized { get; private set; }
 
         [ContextMenu("GetSpawnObjectsInfo")]
@@ -61,6 +59,40 @@
                 int count = poolDictionary[pool.tag].Count;
                 CatLog.Log($"{pool.tag} Count : {count}");
             }
+        }
+
+        private void Start() {
+            //Init Collections
+            poolDictionary  = new Dictionary<string, Stack<GameObject>>();
+            countDictionary = new Dictionary<string, List<GameObject>>();
+            ParentList      = new List<Transform>();
+
+            #region LEGACY_CODE
+            //foreach (Pool pool in pools)
+            //{
+            //    //현재는 갯수 할당되지 않은 오브젝트는 돌려주지 않음
+            //    if (pool.size <= 0) continue;
+            //
+            //    poolDictionary.Add(pool.tag, new Stack<GameObject>());
+            //
+            //    var parentObj = new GameObject(pool.tag + parentStr).transform;
+            //    parentObj.SetParent(this.transform);
+            //    ParentList.Add(parentObj);
+            //
+            //    for(int i =0; i < pool.size; i++)
+            //    {
+            //        var obj = CreateNewObject(pool.tag, pool.prefab, parentObj.transform);
+            //    }
+            //
+            //    //Pool 대상 Object에 ReturnToPool 메서드 검사
+            //    if (poolDictionary[pool.tag].Count <= 0)
+            //        CatLog.ELog($"{pool.tag} ReturnToPool 메서드 누락, Stack에 Pull 되지 않았습니다.");
+            //    else if (poolDictionary[pool.tag].Count != pool.size)
+            //        CatLog.ELog($"{pool.tag} ReturnToPool 메서드가 중복 작성.");
+            //}
+            #endregion
+
+            IsInitialized = true;
         }
 
         void OnDestroy() {
@@ -138,6 +170,9 @@
             objectToSpawn.transform.rotation = rot;
             objectToSpawn.SetActive(true);
 
+            //Try Add Alive Dictionary
+            //TryAddAliveDic(tag, objectToSpawn);
+
             return objectToSpawn;
         }
 
@@ -172,6 +207,9 @@
             objectToSpawn.transform.rotation   = rot;
             objectToSpawn.SetActive(true);
 
+            //Try Add Alive Dictionary
+            //TryAddAliveDic(tag, objectToSpawn);
+
             return objectToSpawn;
         }
 
@@ -201,7 +239,7 @@
         #endregion
 
         /// <summary>
-        /// 관리 부모 Object가 있는경우에 회수처리 Method
+        /// Object 회수. (부모가 변경된 객체 해당)
         /// </summary>
         /// <param name="obj"></param>
         /// <param name="parentNum"></param>
@@ -215,12 +253,15 @@
             //obj.transform.SetParent(_inst.FindParentTransform(tag)); //이거 못씀;; Main, Sub Arrow 회수할때 중복됨
             //ParentList에서 GameObject.name 이랑 싱크 맞춰놓았으니 굳이 사용할 필요도 없음
 
+            //Try Remove Alive Dictionary
+            //_inst.TryRemoveAliveDic(obj.name, obj);
+
             //사용할 준비가 완벽하게 정리되면 Push 해주기
             _inst.poolDictionary[obj.name].Push(obj);
         }
 
         /// <summary>
-        /// 부모 Object가 없는경우 또는 CreateNewObject 메서드제외 사용금지
+        /// Object 회수. (부모가 변경되지 않은 객체 해당)
         /// </summary>
         /// <param name="obj"></param>
         public static void ReturnToPool(GameObject obj)
@@ -230,47 +271,10 @@
 
             obj.SetActive(false);
 
+            //Try Remove Alive Dictionary
+            //_inst.TryRemoveAliveDic(obj.name, obj);
+
             _inst.poolDictionary[obj.name].Push(obj);
-        }
-
-        static IEnumerator ChangeParent(GameObject obj, Transform parent)
-        {
-            yield return null;
-
-            obj.transform.SetParent(parent);
-        }
-
-        private void Start()
-        {
-            poolDictionary = new Dictionary<string, Stack<GameObject>>();
-            ParentList = new List<Transform>();
-
-            #region LEGACY_CODE
-            //foreach (Pool pool in pools)
-            //{
-            //    //현재는 갯수 할당되지 않은 오브젝트는 돌려주지 않음
-            //    if (pool.size <= 0) continue;
-            //
-            //    poolDictionary.Add(pool.tag, new Stack<GameObject>());
-            //
-            //    var parentObj = new GameObject(pool.tag + parentStr).transform;
-            //    parentObj.SetParent(this.transform);
-            //    ParentList.Add(parentObj);
-            //
-            //    for(int i =0; i < pool.size; i++)
-            //    {
-            //        var obj = CreateNewObject(pool.tag, pool.prefab, parentObj.transform);
-            //    }
-            //
-            //    //Pool 대상 Object에 ReturnToPool 메서드 검사
-            //    if (poolDictionary[pool.tag].Count <= 0)
-            //        CatLog.ELog($"{pool.tag} ReturnToPool 메서드 누락, Stack에 Pull 되지 않았습니다.");
-            //    else if (poolDictionary[pool.tag].Count != pool.size)
-            //        CatLog.ELog($"{pool.tag} ReturnToPool 메서드가 중복 작성.");
-            //}
-            #endregion
-
-            IsInitialized = true;
         }
 
         GameObject CreateNewObject(string tag, GameObject prefab, Transform parent)
@@ -283,13 +287,13 @@
         }
 
         /// <summary>
-        /// Pool Object Prefab을 등록하고 Pool 관리대상 Pool Dictionary에 추가합니다.
+        /// Pool Instance List와 Pool Dictionary에 객체 등록. (부모객체를 지정하지 않음)
         /// </summary>
         /// <param name="tag"></param>
         /// <param name="size"></param>
         /// <param name="prefab"></param>
-        public static void AddPoolList(string tag, int size, GameObject prefab)
-        {
+        /// <param name="iscount">active된 객체 수 추적 여부</param>
+        public static void AddPoolList(string tag, int size, GameObject prefab, bool iscount) {
             Pool pool = new Pool() { tag = tag, size = size, prefab = prefab };
             _inst.poolInstanceList.Add(pool);
 
@@ -299,9 +303,25 @@
             parentObj.SetParent(_inst.transform);
             _inst.ParentList.Add(parentObj);
 
-            for (int i = 0; i < pool.size; i++)
-            {
-                _inst.CreateNewObject(pool.tag, pool.prefab, parentObj);
+            //add count Dictionary this Pool Object
+            //if(iscount == true) {
+            //    _inst.countDictionary.Add(tag, new List<GameObject>());
+            //}
+            //
+            //for (int i = 0; i < pool.size; i++) {
+            //    _inst.CreateNewObject(pool.tag, pool.prefab, parentObj);
+            //}
+
+            if(iscount == true) {
+                _inst.NewAliveDic(pool.tag);
+                for (int i = 0; i < pool.size; i++) {
+                    _inst.AddAliveDic(pool.tag, _inst.CreateNewObject(pool.tag, pool.prefab, parentObj));
+                }
+            }
+            else {
+                for (int i = 0; i < pool.size; i++) {
+                    _inst.CreateNewObject(pool.tag, pool.prefab, parentObj);
+                }
             }
 
             if (_inst.poolDictionary[pool.tag].Count <= 0)
@@ -311,24 +331,38 @@
         }
 
         /// <summary>
-        /// Add Pool List, with Other Parent Transform.
+        /// Pool Instance List와 Pool Dictionary에 객체 등록. (부모객체를 지정)
         /// </summary>
         /// <param name="tag"></param>
         /// <param name="size"></param>
         /// <param name="prefab"></param>
         /// <param name="parent"></param>
-        public static void AddPoolList(string tag, int size, GameObject prefab, Transform parent) {
+        /// <param name="iscount">active된 객체 수 추적 여부</param>
+        public static void AddPoolList(string tag, int size, GameObject prefab, Transform parent, bool iscount) {
             Pool pool = new Pool() { tag = tag, size = size, prefab = prefab };
-            _inst.poolInstanceList.Add(pool);                            //1. Add PoolInstance List.
-            _inst.poolDictionary.Add(pool.tag, new Stack<GameObject>()); //2. Add PoolDictaionary.
-            _inst.ParentList.Add(parent);                                //3. Add Parent Transform to Parent List.
-            for (int i = 0; i < pool.size; i++) {
-                _inst.CreateNewObject(pool.tag, pool.prefab, parent);    //4. Create Prefab GameObject as much as Size.
+            _inst.poolInstanceList.Add(pool);                             //1. Add PoolInstance List.
+            _inst.poolDictionary.Add(pool.tag, new Stack<GameObject>());  //2. Add PoolDictaionary.
+            _inst.ParentList.Add(parent);                                 //3. Add Parent Transform to Parent List.
+                                                                          
+            if(iscount == true) {                                         //4. add Count Dictionary this Pool Object.
+                _inst.NewAliveDic(pool.tag);                              
+                for (int i = 0; i < pool.size; i++) {
+                    _inst.AddAliveDic(pool.tag, _inst.CreateNewObject(pool.tag, pool.prefab, parent));
+                }
+            }
+            else {
+                for (int i = 0; i < pool.size; i++) {
+                    _inst.CreateNewObject(pool.tag, pool.prefab, parent); //5. Create Prefab GameObject as much as Size.
+                }
             }
 
-            if (_inst.poolDictionary[pool.tag].Count <= 0)              CatLog.ELog($"{pool.tag} : Missing Return to Pool Method.");
-            else if (_inst.poolDictionary[pool.tag].Count != pool.size) CatLog.ELog($"{pool.tag} : Method has been Duplicated.");
+            if (_inst.poolDictionary[pool.tag].Count <= 0)
+                CatLog.ELog($"{pool.tag} : Missing Return to Pool Method.");
+            else if (_inst.poolDictionary[pool.tag].Count != pool.size)
+                CatLog.ELog($"{pool.tag} : Method has been Duplicated.");
         }
+
+        #region PARENT
 
         private Transform FindParentTransform(string tag)
         {
@@ -338,53 +372,69 @@
             else    return null;
         }
 
-        #region FIND_POOL_OBJECT
-
-        /// <summary>
-        /// Pool Tag로 Pool 관리 대상 Object를 반환합니다
-        /// </summary>
-        public static GameObject[] FindPoolObjectsWithTag(string pooltag)
-        {
-            if (_inst.poolDictionary.ContainsKey(pooltag) == false)
-                throw new Exception($"Pool With Tag {pooltag} doesn't Exist");
-        
-            Stack<GameObject> poolStack = _inst.poolDictionary[pooltag];
-            return poolStack.ToArray();
-        }
-
-        public static int GetPoolStackSize(string tag)
-        {
-            if (_inst.poolDictionary.ContainsKey(tag) == false)
-                throw new Exception($"Pool With Tag {tag} doesn't Exist");
-
-            Stack<GameObject> poolStack = _inst.poolDictionary[tag];
-            return poolStack.Count;
-        }
-
-        // -> 활성화 해서 사용하려는 Object는 Pool Stack에서 Pop되어 사용하기 때문에
-        //    현재로써는 활성화된 Object만 따로 잡아낼 수 없다. 결과는 항상 Length가 0인 배열을 반환.
-        /// <summary>
-        /// Pool Tag로 Pool관리 대상 [활성화된] Object를 반환합니다. 
-        /// </summary>
-        /// <param name="pooltag"></param>
-        /// <returns></returns>
-        //public static GameObject[] FindAlivePoolObjectsWidthTag(string pooltag)
-        //{
-        //    if(_inst.poolDictionary.ContainsKey(pooltag) == false)
-        //        throw new Exception($"Pool With Tag {pooltag} doesn't Exist");
-        //
-        //    List<GameObject> poolList = _inst.poolDictionary[pooltag].ToList();
-        //    for (int i = poolList.Count - 1; i >= 0; i--)
-        //    {
-        //        if (poolList[i].activeSelf == false)
-        //            poolList.Remove(poolList[i]);
-        //    }
-        //
-        //    return poolList.ToArray();
-        //}
-        //
-
         #endregion
 
+        #region COUNTING
+
+        /// <summary>
+        /// this method is non-safety
+        /// </summary>
+        /// <param name="key"></param>
+        void NewAliveDic(string key) {
+            countDictionary.Add(key, new List<GameObject>());
+        }
+
+        /// <summary>
+        /// This method non-safety
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="go"></param>
+        void AddAliveDic(string key, GameObject go) {
+            countDictionary[key].Add(go);
+        }
+
+        /// <summary>
+        /// this method is non-safety
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="go"></param>
+        void RemoveAliveDic(string key, GameObject go) {
+            var target = countDictionary[key].Find(element => ReferenceEquals(element, go));
+            if(target) {
+                countDictionary[key].Remove(target);
+            }
+            else {
+                CatLog.ELog("target is Null. [CCPooler]");
+            }
+        }
+
+        bool TryAddAliveDic(string tag, GameObject go) {
+            if (countDictionary.ContainsKey(tag) == false) return false;
+            countDictionary[tag].Add(go);
+            return true;
+        }
+
+        bool TryRemoveAliveDic(string tag, GameObject go) {
+            if (countDictionary.ContainsKey(tag) == false) return false;
+            var target = countDictionary[tag].Find(element => ReferenceEquals(element, go));
+            if(target) {
+                countDictionary[tag].Remove(target);
+                return true;
+            }
+            else {
+                CatLog.ELog("target is Null [CCPooler.dictionary]");
+                return false;
+            }
+        }
+
+        bool TryAliveDic(string key) {
+            return countDictionary.ContainsKey(key);
+        }
+
+        int GetAliveCount(string key) {
+            return 0;
+        }
+
+        #endregion
     }
 }

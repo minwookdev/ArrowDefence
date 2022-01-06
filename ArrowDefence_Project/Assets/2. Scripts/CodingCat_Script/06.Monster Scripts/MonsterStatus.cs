@@ -57,12 +57,12 @@
                 }
             }
 
-            //Disable by Arrow
-            if(isDeath == true) {
-                GameManager.Instance.CallMonsterDeathEvent();
-                BattleProgresser.OnDropItemChance(ItemDropCorrection);
-                BattleProgresser.OnIncreaseClearGauge(GaugeIncreaseValue);
-            }
+            //Disable by Arrow <Now Checking OnHit Method>
+            //if(isDeath == true) {
+            //    BattleProgresser.OnMonsterDeath();
+            //    BattleProgresser.OnDropItemChance(ItemDropCorrection);
+            //    BattleProgresser.OnIncreaseClearGauge(GaugeIncreaseValue);
+            //}
         }
 
         void OnTriggerEnter2D(Collider2D collider) {
@@ -110,14 +110,14 @@
             monsterState.OnHit();
 
             //Active Event Hit Event.
-            GameManager.Instance.CallMonsterHitEvent();
+            BattleProgresser.OnMonsterHit();
 
             //Monster is Death ?
             if(currentHealthPoint <= 0 && isDeath == false) {
                 monsterState.StateChanger(STATETYPE.DEATH);
 
                 //======================[this logic is need Duplicate Activating test]====================
-                GameManager.Instance.CallMonsterDeathEvent();
+                BattleProgresser.OnMonsterDeath();
                 BattleProgresser.OnDropItemChance(ItemDropCorrection);
                 BattleProgresser.OnIncreaseClearGauge(GaugeIncreaseValue);
                 //========================================================================================
@@ -141,14 +141,14 @@
             monsterState.OnHit();
 
             //Call Event Monster Hit
-            GameManager.Instance.CallMonsterHitEvent();
+            BattleProgresser.OnMonsterHit();
 
             //Monster is Death ?
             if(currentHealthPoint <= 0 && isDeath == false) {
                 monsterState.StateChanger(STATETYPE.DEATH);
 
                 //======================[this logic is need Duplicate Activating test]====================
-                GameManager.Instance.CallMonsterDeathEvent();
+                BattleProgresser.OnMonsterDeath();
                 BattleProgresser.OnDropItemChance(ItemDropCorrection);
                 BattleProgresser.OnIncreaseClearGauge(GaugeIncreaseValue);
                 //========================================================================================

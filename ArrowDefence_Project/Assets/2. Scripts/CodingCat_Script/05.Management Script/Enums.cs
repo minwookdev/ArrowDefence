@@ -49,3 +49,15 @@ public enum ABILITY_TYPE {
     ARROWSPEED     = 7,
     //ACCESSORY PROPERTY
 }
+
+#region GAMEMANAGER
+
+public enum GAMESTATE {
+    STATE_BEFOREBATTLE,
+    STATE_INBATTLE,
+    STATE_BOSSBATTLE,
+    STATE_ENDBATTLE,
+    STATE_GAMEOVER,
+}
+
+#endregion

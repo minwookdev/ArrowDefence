@@ -144,8 +144,8 @@ GameObject:
   m_Component:
   - component: {fileID: 5984624412175565118}
   - component: {fileID: 5984624412175565116}
-  - component: {fileID: 5984624412175565119}
   - component: {fileID: 8148771911743406991}
+  - component: {fileID: 5984624412175565119}
   m_Layer: 5
   m_Name: earnedItem_Slot_Pref
   m_TagString: Untagged
@@ -183,6 +183,33 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5984624412175565113}
   m_CullTransparentMesh: 0
+--- !u!114 &8148771911743406991
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5984624412175565113}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 50415edf1673a6e40b141cec5e9b4a3e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  slotRectTr: {fileID: 5984624412175565118}
+  ItemImg: {fileID: 7308589163855116780}
+  ItemFrame: {fileID: 8930595996445056229}
+  ItemStackTmp: {fileID: 6722113058798559404}
+  Frames:
+  - {fileID: 21300000, guid: 356c0b18fbd3e4e94a7e05ae60d72575, type: 3}
+  - {fileID: 21300000, guid: 70db338447d354c36a0975fb616b135e, type: 3}
+  - {fileID: 21300000, guid: 38b5dbcdbb36e4957abdff78cfe48537, type: 3}
+  - {fileID: 21300000, guid: 1757479cd707b4180a861faf78aeccb2, type: 3}
+  - {fileID: 21300000, guid: 74670eb495c42448db0be880cfa86790, type: 3}
+  - {fileID: 0}
+  isShowGrade: 1
+  touchedScale: {x: 0.9, y: 0.9, z: 1}
+  scaleSpeed: 1
+  tooltipParent: {fileID: 0}
 --- !u!114 &5984624412175565119
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -213,32 +240,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &8148771911743406991
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5984624412175565113}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 50415edf1673a6e40b141cec5e9b4a3e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  slotRect: {fileID: 5984624412175565118}
-  ItemImg: {fileID: 7308589163855116780}
-  ItemFrame: {fileID: 8930595996445056229}
-  ItemStackTmp: {fileID: 6722113058798559404}
-  Frames:
-  - {fileID: 21300000, guid: 356c0b18fbd3e4e94a7e05ae60d72575, type: 3}
-  - {fileID: 21300000, guid: 70db338447d354c36a0975fb616b135e, type: 3}
-  - {fileID: 21300000, guid: 38b5dbcdbb36e4957abdff78cfe48537, type: 3}
-  - {fileID: 21300000, guid: 1757479cd707b4180a861faf78aeccb2, type: 3}
-  - {fileID: 21300000, guid: 74670eb495c42448db0be880cfa86790, type: 3}
-  - {fileID: 0}
-  touchedScale: {x: 0.9, y: 0.9, z: 1}
-  scaleSpeed: 1
-  TooltipOpenPressedTime: 0.5
 --- !u!1 &8177529013423363936
 GameObject:
   m_ObjectHideFlags: 0

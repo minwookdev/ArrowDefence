@@ -33,4 +33,9 @@
 
         bool IsAlive();
     }
+
+    interface IPoolUser {
+        System.Collections.IEnumerator Start();
+    }
+
 }

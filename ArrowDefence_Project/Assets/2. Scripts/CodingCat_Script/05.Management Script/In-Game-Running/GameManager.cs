@@ -3,16 +3,9 @@
     using UnityEngine;
     using ActionCat.Data;
 
-    public enum GAMESTATE {
-        STATE_BEFOREBATTLE,
-        STATE_INBATTLE,
-        STATE_BOSSBATTLE,
-        STATE_ENDBATTLE,
-        STATE_GAMEOVER,
-    }
 
-    public class GameManager : Singleton<GameManager>
-    {
+
+    public class GameManager : Singleton<GameManager> {
         public enum GAMEPLATFORM { 
             PLATFORM_PC,
             PLATFORM_MOBILE
@@ -37,18 +30,12 @@
         public GAMEPLATFORM GamePlay_Platform { get => gamePlatform; set => gamePlatform = value; }
         public GAMESTATE GameState { get => gameState; }
 
-
         public bool IsDevMode { get => isDevMode; }
 
-        //Event Monster
-        public delegate void BattleEventHandler();
-        BattleEventHandler MonsterHitEvent;
-        BattleEventHandler MonsterLessHitEvent;
-        BattleEventHandler MonsterDeathEvent;
-
-        //Event Battle State
-        BattleEventHandler OnStateEndBattle;
-        BattleEventHandler OnStateGameOver;
+        //Game Event Delegate
+        public delegate void GameEventHandler();
+        GameEventHandler OnStateEndBattle;
+        GameEventHandler OnStateGameOver;
 
         private void Start() => this.fixedDeltaTime = Time.fixedDeltaTime;
 
@@ -247,21 +234,6 @@
 
         #region BATTLE
 
-        /// <summary>
-        /// Set Battle State no params
-        /// </summary>
-        /// <param name="gameState"></param>
-        public void SetGameState(GAMESTATE gameState) => this.gameState = gameState;
-
-        /// <summary>
-        /// Set Battle State with Event Handler
-        /// </summary>
-        /// <param name="gameState"></param>
-        /// <param name="handler"></param>
-        public void SetGameState(GAMESTATE gameState, BattleEventHandler handler) {
-            this.gameState = gameState; handler();
-        }
-
         public void ResumeBattle()
         {
             SetBowPullingStop(false);
@@ -273,8 +245,6 @@
             SetBowPullingStop(true);
             TimePause();
         }
-
-
 
         /// <summary>
         /// Battle Scene의 각종 버튼 이벤트에서 Bow Pulling을 방지하는 메서드입니다.
@@ -427,62 +397,41 @@
 
         #region STATE_EVENT_HANDLER
 
+        /// <summary>
+        /// Change Current Game State
+        /// </summary>
+        /// <param name="targetState"></param>
+        public void ChangeGameState(GAMESTATE targetState) {
+            gameState = targetState; //Change Current GameState
+            switch (gameState) {     //Activate Event
+                case GAMESTATE.STATE_BEFOREBATTLE: break;   //No Event.
+                case GAMESTATE.STATE_INBATTLE:     break;   //No Event.
+                case GAMESTATE.STATE_BOSSBATTLE:   break;   //No Event.
+                case GAMESTATE.STATE_ENDBATTLE:    OnStateEndBattle(); break;
+                case GAMESTATE.STATE_GAMEOVER:     OnStateGameOver();  break;
+            }
+        }
+
         public void AddListnerEndBattle(System.Action action) {
-            OnStateEndBattle += new BattleEventHandler(action);
+            OnStateEndBattle += new GameEventHandler(action);
         }
 
         public void AddListnerGameOver(System.Action action) {
-            OnStateGameOver += new BattleEventHandler(action);
+            OnStateGameOver += new GameEventHandler(action);
         }
 
         public void ReleaseAllEvent() {
-            //Release Monster
-            MonsterHitEvent     = null;
-            MonsterDeathEvent   = null;
-            MonsterLessHitEvent = null;
-
             //Release Battle State
             OnStateEndBattle = null;
             OnStateGameOver  = null;
         }
 
-        public BattleEventHandler EventBattleEnd() {
+        public GameEventHandler EventBattleEnd() {
             return this.OnStateEndBattle;
         }
 
-        public BattleEventHandler EventGameOver() {
+        public GameEventHandler EventGameOver() {
             return this.OnStateGameOver;
-        }
-
-        #endregion
-
-        #region MONSTER_EVENT_HANDLER
-
-        public void AddEventMonsterHit(System.Action action) {
-            var newEvent = new BattleEventHandler(action);
-            MonsterHitEvent += newEvent;
-        }
-
-        public void AddEventMonsterLessHit(System.Action action) {
-            var newEvent = new BattleEventHandler(action);
-            MonsterLessHitEvent += newEvent;
-        }
-
-        public void AddEventMonsterDeath(System.Action action) {
-            var newEvent = new BattleEventHandler(action);
-            MonsterDeathEvent += newEvent;
-        }
-
-        public BattleEventHandler CallMonsterHitEvent() {
-            return MonsterHitEvent;
-        }
-
-        public BattleEventHandler CallMonsterLessHitEvent() {
-            return MonsterLessHitEvent;
-        }
-
-        public BattleEventHandler CallMonsterDeathEvent() {
-            return MonsterDeathEvent;
         }
 
         #endregion

@@ -129,8 +129,8 @@
             }
 
             //Create Pools of Arrow Object
-            CCPooler.AddPoolList(mainArrowObjTag, poolQuantity, MainArrowObject);
-            CCPooler.AddPoolList(lessArrowObjTag, poolQuantity, LessArrowObject);
+            CCPooler.AddPoolList(mainArrowObjTag, poolQuantity, MainArrowObject, iscount: false);
+            CCPooler.AddPoolList(lessArrowObjTag, poolQuantity, LessArrowObject, iscount: false);
         }
 
         public void Release()

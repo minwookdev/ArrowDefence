@@ -30,7 +30,7 @@
             //Wait Until CCPooler Initialized
             yield return new WaitUntil(() => CCPooler.IsInitialized == true);
             //Init Object Pooler in FloatingDamage Object..
-            CCPooler.AddPoolList(AD_Data.POOLTAG_FLOATING_DAMAGE, 20, floatingDamagePref, parentTransform);
+            CCPooler.AddPoolList(AD_Data.POOLTAG_FLOATING_DAMAGE, 20, floatingDamagePref, parentTransform, iscount:false);
         }
 
         void OnDestroy() {

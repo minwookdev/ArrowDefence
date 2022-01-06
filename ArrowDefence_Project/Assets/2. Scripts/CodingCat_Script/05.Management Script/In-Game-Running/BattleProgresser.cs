@@ -68,7 +68,7 @@
         private float clearSliderDest;
 
         [Header("CURRENT BATTLE STATE")]
-        [ReadOnly] public GAMESTATE CurrentGameState;
+        [ReadOnly] public GAMESTATE tempGameState;
 
         [Header("DROPS")]
         public ItemDropList DropListAsset = null;
@@ -82,24 +82,26 @@
         public bool IsDebugMonsterLogics = false;
         public bool IsDebugGameOver      = false;
 
-
-        //각종 게임 진행 수치관련 대리자
+        //전투 진행 이벤트 핸들러 : 수치관련 이벤트
         public delegate void ValueEventHandler(float value);
         public static ValueEventHandler OnIncreaseClearGauge;
         public static ValueEventHandler OnDropItemChance;
         public static ValueEventHandler OnDecreasePlayerHealthPoint;
 
+        //전투 진행 이벤트 핸들러 : 몬스터관련 이벤트
+        public delegate void BattleEventHandler();
+        public static BattleEventHandler OnMonsterHit;
+        public static BattleEventHandler OnMonsterDeath;
+
         //Wait For ObjectPooler Variables //의미없는 수준이었기 때문에 주석처리 해둠.
         //float poolerWaitTime = 0f;
         //Coroutine waitCo = null;
 
-        IEnumerator Start()
-        {
+        IEnumerator Start() {
             //Init-GameManager
             battleSceneUI  = GetComponent<BattleSceneRoute>();
             monsterSpawner = GetComponent<MonsterSpawner>();
-            GameManager.Instance.SetGameState(GAMESTATE.STATE_BEFOREBATTLE);
-            CurrentGameState = GameManager.Instance.GameState;
+            SetGameState(GAMESTATE.STATE_BEFOREBATTLE);
 
             //Init-Delegate
             if (DropListAsset != null) {
@@ -126,10 +128,9 @@
             battleSceneUI.InitArrowSlots(arrowSwapSlotDatas);
             battleSceneUI.InitSkillSlots(accessorySkillSlotDatas);
 
-            //Init-GameManager Event [TEST] (추후 특수효과 발동 및 특수 이벤트에 활용 예정)
-            GameManager.Instance.AddEventMonsterHit(() => CatLog.Log("On Monster Hit"));
-            GameManager.Instance.AddEventMonsterLessHit(() => CatLog.Log("On Monster Death"));
-            GameManager.Instance.AddEventMonsterDeath(() => CatLog.Log("On Monster Hit Less Arrow"));
+            //Init Monster Event <몬스터 관련 이벤트>
+            OnMonsterHit += () => CatLog.Log("On Monster Hit !");
+            OnMonsterDeath += () => CatLog.Log("On Monster Death !");
 
             //Init-Battle State Callback Event
             GameManager.Instance.AddListnerEndBattle(() => { 
@@ -312,46 +313,38 @@
 
             startWaitingTime += Time.deltaTime;
             if(startWaitingTime >= StartBattleDelay) {
-                if (IsDebugClearStage) {
-                    //Debug 1. Stage Clear, Get All Item's in DropList Asset
+                if (IsDebugClearStage) {        //Debug 1. Stage Clear, Get All Item's in DropList Asset
                     CatLog.WLog(StringColor.YELLOW, "DEBUGGING MODE TRUE : ALL DROP ITEM LIST.");
                     foreach (var item in DropListAsset.DropTableArray) {
                         AddDropList(new DropItem(GameGlobal.RandomIntInArray(item.QuantityRange), item.ItemAsset));
                     }
                     //GameState Set Clear Game
-                    GameManager.Instance.SetGameState(GAMESTATE.STATE_ENDBATTLE);
+                    SetGameState(GAMESTATE.STATE_ENDBATTLE);
                 }
-                else if (IsDebugMonsterLogics) {
-                    //Debug 2. Monster Logic Testing
+                else if (IsDebugMonsterLogics) { //Debug 2. Monster Logic Testing
                     CatLog.WLog(StringColor.YELLOW, "DEBUGGING MODE TRUE : MONSTER LOGIC TEST.");
                 }
-                else if (IsDebugGameOver) {
-                    //Debug 3. Go GameOver State
+                else if (IsDebugGameOver) {      //Debug 3. Go GameOver State
                     CatLog.WLog(StringColor.YELLOW, "DEBUGGING MODE TRUE : GAME OVER.");
                     //GameState Set GameOver
-                    GameManager.Instance.SetGameState(GAMESTATE.STATE_GAMEOVER);
+                    SetGameState(GAMESTATE.STATE_GAMEOVER);
                 }
-                else {
-                    //Normal Battle Start
+                else { //Normal Battle Start
                     CatLog.Log("Start Battle ! [Normal Game Mode]");
-                    //GameState Set In-Battle
-                    GameManager.Instance.SetGameState(GAMESTATE.STATE_INBATTLE);
+                    SetGameState(GAMESTATE.STATE_INBATTLE);
                 }
             }
         }
 
-        private void OnUpdateInBattle()
-        {
-            //is Game Clear
-            if(currentClearCount >= MaxClearCount) {
-                CurrentGameState = GameManager.Instance.GameState; //testing variables
-                GameManager.Instance.SetGameState(GAMESTATE.STATE_ENDBATTLE, GameManager.Instance.EventBattleEnd());
+        private void OnUpdateInBattle() {
+            //is Check Game Clear
+            if(currentClearCount >= MaxClearCount) { //Change GameState
+                SetGameState(GAMESTATE.STATE_ENDBATTLE);
             }
 
-            //is Game Over
-            if(currentPlayerHealth <= 0f) {
-                GameManager.Instance.SetGameState(GAMESTATE.STATE_GAMEOVER, 
-                                                  GameManager.Instance.EventGameOver());
+            //is Check Game Over
+            if(currentPlayerHealth <= 0f) { //Change GameState
+                SetGameState(GAMESTATE.STATE_GAMEOVER);
             }
         }
 
@@ -389,6 +382,11 @@
         #endregion
 
         #region GAMEMANAGER_CALLBACK
+
+        void SetGameState(GAMESTATE state) {
+            GameManager.Instance.ChangeGameState(state);
+            tempGameState = state;
+        }
 
         #endregion
         //Time.time Timer 참고.

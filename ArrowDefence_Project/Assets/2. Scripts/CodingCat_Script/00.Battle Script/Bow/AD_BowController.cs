@@ -8,11 +8,12 @@
     {
         public static AD_BowController instance;
 
-        [Header("GENERAL")]
-        public Camera MainCam = null;
-        private Touch screenTouch;
+        [Header("COMPONENT")]
         [SerializeField] BowSprite bowSprite;
         [SerializeField] AD_BowAbility bowAbility;
+        [SerializeField] Transform bowTr = null;
+        private Touch screenTouch;
+        public Camera MainCam = null;
 
         [Header("BOW CONTROL VARIABLES")]
         public float TouchRadius = 1f;
@@ -40,7 +41,7 @@
         private bool isLaunch = false;
         private Vector2 arrowForce;
         private Vector3 arrowPosition;
-        private Vector3 initArrowScale = new Vector3(1.5f, 1.5f, 0f);
+        private Vector3 initArrowScale = new Vector3(1.5f, 1.5f, 1f);
         private Vector3 initArrowRot   = new Vector3(0f, 0f, -90f);
 
         //Enums
@@ -51,8 +52,7 @@
         private DamageStruct damageStruct;
 
         //Delegate
-        public delegate void BowSkillsDel(float anglez, Transform parent, MonoBehaviour mono, ref DamageStruct damage,
-                                          Vector3 initscale, Vector3 initpos, Vector2 force, LOAD_ARROW_TYPE type);
+        public delegate void BowSkillsDel(Transform bowTr, AD_BowController controller, ref DamageStruct damage, Vector3 arrowPos, LOAD_ARROW_TYPE type);
         private BowSkillsDel BowSkillSet;
 
         #region NOT_USED
@@ -69,8 +69,10 @@
 
         private void Awake() => instance = this;
 
-        private void Start()
-        {
+        private void Start() {
+            //Bow Transform Init Check
+            if (bowTr = null) CatLog.ELog("Bow Transform Component is Null", true);
+
             //Initialize Main Camera Object
             MainCam = Camera.main;
             currentPullType = Data.CCPlayerData.settings.PullingType;
@@ -80,15 +82,15 @@
                 CatLog.ELog("Bow Controller : Clamp Point is Not Cached.", true);
             }
 
-            //Init-parent
-            ArrowParentTr = transform.parent;
+            //Init-parent Canvas
+            ArrowParentTr = bowTr.parent;
 
             //Initialize Bow Center Pivot Image Object
             if (BowCenterPointImg)
-                BowCenterPointImg.transform.position = transform.position;
+                BowCenterPointImg.transform.position = bowTr.position;
 
             //Init Start Bow Angle : Start 이후 처음 조준할 때 Bounce 현상 방지
-            bowAngle = transform.eulerAngles.z;
+            bowAngle = bowTr.eulerAngles.z;
             minBowAngle = 0f; maxBowAngle = 180f;
 
             //Init Load Arrow Type : 장전될 화살 타입 정의
@@ -272,7 +274,7 @@
             #endregion
 
             float distOfPoint = (currentPullType == PULLINGTYPE.AROUND_BOW_TOUCH) ? 
-                Vector2.Distance(transform.position, currentClickPosition) : 
+                Vector2.Distance(bowTr.position, currentClickPosition) : 
                 Vector2.Distance(initialTouchPos, currentClickPosition);
 
             isBowPulling = (distOfPoint > 1f) ? true : false;
@@ -282,7 +284,7 @@
                 //CorrectionArrPos(currentClickPosition);
 
                 this.direction = (currentPullType == PULLINGTYPE.AROUND_BOW_TOUCH) ?
-                    currentClickPosition - transform.position :
+                    currentClickPosition - bowTr.position :
                     currentClickPosition - initialTouchPos;
 
                 //change bow angle depending on touch or click position. *Mathf.Clamp, *Mathf.LerpAngle.
@@ -290,17 +292,17 @@
                             minBowAngle, maxBowAngle);
 
                 //Set Direction of the Bow.
-                tempEulerAngle        = transform.eulerAngles;
-                tempEulerAngle.z      = bowAngle;
-                transform.eulerAngles = tempEulerAngle;
+                tempEulerAngle    = bowTr.eulerAngles;
+                tempEulerAngle.z  = bowAngle;
+                bowTr.eulerAngles = tempEulerAngle;
 
                 //Draw Touch Line : Color Green.
-                if (currentPullType == PULLINGTYPE.AROUND_BOW_TOUCH) DrawTouchPos.Instance.DrawTouchLine(currentClickPosition, transform.position, true);
+                if (currentPullType == PULLINGTYPE.AROUND_BOW_TOUCH) DrawTouchPos.Instance.DrawTouchLine(currentClickPosition, bowTr.position, true);
                 else if (currentPullType == PULLINGTYPE.FREE_TOUCH)  DrawTouchPos.Instance.DrawTouchLine(currentClickPosition, initialTouchPos, true);
             }
             else {
                 //Draw Touch Line : Color Red.
-                if (currentPullType == PULLINGTYPE.AROUND_BOW_TOUCH) DrawTouchPos.Instance.DrawTouchLine(currentClickPosition, transform.position, false);
+                if (currentPullType == PULLINGTYPE.AROUND_BOW_TOUCH) DrawTouchPos.Instance.DrawTouchLine(currentClickPosition, bowTr.position, false);
                 else if (currentPullType == PULLINGTYPE.FREE_TOUCH)  DrawTouchPos.Instance.DrawTouchLine(currentClickPosition, initialTouchPos, false);
             }
 
@@ -402,8 +404,9 @@
 
             //Shot Arrow & Active Skill.
             ArrowComponent.ShotByBow(arrowForce, ArrowParentTr, damageStruct);
-            BowSkillSet?.Invoke(transform.eulerAngles.z, ArrowParentTr, this, ref damageStruct, initArrowScale,
-                                ArrowComponent.CatchTr.position, arrowForce, loadArrowType);
+            BowSkillSet?.Invoke(bowTr, this, ref damageStruct, ArrowComponent.CatchTr.position, loadArrowType);
+            //BowSkillSet?.Invoke(transform.eulerAngles.z, ArrowParentTr, this, ref damageStruct, initArrowScale,
+            //                    ArrowComponent.CatchTr.position, arrowForce, loadArrowType);
 
             //Release GameObject and Component Arrow.
             LoadedArrow    = null;
@@ -424,7 +427,7 @@
 
         bool PullTypeTouchAround(Vector2 touchPos) {
             Vector2 currentTouchPos = MainCam.ScreenToWorldPoint(touchPos);
-            float distFromBow = (currentTouchPos - (Vector2)transform.position).magnitude;
+            float distFromBow = (currentTouchPos - (Vector2)bowTr.position).magnitude;
             return (distFromBow <= TouchRadius) ? true : false;
         }
 
@@ -434,8 +437,8 @@
 
         void Reload() {
             switch (loadArrowType) { //Reload Arrow by Current Equipped Arrow Type.
-                case LOAD_ARROW_TYPE.ARROW_MAIN: LoadedArrow = CCPooler.SpawnFromPool(AD_Data.POOLTAG_MAINARROW, transform, initArrowScale, ClampPointTop.position, Quaternion.identity); break;
-                case LOAD_ARROW_TYPE.ARROW_SUB:  LoadedArrow = CCPooler.SpawnFromPool(AD_Data.POOLTAG_SUBARROW,  transform, initArrowScale, ClampPointTop.position, Quaternion.identity); break;
+                case LOAD_ARROW_TYPE.ARROW_MAIN: LoadedArrow = CCPooler.SpawnFromPool(AD_Data.POOLTAG_MAINARROW, bowTr, initArrowScale, ClampPointTop.position, Quaternion.identity); break;
+                case LOAD_ARROW_TYPE.ARROW_SUB:  LoadedArrow = CCPooler.SpawnFromPool(AD_Data.POOLTAG_SUBARROW,  bowTr, initArrowScale, ClampPointTop.position, Quaternion.identity); break;
             }
 
             //Get Arrow Component with init Clamp Points.
@@ -448,7 +451,7 @@
         void UpdateStopPulling() {
             if (IsPullingStop == true) {
                 if (LoadedArrow != null)
-                    LoadedArrow.transform.position = ClampPointTop.transform.position;
+                    LoadedArrow.transform.position = ClampPointTop.position;
                 isBowPullBegan = false; isBowPulling = false;
                 DrawTouchPos.Instance.ReleaseTouchLine();
             }
@@ -458,14 +461,14 @@
             //Before use, the 'isCorrectionArrPos' declaration is required.
             bool isCorrectionArrPos = true;
             if(isCorrectionArrPos == false) {
-                if (currentPullType == PULLINGTYPE.AROUND_BOW_TOUCH) direction = touchPos - transform.position;
+                if (currentPullType == PULLINGTYPE.AROUND_BOW_TOUCH) direction = touchPos - bowTr.position;
                 else if (currentPullType == PULLINGTYPE.FREE_TOUCH)  direction = touchPos - initialTouchPos;
             
                 bowAngle = Mathf.Clamp(Mathf.Atan2(direction.x, -direction.y) * Mathf.Rad2Deg + 90, minBowAngle, maxBowAngle);
             
-                tempEulerAngle        = transform.eulerAngles;
-                tempEulerAngle.z      = bowAngle;
-                transform.eulerAngles = tempEulerAngle;
+                tempEulerAngle    = bowTr.eulerAngles;
+                tempEulerAngle.z  = bowAngle;
+                bowTr.eulerAngles = tempEulerAngle;
             
                 isCorrectionArrPos = true;
             }

@@ -1,7 +1,8 @@
 ﻿namespace ActionCat {
+    using ActionCat.Interface;
     using UnityEngine;
 
-    public class DamageFloater : MonoBehaviour {
+    public class DamageFloater : MonoBehaviour, IPoolUser {
         [Header("DAMAGE FLOATER")]
         public int PoolCounter = 10;
         [SerializeField] Transform parentTransform = null;
@@ -26,7 +27,7 @@
             _inst = this;
         }
 
-        System.Collections.IEnumerator Start() {
+        public System.Collections.IEnumerator Start() {
             //Wait Until CCPooler Initialized
             yield return new WaitUntil(() => CCPooler.IsInitialized == true);
             //Init Object Pooler in FloatingDamage Object..

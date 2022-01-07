@@ -45,7 +45,8 @@
             this.iconSprite = sprite;
         }
 
-        public abstract void BowSpecialSkill(float anglez, Transform arrowParent, MonoBehaviour mono, ref DamageStruct damage,
-                                             Vector3 initscale, Vector3 arrowInitPos, Vector2 force, LOAD_ARROW_TYPE arrowType);
+        public abstract void BowSpecialSkill(Transform bowTr, AD_BowController controller, ref DamageStruct damage, Vector3 initPos, LOAD_ARROW_TYPE type);
+        //BowSpecialSkill(Transform bowTr, AD_BowController controller, ref DamageStruct damage, Vector3 initPos, LOAD_ARROW_TYPE arrowType);
+
     }
 }

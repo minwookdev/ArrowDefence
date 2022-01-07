@@ -47,7 +47,7 @@
         [SerializeField] private List<Pool> poolInstanceList = new List<Pool>();
 
         [Header("POOL COUNTER")]
-        [SerializeField] Dictionary<string, List<GameObject>> countDictionary = null;
+        [SerializeField] Dictionary<string, List<GameObject>> aliveTrackDic = null;
 
         public static bool IsInitialized { get; private set; }
 
@@ -63,9 +63,9 @@
 
         private void Start() {
             //Init Collections
-            poolDictionary  = new Dictionary<string, Stack<GameObject>>();
-            countDictionary = new Dictionary<string, List<GameObject>>();
-            ParentList      = new List<Transform>();
+            poolDictionary = new Dictionary<string, Stack<GameObject>>();
+            aliveTrackDic  = new Dictionary<string, List<GameObject>>();
+            ParentList     = new List<Transform>();
 
             #region LEGACY_CODE
             //foreach (Pool pool in pools)
@@ -127,8 +127,7 @@
             _inst._SpawnFromPool(tag, parent, scale, pos, rot);
 
         public static T SpawnFromPool<T>(string tag, Transform parent, 
-                                Vector3 scale, Vector3 pos, Quaternion rot) where T : Component
-        {
+                                Vector3 scale, Vector3 pos, Quaternion rot) where T : Component {
             GameObject obj = _inst._SpawnFromPool(tag, parent, scale, pos, rot);
 
             if (obj.TryGetComponent(out T component))
@@ -149,29 +148,26 @@
         /// <param name="pos">Position of Object Spawn</param>
         /// <param name="rot">Rotation of Object Spawn</param>
         /// <returns></returns>
-        GameObject _SpawnFromPool(string tag, Vector3 pos, Quaternion rot)
-        {
+        GameObject _SpawnFromPool(string tag, Vector3 pos, Quaternion rot) {
             if (!poolDictionary.ContainsKey(tag))
                 throw new Exception($"Pool With Tag {tag} doesn't Exist");
 
             Stack<GameObject> poolStack = poolDictionary[tag];
 
-            //꺼내려는 Object가 Stack에 없을 경우 새로 추가
-            if(poolStack.Count <= 0)
-            {
-                //Pool pool = Array.Find(pools, x=> x.tag == tag);
+            //Spawn 하려는 PoolObject가 Dictionary Stack에 없는 경우 생성
+            if(poolStack.Count <= 0) {
                 Pool pool = poolInstanceList.Find(x => x.tag == tag);
-                var obj = CreateNewObject(pool.tag, pool.prefab, FindParentTransform(pool.tag));
+                var obj = CreateNewObject(pool.tag, pool.prefab, FindParentOrNull(pool.tag));
             }
 
-            //Stack 에서 꺼내서 사용
+            //Stack Pop
             GameObject objectToSpawn = poolStack.Pop();
             objectToSpawn.transform.position = pos;
             objectToSpawn.transform.rotation = rot;
             objectToSpawn.SetActive(true);
 
             //Try Add Alive Dictionary
-            //TryAddAliveDic(tag, objectToSpawn);
+            TryAddAliveTrackDic(tag, objectToSpawn);
 
             return objectToSpawn;
         }
@@ -184,22 +180,19 @@
         /// <param name="pos"></param>
         /// <param name="rot"></param>
         /// <returns></returns>
-        GameObject _SpawnFromPool(string tag, Transform parent, Vector3 scale, Vector3 pos, Quaternion rot)
-        {
+        GameObject _SpawnFromPool(string tag, Transform parent, Vector3 scale, Vector3 pos, Quaternion rot) {
             if (!poolDictionary.ContainsKey(tag))
                 throw new Exception($"Pool With Tag {tag} doesn't Exist");
 
             Stack<GameObject> poolStack = poolDictionary[tag];
 
-            //Spawn 하려는 Object가 Pool에 없는 경우 새로 만듦
-            if(poolStack.Count <= 0)
-            {
-                //부모찾는방법 최적화
-                //Pool pool = Array.Find(pools, x => x.tag == tag);
+            //Spawn 하려는 PoolObject가 Dictionary Stack에 없는 경우 생성
+            if (poolStack.Count <= 0) {
                 Pool pool = poolInstanceList.Find(x => x.tag == tag);
-                var obj = CreateNewObject(pool.tag, pool.prefab, FindParentTransform(pool.tag));
+                var obj = CreateNewObject(pool.tag, pool.prefab, FindParentOrNull(pool.tag));
             }
 
+            //Stack Pop
             GameObject objectToSpawn = poolStack.Pop();
             objectToSpawn.transform.SetParent(parent);
             objectToSpawn.transform.localScale = scale;
@@ -208,7 +201,7 @@
             objectToSpawn.SetActive(true);
 
             //Try Add Alive Dictionary
-            //TryAddAliveDic(tag, objectToSpawn);
+            TryAddAliveTrackDic(tag, objectToSpawn);
 
             return objectToSpawn;
         }
@@ -249,32 +242,32 @@
                 throw new Exception($"Pool With Tag {obj.name} doesn't Exist.");
 
             obj.SetActive(false);
-            obj.transform.SetParent(_inst.FindParentTransform(obj.name));
+            obj.transform.SetParent(_inst.FindParentOrNull(obj.name));
             //obj.transform.SetParent(_inst.FindParentTransform(tag)); //이거 못씀;; Main, Sub Arrow 회수할때 중복됨
             //ParentList에서 GameObject.name 이랑 싱크 맞춰놓았으니 굳이 사용할 필요도 없음
 
-            //Try Remove Alive Dictionary
-            //_inst.TryRemoveAliveDic(obj.name, obj);
-
             //사용할 준비가 완벽하게 정리되면 Push 해주기
             _inst.poolDictionary[obj.name].Push(obj);
+
+            //Try Remove AliveTracking Dictionary.
+            _inst.TryRemoveAliveTrackDic(obj.name, obj);
         }
 
         /// <summary>
         /// Object 회수. (부모가 변경되지 않은 객체 해당)
         /// </summary>
         /// <param name="obj"></param>
-        public static void ReturnToPool(GameObject obj)
-        {
+        public static void ReturnToPool(GameObject obj) {
             if (!_inst.poolDictionary.ContainsKey(obj.name))
                 throw new Exception($"Pool With Tag {obj.name} doesn't Exist.");
 
+            //Disable Pool Object
             obj.SetActive(false);
 
-            //Try Remove Alive Dictionary
-            //_inst.TryRemoveAliveDic(obj.name, obj);
-
             _inst.poolDictionary[obj.name].Push(obj);
+
+            //Try Remove AliveTracking Dictionary.
+            _inst.TryRemoveAliveTrackDic(obj.name, obj);
         }
 
         GameObject CreateNewObject(string tag, GameObject prefab, Transform parent)
@@ -295,33 +288,20 @@
         /// <param name="iscount">active된 객체 수 추적 여부</param>
         public static void AddPoolList(string tag, int size, GameObject prefab, bool iscount) {
             Pool pool = new Pool() { tag = tag, size = size, prefab = prefab };
-            _inst.poolInstanceList.Add(pool);
+            _inst.poolInstanceList.Add(pool);                            //1. Add PoolInstance List
 
-            _inst.poolDictionary.Add(pool.tag, new Stack<GameObject>());
+            _inst.poolDictionary.Add(pool.tag, new Stack<GameObject>()); //2. Add PoolDictionary
 
-            var parentObj = new GameObject(pool.tag).transform;
+            var parentObj = new GameObject(pool.tag).transform;          //3. New Parent GameObject Created and Add Parent List.
             parentObj.SetParent(_inst.transform);
             _inst.ParentList.Add(parentObj);
 
-            //add count Dictionary this Pool Object
-            //if(iscount == true) {
-            //    _inst.countDictionary.Add(tag, new List<GameObject>());
-            //}
-            //
-            //for (int i = 0; i < pool.size; i++) {
-            //    _inst.CreateNewObject(pool.tag, pool.prefab, parentObj);
-            //}
-
-            if(iscount == true) {
-                _inst.NewAliveDic(pool.tag);
-                for (int i = 0; i < pool.size; i++) {
-                    _inst.AddAliveDic(pool.tag, _inst.CreateNewObject(pool.tag, pool.prefab, parentObj));
-                }
+            if(iscount == true) {                                        //4. if Tracking Alive options ture, Add AliveDictionary this PoolObject. 
+                _inst.NewAliveTrackDic(pool.tag);
             }
-            else {
-                for (int i = 0; i < pool.size; i++) {
-                    _inst.CreateNewObject(pool.tag, pool.prefab, parentObj);
-                }
+
+            for (int i = 0; i < pool.size; i++) {                        //5. Create New Pool Object. 
+                _inst.CreateNewObject(pool.tag, pool.prefab, parentObj);
             }
 
             if (_inst.poolDictionary[pool.tag].Count <= 0)
@@ -341,19 +321,17 @@
         public static void AddPoolList(string tag, int size, GameObject prefab, Transform parent, bool iscount) {
             Pool pool = new Pool() { tag = tag, size = size, prefab = prefab };
             _inst.poolInstanceList.Add(pool);                             //1. Add PoolInstance List.
+
             _inst.poolDictionary.Add(pool.tag, new Stack<GameObject>());  //2. Add PoolDictaionary.
+
             _inst.ParentList.Add(parent);                                 //3. Add Parent Transform to Parent List.
-                                                                          
-            if(iscount == true) {                                         //4. add Count Dictionary this Pool Object.
-                _inst.NewAliveDic(pool.tag);                              
-                for (int i = 0; i < pool.size; i++) {
-                    _inst.AddAliveDic(pool.tag, _inst.CreateNewObject(pool.tag, pool.prefab, parent));
-                }
+
+            if(iscount == true) {                                         //4. if Tracking Alive options true, Add AliveDictionary this PoolObject
+                _inst.NewAliveTrackDic(pool.tag);
             }
-            else {
-                for (int i = 0; i < pool.size; i++) {
-                    _inst.CreateNewObject(pool.tag, pool.prefab, parent); //5. Create Prefab GameObject as much as Size.
-                }
+
+            for (int i = 0; i < pool.size; i++) {                         //5. Create New PoolObject.
+                _inst.CreateNewObject(pool.tag, pool.prefab, parent);
             }
 
             if (_inst.poolDictionary[pool.tag].Count <= 0)
@@ -364,75 +342,136 @@
 
         #region PARENT
 
-        private Transform FindParentTransform(string tag)
-        {
-            Transform tr = ParentList.Find(x => x.name == tag);
-
-            if (tr) return tr;
-            else    return null;
+        private Transform FindParentOrNull(string tag) {
+            return ParentList.Find(element => element.name == tag);
         }
 
         #endregion
 
-        #region COUNTING
+        #region ALIVE_TRACKER_DICTIONARY
 
         /// <summary>
-        /// this method is non-safety
+        /// Create New Key AliveTrack Dictionary
         /// </summary>
-        /// <param name="key"></param>
-        void NewAliveDic(string key) {
-            countDictionary.Add(key, new List<GameObject>());
+        /// <param name="key">string type key</param>
+        void NewAliveTrackDic(string key) {
+            aliveTrackDic.Add(key, new List<GameObject>());
         }
 
         /// <summary>
-        /// This method non-safety
+        /// non-safety Method
         /// </summary>
         /// <param name="key"></param>
         /// <param name="go"></param>
-        void AddAliveDic(string key, GameObject go) {
-            countDictionary[key].Add(go);
+        void AddAliveTrackDic(string key, GameObject go) {
+            aliveTrackDic[key].Add(go);
         }
 
         /// <summary>
-        /// this method is non-safety
+        /// non-safety Method
         /// </summary>
         /// <param name="key"></param>
         /// <param name="go"></param>
-        void RemoveAliveDic(string key, GameObject go) {
-            var target = countDictionary[key].Find(element => ReferenceEquals(element, go));
+        void RemoveAliveTrackDic(string key, GameObject go) {
+            var target = aliveTrackDic[key].Find(element => ReferenceEquals(element, go));
             if(target) {
-                countDictionary[key].Remove(target);
+                aliveTrackDic[key].Remove(target);
             }
             else {
                 CatLog.ELog("target is Null. [CCPooler]");
             }
         }
 
-        bool TryAddAliveDic(string tag, GameObject go) {
-            if (countDictionary.ContainsKey(tag) == false) return false;
-            countDictionary[tag].Add(go);
+        bool TryAddAliveTrackDic(string tag, GameObject go) {
+            if (aliveTrackDic.ContainsKey(tag) == false) return false;
+            aliveTrackDic[tag].Add(go);
             return true;
         }
 
-        bool TryRemoveAliveDic(string tag, GameObject go) {
-            if (countDictionary.ContainsKey(tag) == false) return false;
-            var target = countDictionary[tag].Find(element => ReferenceEquals(element, go));
+        bool TryRemoveAliveTrackDic(string tag, GameObject go) {
+            if (aliveTrackDic.ContainsKey(tag) == false) return false;
+            var target = aliveTrackDic[tag].Find(element => ReferenceEquals(element, go));
             if(target) {
-                countDictionary[tag].Remove(target);
+                aliveTrackDic[tag].Remove(target);
                 return true;
             }
             else {
-                CatLog.ELog("target is Null [CCPooler.dictionary]");
                 return false;
             }
         }
 
-        bool TryAliveDic(string key) {
-            return countDictionary.ContainsKey(key);
+        bool TryAliveTrackKey(string key) {
+            return aliveTrackDic.ContainsKey(key);
         }
 
-        int GetAliveCount(string key) {
-            return 0;
+        public static int GetCountAliveTrackDic(string key) {
+            if(_inst.aliveTrackDic.ContainsKey(key) == false) {
+                throw new Exception($"No Has key : {key} in AliveTracking Dictionary");
+            }
+
+            return _inst.aliveTrackDic[key].Count;
+        }
+
+        public static int GetAllAliveMonsterCount() {
+            int totalMonsterCount = 0;
+
+            foreach (var dic in _inst.aliveTrackDic) {
+                //Get Count of Normal, Elite, Frequency Monsters List
+                if (dic.Key == AD_Data.POOLTAG_MONSTER_NORMAL || dic.Key == AD_Data.POOLTAG_MONSTER_ELITE || dic.Key == AD_Data.POOLTAG_MONSTER_FREQ) {
+                    totalMonsterCount += dic.Value.Count;
+                }
+            }
+
+            return totalMonsterCount;
+        }
+
+        public static int GetAllAliveTrackCount() {
+            int total = 0;
+            //Type 1. access directly on Dictionary
+            foreach (var dic in _inst.aliveTrackDic) {  
+                total += dic.Value.Count;
+            }
+            return total;
+            //Type 2.use foreach loop on Keys, then access Values
+            //foreach (string key in _inst.aliveTrackDic.Keys) {
+            //    total += _inst.aliveTrackDic[key].Count;
+            //}
+        }
+
+        public static GameObject[] GetAliveMonsters() {
+            List<GameObject> resultList   = new List<GameObject>();
+            List<GameObject> monstersList = new List<GameObject>();
+
+            //Get Normal Monster List
+            if(_inst.aliveTrackDic.TryGetValue(AD_Data.POOLTAG_MONSTER_NORMAL, out monstersList)) {
+                resultList.AddRange(monstersList);
+            }
+            //Get Elite Monster List
+            if(_inst.aliveTrackDic.TryGetValue(AD_Data.POOLTAG_MONSTER_ELITE, out monstersList)) {
+                resultList.AddRange(monstersList);
+            }
+            //Get Frequency Monster List
+            if(_inst.aliveTrackDic.TryGetValue(AD_Data.POOLTAG_MONSTER_FREQ, out monstersList)) {
+                resultList.AddRange(monstersList);
+            }
+
+            return resultList.ToArray();
+        }
+
+        public static void GetAliveMonstersOut(out GameObject[] array) {
+            List<GameObject> resultList   = new List<GameObject>();
+            List<GameObject> tempMonsters = new List<GameObject>();
+            if(_inst.aliveTrackDic.TryGetValue(AD_Data.POOLTAG_MONSTER_NORMAL, out tempMonsters)) {
+                resultList.AddRange(tempMonsters);
+            }
+            if(_inst.aliveTrackDic.TryGetValue(AD_Data.POOLTAG_MONSTER_ELITE, out tempMonsters)) {
+                resultList.AddRange(tempMonsters);
+            }
+            if(_inst.aliveTrackDic.TryGetValue(AD_Data.POOLTAG_MONSTER_FREQ, out tempMonsters)) {
+                resultList.AddRange(tempMonsters);
+            }
+
+            array = resultList.ToArray();
         }
 
         #endregion

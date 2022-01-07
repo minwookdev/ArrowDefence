@@ -38,7 +38,47 @@
             this.shotDelay  = data.ShotInterval;
         }
 
-        public override void BowSpecialSkill(float anglez, Transform arrowParent, MonoBehaviour mono, ref DamageStruct damage,
+        public override void BowSpecialSkill(Transform bowTr, AD_BowController controller, ref DamageStruct damage, Vector3 initPos, LOAD_ARROW_TYPE type) {
+            string tag = (type == LOAD_ARROW_TYPE.ARROW_MAIN) ? AD_Data.POOLTAG_MAINARROW_LESS : AD_Data.POOLTAG_SUBARROW_LESS;
+            controller.StartCoroutine(RainArrow(tag, bowTr, damage));
+        }
+
+        IEnumerator RainArrow(string poolTag, Transform bowTr, DamageStruct damage) {
+            for (int i = 0; i < arrowCount; i++)
+            {
+                yield return new WaitForSeconds(shotDelay);
+
+                var randomArrowPos = new Vector3(Random.Range(-4f, 4f), Random.Range(-7.5f, -8.75f), 0f);
+                var randomdest     = new Vector3(Random.Range(-3.5f, 3.5f), Random.Range(6f, 4f), 0f);
+
+                //randomArrow Pos in Global World Position -> Debugging Used
+                /* left-top     : -4, -7.5
+                   right-top    :  4, -7.5
+                   right-bottom :  4, -8.75
+                   left-bottom  : -4, -8.75 */
+
+                var arrow = CCPooler.SpawnFromPool<AD_Arrow_less>(poolTag, bowTr.parent.root, GameGlobal.ArrowScale, randomArrowPos, Quaternion.identity);
+                if (arrow)
+                {
+                    arrow.gameObject.transform.rotation = Quaternion.Euler(0f, 0f, CalculateAngle(arrow.transform.position, randomdest));
+                    arrow.ShotToDirection(arrow.transform.up, damage); // * force.magnitude;
+                }
+
+                if (isActiveDebugLine)
+                {
+                    if (isDrawLine)
+                    {
+                        var lineRenderObject = new GameObject("ArrowRain_LineRender_InitPos").AddComponent<ArrowRain_LineRender>();
+                        debugLineRender = lineRenderObject;
+                        isDrawLine = false;
+                    }
+
+                    debugLineRender.PointMaker(bowTr.parent.root, randomArrowPos, randomdest);
+                }
+            }
+        }
+
+        public void BowSpecialSkill(float anglez, Transform arrowParent, MonoBehaviour mono, ref DamageStruct damage,
                                              Vector3 initscale, Vector3 initpos, Vector2 force, LOAD_ARROW_TYPE type)
         {
             #region LEGACY_CODE

@@ -1,7 +1,6 @@
 ﻿namespace ActionCat
 {
     using UnityEngine;
-    using System;
     using System.Collections;
 
     public class MonsterSpawner : MonoBehaviour
@@ -20,6 +19,11 @@
 
         [Header("SPAWN TIMER")]
         [ReadOnly] public float spawnTimer = 0f;
+
+        [Header("DEBUG")]
+        [SerializeField] bool isCheckAliveMonster = false;
+        [SerializeField] float checkerInterval = 2f;
+        private float checkerCount = 2f;
 
         private Vector3 topLeftPoint;
         private Vector3 bottomRightPoint;
@@ -46,16 +50,18 @@
             MonsterInPool();
         }
 
-        private void Update()
-        {
-            switch (GameManager.Instance.GameState)
-            {
+        private void Update() {
+            switch (GameManager.Instance.GameState) {
                 case GAMESTATE.STATE_BEFOREBATTLE:                 break;
                 case GAMESTATE.STATE_INBATTLE:     SpawnMonster(); break;
                 case GAMESTATE.STATE_BOSSBATTLE:                   break;
                 case GAMESTATE.STATE_ENDBATTLE:                    break;
                 case GAMESTATE.STATE_GAMEOVER:                     break;
             }
+
+            //============================[ TEST : ALIVE MONSTER CHECKER ]============================
+            UpdateAliveMonsterChecker();
+            //========================================================================================
         }
 
         private void SpawnMonster() {
@@ -90,18 +96,17 @@
             //CCPooler.SpawnFromPool(AD_Data.POOLTAG_MONSTER_NORMAL, spawnPos, Quaternion.identity);
         }
 
-        private void MonsterInPool()
-        {
+        private void MonsterInPool() {
             //Init-Monster in Object Pooler
             //Difficulty configuration according to cached monsters.
 
             if (monsterPrefNormal != null) {
-                CCPooler.AddPoolList(AD_Data.POOLTAG_MONSTER_NORMAL, 10, monsterPrefNormal, iscount:false);
+                CCPooler.AddPoolList(AD_Data.POOLTAG_MONSTER_NORMAL, 10, monsterPrefNormal, iscount:true);
                 SetStageDiff();
             }
 
             if(monsterPrefFreq != null) {
-                CCPooler.AddPoolList(AD_Data.POOLTAG_MONSTER_FREQ, 10, monsterPrefFreq, iscount:false);
+                CCPooler.AddPoolList(AD_Data.POOLTAG_MONSTER_FREQ, 10, monsterPrefFreq, iscount:true);
                 SetStageDiff();
             }
 
@@ -140,6 +145,17 @@
             ///    stageDiff = 0;
             ///}
             ///else...
+        }
+
+        void UpdateAliveMonsterChecker() {
+            if (isCheckAliveMonster == false) return;
+
+            checkerCount -= Time.unscaledDeltaTime;
+            if(checkerCount <= 0f) {
+                var tempList = CCPooler.GetAliveMonsters();
+                CatLog.Log(StringColor.YELLOW, $"Current Alive Monster Checker Count : {tempList.Length}");
+                checkerCount = checkerInterval;
+            }
         }
 
 #if UNITY_EDITOR

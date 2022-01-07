@@ -22,8 +22,7 @@
 
         }
 
-        public override void BowSpecialSkill(float facingVec, Transform arrowParent, MonoBehaviour mono, ref DamageStruct damage,
-                                             Vector3 initScale, Vector3 arrowInitPos, Vector2 force, LOAD_ARROW_TYPE arrowType) {
+        public override void BowSpecialSkill(Transform bowTr, AD_BowController controller, ref DamageStruct damage, Vector3 initPos, LOAD_ARROW_TYPE type) {
             throw new System.NotImplementedException();
         }
     }

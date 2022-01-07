@@ -290,7 +290,7 @@ RectTransform:
   m_GameObject: {fileID: 1123326281355546838}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1}
   m_Children:
   - {fileID: 1123326281355185384}
   - {fileID: 1123326281355185388}
@@ -322,9 +322,9 @@ MonoBehaviour:
   polyCollider: {fileID: 1098919540599290898}
   arrowTrail: {fileID: 1123326281364875872}
   arrowSprite: {fileID: 7311252437251513649}
-  leftClampPoint: {fileID: 0}
-  rightClampPoint: {fileID: 0}
-  arrowChatchPoint: {fileID: 1123326281355185382}
+  arrowCatchTransform: {fileID: 0}
+  bottomClampTr: {fileID: 0}
+  topClampTr: {fileID: 0}
   ArrowPower: 18
   isLaunched: 0
 --- !u!114 &1123326281355546834

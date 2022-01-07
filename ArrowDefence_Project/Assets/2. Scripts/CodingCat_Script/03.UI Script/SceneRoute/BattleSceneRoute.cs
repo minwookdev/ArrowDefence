@@ -138,9 +138,9 @@
         void Update() {
             HitScreenUpdate();
 
-            if(Input.GetKeyDown(KeyCode.I)) {
-                OnHitScreen();
-            }
+            //if(Input.GetKeyDown(KeyCode.I)) {
+            //    OnHitScreen();
+            //}
         }
 
         void OnDisable() {

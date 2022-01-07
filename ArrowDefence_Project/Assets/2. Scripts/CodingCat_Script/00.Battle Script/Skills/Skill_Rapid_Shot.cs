@@ -36,21 +36,17 @@
             this.shotDelay  = data.ShotInterval;
         }
 
-        public override void BowSpecialSkill(float anglez, Transform parent, MonoBehaviour mono, ref DamageStruct damage,
-                                             Vector3 initScale, Vector3 initPos, Vector2 arrowForce, LOAD_ARROW_TYPE type)
+        public override void BowSpecialSkill(Transform bowTr, AD_BowController controller, ref DamageStruct damage, Vector3 initPos, LOAD_ARROW_TYPE type)
         {
             ///Get the GameObject's MonoBehavior and run a Coroutine with it.
             ///R. Skill Class has no life cycle.
 
             string poolTag = (type == LOAD_ARROW_TYPE.ARROW_MAIN) ? AD_Data.POOLTAG_MAINARROW_LESS : AD_Data.POOLTAG_SUBARROW_LESS;
-            mono.StartCoroutine(RapidShot(parent, damage, initScale, initPos, anglez, arrowForce, poolTag));
+            controller.StartCoroutine(RapidShot(bowTr, damage, initPos, poolTag));
         }
 
-        private IEnumerator RapidShot(Transform arrowParent, DamageStruct damage, Vector3 arrowInitScale, Vector3 arrowInitPos, 
-                                      float facingVec, Vector2 force, string poolTag) {
+        private IEnumerator RapidShot(Transform bowTr, DamageStruct damage, Vector3 arrowInitPos, string poolTag) {
             yield return rapidShotWait;
-
-            //CatLog.Log("Bow Special Effect Occured :: Rapid Shot");
 
             byte arrowcount = 0;
 
@@ -94,11 +90,10 @@
 
                 #endregion
 
-                var ccArrow = CCPooler.SpawnFromPool<AD_Arrow_less>(poolTag, arrowParent, arrowInitScale, arrowInitPos, 
-                                                                    Quaternion.Euler(0f, 0f, (facingVec - 90f) + randomAngle));
+                var ccArrow = CCPooler.SpawnFromPool<AD_Arrow_less>(poolTag, bowTr.parent.root, GameGlobal.ArrowScale, arrowInitPos, 
+                                                                    Quaternion.Euler(0f, 0f, (bowTr.eulerAngles.z - 90f) + randomAngle));
 
-                if (ccArrow)
-                {
+                if (ccArrow) {
                     ccArrow.ShotToDirection(ccArrow.transform.up, damage); // * force.magnitude;
                     arrowcount++;
                 }

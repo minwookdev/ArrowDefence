@@ -6,7 +6,7 @@
     public static class GameGlobal
     {
         public static Vector2 ScreenOffset = new Vector2(2f, 2f);
-        public static Vector3 ArrowScale = new Vector3(1.5f, 1.5f, 1f);
+        public static Vector3 ArrowScale   = new Vector3(1.5f, 1.5f, 1f);
         public static readonly int RandomIntRangeCorrection = 1;
 
         public static readonly string EMPTYSTR = "";

@@ -35,8 +35,33 @@
             this.spreadAngle = data.SpreadAngle;
         }
 
-        public override void BowSpecialSkill(float anglez, Transform parent, MonoBehaviour mono, ref DamageStruct damage,
-                                             Vector3 initScale, Vector3 initPos, Vector2 arrowForce, LOAD_ARROW_TYPE arrowType) {
+        public override void BowSpecialSkill(Transform bowTr, AD_BowController controller, ref DamageStruct damage, Vector3 initPos, LOAD_ARROW_TYPE type) {
+            SpreadShot(bowTr, type, initPos, ref damage);
+        }
+
+        void SpreadShot(Transform bowTr, LOAD_ARROW_TYPE type, Vector3 initPos, ref DamageStruct damage) {
+            float startRotation = bowTr.eulerAngles.z + spreadAngle / 2f;
+            float angleIncrease = spreadAngle / ((float)arrowCount - 1f);
+
+            string poolTag = (type == LOAD_ARROW_TYPE.ARROW_MAIN) ? AD_Data.POOLTAG_MAINARROW_LESS : AD_Data.POOLTAG_SUBARROW_LESS;
+
+            for (int i = 0; i < arrowCount; i++)
+            {
+                if (i == (arrowCount * 0.5f) - 0.5f) continue; //Cancel Launch Middle Arrow
+
+                float tempRotation = startRotation - angleIncrease * i;
+
+                var arrow = CCPooler.SpawnFromPool<AD_Arrow_less>(poolTag, bowTr.parent.root, GameGlobal.ArrowScale, initPos,
+                                                                  Quaternion.Euler(0f, 0f, tempRotation - 90f));
+                if (arrow) {
+                    arrow.ShotToDirection(new Vector2(Mathf.Cos(tempRotation * Mathf.Deg2Rad), Mathf.Sin(tempRotation * Mathf.Deg2Rad)), damage); 
+                    // * force.magnitude;
+                }
+            }
+        }
+
+        public void BowSpecialSkill(float anglez, Transform parent, MonoBehaviour mono, ref DamageStruct damage,
+                                     Vector3 initScale, Vector3 initPos, Vector2 arrowForce, LOAD_ARROW_TYPE arrowType) {
             //float facingRotation = Mathf.Atan2(facingVec.y, facingVec.x) * Mathf.Rad2Deg; //this mean's transform.up..?
 
             #region LEGACY_CODE
@@ -97,10 +122,9 @@
             #endregion
             SpreadShot(anglez, arrowType, parent, ref damage, initScale, initPos, arrowForce);
         }
-    
 
         void SpreadShot(float bowEulerAngleZ, LOAD_ARROW_TYPE arrowType, Transform parent, ref DamageStruct damage,
-            Vector3 arrowScale, Vector3 arrowPos, Vector2 force) {
+                     Vector3 arrowScale, Vector3 arrowPos, Vector2 force) {
             float startRotation = bowEulerAngleZ + spreadAngle / 2f;
             float angleIncrease = spreadAngle / ((float)arrowCount - 1f);
 
@@ -118,6 +142,8 @@
                     arrow.ShotToDirection(new Vector2(Mathf.Cos(tempRotation * Mathf.Deg2Rad), Mathf.Sin(tempRotation * Mathf.Deg2Rad)), damage); // * force.magnitude;
             }
         }
+
+
 
         public override string ToString() => "Spread_Shot";
     }

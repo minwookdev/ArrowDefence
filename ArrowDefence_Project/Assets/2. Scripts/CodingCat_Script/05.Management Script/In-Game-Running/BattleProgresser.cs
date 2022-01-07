@@ -158,10 +158,6 @@
                 case GAMESTATE.STATE_ENDBATTLE    : OnUpdateEndBattle();    break;
                 case GAMESTATE.STATE_GAMEOVER     : OnUpdateGameOver();     break;
             }
-
-            if(Input.GetKeyDown(KeyCode.I)) {
-                OnIncreaseClearGauge(300);
-            }
         }
 
         private void OnDestroy() {

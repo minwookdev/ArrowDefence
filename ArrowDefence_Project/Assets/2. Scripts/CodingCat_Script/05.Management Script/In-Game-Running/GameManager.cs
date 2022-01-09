@@ -89,10 +89,10 @@
                 AD_BowController.instance.IsPullingStop = isStop;
         }
 
-        public LOAD_ARROW_TYPE LoadArrowType()
+        public ARROWTYPE LoadArrowType()
         {
-            LOAD_ARROW_TYPE type = (CCPlayerData.equipments.IsEquippedArrowMain()) ? LOAD_ARROW_TYPE.ARROW_MAIN : 
-                                                                                     LOAD_ARROW_TYPE.ARROW_SUB;
+            ARROWTYPE type = (CCPlayerData.equipments.IsEquippedArrowMain()) ? ARROWTYPE.ARROW_MAIN : 
+                                                                                     ARROWTYPE.ARROW_SUB;
             return type;
         }
 
@@ -120,7 +120,7 @@
             if(activeMain)
             {
                 mainSprite   = equips.GetMainArrow().GetSprite;
-                mainCallback = () => Controller().Swap(LOAD_ARROW_TYPE.ARROW_MAIN);
+                mainCallback = () => Controller().Swap(ARROWTYPE.ARROW_MAIN);
             }
             else
             {
@@ -132,7 +132,7 @@
             if(activeSub)
             {
                 subSprite   = equips.GetSubArrow().GetSprite;
-                subCallback = () => Controller().Swap(LOAD_ARROW_TYPE.ARROW_SUB);
+                subCallback = () => Controller().Swap(ARROWTYPE.ARROW_SUB);
             }
             else
             {

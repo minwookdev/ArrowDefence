@@ -35,15 +35,15 @@
             this.spreadAngle = data.SpreadAngle;
         }
 
-        public override void BowSpecialSkill(Transform bowTr, AD_BowController controller, ref DamageStruct damage, Vector3 initPos, LOAD_ARROW_TYPE type) {
+        public override void BowSpecialSkill(Transform bowTr, AD_BowController controller, ref DamageStruct damage, Vector3 initPos, ARROWTYPE type) {
             SpreadShot(bowTr, type, initPos, ref damage);
         }
 
-        void SpreadShot(Transform bowTr, LOAD_ARROW_TYPE type, Vector3 initPos, ref DamageStruct damage) {
+        void SpreadShot(Transform bowTr, ARROWTYPE type, Vector3 initPos, ref DamageStruct damage) {
             float startRotation = bowTr.eulerAngles.z + spreadAngle / 2f;
             float angleIncrease = spreadAngle / ((float)arrowCount - 1f);
 
-            string poolTag = (type == LOAD_ARROW_TYPE.ARROW_MAIN) ? AD_Data.POOLTAG_MAINARROW_LESS : AD_Data.POOLTAG_SUBARROW_LESS;
+            string poolTag = (type == ARROWTYPE.ARROW_MAIN) ? AD_Data.POOLTAG_MAINARROW_LESS : AD_Data.POOLTAG_SUBARROW_LESS;
 
             for (int i = 0; i < arrowCount; i++)
             {
@@ -61,7 +61,7 @@
         }
 
         public void BowSpecialSkill(float anglez, Transform parent, MonoBehaviour mono, ref DamageStruct damage,
-                                     Vector3 initScale, Vector3 initPos, Vector2 arrowForce, LOAD_ARROW_TYPE arrowType) {
+                                     Vector3 initScale, Vector3 initPos, Vector2 arrowForce, ARROWTYPE arrowType) {
             //float facingRotation = Mathf.Atan2(facingVec.y, facingVec.x) * Mathf.Rad2Deg; //this mean's transform.up..?
 
             #region LEGACY_CODE
@@ -123,12 +123,12 @@
             SpreadShot(anglez, arrowType, parent, ref damage, initScale, initPos, arrowForce);
         }
 
-        void SpreadShot(float bowEulerAngleZ, LOAD_ARROW_TYPE arrowType, Transform parent, ref DamageStruct damage,
+        void SpreadShot(float bowEulerAngleZ, ARROWTYPE arrowType, Transform parent, ref DamageStruct damage,
                      Vector3 arrowScale, Vector3 arrowPos, Vector2 force) {
             float startRotation = bowEulerAngleZ + spreadAngle / 2f;
             float angleIncrease = spreadAngle / ((float)arrowCount - 1f);
 
-            string poolTag = (arrowType == LOAD_ARROW_TYPE.ARROW_MAIN) ? AD_Data.POOLTAG_MAINARROW_LESS : AD_Data.POOLTAG_SUBARROW_LESS;
+            string poolTag = (arrowType == ARROWTYPE.ARROW_MAIN) ? AD_Data.POOLTAG_MAINARROW_LESS : AD_Data.POOLTAG_SUBARROW_LESS;
 
             for (int i = 0; i < arrowCount; i++)
             {

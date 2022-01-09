@@ -38,8 +38,8 @@
             this.shotDelay  = data.ShotInterval;
         }
 
-        public override void BowSpecialSkill(Transform bowTr, AD_BowController controller, ref DamageStruct damage, Vector3 initPos, LOAD_ARROW_TYPE type) {
-            string tag = (type == LOAD_ARROW_TYPE.ARROW_MAIN) ? AD_Data.POOLTAG_MAINARROW_LESS : AD_Data.POOLTAG_SUBARROW_LESS;
+        public override void BowSpecialSkill(Transform bowTr, AD_BowController controller, ref DamageStruct damage, Vector3 initPos, ARROWTYPE type) {
+            string tag = (type == ARROWTYPE.ARROW_MAIN) ? AD_Data.POOLTAG_MAINARROW_LESS : AD_Data.POOLTAG_SUBARROW_LESS;
             controller.StartCoroutine(RainArrow(tag, bowTr, damage));
         }
 
@@ -79,7 +79,7 @@
         }
 
         public void BowSpecialSkill(float anglez, Transform arrowParent, MonoBehaviour mono, ref DamageStruct damage,
-                                             Vector3 initscale, Vector3 initpos, Vector2 force, LOAD_ARROW_TYPE type)
+                                             Vector3 initscale, Vector3 initpos, Vector2 force, ARROWTYPE type)
         {
             #region LEGACY_CODE
             //base.BowSpecialSkill(facingVec, arrowSpreadAngle, numOfArrows, arrowParent, adBow, initScale, arrowInitPos, force, arrowType);
@@ -142,7 +142,7 @@
             //    }
             //}
             #endregion
-            string poolTag = (type == LOAD_ARROW_TYPE.ARROW_MAIN) ? AD_Data.POOLTAG_MAINARROW_LESS : AD_Data.POOLTAG_SUBARROW_LESS;
+            string poolTag = (type == ARROWTYPE.ARROW_MAIN) ? AD_Data.POOLTAG_MAINARROW_LESS : AD_Data.POOLTAG_SUBARROW_LESS;
             mono.StartCoroutine(RainArrow(poolTag, arrowParent, damage, initscale, force));
         }
 

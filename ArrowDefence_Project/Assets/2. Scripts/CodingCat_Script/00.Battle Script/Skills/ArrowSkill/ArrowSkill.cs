@@ -226,9 +226,8 @@
 
     public class HomingArrow : AirActiveTypeAS {
         //Temp Variables 
-        Transform targetTr      = null;  //temp Target Transform
-        Collider2D[] colliders  = null;  //Temp Target Finder Colliders
         List<Collider2D> colliderList = null;
+        Transform targetTr      = null;  //temp Target Transform
         bool isFindTarget       = false; //is Find a Target?
         bool isFixDirection     = false; //Non-Target Direction
         float currentSearchTime = 0f;    //Current Target Search Time
@@ -290,9 +289,8 @@
 
         public override void Clear()
         {
-            targetTr  = null;
-            colliders = null;
             currentSearchTime = 0f;
+            targetTr          = null;
             isFindTarget      = false;
         }
 

@@ -20,12 +20,11 @@ MonoBehaviour:
   Item_Desc: A nice hunting arrow with purple feathers. [Polished]
   Item_Sprite: {fileID: 21300000, guid: 0d6c8a18cba27c243ab0dc43afd9bbbd, type: 3}
   Equip_Type: 1
-  BaseDamage: 0
-  CriticalHitChance: 0
-  CriticalMultiplier: 1
   MainArrowObj: {fileID: 1877318309827916244, guid: 27f4e985fc302244ca075b55b67dc9c6,
     type: 3}
   LessArrowObj: {fileID: 1201505686797549493, guid: ec86490e24ce2414db6aa7ae4de4be0c,
     type: 3}
   ArrowSkillFst: {fileID: 11400000, guid: b3c961b2b5e34c34bbc0009805337060, type: 2}
-  ArrowSkillSec: {fileID: 11400000, guid: 09b518c9490417c4c82df0eaec30ee7e, type: 2}
+  ArrowSkillSec: {fileID: 11400000, guid: a947278377de35645989528dc16ce14b, type: 2}
+  DamageInc: 1
+  Speed: 18

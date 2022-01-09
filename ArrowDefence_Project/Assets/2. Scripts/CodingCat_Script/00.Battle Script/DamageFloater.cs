@@ -8,8 +8,6 @@
         [SerializeField] Transform parentTransform = null;
         [SerializeField] GameObject floatingDamagePref = null;
 
-        string format = "";
-
         private static DamageFloater _inst = null;
         public static DamageFloater Instance {
             get {

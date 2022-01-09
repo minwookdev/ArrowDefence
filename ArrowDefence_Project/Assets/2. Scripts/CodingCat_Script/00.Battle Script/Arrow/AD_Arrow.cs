@@ -31,7 +31,6 @@
 
         //Skill Variables
         bool isInitSkill    = false;
-        bool isCollision    = false;
         ArrowSkillSet arrowSkillSets = null;
 
         //Damage Veriables

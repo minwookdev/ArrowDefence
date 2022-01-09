@@ -116,7 +116,7 @@
             if(currentHealthPoint <= 0 && isDeath == false) {
                 monsterState.StateChanger(STATETYPE.DEATH);
 
-                //======================[this logic is need Duplicate Activating test]====================
+                //============================[ ON CALL MONSTER DEATH EVENTS ]============================
                 BattleProgresser.OnMonsterDeath();
                 BattleProgresser.OnDropItemChance(ItemDropCorrection);
                 BattleProgresser.OnIncreaseClearGauge(GaugeIncreaseValue);
@@ -147,7 +147,7 @@
             if(currentHealthPoint <= 0 && isDeath == false) {
                 monsterState.StateChanger(STATETYPE.DEATH);
 
-                //======================[this logic is need Duplicate Activating test]====================
+                //=============================[ ON CALL MONSTER DEATH EVENTS ]===========================
                 BattleProgresser.OnMonsterDeath();
                 BattleProgresser.OnDropItemChance(ItemDropCorrection);
                 BattleProgresser.OnIncreaseClearGauge(GaugeIncreaseValue);

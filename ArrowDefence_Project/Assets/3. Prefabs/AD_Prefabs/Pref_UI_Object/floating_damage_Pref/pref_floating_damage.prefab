@@ -267,7 +267,8 @@ MonoBehaviour:
   MoveDistance: 1
   FadeDuration: 0.5
   TargetScale: {x: 2, y: 2, z: 1}
-  IsReverse: 0
+  IsReverseDirection: 1
+  IsIgnoreTimeScale: 0
 --- !u!225 &5687336831927777176
 CanvasGroup:
   m_ObjectHideFlags: 0

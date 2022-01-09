@@ -15,7 +15,8 @@
         public float MoveDistance = 1f;
         public float FadeDuration = 0.5f;
         public Vector3 TargetScale = Vector3.one;
-        public bool IsReverse = false;
+        public bool IsReverseDirection = false;
+        public bool IsIgnoreTimeScale  = false; //Not Implemented
 
         public void OnFloating(string countstring, Vector2 direction, bool critical) {
             criticalImage.SetActive(critical);
@@ -31,7 +32,7 @@
             //Phase 0. Init Values
             float progress = 0f;
             float speed = 1 / MoveDuration;
-            Vector2 targetPosition = (Vector2)floatingTr.position + (direction.normalized * MoveDistance);
+            Vector2 targetPosition = (IsReverseDirection) ? (Vector2)floatingTr.position + (direction.normalized * MoveDistance) : (Vector2)floatingTr.position - (direction.normalized * MoveDistance);
             ///is Reverse rotation
             ///Vector2 targetPos = (isCritical) ? (Vector2)tr.position - (direction.normalized * MoveDistance) : (Vector2)tr.position + (direction.normalized * MoveDistance);
             canvasGroup.alpha = 1f;
@@ -67,7 +68,7 @@
         System.Collections.IEnumerator FloatingWithScale(string count, Vector2 direction) {
             float progress = 0f;
             float speed = 1 / MoveDuration;
-            Vector2 targetPosition = (Vector2)floatingTr.position + (direction.normalized * MoveDistance);
+            Vector2 targetPosition = (IsReverseDirection) ? (Vector2)floatingTr.position + (direction.normalized * MoveDistance) : (Vector2)floatingTr.position - (direction.normalized * MoveDistance);
             ///is Reverse rotation
             ///Vector2 targetPos = (isCritical) ? (Vector2)tr.position - (direction.normalized * MoveDistance) : (Vector2)tr.position + (direction.normalized * MoveDistance);
             canvasGroup.alpha = 1f;

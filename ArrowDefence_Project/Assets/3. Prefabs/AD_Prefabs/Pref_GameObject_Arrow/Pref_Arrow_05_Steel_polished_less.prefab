@@ -53,8 +53,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 501263655bfeeb2469ad78cbae96c707, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  trailRender: {fileID: 2479388407804745270}
   rBody: {fileID: 2479388407814401157}
+  arrowTr: {fileID: 2479388407792133688}
+  trailRender: {fileID: 2479388407804745270}
   forceMagnitude: 20
 --- !u!50 &2479388407814401157
 Rigidbody2D:

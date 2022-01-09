@@ -25,14 +25,14 @@
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
-        public DamageStruct GetDamage(LOAD_ARROW_TYPE type, bool isCharged) {
+        public DamageStruct GetDamage(ARROWTYPE type, bool isCharged) {
             if(isInitAbility == false) {
                 isInitAbility = InitAbilityReturnBool();
             }
 
             switch (type) { //Return Damage Struct used Ability Slot Values..
-                case LOAD_ARROW_TYPE.ARROW_MAIN: return new DamageStruct(mainSlotAbility, isCharged);
-                case LOAD_ARROW_TYPE.ARROW_SUB:  return new DamageStruct(subSlotAbility,  isCharged);
+                case ARROWTYPE.ARROW_MAIN: return new DamageStruct(mainSlotAbility, isCharged);
+                case ARROWTYPE.ARROW_SUB:  return new DamageStruct(subSlotAbility,  isCharged);
                 default:                         return new DamageStruct();
             }
         }

@@ -236,7 +236,7 @@
     /// <summary>
     ///  정의. Bow Controller 화살 장전 타입
     /// </summary>
-    public enum LOAD_ARROW_TYPE
+    public enum ARROWTYPE
     {
         ARROW_MAIN = 0,
         ARROW_SUB  = 1

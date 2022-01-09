@@ -33,8 +33,7 @@
         }
     }
 
-    public class BattleProgresser : MonoBehaviour
-    {
+    public class BattleProgresser : MonoBehaviour {
         [Header("COMPONENT")]
         [SerializeField] BattleSceneRoute battleSceneUI  = null;
         [SerializeField] MonsterSpawner   monsterSpawner = null;

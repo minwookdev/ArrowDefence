@@ -333,11 +333,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8331987b02608c4b973083bb036bf47, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  arrowChatchPoint: {fileID: 3510703056981425228}
+  arrowTr: {fileID: 3510703056961579716}
+  rBody: {fileID: 3510703056981778553}
+  polyCollider: {fileID: 3489862991286881464}
   arrowTrail: {fileID: 3510703056991099594}
-  leftClampPoint: {fileID: 0}
-  rightClampPoint: {fileID: 0}
-  arrowSprite: {fileID: 0}
+  arrowSprite: {fileID: 4536256289914087274}
+  arrowCatchTransform: {fileID: 3510703056981425228}
+  bottomClampTr: {fileID: 0}
+  topClampTr: {fileID: 0}
   ArrowPower: 22
   isLaunched: 0
 --- !u!114 &3510703056981778552

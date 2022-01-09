@@ -24,7 +24,7 @@ MonoBehaviour:
     type: 3}
   SkillAsset_f: {fileID: 11400000, guid: 683f9721fd51453419633b8ecae1b7d4, type: 2}
   SkillAsset_s: {fileID: 0}
-  BaseDamage: 60
+  BaseDamage: 120
   CriticalDamageMultiplier: 1.5
   FullChargedMultiplier: 1.2
-  CriticalHitChance: 0
+  CriticalHitChance: 15

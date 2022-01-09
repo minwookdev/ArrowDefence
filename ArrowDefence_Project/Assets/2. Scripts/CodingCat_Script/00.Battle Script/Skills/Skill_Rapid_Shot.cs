@@ -36,12 +36,12 @@
             this.shotDelay  = data.ShotInterval;
         }
 
-        public override void BowSpecialSkill(Transform bowTr, AD_BowController controller, ref DamageStruct damage, Vector3 initPos, LOAD_ARROW_TYPE type)
+        public override void BowSpecialSkill(Transform bowTr, AD_BowController controller, ref DamageStruct damage, Vector3 initPos, ARROWTYPE type)
         {
             ///Get the GameObject's MonoBehavior and run a Coroutine with it.
             ///R. Skill Class has no life cycle.
 
-            string poolTag = (type == LOAD_ARROW_TYPE.ARROW_MAIN) ? AD_Data.POOLTAG_MAINARROW_LESS : AD_Data.POOLTAG_SUBARROW_LESS;
+            string poolTag = (type == ARROWTYPE.ARROW_MAIN) ? AD_Data.POOLTAG_MAINARROW_LESS : AD_Data.POOLTAG_SUBARROW_LESS;
             controller.StartCoroutine(RapidShot(bowTr, damage, initPos, poolTag));
         }
 

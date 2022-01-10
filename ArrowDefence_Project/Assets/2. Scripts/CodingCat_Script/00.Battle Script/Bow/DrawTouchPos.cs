@@ -221,28 +221,25 @@
             }
         }
 
-        private void LerpColor(bool isEnable)
-        {
-            if (isEnable)
-            {
-                if (isColored == true)
-                {
-                    ObjectCenterPivotImage.DOColor(EnableColor, ColorChangeDuration);
-                    ObjectTouchPosImage.DOColor(EnableColor, ColorChangeDuration);
+        private void LerpColor(bool isEnable) {
+            if (isEnable) {
+                if (isColored == true) {
+                    ObjectCenterPivotImage.DOColor(EnableColor, ColorChangeDuration).SetUpdate(true);
+                    ObjectTouchPosImage.DOColor(EnableColor, ColorChangeDuration).SetUpdate(true);
                     ObjectLineRender.DOColor(new Color2(ObjectLineRender.startColor, ObjectLineRender.endColor), 
                                              new Color2(EnableColor, EnableColor), ColorChangeDuration)
-                                    .OnStart(() => isColored = false);
+                                    .OnStart(() => isColored = false)
+                                    .SetUpdate(true);
                 }
             }
-            else
-            {
-                if(isColored == false)
-                {
-                    ObjectCenterPivotImage.DOColor(DisableColor, ColorChangeDuration);
-                    ObjectTouchPosImage.DOColor(DisableColor, ColorChangeDuration);
+            else {
+                if(isColored == false) {
+                    ObjectCenterPivotImage.DOColor(DisableColor, ColorChangeDuration).SetUpdate(true);
+                    ObjectTouchPosImage.DOColor(DisableColor, ColorChangeDuration).SetUpdate(true);
                     ObjectLineRender.DOColor(new Color2(ObjectLineRender.startColor, ObjectLineRender.endColor), 
                                              new Color2(DisableColor, DisableColor), ColorChangeDuration)
-                                    .OnStart(() => isColored = true);
+                                    .OnStart(() => isColored = true)
+                                    .SetUpdate(true);
                 }
             }
         }

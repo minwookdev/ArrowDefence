@@ -4,8 +4,7 @@
     using UnityEngine.UI;
     using System.Collections;
 
-    public class AD_BowController : MonoBehaviour
-    {
+    public class AD_BowController : MonoBehaviour {
         public static AD_BowController instance;
 
         [Header("COMPONENT")]
@@ -38,7 +37,6 @@
         [SerializeField] GameObject loadedArrow;
         [SerializeField] AD_Arrow arrowComponent;
 
-        private bool isLaunch = false;
         private Vector2 arrowForce;
         private Vector3 arrowPosition;
         private Vector3 initArrowScale = new Vector3(1.5f, 1.5f, 1f);
@@ -171,10 +169,10 @@
         }
 
         private void FixedUpdate() {
-            if (isLaunch == true) {
-                Launch();
-                isLaunch = false;
-            }
+            //if (isLaunch == true) { //bool isLaunched
+            //    Launch();
+            //    isLaunch = false;
+            //}
         }
 
         private void OnDestroy() => instance = null;
@@ -358,12 +356,12 @@
         private void BowReleased(Vector2 pos) {
             currentClickPosition = MainCam.ScreenToWorldPoint(pos);
 
-            if(isBowPullBegan == true) {    // 1. Check Pull Began.
-                if (isBowPulling == true) { // 2. Check Pulling. (this is completely Pulled)
-                    isLaunch  = true;       // 3. if the completely Pulled, launch trigge On.
+            if(isBowPullBegan == true) {    //1. Check the Pull Began.
+                if(isBowPulling == true) {  //2. Check the Pulling
+                    Launch();               //3. if the Completely Pulled, Launched.
                     isBowPulling = false;   // Release Pulling State.
-                }
-                isBowPullBegan  = false;    // Release Pull Began State.
+                }                           // Release Pull Began State.
+                isBowPullBegan = false;
             }
 
             //Erase Touch Line

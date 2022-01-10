@@ -3,8 +3,7 @@
     using ActionCat.Interface;
     using UnityEngine;
 
-    public class AD_Arrow : MonoBehaviour, IPoolObject, IArrowObject
-    {
+    public class AD_Arrow : MonoBehaviour, IPoolObject, IArrowObject {
         //The Left, Right Clamp Point for the Arrow.
         [Header("COMPONENT")]
         [SerializeField] Transform arrowTr;
@@ -78,8 +77,15 @@
         }
 
         void OnDisable() {
-            isLaunched  = false;
+            polyCollider.enabled = false;        // Disable Collision
+            isLaunched           = false;        // Change Launched State
+            rBody.velocity       = Vector2.zero; // Reset RigidBody Velocity
+            rBody.isKinematic    = true;         // Change Body Type
 
+            //Disable TrailRenderer
+            arrowTrail.gameObject.SetActive(false);
+
+            //Clear Skills Data
             if (isInitSkill == true){
                 arrowSkillSets.Clear();
             }
@@ -91,9 +97,9 @@
             //Get the Current Position of the Arrow
             arrowPosition = arrowTr.position;
             //Clamp the X Y position Between min and Max Points
-            arrowPosition.x = Mathf.Clamp(arrowPosition.x, Mathf.Min(topClampTr.position.x, bottomClampTr.position.x),
+            arrowPosition.x = Mathf.Clamp(arrowPosition.x, Mathf.Min(topClampTr.position.x, bottomClampTr.position.x), 
                                                            Mathf.Max(topClampTr.position.x, bottomClampTr.position.x));
-            arrowPosition.y = Mathf.Clamp(arrowPosition.y, Mathf.Min(topClampTr.position.y, bottomClampTr.position.y),
+            arrowPosition.y = Mathf.Clamp(arrowPosition.y, Mathf.Min(topClampTr.position.y, bottomClampTr.position.y), 
                                                            Mathf.Max(topClampTr.position.y, bottomClampTr.position.y));
 
             //Set new Position for the Arrow
@@ -143,13 +149,7 @@
 
         #region Interface_Pool
 
-        public void DisableRequest() {
-            rBody.isKinematic = true;
-            arrowTrail.gameObject.SetActive(false);
-            polyCollider.enabled = false;
-
-            CCPooler.ReturnToPool(gameObject, 0);
-        }
+        public void DisableRequest() => CCPooler.ReturnToPool(gameObject, 0);
 
         #endregion
 

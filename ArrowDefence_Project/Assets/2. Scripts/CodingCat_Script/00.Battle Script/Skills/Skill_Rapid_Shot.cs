@@ -42,10 +42,10 @@
             ///R. Skill Class has no life cycle.
 
             string poolTag = (type == ARROWTYPE.ARROW_MAIN) ? AD_Data.POOLTAG_MAINARROW_LESS : AD_Data.POOLTAG_SUBARROW_LESS;
-            controller.StartCoroutine(RapidShot(bowTr, damage, initPos, poolTag));
+            controller.StartCoroutine(RapidShot(bowTr.parent.root, bowTr.eulerAngles, damage, initPos, poolTag));
         }
 
-        private IEnumerator RapidShot(Transform bowTr, DamageStruct damage, Vector3 arrowInitPos, string poolTag) {
+        private IEnumerator RapidShot(Transform parentTr, Vector3 eulerAngles, DamageStruct damage, Vector3 arrowInitPos, string poolTag) {
             yield return rapidShotWait;
 
             byte arrowcount = 0;
@@ -90,8 +90,8 @@
 
                 #endregion
 
-                var ccArrow = CCPooler.SpawnFromPool<AD_Arrow_less>(poolTag, bowTr.parent.root, GameGlobal.ArrowScale, arrowInitPos, 
-                                                                    Quaternion.Euler(0f, 0f, (bowTr.eulerAngles.z - 90f) + randomAngle));
+                var ccArrow = CCPooler.SpawnFromPool<AD_Arrow_less>(poolTag, parentTr, GameGlobal.ArrowScale, arrowInitPos, 
+                                                                    Quaternion.Euler(0f, 0f, (eulerAngles.z - 90f) + randomAngle)); //90f is offset
 
                 if (ccArrow) {
                     ccArrow.ShotToDirection(ccArrow.transform.up, damage); // * force.magnitude;

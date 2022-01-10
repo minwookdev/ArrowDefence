@@ -14902,7 +14902,7 @@ PrefabInstance:
     - target: {fileID: 3204541759480302795, guid: 75155828b9866ee4dbb6eb1c6d7a0a62,
         type: 3}
       propertyPath: MaxClearCount
-      value: 500
+      value: 300
       objectReference: {fileID: 0}
     - target: {fileID: 3204541759480302795, guid: 75155828b9866ee4dbb6eb1c6d7a0a62,
         type: 3}
@@ -14982,6 +14982,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 113046968082111223, guid: e769450a1b6c233448b3f6a6ac19c000,
         type: 3}
+    - target: {fileID: 3204541759480302796, guid: 75155828b9866ee4dbb6eb1c6d7a0a62,
+        type: 3}
+      propertyPath: isCheckAliveMonster
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3204541759480302798, guid: 75155828b9866ee4dbb6eb1c6d7a0a62,
         type: 3}
       propertyPath: ImgFade

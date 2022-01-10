@@ -246,11 +246,11 @@
             //obj.transform.SetParent(_inst.FindParentTransform(tag)); //이거 못씀;; Main, Sub Arrow 회수할때 중복됨
             //ParentList에서 GameObject.name 이랑 싱크 맞춰놓았으니 굳이 사용할 필요도 없음
 
-            //사용할 준비가 완벽하게 정리되면 Push 해주기
-            _inst.poolDictionary[obj.name].Push(obj);
-
             //Try Remove AliveTracking Dictionary.
             _inst.TryRemoveAliveTrackDic(obj.name, obj);
+
+            //사용할 준비가 완벽하게 정리되면 Push 해주기
+            _inst.poolDictionary[obj.name].Push(obj);
         }
 
         /// <summary>
@@ -264,10 +264,10 @@
             //Disable Pool Object
             obj.SetActive(false);
 
-            _inst.poolDictionary[obj.name].Push(obj);
-
             //Try Remove AliveTracking Dictionary.
             _inst.TryRemoveAliveTrackDic(obj.name, obj);
+
+            _inst.poolDictionary[obj.name].Push(obj);
         }
 
         GameObject CreateNewObject(string tag, GameObject prefab, Transform parent)

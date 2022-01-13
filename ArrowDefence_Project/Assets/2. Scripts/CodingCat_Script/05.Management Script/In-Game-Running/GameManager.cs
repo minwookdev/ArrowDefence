@@ -3,8 +3,6 @@
     using UnityEngine;
     using ActionCat.Data;
 
-
-
     public class GameManager : Singleton<GameManager> {
         public enum GAMEPLATFORM { 
             PLATFORM_PC,
@@ -273,6 +271,14 @@
             m_slotEntryUp.eventID = UnityEngine.EventSystems.EventTriggerType.PointerUp;
             m_slotEntryUp.callback.AddListener((data) => SetBowPullingStop(false));
             trigger.triggers.Add(m_slotEntryUp);
+        }
+
+        public void UpdateStageData(string key, in BattleData data) {
+            CCPlayerData.infos.UpdateStageInfo(key, in data);
+        }
+
+        public bool TryGetStageData(string key, out StageInfo stageInfo) {
+            return CCPlayerData.infos.TryGetStageData(key, out stageInfo);
         }
 
         #endregion

@@ -1,12 +1,75 @@
-﻿namespace ActionCat
-{
+﻿namespace ActionCat {
     using ActionCat.Data;
+    using ActionCat.UI;
     using DG.Tweening;
     using System.Collections;
     using System.Collections.Generic;
     using UnityEngine;
     using UnityEngine.UI;
 
+    #region BATTLE_DATA
+    public struct BattleData {
+        public bool isCleared { get; private set; }
+        public bool isUsedResurrect { get; private set; }
+        public short totalKilledCount { get; private set; }
+        public short maxComboCount { get; private set; }
+        public short currentComboCount { get; private set; }
+
+        public BattleData(short startComboCount) {
+            isCleared       = false;
+            isUsedResurrect = false;
+            maxComboCount     = 0;
+            totalKilledCount  = 0;
+            currentComboCount = startComboCount;
+        }
+
+        public void ComboIncrease() {
+            currentComboCount++;
+            if(currentComboCount > maxComboCount) {
+                maxComboCount = currentComboCount;
+            }
+        }
+
+        public void ComboIncrease(byte inc) {
+            currentComboCount += inc;
+            if(currentComboCount > maxComboCount) {
+                maxComboCount = currentComboCount;
+            }
+        }
+
+        public short GetComboWithIncrease() {
+            if (currentComboCount + 1 < GameGlobal.MaxComboCount) //0~9998
+                currentComboCount++;
+            else
+                currentComboCount = GameGlobal.MaxComboCount;     //9999~
+
+            if(currentComboCount > maxComboCount) {
+                maxComboCount = currentComboCount;
+            }
+
+            return currentComboCount;
+        }
+
+        public void ComboClear() {
+            currentComboCount = 0;
+        }
+
+        public void IncreaseKillCount() {
+            totalKilledCount++;
+        }
+
+        public void OnStageCleared(bool isusedresurrect) {
+            isCleared = true;
+            isUsedResurrect = isusedresurrect;
+        }
+
+        public void OnUseResurrection() {
+            isUsedResurrect = true;
+        }
+    }
+    #endregion
+
+    #region DROPS
     [System.Serializable]
     public class DropItem : IStackable
     {
@@ -32,6 +95,7 @@
             else quantity -= value;
         }
     }
+    #endregion
 
     public class BattleProgresser : MonoBehaviour {
         [Header("COMPONENT")]
@@ -50,10 +114,12 @@
         public Transform ParentTransform;
         public Transform BowInitPosition;
         public float MaxPlayerHealth = 200f;
-        private float currentPlayerHealth;
+        BattleData battleData;
+        float currentPlayerHealth;
         float tempPlayerHealth = 0f;
+        bool isUsedResurrect = false;
 
-        [Header("STAGE CLEAR COUNT")]
+        [Header("CLEAR COUNT")]
         [Range(100, 1200)] 
         public float MaxClearCount = 100;
         private float currentClearCount = 0f;
@@ -66,8 +132,10 @@
         public float SliderSmoothTime = 1f;
         private float clearSliderDest;
 
-        [Header("CURRENT BATTLE STATE")]
+        [Header("BATTLE STATE")]
+        [SerializeField] STAGETYPE stageType;
         [ReadOnly] public GAMESTATE tempGameState;
+        [SerializeField] string stageKey = "";
 
         [Header("DROPS")]
         public ItemDropList DropListAsset = null;
@@ -75,6 +143,13 @@
         private int StageDropCorrection = 30;
         [SerializeField] 
         private List<DropItem> dropItemList = new List<DropItem>();
+
+        [Header("COMBO")]
+        [SerializeField] ComboCounter comboCounter = null;
+        [Tooltip("Not Modified this Field.")]
+        [SerializeField] float maxComboTimer = 0f;
+        bool isComboActivating = false;
+        float currentComboTime = 0f;
 
         [Header("DEBUG")]
         public bool IsDebugClearStage    = false;
@@ -127,23 +202,35 @@
             battleSceneUI.InitArrowSlots(arrowSwapSlotDatas);
             battleSceneUI.InitSkillSlots(accessorySkillSlotDatas);
 
+            //Init Combo Counter System
+            maxComboTimer = GameGlobal.ComboDuration;
+            InitComboCounter();
+
             //Init Monster Event <몬스터 관련 이벤트>
-            OnMonsterHit += () => CatLog.Log("On Monster Hit !");
-            OnMonsterDeath += () => CatLog.Log("On Monster Death !");
+            OnMonsterHit   += ComboOccurs;       //Increase Combo Count
+            OnMonsterDeath += IncreaseKillCount; //Increase Killed Count
+            //OnMonsterHit   += () => CatLog.Log("On Monster Hit !");
+            //OnMonsterDeath += () => CatLog.Log("On Monster Death !");
 
             //Init-Battle State Callback Event
-            GameManager.Instance.AddListnerEndBattle(() => { 
-                GameManager.Instance.SetBowPullingStop(true);
-                KillAllMonsters();
+            GameManager.Instance.AddListnerEndBattle(() => {  // < When Game Cleared >
+                GameManager.Instance.SetBowPullingStop(true); // Disable Bow Pullable
+                battleData.OnStageCleared(isUsedResurrect);   // Battle Data Update. <Stage Cleared>
+                KillAllMonsters();                            // Kill All Alive Monsters
             });
-            GameManager.Instance.AddListnerGameOver(() => {
-                GameManager.Instance.SetBowPullingStop(true);
+            GameManager.Instance.AddListnerGameOver(() => {   // < When Game Over >
+                GameManager.Instance.SetBowPullingStop(true); // Disable Bow Pullable
+                ComboClear();                                 // Clear Current Combo Count
             });
 
             //Init-Player Health Point [TEST] (플레이어 임시 체력, 추후 PlayerData에서 수치 받아오도록 설정)
             currentPlayerHealth = MaxPlayerHealth;
             OnDecreasePlayerHealthPoint += DecreaseHealthGauge;
-            OnIncreaseClearGauge += IncreaseClearGauge;
+            OnIncreaseClearGauge        += IncreaseClearGauge;
+
+            //Init Battle Data Struct, Init Stage Key
+            battleData = new BattleData(startComboCount: 0);
+            stageKey   = GameGlobal.GetStageKey(stageType);
 
             //Progresser Ready For Battle State Running
             isInitialized = true;
@@ -332,44 +419,54 @@
         }
 
         private void OnUpdateInBattle() {
-            //is Check Game Clear
-            if(currentClearCount >= MaxClearCount) { //Change GameState
+            //Check Clear Game
+            if(currentClearCount >= MaxClearCount) {
                 SetGameState(GAMESTATE.STATE_ENDBATTLE);
             }
 
-            //is Check Game Over
-            if(currentPlayerHealth <= 0f) { //Change GameState
+            //Check Game Over
+            if(currentPlayerHealth <= 0f) {
                 SetGameState(GAMESTATE.STATE_GAMEOVER);
             }
+
+            //Update Combo System
+            ComboSystemUpdate();
         }
 
         private void OnUpdateBossBattle() {
-
+            //Update Combo System
+            ComboSystemUpdate();
         }
 
-        private void OnUpdateEndBattle()
-        {
-            if (IsResult == false)
+        private void OnUpdateEndBattle() {
+            if (IsResult == false) //waiting time.
                 endWaitingTime += Time.deltaTime;
             
             if (endWaitingTime >= EndBattleDelay) {
                 IsResult = true;
-                DropItemsAddInventory();
-                battleSceneUI.OnEnableResultPanel(dropItemList);
 
+                //Update Stage Info
+                SendStageInfo();
+
+                //Add Items in Player Inventory
+                DropItemsAddInventory();
+
+                //Open Clear Result Panel
+                battleSceneUI.OnEnableResultPanel(dropItemList);
                 endWaitingTime = 0f;
             }
         }
 
         void OnUpdateGameOver() {
-            if(IsResult == false) {
+            if(IsResult == false) { //waiting time.
                 endWaitingTime += Time.unscaledDeltaTime;
             }
 
             if(endWaitingTime >= EndBattleDelay) {
                 IsResult = true;
-                battleSceneUI.OnEnableGameOverPanel();
 
+                //Open GameOver Panel
+                battleSceneUI.OnEnableGameOverPanel();
                 endWaitingTime = 0f;
             }
         }
@@ -384,6 +481,58 @@
         }
 
         #endregion
+
+        #region STAGE_INFO
+
+        void SendStageInfo() {
+            GameManager.Instance.UpdateStageData(stageKey, in battleData);
+        }
+
+        void IncreaseKillCount() {
+            battleData.IncreaseKillCount();
+        }
+
+        #endregion
+
+        #region COMBO_SYSTEM
+
+        void InitComboCounter() {
+            if (comboCounter != null) {
+                comboCounter.InitComboCounter(maxComboTimer, false);
+            }
+            else {
+                CatLog.ELog("ComboCounter Component is Null, need Caching", true);
+            }
+        }
+
+        void ComboOccurs() {
+            //Increase Current Combo and, Update Combo Counter UI
+            comboCounter.UpdateComboCounter(battleData.GetComboWithIncrease());
+            currentComboTime  = maxComboTimer;
+            isComboActivating = true;
+        }
+
+        void ComboSystemUpdate() {
+            //Running Combo System
+            if(currentComboTime > 0) {
+                currentComboTime -= Time.deltaTime;
+            }
+            else {
+                if(isComboActivating == true) {
+                    //Clear Current Combo Count
+                    ComboClear();
+                    isComboActivating = false;
+                }
+            }
+        }
+
+        void ComboClear() {
+            battleData.ComboClear();
+            comboCounter.ComboClear();
+        }
+
+        #endregion
+
         //Time.time Timer 참고.
         //IEnumerator WaitObjectPooler() {
         //    float startTime = Time.time;

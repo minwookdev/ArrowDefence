@@ -195,22 +195,24 @@
         public void Btn_LoadMainScene() {
             ImgFade.DOFade(1f, FadeTime)
                    .SetUpdate(true)
-                   .OnStart(() => { ImgFade.blocksRaycasts = false;
-                                    ImgFade.gameObject.SetActive(true);
+                   .OnStart(() => {    // 1. Phase Start
+                       ImgFade.blocksRaycasts = false;
+                       ImgFade.gameObject.SetActive(true);
                    }) 
-                   .OnComplete(() => { TooltipRelease();
-                                       SceneLoader.Instance.LoadScene(AD_Data.SCENE_MAIN);
+                   .OnComplete(() => { // 2. Phase Ended
+                       TooltipRelease();
+                       SceneLoader.Instance.LoadScene(AD_Data.SCENE_MAIN);
                    });
         }
 
         public void Btn_ReloadScene() {
             ImgFade.DOFade(1f, FadeTime)
                    .SetUpdate(true)
-                   .OnStart(() => {
+                   .OnStart(() => {    // 1. Phase Start.
                        ImgFade.blocksRaycasts = false;
                        ImgFade.gameObject.SetActive(true);
                    })
-                   .OnComplete(() => {
+                   .OnComplete(() => { // 2. Phase Ended.
                        TooltipRelease();
                        SceneLoader.Instance.ReloadScene();
                    });

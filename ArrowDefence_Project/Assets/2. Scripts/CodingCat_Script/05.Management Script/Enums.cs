@@ -61,3 +61,15 @@ public enum GAMESTATE {
 }
 
 #endregion
+
+#region BATTLE
+
+public enum STAGETYPE {
+    NONE                   = 0, //Stage Type Not Setting, throw error
+    STAGE_DEV              = 1,
+    STAGE_FOREST_SECLUDED  = 2,
+    STAGE_DUNGEON_ENTRANCE = 3,
+}
+
+#endregion
+

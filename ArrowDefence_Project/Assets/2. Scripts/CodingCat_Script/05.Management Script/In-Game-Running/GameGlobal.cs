@@ -9,6 +9,10 @@
         public static Vector3 ArrowScale   = new Vector3(1.5f, 1.5f, 1f);
         public static readonly int RandomIntRangeCorrection = 1;
 
+        //COMBO
+        public static readonly short MaxComboCount = 9999;
+        public static readonly float ComboDuration = 1.5f;
+
         public static readonly string EMPTYSTR = "";
 
         /// <summary>
@@ -229,6 +233,35 @@
             list.RemoveAll(predicate);
             array = list.ToArray();
         }
+
+        public static string GetStageKey(STAGETYPE stageType) {
+            switch (stageType) {
+                case STAGETYPE.STAGE_DEV:              return AD_Data.STAGE_KEY_DEV;
+                case STAGETYPE.STAGE_FOREST_SECLUDED:  return AD_Data.STAGE_KEY_FOREST_SECLUDED;
+                case STAGETYPE.STAGE_DUNGEON_ENTRANCE: return AD_Data.STAGE_KEY_DUNGEON_ENTRANCE;
+                default: throw new System.NotImplementedException("Not Implemented this Stage Type");
+            }
+        }
+
+        #region EXTENDED_METHOD
+
+        public static float Zero(this float number) {
+            return number = 0f;
+        }
+
+        public static float One(this float number) {
+            return number = 1f;
+        }
+
+        #endregion
+    }
+
+    public static class StNum {
+        public static readonly float floatOne  = 1f;
+        public static readonly float floatZero = 0f;
+        public static readonly int intOne  = 1;
+        public static readonly int intZero = 0;
+        public static readonly string stringEmpty = "";
     }
 
     #region ENUMS_BATTLE

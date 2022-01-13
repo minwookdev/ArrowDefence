@@ -55,4 +55,11 @@ public static class AD_Data
     /// </summary>
     public static readonly string OBJECT_TAG_MONSTER = "Monster";
     public static readonly string OBJECT_TAG_BOW     = "ArrowDefence_Bow";
+
+    /// <summary>
+    /// Stage Info Dictionary Key
+    /// </summary>
+    public static readonly string STAGE_KEY_DEV              = "DEV";
+    public static readonly string STAGE_KEY_FOREST_SECLUDED  = "SECLUDED_FOREST";
+    public static readonly string STAGE_KEY_DUNGEON_ENTRANCE = "ENTRANCE_DUNGEON";
 }

@@ -4,8 +4,7 @@
     using System.Collections.Generic;
 
     [Serializable]
-    public class AD_Inventory
-    {
+    public class AD_Inventory {
         private List<AD_item> invenList = new List<AD_item>();
         private readonly byte maxItemCount = 255;
 

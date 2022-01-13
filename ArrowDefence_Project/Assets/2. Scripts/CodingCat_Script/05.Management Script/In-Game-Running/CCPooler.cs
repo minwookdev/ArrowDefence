@@ -1,11 +1,10 @@
 ﻿namespace ActionCat
 {
     using System;
-    using System.Collections;
     using System.Collections.Generic;
+    using System.Linq;
     using UnityEngine;
     using UnityEditor;
-    using System.Linq;
 
 #if UNITY_EDITOR
     [CustomEditor(typeof(CCPooler))]
@@ -419,6 +418,9 @@
                 //Get Count of Normal, Elite, Frequency Monsters List
                 if (dic.Key == AD_Data.POOLTAG_MONSTER_NORMAL || dic.Key == AD_Data.POOLTAG_MONSTER_ELITE || dic.Key == AD_Data.POOLTAG_MONSTER_FREQ) {
                     totalMonsterCount += dic.Value.Count;
+                }
+                else {
+                    continue;
                 }
             }
 

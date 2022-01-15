@@ -18,8 +18,18 @@
         [Range(0f, .5f)] public float StartPinchAmount      = 0f;
         [Range(0f, 1f)]  public float totalFadeTime = .5f;
 
+        [Header("CHARGED")]
+        [SerializeField] [RangeEx(0.1f, 1f, 0.1f, "Hit Effect Blend")]
+        float startChargedHitEffectBlend = 0.8f;
+        [SerializeField] [RangeEx(0.1f, 3f, 0.1f)]
+        float chargeEffectTime = 1f;
+
         [Header("FADE")]
         [Range(0f, 3f)] public float FadeBurnTime = 1f;
+
+        [Header("EFFECT TYPE")]
+        [SerializeField] [ReadOnly]
+        BOWEFFECTYPE effectType = BOWEFFECTYPE.NONE;
 
         //Impact Effect Parameters
         string hitEffectBlendParams   = "_HitEffectBlend";   //Range(0f, 1f);
@@ -31,7 +41,8 @@
         string FadeAmountParams = "_FadeAmount"; //Range(-0.1f, 1f);
 
         //Impact Coroutine
-        Coroutine impactCo = null;
+        Coroutine effectCoroutine = null;
+        Coroutine chargeEffectCo = null;
 
         public Sprite GetUISprite() {
             if(SpriteBow != null) {
@@ -46,22 +57,40 @@
             RestoreMaterial();
         }
 
-        public void ActiveImpact() {
-            if(impactCo != null) {
-                StopCoroutine(impactCo);
+        public void EffectImpact() {
+            if(effectCoroutine != null) {
+                StopCoroutine(effectCoroutine);
             }
 
             //Start Bow Shot Impact Coroutine
-            impactCo = StartCoroutine(ShotImpactCo());
+            effectCoroutine = StartCoroutine(EffectImpactCo());
+        }
+
+        public void Effect(BOWEFFECTYPE type, bool isRewind = false) {
+            switch (effectType) { // Stop Coroutine, Clear Current Type Effect
+                case BOWEFFECTYPE.IMPACT:  StopImpact(); break;
+                case BOWEFFECTYPE.CHARGED: StopCharge(); break;
+                case BOWEFFECTYPE.FADE:    StopFade();  return; // Not Change
+            }
+
+            switch (type) {
+                case BOWEFFECTYPE.NONE:    RestoreMaterial(); /*Restore Bow Sprite Material*/  break;
+                case BOWEFFECTYPE.IMPACT:  effectCoroutine = StartCoroutine(EffectImpactCo());   break;
+                case BOWEFFECTYPE.CHARGED: effectCoroutine = StartCoroutine(EffectChargeCo());       break;
+                case BOWEFFECTYPE.FADE:    effectCoroutine = StartCoroutine(EffectFadeCo(isRewind)); break;
+            }
         }
 
         public void ActiveBurn(bool isRewind) {
-            StartCoroutine(FadeCo(isRewind));
+            StartCoroutine(EffectFadeCo(isRewind));
         }
 
-        IEnumerator ShotImpactCo() {
+        #region EFFECT_COROUTINE
+
+        IEnumerator EffectImpactCo() {
             float progress = 0f;
             float speed = 1 / totalFadeTime;
+            effectType = BOWEFFECTYPE.IMPACT;
 
             while (progress < 1) {
                 progress += Time.unscaledDeltaTime * speed;
@@ -78,15 +107,19 @@
             bowMaterial.SetFloat(chromAberrAmountParams, 0f);
             bowMaterial.SetFloat(fishEyeAmountParams, 0f);
             bowMaterial.SetFloat(pinchAmountParams, 0f);
+
+            //Change Effect Type
+            effectType = BOWEFFECTYPE.NONE;
         }
 
-        IEnumerator FadeCo(bool isRewind) {
+        IEnumerator EffectFadeCo(bool isRewind) {
             float progress = 0f;
             float speed = 1 / FadeBurnTime;
+            effectType = BOWEFFECTYPE.FADE;
 
             while (progress < 1) {
                 progress += Time.unscaledDeltaTime * speed;
-                if (isRewind == false)
+                if (isRewind == true)
                     bowMaterial.SetFloat(FadeAmountParams, Mathf.Lerp(0f, 1f, progress));
                 else
                     bowMaterial.SetFloat(FadeAmountParams, Mathf.Lerp(1f, 0f, progress));
@@ -99,10 +132,63 @@
                 bowMaterial.SetFloat(FadeAmountParams, 1f);
             else
                 bowMaterial.SetFloat(FadeAmountParams, 0f);
+
+            //Change Effect Type
+            effectType = BOWEFFECTYPE.NONE;
         }
 
+        IEnumerator EffectChargeCo() {
+            float progress = 0f;
+            float speed = 1 / chargeEffectTime;
+            effectType = BOWEFFECTYPE.CHARGED;
+
+            while (progress < 1) {
+                progress += Time.unscaledDeltaTime * speed;
+                bowMaterial.SetFloat(hitEffectBlendParams, Mathf.Lerp(startChargedHitEffectBlend, 0f, progress));
+
+                yield return null;
+            }
+
+            //Restore Material, Lerp Safety
+            bowMaterial.SetFloat(hitEffectBlendParams, 0f);
+
+            //Change Effect Type
+            effectType = BOWEFFECTYPE.NONE;
+        }
+
+
+        #endregion
+
+        #region EFFECT_STOP
+
+        void StopImpact() {
+            if(effectCoroutine != null) {
+                StopCoroutine(effectCoroutine);
+            }
+
+            bowMaterial.SetFloat(hitEffectBlendParams, 0f);
+            bowMaterial.SetFloat(chromAberrAmountParams, 0f);
+            bowMaterial.SetFloat(fishEyeAmountParams, 0f);
+            bowMaterial.SetFloat(pinchAmountParams, 0f);
+        }
+
+
+        void StopCharge() {
+            if(effectCoroutine != null) {
+                StopCoroutine(effectCoroutine);
+            }
+
+            bowMaterial.SetFloat(hitEffectBlendParams, 0f);
+        }
+
+        void StopFade() {
+            CatLog.WLog("Fade Effect cannot be stopped while it is active.");
+        }
+
+        #endregion
+
         void RestoreMaterial() {
-            //Restore Impact Params
+            //Restore <Imapct> <Charged> Params
             if (bowMaterial.GetFloat(hitEffectBlendParams) != 0f){
                 bowMaterial.SetFloat(hitEffectBlendParams, 0f);
             }
@@ -119,7 +205,7 @@
                 bowMaterial.SetFloat(pinchAmountParams, 0f);
             }
 
-            //Resotore Fade Params
+            //Resotore <Fade> Params
             if(bowMaterial.GetFloat(FadeAmountParams) != 0f) {
                 bowMaterial.SetFloat(FadeAmountParams, 0f);
             }

@@ -67,7 +67,7 @@
 
         void OnTriggerEnter2D(Collider2D collider) {
             if(collider.gameObject.layer == LayerMask.NameToLayer(AD_Data.LAYER_DISABLELINE)) {
-                BattleProgresser.OnDecreasePlayerHealthPoint(10f);
+                BattleProgresser.OnDecPlayerHealth(10f);
                 DisableRequest();
             }
         }
@@ -116,10 +116,10 @@
             if(currentHealthPoint <= 0 && isDeath == false) {
                 monsterState.StateChanger(STATETYPE.DEATH);
 
-                //============================[ ON CALL MONSTER DEATH EVENTS ]============================
+                //=================================[ MONSTER DEATH EVENT ]================================
                 BattleProgresser.OnMonsterDeath();
-                BattleProgresser.OnDropItemChance(ItemDropCorrection);
-                BattleProgresser.OnIncreaseClearGauge(GaugeIncreaseValue);
+                BattleProgresser.OnItemDrop(ItemDropCorrection);
+                //BattleProgresser.OnIncreaseClearGauge(GaugeIncreaseValue);
                 //========================================================================================
 
                 isDeath = true;
@@ -147,10 +147,10 @@
             if(currentHealthPoint <= 0 && isDeath == false) {
                 monsterState.StateChanger(STATETYPE.DEATH);
 
-                //=============================[ ON CALL MONSTER DEATH EVENTS ]===========================
+                //=================================[ MONSTER DEATH EVENT ]================================
                 BattleProgresser.OnMonsterDeath();
-                BattleProgresser.OnDropItemChance(ItemDropCorrection);
-                BattleProgresser.OnIncreaseClearGauge(GaugeIncreaseValue);
+                BattleProgresser.OnItemDrop(ItemDropCorrection);
+                //BattleProgresser.OnIncreaseClearGauge(GaugeIncreaseValue);
                 //========================================================================================
 
                 isDeath = true;
@@ -188,7 +188,7 @@
         /// Animation Event
         /// </summary>
         public void OnDamageWall() {
-            BattleProgresser.OnDecreasePlayerHealthPoint(damageCount);
+            BattleProgresser.OnDecPlayerHealth(damageCount);
         }
 
         /// <summary>

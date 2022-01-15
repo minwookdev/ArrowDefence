@@ -35,6 +35,8 @@ public enum STATEFLOW {
 
 #endregion
 
+#region EQUIPMENT
+
 public enum ABILITY_TYPE {
     //NONE
     NONE           = 0,
@@ -50,9 +52,12 @@ public enum ABILITY_TYPE {
     //ACCESSORY PROPERTY
 }
 
+#endregion
+
 #region GAMEMANAGER
 
 public enum GAMESTATE {
+    STATE_NONE,
     STATE_BEFOREBATTLE,
     STATE_INBATTLE,
     STATE_BOSSBATTLE,
@@ -72,4 +77,17 @@ public enum STAGETYPE {
 }
 
 #endregion
+
+#region EFFECT
+
+public enum BOWEFFECTYPE { 
+    NONE    = 0,
+    IMPACT  = 1,
+    CHARGED = 2,
+    FADE    = 3,
+}
+
+
+#endregion
+
 

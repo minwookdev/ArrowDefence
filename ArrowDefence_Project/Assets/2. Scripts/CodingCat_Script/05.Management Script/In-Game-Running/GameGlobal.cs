@@ -13,6 +13,9 @@
         public static readonly short MaxComboCount = 9999;
         public static readonly float ComboDuration = 1.5f;
 
+        //BOW
+        public static readonly float CHARGINGTIME = 1f;
+
         public static readonly string EMPTYSTR = "";
 
         /// <summary>
@@ -243,14 +246,26 @@
             }
         }
 
-        #region EXTENDED_METHOD
+        #region TIME
 
-        public static float Zero(this float number) {
-            return number = 0f;
+        public static int GetDay(float _seconds) {
+            return (int)(_seconds / (60 * 60 * 24) % 365);
         }
 
-        public static float One(this float number) {
-            return number = 1f;
+        public static int GetHour(float _seconds) {
+            return (int)(_seconds / (60 * 60) % 24);
+        }
+
+        public static int GetMinute(float _seconds) {
+            return (int)((_seconds / 60) % 60);
+        }
+
+        public static int GetSeconds(float _seconds) {
+            return (int)(_seconds % 60);
+        }
+
+        public static string GetMiliSeconds(float _seconds) {
+            return string.Format("{0:.00}", (_seconds % 1));
         }
 
         #endregion

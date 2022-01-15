@@ -25512,7 +25512,7 @@ GameObject:
   - component: {fileID: 557552173}
   - component: {fileID: 557552174}
   m_Layer: 5
-  m_Name: Object_Inventory&Items
+  m_Name: Object_Inventory&Items [disable]
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -30074,7 +30074,7 @@ GameObject:
   - component: {fileID: 671369119}
   - component: {fileID: 671369120}
   m_Layer: 5
-  m_Name: Object_Shop
+  m_Name: Object_Shop [disable]
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -52778,7 +52778,7 @@ GameObject:
   - component: {fileID: 1143269513}
   - component: {fileID: 1143269514}
   m_Layer: 5
-  m_Name: Object_Upgrade
+  m_Name: Object_Upgrade [disable]
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -77048,7 +77048,7 @@ GameObject:
   - component: {fileID: 1642637448}
   - component: {fileID: 1642637447}
   m_Layer: 5
-  m_Name: Object_Stage_Select
+  m_Name: Object_Stage_Select [disable]
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

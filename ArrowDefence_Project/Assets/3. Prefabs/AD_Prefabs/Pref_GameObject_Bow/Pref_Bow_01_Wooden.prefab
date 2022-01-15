@@ -181,19 +181,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34b76004ecd537b448e6408fed03d6f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MainCam: {fileID: 0}
   bowSprite: {fileID: 2632294930036604527}
   bowAbility: {fileID: 2772393570774568323}
+  bowTr: {fileID: 0}
+  MainCam: {fileID: 0}
   TouchRadius: 1
-  PullableRadius: 1
   BowCenterPointImg: {fileID: 6450345450154900485}
   ClampPointTop: {fileID: 2772393571435278274}
   ClampPointBottom: {fileID: 2772393572003259867}
   SmoothRotateSpeed: 12
   ArrowPullingSpeed: 2
-  ArrowComponent: {fileID: 0}
   ArrowParentTr: {fileID: 0}
-  LoadedArrow: {fileID: 0}
+  loadedArrow: {fileID: 0}
+  arrowComponent: {fileID: 0}
 --- !u!114 &2772393570774568323
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -226,7 +226,10 @@ MonoBehaviour:
   StartFishEyeAmount: 0.2
   StartPinchAmount: 0.05
   totalFadeTime: 0.3
+  startChargedHitEffectBlend: 0.8
+  chargeEffectTime: 0.5
   FadeBurnTime: 1
+  effectType: 0
 --- !u!1 &2772393571020930489
 GameObject:
   m_ObjectHideFlags: 0

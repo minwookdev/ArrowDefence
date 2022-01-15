@@ -18,6 +18,14 @@
             throw new NotImplementedException("OnHit function Not override on Controller.");
         }
 
+        /// <summary>
+        /// Use Get Message when Clear Battle
+        /// </summary>
+        public void SetStateDeath() {
+            if (currentState == STATETYPE.DEATH) return;
+            StateChanger(STATETYPE.DEATH);
+        }
+
         #region MACHINE
 
         protected void ChangeState(STATETYPE targetState) {

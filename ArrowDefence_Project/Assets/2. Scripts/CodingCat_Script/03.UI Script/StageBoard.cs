@@ -1,4 +1,4 @@
-﻿namespace ActionCat.UI {
+﻿namespace ActionCat.UI.StageBoard {
     using UnityEngine;
     using UnityEngine.UI;
     using TMPro;
@@ -75,10 +75,10 @@
         #region CHALLENGE_INFO
 
         [System.Serializable]
-        public class ChallengeInfos {
+        internal class ChallengeInfos {
             //===================================================[ CHALLENGE INFO ]===================================================
             [System.Serializable]
-            public class ChallengeInfo {
+            class ChallengeInfo {
                 [SerializeField] TextMeshProUGUI textChallenge = null;
                 [SerializeField] Image imageEnable  = null;
                 [SerializeField] Image imageDisable = null;
@@ -113,7 +113,7 @@
 
         //==================================================[ SETTINGS PANEL CONTROL ]================================================
         [System.Serializable]
-        public class SettingsInfo {
+        internal class SettingsInfo {
             [SerializeField] GameObject panelLock  = null;
             [SerializeField] Toggle toggleAutoShot = null;
             [SerializeField] Toggle toggleSpawnMutantMonster = null;
@@ -136,3 +136,4 @@
         #endregion
     }
 }
+

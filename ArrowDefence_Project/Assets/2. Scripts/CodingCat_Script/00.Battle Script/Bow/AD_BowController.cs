@@ -23,9 +23,11 @@
 
         private bool isBowPulling   = false;     //활이 일정거리 이상 당겨져서 회전할 수 있는 상태
         private bool isBowPullBegan = false;     //Bow Pull State Variables
-        private bool isChargedShot  = false;
+        private bool isChargeShotReady  = false;
         private float maxBowAngle, minBowAngle;  //Min, Max BowAngle Variables
         private float bowAngle;                  //The Angle Variable (angle between Click point and Bow).
+        private float maxChargingTime = 0f;
+        private float chargingTime    = 0f;
         private Vector3 initialTouchPos;         //처음 터치한 곳을 저장할 벡터
         private Vector3 direction;
         private Vector3 currentClickPosition;
@@ -100,9 +102,9 @@
             Reload();
 
             //게임오버 이벤트에 Burn Effect 추가. Resurrection 구현 시 추가적인 로직 구현 필요.
-            GameManager.Instance.AddListnerGameOver(() => { 
+            GameManager.Instance.AddListnerGameOver(() => {
                 //Active Burn Fade Effect.
-                bowSprite.ActiveBurn(false);
+                bowSprite.Effect(BOWEFFECTYPE.FADE, false);
                 //Bow Rope Material Alpha Change.
                 AD_BowRope.instance.RopeAlpha(false);
                 //if Loaded Arrow, Change Sprite color Alpha.
@@ -119,6 +121,9 @@
             CatLog.Log(StringColor.YELLOW, $"Damage Struct SizeOf : {System.Runtime.InteropServices.Marshal.SizeOf(typeof(DamageStruct))}");
             CatLog.Log(StringColor.YELLOW, $"Damage Struct SizeOf : {System.Runtime.InteropServices.Marshal.SizeOf(damageStruct)}");
             bowAbility.AddListnerToSkillDel(ref BowSkillSet);
+
+            //Get Max Charging Time
+            maxChargingTime = GameGlobal.CHARGINGTIME;
         }
 
         private void Update()
@@ -164,8 +169,8 @@
                 this.BowMoved(Input.mousePosition);
             }
 #endif
-            //Arrow Position Update
-            UpdateArrPosition();
+            //Arrow Update
+            UpdateArrPos();
         }
 
         private void FixedUpdate() {
@@ -189,6 +194,9 @@
 
             //Rope Catch Point Set.
             AD_BowRope.instance.SetCatchPoint(arrowComponent.CatchTr);
+
+            //Clear Charging Data
+            ChargeClear();
 
             isBowPullBegan = true;
         }
@@ -400,7 +408,7 @@
             AD_BowRope.instance.CatchPointClear();
 
             //Update Damage Struct
-            damageStruct = bowAbility.GetDamage(arrowType, isChargedShot);
+            damageStruct = bowAbility.GetDamage(arrowType, isChargeShotReady);
 
             //Shot Arrow & Active Skill.
             arrowComponent.ShotByBow(arrowForce, ArrowParentTr, damageStruct);
@@ -413,7 +421,7 @@
             arrowComponent = null;
 
             //Active Shot Impact Effect
-            bowSprite.ActiveImpact();
+            bowSprite.Effect(BOWEFFECTYPE.IMPACT);
 
             //Active Camera Shake
             CineCam.Inst.ShakeCamera(5f, .1f);
@@ -474,7 +482,7 @@
             }
         }
 
-        void UpdateArrPosition() {
+        void UpdateArrPos() {
             if(loadedArrow != null) {
                 if(isBowPulling) {
                     arrowPosition = loadedArrow.transform.position;
@@ -483,9 +491,15 @@
                     
                     //Arrow Direction * Force
                     arrowForce = loadedArrow.transform.up * arrowComponent.ArrowPower;
+
+                    //Increase Charged Power
+                    ChargeIncrease();
                 }
                 else {
                     loadedArrow.transform.position = ClampPointTop.position;
+
+                    //Clear Charged Power <Once>
+                    ChargeCancel();
                 }
             }
         }
@@ -507,7 +521,34 @@
             Reload();
         }
 
+        #region CHARGED
 
+        void ChargeClear() {
+            isChargeShotReady = false;
+            chargingTime      = 0f;
+            CatLog.Log("Charge Clear !");
+        }
+
+        void ChargeIncrease() {
+            chargingTime += Time.unscaledDeltaTime;
+            if(chargingTime > maxChargingTime) {
+                if(isChargeShotReady == false) {
+                    bowSprite.Effect(BOWEFFECTYPE.CHARGED);
+                    isChargeShotReady = true;
+                    CatLog.Log("Charge Complete !");
+                }
+            }
+        }
+
+        void ChargeCancel() {
+            if (isChargeShotReady == true || chargingTime > 0) {
+                isChargeShotReady = false;
+                chargingTime      = 0f;
+                CatLog.Log("Charge Cancel !");
+            }
+        }
+
+        #endregion
 
         #region NOT_USED
 

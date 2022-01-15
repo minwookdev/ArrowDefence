@@ -120,8 +120,7 @@
             PausePanel.GetComponent<CanvasGroup>().alpha = 0f; //이거 무엇?
 
             //Item Data Slot Initializing
-            for (int i = 0; i < SlotParentTr.childCount; i++)
-            {
+            for (int i = 0; i < SlotParentTr.childCount; i++) {
                 DropItemSlots.Add(SlotParentTr.GetChild(i).GetComponent<UI_ItemDataSlot>());
             }
 

@@ -70,11 +70,19 @@ public enum GAMESTATE {
 #region BATTLE
 
 public enum STAGETYPE {
-    NONE                   = 0, //Stage Type Not Setting, throw error
+    NONE                   = 0, //throw error
     STAGE_DEV              = 1,
     STAGE_FOREST_SECLUDED  = 2,
     STAGE_DUNGEON_ENTRANCE = 3,
 }
+
+public enum AUTOSTATE {
+    WAIT,
+    FIND,
+    TRAC,
+    SHOT,
+}
+
 
 #endregion
 

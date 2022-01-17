@@ -42,7 +42,6 @@
 
         //Impact Coroutine
         Coroutine effectCoroutine = null;
-        Coroutine chargeEffectCo = null;
 
         public Sprite GetUISprite() {
             if(SpriteBow != null) {

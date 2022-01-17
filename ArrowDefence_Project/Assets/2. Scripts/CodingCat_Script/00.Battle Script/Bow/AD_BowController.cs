@@ -1,10 +1,9 @@
-﻿namespace ActionCat
-{
+﻿namespace ActionCat {
     using UnityEngine;
     using UnityEngine.UI;
     using System.Collections;
 
-    public class AD_BowController : MonoBehaviour {
+    public partial class AD_BowController : MonoBehaviour {
         public static AD_BowController instance;
 
         [Header("COMPONENT")]
@@ -32,6 +31,7 @@
         private Vector3 direction;
         private Vector3 currentClickPosition;
         private Vector3 tempEulerAngle;
+        //private AutoMachine autoMachine = null;
         public bool IsPullingStop { get; set; }  //Pulling Stop boolean For Pause, Clear Battle Scene
 
         [Header("ARROW VARIABLES")] //Arrow Relation Variables
@@ -126,11 +126,46 @@
             maxChargingTime = GameGlobal.CHARGINGTIME;
         }
 
-        private void Update()
-        {
-#if UNITY_ANDROID
-            if (Input.touchCount != 0)
-            {
+        private void Update() {
+            if(isAutoRunning) { //Enabled AutoMode : AutoMode Update
+                AutoModeUpdate();
+            }
+            else {              //Disable AutoMode : Controller Update
+#if UNITY_EDITOR
+                //==============================================<< EDITOR CONTROLLER >>==============================================
+                if (Input.GetMouseButtonDown(0)) {    //Click Began
+                    BowBegan(Input.mousePosition);
+                }
+                else if (Input.GetMouseButtonUp(0)) { //Click Ended
+                    BowReleased(Input.mousePosition);
+                }
+                if (isBowPullBegan == true) {         //Click Moved
+                    BowMoved(Input.mousePosition);
+                }
+                //===================================================================================================================
+#elif UNITY_ANDROID
+                //==============================================<< MOBILE CONTROLLER >>==============================================
+                //Touch Update : Only Mobile
+                if (Input.touchCount != 0) {
+                    //Get Value On Screen Touch
+                    screenTouch = Input.GetTouch(0);
+
+                    if(screenTouch.phase == TouchPhase.Began) {       //Touch Began       
+                        BowBegan(screenTouch.position); 
+                    }
+                    else if (screenTouch.phase == TouchPhase.Ended) { //Touch Ended
+                        BowReleased(screenTouch.position);
+                    }
+                    if(isBowPullBegan == true) {                      //Touch Moved
+                        BowMoved(screenTouch.position);
+                    }
+                }
+                //===================================================================================================================
+#endif
+            }
+
+/**#if UNITY_ANDROID //Original Controller Update
+            if (Input.touchCount != 0) {
                 //Get Value On Screen Touch -> Area Designation Func Add
                 screenTouch = Input.GetTouch(0);
 
@@ -141,44 +176,27 @@
 
                 if (isBowPullBegan)
                     BowMoved(screenTouch.position);        //Touch Moved
-
-                #region OLD
-                //else if (screenTouch.phase == TouchPhase.Moved && isBowPullBegan)
-                //{
-                //    //Touch Moved
-                //    this.BowMoved(screenTouch.position);
-                //}
-                #endregion
             }
 #endif
 #if UNITY_EDITOR
-            if (Input.GetMouseButtonDown(0))
-            {
-                //Click Began
+            if (Input.GetMouseButtonDown(0)) {      //Click Began
                 this.BowBegan(Input.mousePosition);
             }
-            else if (Input.GetMouseButtonUp(0))
-            {
-                //Click Ended
+            else if (Input.GetMouseButtonUp(0)) {   //Click Ended
                 this.BowReleased(Input.mousePosition);
             }
 
-            if (isBowPullBegan)
-            {
-                //Click Moved
+            if (isBowPullBegan) {                   //Click Moved
                 this.BowMoved(Input.mousePosition);
             }
-#endif
-            //Arrow Update
+#endif **/
+
+            //================================================<< ARROW POSITION UPDATE >>============================================
             UpdateArrPos();
+            //=======================================================================================================================
         }
 
-        private void FixedUpdate() {
-            //if (isLaunch == true) { //bool isLaunched
-            //    Launch();
-            //    isLaunch = false;
-            //}
-        }
+
 
         private void OnDestroy() => instance = null;
 
@@ -189,7 +207,6 @@
             switch (currentPullType) {
                 case PULLINGTYPE.AROUND_BOW_TOUCH: if (PullTypeTouchAround(pos) == false) return; break; //Type 0.-활 주변의 일정거리 터치 조준
                 case PULLINGTYPE.FREE_TOUCH:           PullTypeTouchFree(pos);                    break; //Type 1.-터치한 곳 기준 활 조준
-                case PULLINGTYPE.AUTOMATIC: throw new System.NotImplementedException();                  //Type 3.-자동 사격 (미구현)
             }
 
             //Rope Catch Point Set.
@@ -205,7 +222,7 @@
             //Get CurrentClick Position
             currentClickPosition = MainCam.ScreenToWorldPoint(pos);
 
-            #region OLD_BOW_ROTATION_LOGIC
+#region OLD_BOW_ROTATION_LOGIC
             //Pull Type 추가에 따른 스크립트 구분
             //if (currentPullType == PULLINGTYPE.AROUND_BOW_TOUCH)
             //{
@@ -279,7 +296,7 @@
             //
             //    DrawTouchPos.Instance.DrawTouchLine(correctionTouchPosition, initialTouchPos);
             //}
-            #endregion
+#endregion
 
             float distOfPoint = (currentPullType == PULLINGTYPE.AROUND_BOW_TOUCH) ? 
                 Vector2.Distance(bowTr.position, currentClickPosition) : 
@@ -317,7 +334,7 @@
             //Check the Pulling Stop Trigger is true
             UpdateStopPulling();
 
-            #region OLD_ARROW_LOGIC
+#region OLD_ARROW_LOGIC
 
             //if (LoadedArrow != null)
             //{
@@ -358,7 +375,7 @@
             //
             //    }
             //}
-            #endregion
+#endregion
         }
 
         private void BowReleased(Vector2 pos) {
@@ -377,7 +394,7 @@
         }
 
         private void Launch() {
-            #region OLD
+#region OLD
             //일정 이상 당겨져야 발사되도록 할 조건
             //if (arrowForce.magnitude < requiredLaunchForce)
             //{
@@ -400,7 +417,7 @@
             //if (LoadedArrow == null || isBowPulling == false) {
             //    CatLog.WLog("Can't Launch the Arrow"); return;
             //}
-            #endregion
+#endregion
             //Pull Stop while reloading Arrow.
             IsPullingStop = true;
 
@@ -521,7 +538,7 @@
             Reload();
         }
 
-        #region CHARGED
+#region CHARGED
 
         void ChargeClear() {
             isChargeShotReady = false;
@@ -548,13 +565,13 @@
             }
         }
 
-        #endregion
+#endregion
 
-        #region NOT_USED
+#region NOT_USED
 
         private IEnumerator ArrowReload()
         {
-            #region ORIGIN_RELAOD
+#region ORIGIN_RELAOD
             //var arrow = CatPoolManager.Instance.LoadNormalArrow(this);
             //
             //currentLoadedArrow = arrow;
@@ -570,9 +587,9 @@
             //// -> 추후 게임이 시작되기 전에 미리 Clamp 한번에 Initial해주면 어떨지?
             //arrowComponent.leftClampPoint  = this.leftClampPoint;
             //arrowComponent.rightClampPoint = this.rightClampPoint;
-            #endregion
+#endregion
 
-            #region POOL_RELOAD
+#region POOL_RELOAD
             yield return null;
 
             if (arrowType == ARROWTYPE.ARROW_MAIN)
@@ -589,8 +606,24 @@
 
             //Get Arrow Component
             //ArrowComponent = LoadedArrow.GetComponent<AD_Arrow>().Reload(ClampPointBottom, ClampPointTop);
-            #endregion
+#endregion
         }
+
+        //Origin Fixed Update
+        //private void FixedUpdate() {
+        //    //if (isLaunch == true) { //bool isLaunched
+        //    //    Launch();
+        //    //    isLaunch = false;
+        //    //}
+        //}
+
+        //void Update() {
+        //    //else if (screenTouch.phase == TouchPhase.Moved && isBowPullBegan)
+        //    //{
+        //    //    //Touch Moved
+        //    //    this.BowMoved(screenTouch.position);
+        //    //}
+        //}
 
         #endregion
     }

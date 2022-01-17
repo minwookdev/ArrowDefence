@@ -79,9 +79,9 @@
             //===================================================[ CHALLENGE INFO ]===================================================
             [System.Serializable]
             class ChallengeInfo {
-                [SerializeField] TextMeshProUGUI textChallenge = null;
+                //[SerializeField] TextMeshProUGUI textChallenge = null;
+                //[SerializeField] Image imageDisable = null;
                 [SerializeField] Image imageEnable  = null;
-                [SerializeField] Image imageDisable = null;
 
                 public void TurnOffImage() {
                     imageEnable.gameObject.SetActive(false);

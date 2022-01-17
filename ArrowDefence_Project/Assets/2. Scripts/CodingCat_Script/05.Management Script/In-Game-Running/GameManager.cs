@@ -281,6 +281,16 @@
             return CCPlayerData.infos.TryGetStageData(key, out stageInfo);
         }
 
+        public void AutoMode(bool isStart) {
+            if(Controller() == null) {
+                CatLog.WLog("The Controller is null.");
+                return;
+            }
+
+            if (isStart) Controller().AutoStart();
+            else         Controller().AutoStop();
+        }
+
         #endregion
 
         #region TIME

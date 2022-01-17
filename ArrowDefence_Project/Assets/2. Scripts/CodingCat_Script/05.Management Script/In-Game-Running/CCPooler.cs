@@ -45,8 +45,8 @@
         [Header("POOL OBJECTS")]
         [SerializeField] private List<Pool> poolInstanceList = new List<Pool>();
 
-        [Header("POOL COUNTER")]
-        [SerializeField] Dictionary<string, List<GameObject>> aliveTrackDic = null;
+        [Header("ENABLE TRACKING")]
+        Dictionary<string, List<GameObject>> aliveTrackDic = null;
 
         public static bool IsInitialized { get; private set; }
 
@@ -474,6 +474,20 @@
             }
 
             array = resultList.ToArray();
+        }
+
+        public static void OutEnableMonsters(out List<Transform> result) {
+            List<GameObject> tempList  = new List<GameObject>();
+            result = new List<Transform>();
+            if(_inst.aliveTrackDic.TryGetValue(AD_Data.POOLTAG_MONSTER_NORMAL, out tempList)) {
+                result.AddRange(tempList.GetComponentAll<Transform>());
+            }
+            if(_inst.aliveTrackDic.TryGetValue(AD_Data.POOLTAG_MONSTER_ELITE, out tempList)) {
+                result.AddRange(tempList.GetComponentAll<Transform>());
+            }
+            if (_inst.aliveTrackDic.TryGetValue(AD_Data.POOLTAG_MONSTER_FREQ, out tempList)) {
+                result.AddRange(tempList.GetComponentAll<Transform>());
+            }
         }
 
         #endregion

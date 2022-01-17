@@ -246,6 +246,21 @@
             }
         }
 
+        public static List<T> GetComponentAll<T>(this List<GameObject> list) where T : Component {
+            List<T> tempList = new List<T>();
+            for (int i = 0; i < list.Count; i++) {
+                if(list[i].TryGetComponent<T>(out T component)) {
+                    tempList.Add(component);
+                }
+                else {
+                    CatLog.WLog($"{list[i].name} is not have Component : {component.name}.");
+                    continue;
+                }
+            }
+
+            return tempList;
+        }
+
         #region TIME
 
         public static int GetDay(float _seconds) {

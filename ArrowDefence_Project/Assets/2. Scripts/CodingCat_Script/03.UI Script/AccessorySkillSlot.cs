@@ -232,7 +232,7 @@
         IEnumerator ActiveSkillCo()
         {
             isEffectActivation = true;
-            duration = activeSkillFunc(GameManager.Instance.Controller());
+            duration = activeSkillFunc(GameManager.Instance.ControllerOrNull());
             currentCoolDown = maxCoolDown;
 
             //Wait For Skill Duration

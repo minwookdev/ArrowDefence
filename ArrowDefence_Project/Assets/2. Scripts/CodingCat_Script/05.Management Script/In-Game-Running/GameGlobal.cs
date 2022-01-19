@@ -261,6 +261,31 @@
             return tempList;
         }
 
+        /// <summary>
+        /// return -180~180 degree (for Unity)
+        /// </summary>
+        /// <returns></returns>
+        public static float AngleBetweenVec3(Vector3 _start, Vector3 _end) {
+            Vector3 direction = _end - _start;
+            return Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        }
+
+        public static float AngleBetweenVec2(Vector2 _start, Vector2 _end) {
+            Vector2 direction = _end - _start;
+            return Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        }
+
+
+        /// <summary>
+        /// Number is Included Range [include min, max]
+        /// </summary>
+        /// <param name="number"></param>
+        /// <param name="range">-range ~ range</param>
+        /// <returns></returns>
+        public static bool IsRange(float number, float range) {
+            return (number >= -range && number <= range);
+        }
+
         #region TIME
 
         public static int GetDay(float _seconds) {
@@ -301,8 +326,9 @@
     /// </summary>
     public enum ARROWTYPE
     {
-        ARROW_MAIN = 0,
-        ARROW_SUB  = 1
+        ARROW_MAIN    = 0,
+        ARROW_SUB     = 1,
+        ARROW_SPECIAL = 2,
     }
 
     #endregion

@@ -7,9 +7,9 @@
     using TMPro;
     using DG.Tweening;
     using Games.UI;
+    using UI.Auto;
 
-    public class BattleSceneRoute : MonoBehaviour
-    {
+    public class BattleSceneRoute : MonoBehaviour {
         public class ArrowSwapSlotInitData {
             public bool IsActiveSlot { get; private set; }
             public Sprite IconSprite { get; private set; }
@@ -74,6 +74,9 @@
         float hitFadeTimer = 0f;
         string generalAlpha = "_Alpha";
 
+        [Header("AUTO MODULE")]
+        [SerializeField] AutoButton autoButton = null;
+
         private float screenZpos = 0f;
         private LineRenderer arrowLimitLine;
         private Vector2 topLeftPoint;
@@ -85,8 +88,7 @@
         public Canvas BattleSceneUICanvas;
         public Camera UICamera;
 
-        void Start()
-        {
+        void Start() {
             #region LIMIT_LINE_MAKER
             if (IsVisible)
             {
@@ -472,6 +474,19 @@
                 if(hitFadeTimer <= 0f) {
                     hitScreenMaterial.SetFloat(generalAlpha, 0f);
                 }
+            }
+        }
+
+        #endregion
+
+        #region AUTO_BUTTON
+
+        public AutoButton GetAutoButton() {
+            if(autoButton == null) {
+                throw new System.Exception("Auto Button Component is Not Cached.");
+            }
+            else {
+                return autoButton;
             }
         }
 

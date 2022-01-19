@@ -81,8 +81,7 @@
             arrowslotdata = ReturnArrowSlotData(); skillslotdata = ReturnSkillSlotData();
         }
 
-        public void SetBowPullingStop(bool isStop)
-        {
+        public void SetBowPullingStop(bool isStop) {
             if (AD_BowController.instance != null)
                 AD_BowController.instance.IsPullingStop = isStop;
         }
@@ -118,7 +117,7 @@
             if(activeMain)
             {
                 mainSprite   = equips.GetMainArrow().GetSprite;
-                mainCallback = () => Controller().Swap(ARROWTYPE.ARROW_MAIN);
+                mainCallback = () => ControllerOrNull().Swap(ARROWTYPE.ARROW_MAIN);
             }
             else
             {
@@ -130,7 +129,7 @@
             if(activeSub)
             {
                 subSprite   = equips.GetSubArrow().GetSprite;
-                subCallback = () => Controller().Swap(ARROWTYPE.ARROW_SUB);
+                subCallback = () => ControllerOrNull().Swap(ARROWTYPE.ARROW_SUB);
             }
             else
             {
@@ -185,8 +184,7 @@
             return skillDataList.ToArray();
         }
 
-        public AD_BowController Controller()
-        {
+        public AD_BowController ControllerOrNull() {
             if (AD_BowController.instance != null)
                 return AD_BowController.instance;
             else
@@ -281,14 +279,12 @@
             return CCPlayerData.infos.TryGetStageData(key, out stageInfo);
         }
 
-        public void AutoMode(bool isStart) {
-            if(Controller() == null) {
-                CatLog.WLog("The Controller is null.");
-                return;
+        public void AutoSwitch(bool isDebug = false) {
+            if(ControllerOrNull() == null) {
+                CatLog.ELog("The Controller is Null."); return;
             }
 
-            if (isStart) Controller().AutoStart();
-            else         Controller().AutoStop();
+            ControllerOrNull().AutoSwitch(isDebug);
         }
 
         #endregion

@@ -161,6 +161,8 @@
         public bool IsDebugClearStage    = false;
         public bool IsDebugMonsterLogics = false;
         public bool IsDebugGameOver      = false;
+        public bool IsOnAutoMode         = false;
+        public bool IsAutoModeLogger     = false;
 
         //전투 진행 이벤트 핸들러 : 수치관련 이벤트
         public delegate void ValueEventHandler(float value);
@@ -241,12 +243,22 @@
             //======================================================================================================================
 
             //================================================== << AUTO MODE >> ===================================================
-            //1. BattleSceneRoute에서 버튼UI 활성화/비활성화 가지고 있게함.
-            //2. progresser에서 해당 스테이지의 키 값으로 3별여부 확인.
+            //1. BattleSceneRoute에서 버튼UI 활성화/비활성화 가지고 있게함. -> 1차 검증
+            //2. progresser에서 해당 스테이지의 키 값으로 3별여부 확인.     -> 2차 검증
             //3. 3별 달성된 스테이지라면 -> 이게 아니고 스테이지 진입 할 때, isAuto체크되었는지 여부 확인
             //4. 체크됐으면 AutoMode 버튼 활성화 명령하고 버튼에 GameManager로 부터 함수받아와서 
             //5. 버튼에 리스너등록해주는 방식은 어떨까??
             //6. 일단 씬에 오토버튼 하나 만들어놓고, 만들어주는 프로그레서에서 켜고꺼주는 것부터 진행해보자.
+            bool isEnableButton = true; //Test bool -> always true
+            var autoButton = battleSceneUI.GetAutoButton();
+            if(autoButton != null) {
+                if(isEnableButton) {   //-> Auto Button Enable 조건
+                    autoButton.Init(true, GameManager.Instance.AutoSwitch, IsAutoModeLogger); //-> 여기서 Auto 시작하는 메서드 참조 넣어주면 될 듯?
+                }
+                else {
+                    autoButton.Init(false);
+                }
+            }
             //======================================================================================================================
 
             //================================================ << BATTLE READY >> ==================================================

@@ -225,6 +225,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34b76004ecd537b448e6408fed03d6f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  autoState: 0
+  targetTr: {fileID: 0}
+  isDebug: 0
   bowSprite: {fileID: 5205404718265595800}
   bowAbility: {fileID: 1199833956013647915}
   bowTr: {fileID: 0}

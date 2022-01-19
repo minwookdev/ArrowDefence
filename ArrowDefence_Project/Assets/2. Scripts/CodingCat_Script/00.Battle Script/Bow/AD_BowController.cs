@@ -36,13 +36,15 @@
 
         [Header("ARROW VARIABLES")] //Arrow Relation Variables
         [SerializeField] Transform ArrowParentTr;
-        [SerializeField] GameObject loadedArrow;
+        [SerializeField] Transform arrowTr = null;
+        [SerializeField] GameObject loadedArrow; // <- Not Used
         [SerializeField] AD_Arrow arrowComponent;
 
+        private Vector3 arrowPos;
         private Vector2 arrowForce;
-        private Vector3 arrowPosition;
         private Vector3 initArrowScale = new Vector3(1.5f, 1.5f, 1f);
         private Vector3 initArrowRot   = new Vector3(0f, 0f, -90f);
+
 
         //Enums
         private ARROWTYPE arrowType;
@@ -127,42 +129,45 @@
         }
 
         private void Update() {
+            //===============================================<< AUTO MODE UPDATE >>==============================================
             if(isAutoRunning) { //Enabled AutoMode : AutoMode Update
-                AutoModeUpdate();
+                AutoModeUpdate(); 
+                return;
             }
-            else {              //Disable AutoMode : Controller Update
-#if UNITY_EDITOR
-                //==============================================<< EDITOR CONTROLLER >>==============================================
-                if (Input.GetMouseButtonDown(0)) {    //Click Began
-                    BowBegan(Input.mousePosition);
-                }
-                else if (Input.GetMouseButtonUp(0)) { //Click Ended
-                    BowReleased(Input.mousePosition);
-                }
-                if (isBowPullBegan == true) {         //Click Moved
-                    BowMoved(Input.mousePosition);
-                }
-                //===================================================================================================================
-#elif UNITY_ANDROID
-                //==============================================<< MOBILE CONTROLLER >>==============================================
-                //Touch Update : Only Mobile
-                if (Input.touchCount != 0) {
-                    //Get Value On Screen Touch
-                    screenTouch = Input.GetTouch(0);
+            //===================================================================================================================
 
-                    if(screenTouch.phase == TouchPhase.Began) {       //Touch Began       
-                        BowBegan(screenTouch.position); 
-                    }
-                    else if (screenTouch.phase == TouchPhase.Ended) { //Touch Ended
-                        BowReleased(screenTouch.position);
-                    }
-                    if(isBowPullBegan == true) {                      //Touch Moved
-                        BowMoved(screenTouch.position);
-                    }
-                }
-                //===================================================================================================================
-#endif
+            //==============================================<< MANUAL MODE UPDATE >>=============================================
+#if UNITY_EDITOR
+            //==============================================<< EDITOR CONTROLLER >>==============================================
+            if (Input.GetMouseButtonDown(0)) {    //Click Began
+                BowBegan(Input.mousePosition);
             }
+            else if (Input.GetMouseButtonUp(0)) { //Click Ended
+                BowReleased(Input.mousePosition);
+            }
+            if (isBowPullBegan == true) {         //Click Moved
+                BowMoved(Input.mousePosition);
+            }
+            //===================================================================================================================
+#elif UNITY_ANDROID
+            //==============================================<< MOBILE CONTROLLER >>==============================================
+            //Touch Update : Only Mobile
+            if (Input.touchCount != 0) {
+                //Get Value On Screen Touch
+                screenTouch = Input.GetTouch(0);
+
+                if(screenTouch.phase == TouchPhase.Began) {       //Touch Began       
+                    BowBegan(screenTouch.position); 
+                }
+                else if (screenTouch.phase == TouchPhase.Ended) { //Touch Ended
+                    BowReleased(screenTouch.position);
+                }
+                if(isBowPullBegan == true) {                      //Touch Moved
+                    BowMoved(screenTouch.position);
+                }
+            }
+            //===================================================================================================================
+#endif
 
 /**#if UNITY_ANDROID //Original Controller Update
             if (Input.touchCount != 0) {
@@ -194,9 +199,8 @@
             //================================================<< ARROW POSITION UPDATE >>============================================
             UpdateArrPos();
             //=======================================================================================================================
+            //=======================================================================================================================
         }
-
-
 
         private void OnDestroy() => instance = null;
 
@@ -434,7 +438,8 @@
             //                    ArrowComponent.CatchTr.position, arrowForce, loadArrowType);
 
             //Release GameObject and Component Arrow.
-            loadedArrow    = null;
+            //loadedArrow    = null;
+            arrowTr        = null;
             arrowComponent = null;
 
             //Active Shot Impact Effect
@@ -462,12 +467,14 @@
 
         void Reload() {
             switch (arrowType) { //Reload Arrow by Current Equipped Arrow Type.
-                case ARROWTYPE.ARROW_MAIN: loadedArrow = CCPooler.SpawnFromPool(AD_Data.POOLTAG_MAINARROW, bowTr, initArrowScale, ClampPointTop.position, Quaternion.identity); break;
-                case ARROWTYPE.ARROW_SUB:  loadedArrow = CCPooler.SpawnFromPool(AD_Data.POOLTAG_SUBARROW,  bowTr, initArrowScale, ClampPointTop.position, Quaternion.identity); break;
+                //case ARROWTYPE.ARROW_MAIN: loadedArrow = CCPooler.SpawnFromPool(AD_Data.POOLTAG_MAINARROW, bowTr, initArrowScale, ClampPointTop.position, Quaternion.identity); break;
+                //case ARROWTYPE.ARROW_SUB:  loadedArrow = CCPooler.SpawnFromPool(AD_Data.POOLTAG_SUBARROW,  bowTr, initArrowScale, ClampPointTop.position, Quaternion.identity); break;
+                case ARROWTYPE.ARROW_MAIN: arrowTr = CCPooler.SpawnFromPool<Transform>(AD_Data.POOLTAG_MAINARROW, bowTr, initArrowScale, ClampPointTop.position, Quaternion.identity); break;
+                case ARROWTYPE.ARROW_SUB:  arrowTr = CCPooler.SpawnFromPool<Transform>(AD_Data.POOLTAG_SUBARROW,  bowTr, initArrowScale, ClampPointTop.position, Quaternion.identity); break;
             }
 
             //Get Arrow Component with init Clamp Points.
-            arrowComponent = loadedArrow.GetComponent<AD_Arrow>().Reload(ClampPointBottom, ClampPointTop, initArrowRot);
+            arrowComponent = arrowTr.GetComponent<AD_Arrow>().Reload(ClampPointBottom, ClampPointTop, initArrowRot);
         }
 
         /// <summary>
@@ -475,8 +482,11 @@
         /// </summary>
         void UpdateStopPulling() {
             if (IsPullingStop == true) {
-                if (loadedArrow != null)
-                    loadedArrow.transform.position = ClampPointTop.position;
+                //if (loadedArrow != null)
+                //    loadedArrow.transform.position = ClampPointTop.position;
+
+                if (arrowTr != null)
+                    arrowTr.position = ClampPointTop.position;
                 isBowPullBegan = false; isBowPulling = false;
                 DrawTouchPos.Instance.ReleaseTouchLine();
             }
@@ -500,20 +510,20 @@
         }
 
         void UpdateArrPos() {
-            if(loadedArrow != null) {
+            if(arrowTr != null) {
                 if(isBowPulling) {
-                    arrowPosition = loadedArrow.transform.position;
-                    arrowPosition = Vector3.MoveTowards(arrowPosition, ClampPointBottom.position, Time.unscaledDeltaTime * ArrowPullingSpeed);
-                    loadedArrow.transform.position = arrowPosition;
+                    arrowPos = arrowTr.position;
+                    arrowPos = Vector3.MoveTowards(arrowPos, ClampPointBottom.position, Time.unscaledDeltaTime * ArrowPullingSpeed);
+                    arrowTr.position = arrowPos;
                     
                     //Arrow Direction * Force
-                    arrowForce = loadedArrow.transform.up * arrowComponent.ArrowPower;
+                    arrowForce = arrowTr.up * arrowComponent.ArrowPower;
 
                     //Increase Charged Power
                     ChargeIncrease();
                 }
                 else {
-                    loadedArrow.transform.position = ClampPointTop.position;
+                    arrowTr.position = ClampPointTop.position;
 
                     //Clear Charged Power <Once>
                     ChargeCancel();
@@ -532,7 +542,7 @@
             if (arrowComponent != null)
                 arrowComponent.DisableRequest();
             AD_BowRope.instance.CatchPointClear();
-            loadedArrow   = null; arrowComponent = null;
+            arrowTr = null; arrowComponent = null;
             arrowType = type;
 
             Reload();
@@ -593,14 +603,14 @@
             yield return null;
 
             if (arrowType == ARROWTYPE.ARROW_MAIN)
-                loadedArrow = CCPooler.SpawnFromPool(AD_Data.POOLTAG_MAINARROW, transform, initArrowScale, ClampPointTop.position, Quaternion.Euler(initArrowRot));
+                arrowTr = CCPooler.SpawnFromPool<Transform>(AD_Data.POOLTAG_MAINARROW, transform, initArrowScale, ClampPointTop.position, Quaternion.Euler(initArrowRot));
             else if (arrowType == ARROWTYPE.ARROW_SUB)
-                loadedArrow = CCPooler.SpawnFromPool(AD_Data.POOLTAG_SUBARROW, transform, initArrowScale, ClampPointTop.position, Quaternion.Euler(initArrowRot));
+                arrowTr = CCPooler.SpawnFromPool<Transform>(AD_Data.POOLTAG_SUBARROW, transform, initArrowScale, ClampPointTop.position, Quaternion.Euler(initArrowRot));
 
             //origin code 
             //LoadedArrow.transform.localEulerAngles = initArrowRot;
 
-            arrowComponent = loadedArrow.GetComponent<AD_Arrow>();
+            arrowComponent = arrowTr.GetComponent<AD_Arrow>();
             arrowComponent.bottomClampTr = this.ClampPointBottom;
             arrowComponent.topClampTr = this.ClampPointTop;
 

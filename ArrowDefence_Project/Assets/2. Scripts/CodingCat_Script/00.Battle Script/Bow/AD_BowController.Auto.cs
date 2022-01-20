@@ -6,53 +6,37 @@
     public partial class AD_BowController {
         [Header("AUTOMODE")]
         [SerializeField] [ReadOnly] //Enums
-        AUTOSTATE autoState = AUTOSTATE.WAIT;
+        AUTOSTATE autoState = AUTOSTATE.NONE;
 
         //Fields
-        float findInterval    = 0.8f;
-        float currentFindTime = 0f;
-        float autoShotTime    = 1.5f;
-        float currShotTime    = 0f;
-        float FindDist        = 10f;
-        float angleOffset     = 90f;
+        float findInterval  = 0.8f;
+        float currFindTime  = 0f;
+        float autoShotTime  = 1.5f;
+        float currShotTime  = 0f;
+        float FindDist      = 15f;
+        float angleOffset   = 90f;
         bool isAutoRunning  = false;
         bool isAutoExitWait = false;
 
         //Temp
-        IDamageable target = null;
         [SerializeField] [ReadOnly]
         Transform targetTr = null;
+        IDamageable target = null;
         List<Transform> tempList = null;
+
+        //Coroutines
+        Coroutine arrSwapCo   = null;
+        WaitUntil arrSwapWait = null;
 
         [SerializeField] [ReadOnly]
         bool isDebug = false;
 
         #region SWITCH
 
-        void AutoStop() {
-            if (isAutoRunning == false) {
-                CatLog.WLog("is AutoMode already stopped.");
-                return;
-            }
-
-            isAutoExitWait = true;
-        }
-
-        void AutoStart() {
-            if (isAutoRunning == true) {
-                CatLog.WLog("is AutoMode already started.");
-                return;
-            }
-
-            autoState = AUTOSTATE.WAIT;
-            isAutoExitWait = false;
-            isAutoRunning = true;
-        }
-
         public void AutoSwitch(bool isDebug = false) {
             if (isAutoRunning == false) {
                 //is starting auto mode
-                autoState = AUTOSTATE.WAIT; //set wait automode start state.
+                AutoStateChange(AUTOSTATE.WAIT);
                 isAutoExitWait = false;
                 isAutoRunning  = true;
 
@@ -66,83 +50,193 @@
             }
         }
 
+        void ClearAutoStop() {
+            isAutoExitWait = true;
+        }
+
         #endregion
 
 
-        #region AUTO_STATE
+        #region AUTO_MACHINE
 
         void AutoModeUpdate() {
-            //1. Get Monster List
-            //2. Find a Nearest Mosnter
-            //3. Add Target GameObject to Monster
-            //~~ Target Monster Alive Check Update
-            //4. Auto Rotate to Monster Position
-            //5. Bow Pulling and Shot with Interval
-            //~~ Lose Target Monster (Death)
-            //6. Restart Find New Monster Target
-            // again ~~
-
-            //Implement Shot and Reload
-
+            // 쏘자마자 바로 화살 당겨버려서 어색한것 같으면 코루틴으로 인터벌 주는것도 나쁘지 않겠다.
             //~caution
-            //swap arrow
-            //special arrow ()
-            //boolean isBowPullingStop (clear)
+            //Arrow Swap Test
+            //special arrow (think idea)
+            // auto/manual change Test 
 
             switch (autoState) {
-                case AUTOSTATE.WAIT: AutoWait(); break;
-                case AUTOSTATE.FIND: AutoFind(); break;
-                case AUTOSTATE.TRAC: AutoTrac(); break;
-                case AUTOSTATE.SHOT: AutoShot(); break;
+                case AUTOSTATE.NONE: StateNone(STATEFLOW.UPDATE); break;
+                case AUTOSTATE.WAIT: StateWait(STATEFLOW.UPDATE); break;
+                case AUTOSTATE.FIND: StateFind(STATEFLOW.UPDATE); break;
+                case AUTOSTATE.TRAC: StateTrac(STATEFLOW.UPDATE); break;
+                case AUTOSTATE.SHOT: StateShot(STATEFLOW.UPDATE); break;
                 default: throw new System.NotImplementedException("this AutoState is Not Implemented.");
             }
         }
 
-        void AutoWait() {
-            AutoExiter(); //AutoMode Stop Checker
+        void AutoStateChange(AUTOSTATE changeState) {
+            switch (autoState) {
+                case AUTOSTATE.NONE: StateNone(STATEFLOW.EXIT); break;
+                case AUTOSTATE.WAIT: StateWait(STATEFLOW.EXIT); break;
+                case AUTOSTATE.FIND: StateFind(STATEFLOW.EXIT); break;
+                case AUTOSTATE.TRAC: StateTrac(STATEFLOW.EXIT); break;
+                case AUTOSTATE.SHOT: StateShot(STATEFLOW.EXIT); break;
+            }
+
+            //State Change
+            autoState = changeState;
+
+            switch (autoState) {
+                case AUTOSTATE.NONE: StateNone(STATEFLOW.ENTER); break;
+                case AUTOSTATE.WAIT: StateWait(STATEFLOW.ENTER); break;
+                case AUTOSTATE.FIND: StateFind(STATEFLOW.ENTER); break;
+                case AUTOSTATE.TRAC: StateTrac(STATEFLOW.ENTER); break;
+                case AUTOSTATE.SHOT: StateShot(STATEFLOW.ENTER); break;
+            }
+        }
+
+        void StateNone(STATEFLOW flow) {
+            switch (flow) {
+                case STATEFLOW.ENTER:  NoneEnter(); break; //-> is AutoMode Udpate Exit.
+                case STATEFLOW.UPDATE:              break;
+                case STATEFLOW.EXIT:                break;
+            }
+        }
+
+        void StateWait(STATEFLOW flow) {
+            switch (flow) {
+                case STATEFLOW.ENTER:                break;
+                case STATEFLOW.UPDATE: WaitUpdate(); break;
+                case STATEFLOW.EXIT:                 break;
+            }
+        }
+
+        void StateFind(STATEFLOW flow) {
+            switch (flow) {
+                case STATEFLOW.ENTER:  FindEnter();  break;
+                case STATEFLOW.UPDATE: FindUpdate(); break;
+                case STATEFLOW.EXIT:   FindExit();   break;
+            }
+        }
+
+        void StateTrac(STATEFLOW flow) {
+            switch (flow) {
+                case STATEFLOW.ENTER:  TracEnter();  break;
+                case STATEFLOW.UPDATE: TracUpdate(); break;
+                case STATEFLOW.EXIT:   TrackExit();  break;
+            }
+        }
+
+        void StateShot(STATEFLOW flow) {
+            switch (flow) {
+                case STATEFLOW.ENTER:  ShotEnter(); break;
+                case STATEFLOW.UPDATE:              break;
+                case STATEFLOW.EXIT:                break;
+            }
+        }
+
+        #endregion
+
+        #region STATE
+
+        //################################################################################################################################################
+        //############################################################### << STATE NONE >> ###############################################################
+        void NoneEnter() {
+            //clean up AutoMode variables
+            target   = null;
+            targetTr = null;
+            tempList = null;
+
+            //Restore Arrow position and Clear Rope
+            arrowTr.position = ClampPointTop.position;
+            AD_BowRope.instance.CatchPointClear();
+
+            //clear exitwait
+            isAutoExitWait = false;
+
+            //Stop AutoMode Update
+            isAutoRunning = false;
+        }
+        //################################################################################################################################################
+        //############################################################### << STATE WAIT >> ###############################################################
+        void WaitUpdate() {
+            //AutoExiter(); // <- Wait State is Exitable AutoMode
+            if(isAutoExitWait == true) {
+                AutoStateChange(AUTOSTATE.NONE);
+            }
 
             //Start Auto Mode
             if (isAutoExitWait == false && GameManager.Instance.GameState == GAMESTATE.STATE_INBATTLE) {
                 autoState = AUTOSTATE.FIND;
             }
         }
+        //################################################################################################################################################
+        //############################################################### << STATE FIND >> ###############################################################
+        void FindEnter() {
+            //Restore Arrow position and claer Rope
+            arrowTr.position = ClampPointTop.position;
+        }
 
-        void AutoFind() {
-            AutoExiter(); //AutoMode Stop Checker
+        void FindUpdate() {
+            //AutoExiter(); // <- Find State is Exitable AutoMode
+            if(isAutoExitWait == true) {
+                AutoStateChange(AUTOSTATE.NONE);
+            }
 
-            currentFindTime += Time.deltaTime;
-            if(currentFindTime > findInterval) {
+            currFindTime += Time.deltaTime;
+            if(currFindTime > findInterval) {
                 if(TryFindTarget(out targetTr)) {
                     //Target Finded <- Not include currentFindTimer zero;
                     if (isDebug) CatLog.Log("Target Found");
                     target = targetTr.GetComponent<IDamageable>();
-                    EnterStateTrac();
+                    //EnterStateTrac();
+                    AutoStateChange(AUTOSTATE.TRAC); //State Change - Tracking Target
                 }
                 else {
                     //Target Not Found
                     if (isDebug) CatLog.Log("Target Not Found");
-                    currentFindTime = 0f;
+                    currFindTime = 0f;
                 }
             }
 
             //Implement Rotate the Bow [visualize]
         }
 
-        void AutoTrac() {
+        void FindExit() {
+            //clear current find Timer
+            //currFindTime = 0f;
+        }
+        //################################################################################################################################################
+        //############################################################### << STATE TRAC >> ###############################################################
+        void TracEnter() {
+            if(arrowTr == null || arrowComponent == null) {
+                CatLog.ELog("Arrow Component is Null, Stop AutoMode !", true);
+            }
+
+            //Set Rope Catch Point
+            AD_BowRope.instance.SetCatchPoint(arrowComponent.CatchTr);
+        }
+
+        void TracUpdate() {
             //==========================================<< TARGET CHECK & EXIT CHECK >>=========================================
-            AutoExiter(); //AutoMode Stop Checker
+            //AutoExiter(); // <- Tracking state is Exitable AutoMode
+            if(isAutoExitWait == true) {
+                AutoStateChange(AUTOSTATE.NONE);
+            }
 
             //Target Monster Disable Check
             if (targetTr == null || target.IsAlive() == false) {
-                currentFindTime = 0f; // <- Reset Timer if Not need a reset, delete this;
-                autoState = AUTOSTATE.FIND;
+                //EnterStateFind();
+                AutoStateChange(AUTOSTATE.FIND);
             }
             //==================================================================================================================
 
             //=================================================<< RUNNING TIMER >>==============================================
             //increase monster tracking timer..if timer is maxed change state is shot
             float autoShotTimeMultiplier = 1.0f; // -> Change value Global Ablility
-            currShotTime += Time.deltaTime * autoShotTimeMultiplier;
+            //currShotTime += Time.deltaTime * autoShotTimeMultiplier; -> Move To Arrow Moved
             //==================================================================================================================
 
             //=====================================================<< ROTATE >>=================================================
@@ -165,11 +259,14 @@
                 arrowForce = arrowTr.up * arrowComponent.ArrowPower;
 
                 //AutoMode Not using Charged Power
+
+                //Increase Tracking Time [Only Arrow Loaded (R:ArrowReload)]
+                currShotTime += Time.deltaTime * autoShotTimeMultiplier;
             }
             //==================================================================================================================
 
             //CatLog.Log($"Angle 1 : {GameGlobal.AngleBetweenVec3(bowTr.position, targetTr.position)}");
-            CatLog.Log(StringColor.YELLOW, $"Angle 2 : {GameGlobal.AngleBetweenVec2(bowTr.position, targetTr.position) - bowTr.eulerAngles.z}"); //
+            CatLog.Log(StringColor.YELLOW, $"Angle Debug : {GameGlobal.AngleBetweenVec2(bowTr.position, targetTr.position) - bowTr.eulerAngles.z}"); //
 
             //=====================================================<< SHOT >>===================================================
             if(currShotTime > autoShotTime) {
@@ -184,7 +281,8 @@
                 if(isAngleFrontMonster == true && isMaxPullingArrow == true) {
                     //Shot Arrow
                     CatLog.Log(StringColor.GREEN, "Is Ready to Shot !");
-                    autoState = AUTOSTATE.SHOT;
+                    //autoState = AUTOSTATE.SHOT;
+                    AutoStateChange(AUTOSTATE.SHOT);
                 }
                 else {
                     //Reset Timer
@@ -194,7 +292,12 @@
             }
         }
 
-        void AutoShot() {
+        void TrackExit() {
+            currShotTime = 0f;
+        }
+        //################################################################################################################################################
+        //############################################################### << STATE SHOT >> ###############################################################
+        void ShotEnter() {
             //=================================================<< SHOT ARROW >>=================================================
             AD_BowRope.instance.CatchPointClear(); //Release Bow Rope
 
@@ -223,40 +326,48 @@
             //Get Arrow Componenet with init Clamp Points.
             arrowComponent = arrowTr.GetComponent<AD_Arrow>().Reload(ClampPointBottom, ClampPointTop, initArrowRot);
             //==================================================<< SET STATE >>=================================================
-            EnterStateTrac(); //Return Tracking State
+            //EnterStateTrac(); //Return Tracking State
+            AutoStateChange(AUTOSTATE.TRAC);
             //==================================================================================================================
         }
+        //################################################################################################################################################
+        //################################################################################################################################################
 
-        /// <summary>
-        /// Clean up Auto variables
-        /// </summary>
-        void AutoExiter() {
-            if(isAutoExitWait == true) {
-                target   = null;
-                targetTr = null;
-                tempList = null;
-                isAutoRunning = false;
+        #endregion
+
+        #region ARROW_SWAP
+
+        void AutoModeArrSwap(ARROWTYPE type) {
+            if(arrSwapCo == null) {
+                arrSwapCo = StartCoroutine(AutoModeArrSwapCo(type));
             }
-
-            // 
-            //Auto Exiter 수정 : 어떤 스테이트 에서도 Exiter가 돌아가서 exitWait를 받지만
-            //샷 동작에서 바로 바뀌지는 않고, 끝낼 준비가 된 상황까지 대기하고 마무리 처리 다 된 후에 autoState 변경처리 되도록 변경
-            //이미 그렇게 되고있네..
+            else {
+                CatLog.ELog("AutoMode Arrow Swap Coroutine is Already Running. !!! [this should Not be] !!!");
+            }
         }
 
-        void EnterStateTrac() {
-            if(arrowComponent == null || arrowTr == null) {
-                CatLog.WLog("Arrow Component is Null, Can't Change Tracking State.");
-                return;
+        System.Collections.IEnumerator AutoModeArrSwapCo(ARROWTYPE type) {
+            if (arrowType == type) { //same arrow Type, Exit Coroutine <- Not Need this Line
+                CatLog.WLog("this Type Arrow is Already Loaded.");
+                yield break;
             }
 
-            currShotTime = 0f;
-            AD_BowRope.instance.SetCatchPoint(arrowComponent.CatchTr);
-            autoState = AUTOSTATE.TRAC;
-        }
+            //Wait Arrow Swapable State..
+            yield return arrSwapWait;
 
-        System.Collections.IEnumerator AutoExitWait() {
-            yield return null;
+            AD_BowRope.instance.CatchPointClear();
+            if (arrowComponent != null)
+                arrowComponent.DisableRequest();
+            arrowTr   = null; arrowComponent = null;
+            arrowType = type;
+
+            switch (arrowType) {
+                case ARROWTYPE.ARROW_MAIN: arrowTr = CCPooler.SpawnFromPool<Transform>(AD_Data.POOLTAG_MAINARROW, bowTr, initArrowScale, ClampPointTop.position, Quaternion.identity); break;
+                case ARROWTYPE.ARROW_SUB:  arrowTr = CCPooler.SpawnFromPool<Transform>(AD_Data.POOLTAG_SUBARROW, bowTr, initArrowScale, ClampPointTop.position, Quaternion.identity); break;
+                case ARROWTYPE.ARROW_SPECIAL: CatLog.ELog("This Arrow type is Not Implemented."); yield break;
+            }
+
+            arrowComponent = arrowTr.GetComponent<AD_Arrow>().Reload(ClampPointBottom, ClampPointTop, initArrowRot);
         }
 
         #endregion

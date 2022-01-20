@@ -77,6 +77,7 @@ public enum STAGETYPE {
 }
 
 public enum AUTOSTATE {
+    NONE,
     WAIT,
     FIND,
     TRAC,

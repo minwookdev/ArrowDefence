@@ -1,6 +1,7 @@
 ﻿namespace ActionCat {
     using UnityEngine;
     using UnityEngine.UI;
+    using UnityEngine.EventSystems;
     using System.Collections;
 
     public partial class AD_BowController : MonoBehaviour {
@@ -20,8 +21,10 @@
         [Range(1f, 20f)] public float SmoothRotateSpeed = 12f;
         [Range(1f, 3f)]  public float ArrowPullingSpeed = 1f;
 
+        private int pointerId = 0;
         private bool isBowPulling   = false;     //활이 일정거리 이상 당겨져서 회전할 수 있는 상태
         private bool isBowPullBegan = false;     //Bow Pull State Variables
+        private bool isTouched      = false;
         private bool isChargeShotReady  = false;
         private float maxBowAngle, minBowAngle;  //Min, Max BowAngle Variables
         private float bowAngle;                  //The Angle Variable (angle between Click point and Bow).
@@ -103,6 +106,7 @@
             //Load Arrow From CCPooler.
             Reload();
 
+            //============================================================== << CALLBACK GAMEOVER >> ==============================================================
             //게임오버 이벤트에 Burn Effect 추가. Resurrection 구현 시 추가적인 로직 구현 필요.
             GameManager.Instance.AddListnerGameOver(() => {
                 //Active Burn Fade Effect.
@@ -114,6 +118,10 @@
                     arrowComponent.SpriteAlpha(false);
                 }
             });
+            //=====================================================================================================================================================
+            //================================================================ << CALLBACK CLEAR >> ===============================================================
+            GameManager.Instance.AddListnerEndBattle(() => ClearAutoStop());
+            //=====================================================================================================================================================
 
             if(bowAbility == null) {
                 bowAbility = GetComponent<AD_BowAbility>();
@@ -124,8 +132,11 @@
             CatLog.Log(StringColor.YELLOW, $"Damage Struct SizeOf : {System.Runtime.InteropServices.Marshal.SizeOf(damageStruct)}");
             bowAbility.AddListnerToSkillDel(ref BowSkillSet);
 
-            //Get Max Charging Time
+            //Get Max Charging Timeif(
             maxChargingTime = GameGlobal.CHARGINGTIME;
+
+            //AutoMode Variables Init
+            arrSwapWait = new WaitUntil(() => autoState == AUTOSTATE.WAIT || autoState == AUTOSTATE.FIND || autoState == AUTOSTATE.TRAC);
         }
 
         private void Update() {
@@ -140,7 +151,12 @@
 #if UNITY_EDITOR
             //==============================================<< EDITOR CONTROLLER >>==============================================
             if (Input.GetMouseButtonDown(0)) {    //Click Began
-                BowBegan(Input.mousePosition);
+                if(EventSystem.current.IsPointerOverGameObject() == false) { // if the mouse Click UI GameObject
+                    BowBegan(Input.mousePosition);
+                }
+                else { //Debug
+                    CatLog.Log("Click Blocked.");
+                }
             }
             else if (Input.GetMouseButtonUp(0)) { //Click Ended
                 BowReleased(Input.mousePosition);
@@ -154,13 +170,23 @@
             //Touch Update : Only Mobile
             if (Input.touchCount != 0) {
                 //Get Value On Screen Touch
-                screenTouch = Input.GetTouch(0);
+                //screenTouch = Input.GetTouch(0);
+
+                //New Touch Logic 
+                if(isTouched == false) { //Find Touch
+                    for (int i = 0; i < Input.touchCount; i++) {
+                        if(EventSystem.current.IsPointerOverGameObject(i) == false) {
+                            screenTouch = Input.GetTouch(i);
+                            isTouched   = true; break;
+                        }
+                    }
+                }
 
                 if(screenTouch.phase == TouchPhase.Began) {       //Touch Began       
                     BowBegan(screenTouch.position); 
                 }
                 else if (screenTouch.phase == TouchPhase.Ended) { //Touch Ended
-                    BowReleased(screenTouch.position);
+                    BowReleased(screenTouch.position); isTouched = false;
                 }
                 if(isBowPullBegan == true) {                      //Touch Moved
                     BowMoved(screenTouch.position);
@@ -538,14 +564,22 @@
                 return;
             }
 
-            //Disable Loaded Arrow, Cleanup variables and reload Arrow.
-            if (arrowComponent != null)
-                arrowComponent.DisableRequest();
-            AD_BowRope.instance.CatchPointClear();
-            arrowTr = null; arrowComponent = null;
-            arrowType = type;
+            //Swap Arrow
+            if(isAutoRunning == false) { 
+                //Manual Control
+                //Disable Loaded Arrow, Cleanup variables and reload Arrow.
+                if (arrowComponent != null)
+                    arrowComponent.DisableRequest();
+                AD_BowRope.instance.CatchPointClear();
+                arrowTr = null; arrowComponent = null;
+                arrowType = type;
 
-            Reload();
+                Reload();
+            }
+            else { 
+                //Auto Control
+                AutoModeArrSwap(type);
+            }
         }
 
 #region CHARGED

@@ -207,16 +207,9 @@
 
         #endregion 
 
-        void InitEventTriggerCallback(Func<MonoBehaviour, float> callback)
-        {
-            //Script GameObject is having EventTrigger
-            //EventTrigger.Entry skillSlotEntry = new EventTrigger.Entry();
-            //skillSlotEntry.eventID = EventTriggerType.PointerClick;
-            //skillSlotEntry.callback.AddListener((data) => callback());
-            //eventTrigger.triggers.Add(skillSlotEntry);
-
+        void InitEventTriggerCallback(Func<MonoBehaviour, float> callback) {
+            //GameManager.Instance.PreventionPulling(eventTrigger); //Controller 로직 변경으로 현재 필요없음.
             activeSkillFunc = callback;
-            GameManager.Instance.PreventionPulling(eventTrigger);
         }
 
         void IPointerClickHandler.OnPointerClick(PointerEventData eventData)

@@ -333,8 +333,8 @@
                     mainSlotEntry.callback.AddListener((pointereventdata) => datas[tempIndex].SlotCallback());
                     mainArrowSlot.triggers.Add(mainSlotEntry);
 
-                    //Controller Pulling 예외처리
-                    GameManager.Instance.PreventionPulling(mainArrowSlot);
+                    //Controller Pulling 예외처리 <- Controller로직 변경으로 사용하지 않음.
+                    //GameManager.Instance.PreventionPulling(mainArrowSlot);
                 }
                 else if (i == 1) //Sub Arrow Swap Slot
                 {
@@ -356,81 +356,12 @@
                     subSlotEntry.callback.AddListener((pointereventdata) => datas[tempIndex].SlotCallback());
                     subArrowSlot.triggers.Add(subSlotEntry);
 
-                    GameManager.Instance.PreventionPulling(subArrowSlot);
+                    //Controller Pulling 예외처리 <- Controller로직 변경으로 사용하지 않음.
+                    //GameManager.Instance.PreventionPulling(subArrowSlot);
                 }
             }
 
             specialArrowSlot.gameObject.SetActive(false);
-        }
-
-        public void InitArrowSlots(bool isActiveSlot_m, bool isActiveSlot_s, Sprite icon_m, Sprite icon_s,
-                                   System.Action slotAction_m, System.Action slotAction_s)
-        {
-            //Active || Disable Arrow Swap Slot GameObject.
-            //Event Registration according to the value of isActive boolean.
-
-            if (isActiveSlot_m == true)
-            {
-                mainArrowSlot.gameObject.SetActive(true);
-                var arrowicon            = mainArrowSlot.transform.GetChild(0).GetComponent<Image>();
-                arrowicon.enabled        = true;
-                arrowicon.preserveAspect = true;
-                arrowicon.sprite         = icon_m;
-
-                EventTrigger.Entry m_slotEntry = new EventTrigger.Entry();
-                m_slotEntry.eventID = EventTriggerType.PointerClick;
-                m_slotEntry.callback.AddListener((data) => slotAction_m());
-                mainArrowSlot.triggers.Add(m_slotEntry);
-
-                //Bow Controller Pulling Limit [Down, Up Event]
-                //EventTrigger.Entry m_slotEntryDown = new EventTrigger.Entry();
-                //m_slotEntryDown.eventID = EventTriggerType.PointerDown;
-                //m_slotEntryDown.callback.AddListener((data) => GameManager.Instance.SetBowPullingStop(true));
-                //mainArrowSlot.triggers.Add(m_slotEntryDown);
-                //
-                //EventTrigger.Entry m_slotEntryUp = new EventTrigger.Entry();
-                //m_slotEntryUp.eventID = EventTriggerType.PointerUp;
-                //m_slotEntryUp.callback.AddListener((data) => GameManager.Instance.SetBowPullingStop(false));
-                //mainArrowSlot.triggers.Add(m_slotEntryUp);
-
-                //Swap시, Bow Pulling 방지
-                GameManager.Instance.PreventionPulling(mainArrowSlot);
-            }
-            else mainArrowSlot.gameObject.SetActive(false);
-
-            if (isActiveSlot_s == true)
-            {
-                subArrowSlot.gameObject.SetActive(true);
-                var arrowicon            = subArrowSlot.transform.GetChild(0).GetComponent<Image>();
-                arrowicon.enabled        = true;
-                arrowicon.preserveAspect = true;
-                arrowicon.sprite         = icon_s;
-
-                EventTrigger.Entry s_slotEntry = new EventTrigger.Entry();
-                s_slotEntry.eventID = EventTriggerType.PointerClick;
-                s_slotEntry.callback.AddListener((data) => slotAction_s());
-                subArrowSlot.triggers.Add(s_slotEntry);
-
-                //Swap시, Bow Pulling 방지
-                GameManager.Instance.PreventionPulling(subArrowSlot);
-            }
-            else subArrowSlot.gameObject.SetActive(false);
-
-            //Init Special Arrow Slot GameObject
-            specialArrowSlot.gameObject.SetActive(false);
-
-            //if Init the Special Arrow
-            //if (isActiveSlot_m == false && isActiveSlot_s == false) return;
-            //또는 SP Arrow가 장착된 경우
-            //if(isActiveSlot_sp)
-            //{
-            //    if (isActiveSlot_m) { }
-            //    if (isActiveSlot_s) { }
-            //}
-            //else
-            //{
-            //    if (isActiveSlot_s && isActiveSlot_m) { }
-            //}
         }
 
         public void InitSkillSlots(AccessorySkillSlot.ActiveSkillSlotInitData[] datas)

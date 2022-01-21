@@ -28,10 +28,11 @@
 
     public class StageInfo {
         public short MaxComboCount { get; private set; } = 0;
-        public short KilledCount { get; private set; } = 0;
-        public byte ClearedCount { get; private set; } = 0;
+        public short KilledCount { get; private set; }   = 0;
+        public byte ClearedCount { get; private set; }   = 0;
         public bool IsUsedResurrect { get; private set; } = false;
         public bool IsStageCleared { get; private set; }  = false;
+        public bool IsUseableAuto { get; private set; }   = false;
 
         public void UpdateInfo(in BattleData data) {
             if(MaxComboCount < data.maxComboCount) {
@@ -48,6 +49,10 @@
             
             IsStageCleared = data.isCleared;
             ClearedCount++;
+        }
+
+        public void EnableAutoUse() {
+            IsUseableAuto = true;
         }
 
         public bool IsChallengeAchieve(System.Predicate<StageInfo> predicate, out bool isResult) {

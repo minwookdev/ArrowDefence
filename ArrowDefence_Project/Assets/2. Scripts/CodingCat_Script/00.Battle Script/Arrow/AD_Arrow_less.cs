@@ -24,6 +24,7 @@
         private float arrowAngle = 0f;
         private bool isLaunched  = false;
         private bool isInitSkill = false;
+        private bool isIgnoreCollision = false;
         
         //STURCT
         DamageStruct damageStruct;
@@ -95,11 +96,11 @@
                 arrowSkillSets.OnFixedUpdate();
         }
 
-        private void OnDisable()
-        {
+        private void OnDisable() {
             rBody.velocity = Vector2.zero;
             trailRender.gameObject.SetActive(false);
-            isLaunched = false;
+            isLaunched        = false;
+            isIgnoreCollision = false;
 
             //SkillSets가 init되어있을때, 비활성화 시 Clear처리.
             if (isInitSkill == false)
@@ -183,17 +184,26 @@
 
         private void OnTriggerStay2D(Collider2D collision) {
             if(collision.gameObject.layer == LayerMask.NameToLayer(AD_Data.LAYER_MONSTER)) {
-                Vector3 point = collision.ClosestPoint(arrowTr.position);
+                if (isIgnoreCollision == true) return; //ignore duplicate collision
+
+                isIgnoreCollision = true;
+                Vector3 point     = collision.ClosestPoint(arrowTr.position);
                 if(isInitSkill == true) {
                     //Active-Skill
                     if (arrowSkillSets.OnHit(collision, ref damageStruct, point, GameGlobal.RotateToVector2(arrowTr.eulerAngles.z))) {
                         DisableRequest();
+                    }
+                    else { //Not Disable Arrow: Re-Collision
+                        isIgnoreCollision = false;
                     }
                 }
                 else {
                     //Non-Skill
                     if(collision.GetComponent<IDamageable>().OnHitWithResult(ref damageStruct, point, GameGlobal.RotateToVector2(arrowTr.eulerAngles.z))) {
                         DisableRequest();
+                    }
+                    else { //Not Disable Arrow: Re-Collision
+                        isIgnoreCollision = false;
                     }
                 }
             }

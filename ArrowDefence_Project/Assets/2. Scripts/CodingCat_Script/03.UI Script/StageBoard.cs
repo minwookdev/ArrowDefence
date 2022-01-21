@@ -1,4 +1,5 @@
 ﻿namespace ActionCat.UI.StageBoard {
+    using Data.StageData;
     using UnityEngine;
     using UnityEngine.UI;
     using TMPro;
@@ -12,7 +13,11 @@
 
         [Header("SETTINGS")]
         [SerializeField] SettingsInfo settingsInfo = null;
-        [SerializeField] bool isAchieveAll = false;
+        [SerializeField] [ReadOnly]
+        bool isAchieveAll = false;
+
+        [Header("DEBUG")]
+        [SerializeField] bool isDebug = false;
 
         void Start() {
             // Update Challenge Panel
@@ -32,8 +37,37 @@
         }
 
         void UpdateSettingsInfo(bool isOpen) {
-            settingsInfo.InitSettingPanel(isOpen);
+            //1. Settings Panel이 열렸는지 체크
+            //2-1. 열렸으면 PlayerData.GameSettings에서 키가있는지 확인
+            //2-2. 키가 없으면 바로 생성해주고 데이터 가져와서 세팅해줌.
+            //3-1. 3별아닌 상태면 데이터를 가져오지 않고, 바로 isOn 바로 false처리 해줘서 닫아놓음.
+
+            if(isDebug == true) { //Enable Settings Panel [Only Debugging]
+                var settings = GameManager.Instance.GetStageSetting(GameGlobal.GetStageKey(stageType));
+                settingsInfo.InitSettingPanel(true, settings);
+                return;
+            }
+
+            if(isOpen == true) {
+                var settings = GameManager.Instance.GetStageSetting(GameGlobal.GetStageKey(stageType));
+                settingsInfo.InitSettingPanel(isOpen, settings);
+            }
+            else {
+                settingsInfo.InitSettingPanel(isOpen);
+            }
         }
+
+        #region TOGGLE
+
+        public void ToggleUpdateAutoMode() {
+            settingsInfo.ToggleUpdateAutoMode();
+        }
+
+        public void ToggleUpdateMutant() {
+            settingsInfo.ToggleUpdateMutant();
+        }
+
+        #endregion
 
         #region CHALLNEGES
 
@@ -66,6 +100,11 @@
                 //All Challenge is Achieve?
                 if(isAchieveFirst && isAchieveSeconds && isAchieveThird) {
                     isAchieveAll = true;
+
+                    //Set is Useable AutoMode True
+                    if(data.IsUseableAuto == false) {
+                        data.EnableAutoUse();
+                    }
                 }
             }
         }
@@ -75,7 +114,7 @@
         #region CHALLENGE_INFO
 
         [System.Serializable]
-        internal class ChallengeInfos {
+        internal sealed class ChallengeInfos {
             //===================================================[ CHALLENGE INFO ]===================================================
             [System.Serializable]
             class ChallengeInfo {
@@ -113,14 +152,20 @@
 
         //==================================================[ SETTINGS PANEL CONTROL ]================================================
         [System.Serializable]
-        internal class SettingsInfo {
+        internal sealed class SettingsInfo {
             [SerializeField] GameObject panelLock  = null;
             [SerializeField] Toggle toggleAutoShot = null;
             [SerializeField] Toggle toggleSpawnMutantMonster = null;
+            StageSetting stageSetting = null;
 
-            public void InitSettingPanel(bool isAllAchieve) {
+            public void InitSettingPanel(bool isAllAchieve, StageSetting setting = null) {
                 if(isAllAchieve == true) {
                     panelLock.gameObject.SetActive(false);
+
+                    stageSetting = setting;
+
+                    toggleAutoShot.isOn           = stageSetting.isOnAutoMode;
+                    toggleSpawnMutantMonster.isOn = stageSetting.isOnSpawnMutant;
                 }
                 else {
                     panelLock.gameObject.SetActive(true);
@@ -129,6 +174,43 @@
                     toggleSpawnMutantMonster.isOn = false;
                     toggleAutoShot.isOn           = false;
                 }
+            }
+
+            public void ToggleUpdateAutoMode() {
+                //if (toggleAutoShot.isOn == true) {
+                //    if(stageSetting == null) {
+                //        CatLog.WLog("Invalid Input."); return;
+                //    }
+                //
+                //    stageSetting.SetAutoMode(true);
+                //    CatLog.Log("Toggle AutoShot isOn True.");
+                //}
+                //else {
+                //    if(stageSetting == null) {
+                //        CatLog.WLog("Invalid Input."); return;
+                //    }
+                //
+                //    stageSetting.AutoModeSet
+                //    CatLog.Log("Toggle AutoShot isOn False.");
+                //}
+                //CatLog.Log($"{toggleAutoShot.isOn}");
+
+                if(stageSetting == null) {
+                    CatLog.ELog("Invalid Input."); return;
+                }
+
+                stageSetting.SetAutoMode(toggleAutoShot.isOn);
+
+                //if (toggleAutoShot.isOn == true) CatLog.Log("Toggle AutoShot isOn True");
+                //else                             CatLog.Log("Toggle AutoShot isOn False");
+            }
+
+            public void ToggleUpdateMutant() {
+                if(stageSetting == null) {
+                    CatLog.ELog("Invalid Input."); return;
+                }
+
+                stageSetting.SetMutant(toggleAutoShot.isOn);
             }
         }
         //============================================================================================================================

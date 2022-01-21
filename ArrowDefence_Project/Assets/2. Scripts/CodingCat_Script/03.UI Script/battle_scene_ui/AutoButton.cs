@@ -20,11 +20,7 @@
         [SerializeField] [RangeEx(0.1f, 1.0f, 0.1f)]
         float scalingTime = 0.3f;
 
-        public void Init(bool isEnable, System.Action<bool> action = null, bool isDebug = false) {
-            if(isEnable == false) {
-                gameObject.SetActive(false); return;
-            }
-
+        public void Init(System.Action<bool> action, bool isDebug = false) {
             //Initialize Scale
             initScale = buttonRect.localScale;
 
@@ -34,15 +30,14 @@
             entry.callback.AddListener((eventData) => action(isDebug));
             eventTrigger.triggers.Add(entry);
 
-            //Add EventEntry Bow Pulling Prevention
-            //EventTrigger.Entry downEntry = new EventTrigger.Entry(); //Event Entry Down
-            //downEntry.eventID = EventTriggerType.PointerDown;
-            //downEntry.callback.AddListener((eventdata) => GameManager.Instance.SetBowPullingStop(true));
-            //eventTrigger.triggers.Add(downEntry);
-            //EventTrigger.Entry upEntry = new EventTrigger.Entry();   //Event Entry Up
-            //upEntry.eventID = EventTriggerType.PointerUp;
-            //upEntry.callback.AddListener((eventdata) => GameManager.Instance.SetBowPullingStop(false));
-            //eventTrigger.triggers.Add(upEntry);
+            //Active Auto Button GameObject
+            if(gameObject.activeSelf == false) {
+                gameObject.SetActive(true);
+            }
+        }
+
+        public void Disable() {
+            gameObject.SetActive(false);
         }
 
         void IPointerDownHandler.OnPointerDown(PointerEventData eventData) {

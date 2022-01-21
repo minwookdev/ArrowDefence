@@ -4,7 +4,7 @@ using UnityEngine;
 namespace ES3Types
 {
 	[UnityEngine.Scripting.Preserve]
-	[ES3PropertiesAttribute("<MaxComboCount>k__BackingField", "<KilledCount>k__BackingField", "<ClearedCount>k__BackingField", "<IsUsedResurrect>k__BackingField", "<IsStageCleared>k__BackingField")]
+	[ES3PropertiesAttribute("<MaxComboCount>k__BackingField", "<KilledCount>k__BackingField", "<ClearedCount>k__BackingField", "<IsUsedResurrect>k__BackingField", "<IsStageCleared>k__BackingField", "<IsUseableAuto>k__BackingField")]
 	public class ES3UserType_StageInfo : ES3ObjectType
 	{
 		public static ES3Type Instance = null;
@@ -21,6 +21,7 @@ namespace ES3Types
 			writer.WritePrivateField("<ClearedCount>k__BackingField", instance);
 			writer.WritePrivateField("<IsUsedResurrect>k__BackingField", instance);
 			writer.WritePrivateField("<IsStageCleared>k__BackingField", instance);
+			writer.WritePrivateField("<IsUseableAuto>k__BackingField", instance);
 		}
 
 		protected override void ReadObject<T>(ES3Reader reader, object obj)
@@ -45,6 +46,9 @@ namespace ES3Types
 					break;
 					case "<IsStageCleared>k__BackingField":
 					reader.SetPrivateField("<IsStageCleared>k__BackingField", reader.Read<System.Boolean>(), instance);
+					break;
+					case "<IsUseableAuto>k__BackingField":
+					reader.SetPrivateField("<IsUseableAuto>k__BackingField", reader.Read<System.Boolean>(), instance);
 					break;
 					default:
 						reader.Skip();

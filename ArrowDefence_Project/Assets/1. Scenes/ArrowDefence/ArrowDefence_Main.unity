@@ -617,20 +617,15 @@ MonoBehaviour:
   stageType: 1
   challengeInfos:
     challengeInfos:
-    - textChallenge: {fileID: 1445275401}
-      imageEnable: {fileID: 2117693679}
-      imageDisable: {fileID: 530145182}
-    - textChallenge: {fileID: 1059498401}
-      imageEnable: {fileID: 1815510351}
-      imageDisable: {fileID: 26604393}
-    - textChallenge: {fileID: 1794996551}
-      imageEnable: {fileID: 1404361138}
-      imageDisable: {fileID: 1151036837}
+    - imageEnable: {fileID: 2117693679}
+    - imageEnable: {fileID: 1815510351}
+    - imageEnable: {fileID: 1404361138}
   settingsInfo:
     panelLock: {fileID: 294525777}
     toggleAutoShot: {fileID: 1556668258}
     toggleSpawnMutantMonster: {fileID: 533005536}
   isAchieveAll: 0
+  isDebug: 1
 --- !u!1 &16050580
 GameObject:
   m_ObjectHideFlags: 0
@@ -24365,7 +24360,18 @@ MonoBehaviour:
   m_Group: {fileID: 0}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 15678911}
+        m_MethodName: ToggleUpdateMutant
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_IsOn: 0
 --- !u!1 &533261256
 GameObject:
@@ -73727,7 +73733,18 @@ MonoBehaviour:
   m_Group: {fileID: 0}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 15678911}
+        m_MethodName: ToggleUpdateAutoMode
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_IsOn: 0
 --- !u!1 &1556773880
 GameObject:

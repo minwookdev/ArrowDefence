@@ -154,7 +154,7 @@
                 if(EventSystem.current.IsPointerOverGameObject() == false) { // if the mouse Click UI GameObject
                     BowBegan(Input.mousePosition);
                 }
-                else { //Debug
+                else { //Block click Peedback
                     CatLog.Log("Click Blocked.");
                 }
             }

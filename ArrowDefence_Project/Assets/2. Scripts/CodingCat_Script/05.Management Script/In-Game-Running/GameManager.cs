@@ -1,5 +1,4 @@
-﻿namespace ActionCat
-{
+﻿namespace ActionCat {
     using UnityEngine;
     using ActionCat.Data;
 
@@ -247,8 +246,7 @@
         /// 예외처리될 UI, Arrow Slot, Skill Slot 등에 반드시 추가해주세요
         /// </summary>
         /// <param name="trigger"></param>
-        public void PreventionPulling(UnityEngine.EventSystems.EventTrigger trigger)
-        {
+        public void PreventionPulling(UnityEngine.EventSystems.EventTrigger trigger) {
             PullingPreventionDown(trigger);
             PullingPreventionUp(trigger);
         }
@@ -277,6 +275,14 @@
 
         public bool TryGetStageData(string key, out StageInfo stageInfo) {
             return CCPlayerData.infos.TryGetStageData(key, out stageInfo);
+        }
+
+        public Data.StageData.StageSetting GetStageSetting(string key) {
+            return CCPlayerData.settings.GetStageSetting(key);
+        }
+
+        public bool TryGetStageSetting(string stagekey, out Data.StageData.StageSetting setting) {
+            return CCPlayerData.settings.TryGetStageSetting(stagekey, out setting);
         }
 
         public void AutoSwitch(bool isDebug = false) {

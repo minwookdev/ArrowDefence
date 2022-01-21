@@ -21,6 +21,7 @@
         [Header("SHOOTING")]
         public float ArrowPower;
         [ReadOnly] public bool isLaunched;
+        bool isIgnoreCollision = false;
 
         //Controll Arrow Position (Before Launched)
         private Vector3 arrowPosition;
@@ -79,6 +80,7 @@
         void OnDisable() {
             polyCollider.enabled = false;        // Disable Collision
             isLaunched           = false;        // Change Launched State
+            isIgnoreCollision    = false;
             rBody.velocity       = Vector2.zero; // Reset RigidBody Velocity
             rBody.isKinematic    = true;         // Change Body Type
 
@@ -123,17 +125,26 @@
 
         private void OnTriggerStay2D(Collider2D collision) {
             if(collision.gameObject.layer == LayerMask.NameToLayer(AD_Data.LAYER_MONSTER)) {
-                Vector3 point = collision.ClosestPoint(arrowTr.position);
-                if(isInitSkill == true) {   
-                    // Active-Skill
+                if (isIgnoreCollision == true) return; //ignore duplicate collision
+
+                isIgnoreCollision = true;
+                Vector3 point     = collision.ClosestPoint(arrowTr.position);
+                if(isInitSkill == true) { 
+                    //Try OnHit with Arrow Skill
                     if (arrowSkillSets.OnHit(collision, ref damageStruct, point, GameGlobal.RotateToVector2(arrowTr.eulerAngles.z))) {
                         DisableRequest();
                     }
+                    else { //Not Disable Arrow: Re-Collision
+                        isIgnoreCollision = false;
+                    }
                 }
-                else {  
-                    // Non-Skill
+                else { 
+                    //Try OnHit with Non-Skill
                     if(collision.GetComponent<IDamageable>().OnHitWithResult(ref damageStruct, point, GameGlobal.RotateToVector2(arrowTr.eulerAngles.z))) {
                         DisableRequest();
+                    }
+                    else { //Not Disable Arrow :Re-Collision
+                        isIgnoreCollision = false;
                     }
                 }
             }

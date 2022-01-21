@@ -15,6 +15,7 @@
         float currShotTime  = 0f;
         float FindDist      = 15f;
         float angleOffset   = 90f;
+        float autoTimeMulti = 1.0f;
         bool isAutoRunning  = false;
         bool isAutoExitWait = false;
 
@@ -226,31 +227,8 @@
                 AutoStateChange(AUTOSTATE.NONE);
             }
 
-            //Target Monster Disable Check
-            if (targetTr == null || target.IsAlive() == false) {
-                //EnterStateFind();
-                AutoStateChange(AUTOSTATE.FIND);
-            }
-            //==================================================================================================================
-
-            //=================================================<< RUNNING TIMER >>==============================================
-            //increase monster tracking timer..if timer is maxed change state is shot
-            float autoShotTimeMultiplier = 1.0f; // -> Change value Global Ablility
-            //currShotTime += Time.deltaTime * autoShotTimeMultiplier; -> Move To Arrow Moved
-            //==================================================================================================================
-
-            //=====================================================<< ROTATE >>=================================================
-            //auto rotate to Monster Position
-            direction = targetTr.position - bowTr.position;
-            bowAngle  = Mathf.LerpAngle(bowAngle, Mathf.Atan2(direction.x, -direction.y) * Mathf.Rad2Deg - angleOffset, Time.deltaTime * SmoothRotateSpeed);
-            tempEulerAngle    = bowTr.eulerAngles;
-            tempEulerAngle.z  = bowAngle;
-            bowTr.eulerAngles = tempEulerAngle;
-            //==================================================================================================================
-
             //====================================================<< PULLING >>=================================================
-            //auto Pulling the Bow
-            if(arrowTr != null) {
+            if (arrowTr != null) { //auto Pulling the Bow 
                 arrowPos = arrowTr.position;
                 arrowPos = Vector3.MoveTowards(arrowPos, ClampPointBottom.position, Time.deltaTime * ArrowPullingSpeed);
                 arrowTr.position = arrowPos;
@@ -261,34 +239,50 @@
                 //AutoMode Not using Charged Power
 
                 //Increase Tracking Time [Only Arrow Loaded (R:ArrowReload)]
-                currShotTime += Time.deltaTime * autoShotTimeMultiplier;
+                currShotTime += Time.deltaTime * autoTimeMulti;
             }
             //==================================================================================================================
 
-            //CatLog.Log($"Angle 1 : {GameGlobal.AngleBetweenVec3(bowTr.position, targetTr.position)}");
-            CatLog.Log(StringColor.YELLOW, $"Angle Debug : {GameGlobal.AngleBetweenVec2(bowTr.position, targetTr.position) - bowTr.eulerAngles.z}"); //
+//#################################################################### << TARGET FOUND >> ##################################################################
+            if (targetTr == null || target.IsAlive() == false) { //Target Monster Disable Check
+                //EnterStateFind();
+                AutoStateChange(AUTOSTATE.FIND);
+            }
+            else {
+//################################################################# << TARGET NOT FOUND >> #################################################################
+            //=====================================================<< ROTATE >>=================================================
+                //auto rotate to Monster Position
+                direction = targetTr.position - bowTr.position;
+                bowAngle = Mathf.LerpAngle(bowAngle, Mathf.Atan2(direction.x, -direction.y) * Mathf.Rad2Deg - angleOffset, Time.deltaTime * SmoothRotateSpeed);
+                tempEulerAngle = bowTr.eulerAngles;
+                tempEulerAngle.z = bowAngle;
+                bowTr.eulerAngles = tempEulerAngle;
 
             //=====================================================<< SHOT >>===================================================
-            if(currShotTime > autoShotTime) {
-                //발사 조건 체크 : (몬스터의 위치와 활 위치간의 각도) - 현재 활 각도 : 몬스터 위치 각도와 현재 활이 조준하고있는 각도의 차이
-                float angle = GameGlobal.AngleBetweenVec2(bowTr.position, targetTr.position) - bowTr.eulerAngles.z;
-                float range = 3f; //-> Change Global Variables
+                if (currShotTime > autoShotTime) {
+                    //발사 조건 체크 : (몬스터의 위치와 활 위치간의 각도) - 현재 활 각도 : 몬스터 위치 각도와 현재 활이 조준하고있는 각도의 차이
+                    float angle = GameGlobal.AngleBetweenVec2(bowTr.position, targetTr.position) - bowTr.eulerAngles.z;
+                    float range = 3f; //-> Change Global Variables
 
-                //bool isAngleFrontMonster = (angle >= -range && angle <= range); // -3 ~ 3
-                bool isAngleFrontMonster = GameGlobal.IsRange(angle, range);      // -3 ~ 3
-                bool isMaxPullingArrow   = (Vector2.Distance(arrowPos, ClampPointBottom.position) < 0.5f);
+                    //bool isAngleFrontMonster = (angle >= -range && angle <= range); // -3 ~ 3
+                    bool isAngleFrontMonster = GameGlobal.IsRange(angle, range);      // -3 ~ 3
+                    bool isMaxPullingArrow = (Vector2.Distance(arrowPos, ClampPointBottom.position) < 0.5f);
 
-                if(isAngleFrontMonster == true && isMaxPullingArrow == true) {
-                    //Shot Arrow
-                    CatLog.Log(StringColor.GREEN, "Is Ready to Shot !");
-                    //autoState = AUTOSTATE.SHOT;
-                    AutoStateChange(AUTOSTATE.SHOT);
+                    if (isAngleFrontMonster == true && isMaxPullingArrow == true) {
+                        //Shot Arrow
+                        CatLog.Log(StringColor.GREEN, "Is Ready to Shot !");
+                        //autoState = AUTOSTATE.SHOT;
+                        AutoStateChange(AUTOSTATE.SHOT);
+                    }
+                    else {
+                        //Reset Timer
+                        currShotTime = 0f;
+                    }
                 }
-                else {
-                    //Reset Timer
-                    currShotTime = 0f;
-                }
+            //====================================================<< DEBUG >>===================================================
+                CatLog.Log(StringColor.YELLOW, $"Angle Debug : {GameGlobal.AngleBetweenVec2(bowTr.position, targetTr.position) - bowTr.eulerAngles.z}"); 
             //==================================================================================================================
+//##########################################################################################################################################################
             }
         }
 

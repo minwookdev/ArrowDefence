@@ -177,7 +177,7 @@
                     CatLog.Log("Accessory Special Effect 강제종료.");
                 }
 
-                //Slot Disable Effect
+                //Block Using Effect
                 isPreparedSkillActive   = false;
                 coolDownTmp.text        = "";
                 coolDownMask.fillAmount = 1f;
@@ -188,7 +188,12 @@
                     StopCoroutine(skillEffectCo);
                     stopSkillAction();
                     CatLog.Log("Accessory Special Effect 강제 종료.");
-                } 
+                }
+
+                //Block Using Effect
+                isPreparedSkillActive   = false;
+                coolDownTmp.text        = "";
+                coolDownMask.fillAmount = 1f;
             });
 
         }
@@ -229,8 +234,7 @@
             currentCoolDown = maxCoolDown;
 
             //Wait For Skill Duration
-            while (duration > 0)
-            {
+            while (duration > 0) {
                 yield return null;
                 duration -= Time.unscaledDeltaTime;
             }

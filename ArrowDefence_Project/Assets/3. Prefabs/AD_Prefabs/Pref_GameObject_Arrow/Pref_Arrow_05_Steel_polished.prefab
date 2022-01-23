@@ -305,7 +305,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   arrowTr: {fileID: 6199448580041921731}
   rBody: {fileID: 6199448580062092926}
-  polyCollider: {fileID: 6259479641406288575}
+  arrowColl: {fileID: 6259479641406288575}
   arrowTrail: {fileID: 6199448580054672589}
   arrowSprite: {fileID: 6394716457144593261}
   arrowCatchTransform: {fileID: 6199448580061725259}

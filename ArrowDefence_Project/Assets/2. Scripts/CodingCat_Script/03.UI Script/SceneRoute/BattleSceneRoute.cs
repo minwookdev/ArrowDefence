@@ -13,9 +13,8 @@
         public class ArrowSwapSlotInitData {
             public bool IsActiveSlot { get; private set; }
             public Sprite IconSprite { get; private set; }
-            public System.Action SlotCallback { get; private set; }
-            public ArrowSwapSlotInitData(bool isactiveslot, Sprite iconsprite, System.Action callback)
-            {
+            public System.Action<ARROWTYPE> SlotCallback { get; private set; }
+            public ArrowSwapSlotInitData(bool isactiveslot, Sprite iconsprite, System.Action<ARROWTYPE> callback) {
                 IsActiveSlot = isactiveslot;
                 IconSprite   = iconsprite;
                 SlotCallback = callback;
@@ -308,14 +307,11 @@
 
         #region BATTLE_SLOTS
 
-        public void InitArrowSlots(ArrowSwapSlotInitData[] datas)
-        {
-            for (int i = 0; i < datas.Length; i++)
-            {
+        public void InitArrowSlots(ArrowSwapSlotInitData[] datas) {
+            for (int i = 0; i < datas.Length; i++) {
                 if (i == 0)      //Main Arrow Swap Slot
                 {
-                    if (datas[i].IsActiveSlot == false)
-                    {
+                    if (datas[i].IsActiveSlot == false) {
                         mainArrowSlot.gameObject.SetActive(false);
                         continue;
                     }
@@ -330,7 +326,7 @@
                     var tempIndex = i;
                     EventTrigger.Entry mainSlotEntry = new EventTrigger.Entry();
                     mainSlotEntry.eventID = EventTriggerType.PointerClick;
-                    mainSlotEntry.callback.AddListener((pointereventdata) => datas[tempIndex].SlotCallback());
+                    mainSlotEntry.callback.AddListener((pointereventdata) => datas[tempIndex].SlotCallback(ARROWTYPE.ARROW_MAIN));
                     mainArrowSlot.triggers.Add(mainSlotEntry);
 
                     //Controller Pulling 예외처리 <- Controller로직 변경으로 사용하지 않음.
@@ -338,8 +334,7 @@
                 }
                 else if (i == 1) //Sub Arrow Swap Slot
                 {
-                    if(datas[i].IsActiveSlot == false)
-                    {
+                    if(datas[i].IsActiveSlot == false) {
                         subArrowSlot.gameObject.SetActive(false);
                         continue;
                     }
@@ -353,7 +348,7 @@
                     var tempIndex = i;
                     EventTrigger.Entry subSlotEntry = new EventTrigger.Entry();
                     subSlotEntry.eventID = EventTriggerType.PointerClick;
-                    subSlotEntry.callback.AddListener((pointereventdata) => datas[tempIndex].SlotCallback());
+                    subSlotEntry.callback.AddListener((pointereventdata) => datas[tempIndex].SlotCallback(ARROWTYPE.ARROW_SUB));
                     subArrowSlot.triggers.Add(subSlotEntry);
 
                     //Controller Pulling 예외처리 <- Controller로직 변경으로 사용하지 않음.

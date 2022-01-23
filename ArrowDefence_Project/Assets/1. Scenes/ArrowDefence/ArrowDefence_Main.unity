@@ -625,7 +625,7 @@ MonoBehaviour:
     toggleAutoShot: {fileID: 1556668258}
     toggleSpawnMutantMonster: {fileID: 533005536}
   isAchieveAll: 0
-  isDebug: 1
+  isDebug: 0
 --- !u!1 &16050580
 GameObject:
   m_ObjectHideFlags: 0

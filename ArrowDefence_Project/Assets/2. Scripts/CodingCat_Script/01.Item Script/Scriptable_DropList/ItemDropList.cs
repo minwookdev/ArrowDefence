@@ -32,7 +32,8 @@
         {
             if (DropTableArray == null) return;
 
-            OnCheckTotalChanceValue();
+            //OnCheckTotalChanceValue();
+            CalcTotalChance();
             OnCheckQuantityArray();
         }
 
@@ -51,6 +52,17 @@
                                                     $"TotalChance : {totalChance}%");
             }
             else CatLog.WLog($"DropList : {this.name} is Not have a Item Data's");
+        }
+
+        void CalcTotalChance() {
+            float totalChance = 0f;
+            if(DropTableArray.Length != 0) {
+                for (int i = 0; i < DropTableArray.Length; i++) {
+                    totalChance += DropTableArray[i].DropChance;
+                }
+            }
+
+            CatLog.Log(StringColor.YELLOW, $"DROP TABLE : {this.name}, TOTAL DROP CHANCE : {totalChance}%");
         }
 
         private void OnCheckQuantityArray()

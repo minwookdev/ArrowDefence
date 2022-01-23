@@ -83,6 +83,8 @@
         public void SetBowPullingStop(bool isStop) {
             if (AD_BowController.instance != null)
                 AD_BowController.instance.IsPullingStop = isStop;
+            else
+                CatLog.WLog("Controller Not Found.");
         }
 
         public ARROWTYPE LoadArrowType()
@@ -110,13 +112,13 @@
 
             bool activeMain, activeSub;
             Sprite mainSprite, subSprite;
-            System.Action mainCallback, subCallback;
+            System.Action<ARROWTYPE> mainCallback, subCallback;
 
             activeMain = equips.IsEquippedArrowMain();
             if(activeMain)
             {
                 mainSprite   = equips.GetMainArrow().GetSprite;
-                mainCallback = () => ControllerOrNull().Swap(ARROWTYPE.ARROW_MAIN);
+                mainCallback = ControllerOrNull().Swap;
             }
             else
             {
@@ -128,7 +130,7 @@
             if(activeSub)
             {
                 subSprite   = equips.GetSubArrow().GetSprite;
-                subCallback = () => ControllerOrNull().Swap(ARROWTYPE.ARROW_SUB);
+                subCallback = ControllerOrNull().Swap;
             }
             else
             {
@@ -167,11 +169,20 @@
                             //skillDatas[i].InitSkillData(slowTime.IconSprite, slowTime.TimeSlowRatio, false, 
                             //    SKILL_ACTIVATIONS_TYPE.COOLDOWN_ACTIVE,
                             //    (mono) => slowTime.ActiveSlowTime(mono));
+                            //skillDataList.Add(new AccessorySkillSlot.ActiveSkillSlotInitData(
+                            //                 accessories[i].GetSprite, slowTime.Cooldown, false,
+                            //                 SKILL_ACTIVATIONS_TYPE.COOLDOWN_ACTIVE,
+                            //                 (mono) => slowTime.ActiveSkill(mono),
+                            //                 () => slowTime.OnStop()));
+
+                            //Add SlowTime Skill Slot Data
                             skillDataList.Add(new AccessorySkillSlot.ActiveSkillSlotInitData(
-                                             accessories[i].GetSprite, slowTime.Cooldown, false,
-                                             SKILL_ACTIVATIONS_TYPE.COOLDOWN_ACTIVE,
-                                             (mono) => slowTime.ActiveSkill(mono),
-                                             () => slowTime.OnStop()));
+                                accessories[i].GetSprite, 
+                                slowTime.Cooldown, 
+                                false,
+                                SKILL_ACTIVATIONS_TYPE.COOLDOWN_ACTIVE,
+                                slowTime.ActiveSkill,
+                                slowTime.OnStop));
                         }
                         else {
                             CatLog.ELog("Accessory Skill Casting failed");
@@ -229,14 +240,12 @@
 
         #region BATTLE
 
-        public void ResumeBattle()
-        {
+        public void ResumeBattle() {
             SetBowPullingStop(false);
             TimeDefault();
         }
 
-        public void PauseBattle()
-        {
+        public void PauseBattle() {
             SetBowPullingStop(true);
             TimePause();
         }

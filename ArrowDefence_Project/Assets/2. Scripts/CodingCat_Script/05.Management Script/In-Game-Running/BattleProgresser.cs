@@ -289,7 +289,7 @@
                 GameManager.Instance.ReleaseAllEvent();
                 GameManager.Instance.ReleaseEquipments();
 
-                GameManager.Instance.SetBowPullingStop(false);
+                //GameManager.Instance.SetBowPullingStop(false);
             }
         }
 

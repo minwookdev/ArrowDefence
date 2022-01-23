@@ -332,12 +332,10 @@
         #region ARROW_SWAP
 
         void AutoModeArrSwap(ARROWTYPE type) {
-            if(arrSwapCo == null) {
-                arrSwapCo = StartCoroutine(AutoModeArrSwapCo(type));
+            if(arrSwapCo != null) {
+                StopCoroutine(arrSwapCo);
             }
-            else {
-                CatLog.ELog("AutoMode Arrow Swap Coroutine is Already Running. !!! [this should Not be] !!!");
-            }
+            arrSwapCo = StartCoroutine(AutoModeArrSwapCo(type));
         }
 
         System.Collections.IEnumerator AutoModeArrSwapCo(ARROWTYPE type) {

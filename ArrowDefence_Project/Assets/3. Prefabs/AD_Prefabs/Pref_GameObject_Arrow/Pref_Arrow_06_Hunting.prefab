@@ -427,7 +427,7 @@ MonoBehaviour:
   arrowCatchTransform: {fileID: 6285782674714920717}
   bottomClampTr: {fileID: 0}
   topClampTr: {fileID: 0}
-  ArrowPower: 22
+  powerFactor: 21
   isLaunched: 0
 --- !u!114 &6285782674715417401
 MonoBehaviour:

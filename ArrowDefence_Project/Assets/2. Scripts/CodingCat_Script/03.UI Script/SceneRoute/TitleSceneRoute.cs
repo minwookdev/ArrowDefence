@@ -14,7 +14,7 @@ public class TitleSceneRoute : MonoBehaviour
     public float FadeTime = 2.0f;
 
     public void Start() {
-
+        GameManager.Instance.Initialize();
     }
 
     #region Action_Btn

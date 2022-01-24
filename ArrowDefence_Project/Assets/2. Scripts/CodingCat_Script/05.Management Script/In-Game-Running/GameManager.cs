@@ -4,37 +4,44 @@
 
     public class GameManager : Singleton<GameManager> {
         public enum GAMEPLATFORM { 
-            PLATFORM_PC,
-            PLATFORM_MOBILE
+            PLATFORM_EDITOR     = 0,
+            PLATFORM_STANDALONE = 1,
+            PLATFORM_MOBILE     = 2
         }
-
+        
         //FIELDS
-        private GAMEPLATFORM gamePlatform;
-        private GAMESTATE    gameState = GAMESTATE.STATE_BEFOREBATTLE;
         private float fixedDeltaTime;
-        private bool  isLoadedUserData = false;
-
-        /// <summary>
-        /// Is Dev Mode Control Value
-        /// </summary>
-        private readonly bool isDevMode = true;
-
-        //DropList Variables
-        private ItemDropList.DropTable[] dropListArray;
         private float totalDropChances;
+        private bool isLoadedUserData = false;
+        private bool isInitialized    = false;
+        private ItemDropList.DropTable[] dropListArray;
 
         //PROPERTIES
-        public GAMEPLATFORM GamePlay_Platform { get => gamePlatform; set => gamePlatform = value; }
-        public GAMESTATE GameState { get => gameState; }
+        public GAMEPLATFORM PlayPlatform { get; private set; }
+        public GAMESTATE GameState { get; private set; }
+        public bool IsDevMode { get; private set; }
 
-        public bool IsDevMode { get => isDevMode; }
 
         //Game Event Delegate
         public delegate void GameEventHandler();
         GameEventHandler OnStateEndBattle;
         GameEventHandler OnStateGameOver;
 
-        private void Start() => this.fixedDeltaTime = Time.fixedDeltaTime;
+        public void Initialize() {
+            if (isInitialized == true) return;
+#if UNITY_EDITOR
+            PlayPlatform = GAMEPLATFORM.PLATFORM_EDITOR;
+            IsDevMode    = true;
+#elif UNITY_STANDALONE
+            PlayPlatform = GAMEPLATFORM.PLATFORM_STANDALONE;
+            IsDevMode    = false;
+#elif UNITY_ANDRIOD
+            PlayPlatform = GAMEPLATFORM.PLATFORM_MOBILE;
+            IsDevMode    = false;
+#endif
+            fixedDeltaTime = Time.fixedDeltaTime;
+            isInitialized  = true;
+        }
 
         #region SCREEN
 
@@ -61,9 +68,9 @@
             targetCam.rect = rect;
         }
 
-        #endregion
+#endregion
 
-        #region PLAYER_GEAR
+#region PLAYER-EQUIPMENTS
 
         public void InitEquipments(Transform bowObjInitPos, Transform bowObjParentTr, 
                                     int mainArrowObjPoolQuantity, int subArrowPoolQuantity)
@@ -87,10 +94,8 @@
                 CatLog.WLog("Controller Not Found.");
         }
 
-        public ARROWTYPE LoadArrowType()
-        {
-            ARROWTYPE type = (CCPlayerData.equipments.IsEquippedArrowMain()) ? ARROWTYPE.ARROW_MAIN : 
-                                                                                     ARROWTYPE.ARROW_SUB;
+        public ARROWTYPE LoadArrowType() {
+            ARROWTYPE type = (CCPlayerData.equipments.IsEquippedArrowMain()) ? ARROWTYPE.ARROW_MAIN : ARROWTYPE.ARROW_SUB;
             return type;
         }
 
@@ -201,13 +206,10 @@
                 return null;
         }
 
-        public ArrowSkillSet GetArrowSkillSets(string tag)
-        {
-            if (tag == AD_Data.POOLTAG_MAINARROW || tag == AD_Data.POOLTAG_MAINARROW_LESS)
-            {
+        public ArrowSkillSet GetArrSkillSetsOrNull(string tag) {
+            if (tag == AD_Data.POOLTAG_MAINARROW || tag == AD_Data.POOLTAG_MAINARROW_LESS) {
                 var skillSets = CCPlayerData.equipments.GetMainArrow().ArrowSkillSets;
-                if (skillSets != null)
-                {
+                if (skillSets != null) {
                     //Is Have Skill Data In Arrow
                     var arrowSkillSets = new ArrowSkillSet(skillSets);
                     return arrowSkillSets;
@@ -215,11 +217,9 @@
                 else //Empty Skill Data
                     return null;
             }
-            else if (tag == AD_Data.POOLTAG_SUBARROW || tag == AD_Data.POOLTAG_SUBARROW_LESS)
-            {
+            else if (tag == AD_Data.POOLTAG_SUBARROW || tag == AD_Data.POOLTAG_SUBARROW_LESS) {
                 var skillSets = CCPlayerData.equipments.GetSubArrow().ArrowSkillSets;
-                if (skillSets != null)
-                {
+                if (skillSets != null) {
                     //Is Have Skill Data In Arrow
                     var arrowSkillSets = new ArrowSkillSet(skillSets);
                     return arrowSkillSets;
@@ -236,9 +236,9 @@
             CCPlayerData.equipments.ReleaseEquipments();
         }
 
-        #endregion
+#endregion
 
-        #region BATTLE
+#region BATTLE
 
         public void ResumeBattle() {
             SetBowPullingStop(false);
@@ -251,8 +251,7 @@
         }
 
         /// <summary>
-        /// Battle Scene의 각종 버튼 이벤트에서 Bow Pulling을 방지하는 메서드입니다.
-        /// 예외처리될 UI, Arrow Slot, Skill Slot 등에 반드시 추가해주세요
+        /// Never Used this Method.
         /// </summary>
         /// <param name="trigger"></param>
         public void PreventionPulling(UnityEngine.EventSystems.EventTrigger trigger) {
@@ -302,9 +301,9 @@
             ControllerOrNull().AutoSwitch(isDebug);
         }
 
-        #endregion
+#endregion
 
-        #region TIME
+#region TIME-CONTROL
 
         public void TimeScaleSet(float targetTimeScaleVal)
         {
@@ -338,9 +337,9 @@
             return isTimeDefault;
         }
 
-        #endregion
+#endregion
 
-        #region ITEM_DROP
+#region ITEM-DROP
 
         public void InitialDroplist(ItemDropList newDropList) {
             dropListArray = newDropList.DropTableArray;
@@ -382,7 +381,7 @@
             var last = dropListArray.Length - 1;
             return new DropItem(GameGlobal.RandomIntInArray(dropListArray[last].QuantityRange), dropListArray[last].ItemAsset);
 
-            #region GET_LOW_CAHNCE_ITEM
+#region GET_LOW_CAHNCE_ITEM
             //var minimunChanceOfItem = dropListArray[0];
             //
             //for (int i = 0; i < dropListArray.Length; i++)
@@ -396,12 +395,12 @@
             //
             //DropItem item = new DropItem(GameGlobal.RandomIntInArray(minimunChanceOfItem.QuantityRange), minimunChanceOfItem.ItemAsset);
             //return item;
-            #endregion
+#endregion
         }
 
-        #endregion
+#endregion
 
-        #region SAVE_LOAD
+#region SAVE_LOAD
 
         public void SaveUserData()
         {
@@ -413,24 +412,23 @@
             CCPlayerData.LoadUserData();
         }
 
-        public void AutoLoadUserData()
-        {
+        public void AutoLoadUserData() {
             if (isLoadedUserData == false)
                 LoadUserData();
             isLoadedUserData = true;
         }
 
-        #endregion
+#endregion
 
-        #region STATE_EVENT_HANDLER
+#region STATE_EVENT_HANDLER
 
         /// <summary>
         /// Change Current Game State
         /// </summary>
         /// <param name="targetState"></param>
         public void ChangeGameState(GAMESTATE targetState) {
-            gameState = targetState; //Change Current GameState
-            switch (gameState) {     //Activate Event
+            GameState = targetState; //Change Current GameState
+            switch (GameState) {     //Activate Event
                 case GAMESTATE.STATE_BEFOREBATTLE: break;   //No Event.
                 case GAMESTATE.STATE_INBATTLE:     break;   //No Event.
                 case GAMESTATE.STATE_BOSSBATTLE:   break;   //No Event.
@@ -461,6 +459,6 @@
             return this.OnStateGameOver;
         }
 
-        #endregion
+#endregion
     }
 }

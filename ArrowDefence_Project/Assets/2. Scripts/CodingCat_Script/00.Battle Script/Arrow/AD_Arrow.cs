@@ -4,7 +4,6 @@
     using UnityEngine;
 
     public class AD_Arrow : MonoBehaviour, IPoolObject, IArrowObject {
-
         //The Left, Right Clamp Point for the Arrow.
         [Header("COMPONENT")]
         [SerializeField] Transform arrowTr = null;
@@ -20,25 +19,23 @@
         public Transform topClampTr    = null;
 
         [Header("SHOOTING")]
-        public float ArrowPower;
-        [ReadOnly] public bool isLaunched;
+        [SerializeField] [RangeEx(18f, 30f, 1f, "ARROWPOWER")]
+        private float powerFactor = 18f; // Default : 18f
+        [SerializeField] [ReadOnly] 
+        private bool isLaunched;
 
-        //Controll Arrow Position (Before Launched)
+        //FIELDS
         private Vector3 arrowPosition;
-        private Queue<CollisionData> collDataQueue = null;
+        private DamageStruct damageStruct;
+        private Queue<CollisionData> collisionQueue = null;
 
-        //Launch Power for the Arrow
-        //private float powerFactor = 2000;
-
-        //Class
-        bool isInitSkill = false;
+        //SKILLS
         ArrowSkillSet arrowSkillSets = null;
+        bool isInitSkill = false;
 
-        //Struct
-        DamageStruct damageStruct;
-
-        //Catch Point Proeprty
+        //PROPERTY
         public Transform CatchTr { get => arrowCatchTransform; }
+        public float PowerFactor { get => powerFactor; }
 
         void InitComponent() {
             if (arrowTr == null) arrowTr = GetComponent<Transform>();
@@ -50,18 +47,18 @@
 
         private void Start() {
             InitComponent();
-            rBody.gravityScale   = 0f;
-            arrowColl.enabled = false;
+            rBody.gravityScale = 0f;
+            arrowColl.enabled  = false;
 
             //Init-Arrow Skill
-            arrowSkillSets = GameManager.Instance.GetArrowSkillSets(gameObject.name);
+            arrowSkillSets = GameManager.Instance.GetArrSkillSetsOrNull(gameObject.name);
             if(arrowSkillSets != null) {
                 isInitSkill = true;
                 arrowSkillSets.Init(arrowTr, rBody, this);
             }
 
             //Init Collision Data Queue
-            collDataQueue = new Queue<CollisionData>();
+            collisionQueue = new Queue<CollisionData>();
         }
 
         private void Update() {
@@ -99,8 +96,8 @@
             }
 
             //Clear Collision Queue
-            if(collDataQueue != null && collDataQueue.Count > 0) {
-                collDataQueue.Clear();
+            if(collisionQueue != null && collisionQueue.Count > 0) {
+                collisionQueue.Clear();
             }
         }
 
@@ -134,41 +131,11 @@
             return this;
         }
 
-        //private void OnTriggerStay2D(Collider2D collision) {
-        //    if(collision.gameObject.layer == LayerMask.NameToLayer(AD_Data.LAYER_MONSTER)) {
-        //        if (isIgnoreCollision == false) {
-        //            isIgnoreCollision = true;
-        //            //arrowColl.enabled = false; //ignore multi collision
-        //            Vector3 point = collision.ClosestPoint(arrowTr.position);
-        //            if (isInitSkill == true) {
-        //                //Try OnHit with Arrow Skill
-        //                if (arrowSkillSets.OnHit(collision, ref damageStruct, point, GameGlobal.RotateToVector2(arrowTr.eulerAngles.z))) {
-        //                    DisableRequest();
-        //                }
-        //                else { //Hit Failed, Restart Collision Check
-        //                    isIgnoreCollision = false;
-        //                    //arrowColl.enabled = true;
-        //                }
-        //            }
-        //            else {
-        //                //Try OnHit with Non-Skill
-        //                if (collision.GetComponent<IDamageable>().OnHitWithResult(ref damageStruct, point, GameGlobal.RotateToVector2(arrowTr.eulerAngles.z))) {
-        //                    DisableRequest();
-        //                }
-        //                else { //Hit Failed, Restart Collision Check
-        //                    isIgnoreCollision = false;
-        //                    //arrowColl.enabled = true;
-        //                }
-        //            }
-        //        }
-        //    }
-        //}
-
         private void OnTriggerEnter2D(Collider2D collider) {
             if(collider.gameObject.layer == LayerMask.NameToLayer(AD_Data.LAYER_MONSTER)) {
                 Vector3 collisionPoint     = collider.ClosestPoint(arrowTr.position);
                 Vector2 collisionDirection = GameGlobal.RotateToVector2(arrowTr.eulerAngles.z);
-                collDataQueue.Enqueue(new CollisionData(collider, collisionDirection, collisionPoint));
+                collisionQueue.Enqueue(new CollisionData(collider, collisionDirection, collisionPoint));
             }
         }
 
@@ -201,7 +168,7 @@
             rBody.isKinematic = false;  //Change Body Type to Dynamic.
             isLaunched = true;
 
-            rBody.velocity = direction.normalized * ArrowPower; //Force to direction.
+            rBody.velocity = direction.normalized * powerFactor; //Force to direction.
             ///or Use AddForce, (this action is need to Modity Arrow Power)
             ///rBody.AddForce(direction * ArrowPower, ForceMode2D.Impluse); //or ForceMode2D.Force
 
@@ -221,7 +188,7 @@
         /// </summary>
         /// <param name="force"></param>
         public void ForceToDirectly() {
-            rBody.velocity = arrowTr.up * ArrowPower;
+            rBody.velocity = arrowTr.up * powerFactor;
         }
 
         /// <summary>
@@ -233,7 +200,7 @@
             arrowTr.rotation = Quaternion.Euler(0f, 0f, Quaternion.FromToRotation(Vector3.up, targetPosition - arrowTr.position).eulerAngles.z);
 
             //force to straight Direction.
-            rBody.velocity = arrowTr.up * ArrowPower;
+            rBody.velocity = arrowTr.up * powerFactor;
         }
 
         #endregion
@@ -250,13 +217,16 @@
             }
         }
 
+        /// <summary>
+        /// Update Collision Queue [Atfer launced]
+        /// </summary>
         void UpdateCollisionQueue() {
-            while (collDataQueue.Count > 0) {
-                var collData = collDataQueue.Dequeue();
+            while (collisionQueue.Count > 0) {
+                var collData = collisionQueue.Dequeue();
                 if (isInitSkill == true) { //Try OnHit with ArrowSkill
                     //Hit Success
-                    if (arrowSkillSets.OnHit(collData.collider, ref damageStruct, collData.point, collData.direction)) {
-                        collDataQueue.Clear();
+                    if (arrowSkillSets.OnHit(collData.Collider, ref damageStruct, collData.CollisionPoint, collData.CollisionDirection)) {
+                        collisionQueue.Clear();
                         DisableRequest();
                     }
                     else { //Hit Failed - Get Next Collision Queue
@@ -265,8 +235,8 @@
                 }
                 else { //Try OnHit with Non-Skill
                     //Hit Success
-                    if (collData.collider.GetComponent<IDamageable>().OnHitWithResult(ref damageStruct, collData.point, collData.direction)) {
-                        collDataQueue.Clear();
+                    if (collData.Collider.GetComponent<IDamageable>().OnHitWithResult(ref damageStruct, collData.CollisionPoint, collData.CollisionDirection)) {
+                        collisionQueue.Clear();
                         DisableRequest();
                     }
                     else {  //Hit Failed - Get Next Collision Queue
@@ -277,7 +247,43 @@
             }
         }
 
-        #region GIZMOS
+        #region LEGACY
+
+        //private void OnTriggerStay2D(Collider2D collision) {
+        //    if(collision.gameObject.layer == LayerMask.NameToLayer(AD_Data.LAYER_MONSTER)) {
+        //        if (isIgnoreCollision == false) {
+        //            isIgnoreCollision = true;
+        //            //arrowColl.enabled = false; //ignore multi collision
+        //            Vector3 point = collision.ClosestPoint(arrowTr.position);
+        //            if (isInitSkill == true) {
+        //                //Try OnHit with Arrow Skill
+        //                if (arrowSkillSets.OnHit(collision, ref damageStruct, point, GameGlobal.RotateToVector2(arrowTr.eulerAngles.z))) {
+        //                    DisableRequest();
+        //                }
+        //                else { //Hit Failed, Restart Collision Check
+        //                    isIgnoreCollision = false;
+        //                    //arrowColl.enabled = true;
+        //                }
+        //            }
+        //            else {
+        //                //Try OnHit with Non-Skill
+        //                if (collision.GetComponent<IDamageable>().OnHitWithResult(ref damageStruct, point, GameGlobal.RotateToVector2(arrowTr.eulerAngles.z))) {
+        //                    DisableRequest();
+        //                }
+        //                else { //Hit Failed, Restart Collision Check
+        //                    isIgnoreCollision = false;
+        //                    //arrowColl.enabled = true;
+        //                }
+        //            }
+        //        }
+        //    }
+        //}
+
+        //private void CalculatePower()
+        //{
+        //    this.power = Vector2.Distance(transform.position, rightClampPoint.position) * powerFactor;
+        //}
+
         //void OnDrawGizmosSelected() {
         //    float radius = 3f;
         //    Gizmos.color = Color.red;
@@ -289,23 +295,19 @@
         //    Gizmos.color = Color.red;
         //    Gizmos.DrawWireSphere(arrowTr.position, radius);
         //}
-        #endregion
 
-        //private void CalculatePower()
-        //{
-        //    this.power = Vector2.Distance(transform.position, rightClampPoint.position) * powerFactor;
-        //}
+        #endregion
     }
 
     internal sealed class CollisionData {
-        public Collider2D collider { get; private set; } = null;
-        public Vector2 direction { get; private set; }
-        public Vector3 point { get; private set; }
+        public Collider2D Collider { get; private set; } = null;
+        public Vector2 CollisionDirection { get; private set; }
+        public Vector3 CollisionPoint { get; private set; }
 
         internal CollisionData(Collider2D coll, Vector2 collisionDirection, Vector3 collisionPoint) {
-            direction  = collisionDirection;
-            collider   = coll;
-            point      = collisionPoint;
+            Collider           = coll;
+            CollisionPoint     = collisionPoint;
+            CollisionDirection = collisionDirection;
         }
     }
 }

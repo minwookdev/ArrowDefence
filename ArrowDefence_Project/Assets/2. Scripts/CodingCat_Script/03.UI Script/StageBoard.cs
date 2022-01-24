@@ -21,22 +21,22 @@
 
         void Start() {
             // Update Challenge Panel
-            UpdateChallengeInfo(ref isAchieveAll);
+            ChallengePanelSet(ref isAchieveAll);
 
             // Update Settings Panel
-            UpdateSettingsInfo(isAchieveAll);
+            SettingsPanelSet(isAchieveAll);
         }
 
         void UpdateChallengeInfo(ref bool isAchieveAll) {
             switch (stageType) {
-                case STAGETYPE.STAGE_DEV:              SetChallengeStageDev(ref isAchieveAll); break;
+                case STAGETYPE.STAGE_DEV:              ChallengePanelSet(ref isAchieveAll); break;
                 case STAGETYPE.STAGE_FOREST_SECLUDED:  SetChallengeStageFst(); break;
                 case STAGETYPE.STAGE_DUNGEON_ENTRANCE: SetChallengeStageSec(); break;
                 default: throw new System.NotImplementedException("this Stage Type is NotImplemented.");
             }
         }
 
-        void UpdateSettingsInfo(bool isOpen) {
+        void SettingsPanelSet(bool isOpenPanel) {
             //1. Settings Panel이 열렸는지 체크
             //2-1. 열렸으면 PlayerData.GameSettings에서 키가있는지 확인
             //2-2. 키가 없으면 바로 생성해주고 데이터 가져와서 세팅해줌.
@@ -48,12 +48,12 @@
                 return;
             }
 
-            if(isOpen == true) {
+            if(isOpenPanel == true) {
                 var settings = GameManager.Instance.GetStageSetting(GameGlobal.GetStageKey(stageType));
-                settingsInfo.InitSettingPanel(isOpen, settings);
+                settingsInfo.InitSettingPanel(isOpenPanel, settings);
             }
             else {
-                settingsInfo.InitSettingPanel(isOpen);
+                settingsInfo.InitSettingPanel(isOpenPanel);
             }
         }
 
@@ -80,31 +80,17 @@
 
         }
 
-        void SetChallengeStageDev(ref bool isAchieveAll) {
+        void ChallengePanelSet(ref bool isAchieveAll) {
             challengeInfos.DisableAllStar();
             //Get Players Stage Progress Data
             if(GameManager.Instance.TryGetStageData(GameGlobal.GetStageKey(stageType), out Data.StageInfo data)) {
-                ////Data Get Success <1. Stage Cleared> <2. Not Used Resurrect> <3. Killed Monster Over 30+>
-                if(data.IsChallengeAchieve(info => info.IsStageCleared == true, out bool isAchieveFirst)) {
-                    challengeInfos.EnableStar(0);
+                var byteArray = new Data.StageAchievement().GetStarCount(stageType, data, out isAchieveAll);
+                for (int i = 0; i < byteArray.Length; i++) {
+                    challengeInfos.EnableStar(byteArray[i]);
                 }
 
-                if(data.IsChallengeAchieve(info => info.IsUsedResurrect == false, out bool isAchieveSeconds)) {
-                    challengeInfos.EnableStar(1);
-                }
-
-                if(data.IsChallengeAchieve(info => info.KilledCount >= 30, out bool isAchieveThird)) {
-                    challengeInfos.EnableStar(2);
-                }
-
-                //All Challenge is Achieve?
-                if(isAchieveFirst && isAchieveSeconds && isAchieveThird) {
-                    isAchieveAll = true;
-
-                    //Set is Useable AutoMode True
-                    if(data.IsUseableAuto == false) {
-                        data.EnableAutoUse();
-                    }
+                if(isAchieveAll == true && data.IsUseableAuto == false) {
+                    data.EnableAutoUse();
                 }
             }
         }

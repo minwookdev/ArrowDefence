@@ -543,7 +543,7 @@
                     arrowTr.position = arrowPos;
                     
                     //Arrow Direction * Force
-                    arrowForce = arrowTr.up * arrowComponent.ArrowPower;
+                    arrowForce = arrowTr.up * arrowComponent.PowerFactor;
 
                     //Increase Charged Power
                     ChargeIncrease();

@@ -234,7 +234,7 @@
                 arrowTr.position = arrowPos;
 
                 // < arrow force calculating is Not need >
-                arrowForce = arrowTr.up * arrowComponent.ArrowPower;
+                arrowForce = arrowTr.up * arrowComponent.PowerFactor;
 
                 //AutoMode Not using Charged Power
 

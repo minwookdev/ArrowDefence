@@ -9,8 +9,8 @@
         [SerializeField] TrailRenderer trailRender;
 
         [Header("VARIAVLES")]
-        [SerializeField] [Range(18f, 30f, order = 1)]
-        private float forceMagnitude = 18f; //Default Force : 18f
+        [SerializeField] [RangeEx(18f, 30f, 1f, "ARROWPOWER")]
+        private float forceMagnitude = 18f; //Default : 18f
 
         //Screen Limit Variable
         private Vector2 topLeftScreenPoint;
@@ -24,13 +24,13 @@
         private float arrowAngle = 0f;
         private bool isLaunched  = false;
         private bool isInitSkill = false;
-        private bool isIgnoreCollision = false;
-        
+
         //STURCT
         DamageStruct damageStruct;
 
         //CLASS
         ArrowSkillSet arrowSkillSets = null;
+        System.Collections.Generic.Queue<CollisionData> collisionQueue = null;
 
         void ComponentChecker() {
             if (rBody == null) {
@@ -54,7 +54,7 @@
             bottomRightScreenPoint = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, 0));
 
             //Init-Arrow Skill with Pool-tag params
-            arrowSkillSets = GameManager.Instance.GetArrowSkillSets(gameObject.name);
+            arrowSkillSets = GameManager.Instance.GetArrSkillSetsOrNull(gameObject.name);
             if (arrowSkillSets != null) {
                 isInitSkill = true;
                 arrowSkillSets.Init(arrowTr, rBody, this);
@@ -62,6 +62,9 @@
 
             //set rigid body gravity scale to zero
             if (rBody.gravityScale != 0f) rBody.gravityScale = 0f;
+
+            //Init Collision Data Queue
+            collisionQueue = new System.Collections.Generic.Queue<CollisionData>();
         }
 
         private void Update() {
@@ -77,8 +80,11 @@
             //if (isLaunched)
             //    arrowSkillSets.OnUpdate();
 
+            //When Arrow Fired
             if(isLaunched == true) {
-                UpdateOutOfScreen();
+                ScreenOutCheck();       //Position OutOf Screen
+                UpdateCollisionQueue(); //Update Collision Data
+
                 if (isInitSkill == true) {
                     arrowSkillSets.OnUpdate();
                 }
@@ -100,7 +106,11 @@
             rBody.velocity = Vector2.zero;
             trailRender.gameObject.SetActive(false);
             isLaunched        = false;
-            isIgnoreCollision = false;
+
+            //Clear Collision Data Queue
+            if(collisionQueue != null && collisionQueue.Count > 0) {
+                collisionQueue.Clear();
+            }
 
             //SkillSets가 init되어있을때, 비활성화 시 Clear처리.
             if (isInitSkill == false)
@@ -110,7 +120,7 @@
 
         private void OnDestroy() => arrowSkillSets = null;
 
-        private void UpdateOutOfScreen() {
+        private void ScreenOutCheck() {
             arrowPosition = arrowTr.position;
 
             xIn = (arrowPosition.x >= topLeftScreenPoint.x - offset.x && arrowPosition.x <= bottomRightScreenPoint.x + offset.x);
@@ -181,31 +191,42 @@
         public void DisableRequest() => CCPooler.ReturnToPool(gameObject, 0);
 
         #endregion
+        
+        /// <summary>
+        /// Update COllision Queue, After Launched
+        /// </summary>
+        private void UpdateCollisionQueue() {
+            while (collisionQueue.Count > 0) {
+                var collData = collisionQueue.Dequeue();
+                if(isInitSkill == true) { //Try OnHit with ArrSkill
+                    if (arrowSkillSets.OnHit(collData.Collider, ref damageStruct, collData.CollisionPoint, collData.CollisionDirection)) {
+                        //Hit Result True - Disable GameObject
+                        collisionQueue.Clear();
+                        DisableRequest();
+                    }
+                    else { //Hit Result False - Ignore Collision
+                        break;
+                    }
+                }
+                else {  //Try OnHit with Non-ArrSkill
+                    if(collData.Collider.GetComponent<IDamageable>().OnHitWithResult(ref damageStruct, collData.CollisionPoint, collData.CollisionDirection)) {
+                        //Hit Result True - Disable GameObject
+                        collisionQueue.Clear();
+                        DisableRequest();
+                    }
+                    else { //Hit Result False - Ignore Collision
+                        break;
+                    }
+                }
+                break;
+            }
+        }
 
-        private void OnTriggerStay2D(Collider2D collision) {
+        private void OnTriggerEnter2D(Collider2D collision) {
             if(collision.gameObject.layer == LayerMask.NameToLayer(AD_Data.LAYER_MONSTER)) {
-                if (isIgnoreCollision == true) return; //ignore duplicate collision
-
-                isIgnoreCollision = true;
-                Vector3 point     = collision.ClosestPoint(arrowTr.position);
-                if(isInitSkill == true) {
-                    //Active-Skill
-                    if (arrowSkillSets.OnHit(collision, ref damageStruct, point, GameGlobal.RotateToVector2(arrowTr.eulerAngles.z))) {
-                        DisableRequest();
-                    }
-                    else { //Not Disable Arrow: Re-Collision
-                        isIgnoreCollision = false;
-                    }
-                }
-                else {
-                    //Non-Skill
-                    if(collision.GetComponent<IDamageable>().OnHitWithResult(ref damageStruct, point, GameGlobal.RotateToVector2(arrowTr.eulerAngles.z))) {
-                        DisableRequest();
-                    }
-                    else { //Not Disable Arrow: Re-Collision
-                        isIgnoreCollision = false;
-                    }
-                }
+                Vector3 contactPoint = collision.ClosestPoint(arrowTr.position);
+                Vector2 hitDirection = GameGlobal.RotateToVector2(arrowTr.eulerAngles.z);
+                collisionQueue.Enqueue(new CollisionData(collision, hitDirection, contactPoint));
             }
         }
 
@@ -217,7 +238,34 @@
             }
         }
 
-        #region v1
+        #region LEGACY
+
+        //private void OnTriggerStay2D(Collider2D collision) {
+        //    if(collision.gameObject.layer == LayerMask.NameToLayer(AD_Data.LAYER_MONSTER)) {
+        //        if (isIgnoreCollision == true) return; //ignore duplicate collision
+        //
+        //        isIgnoreCollision = true;
+        //        Vector3 point     = collision.ClosestPoint(arrowTr.position);
+        //        if(isInitSkill == true) {
+        //            //Active-Skill
+        //            if (arrowSkillSets.OnHit(collision, ref damageStruct, point, GameGlobal.RotateToVector2(arrowTr.eulerAngles.z))) {
+        //                DisableRequest();
+        //            }
+        //            else { //Not Disable Arrow: Re-Collision
+        //                isIgnoreCollision = false;
+        //            }
+        //        }
+        //        else {
+        //            //Non-Skill
+        //            if(collision.GetComponent<IDamageable>().OnHitWithResult(ref damageStruct, point, GameGlobal.RotateToVector2(arrowTr.eulerAngles.z))) {
+        //                DisableRequest();
+        //            }
+        //            else { //Not Disable Arrow: Re-Collision
+        //                isIgnoreCollision = false;
+        //            }
+        //        }
+        //    }
+        //}
 
         //ROTATE TESTED CODE
         //if (Input.GetMouseButtonDown(0)) {  //Type. Rotate EulerAngles

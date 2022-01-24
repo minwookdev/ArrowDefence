@@ -21,7 +21,7 @@
                 ES3.Save(KEY_SETTINGS, settings);
                 ES3.Save(KEY_INFOS, infos);
 
-                CatLog.Log("All UserData 저장 성공.");
+                CatLog.Log(StringColor.GREEN, "Success Save All User Data.");
             }
             catch (System.Exception exception) {
                 CatLog.ELog("UserData 저장 실패.");

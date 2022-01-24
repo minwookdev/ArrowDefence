@@ -181,6 +181,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34b76004ecd537b448e6408fed03d6f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  autoState: 0
+  targetTr: {fileID: 0}
+  isDebug: 0
   bowSprite: {fileID: 2632294930036604527}
   bowAbility: {fileID: 2772393570774568323}
   bowTr: {fileID: 0}
@@ -192,6 +195,7 @@ MonoBehaviour:
   SmoothRotateSpeed: 12
   ArrowPullingSpeed: 2
   ArrowParentTr: {fileID: 0}
+  arrowTr: {fileID: 0}
   loadedArrow: {fileID: 0}
   arrowComponent: {fileID: 0}
 --- !u!114 &2772393570774568323
@@ -784,12 +788,12 @@ GameObject:
   - component: {fileID: 9044342372171031646}
   - component: {fileID: 6450345450154900485}
   m_Layer: 8
-  m_Name: Bow_PullCenterImg
+  m_Name: Bow_PullCenterImg [disable raycast]
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2458097899969716506
 RectTransform:
   m_ObjectHideFlags: 0
@@ -831,7 +835,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:

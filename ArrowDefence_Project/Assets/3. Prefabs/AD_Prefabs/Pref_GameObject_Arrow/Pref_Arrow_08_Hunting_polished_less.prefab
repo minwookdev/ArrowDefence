@@ -198,7 +198,7 @@ MonoBehaviour:
   rBody: {fileID: 1201505686797549488}
   arrowTr: {fileID: 1201505686785733901}
   trailRender: {fileID: 1201505686806988035}
-  forceMagnitude: 24
+  forceMagnitude: 23
 --- !u!50 &1201505686797549488
 Rigidbody2D:
   serializedVersion: 4

@@ -178,6 +178,8 @@
         //Coroutine waitCo = null;
 
         IEnumerator Start() {
+            //================================================== << GAMEMANAGER >> =================================================
+            GameManager.Instance.Initialize();
             //================================================== << COMPONENTS >> ==================================================
             monsterSpawner = GetComponent<MonsterSpawner>();
             battleSceneUI  = GetComponent<BattleSceneRoute>();

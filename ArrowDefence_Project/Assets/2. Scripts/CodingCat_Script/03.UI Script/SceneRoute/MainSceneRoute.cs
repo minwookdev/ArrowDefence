@@ -84,8 +84,9 @@ public class MainSceneRoute : MonoBehaviour
 
     private void Awake() => _inst = this;
 
-    private void Start()
-    {
+    private void Start() {
+        GameManager.Instance.Initialize();
+
         //스타트 시 초기 Scale 값 초기화 (테스트용)
         //MenuOpen Tween에 잔상 방지 -> 추후 수정
         foreach (var item in menuObjects)

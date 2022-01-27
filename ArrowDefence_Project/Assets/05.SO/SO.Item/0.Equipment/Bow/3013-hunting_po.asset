@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85b041e0ff5f89e41b19a84369197493, type: 3}
+  m_Name: 3013-hunting_po
+  m_EditorClassIdentifier: 
+  Item_Type: 2
+  Item_Grade: 3
+  Item_Id: 3013
+  Item_Amount: 1
+  Item_Name: Polished Hunting Bow
+  Item_Desc: 
+  Item_Sprite: {fileID: 21300000, guid: f64d550dd4427bb43b7711c61a032d20, type: 3}
+  Equip_Type: 0
+  BowGameObject: {fileID: 5063279129060135535, guid: 757a4754cd126084ba8d4e697409ed45,
+    type: 3}
+  SkillAsset_f: {fileID: 11400000, guid: 5f97212c1121e174eb6db1568bb8c986, type: 2}
+  SkillAsset_s: {fileID: 0}
+  BaseDamage: 250
+  CriticalDamageMultiplier: 2
+  FullChargedMultiplier: 1.2
+  CriticalHitChance: 20

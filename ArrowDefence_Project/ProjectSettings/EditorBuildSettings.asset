@@ -6,21 +6,21 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/1. Scenes/ArrowDefence/ArrowDefence_TItle.unity
+    path: Assets/01.Scenes/ArrDef/ArrowDefence_TItle.unity
     guid: ce27c2b916b8c3147a208757c2477d5a
   - enabled: 1
-    path: Assets/1. Scenes/ArrowDefence/ArrowDefence_Main.unity
+    path: Assets/01.Scenes/ArrDef/ArrowDefence_Main.unity
     guid: 91d109814ae648b4295e4f11797db833
   - enabled: 1
-    path: Assets/1. Scenes/ArrowDefence/ArrowDefence_Loading.unity
+    path: Assets/01.Scenes/ArrDef/ArrowDefence_Loading.unity
     guid: 7e15587eb59b4034fb9c082586b59a83
   - enabled: 1
-    path: Assets/1. Scenes/ArrowDefence/ArrowDefence_BattleScene/ArrowDefence_Battle_Dev.unity
+    path: Assets/01.Scenes/ArrDef/ArrDef_Battle/ArrowDefence_Battle_Dev.unity
     guid: a312859d3776ca64b9daf77e7968e09c
   - enabled: 1
-    path: Assets/1. Scenes/ArrowDefence/ArrowDefence_BattleScene/ArrowDefence_Battle_Forest_Normal.unity
+    path: Assets/01.Scenes/ArrDef/ArrDef_Battle/ArrowDefence_Battle_Forest_Normal.unity
     guid: 39c4609395b8fe842b3c24b1e19fd3b4
   - enabled: 1
-    path: Assets/1. Scenes/ArrowDefence/ArrowDefence_BattleScene/ArrowDefence_Battle_Dungeon_Normal.unity
+    path: Assets/01.Scenes/ArrDef/ArrDef_Battle/ArrowDefence_Battle_Dungeon_Normal.unity
     guid: b72477f165631d34a8213a64fb4a4332
   m_configObjects: {}

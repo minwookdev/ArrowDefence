@@ -4,8 +4,7 @@
     using ActionCat.Interface;
 
     [System.Serializable]
-    public abstract class AccessorySPEffect
-    {
+    public abstract class AccessorySPEffect {
         protected string id;
         protected string name;
         protected string desc;
@@ -98,8 +97,7 @@
 
         public float Cooldown { get => cooldown; }
 
-        public override void Init()
-        {
+        public override void Init() {
             return;
         }
 
@@ -127,8 +125,7 @@
             return duration;
         }
 
-        System.Collections.IEnumerator SlowTimeCo()
-        {
+        System.Collections.IEnumerator SlowTimeCo() { // <- Not Use this type
             GameManager.Instance.TimeScaleSet(timeSlowRatio);
 
             yield return new WaitForSecondsRealtime(duration);

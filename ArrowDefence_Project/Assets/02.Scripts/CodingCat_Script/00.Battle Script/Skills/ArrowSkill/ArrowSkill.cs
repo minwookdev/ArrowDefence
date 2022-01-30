@@ -69,6 +69,7 @@
         //Save Variables
         int maxChainCount = 2;  // Max Chain Count
         float scanRange   = 5f; // Monster Detect Range
+        ACEffector2D hitEffect; // Arrow Hit Effect
 
         //Temp Variables
         List<Collider2D> tempCollList = null;
@@ -200,20 +201,20 @@
         /// Copy Class Constructor
         /// </summary>
         /// <param name="origin"></param>
-        public ReboundArrow(ReboundArrow origin)
-        {
+        public ReboundArrow(ReboundArrow origin) {
             maxChainCount = origin.maxChainCount;
             scanRange     = origin.scanRange;
+            hitEffect     = origin.hitEffect;
         }
 
         /// <summary>
         /// Create Skill Class Data in Skill Scripable Object
         /// </summary>
         /// <param name="item"></param>
-        public ReboundArrow(DataRebound item)
-        {
+        public ReboundArrow(DataRebound item) {
             scanRange     = item.ScanRadius;
             maxChainCount = item.MaxChainCount;
+            hitEffect     = item.effector;
         }
 
         /// <summary>

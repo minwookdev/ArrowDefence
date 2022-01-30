@@ -280,6 +280,10 @@ MonoBehaviour:
   chargeEffectTime: 0.5
   FadeBurnTime: 1
   effectType: 0
+  muzzleEffect:
+  - {fileID: -63832489124254854, guid: 3699b62eae610ff4ab5a118c46161f68, type: 3}
+  - {fileID: 162523047609376232, guid: b6d830e388f8d3548801f05548bf9398, type: 3}
+  - {fileID: 6159201175060336152, guid: 0a83933b697ce7644883b48058c1a6ae, type: 3}
 --- !u!1 &1199833956145012796
 GameObject:
   m_ObjectHideFlags: 0
@@ -846,7 +850,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5231449906695875036}
   m_Layer: 8
-  m_Name: Position_Slot
+  m_Name: Bow_Slot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -869,7 +873,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 12, y: -0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 10, y: 10}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &7090942143403161176
 GameObject:

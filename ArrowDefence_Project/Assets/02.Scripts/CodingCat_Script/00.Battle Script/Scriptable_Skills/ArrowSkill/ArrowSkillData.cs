@@ -2,8 +2,7 @@
 {
     using UnityEngine;
 
-    public class ArrowSkillData : ScriptableObject
-    {
+    public class ArrowSkillData : ScriptableObject {
         //Basic Arrow Skill Data
         //MEMBER
         public string SkillId;
@@ -14,6 +13,7 @@
         public Sprite IconSprite;
         protected ArrowSkill skillData = null;
         public ARROWSKILL_ACTIVETYPE ActiveType;
+        public ACEffector2D effector = null;
 
         //PROPERTIES
         public ArrowSkill ArrowSkill {

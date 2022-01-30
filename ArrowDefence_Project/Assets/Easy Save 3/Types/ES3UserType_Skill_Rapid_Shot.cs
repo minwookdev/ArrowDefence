@@ -4,7 +4,7 @@ using UnityEngine;
 namespace ES3Types
 {
 	[UnityEngine.Scripting.Preserve]
-	[ES3PropertiesAttribute("arrowCount", "shotDelay", "id", "name", "desc", "iconSprite", "level", "skillType")]
+	[ES3PropertiesAttribute("arrowCount", "shotDelay", "muzzleEffect", "id", "name", "desc", "iconSprite", "level", "skillType")]
 	public class ES3UserType_Skill_Rapid_Shot : ES3ObjectType
 	{
 		public static ES3Type Instance = null;
@@ -18,6 +18,7 @@ namespace ES3Types
 			
 			writer.WritePrivateField("arrowCount", instance);
 			writer.WritePrivateField("shotDelay", instance);
+			writer.WritePrivateFieldByRef("muzzleEffect", instance);
 			writer.WritePrivateField("id", instance);
 			writer.WritePrivateField("name", instance);
 			writer.WritePrivateField("desc", instance);
@@ -39,6 +40,9 @@ namespace ES3Types
 					break;
 					case "shotDelay":
 					reader.SetPrivateField("shotDelay", reader.Read<System.Single>(), instance);
+					break;
+					case "muzzleEffect":
+					reader.SetPrivateField("muzzleEffect", reader.Read<ActionCat.ACEffector2D>(), instance);
 					break;
 					case "id":
 					reader.SetPrivateField("id", reader.Read<System.String>(), instance);

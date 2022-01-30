@@ -91,6 +91,41 @@ MonoBehaviour:
   normalStrenght: 5
   normalSmoothing: 1
   computingNormal: 0
+--- !u!1 &1303827171974372348
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5021411773088146676}
+  m_Layer: 8
+  m_Name: Bow_Slot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &5021411773088146676
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1303827171974372348}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 7438080295175813249}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 9, y: -0}
+  m_SizeDelta: {x: 10, y: 10}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1715422336554214900
 GameObject:
   m_ObjectHideFlags: 0
@@ -609,6 +644,7 @@ RectTransform:
   - {fileID: 7438080295657542778}
   - {fileID: 7438080294595748184}
   - {fileID: 7159651216472216598}
+  - {fileID: 5021411773088146676}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
@@ -634,7 +670,7 @@ MonoBehaviour:
   isDebug: 0
   bowSprite: {fileID: 6892431909397582060}
   bowAbility: {fileID: 7438080295175813263}
-  bowTr: {fileID: 0}
+  bowTr: {fileID: 7438080295175813249}
   MainCam: {fileID: 0}
   TouchRadius: 1
   BowCenterPointImg: {fileID: 1784798604290623753}
@@ -646,6 +682,7 @@ MonoBehaviour:
   arrowTr: {fileID: 0}
   loadedArrow: {fileID: 0}
   arrowComponent: {fileID: 0}
+  mainSlotTr: {fileID: 5021411773088146676}
 --- !u!114 &7438080295175813263
 MonoBehaviour:
   m_ObjectHideFlags: 0

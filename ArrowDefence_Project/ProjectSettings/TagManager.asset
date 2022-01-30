@@ -69,7 +69,7 @@ TagManager:
   - name: Map:Rooftop
     uniqueID: 2938535581
     locked: 0
-  - name: Skill Effect
+  - name: 
     uniqueID: 863014967
     locked: 0
   - name: Object:Bow
@@ -78,7 +78,7 @@ TagManager:
   - name: Object:Arrow
     uniqueID: 1102946179
     locked: 0
-  - name: 
+  - name: Effect:Player
     uniqueID: 3172018161
     locked: 0
   - name: 

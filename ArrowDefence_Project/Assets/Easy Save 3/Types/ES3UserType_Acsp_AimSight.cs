@@ -4,7 +4,7 @@ using UnityEngine;
 namespace ES3Types
 {
 	[UnityEngine.Scripting.Preserve]
-	[ES3PropertiesAttribute("lineMaterial", "lineWidth", "id", "name", "desc", "effectType", "level", "iconSprite")]
+	[ES3PropertiesAttribute("aimSightPref", "lineMaterial", "lineWidth", "id", "name", "desc", "effectType", "level", "iconSprite")]
 	public class ES3UserType_Acsp_AimSight : ES3ObjectType
 	{
 		public static ES3Type Instance = null;
@@ -16,6 +16,7 @@ namespace ES3Types
 		{
 			var instance = (ActionCat.Acsp_AimSight)obj;
 			
+			writer.WritePrivateFieldByRef("aimSightPref", instance);
 			writer.WritePropertyByRef("lineMaterial", instance.lineMaterial);
 			writer.WriteProperty("lineWidth", instance.lineWidth, ES3Type_float.Instance);
 			writer.WritePrivateField("id", instance);
@@ -34,6 +35,9 @@ namespace ES3Types
 				switch(propertyName)
 				{
 					
+					case "aimSightPref":
+					reader.SetPrivateField("aimSightPref", reader.Read<UnityEngine.GameObject>(), instance);
+					break;
 					case "lineMaterial":
 						instance.lineMaterial = reader.Read<UnityEngine.Material>(ES3Type_Material.Instance);
 						break;

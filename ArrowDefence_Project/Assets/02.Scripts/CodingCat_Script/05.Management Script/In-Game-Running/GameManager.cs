@@ -72,27 +72,11 @@
 
 #region PLAYER-EQUIPMENTS
 
-        public void InitEquipments(Transform bowObjInitPos, Transform bowObjParentTr, 
-                                    int mainArrowObjPoolQuantity, int subArrowPoolQuantity)
-        {
-            CCPlayerData.equipments.InitEquipments(bowObjInitPos, bowObjParentTr, 
-                                                   mainArrowObjPoolQuantity, subArrowPoolQuantity);
-        }
-
-        public void InitEquipments(Transform bowinitpos, Transform bowparent, int mainarrowpoolquantity, int subarrowpoolquantity,
-                                   out BattleSceneRoute.ArrowSwapSlotInitData[] arrowslotdata,
-                                   out AccessorySkillSlot.ActiveSkillSlotInitData[] skillslotdata) {
-            CCPlayerData.equipments.InitEquipments(bowinitpos, bowparent, mainarrowpoolquantity, subarrowpoolquantity);
-            arrowslotdata = ReturnArrowSlotData(); 
-            skillslotdata = ReturnSkillSlotData();
-        }
-
         public void InitEquips(Transform bowInitPos, Transform bowParent, int mainArrPoolQuantity, int subArrPoolQuantity, 
-                               out UI.ArrSSData[] arrSlotData, 
-                               out AccessorySkillSlot.ActiveSkillSlotInitData[] skillSlotData) {
+                               out UI.ArrSSData[] arrSlotData, out UI.ACSData[] acspSlotData) {
             CCPlayerData.equipments.InitEquipments(bowInitPos, bowParent, mainArrPoolQuantity, subArrPoolQuantity);
             arrSlotData   = GetArrSwapSlotData();
-            skillSlotData = ReturnSkillSlotData();
+            acspSlotData  = GetAccessorySlotData();
         }
 
         public void SetBowPullingStop(bool isStop) {
@@ -102,14 +86,12 @@
                 CatLog.WLog("Controller Not Found.");
         }
 
-        public ARROWTYPE LoadArrowType() {
-            ARROWTYPE type = (CCPlayerData.equipments.IsEquippedArrowMain()) ? ARROWTYPE.ARROW_MAIN : ARROWTYPE.ARROW_SUB;
-            return type;
+        public ARROWTYPE GetFirstArrType() {
+            return (CCPlayerData.equipments.IsEquippedArrowMain()) ? ARROWTYPE.ARROW_MAIN : ARROWTYPE.ARROW_SUB;
         }
 
         public void InitArrowSlotData(out bool slot_m, out bool slot_s, 
-                                      out Sprite arrowIconSprite_m, out Sprite arrowIconSprite_s)
-        {
+                                      out Sprite arrowIconSprite_m, out Sprite arrowIconSprite_s) {
             slot_m = (CCPlayerData.equipments.IsEquippedArrowMain()) ? true : false;
             slot_s = (CCPlayerData.equipments.IsEquippedArrowSub())  ? true : false;
 
@@ -119,109 +101,50 @@
             else        arrowIconSprite_s = null;
         }
 
-        public BattleSceneRoute.ArrowSwapSlotInitData[] ReturnArrowSlotData()
-        {
-            var equips = CCPlayerData.equipments;
-
-            bool activeMain, activeSub;
-            Sprite mainSprite, subSprite;
-            System.Action<ARROWTYPE> mainCallback, subCallback;
-
-            activeMain = equips.IsEquippedArrowMain();
-            if(activeMain)
-            {
-                mainSprite   = equips.GetMainArrow().GetSprite;
-                mainCallback = ControllerOrNull().Swap;
-            }
-            else
-            {
-                mainSprite   = null;
-                mainCallback = null;
-            }
-
-            activeSub = equips.IsEquippedArrowSub();
-            if(activeSub)
-            {
-                subSprite   = equips.GetSubArrow().GetSprite;
-                subCallback = ControllerOrNull().Swap;
-            }
-            else
-            {
-                subSprite   = null;
-                subCallback = null;
-            }
-
-            BattleSceneRoute.ArrowSwapSlotInitData[] datas 
-                = new BattleSceneRoute.ArrowSwapSlotInitData[2]
-                { new BattleSceneRoute.ArrowSwapSlotInitData(activeMain, mainSprite, mainCallback),
-                  new BattleSceneRoute.ArrowSwapSlotInitData(activeSub, subSprite, subCallback) };
-
-            //List.ToArray로 반환하는게 나은가
-
-            return datas;
-        }
-
-        public UI.ArrSSData[] GetArrSwapSlotData() {
+        UI.ArrSSData[] GetArrSwapSlotData() {
             var equipment = CCPlayerData.equipments;
             var dataList  = new System.Collections.Generic.List<UI.ArrSSData>();
             bool isEquippedMainArr = equipment.IsEquippedArrowMain();
-            if (isEquippedMainArr) dataList.Add(new UI.ArrSSData(isEquippedMainArr, equipment.GetMainArrow().GetSprite, ControllerOrNull().Swap));
+            if (isEquippedMainArr) dataList.Add(new UI.ArrSSData(isEquippedMainArr, equipment.GetMainArrow().GetSprite, GetControllerInstOrNull().Swap));
             else                   dataList.Add(new UI.ArrSSData(isEquippedMainArr));
             bool isEquippedSubArr  = equipment.IsEquippedArrowSub();
-            if (isEquippedSubArr)  dataList.Add(new UI.ArrSSData(isEquippedSubArr, equipment.GetSubArrow().GetSprite, ControllerOrNull().Swap));
+            if (isEquippedSubArr)  dataList.Add(new UI.ArrSSData(isEquippedSubArr, equipment.GetSubArrow().GetSprite, GetControllerInstOrNull().Swap));
             else                   dataList.Add(new UI.ArrSSData(isEquippedSubArr));
             bool isEquippedSpArr   = false; //Special Arr is currently always Disable
             if (!isEquippedSpArr)  dataList.Add(new UI.ArrSSData(isEquippedSpArr));
             return dataList.ToArray();
         }
 
-        public AccessorySkillSlot.ActiveSkillSlotInitData[] ReturnSkillSlotData()
-        {
-            //List -> ToArray Return
-            System.Collections.Generic.List<AccessorySkillSlot.ActiveSkillSlotInitData> skillDataList 
-                = new System.Collections.Generic.List<AccessorySkillSlot.ActiveSkillSlotInitData>();
-
+        UI.ACSData[] GetAccessorySlotData() {
+            var list = new System.Collections.Generic.List<UI.ACSData>();
             var accessories = CCPlayerData.equipments.GetAccessories();
-            for (int i = 0; i < accessories.Length; i++)
-            {
+            for (int i = 0; i < accessories.Length; i++) {
                 if (accessories[i] == null) continue;
-
-                if (accessories[i].SPEffect != null)
-                {
-                    if (accessories[i].SPEffect.SpEffectType == ACSP_TYPE.SPEEFECT_SLOWTIME)
-                    {
-                        var slowTime = accessories[i].SPEffect as Acsp_SlowTime;
-                        if (slowTime != null) //한번 더 검증
-                        {
-                            //skillDatas[i].InitSkillData(slowTime.IconSprite, slowTime.TimeSlowRatio, false, 
-                            //    SKILL_ACTIVATIONS_TYPE.COOLDOWN_ACTIVE,
-                            //    (mono) => slowTime.ActiveSlowTime(mono));
-                            //skillDataList.Add(new AccessorySkillSlot.ActiveSkillSlotInitData(
-                            //                 accessories[i].GetSprite, slowTime.Cooldown, false,
-                            //                 SKILL_ACTIVATIONS_TYPE.COOLDOWN_ACTIVE,
-                            //                 (mono) => slowTime.ActiveSkill(mono),
-                            //                 () => slowTime.OnStop()));
-
-                            //Add SlowTime Skill Slot Data
-                            skillDataList.Add(new AccessorySkillSlot.ActiveSkillSlotInitData(
-                                accessories[i].GetSprite, 
-                                slowTime.Cooldown, 
-                                false,
-                                ACSPACTIVETYPE.COOLDOWN,
-                                slowTime.ActiveSkill,
-                                slowTime.OnStop));
-                        }
-                        else {
-                            CatLog.ELog("Accessory Skill Casting failed");
-                        }
+                var speffect = accessories[i].SPEffectOrNull;
+                if (speffect != null) {
+                    switch (speffect.SpEffectType) {
+                        case ACSP_TYPE.SPEFFECT_NONE:     break; //This is Not Activate Type Skill
+                        case ACSP_TYPE.SPEFFECT_AIMSIGHT: break; //This is Not Activate Type Skill
+                        case ACSP_TYPE.SPEEFECT_SLOWTIME:
+                            var slowTime = speffect as Acsp_SlowTime;
+                            if (slowTime != null) {
+                                list.Add(new UI.ACSData(ACSPACTIVETYPE.COOLDOWN, accessories[i].GetSprite, 
+                                                                                 slowTime.ActiveSkill, 
+                                                                                 slowTime.OnStop, 
+                                                                                 slowTime.Cooldown));
+                            }
+                            break;
+                        default: CatLog.WLog("this Special Effect Type is Not Implemented."); break;
                     }
+                    continue;
                 }
+                else continue;
             }
 
-            return skillDataList.ToArray();
+            return list.ToArray();
         }
 
-        public AD_BowController ControllerOrNull() {
+        public AD_BowController GetControllerInstOrNull() {
             if (AD_BowController.instance != null)
                 return AD_BowController.instance;
             else
@@ -253,8 +176,7 @@
                 return null;
         }
 
-        public void ReleaseEquipments()
-        {
+        public void ReleaseEquipments() {
             CCPlayerData.equipments.ReleaseEquipments();
         }
 
@@ -316,11 +238,11 @@
         }
 
         public void AutoSwitch(bool isDebug = false) {
-            if(ControllerOrNull() == null) {
+            if(GetControllerInstOrNull() == null) {
                 CatLog.ELog("The Controller is Null."); return;
             }
 
-            ControllerOrNull().AutoSwitch(isDebug);
+            GetControllerInstOrNull().AutoSwitch(isDebug);
         }
 
 #endregion

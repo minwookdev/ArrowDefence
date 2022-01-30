@@ -20,7 +20,6 @@
         private float lerpDuration = 1f;
         private float valueToLerp;
 
-
         float lineEndAlpha   = 0.3f;
         float lineStartAlpha = 0.8f;
         float lineRenderWidth;
@@ -29,6 +28,7 @@
         string shaderColorString = "_Color";
         Color currentStartColor;
         Color currentEndColor;
+        //RaycastHit2D[] resultArray = new RaycastHit2D[1];
 
         /// <summary>
         /// Executed before the Start method is called. Setting Linerenderer Related Variables
@@ -74,17 +74,38 @@
                     isOn = true;
                 }
 
-                RaycastHit2D rayhit = Physics2D.Raycast(lineStartPoint.position, lineStartPoint.right, rayDist);
-                //Debug.DrawRay(LineStartPoint.position, LineStartPoint.right * rayDistance, Color.green); //Debugging
-
                 lineRender.SetPosition(0, lineStartPoint.position);
 
-                if (rayhit) { // raycast collision issue ** Read Note
-                    if (rayhit.collider.CompareTag(AD_Data.OBJECT_TAG_MONSTER))
-                        lineRender.SetPosition(1, GameGlobal.FixedVectorOnScreen(rayhit.point));
-                    else lineRender.SetPosition(1, lineStartPoint.position + (lineStartPoint.right * rayDist));
+                RaycastHit2D rayhit = Physics2D.Raycast(lineStartPoint.position, lineStartPoint.right, rayDist, 1 << LayerMask.NameToLayer(AD_Data.LAYER_MONSTER));
+                if(rayhit) {
+                    lineRender.SetPosition(1, rayhit.point);
                 }
-                else lineRender.SetPosition(1, lineStartPoint.position + (lineStartPoint.right * rayDist));
+                else {
+                    lineRender.SetPosition(1, lineStartPoint.position + (lineStartPoint.right * rayDist));
+                }
+                //Debug.DrawRay(lineStartPoint.position, lineStartPoint.right * rayDist, Color.green); //Debugging
+
+                //var rayCastHit = Physics2D.RaycastNonAlloc(lineStartPoint.position, lineStartPoint.right, resultArray, rayDist, 1 << LayerMask.NameToLayer(AD_Data.LAYER_MONSTER));
+                //if(rayCastHit > 0) {
+                //    lineRender.SetPosition(1, resultArray[0].point); // test, always index 0.
+                //}
+                //else {
+                //    lineRender.SetPosition(1, lineStartPoint.position + (lineStartPoint.right * rayDist));
+                //}
+
+
+
+                //if (rayhit) { // raycast collision issue ** Read Note
+                //    if (rayhit.collider.CompareTag(AD_Data.OBJECT_TAG_MONSTER)) {
+                //        lineRender.SetPosition(1, GameGlobal.FixedVectorOnScreen(rayhit.point));
+                //    }
+                //    else {
+                //        lineRender.SetPosition(1, lineStartPoint.position + (lineStartPoint.right * rayDist));
+                //    }
+                //}
+                //else {
+                //    lineRender.SetPosition(1, lineStartPoint.position + (lineStartPoint.right * rayDist));
+                //}
 
                 //Line Alpha to 1
                 DrawLineAlpha();
@@ -147,8 +168,8 @@
 
         void EraseLineAlpha() {
             if(timeElapsed < lerpDuration) {
-                lineMaterial.SetFloat(shaderAlphaString, Mathf.Lerp(lineMaterial.GetFloat(shaderAlphaString), 0f, timeElapsed / lerpDuration));
                 timeElapsed += Time.unscaledDeltaTime;
+                lineMaterial.SetFloat(shaderAlphaString, Mathf.Lerp(lineMaterial.GetFloat(shaderAlphaString), 0f, timeElapsed / lerpDuration));
             }
             else {
                 lineMaterial.SetFloat(shaderAlphaString, 0f);

@@ -32,11 +32,6 @@
             openEntry.callback.AddListener(eventData => TimerReset());
 
             //Add OpenEntry in Slot Triggers
-            //mainSlotTrigger.triggers.Add(openEntry);
-            //subSlotTrigger.triggers.Add(openEntry);
-            //specialSlotTrigger.triggers.Add(openEntry);
-
-            //Add OpenEntry in Slot Triggers
             foreach (var slot in slots) {
                 slot.triggers.Add(openEntry);
             }

@@ -112,6 +112,11 @@
     }
 
 
+    public enum EFFECTORTYPE {
+        NEWEFFECT,
+        RESTARTER,
+    }
+
     #endregion
 }
 

@@ -161,6 +161,7 @@ RectTransform:
   - {fileID: 2772393572439236982}
   - {fileID: 2772393571341784148}
   - {fileID: 2458097899969716506}
+  - {fileID: 6194436313435567160}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
@@ -186,7 +187,7 @@ MonoBehaviour:
   isDebug: 0
   bowSprite: {fileID: 2632294930036604527}
   bowAbility: {fileID: 2772393570774568323}
-  bowTr: {fileID: 0}
+  bowTr: {fileID: 2772393570774568333}
   MainCam: {fileID: 0}
   TouchRadius: 1
   BowCenterPointImg: {fileID: 6450345450154900485}
@@ -198,6 +199,7 @@ MonoBehaviour:
   arrowTr: {fileID: 0}
   loadedArrow: {fileID: 0}
   arrowComponent: {fileID: 0}
+  mainSlotTr: {fileID: 6194436313435567160}
 --- !u!114 &2772393570774568323
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -234,6 +236,10 @@ MonoBehaviour:
   chargeEffectTime: 0.5
   FadeBurnTime: 1
   effectType: 0
+  shotParticleArray:
+  - {fileID: 5937770289732402498, guid: 3699b62eae610ff4ab5a118c46161f68, type: 3}
+  - {fileID: 3198888974520107025, guid: b6d830e388f8d3548801f05548bf9398, type: 3}
+  - {fileID: 1828671734012454757, guid: 0a83933b697ce7644883b48058c1a6ae, type: 3}
 --- !u!1 &2772393571020930489
 GameObject:
   m_ObjectHideFlags: 0
@@ -850,3 +856,38 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!1 &6833757335470266678
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6194436313435567160}
+  m_Layer: 8
+  m_Name: Bow_Slot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &6194436313435567160
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6833757335470266678}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 2772393570774568333}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 20.5, y: -0}
+  m_SizeDelta: {x: 10, y: 10}
+  m_Pivot: {x: 0.5, y: 0.5}

@@ -114,6 +114,7 @@ public class RapidShot_DataEditor : Editor
 
     SerializedProperty arrowCountProp;
     SerializedProperty intervalProp;
+    SerializedProperty effectProp;
 
     public void OnEnable()
     {
@@ -125,6 +126,7 @@ public class RapidShot_DataEditor : Editor
         typeProp   = sobject.FindProperty("SkillType");
         levelProp  = sobject.FindProperty("SkillLevel");
         spriteProp = sobject.FindProperty("SkillIconSprite");
+        effectProp = sobject.FindProperty(nameof(SkillDataRapidShot.muzzleEffect));
 
         arrowCountProp  = sobject.FindProperty("ArrowShotCount");
         intervalProp    = sobject.FindProperty("ShotInterval");
@@ -182,6 +184,9 @@ public class RapidShot_DataEditor : Editor
 
         //Spread Angle Field
         EditorGUILayout.PropertyField(intervalProp);
+
+        //Muzzle Effect Field
+        EditorGUILayout.PropertyField(effectProp);
 
         GUILayout.EndVertical();
         #endregion

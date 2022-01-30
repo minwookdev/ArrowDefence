@@ -13,7 +13,9 @@
         [SerializeField] Sprite spriteBossType = null;
         [SerializeField] Sprite spriteEndType  = null;
 
-        private float maxBattleTime = 0f;
+        private float maxBattleTime  = 0f;
+        private string correctionSec  = "";
+        private int currentSeconds = 0;
 
         public void InitSlider(bool isBoss, float maxTime) {
             imageMaxSliderPoint.sprite = (isBoss) ? spriteBossType : spriteEndType;
@@ -27,15 +29,9 @@
         }
 
         string GetTimeStr(float seconds) {
-            //Type 1
-            //return string.Format("{0:F0}:{1:F0}", ((seconds / 60) % 60), seconds % 60);  
-
-            //Type 2
-            //return string.Format("{0}:{1}", ((int)(seconds / 60) % 60), ((int)(seconds % 60)));
-
-            //Type 3 [Correction Seconds]
-            string correctionSeconds = (GameGlobal.GetSeconds(seconds) == 0) ? "00" : GameGlobal.GetSeconds(seconds).ToString();
-            return string.Format("{0}:{1}", GameGlobal.GetMinute(seconds), correctionSeconds);
+            currentSeconds = GameGlobal.GetSeconds(seconds);
+            correctionSec  = (currentSeconds < 10) ? "0" + currentSeconds.ToString() : currentSeconds.ToString();
+            return string.Format("{0}:{1}", GameGlobal.GetMinute(seconds), correctionSec);
         }
     }
 }

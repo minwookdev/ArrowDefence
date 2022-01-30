@@ -216,14 +216,10 @@
             yield return new WaitUntil(() => CCPooler.IsInitialized == true);
 
             //==================================================== << PLAYER >> ====================================================
-            //BattleSceneRoute.ArrowSwapSlotInitData[]     arrowSwapSlotDatas;        //Arrow Swap Slot Data Init       [need object-pooler initializing]
-            AccessorySkillSlot.ActiveSkillSlotInitData[] accessorySkillSlotDatas;   //Accessory skill Slots Data Init [need object-pooler initializing]
-            //GameManager.Instance.InitEquipments(BowInitPosition, ParentTransform, 1, 1, out arrowSwapSlotDatas, out accessorySkillSlotDatas);
-            GameManager.Instance.InitEquips(BowInitPosition, ParentTransform, 1, 1, out ArrSSData[] arrSlotArray, out accessorySkillSlotDatas);
+            GameManager.Instance.InitEquips(BowInitPosition, ParentTransform, 1, 1, out ArrSSData[] arrSlotArray, out ACSData[] acspSlotArray);
 
-            //battleSceneUI.InitArrowSlots(arrowSwapSlotDatas);       //Init Arrow Slots
             battleSceneUI.GetArrSwapSlots().InitSlots(arrSlotArray); //Init Arr Slots
-            battleSceneUI.InitSkillSlots(accessorySkillSlotDatas);  //Init Accessory Skill Slots
+            battleSceneUI.GetAcspSlots().InitSlots(acspSlotArray);   //Init Accessory Skill Slots
             //======================================================================================================================
 
             //================================================ << BATTLE STATE >> ==================================================

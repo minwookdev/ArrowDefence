@@ -1,9 +1,55 @@
 ﻿namespace ActionCat {
     using System.Collections;
+    using System.Collections.Generic;
     using UnityEngine;
     using UnityEngine.UI;
+#if UNITY_EDITOR
+    using UnityEditor;
+#endif
 
     public class BowSprite : MonoBehaviour {
+        #region CUSTOM-EDITOR
+#if UNITY_EDITOR
+        [CustomEditor(typeof(BowSprite))]
+        public class BowSpriteEditor : Editor {
+            SerializedObject serialObject;
+            BowSprite bowSprite;
+
+            private void OnEnable() {
+                serialObject = new SerializedObject(target);
+                bowSprite    = target as BowSprite;
+            }
+
+            public override void OnInspectorGUI() {
+                base.OnInspectorGUI();
+                serialObject.Update();
+                GUILayout.Space(10f);
+                if(GUILayout.Button("SET DEFAULT PARTICLE")) {
+                    string path0 = "Assets/09.Effects/Muzzle/ef_1_red.prefab";
+                    string path1 = "Assets/09.Effects/Muzzle/ef_2_red.prefab";
+                    string path2 = "Assets/09.Effects/Muzzle/ef_3_red.prefab";
+                    var particleAsset0 = AssetDatabase.LoadAssetAtPath<ACEffector2D>(path0);
+                    var particleAsset1 = AssetDatabase.LoadAssetAtPath<ACEffector2D>(path1);
+                    var particleAsset2 = AssetDatabase.LoadAssetAtPath<ACEffector2D>(path2);
+
+                    List<ACEffector2D> particles = new List<ACEffector2D>();
+                    particles.Add(particleAsset0);
+                    particles.Add(particleAsset1);
+                    particles.Add(particleAsset2);
+
+                    bowSprite.muzzleEffect = particles.ToArray();
+                    EditorUtility.SetDirty(bowSprite);
+
+                    CatLog.Log(StringColor.GREEN, "SET DEFAULT PARTICLES in BOWSPRITE");
+                }
+            }
+
+            /// DESCRIPTION
+            ///private 멤버 변수를 불러와야 했기 때문에 내부 클래스로 작성함.
+        }
+#endif
+#endregion
+
         [Header("BOW SPRITE")]
         [SerializeField] Image ImageBattleBow;
         [SerializeField] Sprite SpriteBow;
@@ -31,6 +77,9 @@
         [SerializeField] [ReadOnly]
         BOWEFFECTYPE effectType = BOWEFFECTYPE.NONE;
 
+        [Header("PARTICLE")]
+        [SerializeField] ACEffector2D[] muzzleEffect = null;
+
         //Impact Effect Parameters
         string hitEffectBlendParams   = "_HitEffectBlend";   //Range(0f, 1f);
         string chromAberrAmountParams = "_ChromAberrAmount"; //Range(0f, 1f);
@@ -49,6 +98,13 @@
             }
             else {
                 return null;
+            }
+        }
+
+        private void Start() {
+            for (int i = 0; i < muzzleEffect.Length; i++) {
+                string pooltag = GlobalSO.Inst.POOLTAG_MUZZLE + i.ToString();
+                CCPooler.AddPoolList(pooltag, 2, muzzleEffect[i].gameObject, false);
             }
         }
 
@@ -84,7 +140,7 @@
             StartCoroutine(EffectFadeCo(isRewind));
         }
 
-        #region EFFECT_COROUTINE
+#region EFFECT_COROUTINE
 
         IEnumerator EffectImpactCo() {
             float progress = 0f;
@@ -156,9 +212,9 @@
         }
 
 
-        #endregion
+#endregion
 
-        #region EFFECT_STOP
+#region EFFECT_STOP
 
         void StopImpact() {
             if(effectCoroutine != null) {
@@ -184,7 +240,7 @@
             CatLog.WLog("Fade Effect cannot be stopped while it is active.");
         }
 
-        #endregion
+#endregion
 
         void RestoreMaterial() {
             //Restore <Imapct> <Charged> Params
@@ -209,5 +265,17 @@
                 bowMaterial.SetFloat(FadeAmountParams, 0f);
             }
         }
+
+        #region EFFECT_MUZZLE
+
+        public void ActiveMuzzleFlash(Vector3 position, float eulerAnglesZ) {
+            CCPooler.SpawnFromPool<ACEffector2D>(GetRandomMuzzleTag(), position, Quaternion.identity).Play(eulerAnglesZ);
+        }
+
+        string GetRandomMuzzleTag() {
+            return string.Format("{0}{1}", GlobalSO.Inst.POOLTAG_MUZZLE, Random.Range(0, muzzleEffect.Length));
+        }
+
+        #endregion
     }
 }

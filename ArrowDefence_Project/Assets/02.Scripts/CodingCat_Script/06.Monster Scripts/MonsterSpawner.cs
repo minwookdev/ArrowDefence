@@ -3,8 +3,7 @@
     using UnityEngine;
     using System.Collections;
 
-    public class MonsterSpawner : MonoBehaviour
-    {
+    public class MonsterSpawner : MonoBehaviour {
         [Header("STAGE DIFFICULTY")]
         [SerializeField] STAGEDIFF stageDiff = STAGEDIFF.EASY;
 
@@ -21,6 +20,7 @@
         [ReadOnly] public float spawnTimer = 0f;
 
         [Header("DEBUG")]
+        [SerializeField] bool isNotSpawnMonster   = false;
         [SerializeField] bool isCheckAliveMonster = false;
         [SerializeField] float checkerInterval = 2f;
         private float checkerCount = 2f;
@@ -65,6 +65,8 @@
         }
 
         private void SpawnMonster() {
+            if (isNotSpawnMonster == true) return;
+
             spawnTimer -= Time.deltaTime;
 
             if(spawnTimer <= 0) {

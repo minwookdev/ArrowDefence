@@ -35,6 +35,10 @@
             this.spreadAngle = data.SpreadAngle;
         }
 
+        public override void Init() {
+            
+        }
+
         public override void BowSpecialSkill(Transform bowTr, AD_BowController controller, ref DamageStruct damage, Vector3 initPos, ARROWTYPE type) {
             SpreadShot(bowTr, type, initPos, ref damage);
         }

@@ -22,6 +22,10 @@
 
         }
 
+        public override void Init() {
+            throw new System.NotImplementedException();
+        }
+
         public override void BowSpecialSkill(Transform bowTr, AD_BowController controller, ref DamageStruct damage, Vector3 initPos, ARROWTYPE type) {
             throw new System.NotImplementedException();
         }

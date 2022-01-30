@@ -57,7 +57,6 @@
 
         #endregion
 
-
         #region AUTO_MACHINE
 
         void AutoModeUpdate() {
@@ -154,6 +153,10 @@
             arrowTr.position = ClampPointTop.position;
             AD_BowRope.instance.CatchPointClear();
 
+            if(isBowPulling == true) {
+                isBowPulling = false;
+            }
+
             //clear exitwait
             isAutoExitWait = false;
 
@@ -216,8 +219,8 @@
                 CatLog.ELog("Arrow Component is Null, Stop AutoMode !", true);
             }
 
-            //Set Rope Catch Point
             AD_BowRope.instance.SetCatchPoint(arrowComponent.CatchTr);
+            isBowPulling = true;    //Pulling State isOn, used accessory
         }
 
         void TracUpdate() {
@@ -257,7 +260,6 @@
                 tempEulerAngle = bowTr.eulerAngles;
                 tempEulerAngle.z = bowAngle;
                 bowTr.eulerAngles = tempEulerAngle;
-
             //=====================================================<< SHOT >>===================================================
                 if (currShotTime > autoShotTime) {
                     //발사 조건 체크 : (몬스터의 위치와 활 위치간의 각도) - 현재 활 각도 : 몬스터 위치 각도와 현재 활이 조준하고있는 각도의 차이
@@ -266,12 +268,11 @@
 
                     //bool isAngleFrontMonster = (angle >= -range && angle <= range); // -3 ~ 3
                     bool isAngleFrontMonster = GameGlobal.IsRange(angle, range);      // -3 ~ 3
-                    bool isMaxPullingArrow = (Vector2.Distance(arrowPos, ClampPointBottom.position) < 0.5f);
+                    bool isMaxPullingArrow   = (Vector2.Distance(arrowPos, ClampPointBottom.position) < 0.5f);
 
                     if (isAngleFrontMonster == true && isMaxPullingArrow == true) {
                         //Shot Arrow
                         CatLog.Log(StringColor.GREEN, "Is Ready to Shot !");
-                        //autoState = AUTOSTATE.SHOT;
                         AutoStateChange(AUTOSTATE.SHOT);
                     }
                     else {
@@ -280,7 +281,7 @@
                     }
                 }
             //====================================================<< DEBUG >>===================================================
-                CatLog.Log(StringColor.YELLOW, $"Angle Debug : {GameGlobal.AngleBetweenVec2(bowTr.position, targetTr.position) - bowTr.eulerAngles.z}"); 
+                //CatLog.Log(StringColor.YELLOW, $"Angle Debug : {GameGlobal.AngleBetweenVec2(bowTr.position, targetTr.position) - bowTr.eulerAngles.z}"); 
             //==================================================================================================================
 //##########################################################################################################################################################
             }
@@ -288,6 +289,8 @@
 
         void TrackExit() {
             currShotTime = 0f;
+            isBowPulling = false;
+            CatLog.Log(StringColor.YELLOW, "Exit Tracking State !");
         }
         //################################################################################################################################################
         //############################################################### << STATE SHOT >> ###############################################################
@@ -371,8 +374,8 @@
                 tr = null; return false;
             }
 
-            //Enable Monsters Distance Between this position
-            tempList.RemoveAll(element => Vector2.Distance(element.position, bowTr.position) > FindDist);
+            //Remove Target List
+            tempList.RemoveAll(element => Vector2.Distance(element.position, bowTr.position) > FindDist || element.GetComponent<IDamageable>().IsAlive() == false);
             if (tempList.Count <= 0) {
                 tr = null; return false;
             }

@@ -66,6 +66,15 @@
                 return null;
             }
         }
+        public Transform effectTr {
+            get {
+                if(mainSlotTr == null) {
+                    throw new System.Exception("MainSlot Transform is Null");
+                }
+
+                return mainSlotTr;
+            }
+        }
         #endregion
 
         //Enums
@@ -120,7 +129,7 @@
             minBowAngle = 0f; maxBowAngle = 180f;
 
             //Init Load Arrow Type : 장전될 화살 타입 정의
-            arrowType = GameManager.Instance.LoadArrowType();
+            arrowType = GameManager.Instance.GetFirstArrType();
 
             //Load Arrow From CCPooler.
             Reload();
@@ -479,19 +488,17 @@
             //Shot Arrow & Active Skill.
             arrowComponent.ShotByBow(arrowForce, ArrowParentTr, damageStruct);
             BowSkillSet?.Invoke(bowTr, this, ref damageStruct, arrowComponent.CatchTr.position, arrowType);
-            //BowSkillSet?.Invoke(transform.eulerAngles.z, ArrowParentTr, this, ref damageStruct, initArrowScale,
-            //                    ArrowComponent.CatchTr.position, arrowForce, loadArrowType);
 
             //Release GameObject and Component Arrow.
-            //loadedArrow    = null;
             arrowTr        = null;
             arrowComponent = null;
 
             //Active Shot Impact Effect
             bowSprite.Effect(BOWEFFECTYPE.IMPACT);
+            bowSprite.ActiveMuzzleFlash(mainSlotTr.position, bowTr.eulerAngles.z - angleOffset);
 
             //Active Camera Shake
-            CineCam.Inst.ShakeCamera(5f, .1f);
+            CineCam.Inst.ShakeCamera(8f, .1f);
 
             //Arrow Reload
             Reload();

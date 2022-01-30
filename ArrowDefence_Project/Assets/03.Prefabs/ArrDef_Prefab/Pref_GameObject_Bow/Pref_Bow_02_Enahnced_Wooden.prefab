@@ -518,6 +518,7 @@ RectTransform:
   - {fileID: 4517517998388811856}
   - {fileID: 4517517997372370290}
   - {fileID: 4239044934442883132}
+  - {fileID: 3408081679970699936}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
@@ -543,7 +544,7 @@ MonoBehaviour:
   isDebug: 0
   bowSprite: {fileID: 3989477989434767511}
   bowAbility: {fileID: 4517517997932246181}
-  bowTr: {fileID: 0}
+  bowTr: {fileID: 4517517997932246187}
   MainCam: {fileID: 0}
   TouchRadius: 1
   BowCenterPointImg: {fileID: 4705361034708059427}
@@ -555,6 +556,7 @@ MonoBehaviour:
   arrowTr: {fileID: 0}
   loadedArrow: {fileID: 0}
   arrowComponent: {fileID: 0}
+  mainSlotTr: {fileID: 3408081679970699936}
 --- !u!114 &4517517997932246181
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -591,6 +593,10 @@ MonoBehaviour:
   chargeEffectTime: 0.5
   FadeBurnTime: 1
   effectType: 0
+  shotParticleArray:
+  - {fileID: 5937770289732402498, guid: 3699b62eae610ff4ab5a118c46161f68, type: 3}
+  - {fileID: 3198888974520107025, guid: b6d830e388f8d3548801f05548bf9398, type: 3}
+  - {fileID: 1828671734012454757, guid: 0a83933b697ce7644883b48058c1a6ae, type: 3}
 --- !u!1 &4517517998196540575
 GameObject:
   m_ObjectHideFlags: 0
@@ -759,6 +765,41 @@ RectTransform:
   m_AnchorMax: {x: 0, y: 0.5}
   m_AnchoredPosition: {x: 17.5, y: 0}
   m_SizeDelta: {x: 35, y: 35}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &4859966296815402353
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3408081679970699936}
+  m_Layer: 8
+  m_Name: Bow_Slot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &3408081679970699936
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4859966296815402353}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4517517997932246187}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 24, y: -0}
+  m_SizeDelta: {x: 10, y: 10}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &5640278833819265502
 GameObject:

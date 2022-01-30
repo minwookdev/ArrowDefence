@@ -1,5 +1,4 @@
-﻿namespace ActionCat
-{
+﻿namespace ActionCat {
     using System;
     using System.Collections;
     using UnityEngine;
@@ -8,31 +7,6 @@
     using TMPro;
 
     public class AccessorySkillSlot : MonoBehaviour, IPointerClickHandler {
-        /// <summary>
-        /// ACSP SLOT INIT DATA
-        /// </summary>
-        public class ActiveSkillSlotInitData
-        {
-            public ACSPACTIVETYPE ActiveType { get; private set; }
-            public Sprite SkillIconSprite { get; private set; }
-            public float MaxCount { get; private set; } = 0f;
-            public bool IsPrepared { get; private set; } = false;
-            public Func<MonoBehaviour, float> SkillFunc { get; private set; }
-            public Action StopEffectAction { get; private set; }
-
-            public ActiveSkillSlotInitData(Sprite iconsprite, float maxcount, bool isprepared,
-                                           ACSPACTIVETYPE type, Func<MonoBehaviour, float> skillfunc,
-                                           Action stopskilleffect)
-            {
-                SkillIconSprite  = iconsprite;
-                MaxCount         = maxcount;
-                IsPrepared       = isprepared;
-                ActiveType       = type;
-                SkillFunc        = skillfunc;
-                StopEffectAction = stopskilleffect;
-            }
-        }
-
         [Header("Default")]
         [SerializeField] Image skillIcon;
 
@@ -62,8 +36,24 @@
         Action stopSkillAction  = null;                     //Skill Effect Stop
         Coroutine skillEffectCo = null;                     //Skill Effect Coroutine
 
-        void InitDefault(ACSPACTIVETYPE type, Sprite skillicon)
-        {
+        #region INIT
+
+        public AccessorySkillSlot InitSlot(UI.ACSData data) {
+            switch (data.ActiveType) {
+                case ACSPACTIVETYPE.COOLDOWN:  InitCoolDownType(data); return this;
+                case ACSPACTIVETYPE.CHARGING:  InitStackType(data);    return this;
+                case ACSPACTIVETYPE.KILLCOUNT: InitKillType(data);     return this;
+                case ACSPACTIVETYPE.HITCOUNT:  InitHitType(data);      return this;
+                default: throw new NotImplementedException();
+            }
+        }
+
+        /// <summary>
+        /// 모든 Active Type에 대한 공통적인 초기화 사항.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="skillicon"></param>
+        void InitDefault(ACSPACTIVETYPE type, Sprite skillicon) {
             eventTrigger = GetComponent<EventTrigger>();
             skillActiveType = type;
             if (skillIcon == null)
@@ -71,44 +61,15 @@
             skillIcon.sprite = skillicon;
         }
 
-        #region INIT
-
-        public void InitSlot(UI.ACSData data) {
-            switch (data.ActiveType) {
-                case ACSPACTIVETYPE.COOLDOWN:  InitCoolDownType(data); break;
-                case ACSPACTIVETYPE.CHARGING:  InitStackType(data);    break;
-                case ACSPACTIVETYPE.KILLCOUNT: InitKillType(data);     break;
-                case ACSPACTIVETYPE.HITCOUNT:  InitHitType(data);      break;
-                default: throw new NotImplementedException();
-            }
-        }
-
-        public void InitCoolDownSkillButton(ActiveSkillSlotInitData data)
-        {
-            InitDefault(data.ActiveType, data.SkillIconSprite);
-
-            if (coolDownMask == null || coolDownTmp == null) {
-                CatLog.WLog("CoolDown Mask or CoolDown Count Text is null");
-                return;
-            }
-
-            //Init-Cool Down variables
-            maxCoolDown = data.MaxCount;
-            currentCoolDown = (data.IsPrepared) ? 0f : maxCoolDown;
-
-            //Init-Cool Down UI Element
-            coolDownMask.fillAmount = 1f;
-            coolDownTmp.text = "";
-
-            InitEventTriggerCallback(data.SkillFunc);
-            InitEffectStop(data.StopEffectAction);
-        }
-
+        /// <summary>
+        /// CoolDown Type Skill Slots
+        /// </summary>
+        /// <param name="data"></param>
         public void InitCoolDownType(UI.ACSData data) {
             InitDefault(data.ActiveType, data.IconSprite);
 
             if(coolDownMask == null || coolDownTmp == null) {
-                throw new System.Exception("CoolDown Mask or Text Component is Null.");
+                throw new Exception("CoolDown Mask or Text Component is Null.");
             }
 
             //init cooldown variables
@@ -123,27 +84,12 @@
             InitEffectStop(data.SkillStopCallback);
         }
 
-        public void InitStackingSkillButton(ActiveSkillSlotInitData data)
-        {
-
-        }
-
         public void InitStackType(UI.ACSData data) {
             throw new System.NotImplementedException();
         }
 
-        public void InitKillCountSkillButton_typeA()
-        {
-
-        }
-
         public void InitKillType(UI.ACSData data) {
             throw new System.NotImplementedException();
-        }
-
-        public void InitKillCountSkillButton_typeB()
-        {
-
         }
 
         public void InitHitType(UI.ACSData data) {
@@ -152,28 +98,24 @@
 
         #endregion
 
-        private void Update()
-        {
-            switch (skillActiveType)
-            {
-                case ACSPACTIVETYPE.COOLDOWN: UpdateCoolDownSkill(); break;
-                case ACSPACTIVETYPE.CHARGING: UpdateChargingSkill(); break;
+        private void Update() {
+            switch (skillActiveType) {
+                case ACSPACTIVETYPE.COOLDOWN:  UpdateCoolDownSkill();  break;   //시간이 흐름에 따라 사용 가능 횟수가 충전
+                case ACSPACTIVETYPE.CHARGING:  UpdateChargingSkill();  break;   //
                 case ACSPACTIVETYPE.KILLCOUNT: UpdateKillStackSkill(); break;
-                case ACSPACTIVETYPE.HITCOUNT: UpdateHitsStackSkill(); break;
+                case ACSPACTIVETYPE.HITCOUNT:  UpdateHitsStackSkill(); break;
             }
         }
 
         #region UPDATE
 
-        void UpdateCoolDownSkill()
-        {
+        void UpdateCoolDownSkill() {
             //Only Update Battle Scene In-Battle State
             if (GameManager.Instance.GameState != GAMESTATE.STATE_INBATTLE)
                 return;
 
             //Prepared Skill
-            if (isPreparedSkillActive == false)
-            {
+            if (isPreparedSkillActive == false) {
                 currentCoolDown -= Time.deltaTime;
                 if (currentCoolDown <= 0f)
                     isPreparedSkillActive = true;
@@ -205,8 +147,7 @@
         /// <summary>
         /// Disable Activating Skill Button
         /// </summary>
-        void InitEffectStop(Action action)
-        {
+        void InitEffectStop(Action action) {
             stopSkillAction = action;
 
             //if the End Battle, Stop Effect Coroutine and Disable Effect Use
@@ -267,10 +208,9 @@
                 CatLog.Log("Skill Not Prepared !");
         }
 
-        IEnumerator ActiveSkillCo()
-        {
+        IEnumerator ActiveSkillCo() {
             isEffectActivation = true;
-            duration = activeSkillFunc(GameManager.Instance.ControllerOrNull());
+            duration = activeSkillFunc(GameManager.Instance.GetControllerInstOrNull());
             currentCoolDown = maxCoolDown;
 
             //Wait For Skill Duration

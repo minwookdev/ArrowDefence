@@ -10,6 +10,13 @@
 
         private static GlobalSO _inst;
 
+        [Header("POOLTAG")]
+        public string POOLTAG_RAPIDSHOT_EFFECT = "";
+        public string POOLTAG_MUZZLE = "Eff_Muzzle_0";
+
+        [Header("SORTING ORDER")]
+        public string SORTINGLAYER_EFFECT = "";
+
         public static GlobalSO Inst {
             get {
                 if(_inst != null) {

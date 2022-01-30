@@ -1,9 +1,7 @@
-﻿namespace ActionCat
-{
+﻿namespace ActionCat {
     using UnityEngine;
 
-    public abstract class AD_BowSkill
-    {
+    public abstract class AD_BowSkill {
         protected string id;
         protected string name;
         protected string desc;
@@ -35,8 +33,7 @@
         public AD_BowSkill() { }
         ~AD_BowSkill() { }
 
-        protected AD_BowSkill(string skillid, string skillname, string skilldesc, SKILL_LEVEL level, BOWSKILL_TYPE type, Sprite sprite)
-        {
+        protected AD_BowSkill(string skillid, string skillname, string skilldesc, SKILL_LEVEL level, BOWSKILL_TYPE type, Sprite sprite) {
             this.id         = skillid;
             this.name       = skillname;
             this.desc       = skilldesc;
@@ -45,8 +42,9 @@
             this.iconSprite = sprite;
         }
 
+        public abstract void Init();
+
         public abstract void BowSpecialSkill(Transform bowTr, AD_BowController controller, ref DamageStruct damage, Vector3 initPos, ARROWTYPE type);
         //BowSpecialSkill(Transform bowTr, AD_BowController controller, ref DamageStruct damage, Vector3 initPos, LOAD_ARROW_TYPE arrowType);
-
     }
 }

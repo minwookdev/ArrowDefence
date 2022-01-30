@@ -12,3 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4863daf9ae7cb4c4ab8bcde42158634f, type: 3}
   m_Name: GlobalSO
   m_EditorClassIdentifier: 
+  POOLTAG_RAPIDSHOT_EFFECT: Eff_RapidShot
+  POOLTAG_MUZZLE: Eff_Muzzle_0
+  SORTINGLAYER_EFFECT: Effect:Player

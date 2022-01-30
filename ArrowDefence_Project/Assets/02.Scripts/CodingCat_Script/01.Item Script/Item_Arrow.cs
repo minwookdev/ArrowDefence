@@ -11,6 +11,8 @@
         //Arrow Skill Data Class
         ASInfo arrowSkillInfoFst;
         ASInfo arrowSkillInfoSec;
+        //Arrow Default Hit Effect
+        ACEffector2D hitEffect;
 
         //↘Not Save This SkillSet Class [TEMP]
         ArrowSkillSet arrowSkillSets = null;

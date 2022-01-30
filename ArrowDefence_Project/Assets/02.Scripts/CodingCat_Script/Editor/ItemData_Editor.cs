@@ -205,7 +205,7 @@ public class BowItemData_Editor : Editor
         abilCritDmgProp       = serialObject.FindProperty(nameof(ItemData_Equip_Bow.CriticalDamageMultiplier));
         abilChargedDamageProp = serialObject.FindProperty(nameof(ItemData_Equip_Bow.FullChargedMultiplier));
 
-        var texture = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/99. ArrowDefence_Resources/Sprites/Scene_Main/Sprite_Icon/icon_star_grade_l.png");
+        var texture = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/08.Sprites/Sprites/Scene_Main/Sprite_Icon/icon_star_grade_l.png");
         if(texture == null) {
             CatLog.WLog("Star Texture is Null");
         }
@@ -213,7 +213,7 @@ public class BowItemData_Editor : Editor
             enableStarTexture = texture;
         }
 
-        var disableTexture = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/99. ArrowDefence_Resources/Sprites/Scene_Main/Sprite_Icon/icon_star_grade_l_d.png");
+        var disableTexture = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/08.Sprites/Sprites/Scene_Main/Sprite_Icon/icon_star_grade_l_d.png");
         if(disableTexture != null) {
             disableStarTexture = disableTexture;
         }

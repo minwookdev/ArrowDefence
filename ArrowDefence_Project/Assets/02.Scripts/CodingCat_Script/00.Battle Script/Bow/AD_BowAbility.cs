@@ -14,6 +14,7 @@
             var bowSkills = CCPlayerData.equipments.GetBowItem().GetSkillsOrNull();
             for (int i = 0; i < bowSkills.Length; i++) {
                 if(bowSkills[i] != null) {
+                    bowSkills[i].Init();
                     bowskilldelegate += bowSkills[i].BowSpecialSkill;
                     CatLog.Log($"Skill Slot {i} Init, Skill Name : {bowSkills[i].ToString()}");
                 }

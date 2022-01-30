@@ -1,26 +1,11 @@
-﻿namespace ActionCat {
+﻿namespace ActionCat.UI {
     using System.Collections.Generic;
     using UnityEngine;
     using UnityEngine.UI;
-    using UnityEngine.EventSystems;
-    using TMPro;
     using DG.Tweening;
-    using UI;
-    using Games.UI;
-    using UI.Auto;
+    using TMPro;
 
     public class BattleSceneRoute : MonoBehaviour {
-        public class ArrowSwapSlotInitData {
-            public bool IsActiveSlot { get; private set; }
-            public Sprite IconSprite { get; private set; }
-            public System.Action<ARROWTYPE> SlotCallback { get; private set; }
-            public ArrowSwapSlotInitData(bool isactiveslot, Sprite iconsprite, System.Action<ARROWTYPE> callback) {
-                IsActiveSlot = isactiveslot;
-                IconSprite   = iconsprite;
-                SlotCallback = callback;
-            }
-        }
-
         //Screen Limit Variable
         [Header("DEV OPTIONS")]
         public bool IsVisible;
@@ -54,15 +39,11 @@
         [TextArea(3, 5)] public string StageTips = "";
         Sequence overSeq = null;
 
-        [Header("ARROW SWAP MODULE")]
+        [Header("SWAP SLOT MODULE")]
         [SerializeField] SwapSlots arrSwapSlot = null;
 
-        [Header("ACCESSORY SLOT MODULE")]
-        [SerializeField] Transform skillSlotTr;
-        [SerializeField] GameObject prefCooldownType;
-        [SerializeField] GameObject prefChargingType;
-        [SerializeField] GameObject prefHitsType;
-        [SerializeField] GameObject prefkillType;
+        [Header("ACSP SLOT MODULE")]
+        [SerializeField] AcspSlots acspSlots = null;
 
         [Header("HIT SCREEN")]
         [SerializeField] Material hitScreenMaterial = null;
@@ -72,7 +53,7 @@
         string generalAlpha = "_Alpha";
 
         [Header("AUTO MODULE")]
-        [SerializeField] AutoButton autoButton = null;
+        [SerializeField] UI.Auto.AutoButton autoButton = null;
 
         private float screenZpos = 0f;
         private LineRenderer arrowLimitLine;
@@ -135,10 +116,6 @@
 
         void Update() {
             HitScreenUpdate();
-
-            //if(Input.GetKeyDown(KeyCode.I)) {
-            //    OnHitScreen();
-            //}
         }
 
         void OnDisable() {
@@ -226,7 +203,7 @@
         /// </summary>
         void TooltipRelease() {
             //Release Item Info Tooltip
-            ItemTooltip.Inst.ReleaseParent();
+            Games.UI.ItemTooltip.Inst.ReleaseParent();
         }
 
         #endregion
@@ -303,87 +280,14 @@
 
         #endregion 
 
-        #region BATTLE_SLOTS
-
-        //public void InitArrowSlots(ArrowSwapSlotInitData[] datas) {
-        //    for (int i = 0; i < datas.Length; i++) {
-        //        if (i == 0)      //Main Arrow Swap Slot
-        //        {
-        //            if (datas[i].IsActiveSlot == false) {
-        //                mainArrowSlot.gameObject.SetActive(false);
-        //                continue;
-        //            }
-        //
-        //            mainArrowSlot.gameObject.SetActive(true);
-        //            var arrowIcon = mainArrowSlot.transform.GetChild(0).GetComponent<Image>();
-        //            arrowIcon.enabled = true;
-        //            arrowIcon.preserveAspect = true;
-        //            arrowIcon.sprite = datas[i].IconSprite;
-        //
-        //            //Click Event 처리
-        //            var tempIndex = i;
-        //            EventTrigger.Entry mainSlotEntry = new EventTrigger.Entry();
-        //            mainSlotEntry.eventID = EventTriggerType.PointerClick;
-        //            mainSlotEntry.callback.AddListener((pointereventdata) => datas[tempIndex].SlotCallback(ARROWTYPE.ARROW_MAIN));
-        //            mainArrowSlot.triggers.Add(mainSlotEntry);
-        //
-        //            //Controller Pulling 예외처리 <- Controller로직 변경으로 사용하지 않음.
-        //            //GameManager.Instance.PreventionPulling(mainArrowSlot);
-        //        }
-        //        else if (i == 1) //Sub Arrow Swap Slot
-        //        {
-        //            if(datas[i].IsActiveSlot == false) {
-        //                subArrowSlot.gameObject.SetActive(false);
-        //                continue;
-        //            }
-        //
-        //            subArrowSlot.gameObject.SetActive(true);
-        //            var arrowIcon = subArrowSlot.transform.GetChild(0).GetComponent<Image>();
-        //            arrowIcon.enabled = true;
-        //            arrowIcon.preserveAspect = true;
-        //            arrowIcon.sprite = datas[i].IconSprite;
-        //
-        //            var tempIndex = i;
-        //            EventTrigger.Entry subSlotEntry = new EventTrigger.Entry();
-        //            subSlotEntry.eventID = EventTriggerType.PointerClick;
-        //            subSlotEntry.callback.AddListener((pointereventdata) => datas[tempIndex].SlotCallback(ARROWTYPE.ARROW_SUB));
-        //            subArrowSlot.triggers.Add(subSlotEntry);
-        //
-        //            //Controller Pulling 예외처리 <- Controller로직 변경으로 사용하지 않음.
-        //            //GameManager.Instance.PreventionPulling(subArrowSlot);
-        //        }
-        //    }
-        //
-        //    specialArrowSlot.gameObject.SetActive(false);
-        //}
-
-        public void InitSkillSlots(AccessorySkillSlot.ActiveSkillSlotInitData[] datas)
-        {
-            foreach (var data in datas)
-            {
-                //if (data == null) continue; //-> 로직 변경으로 체크할 필요없어졌다.
-
-                switch (data.ActiveType)
-                {
-                    case ACSPACTIVETYPE.COOLDOWN:
-                        var cooldownslot = Instantiate(prefCooldownType, skillSlotTr).GetComponent<AccessorySkillSlot>();
-                        cooldownslot.InitCoolDownSkillButton(data); break;
-
-                    case ACSPACTIVETYPE.CHARGING:
-                        var chargingslot = Instantiate(prefChargingType, skillSlotTr).GetComponent<AccessorySkillSlot>();
-                        chargingslot.InitStackingSkillButton(data); break;
-
-                    case ACSPACTIVETYPE.KILLCOUNT: break;
-
-                    case ACSPACTIVETYPE.HITCOUNT: break;
-
-                    default: break;
-                }
-            }
-        }
+        #region UI_SLOTS
 
         public SwapSlots GetArrSwapSlots() {
             return (arrSwapSlot == null) ? throw new System.Exception("SwapSlot Component Not Cached.") : arrSwapSlot;
+        }
+
+        public AcspSlots GetAcspSlots() {
+            return (acspSlots == null) ? throw new System.Exception("Accessory SkillSlot Component Not Cached.") : acspSlots;
         }
 
         #endregion
@@ -409,13 +313,8 @@
 
         #region AUTO_BUTTON
 
-        public AutoButton GetAutoButton() {
-            if(autoButton == null) {
-                throw new System.Exception("Auto Button Component is Not Cached.");
-            }
-            else {
-                return autoButton;
-            }
+        public Auto.AutoButton GetAutoButton() {
+            return (autoButton != null) ? autoButton : throw new System.Exception("AutoButton Component is Not Cached.");
         }
 
         #endregion

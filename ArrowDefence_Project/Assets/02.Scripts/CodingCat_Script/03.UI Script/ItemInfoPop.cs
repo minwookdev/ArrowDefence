@@ -373,7 +373,7 @@
                 abilitySlots.EnableSlots(address.AbilitiesOrNull);
 
                 //Enable Skill-Slots (Artifact Special Skill Max : Only 1)
-                var spEffect = address.SPEffect;
+                var spEffect = address.SPEffectOrNull;
                 if(spEffect != null) {
                     SkillSlots[0].ActiveSlot(spEffect.Name, spEffect.Description, 
                                              spEffect.Level, spEffect.IconSprite);
@@ -809,11 +809,11 @@
                 {
                     if (i == 0)
                     {
-                        if (itemAddress.SPEffect != null)
-                            SkillSlots[i].ActiveSlot(itemAddress.SPEffect.Name,
-                                                     itemAddress.SPEffect.Description,
-                                                     itemAddress.SPEffect.Level,
-                                                     itemAddress.SPEffect.IconSprite);
+                        if (itemAddress.SPEffectOrNull != null)
+                            SkillSlots[i].ActiveSlot(itemAddress.SPEffectOrNull.Name,
+                                                     itemAddress.SPEffectOrNull.Description,
+                                                     itemAddress.SPEffectOrNull.Level,
+                                                     itemAddress.SPEffectOrNull.IconSprite);
                         else
                             SkillSlots[i].DisableSlot();
                     }

@@ -1,27 +1,17 @@
-﻿namespace ActionCat
-{
-    using UnityEditor;
-    using UnityEngine;
-
-    public class Item_Accessory : Item_Equipment
-    {
+﻿namespace ActionCat {
+    public class Item_Accessory : Item_Equipment {
         private int maxNumberOfEffect;
         private AccessoryRFEffect[] effects;
         private AccessorySPEffect specialEffect;
 
-        public AccessorySPEffect SPEffect
-        {
-            get
-            {
-                if (this.specialEffect != null)
-                    return specialEffect;
-                else
-                    return null;
+        public AccessorySPEffect SPEffectOrNull {
+            get {
+                if (specialEffect != null) return specialEffect;
+                else                       return null;
             }
         }
 
-        public Item_Accessory(ItemData_Equip_Accessory item) : base()
-        {
+        public Item_Accessory(ItemData_Equip_Accessory item) : base() {
             //Set Equipment Item Type
             this.EquipType = EQUIP_ITEMTYPE.EQUIP_ACCESSORY;
 
@@ -37,8 +27,7 @@
             specialEffect = item.SPEffect;
         }
 
-        public Item_Accessory(Item_Accessory item) : base()
-        {
+        public Item_Accessory(Item_Accessory item) : base() {
             //Set Equipment Item Type
             this.EquipType = EQUIP_ITEMTYPE.EQUIP_ACCESSORY;
 
@@ -58,23 +47,8 @@
         /// </summary>
         public Item_Accessory() : base() { }
 
-        public void Init()
-        {
-            //여기다가 Effect 실행하는 코드 써보면된다 !
-            //Bow GameObject를 변수로 받던지 하면될거같다
-            //아니면 GameObject.Find 사용하거나 등등
-
-            //var bowGameObject = GameObject.FindWithTag(AD_Data.OBJECT_TAG_BOW);
-            //if(bowGameObject)
-            //{
-            //    System.Type effectScript = AcEffectScript.GetClass();
-            //    bowGameObject.AddComponent(effectScript);
-            //}
-
+        public void Init() {
             if (specialEffect != null) specialEffect.Init();
-
-            //사실 그냥 이렇게 하면되긴하네 GameObject 형에 직접적으로 컴포넌트를 붙이는 거니깐
-            //bowGameObject.AddComponent<AcEffect_AimSight>();
         }
     }
 }

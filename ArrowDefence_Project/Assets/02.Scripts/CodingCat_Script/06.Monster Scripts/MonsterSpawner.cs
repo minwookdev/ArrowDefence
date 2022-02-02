@@ -103,17 +103,17 @@
             //Difficulty configuration according to cached monsters.
 
             if (monsterPrefNormal != null) {
-                CCPooler.AddPoolList(AD_Data.POOLTAG_MONSTER_NORMAL, 10, monsterPrefNormal, iscount:true);
+                CCPooler.AddPoolList(AD_Data.POOLTAG_MONSTER_NORMAL, 10, monsterPrefNormal, isTracking:true);
                 SetStageDiff();
             }
 
             if(monsterPrefFreq != null) {
-                CCPooler.AddPoolList(AD_Data.POOLTAG_MONSTER_FREQ, 10, monsterPrefFreq, iscount:true);
+                CCPooler.AddPoolList(AD_Data.POOLTAG_MONSTER_FREQ, 10, monsterPrefFreq, isTracking:true);
                 SetStageDiff();
             }
 
             if(monsterPrefElite != null) {
-                CCPooler.AddPoolList(AD_Data.POOLTAG_MONSTER_ELITE, 10, monsterPrefElite, iscount:false);
+                CCPooler.AddPoolList(AD_Data.POOLTAG_MONSTER_ELITE, 10, monsterPrefElite, isTracking:false);
                 SetStageDiff();
             }
         }

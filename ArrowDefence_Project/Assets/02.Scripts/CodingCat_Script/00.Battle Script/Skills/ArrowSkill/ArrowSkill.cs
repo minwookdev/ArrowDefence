@@ -26,6 +26,41 @@
 
     public abstract class AttackActiveTypeAS : ArrowSkill {
         protected GameObject lastHitTarget = null;
+        protected ACEffector2D[] effects   = null;
+        #region PROPERTY
+        public int EffectsLength {
+            get {
+                if(effects == null) {
+                    throw new System.Exception("the effects Array is Not assignment.");
+                }
+
+                return effects.Length;
+            }
+        }
+        public bool IsEffectUser {
+            get {
+                if(effects == null) {
+                    return false;
+                }
+
+                if(effects.Length == 0) {
+                    CatLog.WLog($"hit skill is assignment, but effects Array is Empty.");
+                    return false;
+                }
+
+                return true;
+            }
+        }
+        public ACEffector2D[] Effects {
+            get {
+                if(effects == null) {
+                    throw new System.Exception("the EffectArray is Not Assignment.");
+                }
+
+                return effects;
+            }
+        }
+        #endregion
 
         public abstract bool OnHit(Collider2D target, ref DamageStruct damage, Vector3 contact, Vector2 direction);
 
@@ -51,6 +86,8 @@
             }
             else return;
         }
+
+        public abstract void EffectPlay();
     }
 
     public abstract class AirActiveTypeAS : ArrowSkill {
@@ -69,11 +106,11 @@
         //Save Variables
         int maxChainCount = 2;  // Max Chain Count
         float scanRange   = 5f; // Monster Detect Range
-        ACEffector2D hitEffect; // Arrow Hit Effect
 
         //Temp Variables
         List<Collider2D> tempCollList = null;
         int currentChainCount         = 0;  // Current Chain Count
+        string[] effectPoolTags;
 
         public override bool OnHit(Collider2D target, ref DamageStruct damage, Vector3 contact, Vector2 direction) {
             //=============================================[ PHASE I. ACTIVATING & TARGET CHECKER ]=========================================================
@@ -197,14 +234,24 @@
             currentChainCount = 0;
         }
 
+        public override void EffectPlay() {
+            CCPooler.SpawnFromPool<ACEffector2D>(effectPoolTags.RandIndex<string>(), Vector3.zero, Quaternion.identity);
+        }
+
         /// <summary>
         /// Copy Class Constructor
         /// </summary>
         /// <param name="origin"></param>
-        public ReboundArrow(ReboundArrow origin) {
+        public ReboundArrow(ReboundArrow origin, string tag) {
             maxChainCount = origin.maxChainCount;
             scanRange     = origin.scanRange;
-            hitEffect     = origin.hitEffect;
+            effects       = origin.effects;
+
+            List<string> effectPoolTagList = new List<string>();
+            for (int i = 0; i < effects.Length; i++) {
+                effectPoolTagList.Add($"{tag}{AD_Data.POOLTAG_HITEFFECT}{i}");
+            }
+            effectPoolTags = effectPoolTagList.ToArray();
         }
 
         /// <summary>
@@ -214,15 +261,13 @@
         public ReboundArrow(DataRebound item) {
             scanRange     = item.ScanRadius;
             maxChainCount = item.MaxChainCount;
-            hitEffect     = item.effector;
+            effects       = item.effects;
         }
 
         /// <summary>
         /// Public Empty Constructor for ES3
         /// </summary>
-        public ReboundArrow() {
-
-        }
+        public ReboundArrow() { }
     }
 
     public class HomingArrow : AirActiveTypeAS {
@@ -505,6 +550,10 @@
 
         public override void Clear() {
             currentChainCount = 0;
+        }
+
+        public override void EffectPlay() {
+            throw new System.NotImplementedException();
         }
 
         public PiercingArrow(PiercingArrow origin)

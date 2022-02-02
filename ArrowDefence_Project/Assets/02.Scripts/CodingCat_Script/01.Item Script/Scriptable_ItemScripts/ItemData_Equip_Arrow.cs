@@ -2,8 +2,7 @@
     using UnityEngine;
 
     [CreateAssetMenu(fileName = "Item_Arrow_Asset", menuName = "Scriptable Object Asset/Item_Arrow_Asset")]
-    public class ItemData_Equip_Arrow : ItemData_Equip
-    {
+    public class ItemData_Equip_Arrow : ItemData_Equip {
         [Header("Arrow Item Data")]
         public GameObject MainArrowObj;
         public GameObject LessArrowObj;
@@ -14,7 +13,8 @@
         //Inherence Ability
         [Range(1f, 1.5f)]  public float DamageInc = 1f;
         [Range(18f, 28f)] public float Speed = 18f;
-        //[Range()] public float StatusEffectInc = 0f;
+
+        public ACEffector2D[] effects;
 
         public ItemData_Equip_Arrow() : base() {
             this.Equip_Type = EQUIP_ITEMTYPE.EQUIP_ARROW;

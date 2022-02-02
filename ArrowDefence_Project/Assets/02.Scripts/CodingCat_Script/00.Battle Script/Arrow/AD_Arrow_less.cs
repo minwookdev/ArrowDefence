@@ -21,6 +21,7 @@
         //Arrow Angle Calculate Variable
         private Vector2 arrowPosition;
         private Vector2 velocity;
+        private string[] effectPoolTags;
         private float arrowAngle = 0f;
         private bool isLaunched  = false;
         private bool isInitSkill = false;
@@ -237,6 +238,30 @@
                 }
             }
         }
+
+        #region EFFECT
+
+        public void SetEffectInfo(string[] tagArray) {
+            effectPoolTags = tagArray;
+        }
+
+        public void RemoveEffectInfo() {
+            effectPoolTags = null;
+        }
+
+        void DefaultEffect() {
+            if(effectPoolTags.Length == 0) {
+                return;
+            }
+
+            CCPooler.SpawnFromPool<ACEffector2D>(effectPoolTags[(Random.Range(0, effectPoolTags.Length))], Vector3.zero, Quaternion.identity);
+        }
+
+        string IArrowObject.GetEffectKey() {
+            return string.Format("{0}{1}", gameObject.name, AD_Data.POOLTAG_HITEFFECT);
+        }
+
+        #endregion
 
         #region LEGACY
 

@@ -13,6 +13,7 @@ public class ArrowSkillData_Editor : Editor
     protected SerializedProperty typeProp;
     protected SerializedProperty spriteProp;
     protected SerializedProperty activeTypeProp;
+    protected SerializedProperty effectProp;
 
     protected void InitSerializedObject()
     {
@@ -25,6 +26,7 @@ public class ArrowSkillData_Editor : Editor
         typeProp       = sobject.FindProperty("SkillType");
         spriteProp     = sobject.FindProperty("IconSprite");
         activeTypeProp = sobject.FindProperty("ActiveType");
+        effectProp     = sobject.FindProperty(nameof(ArrowSkillData.effects));
     }
 
     public virtual void DrawMonoScript()
@@ -86,17 +88,20 @@ public class ReboundArrowDataEditor : ArrowSkillData_Editor
     SerializedProperty scanRangeProp;
     SerializedProperty maxChainCountProp;
 
-    public void OnEnable()
-    {
+    GUIStyle guiStyle;
+
+    public void OnEnable() {
         base.InitSerializedObject();
 
         //Rebound Arrow Property
         scanRangeProp     = sobject.FindProperty("ScanRadius");
         maxChainCountProp = sobject.FindProperty("MaxChainCount");
+
+        guiStyle = new GUIStyle();
+        guiStyle.alignment = TextAnchor.MiddleCenter;
     }
 
-    public override void OnInspectorGUI()
-    {
+    public override void OnInspectorGUI() {
         //base.OnInspectorGUI();
 
         //Draw Disable MonoScript
@@ -115,6 +120,19 @@ public class ReboundArrowDataEditor : ArrowSkillData_Editor
         //Chain Count Property
         EditorGUILayout.PropertyField(maxChainCountProp);
 
+        EditorGUILayout.EndVertical();
+        #endregion
+
+        #region EFFECT_DATA
+        GUILayout.Label("Hit Skill Effect", EditorStyles.boldLabel);
+        EditorGUILayout.BeginVertical("GroupBox");
+        EditorGUILayout.BeginHorizontal();
+        GUILayout.Label("Effect Array Length");
+        effectProp.arraySize = EditorGUILayout.IntField(effectProp.arraySize, new GUIStyle(GUI.skin.box) {alignment = TextAnchor.MiddleCenter });
+        EditorGUILayout.EndHorizontal();
+        for (int i = 0; i < effectProp.arraySize; i++) {
+            EditorGUILayout.PropertyField(effectProp.GetArrayElementAtIndex(i), new GUIContent("Effect Element " + i));
+        }
         EditorGUILayout.EndVertical();
         #endregion
 

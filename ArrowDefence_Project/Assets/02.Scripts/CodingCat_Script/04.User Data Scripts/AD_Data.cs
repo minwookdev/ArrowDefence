@@ -1,8 +1,7 @@
 ﻿/// <summary>
 /// Editor-Related String Date class, used during runtime
 /// </summary>
-public static class AD_Data
-{
+public static class AD_Data {
     /// <summary>
     /// Scene Name String Data
     /// </summary>
@@ -40,6 +39,11 @@ public static class AD_Data
     public static readonly string POOLTAG_MONSTER_NORMAL = "Monster_Normal";
     public static readonly string POOLTAG_MONSTER_FREQ   = "Monster_Freq";
     public static readonly string POOLTAG_MONSTER_ELITE  = "Monster_Elite";
+
+    /// <summary>
+    /// [MainArrowPoolTag] + [HitEffectPoolTag]
+    /// </summary>
+    public static readonly string POOLTAG_HITEFFECT = "_HitEffect_";
 
     /// <summary>
     /// Unity Layer Mask string Data

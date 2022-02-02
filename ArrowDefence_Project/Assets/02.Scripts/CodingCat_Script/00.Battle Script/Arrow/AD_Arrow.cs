@@ -25,6 +25,7 @@
         private bool isLaunched;
 
         //FIELDS
+        private string[] effectPoolTags;
         private Vector3 arrowPosition;
         private DamageStruct damageStruct;
         private Queue<CollisionData> collisionQueue = null;
@@ -246,6 +247,30 @@
                 break;
             }
         }
+
+        #region EFFECT
+
+        public void SetEffectInfo(string[] tagArray) {
+            effectPoolTags = tagArray;
+        }
+
+        public void RemoveEffectInfo() {
+            effectPoolTags = null;
+        }
+
+        void DefaultEffect() {
+            if(effectPoolTags.Length == 0) {
+                return;
+            }
+
+            CCPooler.SpawnFromPool<ACEffector2D>(effectPoolTags.RandIndex<string>(), Vector3.zero, Quaternion.identity);
+        }
+
+        string IArrowObject.GetEffectKey() {
+            return string.Format("{0}{1}", gameObject.name, AD_Data.POOLTAG_HITEFFECT);
+        }
+
+        #endregion
 
         #region LEGACY
 

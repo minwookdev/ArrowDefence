@@ -13,7 +13,7 @@
         public Sprite IconSprite;
         protected ArrowSkill skillData = null;
         public ARROWSKILL_ACTIVETYPE ActiveType;
-        public ACEffector2D effector = null;
+        public ACEffector2D[] effects = null;
 
         //PROPERTIES
         public ArrowSkill ArrowSkill {

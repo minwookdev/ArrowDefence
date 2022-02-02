@@ -285,6 +285,10 @@
             return (number >= -range && number <= range);
         }
 
+        public static T RandIndex<T>(this T[] array) {
+            return array[Random.Range(0, array.Length)];
+        }
+
         #region TIME
 
         public static int GetDay(float _seconds) {

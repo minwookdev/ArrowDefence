@@ -14,10 +14,6 @@
         Coroutine playerCo  = null;
         WaitUntil waitUntil = null;
 
-        private void OnEnable() {
-            waitUntil = new WaitUntil(() => particleSys.isStopped == true);
-        }
-
         private void Start() {
             particleRenderer.alignment        = ParticleSystemRenderSpace.Local;
             particleRenderer.sortingLayerName = GlobalSO.Inst.SORTINGLAYER_EFFECT;
@@ -27,6 +23,7 @@
             //var mainMod = particleSys.main;
             //mainMod.startRotation = 90f;
 
+            waitUntil = new WaitUntil(() => particleSys.isStopped == true);
         }
 
         public void DisableRequest() {

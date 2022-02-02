@@ -447,6 +447,7 @@ public class ArrowItemData_Editor : Editor
     SerializedObject serialObject;
     SerializedProperty incDamageProp;
     SerializedProperty speedProp;
+    SerializedProperty effectProp;
 
     //Is Ability Tap Foldout
     bool isAbilityTapFoldout = false;
@@ -460,8 +461,9 @@ public class ArrowItemData_Editor : Editor
         serialObject  = new SerializedObject(target);
         incDamageProp = serialObject.FindProperty(nameof(ItemData_Equip_Arrow.DamageInc));
         speedProp     = serialObject.FindProperty(nameof(ItemData_Equip_Arrow.Speed));
+        effectProp    = serialObject.FindProperty(nameof(ItemData_Equip_Arrow.effects));
 
-        var texture = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/99. ArrowDefence_Resources/Sprites/Scene_Main/Sprite_Icon/icon_star_grade_l.png");
+        var texture = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/08.Sprites/Sprites/Scene_Main/Sprite_Icon/icon_star_grade_l.png");
         if (texture == null) {
             CatLog.WLog("Star Texture is Null");
         }
@@ -469,7 +471,7 @@ public class ArrowItemData_Editor : Editor
             enableStarTexture = texture;
         }
 
-        var disableTexture = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/99. ArrowDefence_Resources/Sprites/Scene_Main/Sprite_Icon/icon_star_grade_l_d.png");
+        var disableTexture = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/08.Sprites/Sprites/Scene_Main/Sprite_Icon/icon_star_grade_l_d.png");
         if (disableTexture != null) {
             disableStarTexture = disableTexture;
         }
@@ -486,7 +488,7 @@ public class ArrowItemData_Editor : Editor
         EditorGUILayout.ObjectField("Script", MonoScript.FromScriptableObject((ItemData_Equip_Arrow)item), typeof(ItemData_Equip_Arrow), false);
         EditorGUI.EndDisabledGroup();
 
-        serializedObject.Update();
+        serialObject.Update();
 
         GUILayout.Space(5);
         GUILayout.BeginVertical("HelpBox");
@@ -593,14 +595,29 @@ public class ArrowItemData_Editor : Editor
         item.ArrowSkillSec = (ArrowSkillData)EditorGUILayout.ObjectField("Skill Slot Seconds", item.ArrowSkillSec,
                                                         typeof(ArrowSkillData), allowSceneObjects: false);
 
+        GUILayout.Space(5f);
+        GUILayout.EndVertical();
+
+        GUILayout.Label("Default Effect", EditorStyles.boldLabel);
+        GUILayout.BeginVertical("GroupBox");
+        //var effectGroupIndent = EditorGUI.indentLevel;
+        //EditorGUI.indentLevel = 1;
+        //EditorGUILayout.PropertyField(effectProp);
+        //EditorGUI.indentLevel = effectGroupIndent;
+        EditorGUILayout.BeginHorizontal();
+        GUILayout.Label("Effect Array Length"); GUILayout.Space(70f);
+        effectProp.arraySize = EditorGUILayout.IntField(effectProp.arraySize, new GUIStyle(GUI.skin.textField) { alignment = TextAnchor.MiddleCenter });
+        EditorGUILayout.EndHorizontal();
+        for (int i = 0; i < effectProp.arraySize; i++) {
+            EditorGUILayout.PropertyField(effectProp.GetArrayElementAtIndex(i), new GUIContent("Effect Element " + i));
+        }
         GUILayout.EndVertical();
 
         #endregion
 
         #region GENERATE_BUTTON
 
-        if (GUILayout.Button("GENERATE"))
-        {
+        if (GUILayout.Button("GENERATE")) {
             EditorUtility.SetDirty(item);
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
@@ -613,7 +630,7 @@ public class ArrowItemData_Editor : Editor
 
         GUILayout.EndVertical();
 
-        //serializedObject.ApplyModifiedProperties();
+        serialObject.ApplyModifiedProperties();
     }
 
     void DrawStar(byte enable) {

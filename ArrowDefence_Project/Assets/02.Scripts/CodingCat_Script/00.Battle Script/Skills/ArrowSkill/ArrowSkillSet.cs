@@ -8,6 +8,7 @@
         AttackActiveTypeAS hitSkill = null;
         AirActiveTypeAS airSkill    = null;
         AddProjTypeAS addProjSkill  = null;
+        string arrowPoolTag;
 
         //temp
         Transform tempTr;
@@ -19,7 +20,7 @@
         /// </summary>
         /// <param name="skillInfoFst"></param>
         /// <param name="skillInfoSec"></param>
-        public ArrowSkillSet(ASInfo skillInfoFst, ASInfo skillInfoSec)
+        public ArrowSkillSet(ASInfo skillInfoFst, ASInfo skillInfoSec, string tag)
         {
             //First Arrow SkillData Init
             if(skillInfoFst != null) {
@@ -62,8 +63,8 @@
             if(origin.hitSkill != null) {
                 switch (origin.hitSkill)
                 {
-                    case ReboundArrow rebound:   hitSkill = new ReboundArrow(rebound);   break;
-                    case PiercingArrow piercing: hitSkill = new PiercingArrow(piercing); break;
+                    case ReboundArrow rebound:   hitSkill = new ReboundArrow(rebound, arrowPoolTag); break;
+                    case PiercingArrow piercing: hitSkill = new PiercingArrow(piercing);             break;
                     default: break;
                 }
             }

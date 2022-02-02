@@ -16,6 +16,8 @@
         void ForceToDirectly();
 
         void ForceToTarget(UnityEngine.Vector3 targetPosition);
+
+        string GetEffectKey();
     }
 
     interface IDamageable {

@@ -284,8 +284,8 @@
         /// <param name="tag"></param>
         /// <param name="size"></param>
         /// <param name="prefab"></param>
-        /// <param name="iscount">active된 객체 수 추적 여부</param>
-        public static void AddPoolList(string tag, int size, GameObject prefab, bool iscount) {
+        /// <param name="isTracking">active된 객체 수 추적 여부</param>
+        public static void AddPoolList(string tag, int size, GameObject prefab, bool isTracking) {
             Pool pool = new Pool() { tag = tag, size = size, prefab = prefab };
             _inst.poolInstanceList.Add(pool);                            //1. Add PoolInstance List
 
@@ -295,7 +295,7 @@
             parentObj.SetParent(_inst.transform);
             _inst.ParentList.Add(parentObj);
 
-            if(iscount == true) {                                        //4. if Tracking Alive options ture, Add AliveDictionary this PoolObject. 
+            if(isTracking == true) {                                        //4. if Tracking Alive options ture, Add AliveDictionary this PoolObject. 
                 _inst.NewAliveTrackDic(pool.tag);
             }
 
@@ -316,8 +316,8 @@
         /// <param name="size"></param>
         /// <param name="prefab"></param>
         /// <param name="parent"></param>
-        /// <param name="iscount">active된 객체 수 추적 여부</param>
-        public static void AddPoolList(string tag, int size, GameObject prefab, Transform parent, bool iscount) {
+        /// <param name="isTracking">active된 객체 수 추적 여부</param>
+        public static void AddPoolList(string tag, int size, GameObject prefab, Transform parent, bool isTracking) {
             Pool pool = new Pool() { tag = tag, size = size, prefab = prefab };
             _inst.poolInstanceList.Add(pool);                             //1. Add PoolInstance List.
 
@@ -325,7 +325,7 @@
 
             _inst.ParentList.Add(parent);                                 //3. Add Parent Transform to Parent List.
 
-            if(iscount == true) {                                         //4. if Tracking Alive options true, Add AliveDictionary this PoolObject
+            if(isTracking == true) {                                         //4. if Tracking Alive options true, Add AliveDictionary this PoolObject
                 _inst.NewAliveTrackDic(pool.tag);
             }
 

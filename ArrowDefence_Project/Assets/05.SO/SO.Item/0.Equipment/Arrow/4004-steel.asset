@@ -26,3 +26,7 @@ MonoBehaviour:
     type: 3}
   ArrowSkillFst: {fileID: 0}
   ArrowSkillSec: {fileID: 0}
+  DamageInc: 1
+  Speed: 18
+  effects:
+  - {fileID: 9152076937454663170, guid: d702d250e9628a142987494c9b1e5108, type: 3}

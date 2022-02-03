@@ -203,7 +203,6 @@
                 else if (itemDesc.Length <= 80) tempSizeDelta.y = 90f;
                 else                            tempSizeDelta.y = 105f;
                 rectTransform.sizeDelta = tempSizeDelta;
-                CatLog.Log($"Item Description String Length : {itemDesc.Length}");
             }
 
             void SetDefaultItemInfo(AD_item item, string type, bool isCounting, Sprite frame) {

@@ -15,8 +15,8 @@
         [SerializeField] Transform arrowCatchTransform = null;
 
         [Header("COMPONENT OTHERS")]
-        public Transform bottomClampTr = null;
-        public Transform topClampTr    = null;
+        [ReadOnly] public Transform bottomClampTr = null;
+        [ReadOnly] public Transform topClampTr    = null;
 
         [Header("SHOOTING")]
         [SerializeField] [RangeEx(18f, 30f, 1f, "ARROWPOWER")]
@@ -25,6 +25,7 @@
         private bool isLaunched;
 
         //FIELDS
+        [SerializeField]
         private string[] effectPoolTags;
         private Vector3 arrowPosition;
         private DamageStruct damageStruct;
@@ -227,6 +228,7 @@
                 if (isInitSkill == true) { //Try OnHit with ArrowSkill
                     //Hit Success
                     if (arrowSkillSets.OnHit(collData.Collider, ref damageStruct, collData.CollisionPoint, collData.CollisionDirection)) {
+                        PlayEffect(collData.CollisionPoint);
                         collisionQueue.Clear();
                         DisableRequest();
                     }
@@ -237,6 +239,7 @@
                 else { //Try OnHit with Non-Skill
                     //Hit Success
                     if (collData.Collider.GetComponent<IDamageable>().OnHitWithResult(ref damageStruct, collData.CollisionPoint, collData.CollisionDirection)) {
+                        PlayEffect(collData.CollisionPoint);
                         collisionQueue.Clear();
                         DisableRequest();
                     }
@@ -258,12 +261,12 @@
             effectPoolTags = null;
         }
 
-        void DefaultEffect() {
+        public void PlayEffect(Vector3 position) {
             if(effectPoolTags.Length == 0) {
-                return;
+                CatLog.WLog("Effect PoolTag Array is Empty."); return;
             }
 
-            CCPooler.SpawnFromPool<ACEffector2D>(effectPoolTags.RandIndex<string>(), Vector3.zero, Quaternion.identity);
+            CCPooler.SpawnFromPool<ACEffector2D>(effectPoolTags.RandIndex<string>(), position, Quaternion.identity).PlayOnce(true);
         }
 
         string IArrowObject.GetEffectKey() {

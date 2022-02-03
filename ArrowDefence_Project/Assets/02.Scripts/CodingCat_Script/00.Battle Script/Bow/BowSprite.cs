@@ -269,7 +269,7 @@
         #region EFFECT_MUZZLE
 
         public void ActiveMuzzleFlash(Vector3 position, float eulerAnglesZ) {
-            CCPooler.SpawnFromPool<ACEffector2D>(GetRandomMuzzleTag(), position, Quaternion.identity).Play(eulerAnglesZ);
+            CCPooler.SpawnFromPool<ACEffector2D>(GetRandomMuzzleTag(), position, Quaternion.identity).PlayOnce(eulerAnglesZ);
         }
 
         string GetRandomMuzzleTag() {

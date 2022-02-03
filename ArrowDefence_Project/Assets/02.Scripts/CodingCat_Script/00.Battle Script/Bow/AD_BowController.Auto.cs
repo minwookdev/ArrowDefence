@@ -149,13 +149,13 @@
             targetTr = null;
             tempList = null;
 
-            //Restore Arrow position and Clear Rope
-            arrowTr.position = ClampPointTop.position;
-            AD_BowRope.instance.CatchPointClear();
-
             if(isBowPulling == true) {
                 isBowPulling = false;
             }
+
+            //Restore Arrow position and Clear Rope
+            arrowTr.position = ClampPointTop.position;
+            AD_BowRope.instance.CatchPointClear();
 
             //clear exitwait
             isAutoExitWait = false;

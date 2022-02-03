@@ -293,8 +293,6 @@
             foreach (var item in dropListArray) {
                 totalDropChances += item.DropChance;
             }
-
-            CatLog.Log($"Drop List : {newDropList.name}, Total Drop Chances : {totalDropChances}");
         }
 
         public void ReleaseDropList()

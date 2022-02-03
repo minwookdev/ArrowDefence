@@ -289,6 +289,14 @@
             return array[Random.Range(0, array.Length)];
         }
 
+        public static float RandomAngleDeg() {
+            return Random.Range(0f, 360f);
+        }
+
+        public static float RandomAngleRad() {
+            return Random.Range(0f, 360f) * Mathf.Deg2Rad;
+        }
+
         #region TIME
 
         public static int GetDay(float _seconds) {

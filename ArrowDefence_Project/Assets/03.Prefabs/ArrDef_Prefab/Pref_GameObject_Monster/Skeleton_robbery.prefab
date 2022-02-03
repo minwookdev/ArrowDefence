@@ -51,11 +51,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   monsterState: {fileID: 6569283258810144969}
   sprite: {fileID: 8199350597534063019}
-  MaxMonsterHP: 80
+  MaxMonsterHP: 220
   MaxMonsterMP: 50
   ItemDropCorrection: 5
   GaugeIncreaseValue: 10
   AttackDamage: 5
+  Armorating: 0
+  CriticalResist: 0
   isActiveHitColor: 0
   HitColor: {r: 1, g: 0.25943398, b: 0.25943398, a: 1}
 --- !u!114 &6569283258810144969

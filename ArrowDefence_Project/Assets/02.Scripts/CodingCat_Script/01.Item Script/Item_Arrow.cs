@@ -219,17 +219,17 @@
             //Create Pools of Arrow Object
             CCPooler.AddPoolList(mainArrowObjTag, poolQuantity, MainArrowObject, isTracking: false);
             CCPooler.AddPoolList(lessArrowObjTag, poolQuantity, LessArrowObject, isTracking: false);
-
-            mainArrow.RemoveEffectInfo();
-            lessArrow.RemoveEffectInfo();
         }
 
-        public void Release()
-        {
+        public void Release() {
             //Clear Arrow Skill Sets Class 
             if (arrowSkillSets == null)
                 return;
             arrowSkillSets = null;
+
+            //Remove Origin Prefab EffectTags string Array
+            MainArrowObject.GetComponent<AD_Arrow>().RemoveEffectInfo();
+            LessArrowObject.GetComponent<AD_Arrow_less>().RemoveEffectInfo();
         }
     }
 }

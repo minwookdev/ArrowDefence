@@ -21,6 +21,7 @@
         //Arrow Angle Calculate Variable
         private Vector2 arrowPosition;
         private Vector2 velocity;
+        [SerializeField]
         private string[] effectPoolTags;
         private float arrowAngle = 0f;
         private bool isLaunched  = false;
@@ -202,6 +203,7 @@
                 if(isInitSkill == true) { //Try OnHit with ArrSkill
                     if (arrowSkillSets.OnHit(collData.Collider, ref damageStruct, collData.CollisionPoint, collData.CollisionDirection)) {
                         //Hit Result True - Disable GameObject
+                        PlayEffect(collData.CollisionPoint);
                         collisionQueue.Clear();
                         DisableRequest();
                     }
@@ -212,6 +214,7 @@
                 else {  //Try OnHit with Non-ArrSkill
                     if(collData.Collider.GetComponent<IDamageable>().OnHitWithResult(ref damageStruct, collData.CollisionPoint, collData.CollisionDirection)) {
                         //Hit Result True - Disable GameObject
+                        PlayEffect(collData.CollisionPoint);
                         collisionQueue.Clear();
                         DisableRequest();
                     }
@@ -249,12 +252,12 @@
             effectPoolTags = null;
         }
 
-        void DefaultEffect() {
+        public void PlayEffect(Vector3 position) {
             if(effectPoolTags.Length == 0) {
-                return;
+                CatLog.WLog("Effect PoolTag Array is Empty."); return;
             }
 
-            CCPooler.SpawnFromPool<ACEffector2D>(effectPoolTags[(Random.Range(0, effectPoolTags.Length))], Vector3.zero, Quaternion.identity);
+            CCPooler.SpawnFromPool<ACEffector2D>(effectPoolTags.RandIndex<string>(), position, Quaternion.identity).PlayOnce(true);
         }
 
         string IArrowObject.GetEffectKey() {

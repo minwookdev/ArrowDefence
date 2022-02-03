@@ -99,7 +99,7 @@
                 }
 
                 // RapidShot Muzzle Effect Active
-                CCPooler.SpawnFromPool<ACEffector2D>(effectPoolTag, effectPos, Quaternion.identity).Play(randomRotation.eulerAngles.z);
+                CCPooler.SpawnFromPool<ACEffector2D>(effectPoolTag, effectPos, Quaternion.identity).PlayOnce(randomRotation.eulerAngles.z);
             }
 
             #region LEGACY_CODE

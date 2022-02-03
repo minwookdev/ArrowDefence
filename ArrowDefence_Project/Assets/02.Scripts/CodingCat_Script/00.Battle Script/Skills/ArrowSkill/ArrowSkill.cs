@@ -129,6 +129,7 @@
                 if (target.GetComponent<IDamageable>().OnHitWithResult(ref damage, contact, direction)) { //Try OnHit
                     currentChainCount++;
                     lastHitTarget = target.gameObject;
+                    arrow.PlayEffect(contact);
                 }
                 else { //if Failed OnHit, Ignore
                     return false;
@@ -186,6 +187,8 @@
                 if (target.GetComponent<IDamageable>().OnHitWithResult(ref damage, contact, direction)) {
                     currentChainCount++;
                     lastHitTarget = target.gameObject;
+
+                    arrow.PlayEffect(contact);
                 }
                 else{ //if Failed OnHit, Ignore
                     targetTr = null;

@@ -295,7 +295,7 @@
             parentObj.SetParent(_inst.transform);
             _inst.ParentList.Add(parentObj);
 
-            if(isTracking == true) {                                        //4. if Tracking Alive options ture, Add AliveDictionary this PoolObject. 
+            if(isTracking == true) {                                     //4. if Tracking Alive options ture, Add AliveDictionary this PoolObject. 
                 _inst.NewAliveTrackDic(pool.tag);
             }
 
@@ -325,7 +325,7 @@
 
             _inst.ParentList.Add(parent);                                 //3. Add Parent Transform to Parent List.
 
-            if(isTracking == true) {                                         //4. if Tracking Alive options true, Add AliveDictionary this PoolObject
+            if(isTracking == true) {                                      //4. if Tracking Alive options true, Add AliveDictionary this PoolObject
                 _inst.NewAliveTrackDic(pool.tag);
             }
 

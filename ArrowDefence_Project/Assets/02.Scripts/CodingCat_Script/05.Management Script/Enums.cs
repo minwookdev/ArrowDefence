@@ -113,6 +113,7 @@
 
 
     public enum EFFECTORTYPE {
+        NONE,
         NEWEFFECT,
         RESTARTER,
     }

@@ -18,6 +18,8 @@
         void ForceToTarget(UnityEngine.Vector3 targetPosition);
 
         string GetEffectKey();
+
+        void PlayEffect(UnityEngine.Vector3 position);
     }
 
     interface IDamageable {

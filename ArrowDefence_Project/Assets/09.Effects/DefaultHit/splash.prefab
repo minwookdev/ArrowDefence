@@ -45,10 +45,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c7ab8885a97c8f4594b3c4972bb12ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  effetorType: 0
   tr: {fileID: 6414356965754425491}
   particleSys: {fileID: 6414356965754425488}
   particleRenderer: {fileID: 6414356965754425489}
+  effectorType: 0
+  sortingLayerName: Effect:Player
+  sortOrder: 1
 --- !u!198 &6414356965754425488
 ParticleSystem:
   m_ObjectHideFlags: 0

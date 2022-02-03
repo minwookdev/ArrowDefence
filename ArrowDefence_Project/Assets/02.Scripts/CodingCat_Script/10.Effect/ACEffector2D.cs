@@ -4,11 +4,16 @@
     using UnityEngine;
 
     public class ACEffector2D : MonoBehaviour, IPoolObject {
-        [Header("EFFECT")]
-        [SerializeField] EFFECTORTYPE effetorType = EFFECTORTYPE.NEWEFFECT;
+        [Header("COMPONENT")]
         [SerializeField] Transform tr = null;
         [SerializeField] ParticleSystem particleSys = null;
         [SerializeField] ParticleSystemRenderer particleRenderer = null;
+
+        [Header("EFFECT")]
+        [SerializeField] [ReadOnly] 
+        EFFECTORTYPE effectorType = EFFECTORTYPE.NONE;
+        [SerializeField] string sortingLayerName = "";
+        [SerializeField] int sortOrder = 0;
 
         //COROUTINE
         Coroutine playerCo  = null;
@@ -16,12 +21,8 @@
 
         private void Start() {
             particleRenderer.alignment        = ParticleSystemRenderSpace.Local;
-            particleRenderer.sortingLayerName = GlobalSO.Inst.SORTINGLAYER_EFFECT;
-            particleRenderer.sortingOrder     = 1;
-
-            //Muzzle Effect Rotate Offset Apply
-            //var mainMod = particleSys.main;
-            //mainMod.startRotation = 90f;
+            particleRenderer.sortingLayerName = sortingLayerName;
+            particleRenderer.sortingOrder     = sortOrder;
 
             waitUntil = new WaitUntil(() => particleSys.isStopped == true);
         }
@@ -30,17 +31,48 @@
             CCPooler.ReturnToPool(gameObject);
         }
 
-        public void Play(float eulerAnglesZ) {
-            Vector3 rotation = tr.eulerAngles;
-            rotation.z       = eulerAnglesZ;
-            tr.eulerAngles   = rotation;
+        public void PlayOnce(float degree) {
+            if(effectorType == EFFECTORTYPE.NONE) {
+                effectorType = EFFECTORTYPE.NEWEFFECT;
+            }
 
-            gameObject.SetActive(true);
+            Vector3 rotation = tr.eulerAngles;
+            rotation.z = degree;
+            tr.eulerAngles = rotation;
 
             if(playerCo != null) {
                 StopCoroutine(playerCo);
+            } playerCo = StartCoroutine(RunEffect());
+        }
+
+        public void PlayOnce(bool isStartRandRotation = false) {
+            if(effectorType == EFFECTORTYPE.NONE) {
+                effectorType = EFFECTORTYPE.NEWEFFECT;
             }
-            playerCo = StartCoroutine(RunEffect());
+
+            if(isStartRandRotation == true) {
+                Vector3 eulerAngles = tr.eulerAngles;
+                eulerAngles.z = GameGlobal.RandomAngleDeg();
+                tr.eulerAngles = eulerAngles;
+            }
+
+            if(playerCo != null) {
+                StopCoroutine(playerCo);
+            } playerCo = StartCoroutine(RunEffect());
+        }
+
+        public void Play(bool isStartRandRotation = false) {
+            if(effectorType == EFFECTORTYPE.NONE) {
+                effectorType = EFFECTORTYPE.RESTARTER;
+            }
+
+            if(isStartRandRotation == true) {
+                Vector3 eulerAngles = tr.eulerAngles;
+                eulerAngles.z = GameGlobal.RandomAngleDeg();
+                tr.eulerAngles = eulerAngles;
+            }
+
+            particleSys.Play();
         }
 
         IEnumerator RunEffect() {

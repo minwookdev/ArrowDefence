@@ -495,7 +495,7 @@
 
             //Active Shot Impact Effect
             bowSprite.Effect(BOWEFFECTYPE.IMPACT);
-            bowSprite.ActiveMuzzleFlash(mainSlotTr.position, bowTr.eulerAngles.z - angleOffset);
+            bowSprite.EffectMuzzleFlash(mainSlotTr.position, bowTr.eulerAngles.z - angleOffset);
 
             //Active Camera Shake
             CineCam.Inst.ShakeCamera(8f, .1f);

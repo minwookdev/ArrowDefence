@@ -48,9 +48,9 @@ MonoBehaviour:
   tr: {fileID: 5937770289732402497}
   particleSys: {fileID: 5937770289732402498}
   particleRenderer: {fileID: 5937770289732402499}
-  effetorType: 0
+  effectorType: 0
   sortingLayerName: Effect:Player
-  sortOrder: 1
+  sortingOrder: 1
 --- !u!198 &5937770289732402498
 ParticleSystem:
   m_ObjectHideFlags: 0
@@ -67,7 +67,7 @@ ParticleSystem:
   ringBufferLoopRange: {x: 0, y: 1}
   looping: 0
   prewarm: 0
-  playOnAwake: 1
+  playOnAwake: 0
   useUnscaledTime: 0
   autoRandomSeed: 1
   useRigidbodyForVelocity: 1
@@ -126,7 +126,7 @@ ParticleSystem:
       m_RotationOrder: 4
   moveWithTransform: 0
   moveWithCustomTransform: {fileID: 0}
-  scalingMode: 1
+  scalingMode: 0
   randomSeed: 0
   InitialModule:
     serializedVersion: 3
@@ -4804,8 +4804,8 @@ ParticleSystemRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -1122949135
+  m_SortingLayer: 12
   m_SortingOrder: 1
   m_RenderMode: 0
   m_SortMode: 0

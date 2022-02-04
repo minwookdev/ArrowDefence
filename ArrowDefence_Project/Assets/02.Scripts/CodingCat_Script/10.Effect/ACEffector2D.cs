@@ -2,28 +2,27 @@
     using ActionCat.Interface;
     using System.Collections;
     using UnityEngine;
-
+#if UNITY_EDITOR
+    using UnityEditor;
+#endif
+    [RequireComponent(typeof(ParticleSystem))]
     public class ACEffector2D : MonoBehaviour, IPoolObject {
         [Header("COMPONENT")]
         [SerializeField] Transform tr = null;
         [SerializeField] ParticleSystem particleSys = null;
         [SerializeField] ParticleSystemRenderer particleRenderer = null;
 
-        [Header("EFFECT")]
+        [Header("EFFECT PROPERTY")]
         [SerializeField] [ReadOnly] 
         EFFECTORTYPE effectorType = EFFECTORTYPE.NONE;
         [SerializeField] string sortingLayerName = "";
-        [SerializeField] int sortOrder = 0;
+        [SerializeField] int sortingOrder = 0;
 
         //COROUTINE
         Coroutine playerCo  = null;
         WaitUntil waitUntil = null;
 
-        private void Start() {
-            particleRenderer.alignment        = ParticleSystemRenderSpace.Local;
-            particleRenderer.sortingLayerName = sortingLayerName;
-            particleRenderer.sortingOrder     = sortOrder;
-
+        void Awake() {
             waitUntil = new WaitUntil(() => particleSys.isStopped == true);
         }
 
@@ -80,5 +79,84 @@
             yield return waitUntil;
             DisableRequest();
         }
+
+#if UNITY_EDITOR
+        [CustomEditor(typeof(ACEffector2D))]
+        class ACEffector2DEditor : Editor {
+            ACEffector2D effector;
+            private void OnEnable() {
+                effector = target as ACEffector2D;
+            }
+
+            public override void OnInspectorGUI() {
+                base.OnInspectorGUI();
+                GUILayout.Space(10f);
+                if(GUILayout.Button("Apply Effect Property")) {
+                    if(effector == null) {
+                        CatLog.ELog("ACEffector2D is Not Assignment.");
+                        return;
+                    }
+
+                    if(effector.TryGetComponent<ParticleSystem>(out ParticleSystem particle)) {
+                        var particleRenderer = particle.GetComponent<ParticleSystemRenderer>();
+                        particleRenderer.alignment = ParticleSystemRenderSpace.Local;
+                        particleRenderer.sortingLayerName = effector.sortingLayerName;
+                        particleRenderer.sortingOrder     = effector.sortingOrder;
+
+                        var particleMain = particle.main;
+                        particleMain.playOnAwake = false;
+                        particleMain.scalingMode = ParticleSystemScalingMode.Hierarchy;
+
+                        EditorUtility.SetDirty(effector);
+                        CatLog.Log(StringColor.GREEN, "The Proeprties Changed Successfully.");
+                    }
+                    else {
+                        CatLog.ELog("ParticleSystem is Not Assignment.");
+                    }
+                }
+                if(GUILayout.Button("Only Change Layers")) {
+                    if(effector = null) {
+                        CatLog.ELog("ACEffector2D is Not Assignment.");
+                        return;
+                    }
+
+                    if(effector.TryGetComponent<ParticleSystem>(out ParticleSystem particle)) {
+                        var particleRenderer = particle.GetComponent<ParticleSystemRenderer>();
+                        particleRenderer.sortingLayerName = effector.sortingLayerName;
+                        particleRenderer.sortingOrder     = effector.sortingOrder;
+
+                        EditorUtility.SetDirty(effector);
+                        CatLog.Log(StringColor.GREEN, "The Proeprties Changed Successfully.");
+                    }
+                    else {
+                        CatLog.ELog("ParticleSystem is Not Assignment.");
+                    }
+                }
+                if(GUILayout.Button("Set to Default Property")) {
+                    if(effector == null) {
+                        CatLog.ELog("ACEffector2D is Not Assignment.");
+                        return;
+                    }
+
+                    if(effector.TryGetComponent<ParticleSystem>(out ParticleSystem particle)) {
+                        var particleRenderer = particle.GetComponent<ParticleSystemRenderer>();
+                        particleRenderer.alignment = ParticleSystemRenderSpace.View;
+                        particleRenderer.sortingLayerName = "Default";
+                        particleRenderer.sortingOrder     = 0;
+
+                        var particleMain = particle.main;
+                        particleMain.playOnAwake = true;
+                        particleMain.scalingMode = ParticleSystemScalingMode.Shape;
+
+                        EditorUtility.SetDirty(effector);
+                        CatLog.Log(StringColor.GREEN, "The Proeprties Changed Successfully.");
+                    }
+                    else {
+                        CatLog.ELog("ParticleSystem is Not Assignment.");
+                    }
+                }
+            }
+        }
+#endif
     }
 }

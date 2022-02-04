@@ -420,6 +420,10 @@ MonoBehaviour:
   chargeEffectTime: 0.5
   FadeBurnTime: 1
   effectType: 0
+  muzzleEffect:
+  - {fileID: -63832489124254854, guid: 3699b62eae610ff4ab5a118c46161f68, type: 3}
+  - {fileID: 162523047609376232, guid: b6d830e388f8d3548801f05548bf9398, type: 3}
+  - {fileID: 6159201175060336152, guid: 0a83933b697ce7644883b48058c1a6ae, type: 3}
 --- !u!1 &9109711390810676079
 GameObject:
   m_ObjectHideFlags: 0

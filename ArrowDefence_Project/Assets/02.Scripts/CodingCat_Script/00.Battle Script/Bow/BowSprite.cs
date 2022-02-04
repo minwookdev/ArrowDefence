@@ -24,23 +24,18 @@
                 base.OnInspectorGUI();
                 serialObject.Update();
                 GUILayout.Space(10f);
-                if(GUILayout.Button("SET DEFAULT PARTICLE")) {
-                    string path0 = "Assets/09.Effects/Muzzle/ef_1_red.prefab";
-                    string path1 = "Assets/09.Effects/Muzzle/ef_2_red.prefab";
-                    string path2 = "Assets/09.Effects/Muzzle/ef_3_red.prefab";
-                    var particleAsset0 = AssetDatabase.LoadAssetAtPath<ACEffector2D>(path0);
-                    var particleAsset1 = AssetDatabase.LoadAssetAtPath<ACEffector2D>(path1);
-                    var particleAsset2 = AssetDatabase.LoadAssetAtPath<ACEffector2D>(path2);
+                if(GUILayout.Button("Set Default MuzzleFlash")) {
+                    string[] paths = { "Assets/09.Effects/Muzzle/ef_1_red.prefab",
+                                       "Assets/09.Effects/Muzzle/ef_2_red.prefab",
+                                       "Assets/09.Effects/Muzzle/ef_3_red.prefab" };
+                    List<ACEffector2D> particleAssets = new List<ACEffector2D>();
+                    for (int i = 0; i < paths.Length; i++) {
+                        particleAssets.Add(AssetDatabase.LoadAssetAtPath<ACEffector2D>(paths[i]));
+                    }
+                    bowSprite.muzzleEffect = particleAssets.ToArray();
 
-                    List<ACEffector2D> particles = new List<ACEffector2D>();
-                    particles.Add(particleAsset0);
-                    particles.Add(particleAsset1);
-                    particles.Add(particleAsset2);
-
-                    bowSprite.muzzleEffect = particles.ToArray();
                     EditorUtility.SetDirty(bowSprite);
-
-                    CatLog.Log(StringColor.GREEN, "SET DEFAULT PARTICLES in BOWSPRITE");
+                    CatLog.Log(StringColor.GREEN, "Set Default MuzzleFlash Succedfully.");
                 }
             }
 
@@ -88,6 +83,7 @@
 
         //Fade Effect parameters
         string FadeAmountParams = "_FadeAmount"; //Range(-0.1f, 1f);
+        string[] muzzleEffectTags;
 
         //Impact Coroutine
         Coroutine effectCoroutine = null;
@@ -102,10 +98,18 @@
         }
 
         private void Start() {
-            for (int i = 0; i < muzzleEffect.Length; i++) {
-                string pooltag = GlobalSO.Inst.POOLTAG_MUZZLE + i.ToString();
-                CCPooler.AddPoolList(pooltag, 2, muzzleEffect[i].gameObject, false);
+            var tags = new List<string>();
+            if (muzzleEffect != null) {
+                for (int i = 0; i < muzzleEffect.Length; i++) {
+                    string pooltag = GlobalSO.Inst.POOLTAG_MUZZLE + i.ToString();
+                    CCPooler.AddPoolList(pooltag, 2, muzzleEffect[i].gameObject, false);
+                    tags.Add(pooltag);
+                }
             }
+            //always allocate, even is length is zero or null
+            /// because
+            /// Check the Active Effect Before Tags Length.
+            muzzleEffectTags = tags.ToArray();
         }
 
         private void OnDisable() {
@@ -268,12 +272,12 @@
 
         #region EFFECT_MUZZLE
 
-        public void ActiveMuzzleFlash(Vector3 position, float eulerAnglesZ) {
-            CCPooler.SpawnFromPool<ACEffector2D>(GetRandomMuzzleTag(), position, Quaternion.identity).PlayOnce(eulerAnglesZ);
-        }
+        public void EffectMuzzleFlash(Vector3 position, float eulerAnglesZ) {
+            if(muzzleEffectTags.Length == 0) {
+                return;
+            }
 
-        string GetRandomMuzzleTag() {
-            return string.Format("{0}{1}", GlobalSO.Inst.POOLTAG_MUZZLE, Random.Range(0, muzzleEffect.Length));
+            CCPooler.SpawnFromPool<ACEffector2D>(muzzleEffectTags.RandIndex<string>(), position, Quaternion.identity).PlayOnce(eulerAnglesZ);
         }
 
         #endregion

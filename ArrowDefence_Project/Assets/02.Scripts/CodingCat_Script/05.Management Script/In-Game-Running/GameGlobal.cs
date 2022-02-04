@@ -391,12 +391,13 @@
     /// <summary>
     /// 정의. 구현된 Arrow Skill Type
     /// </summary>
-    public enum ARROWSKILL
-    {
+    public enum ARROWSKILL {
         SKILL_REBOUND,
         SKILL_HOMING,
         SKILL_SPLIT,
         SKILL_PIERCING,
+        SPLIT_DAGGER,
+        ELEMENTAL_FIRE,
     }
     /// <summary>
     /// 정의. Skill 발동 UI 타입

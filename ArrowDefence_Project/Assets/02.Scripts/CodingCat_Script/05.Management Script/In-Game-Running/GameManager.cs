@@ -12,6 +12,7 @@
         //FIELDS
         private float fixedDeltaTime;
         private float totalDropChances;
+        private float restoreTimeScale;
         private bool isLoadedUserData = false;
         private bool isInitialized    = false;
         private ItemDropList.DropTable[] dropListArray;
@@ -186,12 +187,12 @@
 
         public void ResumeBattle() {
             SetBowPullingStop(false);
-            TimeDefault();
+            TimeToRestore();
         }
 
         public void PauseBattle() {
             SetBowPullingStop(true);
-            TimePause();
+            TimeToPause();
         }
 
         /// <summary>
@@ -263,23 +264,27 @@
             }
         }
 
-        public void TimeDefault()
-        {
+        public void TimeToDefault() {
             Time.timeScale      = 1f;
             Time.fixedDeltaTime = this.fixedDeltaTime * Time.timeScale;
         }
 
-        public void TimePause()
-        {
+        public void TimeToPause() {
+            restoreTimeScale = Time.timeScale;
             Time.timeScale      = 0f;
             Time.fixedDeltaTime = this.fixedDeltaTime * Time.timeScale;
         }
 
-        public bool IsTimeDefault()
-        {
+        public void TimeToRestore() {
+            Time.timeScale = restoreTimeScale;
+            Time.fixedDeltaTime = this.fixedDeltaTime * Time.timeScale;
+        }
+
+        public bool IsTimeDefault() {
             bool isTimeDefault = (Time.timeScale == 1f) ? true : false;
             return isTimeDefault;
         }
+
 
 #endregion
 

@@ -4,7 +4,7 @@ using UnityEngine;
 namespace ES3Types
 {
 	[UnityEngine.Scripting.Preserve]
-	[ES3PropertiesAttribute("maxChainCount", "scanRange")]
+	[ES3PropertiesAttribute("maxChainCount", "scanRange", "effects")]
 	public class ES3UserType_ReboundArrow : ES3ObjectType
 	{
 		public static ES3Type Instance = null;
@@ -18,6 +18,7 @@ namespace ES3Types
 			
 			writer.WritePrivateField("maxChainCount", instance);
 			writer.WritePrivateField("scanRange", instance);
+			writer.WritePrivateField("effects", instance);
 		}
 
 		protected override void ReadObject<T>(ES3Reader reader, object obj)
@@ -33,6 +34,9 @@ namespace ES3Types
 					break;
 					case "scanRange":
 					reader.SetPrivateField("scanRange", reader.Read<System.Single>(), instance);
+					break;
+					case "effects":
+					reader.SetPrivateField("effects", reader.Read<ActionCat.ACEffector2D[]>(), instance);
 					break;
 					default:
 						reader.Skip();

@@ -4,7 +4,7 @@ using UnityEngine;
 namespace ES3Types
 {
 	[UnityEngine.Scripting.Preserve]
-	[ES3PropertiesAttribute("maxChainCount")]
+	[ES3PropertiesAttribute("maxChainCount", "effects")]
 	public class ES3UserType_PiercingArrow : ES3ObjectType
 	{
 		public static ES3Type Instance = null;
@@ -17,6 +17,7 @@ namespace ES3Types
 			var instance = (ActionCat.PiercingArrow)obj;
 			
 			writer.WriteProperty("maxChainCount", instance.maxChainCount, ES3Type_byte.Instance);
+			writer.WritePrivateField("effects", instance);
 		}
 
 		protected override void ReadObject<T>(ES3Reader reader, object obj)
@@ -30,6 +31,9 @@ namespace ES3Types
 					case "maxChainCount":
 						instance.maxChainCount = reader.Read<System.Byte>(ES3Type_byte.Instance);
 						break;
+					case "effects":
+					reader.SetPrivateField("effects", reader.Read<ActionCat.ACEffector2D[]>(), instance);
+					break;
 					default:
 						reader.Skip();
 						break;

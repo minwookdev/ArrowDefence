@@ -263,8 +263,8 @@ MonoBehaviour:
   textCounter: {fileID: 4017016351315241658}
   canvasGroup: {fileID: 4017016352037219525}
   comboHoldTime: 0
-  startYPos: -2
-  isUseUnscaledTime: 0
+  isUnscaledTime: 0
+  tweenStartPositionY: -10
 --- !u!225 &4017016352037219525
 CanvasGroup:
   m_ObjectHideFlags: 0

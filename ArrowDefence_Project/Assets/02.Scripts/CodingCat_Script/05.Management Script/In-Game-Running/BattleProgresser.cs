@@ -151,8 +151,8 @@
 
         [Header("COMBO")]
         [SerializeField] ComboCounter comboCounter = null;
-        [Tooltip("Not Modified this Field.")]
-        [SerializeField] float maxComboTimer = 0f;
+        [ReadOnly] [SerializeField] 
+        float maxComboTimer = 0f;
         bool isComboActivating = false;
         float currentComboTime = 0f;
 

@@ -390,7 +390,7 @@
             }
 
             //Check the Pulling Stop Trigger is true
-            UpdateStopPulling();
+            CheckStopPulling();
 
 #region OLD_ARROW_LOGIC
 
@@ -532,13 +532,12 @@
         /// <summary>
         /// 화살이 당겨진 상황에서 클리어, 일시정지 들어오면 당기고있는 상태 해제
         /// </summary>
-        void UpdateStopPulling() {
+        void CheckStopPulling() {
             if (IsPullingStop == true) {
-                //if (loadedArrow != null)
-                //    loadedArrow.transform.position = ClampPointTop.position;
-
-                if (arrowTr != null)
+                if (arrowTr != null) {
                     arrowTr.position = ClampPointTop.position;
+                }
+                    
                 isBowPullBegan = false; isBowPulling = false;
                 DrawTouchPos.Instance.ReleaseTouchLine();
             }

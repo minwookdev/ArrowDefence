@@ -4,7 +4,7 @@ using UnityEngine;
 namespace ES3Types
 {
 	[UnityEngine.Scripting.Preserve]
-	[ES3PropertiesAttribute("searchInterval", "scanRadius", "speed", "rotateSpeed")]
+	[ES3PropertiesAttribute("scanRadius", "speed", "rotateSpeed")]
 	public class ES3UserType_HomingArrow : ES3ObjectType
 	{
 		public static ES3Type Instance = null;
@@ -16,7 +16,6 @@ namespace ES3Types
 		{
 			var instance = (ActionCat.HomingArrow)obj;
 			
-			writer.WritePrivateField("searchInterval", instance);
 			writer.WritePrivateField("scanRadius", instance);
 			writer.WritePrivateField("speed", instance);
 			writer.WritePrivateField("rotateSpeed", instance);
@@ -30,9 +29,6 @@ namespace ES3Types
 				switch(propertyName)
 				{
 					
-					case "searchInterval":
-					reader.SetPrivateField("searchInterval", reader.Read<System.Single>(), instance);
-					break;
 					case "scanRadius":
 					reader.SetPrivateField("scanRadius", reader.Read<System.Single>(), instance);
 					break;

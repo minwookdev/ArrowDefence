@@ -60,11 +60,10 @@
         #region AUTO_MACHINE
 
         void AutoModeUpdate() {
-            // 쏘자마자 바로 화살 당겨버려서 어색한것 같으면 코루틴으로 인터벌 주는것도 나쁘지 않겠다.
-            //~caution
-            //Arrow Swap Test
-            //special arrow (think idea)
-            // auto/manual change Test 
+            //if gamestate is paused, stop update automode
+            if(IsPullingStop == true) {
+                return;
+            }
 
             switch (autoState) {
                 case AUTOSTATE.NONE: StateNone(STATEFLOW.UPDATE); break;
@@ -189,7 +188,7 @@
                 AutoStateChange(AUTOSTATE.NONE);
             }
 
-            currFindTime += Time.deltaTime;
+            currFindTime += Time.unscaledDeltaTime;
             if(currFindTime > findInterval) {
                 if(TryFindTarget(out targetTr)) {
                     //Target Finded <- Not include currentFindTimer zero;
@@ -225,15 +224,13 @@
 
         void TracUpdate() {
             //==========================================<< TARGET CHECK & EXIT CHECK >>=========================================
-            //AutoExiter(); // <- Tracking state is Exitable AutoMode
             if(isAutoExitWait == true) {
                 AutoStateChange(AUTOSTATE.NONE);
             }
-
             //====================================================<< PULLING >>=================================================
             if (arrowTr != null) { //auto Pulling the Bow 
                 arrowPos = arrowTr.position;
-                arrowPos = Vector3.MoveTowards(arrowPos, ClampPointBottom.position, Time.deltaTime * ArrowPullingSpeed);
+                arrowPos = Vector3.MoveTowards(arrowPos, ClampPointBottom.position, Time.unscaledDeltaTime * ArrowPullingSpeed);
                 arrowTr.position = arrowPos;
 
                 // < arrow force calculating is Not need >
@@ -242,7 +239,7 @@
                 //AutoMode Not using Charged Power
 
                 //Increase Tracking Time [Only Arrow Loaded (R:ArrowReload)]
-                currShotTime += Time.deltaTime * autoTimeMulti;
+                currShotTime += Time.unscaledDeltaTime * autoTimeMulti;
             }
             //==================================================================================================================
 
@@ -256,7 +253,7 @@
             //=====================================================<< ROTATE >>=================================================
                 //auto rotate to Monster Position
                 direction = targetTr.position - bowTr.position;
-                bowAngle = Mathf.LerpAngle(bowAngle, Mathf.Atan2(direction.x, -direction.y) * Mathf.Rad2Deg - angleOffset, Time.deltaTime * SmoothRotateSpeed);
+                bowAngle = Mathf.LerpAngle(bowAngle, Mathf.Atan2(direction.x, -direction.y) * Mathf.Rad2Deg - angleOffset, Time.unscaledDeltaTime * SmoothRotateSpeed);
                 tempEulerAngle = bowTr.eulerAngles;
                 tempEulerAngle.z = bowAngle;
                 bowTr.eulerAngles = tempEulerAngle;

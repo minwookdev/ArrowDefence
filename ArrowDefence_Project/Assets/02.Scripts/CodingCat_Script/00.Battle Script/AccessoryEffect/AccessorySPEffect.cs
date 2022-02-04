@@ -105,7 +105,7 @@
 
         public override void OnStop()
         {
-            GameManager.Instance.TimeDefault();
+            GameManager.Instance.TimeToDefault();
         }
 
         public Acsp_SlowTime(SkillDataSlowTime data) : 
@@ -131,7 +131,7 @@
             yield return new WaitForSecondsRealtime(duration);
 
             CatLog.Log("슬로우 타임 종료");
-            GameManager.Instance.TimeDefault();
+            GameManager.Instance.TimeToDefault();
         }
     }
 }

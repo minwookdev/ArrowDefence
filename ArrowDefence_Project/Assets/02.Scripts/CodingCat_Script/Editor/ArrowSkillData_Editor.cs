@@ -246,12 +246,63 @@ public class PiercingArrowDataEditor : ArrowSkillData_Editor
     }
 }
 
-public class CreateArrowSkillDataAsset
-{ 
+[CustomEditor(typeof(DataSplitDagger))]
+public class SpliDaggerEditor : ArrowSkillData_Editor {
+    SerializedProperty projectileCountProp;
+    SerializedProperty daggerPrefProp;
+
+    private void OnEnable() {
+        base.InitSerializedObject();
+        daggerPrefProp      = sobject.FindProperty(nameof(DataSplitDagger.daggerPref));
+        projectileCountProp = sobject.FindProperty(nameof(DataSplitDagger.projectileCount));
+    }
+
+    public override void OnInspectorGUI() {
+        DrawMonoScript();
+        DrawDefaultSkillData();
+        #region SPLITDAGGER
+        GUILayout.Label("Split Dagger", EditorStyles.boldLabel);
+        EditorGUILayout.BeginVertical("GroupBox");
+        EditorGUILayout.PropertyField(projectileCountProp);
+        EditorGUILayout.PropertyField(daggerPrefProp);
+        EditorGUILayout.EndVertical();
+        #endregion
+        GUILayout.EndVertical();
+        sobject.ApplyModifiedProperties();
+    }
+}
+
+[CustomEditor(typeof(DataEltalFire))]
+public class ElementalFireEditor : ArrowSkillData_Editor {
+    SerializedProperty probabilityProp;
+    SerializedProperty firePrefProp;
+
+    private void OnEnable() {
+        base.InitSerializedObject();
+        probabilityProp = sobject.FindProperty(nameof(DataEltalFire.ActivationProbability));
+        firePrefProp    = sobject.FindProperty(nameof(DataEltalFire.firePref));
+    }
+
+    public override void OnInspectorGUI() {
+        DrawMonoScript();
+        DrawDefaultSkillData();
+        #region ELEMENTAL_FIRE
+        GUILayout.Label("Elemental Arrow - Fire", EditorStyles.boldLabel);
+        EditorGUILayout.BeginVertical("GroupBox");
+        EditorGUILayout.PropertyField(probabilityProp);
+        EditorGUILayout.PropertyField(firePrefProp);
+        EditorGUILayout.EndVertical();
+        #endregion
+        GUILayout.EndVertical();
+        sobject.ApplyModifiedProperties();
+    }
+}
+
+public class CreateArrowSkillDataAsset {  
     [MenuItem("ActionCat/Scriptable Object/Arrow Skill Asset/Rebound Arrow")]
     public static void CreateReboundArrowAsset()
     {
-        string assetCreatePath = "Assets/05. Scriptable_Object/SkillAsset/ArrowSkillAsset/ReboundArrow.asset";
+        string assetCreatePath = "Assets/05.SO/SO.Skill/ArrowSkillAsset/ReboundArrow.asset";
         var asset = ScriptableObject.CreateInstance<DataRebound>();
         AssetDatabase.CreateAsset(asset, assetCreatePath);
         AssetDatabase.SaveAssets();
@@ -264,7 +315,7 @@ public class CreateArrowSkillDataAsset
     [MenuItem("ActionCat/Scriptable Object/Arrow Skill Asset/Homing Arrow")]
     public static void CreateHomingArrowAsset()
     {
-        string assetCreatePath = "Assets/05. Scriptable_Object/SkillAsset/ArrowSkillAsset/HomingArrow.asset";
+        string assetCreatePath = "Assets/05.SO/SO.Skill/ArrowSkillAsset/HomingArrow.asset";
         var asset = ScriptableObject.CreateInstance<DataHoming>();
         AssetDatabase.CreateAsset(asset, assetCreatePath);
         AssetDatabase.SaveAssets();
@@ -277,7 +328,7 @@ public class CreateArrowSkillDataAsset
     [MenuItem("ActionCat/Scriptable Object/Arrow Skill Asset/Piercing Arrow")]
     public static void CreatePiercingArrowAsset()
     {
-        string assetCreatePath = "Assets/05. Scriptable_Object/SkillAsset/ArrowSkillAsset/PiercingArrow.asset";
+        string assetCreatePath = "Assets/05.SO/SO.Skill/ArrowSkillAsset/PiercingArrow.asset";
         var asset = ScriptableObject.CreateInstance<DataPiercing>();
         AssetDatabase.CreateAsset(asset, assetCreatePath);
         AssetDatabase.SaveAssets();
@@ -290,8 +341,32 @@ public class CreateArrowSkillDataAsset
     [MenuItem("ActionCat/Scriptable Object/Arrow Skill Asset/Split Arrow")]
     public static void CreateSplitArrowAsset()
     {
-        string assetCreatePath = "Assets/05. Scriptable_Object/SkillAsset/ArrowSkillAsset/SplitArrow.asset";
+        string assetCreatePath = "Assets/05.SO/SO.Skill/ArrowSkillAsset/SplitArrow.asset";
         var asset = ScriptableObject.CreateInstance<DataSplit>();
+        AssetDatabase.CreateAsset(asset, assetCreatePath);
+        AssetDatabase.SaveAssets();
+        AssetDatabase.Refresh();
+
+        EditorUtility.FocusProjectWindow();
+        Selection.activeObject = asset;
+    }
+
+    [MenuItem("ActionCat/Scriptable Object/Arrow Skill Asset/Split Dagger")]
+    public static void CreateSplitDaggerAsset() {
+        string assetCreatePath = "Assets/05.SO/SO.Skill/ArrowSkillAsset/SplitDagger_Default.asset";
+        var asset = ScriptableObject.CreateInstance<DataSplitDagger>();
+        AssetDatabase.CreateAsset(asset, assetCreatePath);
+        AssetDatabase.SaveAssets();
+        AssetDatabase.Refresh();
+
+        EditorUtility.FocusProjectWindow();
+        Selection.activeObject = asset;
+    }
+
+    [MenuItem("ActionCat/Scriptable Object/Arrow Skill Asset/Elemental Arrow - Fire")]
+    public static void CreateElementalFire() {
+        string assetCreatePath = "Assets/05.SO/SO.Skill/ArrowSkillAsset/ElemetalArrow-Fire_Default.asset";
+        var asset = ScriptableObject.CreateInstance<DataEltalFire>();
         AssetDatabase.CreateAsset(asset, assetCreatePath);
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();

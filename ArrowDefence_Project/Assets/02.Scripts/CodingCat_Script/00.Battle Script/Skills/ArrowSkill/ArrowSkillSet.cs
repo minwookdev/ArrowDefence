@@ -6,8 +6,8 @@
     public class ArrowSkillSet {
         ARROWSKILL_ACTIVETYPE activeType;
         AttackActiveTypeAS hitSkill = null;
-        AirActiveTypeAS airSkill    = null;
-        AddProjTypeAS addProjSkill  = null;
+        AirType airSkill            = null;
+        ProjectileType addProjSkill = null;
         string arrowPoolTag;
 
         //temp
@@ -61,8 +61,7 @@
 
             //Clone-Hit Type Skill
             if(origin.hitSkill != null) {
-                switch (origin.hitSkill)
-                {
+                switch (origin.hitSkill) {
                     case ReboundArrow rebound:   hitSkill = new ReboundArrow(rebound, arrowPoolTag); break;
                     case PiercingArrow piercing: hitSkill = new PiercingArrow(piercing);             break;
                     default: break;
@@ -71,8 +70,7 @@
 
             //Clone-Air Type Skill
             if(origin.airSkill != null) {
-                switch (origin.airSkill)
-                {
+                switch (origin.airSkill) {
                     case HomingArrow homing: airSkill = new HomingArrow(homing); break;
                     default: break;
                 }
@@ -80,8 +78,7 @@
 
             //Clone-Additional Projectiles Typ Skil
             if (origin.addProjSkill != null) {
-                switch (origin.addProjSkill)
-                {
+                switch (origin.addProjSkill) {
                     case SplitArrow split: addProjSkill = new SplitArrow(split); break;
                     default: break;
                 }
@@ -112,7 +109,7 @@
                 return;
             }
 
-            if (skillData is AirActiveTypeAS airTypeSkill) {
+            if (skillData is AirType airTypeSkill) {
                 airSkill = airTypeSkill;
             }
             else {
@@ -126,7 +123,7 @@
                 return;
             }
 
-            if(skillData is AddProjTypeAS addProjTypeSkill) {
+            if(skillData is ProjectileType addProjTypeSkill) {
                 addProjSkill = addProjTypeSkill;
             }
             else {

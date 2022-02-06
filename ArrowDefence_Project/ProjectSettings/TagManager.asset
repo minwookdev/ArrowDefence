@@ -8,6 +8,7 @@ TagManager:
   - ArrowDefence_Arrow
   - BattleScene_MainCanvas
   - Monster
+  - ArrDef_Route_UI
   layers:
   - Default
   - TransparentFX

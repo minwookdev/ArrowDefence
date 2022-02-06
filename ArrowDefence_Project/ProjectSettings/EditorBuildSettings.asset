@@ -23,4 +23,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/01.Scenes/ArrDef/ArrDef_Battle/ArrowDefence_Battle_Dungeon_Normal.unity
     guid: b72477f165631d34a8213a64fb4a4332
+  - enabled: 1
+    path: Assets/01.Scenes/ArrDef/ArrDef_UI/ArrowDefence_Battle_UI.unity
+    guid: 5d8e11c4d4438504cac16efabded54ff
+  - enabled: 0
+    path: Assets/01.Scenes/ArrDef/tempscene.unity
+    guid: 4a6c559912b269546a8277f892c2dc26
   m_configObjects: {}

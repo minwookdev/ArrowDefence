@@ -42,8 +42,7 @@
             }
         }
 
-        IEnumerator LoadScene()
-        {
+        IEnumerator LoadScene() {
             yield return null;
 
             AsyncOperation op = SceneManager.LoadSceneAsync(nextScene);
@@ -51,8 +50,7 @@
 
             //float timer = 0.0f;
 
-            while (!op.isDone)
-            {
+            while (!op.isDone) {
                 yield return null;
 
                 #region NOT_FAKE_TIME
@@ -84,12 +82,10 @@
                 #region FAKE_TIME
 
                 //Slider Type Loading :: Fake Time
-                if (progressSlider.value < 0.9f)
-                {
+                if (progressSlider.value < 0.9f) {
                     progressSlider.value = Mathf.MoveTowards(progressSlider.value, 0.9f, Time.deltaTime);
                 }
-                else if (op.progress >= 0.9f)
-                {
+                else if (op.progress >= 0.9f) {
                     progressSlider.value = Mathf.MoveTowards(progressSlider.value, 1.0f, Time.deltaTime);
                 }
 
@@ -99,8 +95,7 @@
                 tmpProgress.text = loadingPerStr;
 
                 //if Slider is the Max Value, Allow Active Target Scene 
-                if (progressSlider.value >= 1f)
-                {
+                if (progressSlider.value >= 1f) {
                     op.allowSceneActivation = true;
                     yield break;
                 }

@@ -19,7 +19,7 @@
 
         //PROPERTIES
         public GAMEPLATFORM PlayPlatform { get; private set; }
-        public GAMESTATE GameState { get; private set; }
+        public GAMESTATE GameState { get; private set; } = GAMESTATE.STATE_NONE;
         public bool IsDevMode { get; private set; }
 
 
@@ -392,10 +392,13 @@
             OnStateGameOver += new GameEventHandler(action);
         }
 
-        public void ReleaseAllEvent() {
+        public void ReleaseAllEventsWithNoneState() {
             //Release Battle State
             OnStateEndBattle = null;
             OnStateGameOver  = null;
+
+            //Restore GameState to NONE
+            ChangeGameState(GAMESTATE.STATE_NONE);
         }
 
         public GameEventHandler EventBattleEnd() {

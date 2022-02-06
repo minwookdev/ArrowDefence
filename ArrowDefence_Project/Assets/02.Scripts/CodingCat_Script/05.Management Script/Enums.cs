@@ -61,8 +61,7 @@
 
     #region GAMEMANAGER
 
-    public enum GAMESTATE
-    {
+    public enum GAMESTATE {
         STATE_NONE,
         STATE_BEFOREBATTLE,
         STATE_INBATTLE,

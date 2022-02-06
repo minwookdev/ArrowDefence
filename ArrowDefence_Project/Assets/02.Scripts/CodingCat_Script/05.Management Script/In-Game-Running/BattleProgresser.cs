@@ -128,13 +128,15 @@
         [SerializeField] [ReadOnly]
         private float currentBattleTime = 0f;
 
-        [Header("SLIDER")]
-        public Slider ClearSlider;
-        public Slider PlayerHealthSlider;
-        public Slider EnemyBossHealthSlider;
-        public float SliderSmoothTime = 1f;
-        [SerializeField] ClearSlider clearSlider = null;
+        //===============================================================================
+        //[Header("SLIDER")]
+        Slider ClearSlider;
+        Slider PlayerHealthSlider;
+        Slider EnemyBossHealthSlider;
+        float SliderSmoothTime = 1f;
+        ClearSlider clearSlider = null;
         private float clearSliderDest;
+        //===============================================================================
 
         [Header("BATTLE STATE")]
         [SerializeField] STAGETYPE stageType;
@@ -150,7 +152,6 @@
         private List<DropItem> dropItemList = new List<DropItem>();
 
         [Header("COMBO")]
-        [SerializeField] ComboCounter comboCounter = null;
         [ReadOnly] [SerializeField] 
         float maxComboTimer = 0f;
         bool isComboActivating = false;
@@ -173,16 +174,14 @@
         public static BattleEventHandler OnMonsterHit;
         public static BattleEventHandler OnMonsterDeath;
 
-        //Wait For ObjectPooler Variables //의미없는 수준이었기 때문에 주석처리 해둠.
-        //float poolerWaitTime = 0f;
-        //Coroutine waitCo = null;
-
         IEnumerator Start() {
             //================================================== << GAMEMANAGER >> =================================================
             GameManager.Instance.Initialize();
+            //================================================= << LOAD UI SCENE >> ================================================
+            yield return StartCoroutine(SceneLoader.Instance.AdditiveLoadUIScene());
             //================================================== << COMPONENTS >> ==================================================
             monsterSpawner = GetComponent<MonsterSpawner>();
-            battleSceneUI  = GetComponent<BattleSceneRoute>();
+            battleSceneUI  = FindObjectOfType<BattleSceneRoute>(); // SceneRoute Object is Moved other Scene.
             //======================================================================================================================
 
             //================================================ << ITEM DROP LIST >> ================================================
@@ -286,9 +285,10 @@
             //GameManager가 먼저 지워질 수 있다.
             if (GameManager.Instance != null) {
                 GameManager.Instance.ReleaseDropList();
-                GameManager.Instance.ReleaseAllEvent();
+                GameManager.Instance.ReleaseAllEventsWithNoneState();
                 GameManager.Instance.ReleaseEquipments();
 
+                //위 이벤트들 GameManager안에서 하나로 묶고, 여기서는 하나만 호출하는거 가능?
                 //GameManager.Instance.SetBowPullingStop(false);
             }
         }
@@ -313,10 +313,7 @@
             }
         }
 
-        public void DecreaseHealthGauge(float value)
-        {
-            //currentPlayerHealth -= value;
-
+        public void DecreaseHealthGauge(float value) {
             tempPlayerHealth = currentPlayerHealth;
             tempPlayerHealth -= value;
             if (tempPlayerHealth > 0) {
@@ -328,11 +325,9 @@
             else {
                 currentPlayerHealth = 0;
             }
-                
-            if(PlayerHealthSlider != null) {
-                float dest = currentPlayerHealth / MaxPlayerHealth;
-                PlayerHealthSlider.DOValue(dest, 0.5f);
-            }
+               
+            float dest = currentPlayerHealth / MaxPlayerHealth;
+            battleSceneUI.PlayerHealthSlider.Decrease(dest);
         }
 
         /// <summary>
@@ -379,17 +374,12 @@
         }
 
         void ClearSliderInit() {
-            if (clearSlider == null) {
-                CatLog.ELog("Clear Slider Component is Null", true);
-            }
-            else {
-                currentBattleTime = maxBattleTime;
-                clearSlider.InitSlider(false, maxBattleTime);
-            }
+            currentBattleTime = maxBattleTime;
+            battleSceneUI.StageClearSlider.InitSlider(false, maxBattleTime);
         }
 
         void ClearSliderUpdate() {
-            clearSlider.UpdateSlider(currentBattleTime);
+            battleSceneUI.StageClearSlider.UpdateSlider(currentBattleTime);
         }
 
         #endregion
@@ -504,7 +494,8 @@
                 DropItemsAddInventory();
 
                 //Open Clear Result Panel
-                battleSceneUI.OnEnableResultPanel(dropItemList);
+                //battleSceneUI.OnEnableResultPanel(dropItemList);
+                battleSceneUI.OpenClearPanel(dropItemList.ToArray());
                 endWaitingTime = 0f;
             }
         }
@@ -518,7 +509,8 @@
                 IsResult = true;
 
                 //Open GameOver Panel
-                battleSceneUI.OnEnableGameOverPanel();
+                //battleSceneUI.OnEnableGameOverPanel();
+                battleSceneUI.OpenGameOverPanel();
                 endWaitingTime = 0f;
             }
         }
@@ -549,18 +541,13 @@
         #region COMBO_SYSTEM
 
         void InitComboCounter() {
-            if (comboCounter != null) {
-                maxComboTimer = GameGlobal.ComboDuration;
-                comboCounter.InitComboCounter(maxComboTimer, false);
-            }
-            else {
-                CatLog.ELog("ComboCounter Component is Null, need Caching", true);
-            }
+            maxComboTimer = GameGlobal.ComboDuration;
+            battleSceneUI.ComboCounterInit(maxComboTimer, false);
         }
 
         void ComboOccurs() {
             //Increase Current Combo and, Update Combo Counter UI
-            comboCounter.UpdateComboCounter(battleData.GetComboWithIncrease());
+            battleSceneUI.ComboCounterUpdate(battleData.GetComboWithIncrease());
             currentComboTime  = maxComboTimer;
             isComboActivating = true;
         }
@@ -581,7 +568,7 @@
 
         void ComboClear() {
             battleData.ComboClear();
-            comboCounter.ComboClear();
+            battleSceneUI.ComboCounterClear();
         }
 
         #endregion

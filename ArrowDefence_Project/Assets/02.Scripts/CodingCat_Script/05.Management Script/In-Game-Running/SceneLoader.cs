@@ -1,13 +1,7 @@
-﻿namespace ActionCat
-{
+﻿namespace ActionCat {
     using UnityEngine.SceneManagement;
 
-    public class SceneLoader : Singleton<SceneLoader>
-    {
-        //private readonly string startScene   = AD_Data.Scene_Title;
-        //private readonly string mainScene    = AD_Data.Scene_Main;
-        //private readonly string battleScene  = AD_Data.Scene_Battle_Dev;
-
+    public class SceneLoader : Singleton<SceneLoader> {
         private readonly string loadingScene = AD_Data.SCENE_LOADING;
 
         public string NextScene { get; private set; }
@@ -16,8 +10,7 @@
         /// Set the Scene to be Loaded and load the LoadingScene
         /// </summary>
         /// <param name="targetScene">Load target SceneName</param>
-        public void LoadScene(string targetScene)
-        {
+        public void LoadScene(string targetScene) {
             NextScene = targetScene;
 
             try {
@@ -37,6 +30,14 @@
 
         public string GetCurrentSceneName() {
             return SceneManager.GetActiveScene().name;
+        }
+
+        public System.Collections.IEnumerator AdditiveLoadUIScene() {
+            float loadStartTime = UnityEngine.Time.time;
+            yield return SceneManager.LoadSceneAsync("ArrowDefence_Battle_UI", LoadSceneMode.Additive);
+            Scene targetScene = SceneManager.GetSceneByName("ArrowDefence_Battle_UI");
+            SceneManager.SetActiveScene(targetScene);
+            CatLog.Log($"UIScene LoadingTime : {UnityEngine.Time.time - loadStartTime}sec");
         }
     }
 }

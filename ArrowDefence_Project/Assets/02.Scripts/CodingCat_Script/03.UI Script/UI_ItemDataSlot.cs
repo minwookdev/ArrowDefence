@@ -50,11 +50,12 @@
         }
 
         /// <summary>
-        /// Set Slot v2
+        /// Enable Item Data Slot
         /// </summary>
-        /// <param name="data">Item Data class</param>
-        /// <param name="stack">Visible Item Stack Text stirng</param>
-        public void SetSlot(ItemData data, int stack) {
+        /// <param name="data"></param>
+        /// <param name="stack"></param>
+        /// <param name="rootParent">Root Parent Transform for Tooltip</param>
+        public void SetSlot(ItemData data, int stack, RectTransform rootParent) {
             itemDataAddress = data;
             ItemImg.sprite  = data.Item_Sprite;
 
@@ -66,7 +67,11 @@
             }
 
             //Get Parent Canvas (to use tooltip)
-            tooltipParent = transform.parent.root.GetComponent<RectTransform>();
+            tooltipParent = rootParent;
+
+            if(gameObject.activeSelf == false) {
+                gameObject.SetActive(true);
+            }
         }
 
         /// <summary>

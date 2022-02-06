@@ -15,6 +15,23 @@
         public bool isOnFPS = false;
         public bool isActiveScreenHit = true;
 
+        [Header("MODULE : PANEL")]
+        [SerializeField] PanelClear panelClear   = null;
+        [SerializeField] PanelDeath panelDeath   = null;
+        [SerializeField] ComboCounter panelCombo = null;
+
+        [Header("MODULE : SLOTS")]
+        [SerializeField] SwapSlots arrSwapSlot = null;
+        [SerializeField] AcspSlots acspSlots   = null;
+
+        [Header("MODULE : BUTTON")]
+        [SerializeField] Auto.AutoButton autoButton = null;
+
+        [Header("MODULE : SLIDERS")]
+        [SerializeField] ClearSlider stageClearSlider  = null;
+        [SerializeField] SliderCtrl playerHealthSlider = null;
+        [SerializeField] SliderCtrl bossHealthSlider   = null;
+
         [Header("ENTERING SCENE FADE OPTION")]
         public CanvasGroup ImgFade;
         public float FadeTime = 1.0f;
@@ -39,21 +56,12 @@
         [TextArea(3, 5)] public string StageTips = "";
         Sequence overSeq = null;
 
-        [Header("SWAP SLOT MODULE")]
-        [SerializeField] SwapSlots arrSwapSlot = null;
-
-        [Header("ACSP SLOT MODULE")]
-        [SerializeField] AcspSlots acspSlots = null;
-
         [Header("HIT SCREEN")]
         [SerializeField] Material hitScreenMaterial = null;
         public float ScreenHitFadeTime = .5f;
         public float ScreenHitAlpha = 0.4f;
         float hitFadeTimer = 0f;
         string generalAlpha = "_Alpha";
-
-        [Header("AUTO MODULE")]
-        [SerializeField] UI.Auto.AutoButton autoButton = null;
 
         private float screenZpos = 0f;
         private LineRenderer arrowLimitLine;
@@ -65,6 +73,25 @@
         [Header("ITEM SLOT TOOLTIP")]
         public Canvas BattleSceneUICanvas;
         public Camera UICamera;
+
+        #region SLIDER
+        public ClearSlider StageClearSlider {
+            get {
+                if(stageClearSlider == null) {
+                    throw new System.Exception("Clear Slider is Not Cached.");
+                }
+                return stageClearSlider;
+            }
+        }
+        public SliderCtrl PlayerHealthSlider {
+            get {
+                if(playerHealthSlider == null) {
+                    throw new System.Exception("Player Health Slider is Null.");
+                }
+                return playerHealthSlider;
+            }
+        }
+        #endregion
 
         void Start() {
             #region LIMIT_LINE_MAKER
@@ -100,16 +127,18 @@
             PausePanel.GetComponent<CanvasGroup>().alpha = 0f; //이거 무엇?
 
             //Item Data Slot Initializing
-            for (int i = 0; i < SlotParentTr.childCount; i++) {
-                DropItemSlots.Add(SlotParentTr.GetChild(i).GetComponent<UI_ItemDataSlot>());
-            }
+            //for (int i = 0; i < SlotParentTr.childCount; i++) {
+            //    DropItemSlots.Add(SlotParentTr.GetChild(i).GetComponent<UI_ItemDataSlot>());
+            //}
 
             //Fade Effect When Etnering The Battle Scene (if Don't Work This Function, Enable The DEV Variable)
             this.OnSceneEnteringFadeOut();
 
             //FPS Checker Initialize
-            if (isOnFPS)
+            if (isOnFPS) {
                 gameObject.AddComponent<FrameRateCheck>();
+            }
+                
 
             #endregion
         }
@@ -208,7 +237,7 @@
 
         #endregion
 
-        #region ENABLE_POPUP
+        #region PANEL
         public void OnEnableResultPanel(List<DropItem> items) {
             if (ResultPanel.activeSelf) return;
 
@@ -236,7 +265,7 @@
             for (int i = 0; i < items.Count; i++)
             {
                 DropItemSlots[i].gameObject.SetActive(true);
-                DropItemSlots[i].SetSlot(items[i].ItemAsset, items[i].Quantity);
+                //DropItemSlots[i].SetSlot(items[i].ItemAsset, items[i].Quantity);
             }
         }
 
@@ -266,19 +295,31 @@
             //Don't set SetAutoKill because no re-run is required.
         }
 
-        /// <summary>
-        /// Skip Panel Touch Event
-        /// </summary>
-        public void OnGameOverPanelSkip() {
-            if(overSeq.IsPlaying()) {
-                overSeq.Complete(); //Skipping GameOver Sequence.
-            }
-
-            //Disable Front Panel
-            overFrontPanel.SetActive(false);
+        public void OpenClearPanel(DropItem[] drops) {
+            panelClear.OpenPanel(drops);
         }
 
-        #endregion 
+        public void OpenGameOverPanel() {
+            panelDeath.OpenPanel();
+        }
+
+        public void ComboCounterInit(float maxTime, bool inUnscaledTime) {
+            if(panelCombo == null) {
+                throw new System.Exception("ComboCounter Component Not Cached.");
+            }
+
+            panelCombo.InitComboCounter(maxTime, inUnscaledTime);
+        }
+
+        public void ComboCounterUpdate(short comboCount) {
+            panelCombo.UpdateComboCounter(comboCount);
+        }
+
+        public void ComboCounterClear() {
+            panelCombo.ComboClear();
+        }
+
+        #endregion
 
         #region UI_SLOTS
 

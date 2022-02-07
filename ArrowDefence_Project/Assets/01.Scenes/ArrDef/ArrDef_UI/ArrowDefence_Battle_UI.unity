@@ -263,86 +263,6 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 114002990}
   m_PrefabAsset: {fileID: 0}
---- !u!1001 &180232588
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 1850263725143571297, guid: 03907dc539378d84b8ca24ac83379701,
-        type: 3}
-      propertyPath: m_Name
-      value: UiCamera
-      objectReference: {fileID: 0}
-    - target: {fileID: 1850263725143571302, guid: 03907dc539378d84b8ca24ac83379701,
-        type: 3}
-      propertyPath: orthographic size
-      value: 9
-      objectReference: {fileID: 0}
-    - target: {fileID: 1850263725143571303, guid: 03907dc539378d84b8ca24ac83379701,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1850263725143571303, guid: 03907dc539378d84b8ca24ac83379701,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 15
-      objectReference: {fileID: 0}
-    - target: {fileID: 1850263725143571303, guid: 03907dc539378d84b8ca24ac83379701,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1850263725143571303, guid: 03907dc539378d84b8ca24ac83379701,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -10
-      objectReference: {fileID: 0}
-    - target: {fileID: 1850263725143571303, guid: 03907dc539378d84b8ca24ac83379701,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1850263725143571303, guid: 03907dc539378d84b8ca24ac83379701,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1850263725143571303, guid: 03907dc539378d84b8ca24ac83379701,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1850263725143571303, guid: 03907dc539378d84b8ca24ac83379701,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1850263725143571303, guid: 03907dc539378d84b8ca24ac83379701,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1850263725143571303, guid: 03907dc539378d84b8ca24ac83379701,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1850263725143571303, guid: 03907dc539378d84b8ca24ac83379701,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 03907dc539378d84b8ca24ac83379701, type: 3}
---- !u!20 &180232589 stripped
-Camera:
-  m_CorrespondingSourceObject: {fileID: 1850263725143571302, guid: 03907dc539378d84b8ca24ac83379701,
-    type: 3}
-  m_PrefabInstance: {fileID: 180232588}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &322766786
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1559,6 +1479,30 @@ MonoBehaviour:
     BackgroundTexture: {fileID: 0}
     IsBackgroundRecursive: 0
     IsHidden: 0
+  - Type: 0
+    Name: 
+    GameObject: {fileID: 4458392278334258605}
+    Ordinal: 11
+    Priority: 0
+    IconType: 1010
+    IconTexture: {fileID: 0}
+    IsIconRecursive: 0
+    BackgroundType: 0
+    BackgroundTexture: {fileID: 0}
+    IsBackgroundRecursive: 0
+    IsHidden: 0
+  - Type: 0
+    Name: 
+    GameObject: {fileID: 1994971439}
+    Ordinal: 12
+    Priority: 0
+    IconType: 1600
+    IconTexture: {fileID: 0}
+    IsIconRecursive: 0
+    BackgroundType: 0
+    BackgroundTexture: {fileID: 0}
+    IsBackgroundRecursive: 0
+    IsHidden: 0
 --- !u!4 &1442888270
 Transform:
   m_ObjectHideFlags: 0
@@ -1616,40 +1560,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b874476ef2ee2849b439fc39141d798, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IsVisible: 1
-  LineWidth: 0.1
-  DefaultLineMat: {fileID: 10306, guid: 0000000000000000f000000000000000, type: 0}
-  isOnFPS: 1
-  isActiveScreenHit: 1
   panelClear: {fileID: 4458392278063695249}
   panelDeath: {fileID: 4458392278459060912}
+  panelPause: {fileID: 4458392278334258606}
   panelCombo: {fileID: 4458392277789082011}
-  arrSwapSlot: {fileID: 4458392278094258585}
-  acspSlots: {fileID: 4458392277677199592}
-  autoButton: {fileID: 7464953378379607474}
-  stageClearSlider: {fileID: 4458392277320826556}
-  playerHealthSlider: {fileID: 4458392277885216803}
-  bossHealthSlider: {fileID: 4458392277640972507}
-  ImgFade: {fileID: 4458392277785268851}
-  FadeTime: 1
-  PausePanel: {fileID: 4458392278334258605}
-  PanelOpenFadeTime: 0.5
-  ResultPanel: {fileID: 4458392278063695248}
-  SlotParentTr: {fileID: 0}
-  DropItemSlotPref: {fileID: 0}
-  DropItemSlots: []
-  overPanel: {fileID: 0}
-  overFrontPanel: {fileID: 0}
-  overLogo: {fileID: 0}
-  overBackPanel: {fileID: 0}
-  canvasGroupOverButton: {fileID: 0}
-  tmp_tips: {fileID: 0}
-  StageTips: 
+  slotArrSwap: {fileID: 4458392278094258585}
+  slotAcsp: {fileID: 4458392277677199592}
+  buttonAuto: {fileID: 7464953378379607474}
+  sliderStageClear: {fileID: 4458392277320826556}
+  sliderPlayerHealth: {fileID: 4458392277885216803}
+  sliderBossHealth: {fileID: 4458392277640972507}
   hitScreenMaterial: {fileID: 2100000, guid: 049556744e731da46a8a0809dc2ecc78, type: 2}
   ScreenHitFadeTime: 0.5
   ScreenHitAlpha: 0.4
-  BattleSceneUICanvas: {fileID: 4458392277081655488}
-  UICamera: {fileID: 180232589}
+  fadeCanvasGroup: {fileID: 4458392277785268851}
+  fadeOutTime: 1
+  isOnDisableLine: 0
+  isOnFPS: 1
+  DefaultLineMat: {fileID: 10306, guid: 0000000000000000f000000000000000, type: 0}
 --- !u!1 &1663309669
 GameObject:
   m_ObjectHideFlags: 0
@@ -2320,6 +2248,80 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 3.4}
   m_SizeDelta: {x: 90, y: 90}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!20 &1850263725031234282
+Camera:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1850263725031234285}
+  m_Enabled: 1
+  serializedVersion: 2
+  m_ClearFlags: 3
+  m_BackGroundColor: {r: 0.14901961, g: 0.14901961, b: 0.14901961, a: 0}
+  m_projectionMatrixMode: 1
+  m_GateFitMode: 2
+  m_FOVAxisMode: 0
+  m_SensorSize: {x: 36, y: 24}
+  m_LensShift: {x: 0, y: 0}
+  m_FocalLength: 50
+  m_NormalizedViewPortRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+  near clip plane: 0.3
+  far clip plane: 20
+  field of view: 60
+  orthographic: 1
+  orthographic size: 9
+  m_Depth: 1
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 32
+  m_RenderingPath: -1
+  m_TargetTexture: {fileID: 0}
+  m_TargetDisplay: 0
+  m_TargetEye: 3
+  m_HDR: 1
+  m_AllowMSAA: 1
+  m_AllowDynamicResolution: 0
+  m_ForceIntoRT: 0
+  m_OcclusionCulling: 1
+  m_StereoConvergence: 10
+  m_StereoSeparation: 0.022
+--- !u!4 &1850263725031234283
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1850263725031234285}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 15, y: 0, z: -10}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1850263725031234285
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1850263725031234283}
+  - component: {fileID: 1850263725031234282}
+  m_Layer: 0
+  m_Name: UiCamera
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!114 &1863444848838127265
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3111,7 +3113,7 @@ Canvas:
   m_Enabled: 1
   serializedVersion: 3
   m_RenderMode: 1
-  m_Camera: {fileID: 180232589}
+  m_Camera: {fileID: 1850263725031234282}
   m_PlaneDistance: 10
   m_PixelPerfect: 1
   m_ReceivesEvents: 1
@@ -5672,8 +5674,8 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
-          m_MethodName: Btn_LoadMainScene
+        - m_Target: {fileID: 4458392278334258606}
+          m_MethodName: ButtonLoadMain
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -7026,8 +7028,8 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
-          m_MethodName: Btn_ReloadScene
+        - m_Target: {fileID: 4458392278334258606}
+          m_MethodName: ButtonRestart
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -10875,6 +10877,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4458392278334258604}
   - component: {fileID: 4458392278334258595}
+  - component: {fileID: 4458392278334258606}
   m_Layer: 5
   m_Name: panel_pause
   m_TagString: Untagged
@@ -10882,6 +10885,24 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 0
+--- !u!114 &4458392278334258606
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4458392278334258605}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3dd7797e248743c4bb236485d7fe0f4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pausePanelTr: {fileID: 4458392278334258604}
+  panelCanvasGroup: {fileID: 4458392278334258595}
+  openFadeTime: 0.5
+  battleButtons:
+    fadePanel: {fileID: 4458392277785268851}
+    defaultFadeTime: 1
 --- !u!222 &4458392278347474480
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -12585,8 +12606,8 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
-          m_MethodName: Btn_ContinueGame
+        - m_Target: {fileID: 4458392278334258606}
+          m_MethodName: ButtonResume
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -14861,8 +14882,8 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
-          m_MethodName: Btn_OpenPausePanel
+        - m_Target: {fileID: 1658476449}
+          m_MethodName: ButtonPause
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}

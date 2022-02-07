@@ -1,11 +1,11 @@
 ﻿namespace ActionCat {
     using ActionCat.Data;
     using ActionCat.UI;
-    using DG.Tweening;
     using System.Collections;
     using System.Collections.Generic;
     using UnityEngine;
     using UnityEngine.UI;
+    using DG.Tweening;
 
     #region BATTLE_DATA
     public struct BattleData {
@@ -97,17 +97,31 @@
     #endregion
 
     public class BattleProgresser : MonoBehaviour {
-        [Header("COMPONENT")]
-        [SerializeField] BattleSceneRoute battleSceneUI  = null;
-        [SerializeField] MonsterSpawner   monsterSpawner = null;
+        [Header("REQUIRED")]
+        [SerializeField] [ReadOnly] 
+        BattleSceneRoute sceneRoute = null;
+        [SerializeField] MonsterSpawner monsterSpawner = null;
 
-        [Header("BATTLE PROGRESS")]
-        public float StartBattleDelay = 3f;
-        public float EndBattleDelay   = 2f;
-        private float startWaitingTime;
-        private float endWaitingTime;
-        private bool IsResult = false;
-        private bool isInitialized = false;
+        [Header("STAGE INFO")]
+        [SerializeField] STAGETYPE stageType;
+        [ReadOnly] public GAMESTATE tempGameState;
+        [SerializeField] [ReadOnly]
+        string stageKey = "";
+
+        [Header("TIME")]
+        [SerializeField] [RangeEx(60f, 180f, step:10f, "Battle Time (Step:10f)")]
+        private float maxBattleTime = 120f;
+        [SerializeField] [ReadOnly]
+        private float currentBattleTime = 0f;
+
+        [Header("WAITING")]
+        [SerializeField] Image ImageCover = null;
+        [SerializeField] [RangeEx(0.5f, 5f, 0.5f)] float StartBattleDelay = 3f;
+        [SerializeField] [RangeEx(0.5f, 5f, 0.5f)] float EndBattleDelay   = 2f;
+        private float currentStartDelayTime;
+        private float currentEndDelayTime;
+        private bool IsOpenedResult = false;
+        private bool isInitialized  = false;
 
         [Header("PLAYER")]
         public Transform ParentTransform;
@@ -118,50 +132,23 @@
         float tempPlayerHealth = 0f;
         bool isUsedResurrect = false;
 
-        [Header("CLEAR COUNT")]
-        [Range(100, 1200)]
-        public float MaxClearCount = 100;
-        private float currentClearCount = 0f;
-        float tempClearCount = 0f;
-        [SerializeField] [RangeEx(60f, 180f, step:10f, "Battle Time (Step:10f)")]
-        private float maxBattleTime = 120f;
-        [SerializeField] [ReadOnly]
-        private float currentBattleTime = 0f;
-
-        //===============================================================================
-        //[Header("SLIDER")]
-        Slider ClearSlider;
-        Slider PlayerHealthSlider;
-        Slider EnemyBossHealthSlider;
-        float SliderSmoothTime = 1f;
-        ClearSlider clearSlider = null;
-        private float clearSliderDest;
-        //===============================================================================
-
-        [Header("BATTLE STATE")]
-        [SerializeField] STAGETYPE stageType;
-        [ReadOnly] public GAMESTATE tempGameState;
-        [SerializeField] [ReadOnly]
-        string stageKey = "";
-
         [Header("DROPS")]
-        public ItemDropList DropListAsset = null;
-        [SerializeField] [Range(0, 100)] 
-        private int StageDropCorrection = 30;
-        [SerializeField] 
-        private List<DropItem> dropItemList = new List<DropItem>();
+        [SerializeField] ItemDropList DropListAsset = null;
+        [SerializeField]
+        [RangeEx(0f, 50f, 10f)]
+        private int dropCorrection = 30;
+        [SerializeField] List<DropItem> dropItemList = new List<DropItem>();
 
-        [Header("COMBO")]
-        [ReadOnly] [SerializeField] 
+        //COMBO TIME
         float maxComboTimer = 0f;
         bool isComboActivating = false;
         float currentComboTime = 0f;
 
         [Header("DEBUG")]
-        public bool IsDebugClearStage    = false;
+        public bool IsQuickGameClear     = false;
+        public bool IsQuickGameOver      = false;
+        public bool IsQuickAutoButton    = false;
         public bool IsDebugMonsterLogics = false;
-        public bool IsDebugGameOver      = false;
-        public bool IsDebugAutoMode      = false;
 
         //전투 진행 이벤트 핸들러 : 수치관련 이벤트
         public delegate void ValueEventHandler(float value);
@@ -174,14 +161,28 @@
         public static BattleEventHandler OnMonsterHit;
         public static BattleEventHandler OnMonsterDeath;
 
+        void Cover(bool isOpen) {
+            var tempColor = ImageCover.color;
+            tempColor.a   = (isOpen == true) ? StNum.floatZero : StNum.floatOne;
+            ImageCover.color = tempColor;
+            if(isOpen == true) {
+                ImageCover.gameObject.SetActive(false);
+            }
+        }
+
+        void Awake() {
+            Cover(false);
+        }
+
         IEnumerator Start() {
             //================================================== << GAMEMANAGER >> =================================================
             GameManager.Instance.Initialize();
             //================================================= << LOAD UI SCENE >> ================================================
             yield return StartCoroutine(SceneLoader.Instance.AdditiveLoadUIScene());
+            Cover(true);
             //================================================== << COMPONENTS >> ==================================================
             monsterSpawner = GetComponent<MonsterSpawner>();
-            battleSceneUI  = FindObjectOfType<BattleSceneRoute>(); // SceneRoute Object is Moved other Scene.
+            sceneRoute  = FindObjectOfType<BattleSceneRoute>(); // SceneRoute Object is Moved other Scene.
             //======================================================================================================================
 
             //================================================ << ITEM DROP LIST >> ================================================
@@ -203,7 +204,7 @@
             //Add Numerical Events to Delegate < 게임 진행 수치관련 이벤트 >
             currentPlayerHealth = MaxPlayerHealth; // <- 임시 플레이어 체력 할당 <플레이어 데이터에서 받아올 것>
             OnDecPlayerHealth  += DecreaseHealthGauge;
-            OnIncClearGauge    += IncreaseClearGauge;
+            //OnIncClearGauge    += IncreaseClearGauge;
             //======================================================================================================================
 
             //================================================= << BATTLE DATA >> ==================================================
@@ -217,8 +218,8 @@
             //==================================================== << PLAYER >> ====================================================
             GameManager.Instance.InitEquips(BowInitPosition, ParentTransform, 1, 1, out ArrSSData[] arrSlotArray, out ACSData[] acspSlotArray);
 
-            battleSceneUI.GetArrSwapSlots().InitSlots(arrSlotArray); //Init Arr Slots
-            battleSceneUI.GetAcspSlots().InitSlots(acspSlotArray);   //Init Accessory Skill Slots
+            sceneRoute.SlotArrSwap.InitSlots(arrSlotArray);     //Init ArrowSwap Slot
+            sceneRoute.SlotAcSkill.InitSlots(acspSlotArray);    //Init AcspSkill Slot
             //======================================================================================================================
 
             //================================================ << BATTLE STATE >> ==================================================
@@ -240,17 +241,17 @@
             //======================================================================================================================
 
             //================================================== << AUTO MODE >> ===================================================
-            var autoButton = battleSceneUI.GetAutoButton();
+            var autoButton = sceneRoute.ButtonAuto;
             autoButton.Disable();
             bool isOnStageSetting  = GameManager.Instance.TryGetStageSetting(stageKey, out Data.StageData.StageSetting setting);
             bool isUseableAutoMode = GameManager.Instance.TryGetStageData(stageKey, out StageInfo info);
             if (isOnStageSetting == true && isUseableAutoMode == true) {
                 if(setting.isOnAutoMode && info.IsUseableAuto) {
-                    autoButton.Init(GameManager.Instance.AutoSwitch, IsDebugAutoMode);
+                    autoButton.Init(GameManager.Instance.AutoSwitch, IsQuickAutoButton);
                 }
             }
-            else if (IsDebugAutoMode == true) {
-                autoButton.Init(GameManager.Instance.AutoSwitch, IsDebugAutoMode);
+            else if (IsQuickAutoButton == true) {
+                autoButton.Init(GameManager.Instance.AutoSwitch, IsQuickAutoButton);
             }
 
             //======================================================================================================================
@@ -273,7 +274,7 @@
         private void OnDestroy() {
             //씬 이동 시 변수 정리.
             //게임 수치관련 이벤트 해제
-            OnIncClearGauge   -= IncreaseClearGauge;
+            //OnIncClearGauge   -= IncreaseClearGauge;
             OnItemDrop        -= OnItemDropRoll;
             OnDecPlayerHealth -= DecreaseHealthGauge;
 
@@ -295,24 +296,6 @@
 
         #region SLIDER
 
-        public void IncreaseClearGauge(float value) {
-            //Safe Calculate
-            tempClearCount = currentClearCount + value;
-
-            if (tempClearCount < MaxClearCount) {
-                currentClearCount = tempClearCount;
-            }
-            else if (tempClearCount >= MaxClearCount) {
-                currentClearCount = MaxClearCount;
-            }
-
-            //Increase Clear Slider Value [if the caching ui.slider]
-            if (ClearSlider != null) {
-                float dest = currentClearCount / MaxClearCount;
-                ClearSlider.DOValue(dest, 1f);
-            }
-        }
-
         public void DecreaseHealthGauge(float value) {
             tempPlayerHealth = currentPlayerHealth;
             tempPlayerHealth -= value;
@@ -327,32 +310,7 @@
             }
                
             float dest = currentPlayerHealth / MaxPlayerHealth;
-            battleSceneUI.PlayerHealthSlider.Decrease(dest);
-        }
-
-        /// <summary>
-        /// 호출되는 간격이 짧을때는 Update에다 두고 사용하는게 안정적임 -> 그냥 DoTween 사용해서 해결함
-        /// </summary>
-        /// <returns></returns>
-        private IEnumerator MoveSlider()
-        {
-            //var value = currentStageCount / MaxStageCount;
-            //float startValue = StageSlider.value;
-            float lerp = 0f;
-
-            while (lerp < SliderSmoothTime)
-            {
-                clearSliderDest = currentClearCount / MaxClearCount; //처음에만 잡아줘버리면 계속 변동하는 수치를 잡지못함
-                lerp += Time.deltaTime;
-                float lerpValue = lerp / SliderSmoothTime;
-                ClearSlider.value = Mathf.Lerp(ClearSlider.value, clearSliderDest, lerpValue);
-
-                yield return null;
-            }
-
-            //ClearSlider.value = clearSliderDest;
-            //adding Time.deltaTime will probably never add to a full Number, this is just rounding Slider value
-            //so it's exactly what we want
+            sceneRoute.PlayerSliderDec(dest);
         }
 
         void KillAllMonsters() {
@@ -367,7 +325,7 @@
 
         void ActivePlayerDamageEffect() {
             //Active Red Panel 
-            battleSceneUI.OnHitScreen();
+            sceneRoute.OnHitScreen();
 
             //Active Camera Shake
             CineCam.Inst.ShakeCamera(5f, .2f);
@@ -375,11 +333,11 @@
 
         void ClearSliderInit() {
             currentBattleTime = maxBattleTime;
-            battleSceneUI.StageClearSlider.InitSlider(false, maxBattleTime);
+            sceneRoute.ClearSliderInit(false, maxBattleTime);
         }
 
         void ClearSliderUpdate() {
-            battleSceneUI.StageClearSlider.UpdateSlider(currentBattleTime);
+            sceneRoute.ClearSliderUpdate(currentBattleTime);
         }
 
         #endregion
@@ -387,7 +345,7 @@
         #region ITEMDROP_METHOD
 
         private void OnItemDropRoll(float dropRateCorrection) {
-            if (GameManager.Instance.OnItemDropRoll(StageDropCorrection, dropRateCorrection) == true) {
+            if (GameManager.Instance.OnItemDropRoll(dropCorrection, dropRateCorrection) == true) {
                 AddDropList(GameManager.Instance.OnItemDrop());
             }
         }
@@ -426,9 +384,9 @@
         {
             if (isInitialized == false) return;
 
-            startWaitingTime += Time.deltaTime;
-            if(startWaitingTime >= StartBattleDelay) {
-                if (IsDebugClearStage) {        //Debug 1. Stage Clear, Get All Item's in DropList Asset
+            currentStartDelayTime += Time.deltaTime;
+            if(currentStartDelayTime >= StartBattleDelay) {
+                if (IsQuickGameClear) {        //Debug 1. Stage Clear, Get All Item's in DropList Asset
                     CatLog.WLog(StringColor.YELLOW, "DEBUGGING MODE TRUE : ALL DROP ITEM LIST.");
                     foreach (var item in DropListAsset.DropTableArray) {
                         AddDropList(new DropItem(GameGlobal.RandomIntInArray(item.QuantityRange), item.ItemAsset));
@@ -439,7 +397,7 @@
                 else if (IsDebugMonsterLogics) { //Debug 2. Monster Logic Testing
                     CatLog.WLog(StringColor.YELLOW, "DEBUGGING MODE TRUE : MONSTER LOGIC TEST.");
                 }
-                else if (IsDebugGameOver) {      //Debug 3. Go GameOver State
+                else if (IsQuickGameOver) {      //Debug 3. Go GameOver State
                     CatLog.WLog(StringColor.YELLOW, "DEBUGGING MODE TRUE : GAME OVER.");
                     //GameState Set GameOver
                     SetGameState(GAMESTATE.STATE_GAMEOVER);
@@ -481,11 +439,11 @@
         }
 
         private void OnUpdateEndBattle() {
-            if (IsResult == false) //waiting time.
-                endWaitingTime += Time.deltaTime;
+            if (IsOpenedResult == false) //waiting time.
+                currentEndDelayTime += Time.deltaTime;
             
-            if (endWaitingTime >= EndBattleDelay) {
-                IsResult = true;
+            if (currentEndDelayTime >= EndBattleDelay) {
+                IsOpenedResult = true;
 
                 //Update Stage Info
                 SendStageInfo();
@@ -495,23 +453,23 @@
 
                 //Open Clear Result Panel
                 //battleSceneUI.OnEnableResultPanel(dropItemList);
-                battleSceneUI.OpenClearPanel(dropItemList.ToArray());
-                endWaitingTime = 0f;
+                sceneRoute.OpenClearPanel(dropItemList.ToArray());
+                currentEndDelayTime = 0f;
             }
         }
 
         void OnUpdateGameOver() {
-            if(IsResult == false) { //waiting time.
-                endWaitingTime += Time.unscaledDeltaTime;
+            if(IsOpenedResult == false) { //waiting time.
+                currentEndDelayTime += Time.unscaledDeltaTime;
             }
 
-            if(endWaitingTime >= EndBattleDelay) {
-                IsResult = true;
+            if(currentEndDelayTime >= EndBattleDelay) {
+                IsOpenedResult = true;
 
                 //Open GameOver Panel
                 //battleSceneUI.OnEnableGameOverPanel();
-                battleSceneUI.OpenGameOverPanel();
-                endWaitingTime = 0f;
+                sceneRoute.OpenGameOverPanel();
+                currentEndDelayTime = 0f;
             }
         }
 
@@ -542,12 +500,12 @@
 
         void InitComboCounter() {
             maxComboTimer = GameGlobal.ComboDuration;
-            battleSceneUI.ComboCounterInit(maxComboTimer, false);
+            sceneRoute.ComboCounterInit(maxComboTimer, false);
         }
 
         void ComboOccurs() {
             //Increase Current Combo and, Update Combo Counter UI
-            battleSceneUI.ComboCounterUpdate(battleData.GetComboWithIncrease());
+            sceneRoute.ComboCounterUpdate(battleData.GetComboWithIncrease());
             currentComboTime  = maxComboTimer;
             isComboActivating = true;
         }
@@ -568,22 +526,9 @@
 
         void ComboClear() {
             battleData.ComboClear();
-            battleSceneUI.ComboCounterClear();
+            sceneRoute.ComboCounterClear();
         }
 
         #endregion
-
-        //Time.time Timer 참고.
-        //IEnumerator WaitObjectPooler() {
-        //    float startTime = Time.time;
-        //    while (poolerWaitTime < 3f)
-        //    {
-        //        poolerWaitTime = Time.time - startTime;
-        //        yield return null;
-        //    }
-        //
-        //    CatLog.ELog("Battle Progresser : CCPooler Wait Time Over, Stop Editor.");
-        //    Debug.Break();
-        //}
     }
 }

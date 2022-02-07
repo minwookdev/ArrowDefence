@@ -8337,6 +8337,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3204541759480302795, guid: 75155828b9866ee4dbb6eb1c6d7a0a62,
         type: 3}
+      propertyPath: ImageMainFade
+      value: 
+      objectReference: {fileID: 5957169593745452069}
+    - target: {fileID: 3204541759480302795, guid: 75155828b9866ee4dbb6eb1c6d7a0a62,
+        type: 3}
       propertyPath: MaxClearCount
       value: 300
       objectReference: {fileID: 0}
@@ -8349,6 +8354,11 @@ PrefabInstance:
         type: 3}
       propertyPath: maxComboTimer
       value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3204541759480302795, guid: 75155828b9866ee4dbb6eb1c6d7a0a62,
+        type: 3}
+      propertyPath: dropCorrection
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 3204541759480302795, guid: 75155828b9866ee4dbb6eb1c6d7a0a62,
         type: 3}
@@ -8856,6 +8866,18 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 5957169593745452066}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &5957169593745452069 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3591699246899055443, guid: 86b8a08e370fc7d48aa86d09bf50d9dd,
+    type: 3}
+  m_PrefabInstance: {fileID: 5957169593745452066}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &6885781576976812849
 PrefabInstance:
   m_ObjectHideFlags: 0

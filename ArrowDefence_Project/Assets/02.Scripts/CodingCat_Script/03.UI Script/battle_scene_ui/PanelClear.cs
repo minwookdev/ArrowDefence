@@ -83,9 +83,27 @@
         }
 
         /// <summary>
+        /// Only Use PausePanel Scirpts
+        /// </summary>
+        /// <param name="panel"></param>
+        public void Resume(PanelPause panel, CanvasGroup canvasGroup, float fadeTime) {
+            canvasGroup.DOFade(StNum.floatZero, fadeTime)
+                .SetUpdate(true)
+                .OnStart(() => canvasGroup.blocksRaycasts = false)
+                .OnComplete(() => {
+                    GameManager.Instance.ResumeBattle();
+                    panel.gameObject.SetActive(false);
+                });
+        }
+
+        /// <summary>
         /// Editor로 Button 또는 EventTrigger로 캐싱사용 하려면 래핑해서 사용.
         /// </summary>
         public void Resurrect() {
+            throw new System.NotImplementedException();
+        }
+
+        public void Settings() {
             throw new System.NotImplementedException();
         }
     }

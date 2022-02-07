@@ -26,7 +26,8 @@ MonoBehaviour:
     type: 3}
   LessArrowObj: {fileID: 551979332388609518, guid: 46704234dcf8d5b468cae3046c421e3b,
     type: 3}
-  ArrowSkillFst: {fileID: 11400000, guid: 09b518c9490417c4c82df0eaec30ee7e, type: 2}
+  ArrowSkillFst: {fileID: 11400000, guid: 0893f7ccbe805e346b4b5499d3b28cd1, type: 2}
   ArrowSkillSec: {fileID: 0}
   DamageInc: 1
   Speed: 18
+  effects: []

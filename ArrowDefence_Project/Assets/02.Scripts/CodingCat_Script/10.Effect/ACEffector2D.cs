@@ -107,6 +107,9 @@
                         particleMain.playOnAwake = false;
                         particleMain.scalingMode = ParticleSystemScalingMode.Hierarchy;
 
+                        effector.transform.eulerAngles = Vector3.zero;
+                        //effector.transform.rotation = Quaternion.Euler(Vector3.zero);
+
                         EditorUtility.SetDirty(effector);
                         CatLog.Log(StringColor.GREEN, "The Proeprties Changed Successfully.");
                     }
@@ -147,6 +150,11 @@
                         var particleMain = particle.main;
                         particleMain.playOnAwake = true;
                         particleMain.scalingMode = ParticleSystemScalingMode.Shape;
+
+                        var eulerAngles = effector.transform.eulerAngles;
+                        eulerAngles.x   = -90f;
+                        effector.transform.eulerAngles = eulerAngles;
+
 
                         EditorUtility.SetDirty(effector);
                         CatLog.Log(StringColor.GREEN, "The Proeprties Changed Successfully.");

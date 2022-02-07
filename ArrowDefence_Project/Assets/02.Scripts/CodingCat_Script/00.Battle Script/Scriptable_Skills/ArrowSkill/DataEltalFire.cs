@@ -1,6 +1,9 @@
 ﻿namespace ActionCat {
     using UnityEngine;
 
+    /// <summary>
+    /// ArrowSkill ScriptableObject
+    /// </summary>
     public class DataEltalFire : ArrowSkillData {
         [RangeEx(10f, 30f, 5f)]
         public float ActivationProbability = 10f;

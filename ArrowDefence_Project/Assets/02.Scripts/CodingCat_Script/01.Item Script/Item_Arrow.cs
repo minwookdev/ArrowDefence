@@ -33,6 +33,10 @@
             }
         }
 
+        /// <summary>
+        /// Constructor for Item ScriptableObject
+        /// </summary>
+        /// <param name="item"></param>
         public Item_Arrow (ItemData_Equip_Arrow item) : base() {
             this.EquipType = EQUIP_ITEMTYPE.EQUIP_ARROW;
 
@@ -47,10 +51,12 @@
             this.LessArrowObject = item.LessArrowObj;
 
             //Init-Arrow Skill Info
-            if (item.ArrowSkillFst != null)
+            if (item.ArrowSkillFst != null) {
                 this.arrowSkillInfoFst = new ASInfo(item.ArrowSkillFst);
-            if (item.ArrowSkillSec != null)
+            }
+            if (item.ArrowSkillSec != null) {
                 this.arrowSkillInfoSec = new ASInfo(item.ArrowSkillSec);
+            }
 
             //Init-Ability Info
             this.abilities = item.abilityDatas;
@@ -58,6 +64,10 @@
             this.effects = item.effects;
         }
 
+        /// <summary>
+        /// Constructor for Item Clone
+        /// </summary>
+        /// <param name="item"></param>
         public Item_Arrow(Item_Arrow item) : base() {
             this.EquipType = EQUIP_ITEMTYPE.EQUIP_ARROW;
 

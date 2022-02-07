@@ -1,6 +1,9 @@
 ﻿namespace ActionCat {
     using UnityEngine;
 
+    /// <summary>
+    /// ArrowSkill ScriptableObject
+    /// </summary>
     public class DataSplitDagger : ArrowSkillData {
         [RangeEx(3, 5, 1)]
         public int projectileCount = 3;

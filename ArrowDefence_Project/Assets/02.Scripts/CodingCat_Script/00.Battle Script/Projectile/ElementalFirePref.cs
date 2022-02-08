@@ -1,18 +1,13 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿namespace ActionCat {
+    using UnityEngine;
 
-public class ElementalFirePref : MonoBehaviour
-{
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public class ElementalFirePref : ProjectilePref {
+        public override void Shot() {
+            throw new System.NotImplementedException();
+        }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        protected override void CheckComponent() {
+            throw new System.NotImplementedException();
+        }
     }
 }

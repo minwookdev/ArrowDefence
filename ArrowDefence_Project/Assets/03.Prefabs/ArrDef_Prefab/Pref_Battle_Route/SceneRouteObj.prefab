@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3204541759480302799}
-  - component: {fileID: 3204541759480302798}
   - component: {fileID: 3204541759480302796}
   - component: {fileID: 3204541759480302795}
   m_Layer: 0
@@ -33,56 +32,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3204541759480302798
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3204541759480302800}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8b874476ef2ee2849b439fc39141d798, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  IsVisible: 1
-  LineWidth: 0.1
-  DefaultLineMat: {fileID: 10756, guid: 0000000000000000e000000000000000, type: 0}
-  isOnFPS: 1
-  isActiveScreenHit: 1
-  ImgFade: {fileID: 0}
-  FadeTime: 1
-  PausePanel: {fileID: 0}
-  PanelOpenFadeTime: 0.5
-  ResultPanel: {fileID: 0}
-  SlotParentTr: {fileID: 0}
-  DropItemSlotPref: {fileID: 5984624412175565113, guid: 07963ed1caf360a429dfd7b2ee79fd4d,
-    type: 3}
-  DropItemSlots: []
-  overPanel: {fileID: 0}
-  overFrontPanel: {fileID: 0}
-  overLogo: {fileID: 0}
-  overBackPanel: {fileID: 0}
-  canvasGroupOverButton: {fileID: 0}
-  tmp_tips: {fileID: 0}
-  StageTips: 
-  mainArrowSlot: {fileID: 0}
-  subArrowSlot: {fileID: 0}
-  specialArrowSlot: {fileID: 0}
-  skillSlotTr: {fileID: 0}
-  prefCooldownType: {fileID: 8603381215424117483, guid: 77b99c919336ebe42a4ba1065eb14415,
-    type: 3}
-  prefChargingType: {fileID: 1487578310220286010, guid: a0d9a01f43e6a1643b1f00f8cfef5b44,
-    type: 3}
-  prefHitsType: {fileID: 5960462813511267407, guid: 7be17370b84c0644f96bfc56cd7b5fd4,
-    type: 3}
-  prefkillType: {fileID: 2739246953676750907, guid: 6e10ca916b782284fb32ecab29e543ca,
-    type: 3}
-  hitScreenMaterial: {fileID: 2100000, guid: 049556744e731da46a8a0809dc2ecc78, type: 2}
-  ScreenHitFadeTime: 0.5
-  ScreenHitAlpha: 0.4
-  BattleSceneUICanvas: {fileID: 0}
-  UICamera: {fileID: 0}
 --- !u!114 &3204541759480302796
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -96,12 +45,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stageDiff: 0
-  TopLeft: {x: -3.5, y: 10, z: 90}
-  BottomRight: {x: 3.5, y: 8, z: 90}
-  monsterPrefNormal: {fileID: 0}
-  monsterPrefFreq: {fileID: 0}
+  TopLeft: {x: -3.8, y: 10, z: 0}
+  BottomRight: {x: 3.8, y: 9, z: 0}
+  monsterPrefNormal: {fileID: 113046968082111223, guid: e769450a1b6c233448b3f6a6ac19c000,
+    type: 3}
+  monsterPrefFreq: {fileID: 1513067888068708607, guid: d30dbadb9ea15b0448f87f59ceb3d4a2,
+    type: 3}
   monsterPrefElite: {fileID: 0}
   spawnTimer: 0
+  isNotSpawnMonster: 0
+  isCheckAliveMonster: 0
+  checkerInterval: 2
 --- !u!114 &3204541759480302795
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -114,20 +68,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0180c68b6b8ea574e9a63dd369c0474b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sceneRoute: {fileID: 0}
+  monsterSpawner: {fileID: 3204541759480302796}
+  stageType: 1
+  tempGameState: 0
+  stageKey: 
+  maxBattleTime: 120
+  currentBattleTime: 0
+  ImageCover: {fileID: 0}
   StartBattleDelay: 2
   EndBattleDelay: 2
   ParentTransform: {fileID: 0}
   BowInitPosition: {fileID: 0}
   MaxPlayerHealth: 200
-  MaxClearCount: 300
-  ClearSlider: {fileID: 0}
-  PlayerHealthSlider: {fileID: 0}
-  EnemyBossHealthSlider: {fileID: 0}
-  SliderSmoothTime: 2
-  CurrentGameState: 0
   DropListAsset: {fileID: 11400000, guid: 834b46e9df025194da792695df7f4b4b, type: 2}
-  StageDropCorrection: 30
+  dropCorrection: 20
   dropItemList: []
-  IsDebugClearStage: 0
+  IsQuickGameClear: 0
+  IsQuickGameOver: 0
+  IsQuickAutoButton: 0
   IsDebugMonsterLogics: 0
-  IsDebugGameOver: 0

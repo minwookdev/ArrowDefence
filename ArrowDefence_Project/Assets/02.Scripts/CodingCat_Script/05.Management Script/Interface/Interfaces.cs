@@ -22,7 +22,7 @@
         void PlayEffect(UnityEngine.Vector3 position);
     }
 
-    interface IDamageable {
+    public interface IDamageable {
         void OnHitObject(float value);
 
         void OnHitObject(ref ActionCat.DamageStruct damage);

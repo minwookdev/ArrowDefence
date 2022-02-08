@@ -47,7 +47,7 @@
         private Vector2 topLeftPoint;
         private Vector2 bottomRightPoint;
         private Vector3[] limitPoints = new Vector3[5];
-        private Vector2 offset = new Vector2(2f, 2f);
+        private Vector2 offset = new Vector2(2f, 3f);
 
         #region PROPERTY
         public SwapSlots SlotArrSwap {

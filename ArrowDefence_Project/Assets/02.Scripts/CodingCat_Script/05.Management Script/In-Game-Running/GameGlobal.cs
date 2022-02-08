@@ -3,9 +3,8 @@
     using System.Collections.Generic;
     using UnityEngine;
 
-    public static class GameGlobal
-    {
-        public static Vector2 ScreenOffset = new Vector2(2f, 2f);
+    public static class GameGlobal {
+        public static Vector2 ScreenOffset = new Vector2(2f, 3f);
         public static Vector3 ArrowScale   = new Vector3(1.5f, 1.5f, 1f);
         public static readonly int RandomIntRangeCorrection = 1;
 
@@ -325,6 +324,7 @@
     public static class StNum {
         public static readonly float floatOne  = 1f;
         public static readonly float floatZero = 0f;
+        public static readonly float DegreeFull = 360f;
         public static readonly int intOne  = 1;
         public static readonly int intZero = 0;
         public static readonly string stringEmpty = "";

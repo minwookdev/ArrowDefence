@@ -1,9 +1,21 @@
 ﻿namespace ActionCat {
     using UnityEngine;
+    using ActionCat.Interface;
 
     public abstract class ProjectileType : ArrowSkill {
-        protected GameObject projectilePref = null;
-        public abstract void OnHit();
+        protected ProjectilePref projectilePref = null;
+        public abstract void OnHit(Vector2 point);
+        public virtual bool TryGetPrefab(out ProjectilePref pref) {
+            if(projectilePref == null) {
+                pref = null;
+                return false;
+            }
+
+            pref = projectilePref;
+            return true;
+        }
+
+        public virtual int DefaultSpawnSize() => 10;
     }
 
     public class SplitArrow : ProjectileType {
@@ -11,7 +23,7 @@
             throw new System.NotImplementedException();
         }
 
-        public override void OnHit() {
+        public override void OnHit(Vector2 point) {
             throw new System.NotImplementedException();
         }
 
@@ -35,13 +47,26 @@
     public class SplitDagger : ProjectileType {
         private int projectileCount;
 
-        public override void OnHit() {
-            throw new System.NotImplementedException();
+        //Not Saved
+        private float intervalAngle;
+
+        public override void Init(Transform tr, Rigidbody2D rigid, IArrowObject arrowInter) {
+            intervalAngle = StNum.DegreeFull / projectileCount;
         }
 
-        public override void Clear() {
-            throw new System.NotImplementedException();
+        public override void OnHit(Vector2 point) {
+            float randomAngle = Random.Range(0f, StNum.DegreeFull);
+            for (int i = 1; i <= projectileCount; i++) {
+                Quaternion randomRotation = Quaternion.AngleAxis(randomAngle + (intervalAngle * i), Vector3.forward);
+                var dagger = CCPooler.SpawnFromPool<ProjectilePref>(projectilePref.PrefName, point, randomRotation);
+                if (dagger) {
+                    dagger.Shot();
+                }
+            }
+            CatLog.Break();
         }
+
+        public override void Clear() { }
 
         /// <summary>
         /// Constructor for Skill Data ScriptableObject
@@ -68,12 +93,10 @@
     public class ElementalFire : ProjectileType {
         private float activationProbability;
 
-        public override void OnHit() {
+        public override void OnHit(Vector2 point) {
             throw new System.NotImplementedException();
         }
-        public override void Clear() {
-            throw new System.NotImplementedException();
-        }
+        public override void Clear() { }
 
         /// <summary>
         /// Constructor for Skill Data ScriptableObject

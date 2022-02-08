@@ -7,7 +7,7 @@
     public class DataSplitDagger : ArrowSkillData {
         [RangeEx(3, 5, 1)]
         public int projectileCount = 3;
-        public GameObject daggerPref;
+        public ProjectilePref daggerPref;
 
         public DataSplitDagger() {
             ActiveType = ARROWSKILL_ACTIVETYPE.ADDPROJ;

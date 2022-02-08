@@ -20,12 +20,10 @@
         /// </summary>
         /// <param name="skillInfoFst"></param>
         /// <param name="skillInfoSec"></param>
-        public ArrowSkillSet(ASInfo skillInfoFst, ASInfo skillInfoSec, string tag)
-        {
+        public ArrowSkillSet(ASInfo skillInfoFst, ASInfo skillInfoSec, string tag) {
             //First Arrow SkillData Init
             if(skillInfoFst != null) {
-                switch (skillInfoFst.ActiveType)
-                {
+                switch (skillInfoFst.ActiveType) {
                     case ARROWSKILL_ACTIVETYPE.ATTACK:  InitHitTypeSkill(skillInfoFst.SkillData);     break;
                     case ARROWSKILL_ACTIVETYPE.AIR:     InitAirTypeSkill(skillInfoFst.SkillData);     break;
                     case ARROWSKILL_ACTIVETYPE.ADDPROJ: InitAddProjTypeSkill(skillInfoFst.SkillData); break;
@@ -34,8 +32,7 @@
             }
             //Seconds Arrow SkillData Init
             if(skillInfoSec != null) {
-                switch (skillInfoSec.ActiveType)
-                {
+                switch (skillInfoSec.ActiveType) {
                     case ARROWSKILL_ACTIVETYPE.ATTACK:  InitHitTypeSkill(skillInfoSec.SkillData);     break;
                     case ARROWSKILL_ACTIVETYPE.AIR:     InitAirTypeSkill(skillInfoSec.SkillData);     break;
                     case ARROWSKILL_ACTIVETYPE.ADDPROJ: InitAddProjTypeSkill(skillInfoSec.SkillData); break;
@@ -54,8 +51,7 @@
         /// </summary>
         /// <param name="origin"></param>
         /// <param name="num"></param>
-        public ArrowSkillSet(ArrowSkillSet origin)
-        {
+        public ArrowSkillSet(ArrowSkillSet origin) {
             //Clone-Active Type
             activeType = origin.activeType;
 
@@ -64,7 +60,7 @@
                 switch (origin.hitSkill) {
                     case ReboundArrow rebound:   hitSkill = new ReboundArrow(rebound, arrowPoolTag); break;
                     case PiercingArrow piercing: hitSkill = new PiercingArrow(piercing);             break;
-                    default: break;
+                    default: throw new System.NotImplementedException("this type is Not Implemented.");
                 }
             }
 
@@ -72,15 +68,16 @@
             if(origin.airSkill != null) {
                 switch (origin.airSkill) {
                     case HomingArrow homing: airSkill = new HomingArrow(homing); break;
-                    default: break;
+                    default: throw new System.NotImplementedException("this type is Not Implemented.");
                 }
             }
 
             //Clone-Additional Projectiles Typ Skil
             if (origin.addProjSkill != null) {
                 switch (origin.addProjSkill) {
-                    case SplitArrow split: addProjSkill = new SplitArrow(split); break;
-                    default: break;
+                    case SplitArrow split:   addProjSkill = new SplitArrow(split);   break;
+                    case SplitDagger dagger: addProjSkill = new SplitDagger(dagger); break;
+                    default: throw new System.NotImplementedException("this type is Not Implemented.");
                 }
             }
         }
@@ -105,29 +102,33 @@
 
         void InitAirTypeSkill(ArrowSkill skillData) {
             if (airSkill != null) {
-                CatLog.ELog($"Error : 중복된 ActiveType의 ArrowSkill {skillData}이(가) 할당되었습니다. [AIR]");
-                return;
+                throw new System.Exception($"중복된 Air ActivationType의 ArrSkill ({skillData}) 할당되었습니다.");
             }
 
-            if (skillData is AirType airTypeSkill) {
-                airSkill = airTypeSkill;
+            if (skillData is AirType airActiveTypeSkill) {
+                airSkill = airActiveTypeSkill;
             }
             else {
-                CatLog.WLog($"{skillData}는(은) AirActivate Type이 아닙니다.");
+                CatLog.WLog($"잘못된 ActivationType : {skillData}는(은) Air ActivationType이 아닙니다.");
             }
         }
 
         void InitAddProjTypeSkill(ArrowSkill skillData) {
             if(addProjSkill != null) {
-                CatLog.ELog($"Error : 중복된 ActiveType의 ArrowSkill {skillData}이(가) 할당되었습니다. [ADD PROJECTILES]");
-                return;
+                throw new System.Exception($"중복된 ProjectileType의 ArrSkill ({skillData}) 할당되었습니다.");
             }
 
-            if(skillData is ProjectileType addProjTypeSkill) {
-                addProjSkill = addProjTypeSkill;
+            if(skillData is ProjectileType projectileTypeSkill) {
+                addProjSkill = projectileTypeSkill;
+                if(addProjSkill.TryGetPrefab(out ProjectilePref projectile)) {
+                    Vector2 topLeft     = Camera.main.ScreenToWorldPoint(new Vector2(0f, Screen.height));
+                    Vector2 bottomRight = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, 0f));
+                    projectile.SetScreenLocation(topLeft, bottomRight);
+                    CCPooler.AddPoolList(projectile.PrefName, projectileTypeSkill.DefaultSpawnSize(), projectile.gameObject, isTracking: false);
+                }
             }
             else {
-                CatLog.WLog($"{skillData}는(은) Additional Projectiles Type이 아닙니다.");
+                CatLog.WLog($"잘못된 ActivationType : {skillData}는(은) Projectile Type이 아닙니다.");
             }
         }
 
@@ -286,7 +287,7 @@
         #region ON-HIT-CALLBACK
 
         bool HitFull(Collider2D collider, ref DamageStruct damage, Vector3 contactpoint, Vector2 direction) {
-            addProjSkill.OnHit();
+            addProjSkill.OnHit(contactpoint);
             bool isDisable = hitSkill.OnHit(collider, out tempTr, ref damage, contactpoint, direction);
             if (isDisable == false)
                 airSkill.OnHitCallback(tempTr);
@@ -294,7 +295,7 @@
         }
 
         bool HitAtkProj(Collider2D collider, ref DamageStruct damage, Vector3 contactpoint, Vector2 direction) {
-            addProjSkill.OnHit();
+            addProjSkill.OnHit(contactpoint);
             return hitSkill.OnHit(collider, ref damage, contactpoint, direction);
         }
 
@@ -302,9 +303,9 @@
             return hitSkill.OnHit(collider, ref damage, contactpoint, direction);
         }
 
-        bool HitProj(Collider2D coll, ref DamageStruct damage, Vector3 contactPos, Vector2 direction) {
-            addProjSkill.OnHit();
-            return HitDefault(coll, ref damage, contactPos, direction);
+        bool HitProj(Collider2D coll, ref DamageStruct damage, Vector3 contactpoint, Vector2 direction) {
+            addProjSkill.OnHit(contactpoint);
+            return HitDefault(coll, ref damage, contactpoint, direction);
         }
 
         bool HitAtkAir(Collider2D collider, ref DamageStruct damage, Vector3 contactpoint, Vector2 direction)

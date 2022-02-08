@@ -25,4 +25,5 @@ MonoBehaviour:
   ActiveType: 6
   effects: []
   projectileCount: 3
-  daggerPref: {fileID: 0}
+  daggerPref: {fileID: 5571855133762799641, guid: 3dd77a12e171ca14a9cba99f127e58e3,
+    type: 3}

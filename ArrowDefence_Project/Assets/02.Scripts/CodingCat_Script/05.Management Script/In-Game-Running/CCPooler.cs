@@ -37,6 +37,9 @@
             public GameObject prefab;
             public int size;
             [ReadOnly] public Transform defalutParent;
+            public void SizeInc(int value) {
+                size += value;
+            }
         }
 
         [Header("PARENT LIST")]
@@ -286,21 +289,39 @@
         /// <param name="prefab"></param>
         /// <param name="isTracking">active된 객체 수 추적 여부</param>
         public static void AddPoolList(string tag, int size, GameObject prefab, bool isTracking) {
+            if(_inst.poolDictionary.ContainsKey(tag) == true) { //Exception: Duplicate PoolTag
+                CatLog.WLog(StringColor.YELLOW, "Same PoolTag found in Dictionary.");
+                Pool origin = _inst.poolInstanceList.Find(element => element.tag == tag);
+                Transform originParent = _inst.FindParentOrNull(tag);
+                if(origin == null || originParent == null) {
+                    throw new Exception("Origin Pool or Parent is Null.");
+                }
+                origin.SizeInc(size);
+                for (int i = 0; i < size; i++) { //Create the Size to be added
+                    _inst.CreateNewObject(origin.tag, origin.prefab, originParent);
+                }
+
+                if(_inst.poolDictionary[origin.tag].Count != origin.size) {
+                    CatLog.ELog($"{origin.tag} Not Equal Pool Dictionary Count");
+                }
+                return;
+            }
+
             Pool pool = new Pool() { tag = tag, size = size, prefab = prefab };
             _inst.poolInstanceList.Add(pool);                            //1. Add PoolInstance List
 
             _inst.poolDictionary.Add(pool.tag, new Stack<GameObject>()); //2. Add PoolDictionary
 
-            var parentObj = new GameObject(pool.tag).transform;          //3. New Parent GameObject Created and Add Parent List.
-            parentObj.SetParent(_inst.transform);
-            _inst.ParentList.Add(parentObj);
+            var parentTr = new GameObject(pool.tag).transform;          //3. New Parent GameObject Created and Add Parent List.
+            parentTr.SetParent(_inst.transform);
+            _inst.ParentList.Add(parentTr);
 
             if(isTracking == true) {                                     //4. if Tracking Alive options ture, Add AliveDictionary this PoolObject. 
                 _inst.NewAliveTrackDic(pool.tag);
             }
 
             for (int i = 0; i < pool.size; i++) {                        //5. Create New Pool Object. 
-                _inst.CreateNewObject(pool.tag, pool.prefab, parentObj);
+                _inst.CreateNewObject(pool.tag, pool.prefab, parentTr);
             }
 
             if (_inst.poolDictionary[pool.tag].Count <= 0)

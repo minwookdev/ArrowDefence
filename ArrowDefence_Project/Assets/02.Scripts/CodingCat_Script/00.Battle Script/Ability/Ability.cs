@@ -191,13 +191,13 @@
         }
 
         public override byte GetGrade() {
-            if (incDamageRate <= 0f)       return 0;
-            else if (incDamageRate <= 6f)  return 1;
-            else if (incDamageRate <= 12f) return 2;
-            else if (incDamageRate <= 18f) return 3;
-            else if (incDamageRate <= 24f) return 4;
-            else if (incDamageRate <= 30f) return 5;
-            else                           return 0;
+            if (incDamageRate <= 1f)        return 0;
+            else if (incDamageRate <= 1.1f) return 1;
+            else if (incDamageRate <= 1.2f) return 2;
+            else if (incDamageRate <= 1.3f) return 3;
+            else if (incDamageRate <= 1.4f) return 4;
+            else if (incDamageRate <= 1.5f) return 5;
+            else                            return 0;
         }
 
         public override string GetName() {

@@ -25,4 +25,5 @@ MonoBehaviour:
   ActiveType: 6
   effects: []
   ActivationProbability: 10
-  firePref: {fileID: 0}
+  firePref: {fileID: 3887456060707844106, guid: f3e198ce3a1107e429b46b4d8d9f85a4,
+    type: 3}

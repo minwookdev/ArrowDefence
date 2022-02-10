@@ -20,7 +20,7 @@
             rBody   = rigid;
             arrow   = arrowInter;
         }
-
+        public virtual void Release() { }
         public abstract void Clear();
     }
 
@@ -110,11 +110,11 @@
             else {
                 // Max Chain : Try On Hit and Disable
                 if (currentChainCount >= maxChainCount) { //Try OnHit
-                    return target.GetComponent<IDamageable>().OnHitWithResult(ref damage, contact, direction);
+                    return target.GetComponent<IDamageable>().TryOnHit(ref damage, contact, direction);
                 }
 
                 // Not Max Chain : Try Activate Skill
-                if (target.GetComponent<IDamageable>().OnHitWithResult(ref damage, contact, direction)) { //Try OnHit
+                if (target.GetComponent<IDamageable>().TryOnHit(ref damage, contact, direction)) { //Try OnHit
                     currentChainCount++;
                     lastHitTarget = target.gameObject;
                     arrow.PlayEffect(contact);
@@ -168,11 +168,11 @@
                 // Max Chain : Try On Hit
                 if (currentChainCount >= maxChainCount){
                     targetTr = null; 
-                    return target.GetComponent<IDamageable>().OnHitWithResult(ref damage, contact, direction);
+                    return target.GetComponent<IDamageable>().TryOnHit(ref damage, contact, direction);
                 }
 
                 // Not Max Chain : Try OnHit and Activating Skill
-                if (target.GetComponent<IDamageable>().OnHitWithResult(ref damage, contact, direction)) {
+                if (target.GetComponent<IDamageable>().TryOnHit(ref damage, contact, direction)) {
                     currentChainCount++;
                     lastHitTarget = target.gameObject;
 
@@ -233,16 +233,18 @@
         /// Copy Class Constructor
         /// </summary>
         /// <param name="origin"></param>
-        public ReboundArrow(ReboundArrow origin, string tag) {
+        public ReboundArrow(ReboundArrow origin, string tag= "") {
             maxChainCount = origin.maxChainCount;
             scanRange     = origin.scanRange;
             effects       = origin.effects;
 
-            List<string> effectPoolTagList = new List<string>();
-            for (int i = 0; i < effects.Length; i++) {
-                effectPoolTagList.Add($"{tag}{AD_Data.POOLTAG_HITEFFECT}{i}");
+            if(tag != null || tag != "") {
+                List<string> effectPoolTagList = new List<string>();
+                for (int i = 0; i < effects.Length; i++) {
+                    effectPoolTagList.Add($"{tag}{AD_Data.POOLTAG_HITEFFECT}{i}");
+                }
+                effectPoolTags = effectPoolTagList.ToArray();
             }
-            effectPoolTags = effectPoolTagList.ToArray();
         }
 
         /// <summary>
@@ -285,11 +287,11 @@
             }
             else {
                 if(currentChainCount >= maxChainCount) { // Max Chain Count : Try OnHit
-                    return target.GetComponent<IDamageable>().OnHitWithResult(ref damage, contactpoint, direction);
+                    return target.GetComponent<IDamageable>().TryOnHit(ref damage, contactpoint, direction);
                 }
 
                 //Try On Hit
-                isResult = target.GetComponent<IDamageable>().OnHitWithResult(ref damage, contactpoint, direction);
+                isResult = target.GetComponent<IDamageable>().TryOnHit(ref damage, contactpoint, direction);
                 if(isResult) {
                     //Success OnHit
                     currentChainCount++;
@@ -317,11 +319,11 @@
             //=================================================[ ARRIVAL MAX CHAINCOUNT ]=========================================================
                 if(currentChainCount >= maxChainCount) {
                     targetTr = null;
-                    return target.GetComponent<IDamageable>().OnHitWithResult(ref damage, contactpoint, direction);
+                    return target.GetComponent<IDamageable>().TryOnHit(ref damage, contactpoint, direction);
                 }
 
             //========================================================[ TRY ON HIT ]==============================================================
-                isResult = target.GetComponent<IDamageable>().OnHitWithResult(ref damage, contactpoint, direction);
+                isResult = target.GetComponent<IDamageable>().TryOnHit(ref damage, contactpoint, direction);
                 if(isResult == false) { //Failed Target OnHit
                     targetTr = null;
                     return isResult;

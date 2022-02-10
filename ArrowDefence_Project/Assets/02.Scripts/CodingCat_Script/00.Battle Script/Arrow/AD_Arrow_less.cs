@@ -212,7 +212,7 @@
                     }
                 }
                 else {  //Try OnHit with Non-ArrSkill
-                    if(collData.Collider.GetComponent<IDamageable>().OnHitWithResult(ref damageStruct, collData.CollisionPoint, collData.CollisionDirection)) {
+                    if(collData.Collider.GetComponent<IDamageable>().TryOnHit(ref damageStruct, collData.CollisionPoint, collData.CollisionDirection)) {
                         //Hit Result True - Disable GameObject
                         PlayEffect(collData.CollisionPoint);
                         collisionQueue.Clear();
@@ -260,7 +260,7 @@
             CCPooler.SpawnFromPool<ACEffector2D>(effectPoolTags.RandIndex<string>(), position, Quaternion.identity).PlayOnce(true);
         }
 
-        string IArrowObject.GetEffectKey() {
+        string IArrowObject.GetMainTag() {
             return string.Format("{0}{1}", gameObject.name, AD_Data.POOLTAG_HITEFFECT);
         }
 

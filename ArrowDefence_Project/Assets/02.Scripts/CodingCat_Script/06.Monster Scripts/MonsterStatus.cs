@@ -32,6 +32,11 @@
         float fadeTime = 0.5f;
         Color startColor;
         Coroutine colorCo;
+        public Vector3 constVector {
+            get {
+                return new Vector3(0f, 0f, 0f);
+            }
+        }
 
         private void Start() {
             InitComponent();
@@ -95,7 +100,7 @@
 
         #region ON_DAMAGE
 
-        public void OnHitWithDirection(ref DamageStruct damage, Vector3 contactPoint, Vector3 direction) {
+        public void OnHit(ref DamageStruct damage, Vector3 contactPoint, Vector3 direction) {
             //if the Monster is already Death, Failed Hit.
             if (currentHealthPoint <= 0 || isDeath == true) {
                 return;
@@ -126,7 +131,7 @@
             }
         }
 
-        public bool OnHitWithResult(ref DamageStruct damage, Vector3 point, Vector2 direction) {
+        public bool TryOnHit(ref DamageStruct damage, Vector3 point, Vector2 direction) {
             //Monster is already Death, Failed Hit.
             if(currentHealthPoint <= 0 || isDeath == true) {
                 return false;
@@ -158,6 +163,35 @@
 
             return true;
         }
+
+        //public void OnHitProjectile(ref DamageStruct damage, Vector3 contactPoint, Vector3 direction) {
+        //    if(currentHealthPoint <= 0 || isDeath == true) {
+        //        return;
+        //    }
+        //
+        //    //Recieve Final Calculated Damage Count
+        //    var recieveDamage = damage.GetProjectileDamage();
+        //    currentHealthPoint -= recieveDamage;
+        //    DamageFloater.Instance.OnFloatingWithScale(recieveDamage, contactPoint, direction, iscritical: false);
+        //
+        //    //Play Monster Hit Animation
+        //    monsterState.OnHit();
+        //
+        //    //Active Hit Event
+        //    BattleProgresser.OnMonsterHit();
+        //
+        //    //Monster is Death?
+        //    if(currentHealthPoint <= 0 && isDeath == false) {
+        //        monsterState.StateChanger(STATETYPE.DEATH);
+        //
+        //        //=================================[ MONSTER DEATH EVENT ]================================
+        //        BattleProgresser.OnMonsterDeath();
+        //        BattleProgresser.OnItemDrop(ItemDropCorrection);
+        //        //========================================================================================
+        //
+        //        isDeath = true;
+        //    }
+        //}
 
         public bool IsAlive() => (isDeath == false || currentHealthPoint > 0) ? true : false;
 

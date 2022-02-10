@@ -102269,6 +102269,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: projectile_split_dagger
       objectReference: {fileID: 0}
+    - target: {fileID: 2177877789134516997, guid: 3dd77a12e171ca14a9cba99f127e58e3,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3131000947980100957, guid: 3dd77a12e171ca14a9cba99f127e58e3,
         type: 3}
       propertyPath: m_RootOrder
@@ -106554,6 +106559,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: projectile_elemental_fire
+      objectReference: {fileID: 0}
+    - target: {fileID: 649397409686806594, guid: f3e198ce3a1107e429b46b4d8d9f85a4,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4698312999232360744, guid: f3e198ce3a1107e429b46b4d8d9f85a4,
         type: 3}

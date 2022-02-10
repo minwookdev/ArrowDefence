@@ -20,8 +20,7 @@
         //Main Arrow Component
         private AD_Arrow adArrow;
 
-        private void Start()
-        {
+        private void Start() {
             //Init-Component
             tr = GetComponent<Transform>();
 
@@ -32,8 +31,7 @@
             adArrow                = gameObject.GetComponent<AD_Arrow>();
         }
 
-        private void Update()
-        {
+        private void Update() {
             //Get Velocity of the Arrow //CalcAngle Verriables
             velocity = arrowRigidBody.velocity;
 
@@ -44,8 +42,7 @@
             }
         }
 
-        void CalcAngle()
-        {
+        void CalcAngle() {
             //Calculate the angle if the arrow
             arrowAngle = (Mathf.Atan2(velocity.x, -velocity.y) * Mathf.Rad2Deg + 180);
             //Set Rotation of the Arrow

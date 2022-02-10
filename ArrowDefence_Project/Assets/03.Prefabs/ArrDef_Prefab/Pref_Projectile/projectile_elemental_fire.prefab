@@ -45,6 +45,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2fa19530644a698449510897cb2dffe9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  baseDamage: 50
+  finCalcDamage: 0
+  tr: {fileID: 4698312999232360744}
+  coll: {fileID: 5277913442314701506}
+  effector: {fileID: 8259525023526878661}
 --- !u!58 &5277913442314701506
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -201,3 +206,15 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 2113261455595403253}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &8259525023526878661 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8055930550982871600, guid: d2e43e720584388498a15751b0507a76,
+    type: 3}
+  m_PrefabInstance: {fileID: 2113261455595403253}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3894153212500131344}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c7ab8885a97c8f4594b3c4972bb12ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

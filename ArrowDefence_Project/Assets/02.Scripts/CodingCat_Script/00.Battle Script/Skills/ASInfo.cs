@@ -41,7 +41,7 @@
             type       = so.SkillType;
             activeType = so.ActiveType;
             iconSprite = so.IconSprite;
-            skillData  = so.ArrowSkill;
+            skillData  = GetNewSkill(so.ArrowSkill);
         }
 
         /// <summary>
@@ -57,6 +57,26 @@
             activeType = origin.activeType;
             iconSprite = origin.iconSprite;
             skillData  = origin.skillData;
+        }
+
+        public ArrowSkill GetNewSkill(ArrowSkill data) {
+            switch (data) {
+                //=================================== [ TYPE : HIT ] ===================================
+                case ReboundArrow newskill:   return new ReboundArrow(newskill);
+                case PiercingArrow newskill:  return new PiercingArrow(newskill);
+                //=================================== [ TYPE : AIR ] ===================================
+                case HomingArrow newskill:    return new HomingArrow(newskill);
+                //================================ [ TYPE : PROJECTILE ] ===============================
+                case SplitDagger newskill:    return new SplitDagger(newskill);
+                case SplitArrow newskill:     return new SplitArrow(newskill);
+                case ElementalFire newskill:  return new ElementalFire(newskill);
+                //======================================================================================
+                default: throw new System.NotImplementedException("this type is Not Implemented !");
+            }
+        }
+
+        public void Release() {
+            skillData.Release();
         }
 
         public ASInfo() { }

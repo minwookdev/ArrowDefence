@@ -11,7 +11,7 @@
         public ArrowSkillData ArrowSkillSec;
 
         //Inherence Ability
-        [Range(1f, 1.5f)]  public float DamageInc = 1f;
+        [Range(1f, 1.5f)] public float DamageInc = 1f;
         [Range(18f, 28f)] public float Speed = 18f;
 
         public ACEffector2D[] effects;

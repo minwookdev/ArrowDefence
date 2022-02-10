@@ -199,15 +199,15 @@
         /// <param name="bowObjectParentTr"></param>
         /// <param name="mainArrowPoolQuantity"></param>
         /// <param name="subArrowPoolQuantity"></param>
-        public void InitEquipments(Transform bowObjectInitPos, Transform bowObjectParentTr, int mainArrowPoolQuantity, int subArrowPoolQuantity)
-        {
+        public void InitEquipments(Transform bowObjectInitPos, Transform bowObjectParentTr, int mainArrowPoolQuantity, int subArrowPoolQuantity) {
+            var ability = CCPlayerData.ability; //이거를 BowAbility내부의 것을 가져와주면 된다.
+
             //Bow Object needs to reload Arrow from Start Method, Arrow Object must first Init.
-            if (IsEquippedArrowMain()) EquippedArrow_f.Init(AD_Data.POOLTAG_MAINARROW, AD_Data.POOLTAG_MAINARROW_LESS, mainArrowPoolQuantity);
-            if (IsEquippedArrowSub())  EquippedArrow_s.Init(AD_Data.POOLTAG_SUBARROW,  AD_Data.POOLTAG_SUBARROW_LESS, subArrowPoolQuantity);
+            if (IsEquippedArrowMain()) EquippedArrow_f.Init(AD_Data.POOLTAG_MAINARROW, AD_Data.POOLTAG_MAINARROW_LESS, mainArrowPoolQuantity, ability.GetAbilityMain());
+            if (IsEquippedArrowSub())  EquippedArrow_s.Init(AD_Data.POOLTAG_SUBARROW,  AD_Data.POOLTAG_SUBARROW_LESS,  subArrowPoolQuantity,  ability.GetAbilitySub());
             if (IsEquippedBow())       EquippedBow.Init(bowObjectInitPos, bowObjectParentTr);
 
-            foreach (var accessory in GetAccessories())
-            {
+            foreach (var accessory in GetAccessories()) {
                 if (accessory != null) accessory.Init();
             }
         }
@@ -215,8 +215,7 @@
         /// <summary>
         /// Battle Scene에서 Release처리 되어야할 요소들 처리
         /// </summary>
-        public void ReleaseEquipments()
-        {
+        public void ReleaseEquipments() {
             if (IsEquippedArrowMain()) EquippedArrow_f.Release();
             if (IsEquippedArrowSub())  EquippedArrow_s.Release();
         }

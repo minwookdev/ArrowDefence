@@ -4,7 +4,8 @@
 
     public abstract class ProjectileType : ArrowSkill {
         protected ProjectilePref projectilePref = null;
-        public abstract void OnHit(Vector2 point);
+        protected string projectilePoolTag = "";
+        public abstract void OnHit(Vector2 point, ref DamageStruct damage);
         public virtual bool TryGetPrefab(out ProjectilePref pref) {
             if(projectilePref == null) {
                 pref = null;
@@ -16,6 +17,17 @@
         }
 
         public virtual int DefaultSpawnSize() => 10;
+
+        public virtual void SetPoolTag(string tag) {
+            projectilePoolTag = tag;
+            CatLog.Log($"Projectile PoolTag : {projectilePoolTag}");
+        }
+
+        public abstract string GetUniqueTag();
+
+        public ProjectileType() { }
+
+        protected ProjectileType(string tag) => projectilePoolTag = tag;
     }
 
     public class SplitArrow : ProjectileType {
@@ -23,7 +35,11 @@
             throw new System.NotImplementedException();
         }
 
-        public override void OnHit(Vector2 point) {
+        public override void OnHit(Vector2 point, ref DamageStruct damage) {
+            throw new System.NotImplementedException();
+        }
+
+        public override string GetUniqueTag() {
             throw new System.NotImplementedException();
         }
 
@@ -50,20 +66,23 @@
         //Not Saved
         private float intervalAngle;
 
+        public override string GetUniqueTag() {
+            return "splitdagger";
+        }
+
         public override void Init(Transform tr, Rigidbody2D rigid, IArrowObject arrowInter) {
             intervalAngle = StNum.DegreeFull / projectileCount;
         }
 
-        public override void OnHit(Vector2 point) {
+        public override void OnHit(Vector2 point, ref DamageStruct damage) {
             float randomAngle = Random.Range(0f, StNum.DegreeFull);
             for (int i = 1; i <= projectileCount; i++) {
                 Quaternion randomRotation = Quaternion.AngleAxis(randomAngle + (intervalAngle * i), Vector3.forward);
-                var dagger = CCPooler.SpawnFromPool<ProjectilePref>(projectilePref.PrefName, point, randomRotation);
+                var dagger = CCPooler.SpawnFromPool<ProjectilePref>(projectilePoolTag, point, randomRotation);
                 if (dagger) {
-                    dagger.Shot();
+                    dagger.Shot(damage);
                 }
             }
-            CatLog.Break();
         }
 
         public override void Clear() { }
@@ -80,7 +99,7 @@
         /// Constructor for Skill Clone
         /// </summary>
         /// <param name="origin"></param>
-        public SplitDagger(SplitDagger origin) {
+        public SplitDagger(SplitDagger origin) : base(origin.projectilePoolTag) {
             projectilePref  = origin.projectilePref;
             projectileCount = origin.projectileCount;
         }
@@ -93,8 +112,17 @@
     public class ElementalFire : ProjectileType {
         private float activationProbability;
 
-        public override void OnHit(Vector2 point) {
-            throw new System.NotImplementedException();
+        public override string GetUniqueTag() {
+            return "elemental_fire";
+        }
+
+        public override void OnHit(Vector2 point, ref DamageStruct damage) {
+            if (Random.Range(0f, 100f) < activationProbability) {
+                var fire = CCPooler.SpawnFromPool<ElementalFirePref>(projectilePoolTag, point, Quaternion.identity);
+                if (fire) {
+                    fire.Shot(damage);
+                }
+            }
         }
         public override void Clear() { }
 
@@ -110,7 +138,7 @@
         /// Constructor for Skill Clone
         /// </summary>
         /// <param name="origin"></param>
-        public ElementalFire(ElementalFire origin) {
+        public ElementalFire(ElementalFire origin): base() {
             projectilePref = origin.projectilePref;
             activationProbability = origin.activationProbability;
         }

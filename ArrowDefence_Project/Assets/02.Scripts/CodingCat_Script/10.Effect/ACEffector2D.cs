@@ -26,6 +26,12 @@
             waitUntil = new WaitUntil(() => particleSys.isStopped == true);
         }
 
+        void Start() {
+            if (tr == null)               throw new System.Exception("Component Not Cached.");
+            if (particleSys == null)      throw new System.Exception("Component Not Cached.");
+            if (particleRenderer == null) throw new System.Exception("Component Not Cached.");
+        }
+
         public void DisableRequest() {
             CCPooler.ReturnToPool(gameObject);
         }
@@ -44,12 +50,12 @@
             } playerCo = StartCoroutine(RunEffect());
         }
 
-        public void PlayOnce(bool isStartRandRotation = false) {
+        public void PlayOnce(bool isRandomRotation = false) {
             if(effectorType == EFFECTORTYPE.NONE) {
                 effectorType = EFFECTORTYPE.NEWEFFECT;
             }
 
-            if(isStartRandRotation == true) {
+            if(isRandomRotation == true) {
                 Vector3 eulerAngles = tr.eulerAngles;
                 eulerAngles.z = GameGlobal.RandomAngleDeg();
                 tr.eulerAngles = eulerAngles;
@@ -78,6 +84,10 @@
             particleSys.Play();
             yield return waitUntil;
             DisableRequest();
+        }
+
+        public bool IsPlaying() {
+            return particleSys.isPlaying;
         }
 
 #if UNITY_EDITOR

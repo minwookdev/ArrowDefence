@@ -177,7 +177,7 @@
             return false;
         }
 
-        public void Init(string mainArrowObjTag, string lessArrowObjTag, int poolQuantity) {
+        public void Init(string mainArrowObjTag, string lessArrowObjTag, int poolQuantity, PlayerAbilitySlot ability) {
             if(MainArrowObject == null || LessArrowObject == null) {
                 throw new System.Exception($"ArrowItem : {Item_Name} is ArrowPrefab NULL.");
             }
@@ -219,8 +219,7 @@
                 arrowSkillSets = null;
             }
             else {
-                arrowSkillSets = new ArrowSkillSet(arrowSkillInfoFst, arrowSkillInfoSec, mainArrowObjTag);
-                CatLog.Log($"Arritem : {Item_Name} is initialized skills.");
+                arrowSkillSets = new ArrowSkillSet(arrowSkillInfoFst, arrowSkillInfoSec, mainArrowObjTag, ability);
             }
 
             mainArrow.SetEffectInfo(effectPoolTags.ToArray());
@@ -237,6 +236,10 @@
                 return;
             arrowSkillSets = null;
 
+            //Release Data Arrow Skill
+            if (arrowSkillInfoFst != null) arrowSkillInfoFst.Release();
+            if (arrowSkillInfoSec != null) arrowSkillInfoSec.Release();
+            
             //Remove Origin Prefab EffectTags string Array
             MainArrowObject.GetComponent<AD_Arrow>().RemoveEffectInfo();
             LessArrowObject.GetComponent<AD_Arrow_less>().RemoveEffectInfo();

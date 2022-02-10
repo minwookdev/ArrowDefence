@@ -4,17 +4,15 @@
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct DamageStruct { //Keep Less 16Byte.
         public short Damage { get; private set; }
+        public short ArmorPene { get; private set; }
         public byte CritChance { get; private set; }
         public float CritMulti { get; private set; }
-        public short ArmorPene { get; private set; }
 
         public DamageStruct(PlayerAbilitySlot ability, bool isCharged) {
             Damage     = (isCharged) ? System.Convert.ToInt16(ability.RawDamage * Data.CCPlayerData.ability.GlobalAbilityField.ChargedShotMultiplier) : System.Convert.ToInt16(ability.RawDamage);
             CritChance = ability.CritChance;
             CritMulti  = ability.CritDamageMultiplier;
             ArmorPene  = ability.ArmorPenetRate;
-
-
         }
 
         public void MultiplierDamage(float value) {
@@ -44,20 +42,22 @@
             return finCalcDamage;
         }
 
-        public float GetProjectileDamage() {
-            return 0f;
+        public void SetDamage(short damage) {
+            Damage = damage;
         }
     }
 
     public class PlayerAbilitySlot {
         public float RawDamage { private set; get; } = 0f;
+        public float DamageIncRate { private set; get; } = 0f;
         public short ArmorPenetRate { private set; get; } = 0;
         public byte CritChance { private set; get; } = 0;
         public float CritDamageMultiplier { private set; get; } = 1.5f;
 
         public void UpdateSlotAbility(float damage, float arrowIncDamage, byte critChance, float critMultiplier) {
-            RawDamage  = damage * arrowIncDamage;
-            CritChance = critChance;
+            RawDamage     = damage * arrowIncDamage;
+            DamageIncRate = arrowIncDamage;
+            CritChance    = critChance;
             CritDamageMultiplier = critMultiplier;
             ArmorPenetRate = 0;
         }
@@ -71,6 +71,7 @@
         /// <param name="critMultiplier"></param>
         public PlayerAbilitySlot(float damage, float arrowIncDamage, byte critchance, float critMultiplier) {
             RawDamage  = damage * arrowIncDamage;
+            DamageIncRate = arrowIncDamage;
             CritChance = critchance; 
             CritDamageMultiplier = critMultiplier;
             ArmorPenetRate = 0;
@@ -169,8 +170,8 @@
             GlobalAbilityField = new GlobalAbility();
         }
 
-        public PlayerAbilitySlot GetAbilitySlotMain() => mainSlotAbility;
+        public PlayerAbilitySlot GetAbilityMain() => mainSlotAbility;
 
-        public PlayerAbilitySlot GetAbilitySubSlot() => subSlotAbility;
+        public PlayerAbilitySlot GetAbilitySub() => subSlotAbility;
     }
 }

@@ -40,10 +40,10 @@
 
         private bool InitAbilityReturnBool() {
             if (CCPlayerData.equipments.IsEquippedArrowMain()) {
-                mainSlotAbility = new PlayerAbilitySlot(CCPlayerData.ability.GetAbilitySlotMain());
+                mainSlotAbility = new PlayerAbilitySlot(CCPlayerData.ability.GetAbilityMain());
             }
             if(CCPlayerData.equipments.IsEquippedArrowSub()) {
-                subSlotAbility  = new PlayerAbilitySlot(CCPlayerData.ability.GetAbilitySubSlot());
+                subSlotAbility  = new PlayerAbilitySlot(CCPlayerData.ability.GetAbilitySub());
             }
             return true;
         }

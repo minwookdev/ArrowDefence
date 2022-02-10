@@ -41,9 +41,14 @@ public static class AD_Data {
     public static readonly string POOLTAG_MONSTER_ELITE  = "Monster_Elite";
 
     /// <summary>
-    /// [MainArrowPoolTag] + [HitEffectPoolTag]
+    /// [MainArrowPoolTag] + [HitEffectPoolTag] + [Counts]
     /// </summary>
     public static readonly string POOLTAG_HITEFFECT = "_HitEffect_";
+
+    /// <summary>
+    /// [ArrowPoolTag] + [ProjectilePoolTag] + [Counts]
+    /// </summary>
+    public static readonly string POOLTAG_PROJECTILE = "_projectile_";
 
     /// <summary>
     /// Unity Layer Mask string Data

@@ -250,9 +250,11 @@ public class PiercingArrowDataEditor : ArrowSkillData_Editor
 public class SpliDaggerEditor : ArrowSkillData_Editor {
     SerializedProperty projectileCountProp;
     SerializedProperty daggerPrefProp;
+    SerializedProperty damageProp;
 
     private void OnEnable() {
         base.InitSerializedObject();
+        damageProp          = sobject.FindProperty(nameof(DataSplitDagger.ProjectileDamage));
         daggerPrefProp      = sobject.FindProperty(nameof(DataSplitDagger.daggerPref));
         projectileCountProp = sobject.FindProperty(nameof(DataSplitDagger.projectileCount));
     }
@@ -260,6 +262,12 @@ public class SpliDaggerEditor : ArrowSkillData_Editor {
     public override void OnInspectorGUI() {
         DrawMonoScript();
         DrawDefaultSkillData();
+        #region PROJECTILE
+        GUILayout.Label("Projectile Common", EditorStyles.boldLabel);
+        EditorGUILayout.BeginVertical("GroupBox");
+        EditorGUILayout.PropertyField(damageProp);
+        EditorGUILayout.EndVertical();
+        #endregion
         #region SPLITDAGGER
         GUILayout.Label("Split Dagger", EditorStyles.boldLabel);
         EditorGUILayout.BeginVertical("GroupBox");
@@ -276,9 +284,11 @@ public class SpliDaggerEditor : ArrowSkillData_Editor {
 public class ElementalFireEditor : ArrowSkillData_Editor {
     SerializedProperty probabilityProp;
     SerializedProperty firePrefProp;
+    SerializedProperty damageProp;
 
     private void OnEnable() {
         base.InitSerializedObject();
+        damageProp      = sobject.FindProperty(nameof(DataEltalFire.ProjectileDamage));
         probabilityProp = sobject.FindProperty(nameof(DataEltalFire.ActivationProbability));
         firePrefProp    = sobject.FindProperty(nameof(DataEltalFire.firePref));
     }
@@ -286,6 +296,12 @@ public class ElementalFireEditor : ArrowSkillData_Editor {
     public override void OnInspectorGUI() {
         DrawMonoScript();
         DrawDefaultSkillData();
+        #region PROJECTILE
+        GUILayout.Label("Projectile Common", EditorStyles.boldLabel);
+        EditorGUILayout.BeginVertical("GroupBox");
+        EditorGUILayout.PropertyField(damageProp);
+        EditorGUILayout.EndVertical();
+        #endregion
         #region ELEMENTAL_FIRE
         GUILayout.Label("Elemental Arrow - Fire", EditorStyles.boldLabel);
         EditorGUILayout.BeginVertical("GroupBox");

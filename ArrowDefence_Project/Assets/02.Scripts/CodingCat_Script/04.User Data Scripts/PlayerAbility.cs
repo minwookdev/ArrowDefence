@@ -53,6 +53,7 @@
         public short ArmorPenetRate { private set; get; } = 0;
         public byte CritChance { private set; get; } = 0;
         public float CritDamageMultiplier { private set; get; } = 1.5f;
+        public float ElementalActivationRateIncrease { private set; get; } = 0f;
 
         public void UpdateSlotAbility(float damage, float arrowIncDamage, byte critChance, float critMultiplier) {
             RawDamage     = damage * arrowIncDamage;
@@ -86,6 +87,10 @@
             CritChance           = origin.CritChance;
             CritDamageMultiplier = origin.CritDamageMultiplier;
             ArmorPenetRate       = origin.ArmorPenetRate;
+        }
+
+        public short GetProjectileDamage(short projectileDamage) {
+            return System.Convert.ToInt16(projectileDamage * DamageIncRate);
         }
     }
 
@@ -173,5 +178,7 @@
         public PlayerAbilitySlot GetAbilityMain() => mainSlotAbility;
 
         public PlayerAbilitySlot GetAbilitySub() => subSlotAbility;
+
+        public PlayerAbilitySlot GetAbilitySpecial() => null;
     }
 }

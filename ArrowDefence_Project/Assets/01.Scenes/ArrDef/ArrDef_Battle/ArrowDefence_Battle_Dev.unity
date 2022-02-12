@@ -8320,6 +8320,11 @@ PrefabInstance:
       propertyPath: ParentTransform
       value: 
       objectReference: {fileID: 1757660976}
+    - target: {fileID: 3204541759480302795, guid: 75155828b9866ee4dbb6eb1c6d7a0a62,
+        type: 3}
+      propertyPath: IsQuickAutoButton
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3204541759480302799, guid: 75155828b9866ee4dbb6eb1c6d7a0a62,
         type: 3}
       propertyPath: m_RootOrder

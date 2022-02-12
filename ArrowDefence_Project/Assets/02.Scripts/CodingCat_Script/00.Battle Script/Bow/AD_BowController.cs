@@ -9,7 +9,7 @@
 
         [Header("COMPONENT")]
         [SerializeField] BowSprite bowSprite;
-        [SerializeField] AD_BowAbility bowAbility;
+        [SerializeField] AD_BowAbility ability;
         [SerializeField] Transform bowTr = null;
         private Touch screenTouch;
         public Camera MainCam = null;
@@ -102,11 +102,15 @@
 
         private void Awake() => instance = this;
 
-        private void Start() {
+        private IEnumerator Start() {
             //Init Controller Transform
             if (bowTr == null) {
                 bowTr = gameObject.GetComponent<Transform>();
             }
+
+            if(ability == null) {
+                ability = GetComponent<AD_BowAbility>();
+            }   
 
             //Initialize Main Camera Object
             MainCam = Camera.main;
@@ -131,6 +135,8 @@
             //Init Load Arrow Type : 장전될 화살 타입 정의
             arrowType = GameManager.Instance.GetFirstArrType();
 
+            yield return new WaitUntil(() => ability.IsInitEquipments);
+
             //Load Arrow From CCPooler.
             Reload();
 
@@ -151,14 +157,10 @@
             GameManager.Instance.AddListnerEndBattle(() => ClearAutoStop());
             //=====================================================================================================================================================
 
-            if(bowAbility == null) {
-                bowAbility = GetComponent<AD_BowAbility>();
-            }
-
             //Init-Bow Skill and Current Slot Damage Struct.
             CatLog.Log(StringColor.YELLOW, $"Damage Struct SizeOf : {System.Runtime.InteropServices.Marshal.SizeOf(typeof(DamageStruct))}");
             CatLog.Log(StringColor.YELLOW, $"Damage Struct SizeOf : {System.Runtime.InteropServices.Marshal.SizeOf(damageStruct)}");
-            bowAbility.AddListnerToSkillDel(ref BowSkillSet);
+            ability.AddListnerToSkillDel(ref BowSkillSet);
 
             //Get Max Charging Timeif(
             maxChargingTime = GameGlobal.CHARGINGTIME;
@@ -483,7 +485,7 @@
             AD_BowRope.instance.CatchPointClear();
 
             //Update Damage Struct
-            damageStruct = bowAbility.GetDamage(arrowType, isChargeShotReady);
+            damageStruct = ability.GetDamage(arrowType, isChargeShotReady);
 
             //Shot Arrow & Active Skill.
             arrowComponent.ShotByBow(arrowForce, ArrowParentTr, damageStruct);
@@ -519,8 +521,6 @@
 
         void Reload() {
             switch (arrowType) { //Reload Arrow by Current Equipped Arrow Type.
-                //case ARROWTYPE.ARROW_MAIN: loadedArrow = CCPooler.SpawnFromPool(AD_Data.POOLTAG_MAINARROW, bowTr, initArrowScale, ClampPointTop.position, Quaternion.identity); break;
-                //case ARROWTYPE.ARROW_SUB:  loadedArrow = CCPooler.SpawnFromPool(AD_Data.POOLTAG_SUBARROW,  bowTr, initArrowScale, ClampPointTop.position, Quaternion.identity); break;
                 case ARROWTYPE.ARROW_MAIN: arrowTr = CCPooler.SpawnFromPool<Transform>(AD_Data.POOLTAG_MAINARROW, bowTr, initArrowScale, ClampPointTop.position, Quaternion.identity); break;
                 case ARROWTYPE.ARROW_SUB:  arrowTr = CCPooler.SpawnFromPool<Transform>(AD_Data.POOLTAG_SUBARROW,  bowTr, initArrowScale, ClampPointTop.position, Quaternion.identity); break;
             }

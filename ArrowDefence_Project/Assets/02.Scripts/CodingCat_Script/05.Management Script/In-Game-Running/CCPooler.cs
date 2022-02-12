@@ -124,10 +124,29 @@
 
         #region EXTENDED_SPAWN_FROM_POOL
 
+        /// <summary>
+        /// Parent Change를 사용하는 Pool Object Spawn Method, Object 회수에 반드시 ReturnToPool(GameObject, byte)를 사용할 것.
+        /// </summary>
+        /// <param name="tag"></param>
+        /// <param name="parent"></param>
+        /// <param name="scale"></param>
+        /// <param name="pos"></param>
+        /// <param name="rot"></param>
+        /// <returns></returns>
         public static GameObject SpawnFromPool(string tag, Transform parent ,
                                                Vector3 scale, Vector3 pos, Quaternion rot) =>
             _inst._SpawnFromPool(tag, parent, scale, pos, rot);
 
+        /// <summary>
+        /// Parent Change를 사용하는 Pool Object Spawn Method, Object 회수에 반드시 ReturnToPool(GameObject, byte)를 사용할 것.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="tag"></param>
+        /// <param name="parent"></param>
+        /// <param name="scale"></param>
+        /// <param name="pos"></param>
+        /// <param name="rot"></param>
+        /// <returns></returns>
         public static T SpawnFromPool<T>(string tag, Transform parent, 
                                 Vector3 scale, Vector3 pos, Quaternion rot) where T : Component {
             GameObject obj = _inst._SpawnFromPool(tag, parent, scale, pos, rot);
@@ -290,21 +309,22 @@
         /// <param name="isTracking">active된 객체 수 추적 여부</param>
         public static void AddPoolList(string tag, int size, GameObject prefab, bool isTracking) {
             if(_inst.poolDictionary.ContainsKey(tag) == true) { //Exception: Duplicate PoolTag
-                CatLog.WLog(StringColor.YELLOW, "Same PoolTag found in Dictionary.");
-                Pool origin = _inst.poolInstanceList.Find(element => element.tag == tag);
-                Transform originParent = _inst.FindParentOrNull(tag);
-                if(origin == null || originParent == null) {
-                    throw new Exception("Origin Pool or Parent is Null.");
-                }
-                origin.SizeInc(size);
-                for (int i = 0; i < size; i++) { //Create the Size to be added
-                    _inst.CreateNewObject(origin.tag, origin.prefab, originParent);
-                }
-
-                if(_inst.poolDictionary[origin.tag].Count != origin.size) {
-                    CatLog.ELog($"{origin.tag} Not Equal Pool Dictionary Count");
-                }
-                return;
+                ///CatLog.WLog(StringColor.YELLOW, "Same PoolTag found in Dictionary.");
+                ///Pool origin = _inst.poolInstanceList.Find(element => element.tag == tag);
+                ///Transform originParent = _inst.FindParentOrNull(tag);
+                ///if(origin == null || originParent == null) {
+                ///    throw new Exception("Origin Pool or Parent is Null.");
+                ///}
+                ///origin.SizeInc(size);
+                ///for (int i = 0; i < size; i++) { //Create the Size to be added
+                ///    _inst.CreateNewObject(origin.tag, origin.prefab, originParent);
+                ///}
+                ///
+                ///if(_inst.poolDictionary[origin.tag].Count != origin.size) {
+                ///    CatLog.ELog($"{origin.tag} Not Equal Pool Dictionary Count");
+                ///}
+                ///return;
+                throw new Exception("a Duplicate Pool Tag was Detected.");
             }
 
             Pool pool = new Pool() { tag = tag, size = size, prefab = prefab };
@@ -358,6 +378,47 @@
                 CatLog.ELog($"{pool.tag} : Missing Return to Pool Method.");
             else if (_inst.poolDictionary[pool.tag].Count != pool.size)
                 CatLog.ELog($"{pool.tag} : Method has been Duplicated.");
+        }
+
+        /// <summary>
+        /// This Method is Experiment, Not Used Yet
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="tag"></param>
+        /// <param name="size"></param>
+        /// <param name="prefab"></param>
+        /// <param name="action"></param>
+        /// <param name="isTracking"></param>
+        public static void AddPoolListExtended<T>(string tag, int size, T prefab, Action<T> action, bool isTracking) where T : Component {
+            Transform tempParent = null; // Temp GameObejct Parent, Create New Temp Transform
+            var tempPrefab  = Instantiate<T>(prefab, new Vector3(100f, 100f, 0f), Quaternion.identity, tempParent);
+            tempPrefab.name = "temp_";
+            action(tempPrefab);
+
+            Pool pool = new Pool() { tag = tag, prefab = tempPrefab.gameObject, size = size };
+            _inst.poolInstanceList.Add(pool);
+            _inst.poolDictionary.Add(pool.tag, new Stack<GameObject>());
+
+            var parentTr = new GameObject(pool.tag).transform;
+            parentTr.SetParent(_inst.transform);
+            _inst.ParentList.Add(parentTr);
+
+            if (isTracking == true) {
+                _inst.NewAliveTrackDic(pool.tag);
+            }
+
+            for (int i = 0; i < pool.size; i++) {
+                _inst.CreateNewObject(pool.tag, pool.prefab, parentTr);
+            }
+
+            tempPrefab.gameObject.SetActive(false);
+
+            if(_inst.poolDictionary[pool.tag].Count <= 0) {
+                CatLog.ELog("");
+            }
+            else if (_inst.poolDictionary[pool.tag].Count != pool.size) {
+                CatLog.ELog("");
+            }
         }
 
         #region PARENT

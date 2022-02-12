@@ -129,5 +129,20 @@
 
             var bowObject = GameObject.Instantiate(bowGameObject, initPos.position, Quaternion.Euler(0f, 0f, 90f), parentTr);
         }
+
+        public AD_BowAbility Initialize(Transform initTr, Transform parentTr) {
+            if(bowGameObject == null) {
+                throw new System.Exception("Bow GameObejct Prefab is null.");
+            }
+
+            var prefab = GameObject.Instantiate(bowGameObject, initTr.position, Quaternion.Euler(0f, 0f, 90f), parentTr);
+            if (prefab.TryGetComponent<AD_BowAbility>(out AD_BowAbility ability)) {
+                ability.Initialize();
+                return ability;
+            }
+            else {
+                throw new System.Exception("Controller Ability Component is Null.");
+            }
+        }
     }
 }

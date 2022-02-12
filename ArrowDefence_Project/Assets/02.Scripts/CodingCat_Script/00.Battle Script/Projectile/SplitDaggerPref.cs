@@ -19,7 +19,7 @@
             coll.enabled = false;
         }
 
-        public override void Shot(DamageStruct damage) {
+        public override void Shot(DamageStruct damage, short projectileDamage = 0) {
             rigidBody.AddForce(tr.up * force, ForceMode2D.Impulse);
 
             // Update Damage Count

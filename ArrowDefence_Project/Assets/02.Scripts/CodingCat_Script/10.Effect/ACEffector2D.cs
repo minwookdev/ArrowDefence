@@ -27,9 +27,18 @@
         }
 
         void Start() {
-            if (tr == null)               throw new System.Exception("Component Not Cached.");
-            if (particleSys == null)      throw new System.Exception("Component Not Cached.");
-            if (particleRenderer == null) throw new System.Exception("Component Not Cached.");
+            if (tr == null) {
+                CatLog.ComponentMent();
+                tr = GetComponent<Transform>();
+            }
+            if (particleSys == null) {
+                CatLog.ComponentMent();
+                particleSys = GetComponent<ParticleSystem>();
+            }
+            if (particleRenderer == null) {
+                CatLog.ComponentMent();
+                particleRenderer = GetComponent<ParticleSystemRenderer>();
+            }
         }
 
         public void DisableRequest() {

@@ -13,8 +13,8 @@
         private float fixedDeltaTime;
         private float totalDropChances;
         private float restoreTimeScale;
-        private bool isLoadedUserData = false;
-        private bool isInitialized    = false;
+        private bool isLoadedUserData     = false;
+        private bool isManagerInitialized = false;
         private ItemDropList.DropTable[] dropListArray;
 
         //PROPERTIES
@@ -29,7 +29,7 @@
         GameEventHandler OnStateGameOver;
 
         public void Initialize() {
-            if (isInitialized == true) return;
+            if (isManagerInitialized == true) return;
 #if UNITY_EDITOR
             PlayPlatform = GAMEPLATFORM.PLATFORM_EDITOR;
             IsDevMode    = true;
@@ -41,7 +41,7 @@
             IsDevMode    = false;
 #endif
             fixedDeltaTime = Time.fixedDeltaTime;
-            isInitialized  = true;
+            isManagerInitialized  = true;
         }
 
         #region SCREEN

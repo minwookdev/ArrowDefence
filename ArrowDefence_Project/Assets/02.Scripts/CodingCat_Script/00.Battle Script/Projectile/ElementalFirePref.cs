@@ -8,14 +8,10 @@
 
         WaitUntil EndWait = null;
 
-        public override void Shot(DamageStruct damage) {
-            effector.Play(true);
-            StartCoroutine(CollisionCo());
-            StartCoroutine(WaitEndEffect());
-        }
-
-        private void Update() {
-            
+        public override void Shot(DamageStruct damage, short projectileDamage) {
+            StartCoroutine(Play());
+            finCalcDamage = projectileDamage;
+            damage.SetDamage(finCalcDamage);
         }
 
         private void Start() {
@@ -30,7 +26,11 @@
         }
 
         public override void SetProjectileValue(PlayerAbilitySlot slot) {
-            throw new System.NotImplementedException();
+            //finCalcDamage = System.Convert.ToInt16(baseDamage * slot.DamageIncRate);
+        }
+
+        public void SetProjectileValue(short finalCalculatedDamage) {
+            finCalcDamage = finalCalculatedDamage;
         }
 
         private void OnTriggerEnter2D(Collider2D collision) {
@@ -45,9 +45,11 @@
             coll.enabled = false;
         }
 
-        IEnumerator WaitEndEffect() {
+        IEnumerator Play() {
+            effector.Play(true);
+            yield return StartCoroutine(CollisionCo());
             yield return EndWait;
-            DisableRequest();
+            DisableRequest(); //Coroutine End
         }
     }
 }

@@ -200,12 +200,24 @@
         /// <param name="mainArrowPoolQuantity"></param>
         /// <param name="subArrowPoolQuantity"></param>
         public void InitEquipments(Transform bowObjectInitPos, Transform bowObjectParentTr, int mainArrowPoolQuantity, int subArrowPoolQuantity) {
-            var ability = CCPlayerData.ability; //이거를 BowAbility내부의 것을 가져와주면 된다.
-
+            //var ability = CCPlayerData.ability; //이거를 BowAbility내부의 것을 가져와주면 된다.
             //Bow Object needs to reload Arrow from Start Method, Arrow Object must first Init.
-            if (IsEquippedArrowMain()) EquippedArrow_f.Init(AD_Data.POOLTAG_MAINARROW, AD_Data.POOLTAG_MAINARROW_LESS, mainArrowPoolQuantity, ability.GetAbilityMain());
-            if (IsEquippedArrowSub())  EquippedArrow_s.Init(AD_Data.POOLTAG_SUBARROW,  AD_Data.POOLTAG_SUBARROW_LESS,  subArrowPoolQuantity,  ability.GetAbilitySub());
-            if (IsEquippedBow())       EquippedBow.Init(bowObjectInitPos, bowObjectParentTr);
+            //if (IsEquippedArrowMain()) EquippedArrow_f.Init(AD_Data.POOLTAG_MAINARROW, AD_Data.POOLTAG_MAINARROW_LESS, mainArrowPoolQuantity, ability.GetAbilityMain());
+            //if (IsEquippedArrowSub())  EquippedArrow_s.Init(AD_Data.POOLTAG_SUBARROW,  AD_Data.POOLTAG_SUBARROW_LESS,  subArrowPoolQuantity,  ability.GetAbilitySub());
+            //if (IsEquippedBow())       EquippedBow.Init(bowObjectInitPos, bowObjectParentTr);
+
+            AD_BowAbility ability = null;
+            if(IsEquippedBow() == true) {
+                ability = EquippedBow.Initialize(bowObjectInitPos, bowObjectParentTr);
+            }
+            if(IsEquippedArrowMain() == true) {
+                EquippedArrow_f.Init(AD_Data.POOLTAG_MAINARROW, AD_Data.POOLTAG_MAINARROW_LESS, mainArrowPoolQuantity, ability.GetAbility(0));
+            }
+            if(IsEquippedArrowSub() == true) {
+                EquippedArrow_s.Init(AD_Data.POOLTAG_SUBARROW, AD_Data.POOLTAG_SUBARROW_LESS, subArrowPoolQuantity, ability.GetAbility(1));
+            }
+            //Equipment Ready, (Wait For Spawn Arrow Prafabs)
+            ability.IsInitializedEquipments(this, true);
 
             foreach (var accessory in GetAccessories()) {
                 if (accessory != null) accessory.Init();

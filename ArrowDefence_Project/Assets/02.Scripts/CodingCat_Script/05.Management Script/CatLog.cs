@@ -126,6 +126,13 @@
 #endif
         }
 
+        [System.Diagnostics.Conditional("ENABLE_LOG")]
+        public static void ComponentMent() {
+#if ENABLE_LOG
+            UnityEngine.Debug.LogWarning("Warning ! recommended Component caching.");
+#endif
+        }
+
         #region DLog_Stop_Method
         [System.Diagnostics.Conditional("ENABLE_LOG")]
         public static void ELog(string msg, bool isStopEditor)

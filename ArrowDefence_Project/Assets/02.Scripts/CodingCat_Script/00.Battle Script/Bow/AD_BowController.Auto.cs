@@ -296,7 +296,7 @@
             AD_BowRope.instance.CatchPointClear(); //Release Bow Rope
 
             //Get New Damage Struct [AutoMode Damage Struct is always non-charged]
-            damageStruct = bowAbility.GetDamage(arrowType, false);
+            damageStruct = ability.GetDamage(arrowType, false);
 
             //Shot Arrow and active skills
             arrowComponent.ShotByBow(arrowForce, ArrowParentTr, damageStruct);

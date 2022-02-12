@@ -3,12 +3,24 @@
     using UnityEngine;
 
     public class AD_BowAbility : MonoBehaviour {
-        //Slot Ability Class.
-        PlayerAbilitySlot mainSlotAbility = null;
-        PlayerAbilitySlot subSlotAbility  = null;
+        PlayerAbilitySlot[] abilitySlots = null;
 
         //Is Initialized Ability Struct.
         bool isInitAbility = false;
+        public bool IsInitEquipments { get; private set; } = false;
+
+        /// <summary>
+        /// Run Player Equipment Controller Initialize.
+        /// </summary>
+        public void Initialize() {
+            var originAbility = CCPlayerData.ability;
+            abilitySlots = new PlayerAbilitySlot[2] {
+                new PlayerAbilitySlot(originAbility.GetAbilityMain()),
+                new PlayerAbilitySlot(originAbility.GetAbilitySub()),
+                //new PlayerAbilitySlot(originAbility.GetAbilitySpecial())
+            };
+            isInitAbility = true;
+        }
 
         public void AddListnerToSkillDel(ref AD_BowController.BowSkillsDel bowskilldelegate) {
             var bowSkills = CCPlayerData.equipments.GetBowItem().GetSkillsOrNull();
@@ -28,24 +40,23 @@
         /// <returns></returns>
         public DamageStruct GetDamage(ARROWTYPE type, bool isCharged) {
             if(isInitAbility == false) {
-                isInitAbility = InitAbilityReturnBool();
+                throw new System.Exception("Ability Not Initialized.");
             }
 
-            switch (type) { //Return Damage Struct used Ability Slot Values..
-                case ARROWTYPE.ARROW_MAIN: return new DamageStruct(mainSlotAbility, isCharged);
-                case ARROWTYPE.ARROW_SUB:  return new DamageStruct(subSlotAbility,  isCharged);
-                default:                   return new DamageStruct();
+            switch (type) {
+                case ARROWTYPE.ARROW_MAIN:    return new DamageStruct(abilitySlots[0], isCharged);
+                case ARROWTYPE.ARROW_SUB:     return new DamageStruct(abilitySlots[1], isCharged);
+                case ARROWTYPE.ARROW_SPECIAL: return new DamageStruct(abilitySlots[2], isCharged);
+                default: throw new System.NotImplementedException();
             }
         }
 
-        private bool InitAbilityReturnBool() {
-            if (CCPlayerData.equipments.IsEquippedArrowMain()) {
-                mainSlotAbility = new PlayerAbilitySlot(CCPlayerData.ability.GetAbilityMain());
-            }
-            if(CCPlayerData.equipments.IsEquippedArrowSub()) {
-                subSlotAbility  = new PlayerAbilitySlot(CCPlayerData.ability.GetAbilitySub());
-            }
-            return true;
+        public PlayerAbilitySlot GetAbility(byte index) {
+            return abilitySlots[index];
+        }
+
+        public void IsInitializedEquipments(Player_Equipments equipments, bool initialized) {
+            IsInitEquipments = initialized;
         }
     }
 }

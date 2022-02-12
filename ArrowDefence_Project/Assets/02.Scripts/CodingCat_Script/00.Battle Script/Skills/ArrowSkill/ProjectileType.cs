@@ -1,10 +1,15 @@
 ﻿namespace ActionCat {
     using UnityEngine;
     using ActionCat.Interface;
-
+    //==================================================================== [ PARENT ] =========================================================================
     public abstract class ProjectileType : ArrowSkill {
         protected ProjectilePref projectilePref = null;
-        protected string projectilePoolTag = "";
+        protected short projectileDamage;
+
+        //Not Saved
+        protected string projectilePoolTag  = "";
+        protected PlayerAbilitySlot ability = null;
+
         public abstract void OnHit(Vector2 point, ref DamageStruct damage);
         public virtual bool TryGetPrefab(out ProjectilePref pref) {
             if(projectilePref == null) {
@@ -23,13 +28,28 @@
             CatLog.Log($"Projectile PoolTag : {projectilePoolTag}");
         }
 
+        public virtual void SetAbility(PlayerAbilitySlot address) {
+            ability = address;
+        }
+
         public abstract string GetUniqueTag();
+
+        public override void Release() {
+            projectilePoolTag = "";
+            ability = null;
+        }
 
         public ProjectileType() { }
 
-        protected ProjectileType(string tag) => projectilePoolTag = tag;
-    }
+        //이 생성자에서 ability 받아주면 된다.
+        protected ProjectileType(string tag, PlayerAbilitySlot address) {
+            projectilePoolTag = tag;
+            ability           = address;
 
+        }
+    }
+    //=========================================================================================================================================================
+    //================================================================= [ SPLIT ARROW ] =======================================================================
     public class SplitArrow : ProjectileType {
         public override void Clear() {
             throw new System.NotImplementedException();
@@ -59,7 +79,8 @@
         ~SplitArrow() { }
         #endregion
     }
-
+    //=========================================================================================================================================================
+    //================================================================= [ SPLIT DAGGER ] ======================================================================
     public class SplitDagger : ProjectileType {
         private int projectileCount;
 
@@ -87,28 +108,36 @@
 
         public override void Clear() { }
 
+        public override void Release() {
+            base.Release();
+            intervalAngle = 0f;
+        }
+
         /// <summary>
         /// Constructor for Skill Data ScriptableObject
         /// </summary>
         /// <param name="data"></param>
         public SplitDagger(DataSplitDagger data) {
-            projectilePref  = data.daggerPref;
-            projectileCount = data.projectileCount;
+            projectilePref   = data.daggerPref;
+            projectileCount  = data.projectileCount;
+            projectileDamage = data.ProjectileDamage;
         }
         /// <summary>
         /// Constructor for Skill Clone
         /// </summary>
         /// <param name="origin"></param>
-        public SplitDagger(SplitDagger origin) : base(origin.projectilePoolTag) {
-            projectilePref  = origin.projectilePref;
-            projectileCount = origin.projectileCount;
+        public SplitDagger(SplitDagger origin) : base(origin.projectilePoolTag, origin.ability) {
+            projectilePref   = origin.projectilePref;
+            projectileCount  = origin.projectileCount;
+            projectileDamage = origin.projectileDamage;
         }
         #region ES3
         public SplitDagger() { }
         ~SplitDagger() { }
         #endregion
     }
-
+    //=========================================================================================================================================================
+    //=============================================================== [ ELEMENTAL - FIRE ] ====================================================================
     public class ElementalFire : ProjectileType {
         private float activationProbability;
 
@@ -117,34 +146,41 @@
         }
 
         public override void OnHit(Vector2 point, ref DamageStruct damage) {
-            if (Random.Range(0f, 100f) < activationProbability) {
+            if (Random.Range(0f, 100f) < activationProbability + ability.ElementalActivationRateIncrease) {
                 var fire = CCPooler.SpawnFromPool<ElementalFirePref>(projectilePoolTag, point, Quaternion.identity);
                 if (fire) {
-                    fire.Shot(damage);
+                    fire.Shot(damage, ability.GetProjectileDamage(projectileDamage)); //
                 }
             }
         }
         public override void Clear() { }
+
+        public override void Release() {
+            base.Release();
+        }
 
         /// <summary>
         /// Constructor for Skill Data ScriptableObject
         /// </summary>
         /// <param name="data"></param>
         public ElementalFire(DataEltalFire data) {
-            projectilePref = data.firePref;
+            projectilePref        = data.firePref;
             activationProbability = data.ActivationProbability;
+            projectileDamage      = data.ProjectileDamage;
         }
         /// <summary>
         /// Constructor for Skill Clone
         /// </summary>
         /// <param name="origin"></param>
-        public ElementalFire(ElementalFire origin): base() {
-            projectilePref = origin.projectilePref;
+        public ElementalFire(ElementalFire origin): base(origin.projectilePoolTag, origin.ability) {
+            projectilePref        = origin.projectilePref;
             activationProbability = origin.activationProbability;
+            projectileDamage      = origin.projectileDamage;
         }
         #region ES3
         public ElementalFire() { }
         ~ElementalFire() { }
         #endregion
     }
+    //=========================================================================================================================================================
 }

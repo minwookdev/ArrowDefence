@@ -28,7 +28,7 @@
             CCPooler.ReturnToPool(gameObject);
         }
 
-        public abstract void Shot(DamageStruct damage);
+        public abstract void Shot(DamageStruct damage, short projectileDamage = 0);
 
         public virtual void CheckBounds() {
             tempPos = tr.position;

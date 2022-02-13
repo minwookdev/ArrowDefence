@@ -127,10 +127,6 @@
                     string projectilePoolTag = string.Format("{0}{1}{2}", arrowPoolTag, AD_Data.POOLTAG_PROJECTILE, projectileTypeSkill.GetUniqueTag());
                     addProjSkill.SetPoolTag(projectilePoolTag);
                     addProjSkill.SetAbility(ability);
-                    Vector2 topLeft     = Camera.main.ScreenToWorldPoint(new Vector2(0f, Screen.height));
-                    Vector2 bottomRight = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, 0f));
-                    projectile.SetScreenLocation(topLeft, bottomRight);
-                    projectile.SetProjectileValue(ability);
                     CCPooler.AddPoolList(projectilePoolTag, projectileTypeSkill.DefaultSpawnSize(), projectile.gameObject, isTracking: false);
                 }
             }

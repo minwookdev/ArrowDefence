@@ -164,6 +164,33 @@
             return true;
         }
 
+        public void OnHitElemental(ref DamageStruct damage, Vector3 point, Vector2 direction) {
+            if(currentHealthPoint <= 0 || isDeath) {
+                return;
+            }
+
+            //Recieve Final Calculated Damage
+            var recieveDamage = damage.GetElementalDamage();
+            currentHealthPoint -= recieveDamage;
+            DamageFloater.Instance.OnFloatingWithScale(recieveDamage, point, direction, false);
+
+            //Play Monster Hit Animation
+            monsterState.OnHit();
+
+            //Call Event Monster Hit
+            BattleProgresser.OnMonsterHit();
+
+            //Check Monster is Death (Once)
+            if(currentHealthPoint <= 0 && isDeath == false) {
+                monsterState.StateChanger(STATETYPE.DEATH);
+                //=================================[ MONSTER DEATH EVENT ]================================
+                BattleProgresser.OnMonsterDeath();
+                BattleProgresser.OnItemDrop(ItemDropCorrection);
+                //========================================================================================
+                isDeath = true;
+            }
+        }
+
         //public void OnHitProjectile(ref DamageStruct damage, Vector3 contactPoint, Vector3 direction) {
         //    if(currentHealthPoint <= 0 || isDeath == true) {
         //        return;
@@ -194,22 +221,6 @@
         //}
 
         public bool IsAlive() => (isDeath == false || currentHealthPoint > 0) ? true : false;
-
-        public void OnHitObject(ref DamageStruct damage) {
-            throw new System.NotImplementedException();
-        }
-
-        public void OnHitObject(float damage) {
-            throw new System.NotImplementedException();
-        }
-
-        public void OnHitWithAngle(ref DamageStruct damage, float angle) {
-            throw new System.NotImplementedException();
-        }
-
-        public void OnHitWithQuaternion(ref DamageStruct damage, Quaternion quaternion) {
-            throw new System.NotImplementedException();
-        }
 
         /// <summary>
         /// Animation Event 

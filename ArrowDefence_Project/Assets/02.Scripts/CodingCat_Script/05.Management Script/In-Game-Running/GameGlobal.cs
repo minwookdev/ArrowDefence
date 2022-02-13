@@ -6,7 +6,7 @@
     public static class GameGlobal {
         public static Vector2 ScreenOffset = new Vector2(2f, 3f);
         public static Vector3 ArrowScale   = new Vector3(1.5f, 1.5f, 1f);
-        public static readonly int RandomIntRangeCorrection = 1;
+        public static readonly int RandomRangeCorrection = 1;
 
         //COMBO
         public static readonly short MaxComboCount = 9999;
@@ -75,7 +75,7 @@
             else
             {
                 //DropItem Class Quantity Array Size 2의 경우 (소모품, 재료 아이템) MinQuantity ~ MaxQuantity 사이의 값 Return
-                int quantityInArray = Random.Range(quantityArray[0], quantityArray[1] + RandomIntRangeCorrection);
+                int quantityInArray = Random.Range(quantityArray[0], quantityArray[1] + RandomRangeCorrection);
                 return quantityInArray;
             }
         }

@@ -7,11 +7,15 @@
         [SerializeField] private CapsuleCollider2D coll = null;
 
         [Header("FORCE")]
-        [SerializeField] [RangeEx(8f, 20f, 1f)] 
+        [SerializeField] [RangeEx(8f, 30f, 1f)] 
         float force = 10f;
+
+        private Vector3 tempEulerAngels;
+        private float damageFloaterRange = 2f;
 
         private void Start() {
             CheckComponent();
+            SetScreenBound();
             coll.enabled = false;
         }
 
@@ -19,12 +23,14 @@
             coll.enabled = false;
         }
 
-        public override void Shot(DamageStruct damage, short projectileDamage = 0) {
+        public override void Shot(DamageStruct damage, short projectileDamage) {
             rigidBody.AddForce(tr.up * force, ForceMode2D.Impulse);
 
             // Update Damage Count
-            damageStruct = damage;
-            damageStruct.SetDamage(finCalcDamage);
+            finCalcDamage = projectileDamage;
+            damageStruct  = damage;
+            damageStruct.SetDamage(projectileDamage);
+            CatLog.Log($"Final Calculated Damage : {finCalcDamage}");
 
             coll.enabled = true;
         }
@@ -34,12 +40,14 @@
         }
 
         private void OnTriggerEnter2D(Collider2D collision) {
-            //if(collision.gameObject.layer == LayerMask.NameToLayer(AD_Data.LAYER_MONSTER)) {
-            //    if(collision.TryGetComponent<IDamageable>(out IDamageable target)) {
-            //        Vector2 contact = collision.ClosestPoint(tr.position);
-            //        target.OnHit(ref damageStruct, contact, tr.eulerAngles);
-            //    }
-            //}
+            if(collision.gameObject.layer == LayerMask.NameToLayer(AD_Data.LAYER_MONSTER)) {
+                if(collision.TryGetComponent<IDamageable>(out IDamageable target)) {
+                    Vector2 contact   = collision.ClosestPoint(tr.position);
+                    tempEulerAngels   = tr.localEulerAngles;
+                    tempEulerAngels.z += (Random.Range(-damageFloaterRange, damageFloaterRange + GameGlobal.RandomRangeCorrection));
+                    target.OnHit(ref damageStruct, contact, tempEulerAngels);
+                }
+            }
         }
 
         protected override void CheckComponent() {
@@ -49,7 +57,7 @@
         }
 
         public override void SetProjectileValue(PlayerAbilitySlot ability) {
-            finCalcDamage = System.Convert.ToInt16(baseDamage * ability.DamageIncRate);
+            throw new System.NotImplementedException();
         }
     }
 }

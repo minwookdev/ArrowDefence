@@ -5,7 +5,7 @@
     /// ArrowSkill ScriptableObject
     /// </summary>
     public class DataEltalFire : ArrowSkillData {
-        [RangeEx(10f, 30f, 5f)]
+        [RangeEx(10f, 70f, 5f)]
         public float ActivationProbability = 10f;
         public ProjectilePref firePref;
         [RangeEx(10, 500, 10)]

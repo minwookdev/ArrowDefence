@@ -46,12 +46,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89124044d677ce2498a8a20c2346bfc2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseDamage: 10
   finCalcDamage: 0
   tr: {fileID: 3131000947980100957}
   rigidBody: {fileID: 9141913478002093568}
   coll: {fileID: 5850000821867291896}
-  force: 10
+  force: 20
 --- !u!70 &5850000821867291896
 CapsuleCollider2D:
   m_ObjectHideFlags: 0

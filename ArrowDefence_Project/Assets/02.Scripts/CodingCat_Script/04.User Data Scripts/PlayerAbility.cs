@@ -42,6 +42,13 @@
             return finCalcDamage;
         }
 
+        public float GetElementalDamage() {
+            float correction = UnityEngine.Random.Range(Data.CCPlayerData.ability.GlobalAbilityField.MinDamagePer, Data.CCPlayerData.ability.GlobalAbilityField.MaxDamagePer);
+            float finCalcDamage = Damage * correction;
+            finCalcDamage = (finCalcDamage < 1f) ? 1f : UnityEngine.Mathf.Round(finCalcDamage);
+            return finCalcDamage;
+        }
+
         public void SetDamage(short damage) {
             Damage = damage;
         }
@@ -56,11 +63,11 @@
         public float ElementalActivationRateIncrease { private set; get; } = 0f;
 
         public void UpdateSlotAbility(float damage, float arrowIncDamage, byte critChance, float critMultiplier) {
-            RawDamage     = damage * arrowIncDamage;
-            DamageIncRate = arrowIncDamage;
-            CritChance    = critChance;
+            RawDamage            = damage * arrowIncDamage;
+            DamageIncRate        = arrowIncDamage;
+            CritChance           = critChance;
             CritDamageMultiplier = critMultiplier;
-            ArmorPenetRate = 0;
+            ArmorPenetRate       = 0;
         }
 
         /// <summary>
@@ -71,11 +78,11 @@
         /// <param name="critchance"></param>
         /// <param name="critMultiplier"></param>
         public PlayerAbilitySlot(float damage, float arrowIncDamage, byte critchance, float critMultiplier) {
-            RawDamage  = damage * arrowIncDamage;
-            DamageIncRate = arrowIncDamage;
-            CritChance = critchance; 
+            RawDamage            = damage * arrowIncDamage;
+            DamageIncRate        = arrowIncDamage;
+            CritChance           = critchance; 
             CritDamageMultiplier = critMultiplier;
-            ArmorPenetRate = 0;
+            ArmorPenetRate       = 0;
         }
 
         /// <summary>
@@ -84,6 +91,7 @@
         /// <param name="origin"></param>
         public PlayerAbilitySlot(PlayerAbilitySlot origin) {
             RawDamage            = origin.RawDamage;
+            DamageIncRate        = origin.DamageIncRate;
             CritChance           = origin.CritChance;
             CritDamageMultiplier = origin.CritDamageMultiplier;
             ArmorPenetRate       = origin.ArmorPenetRate;
@@ -106,8 +114,8 @@
         public GlobalAbility GlobalAbilityField;
 
         //Slot Ability
-        PlayerAbilitySlot mainSlotAbility;
-        PlayerAbilitySlot subSlotAbility;
+        PlayerAbilitySlot mainSlotAbility = null;
+        PlayerAbilitySlot subSlotAbility  = null;
 
         //Bow Ability Properties
         float tempDamage;
@@ -115,9 +123,24 @@
         float tempChargedDmgMultiplier;
         byte tempCritChance;
 
-        //Arrow Ability Properties
-        //float tempMainArrowDamageInc;
-        //float tempSubArrowDamageInc;
+        #region PROPERTY
+        public PlayerAbilitySlot GetAbilityMain {
+            get {
+                if(mainSlotAbility == null) {
+                    throw new System.Exception("this slot not assignment !");
+                }
+                return mainSlotAbility;
+            }
+        }
+        public PlayerAbilitySlot GetAbilitySub {
+            get {
+                if(subSlotAbility == null) {
+                    throw new System.Exception("this slot not assignment !");
+                }
+                return subSlotAbility;
+            }
+        }
+        #endregion
 
         public void UpdateAbility(Player_Equipments equip) {
             //Update Bow Abilities // ↓ Default Value.
@@ -174,10 +197,6 @@
             //Init-Global Ability
             GlobalAbilityField = new GlobalAbility();
         }
-
-        public PlayerAbilitySlot GetAbilityMain() => mainSlotAbility;
-
-        public PlayerAbilitySlot GetAbilitySub() => subSlotAbility;
 
         public PlayerAbilitySlot GetAbilitySpecial() => null;
     }

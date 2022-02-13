@@ -101,7 +101,7 @@
                 Quaternion randomRotation = Quaternion.AngleAxis(randomAngle + (intervalAngle * i), Vector3.forward);
                 var dagger = CCPooler.SpawnFromPool<ProjectilePref>(projectilePoolTag, point, randomRotation);
                 if (dagger) {
-                    dagger.Shot(damage);
+                    dagger.Shot(damage, ability.GetProjectileDamage(projectileDamage));
                 }
             }
         }

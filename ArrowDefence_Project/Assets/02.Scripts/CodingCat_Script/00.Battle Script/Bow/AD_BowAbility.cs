@@ -15,8 +15,8 @@
         public void Initialize() {
             var originAbility = CCPlayerData.ability;
             abilitySlots = new PlayerAbilitySlot[2] {
-                new PlayerAbilitySlot(originAbility.GetAbilityMain()),
-                new PlayerAbilitySlot(originAbility.GetAbilitySub()),
+                new PlayerAbilitySlot(originAbility.GetAbilityMain),
+                new PlayerAbilitySlot(originAbility.GetAbilitySub),
                 //new PlayerAbilitySlot(originAbility.GetAbilitySpecial())
             };
             isInitAbility = true;
@@ -52,6 +52,9 @@
         }
 
         public PlayerAbilitySlot GetAbility(byte index) {
+            if(index < 0 || index > 2) {
+                throw new System.NotImplementedException("this slot index is Not Implemented !");
+            }
             return abilitySlots[index];
         }
 

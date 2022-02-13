@@ -99,6 +99,10 @@
             return particleSys.isPlaying;
         }
 
+        public void SetScale(Vector3 scale) {
+            tr.localScale = scale;
+        }
+
 #if UNITY_EDITOR
         [CustomEditor(typeof(ACEffector2D))]
         class ACEffector2DEditor : Editor {

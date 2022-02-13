@@ -4,7 +4,6 @@
 
     public abstract class ProjectilePref : MonoBehaviour, IPoolObject {
         [Header("PROJECTILE VALUE")]
-        [SerializeField] [RangeEx(0, 500, 10)] protected short baseDamage = 10;
         [SerializeField] [ReadOnly] protected short finCalcDamage;
 
         [Header("COMPONENT")]
@@ -41,9 +40,9 @@
 
         protected abstract void CheckComponent();
 
-        public void SetScreenLocation(Vector2 topleft, Vector2 rightbottom) {
-            PointLeftTop     = topleft;
-            PointRightBottom = rightbottom;
+        public void SetScreenBound() {
+            PointLeftTop     = Camera.main.ScreenToWorldPoint(new Vector2(0f, Screen.height));
+            PointRightBottom = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, 0f));
         }
 
         public abstract void SetProjectileValue(PlayerAbilitySlot ability);

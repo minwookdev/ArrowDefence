@@ -16,42 +16,11 @@
         //PlayerData로 들어가는 함수를 가볍게 해주기
 
         /// <summary>
-        /// Bow Item Constructor (Value Type)
-        /// </summary>
-        /// <param name="id">Item Id</param>
-        /// <param name="name">Item Name</param>
-        /// <param name="desc">Item Description</param>
-        /// <param name="sprite">Item Sprite</param>
-        /// <param name="grade">Item Grade</param>
-        /// <param name="obj">Bow GameObject</param>
-        /// <param name="skill1">First Bow Skill</param>
-        /// <param name="skill2">Second Bow Skill</param>
-        public Item_Bow(int id, string name, string desc, Sprite sprite, ITEMGRADE grade, 
-                        GameObject obj, AD_BowSkill skill1, AD_BowSkill skill2) : base()
-        {
-            //Equip Item Type Set
-            EquipType = EQUIP_ITEMTYPE.EQUIP_BOW;
-
-            //Default Item Data Set
-            Item_Id     = id;
-            Item_Name   = name;
-            Item_Desc   = desc;
-            Item_Sprite = sprite;
-            Item_Grade  = grade;
-
-            //Bow Item Data Set
-            bowGameObject = obj;
-            bowSkill_Fst  = skill1;
-            bowSkill_Sec  = skill2;
-        }
-
-        /// <summary>
         /// Bow Item Constructor (Item Data Type)
         /// </summary>
         /// <param name="item">Bow Item Data Address</param>
-        public Item_Bow(ItemData_Equip_Bow item) : base()
-        {
-            this.EquipType    = EQUIP_ITEMTYPE.EQUIP_BOW;
+        public Item_Bow(ItemData_Equip_Bow item) : base() {
+            this.EquipType = EQUIP_ITEMTYPE.EQUIP_BOW;
 
             this.Item_Id      = item.Item_Id;
             this.Item_Name    = item.Item_Name;
@@ -60,18 +29,17 @@
             this.Item_Grade   = item.Item_Grade;
 
             this.bowGameObject = item.BowGameObject;
-            this.bowSkill_Fst  = item.SkillFst;
-            this.bowSkill_Sec  = item.SkillSec;
+            this.bowSkill_Fst  = GetNewSkill(item.SkillAsset_f);
+            this.bowSkill_Sec  = GetNewSkill(item.SkillAsset_s);
 
-            this.abilities = item.abilityDatas;
+            this.abilities = GetNewAbilities(item.abilityDatas);
         }
 
         /// <summary>
         /// Bow Item Constructor (Item Type)
         /// </summary>
         /// <param name="item"></param>
-        public Item_Bow(Item_Bow item) : base()
-        {
+        public Item_Bow(Item_Bow item) : base() {
             this.EquipType = EQUIP_ITEMTYPE.EQUIP_BOW;
 
             this.Item_Id     = item.Item_Id;
@@ -85,6 +53,82 @@
             this.bowSkill_Sec  = item.bowSkill_Sec;
 
             this.abilities = item.abilities;
+        }
+
+        protected override Ability[] GetNewAbilities(Ability[] abilities) {
+            var tempList = new System.Collections.Generic.List<Ability>();
+            for (int i = 0; i < abilities.Length; i++) {
+                switch (abilities[i].AbilityType) {
+                    case ABILITY_TYPE.DAMAGE:
+                        var damage = abilities[i] as AbilityDamage;
+                        if (damage != null) {
+                            tempList.Add(new AbilityDamage(System.Convert.ToInt16(damage.GetCount())));
+                        }
+                        else {
+                            CatLog.ELog("Ability Type Not Matched.");
+                        } break;
+                    case ABILITY_TYPE.CHARGEDAMAGE:
+                        var chargedDamage = abilities[i] as AbilityChargedDamage;
+                        if (chargedDamage != null) {
+                            tempList.Add(new AbilityChargedDamage(chargedDamage.GetCount()));
+                        }
+                        else {
+                            CatLog.ELog("Ability Type Not Matched.");
+                        } break;
+                    case ABILITY_TYPE.CRITICALCHANCE:
+                        var criticalChance = abilities[i] as AbilityCritChance;
+                        if (criticalChance != null) {
+                            tempList.Add(new AbilityCritChance(System.Convert.ToByte(criticalChance.GetCount())));
+                        }
+                        else {
+                            CatLog.ELog("Ability Type Not Matched.");
+                        } break;
+                    case ABILITY_TYPE.CRITICALDAMAGE:
+                        var criticalDamage = abilities[i] as AbilityCritDamage;
+                        if (criticalDamage != null) {
+                            tempList.Add(new AbilityCritDamage(criticalDamage.GetCount()));
+                        }
+                        else {
+                            CatLog.ELog("Ability Type Not Matched.");
+                        } break;
+                    case ABILITY_TYPE.ARMORPENETRATE: throw new System.NotImplementedException();
+                    default:                          throw new System.NotImplementedException();
+                }
+            } 
+            return tempList.ToArray();
+        }
+
+        private AD_BowSkill GetNewSkill(BowSkillData data) {
+            if (data == null) return null;
+            switch (data.SkillType) {
+                case BOWSKILL_TYPE.SKILL_EMPTY: 
+                    throw new System.NotImplementedException();
+                case BOWSKILL_TYPE.SKILL_SPREAD_SHOT:
+                    var spreadShot = data as SkillDataSpreadShot;
+                    if (spreadShot != null) {
+                        return new Skill_Multiple_Shot(spreadShot);
+                    }
+                    else {
+                        throw new System.Exception("This Bow Skill Type Not Matched.");
+                    } 
+                case BOWSKILL_TYPE.SKILL_RAPID_SHOT:
+                    var rapidShot = data as SkillDataRapidShot;
+                    if (rapidShot != null) {
+                        return new Skill_Rapid_Shot(rapidShot);
+                    }
+                    else {
+                        throw new System.Exception("This Bow Skill Type Not Matched.");
+                    } 
+                case BOWSKILL_TYPE.SKILL_ARROW_RAIN:
+                    var rainArrow = data as SkillDataArrowRain;
+                    if (rainArrow != null) {
+                        return new Skill_Arrow_Rain(rainArrow);
+                    }
+                    else {
+                        throw new System.Exception("This Bow Skill Type Not Matched.");
+                    } 
+                default: throw new System.NotImplementedException();
+            }
         }
 
         /// <summary>

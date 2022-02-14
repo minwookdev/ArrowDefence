@@ -217,8 +217,10 @@
                 EquippedArrow_s.Init(AD_Data.POOLTAG_SUBARROW, AD_Data.POOLTAG_SUBARROW_LESS, subArrowPoolQuantity, ability.GetAbility(1));
             }
             //Equipment Ready, (Wait For Spawn Arrow Prafabs)
-            ability.IsInitializedEquipments(this, true);
-
+            if (ability) {
+                ability.IsInitializedEquipments(this, true);
+            }
+            
             foreach (var accessory in GetAccessories()) {
                 if (accessory != null) accessory.Init();
             }

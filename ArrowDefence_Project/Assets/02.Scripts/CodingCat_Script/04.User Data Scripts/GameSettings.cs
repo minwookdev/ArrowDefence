@@ -7,7 +7,7 @@
         Dictionary<string, StageSetting> stageSettings = new Dictionary<string, StageSetting>();
 
         //PROPERTY
-        public PULLINGTYPE PullingType { get; private set; }
+        public PULLINGTYPE PullingType { get; private set; } = PULLINGTYPE.FREE_TOUCH;
 
         public void SetPullingType(PULLINGTYPE pullType) => PullingType = pullType;
 

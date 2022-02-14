@@ -9,8 +9,8 @@
         [SerializeField] TrailRenderer trailRender;
 
         [Header("VARIAVLES")]
-        [SerializeField] [RangeEx(18f, 30f, 1f, "ARROWPOWER")]
-        private float forceMagnitude = 18f; //Default : 18f
+        [SerializeField] [ReadOnly]
+        private float forceMagnitude;//Default : 18f
 
         //Screen Limit Variable
         private Vector2 topLeftScreenPoint;
@@ -33,6 +33,21 @@
         //CLASS
         ArrowSkillSet arrowSkillSets = null;
         System.Collections.Generic.Queue<CollisionData> collisionQueue = null;
+
+        //PROPERTY
+        public float PowerFactor {
+            get {
+                return forceMagnitude;
+            }
+            set {
+                if(value < 18 || value > 30) {
+                    CatLog.ELog("Speed Value OverRange");
+                }
+                else {
+                    forceMagnitude = value;
+                }
+            }
+        }
 
         void ComponentChecker() {
             if (rBody == null) {
@@ -67,6 +82,8 @@
 
             //Init Collision Data Queue
             collisionQueue = new System.Collections.Generic.Queue<CollisionData>();
+
+            CatLog.Log($"Less Arrow Speed: {forceMagnitude}");
         }
 
         private void Update() {

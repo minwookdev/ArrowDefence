@@ -45,9 +45,10 @@
             if (Speed > 18f)    tempAbility.Add(new AbilitySpeed(Speed));
 
             //3. Temp Ability List to item Abilities.
-            if (tempAbility.Count > 0) {
-                abilityDatas = tempAbility.ToArray();
-            }
+            abilityDatas = tempAbility.ToArray();
+            //if (tempAbility.Count > 0) {
+            //    abilityDatas = tempAbility.ToArray();
+            //}
         }
     }
 }

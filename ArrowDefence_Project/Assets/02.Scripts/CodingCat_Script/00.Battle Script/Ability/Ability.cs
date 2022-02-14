@@ -2,12 +2,18 @@
     public abstract class Ability {
         //Type은 따로 저장하지는 않는데, Save Data Load해서 확인해보기.
         protected ABILITY_TYPE abilityType = ABILITY_TYPE.NONE;
+        public ABILITY_TYPE AbilityType {
+            get {
+                return abilityType;
+            }
+        }
         public abstract float GetCount();
         public abstract byte GetGrade();
         public abstract string GetName();
         public abstract bool Upgrade();
     }
 
+    #region ABILITY-BOW
 
     public class AbilityDamage : Ability {
         private short damageCount;
@@ -149,6 +155,10 @@
         }
     }
 
+    #endregion
+
+    #region ABILITY-ARROW
+
     public class AbilitySpeed : Ability {
         float speed;
         public override float GetCount() {
@@ -217,4 +227,6 @@
             abilityType = ABILITY_TYPE.DAMAGEINC;
         }
     }
+
+    #endregion
 }

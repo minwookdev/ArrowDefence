@@ -19,8 +19,8 @@
         [ReadOnly] public Transform topClampTr    = null;
 
         [Header("SHOOTING")]
-        [SerializeField] [RangeEx(18f, 30f, 1f, "ARROWPOWER")]
-        private float powerFactor = 18f; // Default : 18f
+        [SerializeField] [ReadOnly]
+        private float powerFactor; // Default : 18f
         [SerializeField] [ReadOnly] 
         private bool isLaunched;
 
@@ -37,7 +37,16 @@
 
         //PROPERTY
         public Transform CatchTr { get => arrowCatchTransform; }
-        public float PowerFactor { get => powerFactor; }
+        public float PowerFactor { get => powerFactor; 
+            set {
+                if(value < 18 || value > 30) {
+                    CatLog.ELog("Speed Value OverRange");
+                }
+                else {
+                    powerFactor = value;
+                }
+            }
+        }
 
         void InitComponent() {
             if (arrowTr == null) arrowTr = GetComponent<Transform>();
@@ -61,6 +70,8 @@
 
             //Init Collision Data Queue
             collisionQueue = new Queue<CollisionData>();
+
+            CatLog.Log($"Main Arrow Speed: {powerFactor}");
         }
 
         private void Update() {

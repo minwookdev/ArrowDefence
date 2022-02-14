@@ -69,9 +69,11 @@
             }
 
             //Final. if the tempAbility Length is Bigger than 1, Init the Ability Array.
-            if(tempAbility.Count > 0) {
-                abilityDatas = tempAbility.ToArray();
-            }
+            abilityDatas = tempAbility.ToArray();
+            //if(tempAbility.Count > 0) {
+            //    abilityDatas = tempAbility.ToArray();
+            //}
+
         }
     }
 

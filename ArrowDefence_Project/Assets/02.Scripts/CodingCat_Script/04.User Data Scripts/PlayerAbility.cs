@@ -42,8 +42,9 @@
             return finCalcDamage;
         }
 
-        public float GetElementalDamage() {
-            float correction = UnityEngine.Random.Range(Data.CCPlayerData.ability.GlobalAbilityField.MinDamagePer, Data.CCPlayerData.ability.GlobalAbilityField.MaxDamagePer);
+        public float GetElementalDamage(bool isUseMinMaxDamagePer = false) {
+            var ability = Data.CCPlayerData.ability.GlobalAbilityField;
+            float correction = (isUseMinMaxDamagePer) ? UnityEngine.Random.Range(ability.MinDamagePer, ability.MaxDamagePer) : 1f;
             float finCalcDamage = Damage * correction;
             finCalcDamage = (finCalcDamage < 1f) ? 1f : UnityEngine.Mathf.Round(finCalcDamage);
             return finCalcDamage;

@@ -23,8 +23,7 @@
             this.Item_Grade  = item.Item_Grade;
 
             //Set Accessory Item Data
-            //specialEffect = item.SpecialEffect;
-            specialEffect = item.SPEffect;
+            specialEffect = GetNewEffect(item.SPEffectAsset);
         }
 
         public Item_Accessory(Item_Accessory item) : base() {
@@ -49,6 +48,18 @@
 
         public void Init() {
             if (specialEffect != null) specialEffect.Init();
+        }
+
+        AccessorySPEffect GetNewEffect(AccessorySkillData data) {
+            switch (data) {
+                case SkillDataAimSight newData: return new Acsp_AimSight(newData);
+                case SkillDataSlowTime newData: return new Acsp_SlowTime(newData);
+                default: throw new System.NotImplementedException();
+            }
+        }
+
+        protected override Ability[] GetNewAbilities(Ability[] abilities) {
+            throw new System.NotImplementedException();
         }
     }
 }

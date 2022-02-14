@@ -7,6 +7,7 @@
         //Arrow Prefab
         private GameObject MainArrowObject;
         private GameObject LessArrowObject;
+        float speed;
         //Arrow Skill Data Class
         ASInfo arrowSkillInfoFst;
         ASInfo arrowSkillInfoSec;
@@ -49,6 +50,7 @@
             //Init Arrow Prefab
             this.MainArrowObject = item.MainArrowObj;
             this.LessArrowObject = item.LessArrowObj;
+            this.speed = item.Speed;
 
             //Init-Arrow Skill Info
             if (item.ArrowSkillFst != null) {
@@ -59,7 +61,7 @@
             }
 
             //Init-Ability Info
-            this.abilities = item.abilityDatas;
+            this.abilities = GetNewAbilities(item.abilityDatas);
 
             this.effects = item.effects;
         }
@@ -80,6 +82,7 @@
             //Init Arrow Prefab
             this.MainArrowObject = item.MainArrowObject;
             this.LessArrowObject = item.LessArrowObject;
+            this.speed = item.speed;
 
             //Init Arrow Skill Data
             this.arrowSkillInfoFst = item.arrowSkillInfoFst;
@@ -89,6 +92,32 @@
             this.abilities = item.abilities;
 
             this.effects = item.effects;
+        }
+
+        protected override Ability[] GetNewAbilities(Ability[] abilities) {
+            var tempList = new System.Collections.Generic.List<Ability>();
+            for (int i = 0; i < abilities.Length; i++) {
+                switch (abilities[i].AbilityType) {
+                    case ABILITY_TYPE.DAMAGEINC:
+                        var damageIncrease = abilities[i] as AbilityIncDamageRate;
+                        if (damageIncrease != null) {
+                            tempList.Add(new AbilityIncDamageRate(damageIncrease.GetCount()));
+                        }
+                        else {
+                            CatLog.ELog("New Ability Type Not Matched !");
+                        } break;
+                    case ABILITY_TYPE.ARROWSPEED:
+                        var speed = abilities[i] as AbilitySpeed;
+                        if (speed != null) {
+                            tempList.Add(new AbilitySpeed(speed.GetCount()));
+                        }
+                        else {
+                            CatLog.ELog("New Ability Type Not Matched !");
+                        } break;
+                    default: throw new System.NotImplementedException();
+                }
+            }
+            return tempList.ToArray();
         }
 
         /// <summary>
@@ -224,6 +253,9 @@
 
             mainArrow.SetEffectInfo(effectPoolTags.ToArray());
             lessArrow.SetEffectInfo(effectPoolTags.ToArray());
+
+            mainArrow.PowerFactor = speed;
+            lessArrow.PowerFactor = speed;
 
             //Create Pools of Arrow Object
             CCPooler.AddPoolList(mainArrowObjTag, poolQuantity, MainArrowObject, isTracking: false);

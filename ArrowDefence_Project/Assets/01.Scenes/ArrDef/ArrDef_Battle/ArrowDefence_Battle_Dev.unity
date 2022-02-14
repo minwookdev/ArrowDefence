@@ -8307,6 +8307,12 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3204541759480302795, guid: 75155828b9866ee4dbb6eb1c6d7a0a62,
         type: 3}
+      propertyPath: testPref
+      value: 
+      objectReference: {fileID: 726380575017452812, guid: 85f2f6487372ed14b99ed4a9b49748a8,
+        type: 3}
+    - target: {fileID: 3204541759480302795, guid: 75155828b9866ee4dbb6eb1c6d7a0a62,
+        type: 3}
       propertyPath: ImageCover
       value: 
       objectReference: {fileID: 5957169593745452069}

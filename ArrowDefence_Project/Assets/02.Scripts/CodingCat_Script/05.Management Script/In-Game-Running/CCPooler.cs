@@ -390,8 +390,9 @@
         /// <param name="action"></param>
         /// <param name="isTracking"></param>
         public static void AddPoolListExtended<T>(string tag, int size, T prefab, Action<T> action, bool isTracking) where T : Component {
-            Transform tempParent = null; // Temp GameObejct Parent, Create New Temp Transform
-            var tempPrefab  = Instantiate<T>(prefab, new Vector3(100f, 100f, 0f), Quaternion.identity, tempParent);
+            Transform tempParentTr = new GameObject($"{tag}_[NeverUse]").transform; //Create Temp GameObject Transform 
+            tempParentTr.SetParent(_inst.gameObject.transform);
+            var tempPrefab  = Instantiate<T>(prefab, Vector3.zero, Quaternion.identity, tempParentTr);
             tempPrefab.name = "temp_";
             action(tempPrefab);
 
@@ -411,13 +412,14 @@
                 _inst.CreateNewObject(pool.tag, pool.prefab, parentTr);
             }
 
+            //temp GameObject is Destory on Changed Scene
             tempPrefab.gameObject.SetActive(false);
 
             if(_inst.poolDictionary[pool.tag].Count <= 0) {
-                CatLog.ELog("");
+                throw new System.Exception($"{pool.tag}: Omission Method, ReturnToPool()");
             }
             else if (_inst.poolDictionary[pool.tag].Count != pool.size) {
-                CatLog.ELog("");
+                throw new System.Exception($"{pool.tag}: Pool Dictionary Count Not Matched.");
             }
         }
 

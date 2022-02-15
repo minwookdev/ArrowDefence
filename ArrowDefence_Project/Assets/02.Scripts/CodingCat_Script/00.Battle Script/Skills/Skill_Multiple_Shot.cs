@@ -1,43 +1,29 @@
-﻿namespace ActionCat
-{
+﻿namespace ActionCat {
     using UnityEngine;
     using ActionCat.Interface;
 
-    public class Skill_Multiple_Shot : AD_BowSkill, IToString
-    {
+    public class Skill_Multiple_Shot : AD_BowSkill, IToString {
         private byte arrowCount;
         private float spreadAngle;
-
-        ///Default
-        ///byte  ArrowCount  = 3;
-        ///float SpreadAngle = 30f; 
-
-        /// <summary>
-        /// Constructor With no Parameters. (Used Saving Function. Don't Delete this) 
-        /// </summary>
-        public Skill_Multiple_Shot() : base() { }
-
-        public Skill_Multiple_Shot(string id, string name, string desc, SKILL_LEVEL level, BOWSKILL_TYPE type, Sprite sprite, byte arrowcount, float spreadangle) 
-            : base(id, name, desc, level, type, sprite)
-        {
-            this.arrowCount  = arrowcount;
-            this.spreadAngle = spreadangle;
-        }
 
         /// <summary>
         /// Constructor using Skill Data Scriptableobject. (Main)
         /// </summary>
         /// <param name="data"></param>
         public Skill_Multiple_Shot(SkillDataSpreadShot data)
-            : base(data.SkillId, data.SkillName, data.SkillDesc, data.SkillLevel, data.SkillType, data.SkillIconSprite)
-        {
+            : base(data.SkillId, data.SkillName, data.SkillDesc, data.SkillLevel, data.SkillType, data.SkillIconSprite) {
             this.arrowCount  = data.ArrowShotCount;
             this.spreadAngle = data.SpreadAngle;
         }
+        #region ES3
+        public Skill_Multiple_Shot() : base() { }
+        #endregion
 
         public override void Init() {
             
         }
+
+        public override string ToString() => "Spread_Shot";
 
         public override void BowSpecialSkill(Transform bowTr, AD_BowController controller, ref DamageStruct damage, Vector3 initPos, ARROWTYPE type) {
             SpreadShot(bowTr, type, initPos, ref damage);
@@ -64,6 +50,7 @@
             }
         }
 
+        #region LEGACY
         public void BowSpecialSkill(float anglez, Transform parent, MonoBehaviour mono, ref DamageStruct damage,
                                      Vector3 initScale, Vector3 initPos, Vector2 arrowForce, ARROWTYPE arrowType) {
             //float facingRotation = Mathf.Atan2(facingVec.y, facingVec.x) * Mathf.Rad2Deg; //this mean's transform.up..?
@@ -146,9 +133,6 @@
                     arrow.ShotToDirection(new Vector2(Mathf.Cos(tempRotation * Mathf.Deg2Rad), Mathf.Sin(tempRotation * Mathf.Deg2Rad)), damage); // * force.magnitude;
             }
         }
-
-
-
-        public override string ToString() => "Spread_Shot";
+        #endregion
     }
 }

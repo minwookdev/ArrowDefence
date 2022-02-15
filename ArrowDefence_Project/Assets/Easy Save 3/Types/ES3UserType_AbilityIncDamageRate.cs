@@ -4,7 +4,7 @@ using UnityEngine;
 namespace ES3Types
 {
 	[UnityEngine.Scripting.Preserve]
-	[ES3PropertiesAttribute("incDamageRate")]
+	[ES3PropertiesAttribute("incDamageRate", "abilityType")]
 	public class ES3UserType_AbilityIncDamageRate : ES3ObjectType
 	{
 		public static ES3Type Instance = null;
@@ -17,6 +17,7 @@ namespace ES3Types
 			var instance = (ActionCat.AbilityIncDamageRate)obj;
 			
 			writer.WritePrivateField("incDamageRate", instance);
+			writer.WritePrivateField("abilityType", instance);
 		}
 
 		protected override void ReadObject<T>(ES3Reader reader, object obj)
@@ -29,6 +30,9 @@ namespace ES3Types
 					
 					case "incDamageRate":
 					reader.SetPrivateField("incDamageRate", reader.Read<System.Single>(), instance);
+					break;
+					case "abilityType":
+					reader.SetPrivateField("abilityType", reader.Read<ActionCat.ABILITY_TYPE>(), instance);
 					break;
 					default:
 						reader.Skip();

@@ -1,8 +1,6 @@
-﻿namespace ActionCat
-{
+﻿namespace ActionCat {
     using System.Collections;
     using UnityEngine;
-    using ActionCat.Interface;
 
     public class Skill_Rapid_Shot : AD_BowSkill {
         private byte arrowCount;
@@ -13,30 +11,27 @@
         string effectPoolTag = "";
         WaitForSeconds rapidShotWait = new WaitForSeconds(0.2f);
 
-        public Skill_Rapid_Shot() : base() { }
-
-        public Skill_Rapid_Shot(string id, string name, string desc, SKILL_LEVEL level, BOWSKILL_TYPE type, Sprite sprite, byte arrowcount, float delay) 
-            : base(id, name, desc, level, type, sprite) {
-            this.arrowCount = arrowcount;
-            this.shotDelay  = delay;
-        }
 
         /// <summary>
         /// Constructor using Skill Data Scriptableobject. (Main)
         /// </summary>
         /// <param name="data"></param>
-        public Skill_Rapid_Shot(SkillDataRapidShot data)
-            : base(data.SkillId, data.SkillName, data.SkillDesc, data.SkillLevel, data.SkillType, data.SkillIconSprite) {
+        public Skill_Rapid_Shot(SkillDataRapidShot data) : base(data.SkillId, data.SkillName, data.SkillDesc, data.SkillLevel, data.SkillType, data.SkillIconSprite) {
             this.arrowCount   = data.ArrowShotCount;
             this.shotDelay    = data.ShotInterval;
             this.muzzleEffect = data.muzzleEffect;
         }
+        #region ES3
+        public Skill_Rapid_Shot() : base() { }
+        #endregion
 
         public override void Init() {
             effectPoolTag = GlobalSO.Inst.POOLTAG_RAPIDSHOT_EFFECT;
             CCPooler.AddPoolList(effectPoolTag, 5, muzzleEffect.gameObject, false);
             CatLog.Log("RAPID SHOT INITIALIZE COMPLETE.");
         }
+
+        public override string ToString() => "Rapid_Shot";
 
         public override void BowSpecialSkill(Transform bowTr, AD_BowController controller, ref DamageStruct damage, Vector3 initPos, ARROWTYPE type) {
             ///Get the GameObject's MonoBehavior and run a Coroutine with it.
@@ -129,7 +124,5 @@
             //}
             #endregion
         }
-
-        public override string ToString() => "Rapid_Shot";
     }
 }

@@ -1,12 +1,9 @@
-﻿namespace ActionCat
-{
-    using ActionCat.Interface;
+﻿namespace ActionCat {
     using System.Collections;
     using UnityEditor;
     using UnityEngine;
 
-    public class Skill_Arrow_Rain : AD_BowSkill
-    {
+    public class Skill_Arrow_Rain : AD_BowSkill {
         private byte arrowCount;
         private float shotDelay;
 
@@ -15,28 +12,19 @@
         private bool isDrawLine = false;
         private ArrowRain_LineRender debugLineRender;
 
-        /// <summary>
-        /// Constructor With no Parameters. (Used Saving Function. Don't Delete this) 
-        /// </summary>
-        public Skill_Arrow_Rain() : base() { }
-
-        public Skill_Arrow_Rain(string id, string name, string desc, SKILL_LEVEL level, BOWSKILL_TYPE type, Sprite sprite, byte arrowcount, float delay) 
-            : base(id, name, desc, level, type, sprite)
-        {
-            this.arrowCount = arrowcount;
-            this.shotDelay  = delay;
-        }
 
         /// <summary>
         /// Constructor using Skill Data Scriptableobject. (Main)
         /// </summary>
         /// <param name="data"></param>
         public Skill_Arrow_Rain(SkillDataArrowRain data)
-            : base(data.SkillId, data.SkillName, data.SkillDesc, data.SkillLevel, data.SkillType, data.SkillIconSprite)
-        {
+            : base(data.SkillId, data.SkillName, data.SkillDesc, data.SkillLevel, data.SkillType, data.SkillIconSprite) {
             this.arrowCount = data.ArrowShotCount;
             this.shotDelay  = data.ShotInterval;
         }
+        #region ES3
+        public Skill_Arrow_Rain() : base() { }
+        #endregion
 
         public override void Init() {
             
@@ -48,8 +36,7 @@
         }
 
         IEnumerator RainArrow(string poolTag, Transform bowTr, DamageStruct damage) {
-            for (int i = 0; i < arrowCount; i++)
-            {
+            for (int i = 0; i < arrowCount; i++) {
                 yield return new WaitForSeconds(shotDelay);
 
                 var randomArrowPos = new Vector3(Random.Range(-4f, 4f), Random.Range(-7.5f, -8.75f), 0f);
@@ -62,21 +49,17 @@
                    left-bottom  : -4, -8.75 */
 
                 var arrow = CCPooler.SpawnFromPool<AD_Arrow_less>(poolTag, bowTr.parent.root, GameGlobal.ArrowScale, randomArrowPos, Quaternion.identity);
-                if (arrow)
-                {
+                if (arrow) {
                     arrow.gameObject.transform.rotation = Quaternion.Euler(0f, 0f, CalculateAngle(arrow.transform.position, randomdest));
                     arrow.ShotToDirection(arrow.transform.up, damage); // * force.magnitude;
                 }
 
-                if (isActiveDebugLine)
-                {
-                    if (isDrawLine)
-                    {
+                if (isActiveDebugLine) {
+                    if (isDrawLine) {
                         var lineRenderObject = new GameObject("ArrowRain_LineRender_InitPos").AddComponent<ArrowRain_LineRender>();
                         debugLineRender = lineRenderObject;
                         isDrawLine = false;
                     }
-
                     debugLineRender.PointMaker(bowTr.parent.root, randomArrowPos, randomdest);
                 }
             }

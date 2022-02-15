@@ -1,9 +1,7 @@
-﻿namespace ActionCat
-{
+﻿namespace ActionCat {
     using UnityEngine;
 
-    public class Item_Bow : Item_Equipment
-    {
+    public class Item_Bow : Item_Equipment {
         private AD_BowSkill bowSkill_Fst;
         private AD_BowSkill bowSkill_Sec;
         private GameObject bowGameObject;
@@ -54,6 +52,9 @@
 
             this.abilities = item.abilities;
         }
+        #region ES3
+        public Item_Bow() : base() { }
+        #endregion
 
         protected override Ability[] GetNewAbilities(Ability[] abilities) {
             var tempList = new System.Collections.Generic.List<Ability>();
@@ -130,11 +131,6 @@
                 default: throw new System.NotImplementedException();
             }
         }
-
-        /// <summary>
-        /// Constructor With no Parameters. (Used Saving Function. Don't Delete and Use this)
-        /// </summary>
-        public Item_Bow() : base() { }
 
         public AD_BowSkill GetSkill(int idx)
         {

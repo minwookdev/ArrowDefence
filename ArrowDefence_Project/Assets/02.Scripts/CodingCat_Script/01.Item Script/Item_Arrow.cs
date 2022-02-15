@@ -93,6 +93,9 @@
 
             this.effects = item.effects;
         }
+        #region ES3
+        public Item_Arrow() : base() { }
+        #endregion
 
         protected override Ability[] GetNewAbilities(Ability[] abilities) {
             var tempList = new System.Collections.Generic.List<Ability>();
@@ -120,10 +123,6 @@
             return tempList.ToArray();
         }
 
-        /// <summary>
-        /// Constructor With no Parameters. (Used Saving Function. Don't Delete this) 
-        /// </summary>
-        public Item_Arrow() : base() { }
 
         public override object GetItem() => this;
 

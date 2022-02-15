@@ -4,7 +4,7 @@ using UnityEngine;
 namespace ES3Types
 {
 	[UnityEngine.Scripting.Preserve]
-	[ES3PropertiesAttribute("critDamageMultiplier")]
+	[ES3PropertiesAttribute("critDamageMultiplier", "abilityType")]
 	public class ES3UserType_AbilityCritDamage : ES3ObjectType
 	{
 		public static ES3Type Instance = null;
@@ -17,6 +17,7 @@ namespace ES3Types
 			var instance = (ActionCat.AbilityCritDamage)obj;
 			
 			writer.WritePrivateField("critDamageMultiplier", instance);
+			writer.WritePrivateField("abilityType", instance);
 		}
 
 		protected override void ReadObject<T>(ES3Reader reader, object obj)
@@ -29,6 +30,9 @@ namespace ES3Types
 					
 					case "critDamageMultiplier":
 					reader.SetPrivateField("critDamageMultiplier", reader.Read<System.Single>(), instance);
+					break;
+					case "abilityType":
+					reader.SetPrivateField("abilityType", reader.Read<ActionCat.ABILITY_TYPE>(), instance);
 					break;
 					default:
 						reader.Skip();

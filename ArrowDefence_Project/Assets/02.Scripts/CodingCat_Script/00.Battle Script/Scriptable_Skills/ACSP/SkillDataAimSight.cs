@@ -1,15 +1,12 @@
-﻿namespace ActionCat
-{
+﻿namespace ActionCat {
     using UnityEngine;
 
     /// <summary>
     /// Create it through the ActionCat Menu.
     /// </summary>
-    public class SkillDataAimSight : AccessorySkillData
-    {
-        public Material LineRenderMat;
-        [Range(0.1f, 0.001f)]
-        public float LineWidth = 0.050f;
+    public class SkillDataAimSight : AccessorySkillData {
+        [ReadOnly] [Tooltip("this field is deprecated.")] public Material LineRenderMat;
+        [ReadOnly] [Tooltip("this field is deprecated.")] public float LineWidth = 0.050f;
 
         public GameObject AimSightPref = null;
 

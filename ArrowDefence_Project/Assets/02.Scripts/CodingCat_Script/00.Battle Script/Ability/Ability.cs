@@ -1,4 +1,5 @@
 ﻿namespace ActionCat {
+    //==================================================================== << PARENT >> =====================================================================
     public abstract class Ability {
         //Type은 따로 저장하지는 않는데, Save Data Load해서 확인해보기.
         protected ABILITY_TYPE abilityType = ABILITY_TYPE.NONE;
@@ -12,9 +13,9 @@
         public abstract string GetName();
         public abstract bool Upgrade();
     }
-
     #region ABILITY-BOW
-
+    //=======================================================================================================================================================
+    //================================================================== << BASE DAMAGE >> ==================================================================
     public class AbilityDamage : Ability {
         private short damageCount;
 
@@ -43,13 +44,13 @@
             abilityType = ABILITY_TYPE.DAMAGE;
             damageCount = System.Convert.ToInt16(damage);
         }
-
-        public AbilityDamage() {
-            abilityType = ABILITY_TYPE.DAMAGE;
-        }
+        #region ES3
+        public AbilityDamage() { }
         ~AbilityDamage() { }
+        #endregion
     }
-
+    //=======================================================================================================================================================
+    //================================================================ << CHARGED DAMAGE >> =================================================================
     public class AbilityChargedDamage : Ability {
         float chargedShotDamageMulti;
 
@@ -76,16 +77,16 @@
         }
 
         public AbilityChargedDamage(float count) {
-            abilityType = ABILITY_TYPE.CHARGEDAMAGE;
+            abilityType            = ABILITY_TYPE.CHARGEDAMAGE;
             chargedShotDamageMulti = count;
         }
-
-        public AbilityChargedDamage() {
-            abilityType = ABILITY_TYPE.CHARGEDAMAGE;
-        }
+        #region ES3
+        public AbilityChargedDamage() { }
         ~AbilityChargedDamage() { }
+        #endregion
     }
-
+    //=======================================================================================================================================================
+    //=============================================================== << CRITICAL CHANCE >> =================================================================
     public class AbilityCritChance : Ability {
         byte critHitChance;
         public override float GetCount() {
@@ -111,17 +112,16 @@
         }
 
         public AbilityCritChance(byte value) {
-            abilityType = ABILITY_TYPE.CRITICALCHANCE;
+            abilityType   = ABILITY_TYPE.CRITICALCHANCE;
             critHitChance = value;
         }
-
-        public AbilityCritChance() {
-            abilityType = ABILITY_TYPE.CRITICALCHANCE;
-        }
+        #region ES3
+        public AbilityCritChance() { }
+        #endregion
     }
-
-    public class AbilityCritDamage : Ability
-    {
+    //=======================================================================================================================================================
+    //=============================================================== << CRITICAL DAMAGE >> =================================================================
+    public class AbilityCritDamage : Ability {
         float critDamageMultiplier;
         public override float GetCount() {
             return critDamageMultiplier;
@@ -146,19 +146,18 @@
         }
 
         public AbilityCritDamage(float value) {
-            abilityType = ABILITY_TYPE.CRITICALDAMAGE;
+            abilityType          = ABILITY_TYPE.CRITICALDAMAGE;
             critDamageMultiplier = value;
         }
-
-        public AbilityCritDamage() {
-            abilityType = ABILITY_TYPE.CRITICALDAMAGE;
-        }
+        #region ES3
+        public AbilityCritDamage() { }
+        #endregion
     }
-
     #endregion
 
     #region ABILITY-ARROW
-
+    //=======================================================================================================================================================
+    //================================================================= << ARROW SPEED >> ===================================================================
     public class AbilitySpeed : Ability {
         float speed;
         public override float GetCount() {
@@ -185,14 +184,14 @@
 
         public AbilitySpeed(float value) {
             abilityType = ABILITY_TYPE.ARROWSPEED;
-            speed = value;
+            speed       = value;
         }
-
-        public AbilitySpeed() {
-            abilityType = ABILITY_TYPE.ARROWSPEED;
-        }
+        #region ES3
+        public AbilitySpeed() { }
+        #endregion
     }
-
+    //=======================================================================================================================================================
+    //============================================================= << DAMAGE INCREASE RATE >> ==============================================================
     public class AbilityIncDamageRate : Ability {
         float incDamageRate;
 
@@ -219,14 +218,13 @@
         }
 
         public AbilityIncDamageRate(float value) {
-            abilityType = ABILITY_TYPE.DAMAGEINC;
+            abilityType   = ABILITY_TYPE.DAMAGEINC;
             incDamageRate = value;
         }
-
-        public AbilityIncDamageRate() {
-            abilityType = ABILITY_TYPE.DAMAGEINC;
-        }
+        #region ES3
+        public AbilityIncDamageRate() { }
+        #endregion
     }
-
+    //=======================================================================================================================================================
     #endregion
 }

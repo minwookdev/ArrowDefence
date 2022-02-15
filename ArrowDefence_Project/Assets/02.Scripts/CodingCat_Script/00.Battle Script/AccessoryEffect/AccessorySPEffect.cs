@@ -1,8 +1,8 @@
-﻿namespace ActionCat
-{
+﻿namespace ActionCat {
     using UnityEngine;
     using ActionCat.Interface;
 
+    //================================================================= << PARENT >> ==================================================================
     [System.Serializable]
     public abstract class AccessorySPEffect {
         protected string id;
@@ -11,7 +11,6 @@
         protected ACSP_TYPE effectType;
         protected SKILL_LEVEL level;
         protected Sprite iconSprite;
-
         #region PROPERTY
         public string ID { get => id; }
         public string Name { get => name; }
@@ -36,8 +35,9 @@
             this.level      = level;
             this.iconSprite = sprite;
         }
-
+        #region ES3
         public AccessorySPEffect() { }
+        #endregion
 
         /// <summary>
         /// 특수효과 슬롯에 이벤트로 할당될 함수.
@@ -49,11 +49,10 @@
         /// </summary>
         public virtual void OnStop() { return; }
     }
-
+    //=================================================================================================================================================
+    //================================================================ << AIM SIGHT >> ================================================================
     public class Acsp_AimSight : AccessorySPEffect, IToString {
         private GameObject aimSightPref;
-        public Material lineMaterial;
-        public float lineWidth = 0.050f;
 
         public override void Init() {
             var controller = GameGlobal.GetControllerByTag().GetComponent<AD_BowController>();
@@ -66,12 +65,6 @@
 
         public override string ToString() => "Aim Sight";
 
-        public Acsp_AimSight(string id, string name, string desc, ACSP_TYPE type, SKILL_LEVEL level, Sprite sprite, Material lineMat, float width) : 
-            base(id, name, desc, type, level, sprite) {
-            lineMaterial = lineMat;
-            lineWidth    = width;
-        }
-
         /// <summary>
         /// Constructor using Skill Data Scriptableobject. (Main)
         /// </summary>
@@ -79,18 +72,14 @@
         public Acsp_AimSight(SkillDataAimSight data)
             : base(data.SkillId, data.SkillName, data.SkillDesc, data.EffectType, data.SkillLevel, data.SkillIconSprite) {
             aimSightPref = data.AimSightPref;
-            lineMaterial = data.LineRenderMat;
-            lineWidth    = data.LineWidth;
         }
-
-        /// <summary>
-        /// No Parameter Constructor For ES3 Utility (Don't Destory this)
-        /// </summary>
+        #region ES3
         public Acsp_AimSight() : base() { }
+        #endregion
     }
-
-    public class Acsp_SlowTime : AccessorySPEffect, IToString
-    {
+    //=================================================================================================================================================
+    //================================================================ << SLOW TIME >> ================================================================
+    public class Acsp_SlowTime : AccessorySPEffect, IToString {
         float timeSlowRatio;
         float duration;
         float cooldown;
@@ -103,26 +92,24 @@
 
         public override string ToString() => "Slow Time";
 
-        public override void OnStop()
-        {
-            GameManager.Instance.TimeToDefault();
-        }
-
         public Acsp_SlowTime(SkillDataSlowTime data) : 
-            base(data.SkillId, data.SkillName, data.SkillDesc, data.EffectType, data.SkillLevel, data.SkillIconSprite)
-        {
+            base(data.SkillId, data.SkillName, data.SkillDesc, data.EffectType, data.SkillLevel, data.SkillIconSprite) {
             this.timeSlowRatio = data.TimeSlowRatio;
             this.duration      = data.Duration;
             this.cooldown      = data.CoolDown;
         }
-
+        #region ES3
         public Acsp_SlowTime() : base() { }
+        #endregion
 
         public float ActiveSkill(MonoBehaviour mono) {
             //mono.StartCoroutine(SlowTimeCo());
 
             GameManager.Instance.TimeScaleSet(timeSlowRatio);
             return duration;
+        }
+        public override void OnStop() {
+            GameManager.Instance.TimeToDefault();
         }
 
         System.Collections.IEnumerator SlowTimeCo() { // <- Not Use this type
@@ -134,4 +121,5 @@
             GameManager.Instance.TimeToDefault();
         }
     }
+    //=================================================================================================================================================
 }

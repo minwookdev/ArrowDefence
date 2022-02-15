@@ -71,7 +71,10 @@
             //Init Collision Data Queue
             collisionQueue = new Queue<CollisionData>();
 
-            CatLog.Log($"Main Arrow Speed: {powerFactor}");
+            //Check Speed Value
+            if(powerFactor <= 0f) {
+                CatLog.ELog("Is Not Set Arrow Speed Value.");
+            }
         }
 
         private void Update() {

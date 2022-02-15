@@ -1,5 +1,4 @@
-﻿namespace ActionCat
-{
+﻿namespace ActionCat {
     public class ASInfo {
         //FIELD
         string id;

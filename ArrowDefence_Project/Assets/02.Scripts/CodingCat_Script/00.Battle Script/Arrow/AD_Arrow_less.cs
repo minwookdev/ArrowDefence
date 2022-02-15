@@ -83,7 +83,9 @@
             //Init Collision Data Queue
             collisionQueue = new System.Collections.Generic.Queue<CollisionData>();
 
-            CatLog.Log($"Less Arrow Speed: {forceMagnitude}");
+            if(forceMagnitude <= 0f) {
+                CatLog.ELog("Is Not Set Arrow Speed Value.");
+            }
         }
 
         private void Update() {

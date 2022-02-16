@@ -16,8 +16,7 @@
         public void SetItemSprite(Sprite sprite) => ItemImg.sprite = sprite;
 
         //Setup 함수 받아서 Slot 변수들 설정과 해당 Item 주소값 들고있게함
-        public void Setup(AD_item address)
-        {
+        public void Setup(AD_item address) {
             ItemAddress = address;
 
             //Set Item Sprite
@@ -46,12 +45,8 @@
             gameObject.SetActive(false);
         }
 
-        void IPointerClickHandler.OnPointerClick(PointerEventData data)
-        {
-            //throw new System.NotImplementedException();
-
+        void IPointerClickHandler.OnPointerClick(PointerEventData data) {
             MainSceneRoute.OpenItemInfo(ItemAddress);
-
             #region FEEDBACKINLOG
 
             //if(ItemAddress.GetItemType != ITEMTYPE.ITEM_EQUIPMENT)

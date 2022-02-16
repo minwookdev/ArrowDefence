@@ -419,6 +419,45 @@
                 popupGameObject.SetActive(true);
             }
 
+            public void EnablePopup_SpArrow(Item_SpArr address, Sprite frame) {
+                SetDefaultItemInfo(address, "SPECIAL ARROW", false, frame); // Set Default Item Data
+                abilitySlots.EnableSlots(address.AbilitiesOrNull);          // Set Item Ability Data
+                var skills      = address.GetSkillInfos;                    // Set Equipment Item Skill Data
+                var slotsLength = SkillSlots.Length;
+                for (int i = 0; i < skills.Length; i++) {
+                    SkillSlots[i].ActiveSlot(skills[i].SkillName, skills[i].SkillDesc, skills[i].SkillLevel, skills[i].IconSprite);
+                    slotsLength--;
+                }
+                if (slotsLength > 0) {
+                    for (int i = slotsLength - 1; i >= 0; i--) {
+                        SkillSlots[i].DisableSlot();
+                    }
+                }
+                else if (slotsLength < 0) {
+                    CatLog.ELog("Need More Skill Slots.");
+                }
+
+                //Check this item is Equipped
+                bool isActiveEquipButton = (ReferenceEquals(CCPlayerData.equipments.GetSpArrOrNull, address)) ? false : true;
+                if (isActiveEquipButton == true) { //Equip Button Event Entry add
+                    equipEntry = new EventTrigger.Entry();
+                    equipEntry.eventID = EventTriggerType.PointerClick;
+                    equipEntry.callback.AddListener((eventData) => EventEntryEquipSpArr(address));
+                    btn_Equip.triggers.Add(equipEntry);
+                }
+                else {
+                    releaseEntry = new EventTrigger.Entry();
+                    releaseEntry.eventID = EventTriggerType.PointerClick;
+                    releaseEntry.callback.AddListener((eventData) => EventEntryReleaseSpArr());
+                    btn_Release.triggers.Add(releaseEntry);
+                }
+
+                SwitchEquipButton(isActiveEquipButton);
+
+                itemAddress = address;              // Get Item Address
+                popupGameObject.SetActive(true);    // Enable Popup
+            }
+
             void DisablePopup() {
                 //Clear Default Item Info
                 tmp_ItemName.text = "";
@@ -501,6 +540,16 @@
 
             void EventEntryReleaseArtifact(byte idx) {
                 CCPlayerData.equipments.Release_Accessory(idx);
+                Close();
+            }
+
+            void EventEntryEquipSpArr(Item_SpArr item) {
+                CCPlayerData.equipments.Equip_SpArrow(item);
+                Close();
+            }
+
+            void EventEntryReleaseSpArr() {
+                CCPlayerData.equipments.Release_SpArrow();
                 Close();
             }
 
@@ -948,12 +997,10 @@
         public void OpenPopup_EquipmentItem(Item_Equipment equipItem) {
             gameObject.SetActive(true);
             switch (equipItem) {
-                case Item_Bow bow: 
-                    itemPopup.EnablePopup_Bow(bow, Frames[(int)bow.GetGrade]); break;
-                case Item_Arrow arrow: 
-                    itemPopup.EnablePopup_Arrow(arrow, Frames[(int)arrow.GetGrade]); break;
-                case Item_Accessory artifact: 
-                    itemPopup.EnablePopup_Artifact(artifact, Frames[(int)artifact.GetGrade]); break;
+                case Item_Bow            bow: itemPopup.EnablePopup_Bow(bow, Frames[(int)bow.GetGrade]);                break;
+                case Item_SpArr specialArrow: itemPopup.EnablePopup_SpArrow(specialArrow, Frames[(int)specialArrow.GetGrade]); break;
+                case Item_Arrow        arrow: itemPopup.EnablePopup_Arrow(arrow, Frames[(int)arrow.GetGrade]);          break;
+                case Item_Accessory artifact: itemPopup.EnablePopup_Artifact(artifact, Frames[(int)artifact.GetGrade]); break;
             }
         }
 

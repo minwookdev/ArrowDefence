@@ -112,6 +112,17 @@
                     }
                 }
             }
+
+            //Equipment Item Slot :: Special Arrow
+            if (equipment.IsEquippedSpArr) {
+                ArrowItem_Slot_Sp.Setup(equipment.GetSpArrOrNull);
+                ArrowItem_Slot_Sp.gameObject.SetActive(true);
+            }
+            else {
+                if(ArrowItem_Slot_Sp.gameObject.activeSelf) {
+                    ArrowItem_Slot_Sp.Clear();
+                }
+            }
         }
 
         public void OpenChoosePanel(SlotChoosePop.SLOTPANELTYPE type, Item_Equipment itemAddress) {

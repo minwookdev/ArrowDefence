@@ -3,9 +3,7 @@
     using UnityEngine;
 
     [System.Serializable]
-    public abstract class ItemData : ScriptableObject
-    {
-        [Header("Default Item Data")]
+    public abstract class ItemData : ScriptableObject {
         [ReadOnly]
         public ITEMTYPE Item_Type;
         public ITEMGRADE Item_Grade;

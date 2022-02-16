@@ -140,20 +140,12 @@ public class MainSceneRoute : MonoBehaviour
     /// Open Item Information Popup When Click in the Invnetory Items
     /// </summary>
     /// <param name="item"></param>
-    public static void OpenItemInfo(AD_item item)
-    {
-        switch (item)
-        {
-            case Item_Consumable conItem: _inst.itemInfoPop.OpenPopup_ConsumableItem(conItem); break;
-                //_inst.itemInfoPop.gameObject.SetActive(true);
-                //_inst.itemInfoPop.Open_Popup_ConItem(conItem);
-            case Item_Material matItem: _inst.itemInfoPop.OpenPopup_MaterialItem(matItem); break;
-                //_inst.itemInfoPop.gameObject.SetActive(true);
-                //_inst.itemInfoPop.Open_Popup_MatItem(matItem);   
+    public static void OpenItemInfo(AD_item item) {
+        switch (item) {
+            case Item_Consumable  conItem: _inst.itemInfoPop.OpenPopup_ConsumableItem(conItem);  break;
+            case Item_Material    matItem: _inst.itemInfoPop.OpenPopup_MaterialItem(matItem);    break; 
             case Item_Equipment equipItem: _inst.itemInfoPop.OpenPopup_EquipmentItem(equipItem); break;
-            //_inst.itemInfoPop.gameObject.SetActive(true);
-            //_inst.itemInfoPop.Open_Popup_EquipItem(equipItem); 
-            default: break;
+            default: throw new System.NotImplementedException();
         }
     }
 

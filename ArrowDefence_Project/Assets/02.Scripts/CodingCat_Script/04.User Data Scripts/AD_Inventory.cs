@@ -18,16 +18,15 @@
         /// </summary>
         /// <param name="item">New Item Data</param>
         /// <param name="quantity">Quantity Data does not apply to the acquisition of equipment items</param>
-        public void AddItem(ItemData item, int quantity)
-        {
-            switch (item)
-            {
+        public void AddItem(ItemData item, int quantity) {
+            switch (item) {
                 case ItemData_Con             newitem: Add_ConsumableItem(newitem, quantity); break;
                 case ItemData_Mat             newitem: Add_MaterialItem(newitem, quantity);   break;
                 case ItemData_Equip_Bow       newitem: Add_BowItem(newitem);                  break;
+                case ItemDt_SpArr             newitem: Add_SpArrItem(newitem);                break;
                 case ItemData_Equip_Arrow     newitem: Add_ArrowItem(newitem);                break;
                 case ItemData_Equip_Accessory newitem: Add_AccessItem(newitem);               break;
-                default:                                                                      break;
+                default: throw new NotImplementedException();
             }
         }
 
@@ -161,9 +160,12 @@
         /// Arrow Item Add Inventory
         /// </summary>
         /// <param name="newItem">Arrow item Data</param>
-        private void Add_ArrowItem(ItemData_Equip_Arrow newItem)
-        {
+        private void Add_ArrowItem(ItemData_Equip_Arrow newItem) {
             invenList.Add(new Item_Arrow(newItem));
+        }
+
+        private void Add_SpArrItem(ItemDt_SpArr newItem) {
+            invenList.Add(new Item_SpArr(newItem));
         }
 
         /// <summary>
@@ -182,6 +184,10 @@
         public void Add_ArrowItem(Item_Arrow item) => invenList.Add(new Item_Arrow(item));
 
         public void Add_AccessoryItem(Item_Accessory item) => invenList.Add(new Item_Accessory(item));
+
+        public void AddItem_SpArr(Item_SpArr item) {
+            invenList.Add(item);
+        }
 
         #endregion
 
@@ -233,10 +239,10 @@
         /// Equipment Item (Arrow) List Get
         /// </summary>
         /// <returns></returns>
-        public List<AD_item> GetArrowItemList()
-        {
-            var itemList = invenList.FindAll(x => x.GetType() == typeof(Item_Arrow));
-            return itemList;
+        public List<AD_item> GetArrowItemList() {
+            //var itemList = invenList.FindAll(x => x.GetType() == typeof(Item_Arrow));
+            var arrItemList = invenList.FindAll(item => item.GetType() == typeof(Item_SpArr) || item.GetType() == typeof(Item_Arrow));
+            return arrItemList;
         }
 
         /// <summary>

@@ -5,18 +5,33 @@
     using ActionCat.Data;
 
     [Serializable]
-    public class Player_Equipments
-    {
+    public class Player_Equipments {
         private Item_Bow EquippedBow;
 
         private Item_Arrow EquippedArrow_f;
         private Item_Arrow EquippedArrow_s;
+        private Item_SpArr EquippedSpArr;
 
         private Item_Accessory EquippedAccessory_f;
         private Item_Accessory EquippedAccessory_s;
         private Item_Accessory EquippedAccessory_t;
 
-        #region EQUIP_REALESE
+        #region PROPERTY
+        public bool IsEquippedSpArr {
+            get {
+                if (EquippedSpArr == null) return false;
+                else                       return true;
+            }
+        }
+        public Item_SpArr GetSpArrOrNull {
+            get {
+                if (EquippedSpArr == null) return null;
+                else                       return EquippedSpArr;
+            }
+        }
+        #endregion
+
+        #region EQUIP_&_REALESE
 
         //마법활, 마법장신구등 장비종류 좀 늘어날텐데 이거 메서드 좀 적게 관리 가능할거같은데, 장비 종류 늘어날거 대비해서 늘리자
         //사실상 Equipment라는 하나의 인벤토리가 늘어난 셈으로 알면된다. -> 장신구는 배열로 깔아도 괜찮을것같다 아니면 장신구 관련 함수들은 배열로 하든지
@@ -116,6 +131,21 @@
             }
 
             CatLog.Log("Item Release Successfully");
+        }
+
+        public void Equip_SpArrow(Item_SpArr item) {
+            if(IsEquippedSpArr == true) {
+                Release_SpArrow();
+            }
+            EquippedSpArr = item; //실험: New 할당하지 않고, 주소넘기고 인벤토리 내부의 원본 지워주면 어찌됨?
+            CCPlayerData.inventory.DelItem(item);
+            CatLog.Log($"{EquippedSpArr.GetName} 아이템이 장착되었습니다.");
+        }
+
+        public void Release_SpArrow() {
+            CCPlayerData.inventory.AddItem_SpArr(EquippedSpArr);
+            EquippedSpArr = null;
+            CatLog.Log("Special Arorw Slot의 아이템이 해제되었습니다.");
         }
 
         #endregion

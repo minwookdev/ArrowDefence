@@ -796,6 +796,148 @@ public class AccessItemData_Editor : Editor
     }
 }
 
+[CustomEditor(typeof(ItemDt_SpArr))]
+public class SpArrItemDataEditor : Editor {
+    SerializedObject sobject = null;
+    
+    SerializedProperty ItemTypeProp;
+    SerializedProperty ItemGradeProp;
+    SerializedProperty ItemIdProp;
+    SerializedProperty ItemNameProp;
+    SerializedProperty ItemDescProp;
+    SerializedProperty ItemAmountProp;
+    SerializedProperty ItemSpriteProp;
+
+    SerializedProperty EquipTypeProp;
+    SerializedProperty EquipAbilityProp;
+    bool isAbilityTapFoldout = false;
+    Texture2D enableStarTexture  = null;
+    Texture2D disableStarTexture = null;
+
+    SerializedProperty PrefProp;
+    SerializedProperty SkillInfoFst;
+    SerializedProperty SkillInfoSec;
+
+    private void OnEnable() {
+        sobject        = new SerializedObject(target);
+
+        ItemTypeProp   = sobject.FindProperty(nameof(ItemDt_SpArr.Item_Type));
+        ItemGradeProp  = sobject.FindProperty(nameof(ItemDt_SpArr.Item_Grade));
+        ItemIdProp     = sobject.FindProperty(nameof(ItemDt_SpArr.Item_Id));
+        ItemNameProp   = sobject.FindProperty(nameof(ItemDt_SpArr.Item_Name));
+        ItemDescProp   = sobject.FindProperty(nameof(ItemDt_SpArr.Item_Desc));
+        ItemAmountProp = sobject.FindProperty(nameof(ItemDt_SpArr.Item_Amount));
+        ItemSpriteProp = sobject.FindProperty(nameof(ItemDt_SpArr.Item_Sprite));
+
+        EquipTypeProp    = sobject.FindProperty(nameof(ItemDt_SpArr.Equip_Type));
+        EquipAbilityProp = sobject.FindProperty(nameof(ItemDt_SpArr.abilityDatas));
+        enableStarTexture  = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/08.Sprites/Sprites/Scene_Main/Sprite_Icon/icon_star_grade_l.png");
+        disableStarTexture = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/08.Sprites/Sprites/Scene_Main/Sprite_Icon/icon_star_grade_l_d.png");
+        if(enableStarTexture == null || disableStarTexture == null) {
+            CatLog.WLog("Ability Star Texture is Null, Check the Texture Path");
+        }
+
+        PrefProp     = sobject.FindProperty(nameof(ItemDt_SpArr.MainArrowObj));
+        SkillInfoFst = sobject.FindProperty(nameof(ItemDt_SpArr.ArrowSkillFst));
+        SkillInfoSec = sobject.FindProperty(nameof(ItemDt_SpArr.ArrowSkillSec));
+    }
+
+    public override void OnInspectorGUI() {
+        sobject.Update();
+
+        EditorGUI.BeginDisabledGroup(true);
+        EditorGUILayout.ObjectField("Script", MonoScript.FromScriptableObject((ItemDt_SpArr)target), typeof(ItemDt_SpArr), false);
+        EditorGUI.EndDisabledGroup();
+
+        GUILayout.Space(5f);
+        GUILayout.BeginVertical("HelpBox");
+
+        #region Default_info
+        GUILayout.Label("Default Item Info", EditorStyles.boldLabel);
+        GUILayout.BeginVertical("GroupBox");
+        EditorGUI.BeginDisabledGroup(true);
+        EditorGUILayout.PropertyField(ItemTypeProp);
+        EditorGUI.EndDisabledGroup();
+        EditorGUILayout.PropertyField(ItemGradeProp);
+        EditorGUILayout.PropertyField(ItemIdProp);
+        EditorGUILayout.PropertyField(ItemNameProp);
+        EditorGUILayout.PropertyField(ItemDescProp);
+        EditorGUI.BeginDisabledGroup(true);
+        EditorGUILayout.PropertyField(ItemAmountProp);
+        EditorGUI.EndDisabledGroup();
+        EditorGUILayout.PropertyField(ItemSpriteProp, new GUIContent("Item Icon"));
+        GUILayout.EndVertical();
+        #endregion
+        #region Equipment_Info
+        GUILayout.Label("Equipment Item Info", EditorStyles.boldLabel);
+        GUILayout.BeginVertical("GroupBox");
+        EditorGUI.BeginDisabledGroup(true);
+        EditorGUILayout.PropertyField(EquipTypeProp);
+        EditorGUI.EndDisabledGroup();
+        var tempIndent = EditorGUI.indentLevel;
+        EditorGUI.indentLevel = 1;
+        isAbilityTapFoldout = EditorGUILayout.Foldout(isAbilityTapFoldout, "Ability Sliders", true);
+        EditorGUI.indentLevel = tempIndent;
+        if (isAbilityTapFoldout == true) {
+            //#region ABILITY_SPEED
+            //var speed = speedProp.floatValue;
+            //if (speed <= 18) DrawStar(0);
+            //else if (speed <= 20) DrawStar(1);
+            //else if (speed <= 22) DrawStar(2);
+            //else if (speed <= 24) DrawStar(3);
+            //else if (speed <= 26) DrawStar(4);
+            //else if (speed <= 28) DrawStar(5);
+            //else DrawStar(0);
+            ////Draw Proeprty
+            //EditorGUILayout.PropertyField(speedProp);
+            //#endregion
+            //#region ABILITY_INC_DAMAGE
+            //var damage = incDamageProp.floatValue;
+            //if (damage <= 1f) DrawStar(0);
+            //else if (damage <= 1.1f) DrawStar(1);
+            //else if (damage <= 1.2f) DrawStar(2);
+            //else if (damage <= 1.3f) DrawStar(3);
+            //else if (damage <= 1.4f) DrawStar(4);
+            //else if (damage <= 1.5f) DrawStar(5);
+            //else DrawStar(0);
+            ////Draw Property
+            //EditorGUILayout.PropertyField(incDamageProp);
+            //#endregion
+        }
+        GUILayout.EndVertical();
+        #endregion
+        #region Special_Arrow_Info
+        GUILayout.Label("Special Arrow Info", EditorStyles.boldLabel);
+        GUILayout.BeginVertical("GroupBox");
+        EditorGUILayout.PropertyField(PrefProp);
+        EditorGUILayout.PropertyField(SkillInfoFst, new GUIContent("Skill Info Fst"));
+        EditorGUILayout.PropertyField(SkillInfoSec, new GUIContent("Skill Info Sec"));
+        GUILayout.EndVertical();
+        #endregion
+
+        GUILayout.EndVertical();
+        sobject.ApplyModifiedProperties();
+    }
+
+    void DrawStar(byte count) {
+        byte maxStarCount = 5;
+        GUILayout.BeginHorizontal();
+        for (int i = 0; i < count; i++) {
+            maxStarCount--;
+            //Draw Enable Texture
+            GUILayout.Label(enableStarTexture, GUILayout.Width(30f), GUILayout.Height(30f));
+        }
+
+        if (maxStarCount > 0) {
+            for (int i = 0; i < maxStarCount; i++) {
+                //Draw Disable Texture
+                GUILayout.Label(disableStarTexture, GUILayout.Width(30f), GUILayout.Height(30f));
+            }
+        }
+        GUILayout.EndHorizontal();
+    }
+}
+
 /// <summary>
 /// Add Item Data Asset Create Button to CodingCat Menu
 /// </summary>
@@ -858,6 +1000,18 @@ public class CreateItemDataAsset
     {
         string createAssetPath = "Assets/05. Scriptable_Object/ItemAssets/0.Equipment/Aceessory/Accessory_Item.asset";
         var asset = ScriptableObject.CreateInstance<ItemData_Equip_Accessory>();
+        AssetDatabase.CreateAsset(asset, createAssetPath);
+        AssetDatabase.SaveAssets();
+        AssetDatabase.Refresh();
+
+        EditorUtility.FocusProjectWindow();
+        Selection.activeObject = asset;
+    }
+
+    [MenuItem("ActionCat/Scriptable Object/Item Data Asset/Special Arrow Item Asset")]
+    public static void CreateItemAssetSpArr() {
+        string createAssetPath = "Assets/05.SO/SO.Item/0.Equipment/Arrow/Item_Special_Arrow.asset";
+        var asset = ScriptableObject.CreateInstance<ItemDt_SpArr>();
         AssetDatabase.CreateAsset(asset, createAssetPath);
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();

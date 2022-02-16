@@ -1,5 +1,4 @@
-﻿namespace ActionCat
-{
+﻿namespace ActionCat {
     using UnityEngine;
 
     public class Item_Arrow : Item_Equipment {

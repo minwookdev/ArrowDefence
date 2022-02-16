@@ -1,17 +1,14 @@
-﻿namespace ActionCat
-{
+﻿namespace ActionCat {
     using System;
     using UnityEngine;
 
-    public enum ITEMTYPE
-    {
-        ITEM_CONSUMABLE,
+    public enum ITEMTYPE {
         ITEM_MATERIAL,
+        ITEM_CONSUMABLE,
         ITEM_EQUIPMENT
     }
 
-    public enum ITEMGRADE
-    { 
+    public enum ITEMGRADE { 
         GRADE_NORMAL    = 0,
         GRADE_MAGIC     = 1,
         GRADE_RARE      = 2,
@@ -21,16 +18,14 @@
         GRADE_UNIQUE    = 6
     }
 
-    interface IStackable 
-    {
+    interface IStackable  {
         void SetAmount(int value);
         void IncAmount(int value);
         void DecAmount(int value);
     }
 
     [Serializable] //Abstract Class 는 Serailizable 속성 달려있어도 Inspector에서 표기되지 않는다
-    public abstract class AD_item
-    {
+    public abstract class AD_item {
         protected int       Item_Id;
         protected string    Item_Name;
         protected string    Item_Desc;

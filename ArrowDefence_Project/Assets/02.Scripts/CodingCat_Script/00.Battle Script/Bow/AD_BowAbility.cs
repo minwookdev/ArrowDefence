@@ -4,9 +4,11 @@
 
     public class AD_BowAbility : MonoBehaviour {
         PlayerAbilitySlot[] abilitySlots = null;
+        SpArrCondition spArrCondition    = null;
 
         //Is Initialized Ability Struct.
         bool isInitAbility = false;
+        bool isTimerUse    = false;
         public bool IsInitEquipments { get; private set; } = false;
 
         /// <summary>
@@ -14,10 +16,10 @@
         /// </summary>
         public void Initialize() {
             var originAbility = CCPlayerData.ability;
-            abilitySlots = new PlayerAbilitySlot[2] {
+            abilitySlots = new PlayerAbilitySlot[3] {
                 new PlayerAbilitySlot(originAbility.GetAbilityMain),
                 new PlayerAbilitySlot(originAbility.GetAbilitySub),
-                //new PlayerAbilitySlot(originAbility.GetAbilitySpecial())
+                new PlayerAbilitySlot(originAbility.GetAbilitySpecial)
             };
             isInitAbility = true;
         }
@@ -51,6 +53,12 @@
             }
         }
 
+        private void Update() {
+            if (isTimerUse) {
+                spArrCondition.CostIncByTime();
+            }
+        }
+
         public PlayerAbilitySlot GetAbility(byte index) {
             if(index < 0 || index > 2) {
                 throw new System.NotImplementedException("this slot index is Not Implemented !");
@@ -60,6 +68,20 @@
 
         public void IsInitializedEquipments(Player_Equipments equipments, bool initialized) {
             IsInitEquipments = initialized;
+        }
+
+        public void SetCondition(SpArrCondition condition, UI.SwapSlots slot) {
+            spArrCondition = condition;
+            spArrCondition.Initialize(slot);
+            isTimerUse = spArrCondition.IsTypeTime;
+        }
+
+        private void OnDestroy() {
+            abilitySlots = null;
+            if (spArrCondition != null) {
+                spArrCondition.Clear();
+            }
+            spArrCondition = null;
         }
     }
 }

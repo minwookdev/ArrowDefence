@@ -134,8 +134,13 @@
         }
 
         public void EnableSlots(Ability[] abilities) {
-            if(abilities == null || abilities.Length > 5) {
-                DisableAllSlots(); return;
+            if(abilities == null) {
+                DisableAllSlots(); 
+                return;
+            }
+            else if (abilities.Length > 5) {
+                CatLog.ELog("Item Ability Size OverRange, Max ability Range is 5.");
+                return;
             }
 
             int count = abilitySlots.Length;

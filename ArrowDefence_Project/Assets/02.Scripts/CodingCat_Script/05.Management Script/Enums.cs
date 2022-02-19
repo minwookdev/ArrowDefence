@@ -118,6 +118,13 @@
     }
 
     #endregion
+
+    public enum CHARGETYPE {
+        NONE,
+        KILL,
+        TIME,
+        ATCK,
+    }
 }
 
 

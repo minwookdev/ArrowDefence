@@ -5,7 +5,7 @@
 
     public class SliderCtrl : MonoBehaviour {
         [Header("COMPONENT")]
-        Slider mainSlider = null;
+        [SerializeField] Slider mainSlider = null;
 
         [Header("SLIDER")]
         [SerializeField] float duration = 0.5f;

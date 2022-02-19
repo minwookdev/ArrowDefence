@@ -108,6 +108,7 @@
         public float ChargedShotMultiplier { private set; get; } = 1.2f;
         public float MinDamagePer { private set; get; } = 0.9f; // 90~
         public float MaxDamagePer { private set; get; } = 1.1f; // ~110
+        public float IncreaseSpArrCost { private set; get; } = 0f;
     }
 
     public class PlayerAbility {
@@ -117,6 +118,7 @@
         //Slot Ability
         PlayerAbilitySlot mainSlotAbility = null;
         PlayerAbilitySlot subSlotAbility  = null;
+        PlayerAbilitySlot specialSlotAbility = null;
 
         //Bow Ability Properties
         float tempDamage;
@@ -139,6 +141,14 @@
                     throw new System.Exception("this slot not assignment !");
                 }
                 return subSlotAbility;
+            }
+        }
+        public PlayerAbilitySlot GetAbilitySpecial {
+            get {
+                if(specialSlotAbility == null) {
+                    throw new System.Exception("this slot not assignment !");
+                }
+                return specialSlotAbility;
             }
         }
         #endregion
@@ -191,14 +201,26 @@
                 }
             }
 
+            //Update Arrow Ability: Special
+            float tempSpecialArrowIncDamage = 1f;
+            if(equip.IsEquippedSpArr == true) {
+                var abilities = equip.GetSpArrOrNull.AbilitiesOrNull;
+                if(abilities != null) {
+                    for (int i = 0; i < abilities.Length; i++) {
+                        switch (abilities[i]) {
+                            default: throw new System.NotImplementedException("this ability type is Not Implamented !");
+                        }
+                    }
+                }
+            }
+
             //Init-Ability Slots
-            mainSlotAbility = new PlayerAbilitySlot(tempDamage, tempMainArrowIncDamage, tempCritChance, tempCritDmgMultiplier);
-            subSlotAbility  = new PlayerAbilitySlot(tempDamage, tempSubArrowIncDamage, tempCritChance, tempCritDmgMultiplier);
+            mainSlotAbility    = new PlayerAbilitySlot(tempDamage, tempMainArrowIncDamage, tempCritChance, tempCritDmgMultiplier);
+            subSlotAbility     = new PlayerAbilitySlot(tempDamage, tempSubArrowIncDamage, tempCritChance, tempCritDmgMultiplier);
+            specialSlotAbility = new PlayerAbilitySlot(tempDamage, tempSpecialArrowIncDamage, tempCritChance, tempCritDmgMultiplier);
 
             //Init-Global Ability
             GlobalAbilityField = new GlobalAbility();
         }
-
-        public PlayerAbilitySlot GetAbilitySpecial() => null;
     }
 }

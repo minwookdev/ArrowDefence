@@ -179,15 +179,13 @@
 
         #region ONLY_USING_PLAYER_EQUIPMENT
 
-        public void Add_BowItem(Item_Bow newItem) => invenList.Add(new Item_Bow(newItem));
+        public void ToInven(Item_Bow newItem) => invenList.Add(new Item_Bow(newItem));
 
-        public void Add_ArrowItem(Item_Arrow item) => invenList.Add(new Item_Arrow(item));
+        public void ToInven(Item_Arrow item) => invenList.Add(new Item_Arrow(item));
 
-        public void Add_AccessoryItem(Item_Accessory item) => invenList.Add(new Item_Accessory(item));
+        public void ToInven(Item_Accessory item) => invenList.Add(new Item_Accessory(item));
 
-        public void AddItem_SpArr(Item_SpArr item) {
-            invenList.Add(item);
-        }
+        public void ToInven(Item_SpArr item) => invenList.Add(item);
 
         #endregion
 
@@ -199,15 +197,14 @@
         /// Find the Item Reference and removes an Item from the Inventory
         /// </summary>
         /// <param name="target"></param>
-        public void DelItem(AD_item target)
-        {
-            if (invenList.Contains(target))
-            {
-                CatLog.Log($"인벤토리에서 삭제대상 아이템 : {target.GetName}을 찾았습니다.");
+        public void DelItem(AD_item target) {
+            if (invenList.Contains(target)) {
                 invenList.Remove(target);
-                CatLog.Log("인벤토리에서 해당 아이템을 제거하였습니다.");
+                CatLog.Log($"인벤토리에서 해당 아이템 {target.GetName}를(을) 제거하였습니다.");
             }
-            else CatLog.WLog("인벤토리 내부에 해당 아이템이 없습니다.");
+            else {
+                CatLog.WLog("인벤토리 내부에 해당 아이템이 없습니다.");
+            }
         }
 
         public void Clear() => invenList.Clear();

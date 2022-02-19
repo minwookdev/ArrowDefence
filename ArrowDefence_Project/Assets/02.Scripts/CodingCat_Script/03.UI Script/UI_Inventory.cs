@@ -161,65 +161,45 @@
             }
         }
 
-        private void UpdateUIinventory()
-        {
+        private void UpdateUIinventory() {
             //inventoryList.Clear();  //List 불러오기 전 기존 List 정리해줌 아니
             //;; 여기서 지워버리면 어떡함 주소값 다 가지고있는데
             //기존에 있던 UI_Slot들 지워주는 로직 필요함. -> 탭 넘길때마다 기존에있던 아이템Slot들이 남음
             //1. 일단 GetItemList 하고 Count는 제대로 적용되는지 확인하고
             //2. Count는 제대로 넘겨받으면 Tab 바뀔때마다 Clear UI해주는 로직 추가
             
-            switch (SortPanel.SortType)
-            {
+            switch (SortPanel.SortType) {
                 case ItemSortPanel.ItemSort_Type.SortType_All       : inventoryList = CCPlayerData.inventory.GetAllItemList();       break;
                 case ItemSortPanel.ItemSort_Type.SortType_Bow       : inventoryList = CCPlayerData.inventory.GetBowItemList();       break;
                 case ItemSortPanel.ItemSort_Type.SortType_Arrow     : inventoryList = CCPlayerData.inventory.GetArrowItemList();     break;
                 case ItemSortPanel.ItemSort_Type.SortType_Accessory : inventoryList = CCPlayerData.inventory.GetAccessoryItemList(); break;
                 case ItemSortPanel.ItemSort_Type.SortType_Etc       : inventoryList = CCPlayerData.inventory.GetItemList();          break;
-                default: CatLog.WLog("UI Inventory : Wrong Number");                                                                 break;
+                default: throw new System.NotImplementedException("Wrong Sorting Number.");
             }
 
-            CatLog.Log($"Get Player Inventory List Count : {inventoryList.Count}");
+            CatLog.Log(StringColor.YELLOW ,$"Inventory: Update UI Inventory, Player's Item Counts:{inventoryList.Count}");
 
             //if (inventoryList.Count <= 0) return; //Inventory 아무것도 없으면 return 하는 로직 추가
 
-            if(inventoryList.Count > slotList.Count)
-            {
+            if(inventoryList.Count > slotList.Count) {
                 var count = inventoryList.Count - slotList.Count;
-                for(int i = 0; i < count; i++)
-                {
+                for(int i = 0; i < count; i++) {
                     var newSlot = Instantiate(itemSlotPref, itemSlotContainer).GetComponent<UI_ItemSlot>();
                     newSlot.gameObject.SetActive(false);
                     slotList.Add(newSlot);  //부족한 만큼 생성해서 SlotPrefList에 Add
                 }
             }
 
-            for(int i =0;i<inventoryList.Count;i++)
-            {
+            for(int i =0;i<inventoryList.Count;i++) {
                 slotList[i].gameObject.SetActive(true);
                 slotList[i].Setup(inventoryList[i]);
             }
         }
         
 
-        private void ClearUIinventory()
-        {
-            //for(int i =0;i<slotList.Count;i++)
-            //{
-            //    if (slotList[i].gameObject.activeSelf)
-            //        slotList[i].Clear();
-            //}
-
-            //List<UI_ItemSlot> activeSlotList = slotList.FindAll(x => x.gameObject.activeSelf == true);
-            //
-            //
-            //foreach (var slot in activeSlotList)
-            //{
-            //    slot.Clear();
-            //}
-
+        private void ClearUIinventory() {
             slotList.FindAll(x => x.gameObject.activeSelf == true).ForEach(x => x.Clear());
-            CatLog.Log("Clear UI Slot in Inventory");
+            CatLog.Log(StringColor.YELLOW, "Inventory: Clear All Slots.");
         }
 
         #region BUTTON_METHOD

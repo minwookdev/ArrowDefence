@@ -71,11 +71,11 @@
 
 #endregion
 
-#region PLAYER-EQUIPMENTS
+#region GET-PLAYER
 
         public void InitEquips(Transform bowInitPos, Transform bowParent, int mainArrPoolQuantity, int subArrPoolQuantity, 
-                               out UI.ArrSSData[] arrSlotData, out UI.ACSData[] acspSlotData) {
-            CCPlayerData.equipments.InitEquipments(bowInitPos, bowParent, mainArrPoolQuantity, subArrPoolQuantity);
+                               out UI.ArrSSData[] arrSlotData, out UI.ACSData[] acspSlotData, UI.SwapSlots swapSlot) {
+            CCPlayerData.equipments.InitEquipments(bowInitPos, bowParent, mainArrPoolQuantity, subArrPoolQuantity, swapSlot);
             arrSlotData   = GetArrSwapSlotData();
             acspSlotData  = GetAccessorySlotData();
         }
@@ -88,7 +88,9 @@
         }
 
         public ARROWTYPE GetFirstArrType() {
-            return (CCPlayerData.equipments.IsEquippedArrowMain()) ? ARROWTYPE.ARROW_MAIN : ARROWTYPE.ARROW_SUB;
+            if (CCPlayerData.equipments.IsEquippedArrowMain())     return ARROWTYPE.ARROW_MAIN;
+            else if (CCPlayerData.equipments.IsEquippedArrowSub()) return ARROWTYPE.ARROW_SUB;
+            else throw new System.Exception("There are no Arrow Equipped.");
         }
 
         public void InitArrowSlotData(out bool slot_m, out bool slot_s, 
@@ -103,17 +105,18 @@
         }
 
         UI.ArrSSData[] GetArrSwapSlotData() {
-            var equipment = CCPlayerData.equipments;
-            var dataList  = new System.Collections.Generic.List<UI.ArrSSData>();
+            var equipment     = CCPlayerData.equipments;
+            var slotDataList  = new System.Collections.Generic.List<UI.ArrSSData>();
             bool isEquippedMainArr = equipment.IsEquippedArrowMain();
-            if (isEquippedMainArr) dataList.Add(new UI.ArrSSData(isEquippedMainArr, equipment.GetMainArrow().GetSprite, GetControllerInstOrNull().Swap));
-            else                   dataList.Add(new UI.ArrSSData(isEquippedMainArr));
-            bool isEquippedSubArr  = equipment.IsEquippedArrowSub();
-            if (isEquippedSubArr)  dataList.Add(new UI.ArrSSData(isEquippedSubArr, equipment.GetSubArrow().GetSprite, GetControllerInstOrNull().Swap));
-            else                   dataList.Add(new UI.ArrSSData(isEquippedSubArr));
-            bool isEquippedSpArr   = false; //Special Arr is currently always Disable
-            if (!isEquippedSpArr)  dataList.Add(new UI.ArrSSData(isEquippedSpArr));
-            return dataList.ToArray();
+            if (isEquippedMainArr) slotDataList.Add(new UI.ArrSSData(isEquippedMainArr, equipment.GetMainArrow().GetSprite, GetControllerInstOrNull().Swap));
+            else                   slotDataList.Add(new UI.ArrSSData(isEquippedMainArr));
+            bool isEquippedSubArr = equipment.IsEquippedArrowSub();
+            if (isEquippedSubArr)  slotDataList.Add(new UI.ArrSSData(isEquippedSubArr, equipment.GetSubArrow().GetSprite, GetControllerInstOrNull().Swap));
+            else                   slotDataList.Add(new UI.ArrSSData(isEquippedSubArr));
+            bool isEquippedSpArr = equipment.IsEquippedSpArr;
+            if (isEquippedSpArr)   slotDataList.Add(new UI.ArrSSData(isEquippedSpArr, equipment.GetSpArrOrNull.GetSprite, GetControllerInstOrNull().Swap));
+            else                   slotDataList.Add(new UI.ArrSSData(isEquippedSpArr));
+            return slotDataList.ToArray();
         }
 
         UI.ACSData[] GetAccessorySlotData() {
@@ -179,6 +182,10 @@
 
         public void ReleaseEquipments() {
             CCPlayerData.equipments.ReleaseEquipments();
+        }
+
+        public GlobalAbility GetGlobalAbility() {
+            return CCPlayerData.ability.GlobalAbilityField;
         }
 
 #endregion

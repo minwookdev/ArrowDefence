@@ -13,6 +13,8 @@
         [SerializeField] TrailRenderer arrowTrail      = null;
         [SerializeField] SpriteRenderer arrowSprite    = null;
         [SerializeField] Transform arrowCatchTransform = null;
+        [Tooltip("Only Use Special Arrow")]
+        [SerializeField] Transform headPivot = null;
 
         [Header("COMPONENT OTHERS")]
         [ReadOnly] public Transform bottomClampTr = null;
@@ -27,7 +29,7 @@
         //FIELDS
         [SerializeField]
         private string[] effectPoolTags;
-        private Vector3 arrowPosition;
+        private Vector3 tempArrPos;
         private DamageStruct damageStruct;
         private Queue<CollisionData> collisionQueue = null;
 
@@ -47,6 +49,11 @@
                 }
             }
         }
+
+        #region SPECIAL
+        private Vector3 tempPos;
+        private Vector2 tempDestPos;
+        #endregion
 
         void InitComponent() {
             if (arrowTr == null) arrowTr = GetComponent<Transform>();
@@ -121,15 +128,30 @@
 
         private void ClampPosition() {
             //Get the Current Position of the Arrow
-            arrowPosition = arrowTr.position;
+            //tempArrPos = arrowTr.position;
             //Clamp the X Y position Between min and Max Points
-            arrowPosition.x = Mathf.Clamp(arrowPosition.x, Mathf.Min(topClampTr.position.x, bottomClampTr.position.x), 
-                                                           Mathf.Max(topClampTr.position.x, bottomClampTr.position.x));
-            arrowPosition.y = Mathf.Clamp(arrowPosition.y, Mathf.Min(topClampTr.position.y, bottomClampTr.position.y), 
-                                                           Mathf.Max(topClampTr.position.y, bottomClampTr.position.y));
+            //tempArrPos.x = Mathf.Clamp(tempArrPos.x, Mathf.Min(topClampTr.position.x, bottomClampTr.position.x), Mathf.Max(topClampTr.position.x, bottomClampTr.position.x));
+            //tempArrPos.y = Mathf.Clamp(tempArrPos.y, Mathf.Min(topClampTr.position.y, bottomClampTr.position.y), Mathf.Max(topClampTr.position.y, bottomClampTr.position.y));
 
             //Set new Position for the Arrow
-            arrowTr.position = arrowPosition;
+            //arrowTr.position = tempArrPos;
+
+            if(headPivot == null) {
+                tempArrPos = arrowTr.position;
+                tempArrPos.x = Mathf.Clamp(tempArrPos.x, Mathf.Min(topClampTr.position.x, bottomClampTr.position.x),
+                                                         Mathf.Max(topClampTr.position.x, bottomClampTr.position.x));
+                tempArrPos.y = Mathf.Clamp(tempArrPos.y, Mathf.Min(topClampTr.position.y, bottomClampTr.position.y),
+                                                         Mathf.Max(topClampTr.position.y, bottomClampTr.position.y));
+                arrowTr.position = tempArrPos;
+            }
+            else {
+                //tempArrPos   = headPivot.position;
+                //tempArrPos.x = Mathf.Clamp(tempArrPos.x, Mathf.Min(topClampTr.position.x, bottomClampTr.position.x), 
+                //                                         Mathf.Max(topClampTr.position.x, bottomClampTr.position.x));
+                //tempArrPos.y = Mathf.Clamp(tempArrPos.y, Mathf.Min(topClampTr.position.y, bottomClampTr.position.y),
+                //                                         Mathf.Max(topClampTr.position.y, bottomClampTr.position.y));
+                //Move(tempArrPos);
+            }
         }
 
         public void OnDisableCollider() => this.arrowColl.enabled = false;
@@ -285,6 +307,46 @@
 
         string IArrowObject.GetMainTag() {
             return string.Format("{0}{1}", gameObject.name, AD_Data.POOLTAG_HITEFFECT);
+        }
+
+        #endregion
+
+        #region SPECAIL
+
+        public void Move(Vector2 pos) {
+            //v2
+            //arrowTr.position = pos;
+            //Vector2 distFromHead = headPivot.position - arrowTr.position;
+            //arrowTr.position = (Vector2)arrowTr.position - distFromHead;
+
+            //v1
+            //Vector2 movePos = pos - dist;
+            //Vector2 movePosition = pos - (Vector2)(headPivot.localPosition - arrowTr.position);
+            //tempSpArrPos = pos - (Vector2)(headPivot.localPosition - arrowTr.position);
+            //arrowTr.localPosition = dist;
+
+            //v3
+            tempPos = pos - (Vector2)(headPivot.position - arrowTr.position);
+            arrowTr.position = tempPos;
+        }
+
+        public void Pull(float multipleSpeed, bool useUnscaledTime = true) {
+            if (bottomClampTr == null) 
+                throw new System.Exception();
+
+            //Pulling To Bottom Dest Point
+            tempPos     = arrowTr.position;
+            tempDestPos = bottomClampTr.position - (headPivot.position - tempPos);
+            if (useUnscaledTime) tempPos = Vector2.MoveTowards(tempPos, tempDestPos, Time.unscaledDeltaTime * multipleSpeed);
+            else                 tempPos = Vector2.MoveTowards(tempPos, tempDestPos, Time.deltaTime * multipleSpeed);
+            arrowTr.position = tempPos;
+        }
+
+        /// <summary>
+        /// Only Using Special
+        /// </summary>
+        public void SetSpeed(float speed) {
+            powerFactor = speed;
         }
 
         #endregion

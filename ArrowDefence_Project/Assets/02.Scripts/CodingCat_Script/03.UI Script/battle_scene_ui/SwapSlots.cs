@@ -21,6 +21,10 @@
         [Header("SLOTS")]
         [SerializeField] EventTrigger[] slots = null;
 
+        [Header("SP SLOT ADDS")]
+        [SerializeField] Image[] stackImages = null;
+        [SerializeField] Image costImage   = null;
+
         void Start() {
             currOpenedTime = slotOpenDuration;
             openPosX  = slotGroupTr.anchoredPosition.x;
@@ -101,6 +105,38 @@
 
                 if (slots[i].gameObject.activeSelf == false)
                     slots[i].gameObject.SetActive(true);
+            }
+        }
+
+        #endregion
+
+        #region SPECIAL
+
+        public void SSlotUpdateCost(float value) {
+            costImage.fillAmount = value;   
+        }
+
+        /// <summary>
+        /// Enable Stack Images
+        /// </summary>
+        /// <param name="count"> 0 ~ 2 </param>
+        public void SSSlotUpdateStack(int count) {
+            var ImageLenght = stackImages.Length;
+            if (count > ImageLenght || count < 0) {
+                return;
+            }
+
+            //Enable Count of Image
+            for (int i = 0; i < count; i++) {
+                stackImages[i].gameObject.SetActive(true);
+                ImageLenght--;
+            }
+
+            //Disable unuse Image
+            if (ImageLenght > 0) {
+                for (int i = stackImages.Length - 1; i >= stackImages.Length - ImageLenght; i--) {
+                    stackImages[i].gameObject.SetActive(false);
+                }
             }
         }
 

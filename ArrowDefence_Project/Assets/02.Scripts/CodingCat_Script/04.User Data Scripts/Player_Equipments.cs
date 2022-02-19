@@ -60,7 +60,7 @@
 
         public void Release_BowItem()
         {
-            CCPlayerData.inventory.Add_BowItem(this.EquippedBow);
+            CCPlayerData.inventory.ToInven(this.EquippedBow);
             this.EquippedBow = null;
 
             CatLog.Log("아이템이 해제되었습니다.");
@@ -75,9 +75,8 @@
             CatLog.Log($"{this.EquippedArrow_f.GetName} 아이템이 장착되었습니다 : 화살");
         }
 
-        public void Release_ArrowItem()
-        {
-            CCPlayerData.inventory.Add_ArrowItem(this.EquippedArrow_f);
+        public void Release_ArrowItem() {
+            CCPlayerData.inventory.ToInven(this.EquippedArrow_f);
             this.EquippedArrow_f = null;
 
             CatLog.Log("아이템이 해제되었습니다.");
@@ -94,7 +93,7 @@
 
         public void Release_SubArrow()
         {
-            CCPlayerData.inventory.Add_ArrowItem(this.EquippedArrow_s);
+            CCPlayerData.inventory.ToInven(this.EquippedArrow_s);
             this.EquippedArrow_s = null;
 
             CatLog.Log("아이템이 해제되었습니다.");
@@ -121,11 +120,11 @@
         {
             switch (idx)
             {
-                case 0: CCPlayerData.inventory.Add_AccessoryItem(this.EquippedAccessory_f);
+                case 0: CCPlayerData.inventory.ToInven(this.EquippedAccessory_f);
                         this.EquippedAccessory_f = null; break;
-                case 1: CCPlayerData.inventory.Add_AccessoryItem(this.EquippedAccessory_s);
+                case 1: CCPlayerData.inventory.ToInven(this.EquippedAccessory_s);
                         this.EquippedAccessory_s = null; break;
-                case 2: CCPlayerData.inventory.Add_AccessoryItem(this.EquippedAccessory_t);
+                case 2: CCPlayerData.inventory.ToInven(this.EquippedAccessory_t);
                         this.EquippedAccessory_t = null; break;
                 default: CatLog.ELog($"PlayerEquipment : Wrong idx in Accessory Realese Method {idx}"); break;
             }
@@ -137,15 +136,15 @@
             if(IsEquippedSpArr == true) {
                 Release_SpArrow();
             }
-            EquippedSpArr = item; //실험: New 할당하지 않고, 주소넘기고 인벤토리 내부의 원본 지워주면 어찌됨?
+            EquippedSpArr = item; // 실험적인 기능. 문제가 없다면 다른 아이템에도 동일 로직 적용
             CCPlayerData.inventory.DelItem(item);
-            CatLog.Log($"{EquippedSpArr.GetName} 아이템이 장착되었습니다.");
+            CatLog.Log(StringColor.GREEN, $"Equipment: Item Equipped {EquippedSpArr.GetName}");
         }
 
         public void Release_SpArrow() {
-            CCPlayerData.inventory.AddItem_SpArr(EquippedSpArr);
+            CCPlayerData.inventory.ToInven(EquippedSpArr);
             EquippedSpArr = null;
-            CatLog.Log("Special Arorw Slot의 아이템이 해제되었습니다.");
+            CatLog.Log(StringColor.GREEN, "Equipment: Release Equipment Special Arrow.");
         }
 
         #endregion
@@ -229,13 +228,7 @@
         /// <param name="bowObjectParentTr"></param>
         /// <param name="mainArrowPoolQuantity"></param>
         /// <param name="subArrowPoolQuantity"></param>
-        public void InitEquipments(Transform bowObjectInitPos, Transform bowObjectParentTr, int mainArrowPoolQuantity, int subArrowPoolQuantity) {
-            //var ability = CCPlayerData.ability; //이거를 BowAbility내부의 것을 가져와주면 된다.
-            //Bow Object needs to reload Arrow from Start Method, Arrow Object must first Init.
-            //if (IsEquippedArrowMain()) EquippedArrow_f.Init(AD_Data.POOLTAG_MAINARROW, AD_Data.POOLTAG_MAINARROW_LESS, mainArrowPoolQuantity, ability.GetAbilityMain());
-            //if (IsEquippedArrowSub())  EquippedArrow_s.Init(AD_Data.POOLTAG_SUBARROW,  AD_Data.POOLTAG_SUBARROW_LESS,  subArrowPoolQuantity,  ability.GetAbilitySub());
-            //if (IsEquippedBow())       EquippedBow.Init(bowObjectInitPos, bowObjectParentTr);
-
+        public void InitEquipments(Transform bowObjectInitPos, Transform bowObjectParentTr, int mainArrowPoolQuantity, int subArrowPoolQuantity, UI.SwapSlots slot) {
             AD_BowAbility ability = null;
             if(IsEquippedBow() == true) {
                 ability = EquippedBow.Initialize(bowObjectInitPos, bowObjectParentTr);
@@ -253,6 +246,11 @@
             
             foreach (var accessory in GetAccessories()) {
                 if (accessory != null) accessory.Init();
+            }
+
+            if (IsEquippedSpArr) {
+                EquippedSpArr.Init(ability.GetAbility(2), 3);
+                ability.SetCondition(EquippedSpArr.Condition, slot);
             }
         }
 

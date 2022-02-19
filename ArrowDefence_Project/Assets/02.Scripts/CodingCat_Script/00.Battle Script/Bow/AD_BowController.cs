@@ -79,6 +79,7 @@
 
         //Enums
         private ARROWTYPE arrowType;
+        private ARROWTYPE previousType;
         private PULLINGTYPE currentPullType;
 
         //Struct
@@ -132,13 +133,10 @@
             bowAngle = bowTr.eulerAngles.z;
             minBowAngle = 0f; maxBowAngle = 180f;
 
-            //Init Load Arrow Type : 장전될 화살 타입 정의
-            arrowType = GameManager.Instance.GetFirstArrType();
-
             yield return new WaitUntil(() => ability.IsInitEquipments);
 
-            //Load Arrow From CCPooler.
-            Reload();
+            //Load Arr, Get Fisrt Loaded Arrow Type
+            Reload(GameManager.Instance.GetFirstArrType());
 
             //============================================================== << CALLBACK GAMEOVER >> ==============================================================
             //게임오버 이벤트에 Burn Effect 추가. Resurrection 구현 시 추가적인 로직 구현 필요.
@@ -489,7 +487,9 @@
 
             //Shot Arrow & Active Skill.
             arrowComponent.ShotByBow(arrowForce, ArrowParentTr, damageStruct);
-            BowSkillSet?.Invoke(bowTr, this, ref damageStruct, arrowComponent.CatchTr.position, arrowType);
+            if(arrowType != ARROWTYPE.ARROW_SPECIAL) { //active skills, only not special type arrow
+                BowSkillSet?.Invoke(bowTr, this, ref damageStruct, arrowComponent.CatchTr.position, arrowType);
+            }
 
             //Release GameObject and Component Arrow.
             arrowTr        = null;
@@ -503,7 +503,8 @@
             CineCam.Inst.ShakeCamera(8f, .1f);
 
             //Arrow Reload
-            Reload();
+            if (arrowType == ARROWTYPE.ARROW_SPECIAL) Reload(previousType);
+            else                                      Reload(arrowType);
 
             //Release Pulling Stop State
             IsPullingStop = false;
@@ -519,10 +520,16 @@
             initialTouchPos = MainCam.ScreenToWorldPoint(touchPos);
         }
 
-        void Reload() {
+        void Reload(ARROWTYPE type) {
+            if(type == ARROWTYPE.ARROW_SPECIAL) {
+                previousType = arrowType;
+            }
+
+            arrowType = type;
             switch (arrowType) { //Reload Arrow by Current Equipped Arrow Type.
-                case ARROWTYPE.ARROW_MAIN: arrowTr = CCPooler.SpawnFromPool<Transform>(AD_Data.POOLTAG_MAINARROW, bowTr, initArrowScale, ClampPointTop.position, Quaternion.identity); break;
-                case ARROWTYPE.ARROW_SUB:  arrowTr = CCPooler.SpawnFromPool<Transform>(AD_Data.POOLTAG_SUBARROW,  bowTr, initArrowScale, ClampPointTop.position, Quaternion.identity); break;
+                case ARROWTYPE.ARROW_MAIN:    arrowTr = CCPooler.SpawnFromPool<Transform>(AD_Data.POOLTAG_MAINARROW, bowTr, initArrowScale, ClampPointTop.position, Quaternion.identity);     break;
+                case ARROWTYPE.ARROW_SUB:     arrowTr = CCPooler.SpawnFromPool<Transform>(AD_Data.POOLTAG_SUBARROW,  bowTr, initArrowScale, ClampPointTop.position, Quaternion.identity);     break;
+                case ARROWTYPE.ARROW_SPECIAL: arrowTr = CCPooler.SpawnFromPool<Transform>(AD_Data.POOLTAG_SPECIAL_ARROW, bowTr, initArrowScale, ClampPointTop.position, Quaternion.identity); break;
             }
 
             //Get Arrow Component with init Clamp Points.
@@ -563,18 +570,28 @@
         void UpdateArrPos() {
             if(arrowTr != null) {
                 if(isBowPulling) {
-                    arrowPos = arrowTr.position;
-                    arrowPos = Vector3.MoveTowards(arrowPos, ClampPointBottom.position, Time.unscaledDeltaTime * ArrowPullingSpeed);
-                    arrowTr.position = arrowPos;
-                    
                     //Arrow Direction * Force
                     arrowForce = arrowTr.up * arrowComponent.PowerFactor;
+
+                    if (arrowType != ARROWTYPE.ARROW_SPECIAL) {
+                        arrowPos = arrowTr.position;
+                        arrowPos = Vector3.MoveTowards(arrowPos, ClampPointBottom.position, Time.unscaledDeltaTime * ArrowPullingSpeed);
+                        arrowTr.position = arrowPos;
+                    }
+                    else {
+                        arrowComponent.Pull(ArrowPullingSpeed);
+                    }
 
                     //Increase Charged Power
                     ChargeIncrease();
                 }
                 else {
-                    arrowTr.position = ClampPointTop.position;
+                    if(arrowType != ARROWTYPE.ARROW_SPECIAL) {
+                        arrowTr.position = ClampPointTop.position;
+                    }
+                    else {
+                        arrowComponent.Move(ClampPointTop.position);
+                    }
 
                     //Clear Charged Power <Once>
                     ChargeCancel();
@@ -597,9 +614,7 @@
                     arrowComponent.DisableRequest();
                 AD_BowRope.instance.CatchPointClear();
                 arrowTr = null; arrowComponent = null;
-                arrowType = type;
-
-                Reload();
+                Reload(type);
             }
             else { 
                 //Auto Control

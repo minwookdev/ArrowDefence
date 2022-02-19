@@ -216,7 +216,7 @@
             yield return new WaitUntil(() => CCPooler.IsInitialized == true);
 
             //==================================================== << PLAYER >> ====================================================
-            GameManager.Instance.InitEquips(BowInitPosition, ParentTransform, 1, 1, out ArrSSData[] arrSlotArray, out ACSData[] acspSlotArray);
+            GameManager.Instance.InitEquips(BowInitPosition, ParentTransform, 1, 1, out ArrSSData[] arrSlotArray, out ACSData[] acspSlotArray, sceneRoute.SlotArrSwap);
 
             sceneRoute.SlotArrSwap.InitSlots(arrSlotArray);     //Init ArrowSwap Slot
             sceneRoute.SlotAcSkill.InitSlots(acspSlotArray);    //Init AcspSkill Slot

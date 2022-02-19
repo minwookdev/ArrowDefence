@@ -31,6 +31,7 @@ public static class AD_Data {
     public static readonly string POOLTAG_MAINARROW_LESS  = "MainArrow_Less";
     public static readonly string POOLTAG_SUBARROW        = "SubArrow";
     public static readonly string POOLTAG_SUBARROW_LESS   = "SubArrow_Less";
+    public static readonly string POOLTAG_SPECIAL_ARROW   = "Pref_SpecialArrow";
     public static readonly string POOLTAG_FLOATING_DAMAGE = "FloatingDamage";
 
     /// <summary>

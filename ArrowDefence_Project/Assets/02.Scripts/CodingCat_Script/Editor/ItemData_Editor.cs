@@ -818,6 +818,11 @@ public class SpArrItemDataEditor : Editor {
     SerializedProperty SkillInfoFst;
     SerializedProperty SkillInfoSec;
 
+    SerializedProperty conditionTypeProp;
+    SerializedProperty conditionMaxCostProp;
+    SerializedProperty conditionMaxStackProp;
+    SerializedProperty conditionCostIncProp;
+
     private void OnEnable() {
         sobject        = new SerializedObject(target);
 
@@ -840,6 +845,11 @@ public class SpArrItemDataEditor : Editor {
         PrefProp     = sobject.FindProperty(nameof(ItemDt_SpArr.MainArrowObj));
         SkillInfoFst = sobject.FindProperty(nameof(ItemDt_SpArr.ArrowSkillFst));
         SkillInfoSec = sobject.FindProperty(nameof(ItemDt_SpArr.ArrowSkillSec));
+
+        conditionTypeProp     = sobject.FindProperty(nameof(ItemDt_SpArr.ChargeType));
+        conditionMaxCostProp  = sobject.FindProperty(nameof(ItemDt_SpArr.MaxCost));
+        conditionMaxStackProp = sobject.FindProperty(nameof(ItemDt_SpArr.MaxStackCount));
+        conditionCostIncProp  = sobject.FindProperty(nameof(ItemDt_SpArr.CostIncrease));
     }
 
     public override void OnInspectorGUI() {
@@ -912,6 +922,15 @@ public class SpArrItemDataEditor : Editor {
         EditorGUILayout.PropertyField(PrefProp);
         EditorGUILayout.PropertyField(SkillInfoFst, new GUIContent("Skill Info Fst"));
         EditorGUILayout.PropertyField(SkillInfoSec, new GUIContent("Skill Info Sec"));
+        GUILayout.EndVertical();
+        #endregion
+        #region SPECIAL_CONDITION_INFO
+        GUILayout.Label("Special Condition", EditorStyles.boldLabel);
+        GUILayout.BeginVertical("GroupBox");
+        EditorGUILayout.PropertyField(conditionTypeProp);
+        EditorGUILayout.PropertyField(conditionMaxStackProp);
+        EditorGUILayout.PropertyField(conditionMaxCostProp);
+        EditorGUILayout.PropertyField(conditionCostIncProp);
         GUILayout.EndVertical();
         #endregion
 

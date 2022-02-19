@@ -7,7 +7,7 @@
         [SerializeField] private CapsuleCollider2D coll = null;
 
         [Header("FORCE")]
-        [SerializeField] [RangeEx(8f, 30f, 1f)] 
+        [SerializeField] [RangeEx(8f, 50f, 1f)] 
         float force = 10f;
 
         private Vector3 tempEulerAngels;
@@ -30,7 +30,6 @@
             finCalcDamage = projectileDamage;
             damageStruct  = damage;
             damageStruct.SetDamage(projectileDamage);
-            CatLog.Log($"Final Calculated Damage : {finCalcDamage}");
 
             coll.enabled = true;
         }

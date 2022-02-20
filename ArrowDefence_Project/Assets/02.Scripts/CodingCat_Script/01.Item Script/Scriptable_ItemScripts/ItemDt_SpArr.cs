@@ -8,11 +8,16 @@
         public float CostIncrease;
 
         private void OnEnable() {
-
+            CheckCondition();
         }
 
         public ItemDt_SpArr() : base() {
             
+        }
+
+        void CheckCondition() {
+            if (ChargeType == CHARGETYPE.NONE) CatLog.WLog($"Special Arrow ({Item_Name}), Not Setting Charge Type.");
+            if (MaxStackCount <= 0)            CatLog.WLog($"Special Arrow ({Item_Name}), Not Setting MaxStackCount.");
         }
     }
 }

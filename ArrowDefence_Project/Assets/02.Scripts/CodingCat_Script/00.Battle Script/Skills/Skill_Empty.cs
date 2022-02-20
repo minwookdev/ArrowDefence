@@ -4,23 +4,17 @@
 
     public class Skill_Empty : AD_BowSkill
     {
-        public Skill_Empty() : base() { }
-
-        public Skill_Empty(string id, string name, string desc, SKILL_LEVEL level, BOWSKILL_TYPE type, Sprite sprite)
-            : base(id, name, desc, level, type, sprite)
-        {
-
-        }
-
         /// <summary>
         /// Constructor using Skill Data Scriptableobject. (Main)
         /// </summary>
         /// <param name="data"></param>
         public Skill_Empty(SkillData_Empty data)
-            : base(data.SkillId, data.SkillName, data.SkillDesc, data.SkillLevel, data.SkillType, data.SkillIconSprite)
-        {
+            : base(data.SkillId, data.SkillName, data.SkillDesc, data.SkillLevel, data.SkillType, data.SkillIconSprite) {
 
         }
+        #region ES3
+        public Skill_Empty() : base() { }
+        #endregion
 
         public override void Init() {
             throw new System.NotImplementedException();

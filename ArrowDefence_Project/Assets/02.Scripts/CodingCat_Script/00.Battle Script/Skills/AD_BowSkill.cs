@@ -45,6 +45,14 @@
         public abstract void Init();
 
         public abstract void BowSpecialSkill(Transform bowTr, AD_BowController controller, ref DamageStruct damage, Vector3 initPos, ARROWTYPE type);
-        //BowSpecialSkill(Transform bowTr, AD_BowController controller, ref DamageStruct damage, Vector3 initPos, LOAD_ARROW_TYPE arrowType);
+        
+        protected virtual bool TryGetTag(ARROWTYPE type, out string tag) {
+            switch (type) {
+                case ARROWTYPE.ARROW_MAIN:    tag = AD_Data.POOLTAG_MAINARROW_LESS;          return true;
+                case ARROWTYPE.ARROW_SUB:     tag = AD_Data.POOLTAG_SUBARROW_LESS;           return true;
+                case ARROWTYPE.ARROW_SPECIAL: tag = null;                                    return false;
+                default: throw new System.NotImplementedException($"This Arrow Type is Not Implemented. (TYPE: {type})");
+            }
+        }
     }
 }

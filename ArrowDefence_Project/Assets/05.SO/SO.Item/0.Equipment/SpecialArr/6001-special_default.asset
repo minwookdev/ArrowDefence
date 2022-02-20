@@ -29,6 +29,6 @@ MonoBehaviour:
   Speed: 18
   effects: []
   ChargeType: 1
-  MaxCost: 100
-  MaxStackCount: 1
+  MaxCost: 10
+  MaxStackCount: 3
   CostIncrease: 10

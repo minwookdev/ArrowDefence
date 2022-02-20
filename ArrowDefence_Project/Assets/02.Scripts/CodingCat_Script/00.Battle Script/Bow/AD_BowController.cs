@@ -503,8 +503,12 @@
             CineCam.Inst.ShakeCamera(8f, .1f);
 
             //Arrow Reload
-            if (arrowType == ARROWTYPE.ARROW_SPECIAL) Reload(previousType);
-            else                                      Reload(arrowType);
+            if (arrowType == ARROWTYPE.ARROW_SPECIAL) {
+                Reload(previousType);
+            }
+            else {
+                Reload(arrowType);
+            }
 
             //Release Pulling Stop State
             IsPullingStop = false;
@@ -530,6 +534,7 @@
                 case ARROWTYPE.ARROW_MAIN:    arrowTr = CCPooler.SpawnFromPool<Transform>(AD_Data.POOLTAG_MAINARROW, bowTr, initArrowScale, ClampPointTop.position, Quaternion.identity);     break;
                 case ARROWTYPE.ARROW_SUB:     arrowTr = CCPooler.SpawnFromPool<Transform>(AD_Data.POOLTAG_SUBARROW,  bowTr, initArrowScale, ClampPointTop.position, Quaternion.identity);     break;
                 case ARROWTYPE.ARROW_SPECIAL: arrowTr = CCPooler.SpawnFromPool<Transform>(AD_Data.POOLTAG_SPECIAL_ARROW, bowTr, initArrowScale, ClampPointTop.position, Quaternion.identity); break;
+                default: throw new System.Exception("Load Arrow Type is None.");
             }
 
             //Get Arrow Component with init Clamp Points.
@@ -606,18 +611,24 @@
                 return;
             }
 
+            if (type == ARROWTYPE.ARROW_SPECIAL) {
+                if(ability.Condition.IsReadyToLoad == false) {
+                    CatLog.WLog("Special Arrow Not Prepared.");
+                    return;
+                }
+            }
+
             //Swap Arrow
-            if(isAutoRunning == false) { 
-                //Manual Control
+            if(isAutoRunning == false) { // Menual Control
                 //Disable Loaded Arrow, Cleanup variables and reload Arrow.
-                if (arrowComponent != null)
+                if (arrowComponent != null) {
                     arrowComponent.DisableRequest();
+                }
                 AD_BowRope.instance.CatchPointClear();
                 arrowTr = null; arrowComponent = null;
                 Reload(type);
             }
-            else { 
-                //Auto Control
+            else { //Auto Control
                 AutoModeArrSwap(type);
             }
         }

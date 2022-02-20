@@ -36,9 +36,12 @@
         public override void BowSpecialSkill(Transform bowTr, AD_BowController controller, ref DamageStruct damage, Vector3 initPos, ARROWTYPE type) {
             ///Get the GameObject's MonoBehavior and run a Coroutine with it.
             ///R. Skill Class has no life cycle.
+            //string poolTag = (type == ARROWTYPE.ARROW_MAIN) ? AD_Data.POOLTAG_MAINARROW_LESS : AD_Data.POOLTAG_SUBARROW_LESS;
+            //controller.StartCoroutine(RapidShot(bowTr.parent.root, bowTr.eulerAngles, damage, initPos, poolTag, controller.effectTr.position));
 
-            string poolTag = (type == ARROWTYPE.ARROW_MAIN) ? AD_Data.POOLTAG_MAINARROW_LESS : AD_Data.POOLTAG_SUBARROW_LESS;
-            controller.StartCoroutine(RapidShot(bowTr.parent.root, bowTr.eulerAngles, damage, initPos, poolTag, controller.effectTr.position));
+            if(TryGetTag(type, out string tag)) {
+                controller.StartCoroutine(RapidShot(bowTr.parent.root, bowTr.eulerAngles, damage, initPos, tag, controller.effectTr.position));
+            }
         }
 
         private IEnumerator RapidShot(Transform parentTr, Vector3 eulerAngles, DamageStruct damage, Vector3 arrowInitPos, string poolTag, Vector2 effectPos) {

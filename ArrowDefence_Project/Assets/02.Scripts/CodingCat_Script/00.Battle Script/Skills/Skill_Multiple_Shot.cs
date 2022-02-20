@@ -26,22 +26,23 @@
         public override string ToString() => "Spread_Shot";
 
         public override void BowSpecialSkill(Transform bowTr, AD_BowController controller, ref DamageStruct damage, Vector3 initPos, ARROWTYPE type) {
-            SpreadShot(bowTr, type, initPos, ref damage);
+            //SpreadShot(bowTr, type, initPos, ref damage);
+
+            if(TryGetTag(type, out string tag)) {
+                SpreadShot(bowTr, tag, initPos, ref damage);
+            }
         }
 
-        void SpreadShot(Transform bowTr, ARROWTYPE type, Vector3 initPos, ref DamageStruct damage) {
+        void SpreadShot(Transform bowTr, string tag, Vector3 initPos, ref DamageStruct damage) {
             float startRotation = bowTr.eulerAngles.z + spreadAngle / 2f;
             float angleIncrease = spreadAngle / ((float)arrowCount - 1f);
 
-            string poolTag = (type == ARROWTYPE.ARROW_MAIN) ? AD_Data.POOLTAG_MAINARROW_LESS : AD_Data.POOLTAG_SUBARROW_LESS;
-
-            for (int i = 0; i < arrowCount; i++)
-            {
+            for (int i = 0; i < arrowCount; i++) {
                 if (i == (arrowCount * 0.5f) - 0.5f) continue; //Cancel Launch Middle Arrow
 
                 float tempRotation = startRotation - angleIncrease * i;
 
-                var arrow = CCPooler.SpawnFromPool<AD_Arrow_less>(poolTag, bowTr.parent.root, GameGlobal.ArrowScale, initPos,
+                var arrow = CCPooler.SpawnFromPool<AD_Arrow_less>(tag, bowTr.parent.root, GameGlobal.ArrowScale, initPos,
                                                                   Quaternion.Euler(0f, 0f, tempRotation - 90f));
                 if (arrow) {
                     arrow.ShotToDirection(new Vector2(Mathf.Cos(tempRotation * Mathf.Deg2Rad), Mathf.Sin(tempRotation * Mathf.Deg2Rad)), damage); 

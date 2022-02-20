@@ -925,7 +925,7 @@ public class SpArrItemDataEditor : Editor {
         GUILayout.EndVertical();
         #endregion
         #region SPECIAL_CONDITION_INFO
-        GUILayout.Label("Special Condition", EditorStyles.boldLabel);
+        GUILayout.Label("Condition", EditorStyles.boldLabel);
         GUILayout.BeginVertical("GroupBox");
         EditorGUILayout.PropertyField(conditionTypeProp);
         EditorGUILayout.PropertyField(conditionMaxStackProp);

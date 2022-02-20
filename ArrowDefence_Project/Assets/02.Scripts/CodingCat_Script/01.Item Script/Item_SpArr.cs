@@ -91,6 +91,18 @@
                 else                return true;
             }
         }
+
+        public bool IsReadyToLoad {
+            get {
+                if (currentStackedCount >= 1) {
+                    currentStackedCount--;
+                    UpdateInterface();
+                    return true;
+                }
+                else
+                    return false;
+            }
+        }
         #endregion
 
         public SpArrCondition(CHARGETYPE type, int cost, int count, float increase) {
@@ -199,6 +211,14 @@
             if (!IsInitSlot) return;
             spSlot.SSlotUpdateCost(currentCost / maxCost);
             spSlot.SSSlotUpdateStack(currentStackedCount);
+        }
+
+        void CostInterfaceUpdate() {
+
+        }
+
+        void StackInterfaceUdpate() {
+
         }
     }
 }

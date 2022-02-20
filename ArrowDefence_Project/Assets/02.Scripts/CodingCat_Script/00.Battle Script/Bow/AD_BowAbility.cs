@@ -10,6 +10,14 @@
         bool isInitAbility = false;
         bool isTimerUse    = false;
         public bool IsInitEquipments { get; private set; } = false;
+        public SpArrCondition Condition {
+            get {
+                if(spArrCondition == null) {
+                    throw new System.Exception();
+                }
+                return spArrCondition;
+            }
+        }
 
         /// <summary>
         /// Run Player Equipment Controller Initialize.

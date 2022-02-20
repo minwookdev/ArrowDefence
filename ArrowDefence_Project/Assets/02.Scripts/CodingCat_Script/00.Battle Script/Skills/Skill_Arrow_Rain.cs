@@ -31,8 +31,12 @@
         }
 
         public override void BowSpecialSkill(Transform bowTr, AD_BowController controller, ref DamageStruct damage, Vector3 initPos, ARROWTYPE type) {
-            string tag = (type == ARROWTYPE.ARROW_MAIN) ? AD_Data.POOLTAG_MAINARROW_LESS : AD_Data.POOLTAG_SUBARROW_LESS;
-            controller.StartCoroutine(RainArrow(tag, bowTr, damage));
+            //string tag = (type == ARROWTYPE.ARROW_MAIN) ? AD_Data.POOLTAG_MAINARROW_LESS : AD_Data.POOLTAG_SUBARROW_LESS;
+            //controller.StartCoroutine(RainArrow(tag, bowTr, damage));
+
+            if(TryGetTag(type, out string tag)) {
+                controller.StartCoroutine(RainArrow(tag, bowTr, damage));
+            }
         }
 
         IEnumerator RainArrow(string poolTag, Transform bowTr, DamageStruct damage) {

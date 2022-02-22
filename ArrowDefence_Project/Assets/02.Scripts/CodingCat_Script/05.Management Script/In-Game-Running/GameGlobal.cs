@@ -319,6 +319,20 @@
         }
 
         #endregion
+
+        #region COLOR
+        public static void AlphaZero(this TMPro.TextMeshProUGUI text) {
+            var tempColor = text.color;
+            tempColor.a   = 0f;
+            text.color    = tempColor;
+        }
+
+        public static void AlphaOne(this TMPro.TextMeshProUGUI text) {
+            Color tempColor = text.color;
+            tempColor.a = 1f;
+            text.color = tempColor;
+        }
+        #endregion
     }
 
     public static class StNum {
@@ -398,6 +412,8 @@
         SKILL_PIERCING,
         SPLIT_DAGGER,
         ELEMENTAL_FIRE,
+        EXPLOSION,
+        WINDPIERCING,
     }
     /// <summary>
     /// 정의. Skill 발동 UI 타입
@@ -412,8 +428,8 @@
     /// <summary>
     /// 정의. ARROW SKILL 발동 타입
     /// </summary>
-    public enum ARROWSKILL_ACTIVETYPE
-    {
+    public enum ARROWSKILL_ACTIVETYPE {
+        NONE,
         FULL,
         ATTACK_AIR,
         ATTACK_ADDPROJ,
@@ -422,6 +438,9 @@
         AIR,
         ADDPROJ,
         EMPTY,
+        SP_EXPLOSION,
+        SP_WINDPIERCING,
+        BUFF,
     }
     ///[7] TTT : FULL SKILL
     ///[8] TTF : ATK, AIR

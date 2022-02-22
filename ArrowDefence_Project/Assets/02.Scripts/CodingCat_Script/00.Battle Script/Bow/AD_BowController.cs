@@ -165,6 +165,11 @@
 
             //AutoMode Variables Init
             arrSwapWait = new WaitUntil(() => autoState == AUTOSTATE.WAIT || autoState == AUTOSTATE.FIND || autoState == AUTOSTATE.TRAC);
+
+            //Hiding
+            if(pointerId == 0 || isTouched == false) {
+
+            }
         }
 
         private void Update() {
@@ -613,7 +618,7 @@
 
             if (type == ARROWTYPE.ARROW_SPECIAL) {
                 if(ability.Condition.IsReadyToLoad == false) {
-                    CatLog.WLog("Special Arrow Not Prepared.");
+                    Notify.Inst.Show("Special Arrow Not Prepared.");
                     return;
                 }
             }

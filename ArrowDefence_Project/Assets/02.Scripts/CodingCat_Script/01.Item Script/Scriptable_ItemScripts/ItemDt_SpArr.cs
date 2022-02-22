@@ -2,6 +2,7 @@
     using UnityEngine;
 
     public class ItemDt_SpArr : ItemData_Equip_Arrow {
+        public ArrowSkillData ArrowSkillTrd = null;
         public CHARGETYPE ChargeType = CHARGETYPE.NONE;
         public int MaxCost;
         [RangeEx(1, 3, 1)] public int MaxStackCount;

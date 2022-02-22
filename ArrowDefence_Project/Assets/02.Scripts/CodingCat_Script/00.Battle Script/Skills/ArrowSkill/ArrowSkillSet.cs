@@ -1,10 +1,9 @@
-﻿namespace ActionCat
-{
+﻿namespace ActionCat {
     using ActionCat.Interface;
     using UnityEngine;
 
     public class ArrowSkillSet {
-        ARROWSKILL_ACTIVETYPE activeType;
+        ARROWSKILL_ACTIVETYPE activeType = ARROWSKILL_ACTIVETYPE.NONE;
         AttackActiveTypeAS hitSkill = null;
         AirType airSkill            = null;
         ProjectileType addProjSkill = null;
@@ -45,7 +44,43 @@
             activeType = InitArrowSkillActiveType(0);
             CatLog.Log($"Arrow SkillSets Active Type : {activeType.ToString()}");
         }
+        
+        /// <summary>
+        /// Special Type Arrow Constructor
+        /// </summary>
+        /// <param name="array"></param>
+        /// <param name="tag"></param>
+        /// <param name="ability"></param>
+        public ArrowSkillSet(ASInfo[] array, string tag, PlayerAbilitySlot ability) {
+            arrowPoolTag = tag;
 
+            for (int i = 0; i < array.Length; i++) {
+                switch (array[i].ActiveType) {
+                    case ARROWSKILL_ACTIVETYPE.ATTACK:  InitHit(array[i].SkillData); break;
+                    case ARROWSKILL_ACTIVETYPE.AIR:     InitAir(array[i].SkillData); break;
+                    case ARROWSKILL_ACTIVETYPE.ADDPROJ: InitProjectile(array[i].SkillData, ability); break;
+                    case ARROWSKILL_ACTIVETYPE.BUFF:                                 break;
+                    default: throw new System.NotImplementedException();
+                }
+            }
+
+            //Find Special Active Type
+            for (int i = 0; i < array.Length; i++) {
+                switch (array[i].SkillType) {
+                    case ARROWSKILL.EXPLOSION:    activeType = ARROWSKILL_ACTIVETYPE.SP_EXPLOSION;    break;
+                    case ARROWSKILL.WINDPIERCING: activeType = ARROWSKILL_ACTIVETYPE.SP_WINDPIERCING; break;
+                }
+
+                if(activeType != ARROWSKILL_ACTIVETYPE.NONE) {
+                    break;
+                }
+            }
+
+            if(activeType == ARROWSKILL_ACTIVETYPE.NONE) {
+                throw new System.Exception("Not Found ActiveType.");
+            }
+            CatLog.Log($"Initialized ActiveType: {activeType.ToString()}");
+        }
 
         /// <summary>
         /// Constructor II. Copy origin ArrowSkillSets Class.
@@ -230,6 +265,7 @@
                 case ARROWSKILL_ACTIVETYPE.AIR_ADDPROJ:    return HitProj(collider, ref damage, contactPos, direction);
                 case ARROWSKILL_ACTIVETYPE.AIR:            return HitDefault(collider, ref damage, contactPos, direction);
                 case ARROWSKILL_ACTIVETYPE.ADDPROJ:        return HitProj(collider, ref damage, contactPos, direction);
+                case ARROWSKILL_ACTIVETYPE.SP_EXPLOSION:   return IsActiveExplosion(ref damage, contactPos);
                 default:                                   return false;
             }
         }
@@ -356,6 +392,15 @@
         /// <returns></returns>
         bool HitDefault(Collider2D collider, ref DamageStruct damage, Vector3 contactPos, Vector2 direction) {
             return collider.GetComponent<IDamageable>().TryOnHit(ref damage, contactPos, direction);
+        }
+
+        #endregion
+
+        #region SPECIAL
+
+        bool IsActiveExplosion(ref DamageStruct damage, Vector3 point) {
+            addProjSkill.OnHit(point, ref damage);
+            return true;
         }
 
         #endregion

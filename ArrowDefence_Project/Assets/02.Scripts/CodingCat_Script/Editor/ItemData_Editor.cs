@@ -817,6 +817,7 @@ public class SpArrItemDataEditor : Editor {
     SerializedProperty PrefProp;
     SerializedProperty SkillInfoFst;
     SerializedProperty SkillInfoSec;
+    SerializedProperty SkillInfoTrd;
 
     SerializedProperty conditionTypeProp;
     SerializedProperty conditionMaxCostProp;
@@ -845,6 +846,7 @@ public class SpArrItemDataEditor : Editor {
         PrefProp     = sobject.FindProperty(nameof(ItemDt_SpArr.MainArrowObj));
         SkillInfoFst = sobject.FindProperty(nameof(ItemDt_SpArr.ArrowSkillFst));
         SkillInfoSec = sobject.FindProperty(nameof(ItemDt_SpArr.ArrowSkillSec));
+        SkillInfoTrd = sobject.FindProperty(nameof(ItemDt_SpArr.ArrowSkillTrd));
 
         conditionTypeProp     = sobject.FindProperty(nameof(ItemDt_SpArr.ChargeType));
         conditionMaxCostProp  = sobject.FindProperty(nameof(ItemDt_SpArr.MaxCost));
@@ -922,6 +924,7 @@ public class SpArrItemDataEditor : Editor {
         EditorGUILayout.PropertyField(PrefProp);
         EditorGUILayout.PropertyField(SkillInfoFst, new GUIContent("Skill Info Fst"));
         EditorGUILayout.PropertyField(SkillInfoSec, new GUIContent("Skill Info Sec"));
+        EditorGUILayout.PropertyField(SkillInfoTrd, new GUIContent("Skill Info Trd"));
         GUILayout.EndVertical();
         #endregion
         #region SPECIAL_CONDITION_INFO

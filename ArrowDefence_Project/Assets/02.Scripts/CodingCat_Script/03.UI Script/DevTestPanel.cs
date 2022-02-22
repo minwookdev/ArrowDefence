@@ -105,64 +105,52 @@
             }
         }
 
-        public void Button_SaveData()
-        {
+        public void Button_SaveData() {
             CCPlayerData.SaveUserData();
-
-            MainSceneUI.Message("SAVE USER DATA");
+            Notify.Inst.Show("SAVE USER DATA");
         }
 
-        public void Button_LoadData()
-        {
+        public void Button_LoadData() {
             CCPlayerData.LoadUserData();
-
-            MainSceneUI.Message("LOAD USER DATA");
+            Notify.Inst.Show("LOAD USER DATA");
         }
 
-        public void Button_Additems()
-        {
-            if(playerData == null)
-            {
+        public void Button_Additems() {
+            if(playerData == null) {
                 CatLog.WLog("Player Data Scriptable Object is NULL");
                 return;
             }
 
             var itemList = playerData.GetItemData();
 
-            if (itemList.Count <= 0)
-            {
-                CatLog.Log("Player Data Scriptable has no Items"); 
+            if (itemList.Count <= 0) {
+                Notify.Inst.Show("Temp ItemData is Empty.");
                 return;
             }
 
-            foreach (var item in itemList)
-            {
+            foreach (var item in itemList) {
                 CCPlayerData.inventory.AddItem(item, item.Item_Amount);
             }
 
-            CatLog.Log($"{itemList.Count} 개의 아이템이 전달되었습니다.");
-
-            MainSceneUI.Message($"INVENTORY IN {itemList.Count} ITEMS");
+            CatLog.Log($"{itemList.Count} 개의 아이템이 전달.");
+            Notify.Inst.Show($"Send {itemList.Count} Items in Inventory.");
         }
 
-        public void Button_ClearInventory()
-        {
+        public void Button_ClearInventory() {
             CCPlayerData.inventory.Clear();
             CCPlayerData.equipments.Clear();
+            Notify.Inst.Show("Clear All Item in Inventory.");
 
-            MainSceneUI.Message("CLEAR INVENTORY, EQUIPMENTS DATA");
         }
 
-        public void Button_PullingTypeChange()
-        {
-            switch (CCPlayerData.settings.PullingType)
-            {
+        public void Button_PullingTypeChange() {
+            switch (CCPlayerData.settings.PullingType) {
                 case PULLINGTYPE.AROUND_BOW_TOUCH: CCPlayerData.settings.SetPullingType(PULLINGTYPE.FREE_TOUCH);       break;
                 case PULLINGTYPE.FREE_TOUCH:       CCPlayerData.settings.SetPullingType(PULLINGTYPE.AROUND_BOW_TOUCH); break;
-                case PULLINGTYPE.AUTOMATIC: break;
+                default: break;
             }
 
-            MainSceneUI.Message($"PULLING TYPE CHANGE, CURRENT TYPE {CCPlayerData.settings.PullingType.ToString()}");
+            Notify.Inst.Show($"Pulling Type: {CCPlayerData.settings.PullingType.ToString()}");
         }
 
         #endregion

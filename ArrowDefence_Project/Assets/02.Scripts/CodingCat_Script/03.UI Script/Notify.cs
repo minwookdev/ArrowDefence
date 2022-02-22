@@ -1,15 +1,18 @@
 ﻿namespace ActionCat {
     using UnityEngine;
+    using UnityEngine.SceneManagement;
+    using UnityEngine.EventSystems;
     using TMPro;
+    using DG.Tweening;
 
     /// Apply Function
     /// a. Singleton
     /// b. Safety Application Quit
     /// (not) thread safe 
-    public class Notify : MonoBehaviour {
+    public class Notify : MonoBehaviour, IPointerClickHandler {
         static Notify _inst;
         static bool _shuttingDown = false;
-        public static Notify Instance {
+        public static Notify Inst {
             get {
                 if (_shuttingDown) {
                     CatLog.ELog("Notify Instance'" + typeof(Notify) + "' already destroyed. Returnning null.");
@@ -25,30 +28,88 @@
                     return _inst;
                 }
 
-                //이거만 가지고 생성 안될수도 있음 테스트 요망
-                _inst = Resources.Load<Notify>("ArrowDefence_UI/panel_notify");
+                GameObject instance = GameObject.Instantiate(Resources.Load<GameObject>("ArrowDefence_UI/panel_notify"));
+                if (instance == null) throw new System.Exception();
+                if (instance.TryGetComponent<Notify>(out Notify notify)) {
+                    _inst = notify;
+                }
+                else {
+                    throw new System.Exception("New Instance Not have Notify Component.");
+                }
+
                 return _inst;
             }
         }
 
-        [Header("NOFITY")]
+        [Header("COMPONENT")]
         [SerializeField] RectTransform notifyRectTr = null;
         [SerializeField] TextMeshProUGUI notifyText = null;
+        Sequence notifySeq = null;
+
+        [Header("NOTIFY")]
+        [SerializeField] [RangeEx(1f, 5f)] float messageDuration = 1f;
+
+        [Header("NOTIFY LIST")]
+        [SerializeField] GameObject prefMessage;
+        bool isInit = false;
 
         public void Init(RectTransform parentCanvas) {
-            if(notifyRectTr.parent == parentCanvas) {
-                CatLog.WLog("Notify Manager is Already Initialized this Scene.");
-                return;
+            if(isInit == true) {
+                CatLog.WLog("Notify Manager is Already Initialized this Scene."); return;
             }
 
+            if(notifyRectTr == null || notifyText == null) {
+                throw new System.Exception("Notify Component is Not Assignmnet.");
+            }
+
+            //Change Parent
             notifyRectTr.SetParent(parentCanvas);
             notifyRectTr.RectResizer(Vector2.zero, Vector2.zero, Vector3.one);
 
-            //요놈 메인씬 루트에서 테스트하자
+            notifyText.AlphaZero();
+
+            //assignment new Sequence
+            notifySeq = DOTween.Sequence()
+                               .Append(notifyText.DOFade(StNum.floatZero, messageDuration))
+                               .Join(notifyText.rectTransform.DOShakePosition(1f, 5f, 15, 90, false, true))
+                               .SetAutoKill(false)
+                               .SetUpdate(false)
+                               .Pause();
+            isInit = true;
         }
 
-        public void Text(string text, float time = 3f) {
+        public void Show(string text) {
+            if(!isInit) {
+                throw new System.Exception("Notify is Not Initialized or missing component");
+            }
 
+            notifyText.AlphaOne();
+            notifyText.text = text;
+            notifySeq.Restart();
+        }
+
+        public void Hide() {
+            
+        }
+
+        private void Awake() {
+            SceneLoader.SceneChangeCallback += OnReset;
+            //SceneManager.sceneLoaded += OnReset;
+            //SceneManager.activeSceneChanged
+        }
+
+        /// <summary>
+        /// ActionCat.SceneManager 통합예정
+        /// </summary>
+        /// <param name="scene"></param>
+        /// <param name="loadSceneMode"></param>
+        public void OnReset() {
+            if(notifyRectTr.parent != null) {
+                notifyRectTr.SetParent(null);
+            }
+
+            DontDestroyOnLoad(gameObject);
+            isInit = false;
         }
 
         private void OnApplicationQuit() {
@@ -57,6 +118,15 @@
 
         private void OnDestroy() {
             _shuttingDown = true;
+            //SceneManager.sceneLoaded -= OnReset;
+
+            if(SceneLoader.Instance != null) {
+                SceneLoader.SceneChangeCallback -= OnReset;
+            }
+        }
+
+        void IPointerClickHandler.OnPointerClick(PointerEventData eventData) {
+            throw new System.Exception("Notify gameobject is clicked, should not recieve this Event.");
         }
     }
 }

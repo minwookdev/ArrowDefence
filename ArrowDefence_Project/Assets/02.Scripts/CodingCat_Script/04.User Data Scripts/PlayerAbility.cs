@@ -204,10 +204,12 @@
             //Update Arrow Ability: Special
             float tempSpecialArrowIncDamage = 1f;
             if(equip.IsEquippedSpArr == true) {
-                var abilities = equip.GetSpArrOrNull.AbilitiesOrNull;
+                var abilities = equip.GetSpArrow().AbilitiesOrNull;
                 if(abilities != null) {
                     for (int i = 0; i < abilities.Length; i++) {
                         switch (abilities[i]) {
+                            case AbilityIncDamageRate incDamage: break;
+                            case AbilitySpeed             speed: break;
                             default: throw new System.NotImplementedException("this ability type is Not Implamented !");
                         }
                     }

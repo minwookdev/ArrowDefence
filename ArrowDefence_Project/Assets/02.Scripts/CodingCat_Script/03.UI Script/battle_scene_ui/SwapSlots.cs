@@ -6,7 +6,7 @@
 
     public class SwapSlots : MonoBehaviour, IPointerDownHandler {
         [Header("COMPONENT")]
-        [SerializeField] RectTransform slotBodyTr  = null;
+        //[SerializeField] RectTransform slotBodyTr  = null;
         [SerializeField] RectTransform slotGroupTr = null;
 
         [Header("SLOT OPTIONS")]

@@ -2,10 +2,15 @@
     using UnityEngine;
 
     public class Item_SpArr : Item_Equipment {
+        //SAVED VALUES
         private GameObject spArrowPref = null;
         private ASInfo[] skillInfos    = null;
-        private float specialArrDefaultSpeed = 12f;
         private SpArrCondition condition = null;
+        private float specialArrDefaultSpeed = 12f;
+
+        //NON_SAVED VALUES
+        private ArrowSkillSet tempSkillSet = null;
+
         #region PROPERTY
         public ASInfo[] GetSkillInfos {
             get {
@@ -28,10 +33,27 @@
             return new Ability[0]; 
         }
 
+        public bool TryGetSkillSet(out ArrowSkillSet skillset) {
+            if(tempSkillSet == null) {
+                skillset = null;
+                return false;
+            }
+
+            skillset = tempSkillSet;
+            return true;
+        }
+
         public void Init(PlayerAbilitySlot ability, int poolQuatity) {
             if(spArrowPref.TryGetComponent<AD_Arrow>(out AD_Arrow arrow)) {
                 arrow.SetSpeed(specialArrDefaultSpeed);
             }
+            else {
+                throw new System.Exception("Not Added Component in Arrow Prefab");
+            }
+
+            if (skillInfos.Length > 0) tempSkillSet = new ArrowSkillSet(skillInfos, AD_Data.POOLTAG_SPECIAL_ARROW, ability);
+            else                       tempSkillSet = null;
+
             CCPooler.AddPoolList(AD_Data.POOLTAG_SPECIAL_ARROW, poolQuatity, spArrowPref, false);
         }
 
@@ -53,6 +75,7 @@
             var tempList = new System.Collections.Generic.List<ASInfo>();
             if (data.ArrowSkillFst != null) tempList.Add(new ASInfo(data.ArrowSkillFst));
             if (data.ArrowSkillSec != null) tempList.Add(new ASInfo(data.ArrowSkillSec));
+            if (data.ArrowSkillTrd != null) tempList.Add(new ASInfo(data.ArrowSkillTrd));
             skillInfos = tempList.ToArray();
 
             condition = new SpArrCondition(data.ChargeType, data.MaxCost, data.MaxStackCount, data.CostIncrease);

@@ -28,7 +28,8 @@ MonoBehaviour:
   DamageInc: 1
   Speed: 18
   effects: []
+  ArrowSkillTrd: {fileID: 0}
   ChargeType: 1
-  MaxCost: 10
+  MaxCost: 20
   MaxStackCount: 3
   CostIncrease: 10

@@ -57,6 +57,9 @@ public class MainSceneRoute : MonoBehaviour
     private float openMenuTime = 0.5f;
     private float closeMenuTime = 0.2f; //Less than Menu Open Time.
 
+    [Header("CANVAS")]
+    [SerializeField] RectTransform parentRectTr = null;
+
     [Header("FADE EFFECT")]
     [Space(10)]
     public CanvasGroup ImgFade = null;
@@ -73,14 +76,6 @@ public class MainSceneRoute : MonoBehaviour
 
     [Header("SAVE & LOAD")]
     public bool isAutoLoad;
-
-    public enum STAGELIST
-    {
-        STAGE_FOREST  = 1,
-        STAGE_DESERT  = 2,
-        STAGE_DUNGEON = 3,
-        STAGE_DEV     = 0
-    }
 
     private void Awake() => _inst = this;
 
@@ -118,6 +113,9 @@ public class MainSceneRoute : MonoBehaviour
         //Auto Load SaveData
         if (isAutoLoad)
             ActionCat.GameManager.Instance.AutoLoadUserData();
+
+        //Init Notify
+        Notify.Inst.Init(parentRectTr);
     }
 
     private void OnDestroy() {
@@ -246,34 +244,6 @@ public class MainSceneRoute : MonoBehaviour
                           currentOpenedMenu = target.gameObject;
                       });
     }
-
-    //public void StageSelect(int stagedata)
-    //{
-    //    Action<string> actPopup = (str) =>
-    //    {
-    //        battlePop.stageInfo = str;
-    //        battlePop.gameObject.SetActive(true);
-    //    };
-    //
-    //    switch (stagedata)
-    //    {
-    //        case (int)STAGELIST.STAGE_DEV:
-    //            actPopup(AD_Data.STAGEINFO_DEV);
-    //            break;
-    //        case (int)STAGELIST.STAGE_FOREST:
-    //            actPopup(AD_Data.STAGEINFO_FOREST);
-    //            break;
-    //        case (int)STAGELIST.STAGE_DESERT:
-    //            actPopup(AD_Data.STAGEINFO_DESERT);
-    //            break;
-    //        case (int)STAGELIST.STAGE_DUNGEON:
-    //            actPopup(AD_Data.STAGEINFO_DUNGEON);
-    //            break;
-    //        default:
-    //            CatLog.WLog("Not Support This Stage");
-    //            break;
-    //    }
-    //}
 
     public void Button_ClosePopup(GameObject obj)
     {

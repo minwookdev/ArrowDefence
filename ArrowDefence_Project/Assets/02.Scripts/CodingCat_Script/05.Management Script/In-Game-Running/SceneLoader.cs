@@ -3,6 +3,8 @@
 
     public class SceneLoader : Singleton<SceneLoader> {
         private readonly string loadingScene = AD_Data.SCENE_LOADING;
+        public delegate void OnSceneChange();
+        public static event OnSceneChange SceneChangeCallback;
 
         public string NextScene { get; private set; }
 
@@ -12,6 +14,7 @@
         /// <param name="targetScene">Load target SceneName</param>
         public void LoadScene(string targetScene) {
             NextScene = targetScene;
+            SceneChangeCallback?.Invoke();
 
             try {
                 SceneManager.LoadScene(loadingScene);
@@ -39,5 +42,7 @@
             SceneManager.SetActiveScene(targetScene);
             CatLog.Log($"UIScene LoadingTime : {UnityEngine.Time.time - loadStartTime}sec");
         }
+
+
     }
 }

@@ -4,7 +4,7 @@
 
     public class PanelPause : MonoBehaviour {
         [Header("COMPONENT")]
-        [SerializeField] RectTransform pausePanelTr   = null;
+        //[SerializeField] RectTransform pausePanelTr   = null;
         [SerializeField] CanvasGroup panelCanvasGroup = null;
 
         [Header("PAUSE PANEL")]

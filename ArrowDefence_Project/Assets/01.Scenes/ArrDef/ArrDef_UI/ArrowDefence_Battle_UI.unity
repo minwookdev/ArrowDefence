@@ -1938,6 +1938,7 @@ MonoBehaviour:
   isOnDisableLine: 1
   isOnFPS: 1
   DefaultLineMat: {fileID: 10306, guid: 0000000000000000f000000000000000, type: 0}
+  canvasRectTr: {fileID: 4458392277081655495}
 --- !u!1 &1663309669
 GameObject:
   m_ObjectHideFlags: 0
@@ -9047,7 +9048,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa5c4e247b496c44cb7bb0a18489ba5d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  slotBodyTr: {fileID: 4458392278094258586}
   slotGroupTr: {fileID: 4458392278365083060}
   slotOpenDuration: 2
   slotMovingTime: 1
@@ -11264,7 +11264,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3dd7797e248743c4bb236485d7fe0f4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pausePanelTr: {fileID: 4458392278334258604}
   panelCanvasGroup: {fileID: 4458392278334258595}
   openFadeTime: 0.5
   battleButtons:

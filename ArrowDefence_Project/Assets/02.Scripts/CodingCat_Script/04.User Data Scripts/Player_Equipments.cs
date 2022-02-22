@@ -172,6 +172,13 @@
             return accessories;
         }
 
+        public Item_SpArr GetSpArrow() {
+            if(this.EquippedSpArr == null) {
+                throw new System.Exception("Equipped Special Arrow is Null.");
+            }
+            return this.EquippedSpArr;
+        }
+
         public bool IsEquippedBow()
         {
             if (this.EquippedBow != null) return true;

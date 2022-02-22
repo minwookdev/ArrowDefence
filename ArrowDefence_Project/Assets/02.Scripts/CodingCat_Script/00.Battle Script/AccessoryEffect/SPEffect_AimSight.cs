@@ -22,10 +22,8 @@
 
         float lineEndAlpha   = 0.3f;
         float lineStartAlpha = 0.8f;
-        float lineRenderWidth;
         float alphaChangeSpeed   = 0.8f;
         string shaderAlphaString = "_Alpha";
-        string shaderColorString = "_Color";
         Color currentStartColor;
         Color currentEndColor;
         //RaycastHit2D[] resultArray = new RaycastHit2D[1];

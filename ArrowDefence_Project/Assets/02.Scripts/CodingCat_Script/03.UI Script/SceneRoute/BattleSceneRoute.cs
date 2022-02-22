@@ -42,6 +42,9 @@
         [SerializeField] Material DefaultLineMat;
         float LineWidth = 0.1f;
 
+        [Header("COMPONENT")]
+        [SerializeField] RectTransform canvasRectTr = null;
+
         private float screenZpos = 0f;
         private LineRenderer arrowLimitLine;
         private Vector2 topLeftPoint;
@@ -114,6 +117,9 @@
             if (isOnFPS == true) {
                 gameObject.AddComponent<FrameRateCheck>();
             }
+
+            //Initialize Notify
+            Notify.Inst.Init(canvasRectTr);
         }
 
         void Update() {
@@ -178,6 +184,10 @@
 
         public void ClearSliderUpdate(float time) {
             sliderStageClear.UpdateSlider(time);
+        }
+
+        public void SliderDecBoss(float dest) {
+            sliderBossHealth.Decrease(dest);
         }
         #endregion
 

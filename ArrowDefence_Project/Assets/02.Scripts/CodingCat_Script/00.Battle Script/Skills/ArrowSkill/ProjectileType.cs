@@ -183,4 +183,22 @@
         #endregion
     }
     //=========================================================================================================================================================
+    //================================================================== [ EXPLOSION ] ========================================================================
+    public class Explosion : ProjectileType {
+        public override void Clear() {
+            throw new System.NotImplementedException();
+        }
+
+        public override string GetUniqueTag() {
+            throw new System.NotImplementedException();
+        }
+
+        public override void OnHit(Vector2 point, ref DamageStruct damage) {
+            throw new System.NotImplementedException();
+        }
+
+        public Explosion() {
+
+        }
+    }
 }

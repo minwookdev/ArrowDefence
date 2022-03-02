@@ -42,6 +42,11 @@
             return finCalcDamage;
         }
 
+        /// <summary>
+        /// [ Critiacal - X ] [ Min~Max - Choose ] [ Calculate Defence - X ]
+        /// </summary>
+        /// <param name="isUseMinMaxDamagePer"></param>
+        /// <returns></returns>
         public float GetElementalDamage(bool isUseMinMaxDamagePer = false) {
             var ability = Data.CCPlayerData.ability.GlobalAbilityField;
             float correction = (isUseMinMaxDamagePer) ? UnityEngine.Random.Range(ability.MinDamagePer, ability.MaxDamagePer) : 1f;

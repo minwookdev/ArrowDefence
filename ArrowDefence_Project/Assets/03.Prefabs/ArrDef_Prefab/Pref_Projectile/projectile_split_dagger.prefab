@@ -50,7 +50,7 @@ MonoBehaviour:
   tr: {fileID: 3131000947980100957}
   rigidBody: {fileID: 9141913478002093568}
   coll: {fileID: 5850000821867291896}
-  force: 20
+  force: 35
 --- !u!70 &5850000821867291896
 CapsuleCollider2D:
   m_ObjectHideFlags: 0

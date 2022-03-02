@@ -71,10 +71,19 @@
             bottomRightScreenPoint = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, 0));
 
             //Init-Arrow Skill with Pool-tag params
-            arrowSkillSets = GameManager.Instance.GetArrSkillSetsOrNull(gameObject.name);
-            if (arrowSkillSets != null) {
-                isInitSkill = true;
+            //arrowSkillSets = GameManager.Instance.GetArrSkillSetsOrNull(gameObject.name);
+            //if (arrowSkillSets != null) {
+            //    isInitSkill = true;
+            //    arrowSkillSets.Init(arrowTr, rBody, this);
+            //}
+
+            if(GameManager.Instance.TryGetSkillSet(gameObject.name, out ArrowSkillSet skillset)) {
+                arrowSkillSets = skillset;
                 arrowSkillSets.Init(arrowTr, rBody, this);
+                isInitSkill = true;
+            }
+            else {
+                isInitSkill = false;
             }
 
             //set rigid body gravity scale to zero

@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d623d855c5826b45ae48488163e98f8, type: 3}
+  m_Name: special_explsoion_t3
+  m_EditorClassIdentifier: 
+  SkillId: 
+  SkillName: Explosive Charge
+  SkillDesc: 'temp skill description.
+
+    temp skill description.
+
+    temp skill
+    description.'
+  SkillLevel: 3
+  SkillType: 7
+  IconSprite: {fileID: 21300000, guid: 8737d79d123e0d04f937e3c2d6c062f3, type: 3}
+  ActiveType: 7
+  effects:
+  - {fileID: 3086668923814295945, guid: 03aa6f9b130cd46458c57df1f6f06038, type: 3}
+  ExplosionDamage: 300
+  AddExDamage: 100
+  ExplosionPref: {fileID: 154765223882312337, guid: 9c4626ab3dc55b74eb8fb1ca49559dd0,
+    type: 3}
+  SmallExPref: {fileID: 2073678614587151837, guid: c4b3b0c7f0ba3294ca294bd2840cd1ea,
+    type: 3}
+  ExplosionRange: 3.5
+  AddExplosionRange: 4

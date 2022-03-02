@@ -430,17 +430,23 @@
                 var skills      = address.GetSkillInfos;                    // Set Equipment Item Skill Data
                 var slotsLength = SkillSlots.Length;
                 for (int i = 0; i < skills.Length; i++) {
+                    if (i == 2) {
+                        CatLog.WLog("Need More Skill Slots. Slot Index Over !"); break;
+                    }
                     SkillSlots[i].ActiveSlot(skills[i].SkillName, skills[i].SkillDesc, skills[i].SkillLevel, skills[i].IconSprite);
                     slotsLength--;
                 }
                 if (slotsLength > 0) {
-                    for (int i = slotsLength - 1; i >= 0; i--) {
+                    for (int i = SkillSlots.Length - 1; i >= SkillSlots.Length - slotsLength; i--) {
                         SkillSlots[i].DisableSlot();
                     }
                 }
-                else if (slotsLength < 0) {
-                    CatLog.ELog("Need More Skill Slots.");
-                }
+
+                //var skillInfos = address.GetSkillInfos;
+                //for (int i = 0; i < SkillSlots.Length; i++) {
+                //    if(skillInfos[i] != null) SkillSlots[i].ActiveSlot(skillInfos[i].SkillName, skillInfos[i].SkillDesc, skillInfos[i].SkillLevel, skillInfos[i].IconSprite);
+                //    else                      SkillSlots[i].DisableSlot();
+                //}
 
                 //Check this item is Equipped
                 bool isActiveEquipButton = (ReferenceEquals(CCPlayerData.equipments.GetSpArrOrNull, address)) ? false : true;

@@ -34,16 +34,17 @@
         //Skill Callback
         Func<MonoBehaviour, float> activeSkillFunc = null;  //Skill Effect
         Action stopSkillAction  = null;                     //Skill Effect Stop
+        Action actionNotifyPlay = null;                     //SKill Prepared Notify
         Coroutine skillEffectCo = null;                     //Skill Effect Coroutine
 
         #region INIT
 
-        public AccessorySkillSlot InitSlot(UI.ACSData data) {
+        public AccessorySkillSlot InitSlot(UI.ACSData data, Action actionNotify = null) {
             switch (data.ActiveType) {
-                case ACSPACTIVETYPE.COOLDOWN:  InitCoolDownType(data); return this;
-                case ACSPACTIVETYPE.CHARGING:  InitStackType(data);    return this;
-                case ACSPACTIVETYPE.KILLCOUNT: InitKillType(data);     return this;
-                case ACSPACTIVETYPE.HITCOUNT:  InitHitType(data);      return this;
+                case ACSPACTIVETYPE.COOLDOWN:  InitCoolDownType(data, actionNotify); return this;
+                case ACSPACTIVETYPE.CHARGING:  InitStackType(data);                  return this;
+                case ACSPACTIVETYPE.KILLCOUNT: InitKillType(data);                   return this;
+                case ACSPACTIVETYPE.HITCOUNT:  InitHitType(data);                    return this;
                 default: throw new NotImplementedException();
             }
         }
@@ -65,7 +66,7 @@
         /// CoolDown Type Skill Slots
         /// </summary>
         /// <param name="data"></param>
-        public void InitCoolDownType(UI.ACSData data) {
+        public void InitCoolDownType(UI.ACSData data, Action actionNotify) {
             InitDefault(data.ActiveType, data.IconSprite);
 
             if(coolDownMask == null || coolDownTmp == null) {
@@ -80,6 +81,7 @@
             coolDownMask.fillAmount = 1f;
             coolDownTmp.text = "";
 
+            actionNotifyPlay = actionNotify;
             InitEventTriggerCallback(data.SkillFunc);
             InitEffectStop(data.SkillStopCallback);
         }
@@ -117,8 +119,10 @@
             //Prepared Skill
             if (isPreparedSkillActive == false) {
                 currentCoolDown -= Time.deltaTime;
-                if (currentCoolDown <= 0f)
+                if (currentCoolDown <= 0f) {
                     isPreparedSkillActive = true;
+                    actionNotifyPlay();
+                }
             }
 
             //Update-UI-Element

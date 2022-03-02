@@ -507,13 +507,9 @@
             //Active Camera Shake
             CineCam.Inst.ShakeCamera(8f, .1f);
 
-            //Arrow Reload
-            if (arrowType == ARROWTYPE.ARROW_SPECIAL) {
-                Reload(previousType);
-            }
-            else {
-                Reload(arrowType);
-            }
+            //Reload
+            var reloadType = (arrowType == ARROWTYPE.ARROW_SPECIAL) ? previousType : arrowType;
+            Reload(reloadType);
 
             //Release Pulling Stop State
             IsPullingStop = false;
@@ -612,8 +608,7 @@
         public void Swap(ARROWTYPE type) {
             //return when Pulling or attempting to replace with the same arrowtype.
             if (isBowPullBegan == true || arrowType == type) {
-                CatLog.WLog("Bow State is Pulling or Same Type of arrow currently loaded");
-                return;
+                CatLog.WLog("Bow State is Pulling or Same Type of arrow currently loaded"); return;
             }
 
             if (type == ARROWTYPE.ARROW_SPECIAL) {

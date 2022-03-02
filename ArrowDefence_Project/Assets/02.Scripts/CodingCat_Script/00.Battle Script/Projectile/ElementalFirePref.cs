@@ -28,14 +28,6 @@
             if (effector == null) throw new System.Exception("Component Not Cached.");
         }
 
-        public override void SetProjectileValue(PlayerAbilitySlot slot) {
-            //finCalcDamage = System.Convert.ToInt16(baseDamage * slot.DamageIncRate);
-        }
-
-        public void SetProjectileValue(short finalCalculatedDamage) {
-            finCalcDamage = finalCalculatedDamage;
-        }
-
         private void OnTriggerEnter2D(Collider2D collision) {
             if (collision.gameObject.layer == LayerMask.NameToLayer(AD_Data.LAYER_MONSTER)) {
                 if (collision.TryGetComponent<IDamageable>(out IDamageable target)) {

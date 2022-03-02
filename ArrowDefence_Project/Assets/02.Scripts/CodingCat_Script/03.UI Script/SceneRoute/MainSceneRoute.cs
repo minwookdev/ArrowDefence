@@ -70,10 +70,6 @@ public class MainSceneRoute : MonoBehaviour
     public BattlePopup battlePop;
     public ItemInfoPop itemInfoPop;
 
-    [Header("MESSAGE")]
-    public TMPro.TextMeshProUGUI MessageText;
-    Sequence messageSeq;
-
     [Header("SAVE & LOAD")]
     public bool isAutoLoad;
 
@@ -84,14 +80,11 @@ public class MainSceneRoute : MonoBehaviour
 
         //스타트 시 초기 Scale 값 초기화 (테스트용)
         //MenuOpen Tween에 잔상 방지 -> 추후 수정
-        foreach (var item in menuObjects)
-        {
-            if (item.activeSelf)
-            {
+        foreach (var item in menuObjects) {
+            if (item.activeSelf) {
                 currentOpenedMenu = item;
             }
-            else
-            {
+            else {
                 item.transform.localScale = Vector3.zero;
             }
         }
@@ -103,13 +96,6 @@ public class MainSceneRoute : MonoBehaviour
             CatLog.WLog("OpenMenuTime is less than CloseMenuTime.");
         }
 
-        //Set Message Tweening Initialize [Use Testing]
-        messageSeq = DOTween.Sequence()
-                            .Append(MessageText.DOFade(0f, 3f))
-                            .Join(MessageText.transform.DOShakePosition(1f, 5f, 15, 90, false, true))
-                            .SetAutoKill(false)
-                            .Pause(); //Disable Auto Start
-
         //Auto Load SaveData
         if (isAutoLoad)
             ActionCat.GameManager.Instance.AutoLoadUserData();
@@ -120,18 +106,6 @@ public class MainSceneRoute : MonoBehaviour
 
     private void OnDestroy() {
         _inst = null;
-    }
-
-    public void Message(string msg)
-    {
-        if (MessageText != null)
-        {
-            //MessageText.DOKill();
-            MessageText.color = new Color(MessageText.color.r, MessageText.color.g, MessageText.color.b, 1f);
-            MessageText.text = msg;
-
-            messageSeq.Restart();
-        }
     }
 
     /// <summary>

@@ -69,10 +69,19 @@
             arrowColl.enabled  = false;
 
             //Init-Arrow Skill
-            arrowSkillSets = GameManager.Instance.GetArrSkillSetsOrNull(gameObject.name);
-            if(arrowSkillSets != null) {
-                isInitSkill = true;
+            //arrowSkillSets = GameManager.Instance.GetArrSkillSetsOrNull(gameObject.name);
+            //if(arrowSkillSets != null) {
+            //    isInitSkill = true;
+            //    arrowSkillSets.Init(arrowTr, rBody, this);
+            //}
+
+            if(GameManager.Instance.TryGetSkillSet(gameObject.name, out ArrowSkillSet skillset)) {
+                arrowSkillSets = skillset;
                 arrowSkillSets.Init(arrowTr, rBody, this);
+                isInitSkill = true;
+            }
+            else {
+                isInitSkill = false;
             }
 
             //Init Collision Data Queue
@@ -211,7 +220,9 @@
             ///rBody.AddForce(direction * ArrowPower, ForceMode2D.Impluse); //or ForceMode2D.Force
 
             arrowTrail.gameObject.SetActive(true);  //Enable TrailRenderer and Line Clear 
-            arrowTrail.Clear();                     //prevention afterimage
+            if (arrowTrail.enabled == true) {
+                arrowTrail.Clear();
+            }
 
             // Start Collision Start.
             arrowColl.enabled = true; 
@@ -291,6 +302,9 @@
 
         public void SetEffectInfo(string[] tagArray) {
             effectPoolTags = tagArray;
+            if(effectPoolTags.Length <= 0) {
+                CatLog.Log($"{gameObject.name}: Effect PoolTags Array is Empty !");
+            }
         }
 
         public void RemoveEffectInfo() {
@@ -298,10 +312,7 @@
         }
 
         public void PlayEffect(Vector3 position) {
-            if(effectPoolTags.Length == 0) {
-                CatLog.WLog("Effect PoolTag Array is Empty."); return;
-            }
-
+            if (effectPoolTags.Length <= 0) return;
             CCPooler.SpawnFromPool<ACEffector2D>(effectPoolTags.RandIndex<string>(), position, Quaternion.identity).PlayOnce(true);
         }
 

@@ -54,9 +54,5 @@
             if (rigidBody == null) throw new System.Exception("Component Not Cached.");
             if (coll == null)      throw new System.Exception("Component Not Cached.");
         }
-
-        public override void SetProjectileValue(PlayerAbilitySlot ability) {
-            throw new System.NotImplementedException();
-        }
     }
 }

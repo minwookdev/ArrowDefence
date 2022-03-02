@@ -1,5 +1,4 @@
-﻿namespace ActionCat
-{
+﻿namespace ActionCat {
     using System.Collections.Generic;
     using UnityEngine;
 
@@ -223,18 +222,6 @@
             rect.localScale = scale;
         }
 
-        public static Collider2D[] OverlapCircleAll2D(Transform centerTr, float radius, string layerName, System.Predicate<Collider2D> predicate) {
-            List<Collider2D> list = new List<Collider2D>(Physics2D.OverlapCircleAll(centerTr.position, radius, 1 << LayerMask.NameToLayer(layerName)));
-            list.RemoveAll(predicate);
-            return list.ToArray();
-        }
-
-        public static void OverlapCircleAll2D(out Collider2D[] array, Transform centerTr, float radius, string layername, System.Predicate<Collider2D> predicate) {
-            List<Collider2D> list = new List<Collider2D>(Physics2D.OverlapCircleAll(centerTr.position, radius, 1 << LayerMask.NameToLayer(layername)));
-            list.RemoveAll(predicate);
-            array = list.ToArray();
-        }
-
         public static string GetStageKey(STAGETYPE stageType) {
             switch (stageType) {
                 case STAGETYPE.STAGE_DEV:              return AD_Data.STAGE_KEY_DEV;
@@ -289,12 +276,82 @@
         }
 
         public static float RandomAngleDeg() {
-            return Random.Range(0f, 360f);
+            return Random.Range(0, 360f);
         }
 
         public static float RandomAngleRad() {
             return Random.Range(0f, 360f) * Mathf.Deg2Rad;
         }
+
+        #region COLLIDER
+
+        public static Collider2D[] OverlapCircleAll2D(Transform centerTr, float radius, string layerName, System.Predicate<Collider2D> predicate = null) {
+            List<Collider2D> list = new List<Collider2D>(Physics2D.OverlapCircleAll(centerTr.position, radius, 1 << LayerMask.NameToLayer(layerName)));
+            if (predicate != null) list.RemoveAll(predicate);
+            return list.ToArray();
+        }
+
+        public static bool TryGetOverlapCircleAll2D(out Collider2D[] array, Vector2 centerPos, float radius, string layerName, System.Predicate<Collider2D> predicate = null) {
+            var colliderList = new List<Collider2D>(Physics2D.OverlapCircleAll(centerPos, radius, 1 << LayerMask.NameToLayer(layerName)));
+            if (predicate != null) colliderList.RemoveAll(predicate);
+
+            if (colliderList.Count <= 0) {
+                array = null;
+                return false;
+            }
+
+            array = colliderList.ToArray();
+            return true;
+        }
+
+        #endregion
+
+        #region ARRAY
+
+        /// <summary>
+        /// 검증 / 테스트 필요함 (실패)
+        /// </summary>
+        ///public static void Add<T>(this T[] array, T newelement) {
+        ///    List<T> temp = new List<T>(array);
+        ///    temp.Add(newelement);
+        ///    array = new List<T>(temp).ToArray();
+        ///}
+
+        public static T[] AddArray<T>(T[] array, T element) {
+            if(array == null) {
+                throw new System.Exception("This Array is Null.");
+            }
+
+            List<T> tempList = new List<T>(array);
+            tempList.Add(element);
+            return tempList.ToArray();
+        }
+
+        public static void AddArray<T>(ref T[] array, T element) {
+            if(array == null) {
+                throw new System.Exception("This Array is Null.");
+            }
+
+            List<T> tempList = new List<T>(array);
+            tempList.Add(element);
+            array = tempList.ToArray();
+        }
+
+        /// <summary>
+        /// 값 형식은 지원한다. 확장 메서드.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="array"></param>
+        /// <param name="element"></param>
+        public static void Add<T>(this ref T array, T element) where T: struct {
+
+        }
+
+        public static List<T> ToList<T>(this T[] array) {
+            return new List<T>(array);
+        }
+
+        #endregion
 
         #region TIME
 
@@ -342,6 +399,22 @@
         public static readonly int intOne  = 1;
         public static readonly int intZero = 0;
         public static readonly string stringEmpty = "";
+    }
+
+    public struct RandomEx {
+        /// <summary>
+        /// 최소 ~ 최대 모든 범위 포함
+        /// </summary>
+        /// <param name="min"></param>
+        /// <param name="max"></param>
+        /// <returns></returns>
+        public static int RangeInt(int min, int max) {
+            return Random.Range(min, max + 1);
+        }
+
+        public static float RangeFloat(float min, float max) {
+            return Random.Range(min, max);
+        }
     }
 
     #region ENUMS_BATTLE
@@ -406,6 +479,7 @@
     /// 정의. 구현된 Arrow Skill Type
     /// </summary>
     public enum ARROWSKILL {
+        NONE,
         SKILL_REBOUND,
         SKILL_HOMING,
         SKILL_SPLIT,
@@ -414,6 +488,7 @@
         ELEMENTAL_FIRE,
         EXPLOSION,
         WINDPIERCING,
+        BUFF,
     }
     /// <summary>
     /// 정의. Skill 발동 UI 타입
@@ -450,9 +525,5 @@
     ///[12] FTF : AIR
     ///[13] FFT : ADD PROJ
     ///[14] FFF : EMPTY
-    #endregion
-
-    #region ENUMS_ITEM
-
     #endregion
 }

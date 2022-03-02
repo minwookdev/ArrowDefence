@@ -28,14 +28,17 @@
         [Header("SLOTS")] [Tooltip("Do Not Modify this Field")]
         [SerializeField] [ReadOnly] AccessorySkillSlot[] slots = null;
 
+        [Header("NOTIFY")]
+        [SerializeField] SlotNotify notify = null;
+
         public void InitSlots(ACSData[] array) {
             var list = new System.Collections.Generic.List<AccessorySkillSlot>();
             for (int i = 0; i < array.Length; i++) {
                 switch (array[i].ActiveType) {
-                    case ACSPACTIVETYPE.COOLDOWN:  list.Add(Instantiate<AccessorySkillSlot>(cooldownSlotPref, slotGroupTr).InitSlot(array[i])); break;
-                    case ACSPACTIVETYPE.CHARGING:  list.Add(Instantiate<AccessorySkillSlot>(chargingSlotPref, slotGroupTr).InitSlot(array[i])); break;
-                    case ACSPACTIVETYPE.KILLCOUNT: list.Add(Instantiate<AccessorySkillSlot>(killTypeSlotPref, slotGroupTr).InitSlot(array[i])); break;
-                    case ACSPACTIVETYPE.HITCOUNT:  list.Add(Instantiate<AccessorySkillSlot>(hitTypeSlotPref, slotGroupTr).InitSlot(array[i]));  break;
+                    case ACSPACTIVETYPE.COOLDOWN:  list.Add(Instantiate<AccessorySkillSlot>(cooldownSlotPref, slotGroupTr).InitSlot(array[i], PlayNotify)); break;
+                    case ACSPACTIVETYPE.CHARGING:  list.Add(Instantiate<AccessorySkillSlot>(chargingSlotPref, slotGroupTr).InitSlot(array[i]));             break;
+                    case ACSPACTIVETYPE.KILLCOUNT: list.Add(Instantiate<AccessorySkillSlot>(killTypeSlotPref, slotGroupTr).InitSlot(array[i]));             break;
+                    case ACSPACTIVETYPE.HITCOUNT:  list.Add(Instantiate<AccessorySkillSlot>(hitTypeSlotPref, slotGroupTr).InitSlot(array[i]));              break;
                     default: throw new System.NotImplementedException("This SlotType is Not Implemented.");
                 }
             }
@@ -52,6 +55,9 @@
                 entry.eventID = EventTriggerType.PointerDown;
                 entry.callback.AddListener(eventdata => TimerReset());
 
+                //Init Slot Notify System
+                notify.Init();
+
                 foreach (var slot in slots) {
                     if(slot.TryGetComponent<EventTrigger>(out EventTrigger eventTrigger)) {
                         eventTrigger.triggers.Add(entry);
@@ -61,6 +67,7 @@
                         continue;
                     }
                 }
+
 
                 if(blockPanel.TryGetComponent<EventTrigger>(out EventTrigger panelEventTrigger)) {
                     panelEventTrigger.triggers.Add(entry);
@@ -106,10 +113,21 @@
 
         void TimerReset() {
             currOpenedTime = maxOpenedTime;
+            if (notify.IsPlaying()) {
+                notify.Stop();
+            }
         }
 
         void IPointerDownHandler.OnPointerDown(PointerEventData eventData) {
             TimerReset();
+        }
+
+        void PlayNotify() {
+            if (isOpen) {
+                return;
+            }
+
+            notify.Play();
         }
     }
 

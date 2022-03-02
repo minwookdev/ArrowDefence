@@ -155,7 +155,7 @@
                 return null;
         }
 
-        public ArrowSkillSet GetArrSkillSetsOrNull(string tag) {
+        public ArrowSkillSet GetArrSkillSetsOrNull(string tag) { // <- Delete this..
             if (tag == AD_Data.POOLTAG_MAINARROW || tag == AD_Data.POOLTAG_MAINARROW_LESS) {
                 var skillSets = CCPlayerData.equipments.GetMainArrow().ArrowSkillSets;
                 if (skillSets != null) {
@@ -178,6 +178,35 @@
             }
             else //WrongTag 
                 return null;
+        }
+
+        public bool TryGetSkillSet(string tag, out ArrowSkillSet skillset) {
+            ArrowSkillSet temp = null;
+            var equipments = CCPlayerData.equipments;
+            if (tag == AD_Data.POOLTAG_MAINARROW || tag == AD_Data.POOLTAG_MAINARROW_LESS) {
+                temp = equipments.GetMainArrow().ArrowSkillSets;
+            }
+            else if (tag == AD_Data.POOLTAG_SUBARROW || tag == AD_Data.POOLTAG_SUBARROW_LESS) {
+                temp = equipments.GetSubArrow().ArrowSkillSets;
+            }
+            else if (tag == AD_Data.POOLTAG_SPECIAL_ARROW) {
+                if(equipments.GetSpArrow().TryGetSkillSet(out ArrowSkillSet tempskillset)) {
+                    temp = tempskillset;
+                }
+            }
+            else {
+                CatLog.ELog($"Not Implemented this ArrowTag. (Tag: {tag})");
+                skillset = null;
+                return false;
+            }
+
+            if (temp == null) { //Arrow Skill is Empty
+                skillset = null;
+                return false;
+            }
+
+            skillset = new ArrowSkillSet(temp);
+            return true;
         }
 
         public void ReleaseEquipments() {

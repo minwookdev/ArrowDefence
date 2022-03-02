@@ -183,6 +183,7 @@
                 else {
                     tempCost = 0f;
                 }
+                spSlot.PlayNotify();
             }
             currentCost = tempCost;
             UpdateInterface();
@@ -199,6 +200,7 @@
                 else {
                     tempCost = 0f;
                 }
+                spSlot.PlayNotify();
             }
             currentCost = tempCost;
             UpdateInterface();
@@ -209,6 +211,7 @@
             if(currentCost >= maxCost) {
                 currentStackedCount++;
                 currentCost = 0f;
+                spSlot.PlayNotify();
             }
             UpdateInterface();
         }

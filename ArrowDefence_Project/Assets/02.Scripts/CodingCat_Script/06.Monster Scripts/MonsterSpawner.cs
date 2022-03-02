@@ -8,6 +8,7 @@
         [SerializeField] STAGEDIFF stageDiff = STAGEDIFF.EASY;
 
         [Header("SPAWN POINT")]
+        [SerializeField] Transform[] spawnPoints = null;
         public Vector3 TopLeft;
         public Vector3 BottomRight;
 
@@ -18,6 +19,10 @@
 
         [Header("SPAWN TIMER")]
         [ReadOnly] public float spawnTimer = 0f;
+        [SerializeField] [ReadOnly] float currentSpawnTime  = 0f;
+        [SerializeField] [ReadOnly] float spawnIntervalTime = 0f;
+        [SerializeField] [ReadOnly] int currentSpawnStack   = 0;
+        [SerializeField] [ReadOnly] int spawnStackDest      = 0;
 
         [Header("DEBUG")]
         [SerializeField] bool isNotSpawnMonster   = false;
@@ -32,8 +37,7 @@
         private int spawnIntervalMin;
         private int spawnIntervalMax;
 
-        private IEnumerator Start()
-        {
+        private IEnumerator Start() {
             //Init Monster Spawn Point
             topLeftPoint     = TopLeft;
             bottomRightPoint = BottomRight;
@@ -42,6 +46,8 @@
             spawnIntervalMax = 2;
             spawnIntervalMin = 1;
             spawnTimer = 3f;
+
+            currentSpawnTime = GetRandomInterval();
 
             //Waiting Object Pooler for Add Object in Pooler
             yield return new WaitUntil(() => CCPooler.IsInitialized);
@@ -75,6 +81,55 @@
             }
         }
 
+        void UpdateSpawner() {
+            //Decrease Spawn Interval Time
+            currentSpawnTime -= Time.deltaTime;
+
+            if (currentSpawnTime <= 0f) {
+                currentSpawnStack++;
+                if (currentSpawnStack > spawnStackDest) {
+                    SpawnGroup();
+                    spawnStackDest = GetRandomStack();
+                }
+                else {
+                    SpawnNormal();
+                }
+                currentSpawnTime = GetRandomInterval();
+            }
+        }
+
+        void SpawnNormal() {
+
+        }
+
+        void SpawnGroup() {
+
+        }
+
+        float GetRandomInterval() {
+            switch (stageDiff) {
+                case STAGEDIFF.NONE: return RandomEx.RangeFloat(1f, 2f);
+                case STAGEDIFF.EASY: return RandomEx.RangeFloat(2f, 3f);
+                case STAGEDIFF.NOML: return RandomEx.RangeFloat(1f, 2f);
+                case STAGEDIFF.HARD: return RandomEx.RangeFloat(1f, 1.5f);
+                case STAGEDIFF.WARF: return RandomEx.RangeFloat(0.7f, 1.2f);
+                case STAGEDIFF.HELL: return RandomEx.RangeFloat(0.5f, 1f);
+                default: throw new System.NotImplementedException();
+            }
+        }
+
+        int GetRandomStack() {
+            switch (stageDiff) {
+                case STAGEDIFF.NONE: return RandomEx.RangeInt(3, 4);
+                case STAGEDIFF.EASY: return RandomEx.RangeInt(4, 4);
+                case STAGEDIFF.NOML: return RandomEx.RangeInt(3, 4);
+                case STAGEDIFF.HARD: return RandomEx.RangeInt(2, 3);
+                case STAGEDIFF.WARF: return RandomEx.RangeInt(2, 3);
+                case STAGEDIFF.HELL: return RandomEx.RangeInt(1, 2);
+                default: throw new System.NotImplementedException();
+            }
+        }
+
         private IEnumerator Spawn()
         {
             //몬스터 소환해놓고 각종 변수 (위치, 회전 등) 설정해주고
@@ -88,9 +143,9 @@
             //현재는 Init된 Pref에 따라 스폰 몬스터 결정.
             switch (stageDiff) {
                 case STAGEDIFF.EASY:   EasyDiffSpawn(spawnPos);   break;
-                case STAGEDIFF.NORMAL: NormalDiffSpawn(spawnPos); break;
+                case STAGEDIFF.NOML: NormalDiffSpawn(spawnPos); break;
                 case STAGEDIFF.HARD:   HardDiffSpawn(spawnPos);   break;
-                case STAGEDIFF.WARFIELD: break;
+                case STAGEDIFF.WARF: break;
                 case STAGEDIFF.HELL:     break;
             }
 

@@ -75,12 +75,12 @@
             } playerCo = StartCoroutine(RunEffect());
         }
 
-        public void Play(bool isStartRandRotation = false) {
+        public void Play(bool randomRotate = false) {
             if(effectorType == EFFECTORTYPE.NONE) {
                 effectorType = EFFECTORTYPE.RESTARTER;
             }
 
-            if(isStartRandRotation == true) {
+            if(randomRotate == true) {
                 Vector3 eulerAngles = tr.eulerAngles;
                 eulerAngles.z = GameGlobal.RandomAngleDeg();
                 tr.eulerAngles = eulerAngles;

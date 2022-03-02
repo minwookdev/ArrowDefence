@@ -16,14 +16,14 @@ MonoBehaviour:
   Item_Grade: 4
   Item_Id: 6001
   Item_Amount: 1
-  Item_Name: TEST SP ARR
-  Item_Desc: Test Special Arrow Item.
+  Item_Name: Explosion Arrow
+  Item_Desc: this is a draft of a  special arrow.
   Item_Sprite: {fileID: 21300000, guid: 0d6c8a18cba27c243ab0dc43afd9bbbd, type: 3}
   Equip_Type: 1
   MainArrowObj: {fileID: 8706528957568387701, guid: 525c69bdcbe82df4f9a7ab3e66d92565,
     type: 3}
   LessArrowObj: {fileID: 0}
-  ArrowSkillFst: {fileID: 0}
+  ArrowSkillFst: {fileID: 11400000, guid: 715fba3fd71c75446a795b621327456c, type: 2}
   ArrowSkillSec: {fileID: 0}
   DamageInc: 1
   Speed: 18

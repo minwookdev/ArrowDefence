@@ -120,7 +120,7 @@
             _shuttingDown = true;
             //SceneManager.sceneLoaded -= OnReset;
 
-            if(SceneLoader.Instance != null) {
+            if (SceneLoader.IsActive) {
                 SceneLoader.SceneChangeCallback -= OnReset;
             }
         }

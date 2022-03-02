@@ -560,6 +560,10 @@
             array = resultList.ToArray();
         }
 
+        /// <summary>
+        /// 개선 필요
+        /// </summary>
+        /// <param name="result"></param>
         public static void OutEnableMonsters(out List<Transform> result) {
             List<GameObject> tempList  = new List<GameObject>();
             result = new List<Transform>();
@@ -572,6 +576,25 @@
             if (_inst.aliveTrackDic.TryGetValue(AD_Data.POOLTAG_MONSTER_FREQ, out tempList)) {
                 result.AddRange(tempList.GetComponentAll<Transform>());
             }
+        }
+
+        public static Transform[] GetAllAliveMonsterTr() {
+            var resultTrList = new List<Transform>();
+            string[] targetTags = new string[3] { AD_Data.POOLTAG_MONSTER_NORMAL, 
+                                                  AD_Data.POOLTAG_MONSTER_ELITE, 
+                                                  AD_Data.POOLTAG_MONSTER_FREQ };
+
+            foreach (var keyValuePair in _inst.aliveTrackDic) {
+                for (int i = 0; i < targetTags.Length; i++) {
+                    if(keyValuePair.Key == targetTags[i]) {
+                        if(_inst.aliveTrackDic.TryGetValue(keyValuePair.Key, out List<GameObject> tempList)) {
+                            resultTrList.AddRange(tempList.GetComponentAll<Transform>());
+                        }
+                    }
+                }
+            }
+
+            return resultTrList.ToArray();
         }
 
         #endregion

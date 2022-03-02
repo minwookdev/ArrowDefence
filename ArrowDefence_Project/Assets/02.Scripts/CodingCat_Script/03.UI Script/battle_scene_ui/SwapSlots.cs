@@ -23,7 +23,10 @@
 
         [Header("SP SLOT ADDS")]
         [SerializeField] Image[] stackImages = null;
-        [SerializeField] Image costImage   = null;
+        [SerializeField] Image costImage     = null;
+
+        [Header("Notify")]
+        [SerializeField] SlotNotify notify = null;
 
         void Start() {
             currOpenedTime = slotOpenDuration;
@@ -44,8 +47,8 @@
         void Update() {
             if(currOpenedTime <= 0) {
                 if(isOpen == true) {
-                    TweenClose();
                     isOpen = false;
+                    TweenClose();
                 }
             }
             else {
@@ -53,8 +56,8 @@
                 else                   currOpenedTime -= Time.deltaTime;
 
                 if(isOpen == false) {
-                    TweenOpen();
                     isOpen = true;
+                    TweenOpen();
                 }
             }
         }
@@ -65,6 +68,9 @@
 
         void TimerReset() {
             currOpenedTime = slotOpenDuration;
+            if (notify.IsPlaying()) {
+                notify.Stop();
+            }
         }
 
         void TweenOpen() {
@@ -75,7 +81,7 @@
             slotGroupTr.DOLocalMoveX(closePosX, slotMovingTime);
         }
 
-        #region SLOTS
+        #region INITALIZE
 
         public void InitSlots(ArrSSData[] array) {
             for (int i = 0; i < array.Length; i++) {
@@ -94,9 +100,9 @@
                 int captureNum = i;
                 var type = ARROWTYPE.NONE;
                 switch (captureNum) {   //Get Arrow Type
-                    case 0: type = ARROWTYPE.ARROW_MAIN;    break;
-                    case 1: type = ARROWTYPE.ARROW_SUB;     break;
-                    case 2: type = ARROWTYPE.ARROW_SPECIAL; break;
+                    case 0: type = ARROWTYPE.ARROW_MAIN;                   break;
+                    case 1: type = ARROWTYPE.ARROW_SUB;                    break;
+                    case 2: type = ARROWTYPE.ARROW_SPECIAL; notify.Init(); break;
                 }
                 var entry = new EventTrigger.Entry();
                 entry.eventID = EventTriggerType.PointerClick;
@@ -140,6 +146,14 @@
             }
         }
 
+        public void PlayNotify() {
+            if (isOpen) {
+                return;
+            }
+
+            notify.Play();
+        }
+
         #endregion
     }
 
@@ -155,4 +169,49 @@
         }
     }
 
+    [System.Serializable]
+    internal sealed class SlotNotify {
+        [Header("SLOT NOTIFY")]
+        [SerializeField] RectTransform notifyRectTr = null;
+        [SerializeField] CanvasGroup notifyCanvasGroup = null;
+
+        byte repeatCount;
+        float interval;
+        Vector3 fadeInScale  = new Vector3(1f, 1f, 1f);
+        Vector3 fadeOutScale = new Vector3(1.2f, 1.2f, 1f);
+        Sequence notifySequence = null;
+
+        public void Init(byte repeat = 2, float intervalTime = 0.5f, bool isDefaultTimeScale = false) {
+            repeatCount = repeat;
+            interval    = intervalTime;
+            notifySequence = DOTween.Sequence();
+            notifySequence.SetAutoKill(false).SetUpdate(isDefaultTimeScale).Pause();
+            for (int i = 0; i < repeatCount; i++) {
+                notifySequence.Append(notifyCanvasGroup.DOFade(0.7f, interval))
+                              .Join(notifyRectTr.DOScale(fadeOutScale, interval))
+                              .Append(notifyCanvasGroup.DOFade(StNum.floatZero, interval))
+                              .Join(notifyRectTr.DOScale(fadeInScale, interval));
+            }
+        }
+
+        public void Play() {
+            if(notifySequence == null) {
+                throw new System.Exception("Slot Notify Sequence is Null.");
+            }
+
+            notifySequence.Restart();
+        }
+
+        public void Stop() {
+            notifySequence.Complete();
+        }
+
+        public bool IsPlaying() {
+            if(notifySequence == null) {
+                return false;
+            }
+
+            return notifySequence.IsPlaying();
+        }
+    }
 }

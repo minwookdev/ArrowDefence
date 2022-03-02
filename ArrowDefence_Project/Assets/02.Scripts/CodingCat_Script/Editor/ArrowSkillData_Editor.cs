@@ -314,6 +314,53 @@ public class ElementalFireEditor : ArrowSkillData_Editor {
     }
 }
 
+[CustomEditor(typeof(Dt_Explosion))]
+public class ExplosionEditor : ArrowSkillData_Editor {
+    SerializedProperty explosionPref;
+    SerializedProperty smallExPref;
+    SerializedProperty explosionRange;
+    SerializedProperty addExplosionRange;
+    SerializedProperty explosionDamageProp;
+    SerializedProperty addExplosionDamageProp;
+
+    private void OnEnable() {
+        base.InitSerializedObject();
+        explosionPref     = sobject.FindProperty(nameof(Dt_Explosion.ExplosionPref));
+        smallExPref       = sobject.FindProperty(nameof(Dt_Explosion.SmallExPref));
+        explosionRange    = sobject.FindProperty(nameof(Dt_Explosion.ExplosionRange));
+        addExplosionRange = sobject.FindProperty(nameof(Dt_Explosion.AddExplosionRange));
+        explosionDamageProp    = sobject.FindProperty(nameof(Dt_Explosion.ExplosionDamage));
+        addExplosionDamageProp = sobject.FindProperty(nameof(Dt_Explosion.AddExDamage));
+    }
+
+    public override void OnInspectorGUI() {
+        DrawMonoScript();
+        DrawDefaultSkillData();
+        #region PROJECTILE
+        GUILayout.Label("Projectile Common");
+        EditorGUILayout.BeginVertical("GroupBox");
+        EditorGUILayout.PropertyField(explosionDamageProp, new GUIContent("Base Damage"));
+        EditorGUILayout.PropertyField(addExplosionDamageProp, new GUIContent("Base Damage - 2"));
+        EditorGUILayout.EndVertical();
+        #endregion
+        #region EXPLOSION
+        GUILayout.Label("Explosion");
+        EditorGUILayout.BeginVertical("GroupBox");
+        EditorGUILayout.PropertyField(explosionPref);
+        EditorGUILayout.PropertyField(smallExPref);
+        EditorGUILayout.PropertyField(explosionRange);
+        EditorGUILayout.PropertyField(addExplosionRange);
+        var currentIndentLevel = EditorGUI.indentLevel;
+        EditorGUI.indentLevel = 1;
+        EditorGUILayout.PropertyField(effectProp, new GUIContent("ShockWave Effect"));
+        EditorGUI.indentLevel = currentIndentLevel;
+        EditorGUILayout.EndVertical();
+        #endregion
+        GUILayout.EndVertical();
+        sobject.ApplyModifiedProperties();
+    }
+}
+
 public class CreateArrowSkillDataAsset {  
     [MenuItem("ActionCat/Scriptable Object/Arrow Skill Asset/Rebound Arrow")]
     public static void CreateReboundArrowAsset()
@@ -390,6 +437,20 @@ public class CreateArrowSkillDataAsset {
         EditorUtility.FocusProjectWindow();
         Selection.activeObject = asset;
     }
+
+    [MenuItem("ActionCat/Scriptable Object/Arrow Skill Asset/Special/Explosion")]
+    public static void CreateExplosionAsset() {
+        string assetCreatePath = "Assets/05.SO/SO.Skill/ArrowSkillAsset/Special_Explosion_default.asset";
+        var asset = ScriptableObject.CreateInstance<Dt_Explosion>();
+        AssetDatabase.CreateAsset(asset, assetCreatePath);
+        AssetDatabase.SaveAssets();
+        AssetDatabase.Refresh();
+
+        EditorUtility.FocusProjectWindow();
+        Selection.activeObject = asset;
+    }
 }
+
+
 
 

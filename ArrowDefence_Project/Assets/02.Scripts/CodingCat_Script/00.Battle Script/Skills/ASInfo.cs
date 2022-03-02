@@ -69,6 +69,7 @@
                 case SplitDagger newskill:    return new SplitDagger(newskill);
                 case SplitArrow newskill:     return new SplitArrow(newskill);
                 case ElementalFire newskill:  return new ElementalFire(newskill);
+                case Explosion newskill:      return new Explosion(newskill);
                 //======================================================================================
                 default: throw new System.NotImplementedException("this type is Not Implemented !");
             }

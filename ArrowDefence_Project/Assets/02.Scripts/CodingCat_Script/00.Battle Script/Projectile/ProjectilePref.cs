@@ -23,7 +23,7 @@
             }
         }
 
-        public void DisableRequest() {
+        public virtual void DisableRequest() {
             CCPooler.ReturnToPool(gameObject);
         }
 
@@ -45,6 +45,7 @@
             PointRightBottom = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, 0f));
         }
 
-        public abstract void SetProjectileValue(PlayerAbilitySlot ability);
+        public virtual void SetAbility(PlayerAbilitySlot ability) { }
+
     }
 }

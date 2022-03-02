@@ -21,6 +21,10 @@
             arrow   = arrowInter;
         }
         public virtual void Release() { }
+
+        /// <summary>
+        /// Call When Arrow GameObject Disable
+        /// </summary>
         public abstract void Clear();
     }
 

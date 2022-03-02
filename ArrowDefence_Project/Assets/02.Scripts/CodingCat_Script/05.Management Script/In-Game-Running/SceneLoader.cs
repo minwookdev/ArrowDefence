@@ -28,6 +28,7 @@
 
         public void ReloadScene() {
             NextScene = SceneManager.GetSceneAt(0).name;
+            SceneChangeCallback();
             SceneManager.LoadScene(loadingScene);
         }
 

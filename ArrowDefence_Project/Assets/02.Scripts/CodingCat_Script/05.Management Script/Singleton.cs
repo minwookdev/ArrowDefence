@@ -61,6 +61,15 @@
             }
         }
 
+        public static bool IsActive {
+            get {
+                if(_instance == null) {
+                    return false;
+                }
+                return true;
+            }
+        }
+
         private void Awake()
         {
 #if UNITY_EDITOR

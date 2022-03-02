@@ -112,9 +112,10 @@
             // Clone-Additional Projectiles Typ Skil
             if (origin.addProjSkill != null) {
                 switch (origin.addProjSkill) {
-                    case SplitArrow split:   addProjSkill = new SplitArrow(split);   break;
-                    case SplitDagger dagger: addProjSkill = new SplitDagger(dagger); break;
-                    case ElementalFire fire: addProjSkill = new ElementalFire(fire); break;
+                    case SplitArrow projectile:    addProjSkill = new SplitArrow(projectile);    break;
+                    case SplitDagger projectile:   addProjSkill = new SplitDagger(projectile);   break;
+                    case ElementalFire projectile: addProjSkill = new ElementalFire(projectile); break;
+                    case Explosion projectile:     addProjSkill = new Explosion(projectile);     break;
                     default: throw new System.NotImplementedException("this type is Not Implemented.");
                 }
             }
@@ -134,7 +135,7 @@
                 hitSkill = hitTypeSkill;
             }
             else {
-                CatLog.WLog($"{skillData}는(은) AttackActivate Type이 아닙니다.");
+                CatLog.WLog($"잘못된 Item의 ActiveType: {skillData}는(은) HitType이 아닙니다. (ActiveType을 확인)");
             }
         }
 
@@ -147,7 +148,7 @@
                 airSkill = airActiveTypeSkill;
             }
             else {
-                CatLog.WLog($"잘못된 ActivationType : {skillData}는(은) Air ActivationType이 아닙니다.");
+                CatLog.WLog($"잘못된 Item의 ActiveType: {skillData}는(은) AirType이 아닙니다. (ActiveType을 확인)");
             }
         }
 
@@ -157,16 +158,24 @@
             }
 
             if(skillData is ProjectileType projectileTypeSkill) {
+                ///addProjSkill = projectileTypeSkill;
+                ///if(addProjSkill.TryGetPrefab(out ProjectilePref projectile)) {
+                ///    string projectilePoolTag = string.Format("{0}{1}{2}", arrowPoolTag, AD_Data.POOLTAG_PROJECTILE, projectileTypeSkill.GetUniqueTag());
+                ///    addProjSkill.SetPoolTag(projectilePoolTag);
+                ///    addProjSkill.SetAbility(ability);
+                ///    CCPooler.AddPoolList(projectilePoolTag, projectileTypeSkill.DefaultSpawnSize(), projectile.gameObject, isTracking: false);
+                ///}
                 addProjSkill = projectileTypeSkill;
-                if(addProjSkill.TryGetPrefab(out ProjectilePref projectile)) {
-                    string projectilePoolTag = string.Format("{0}{1}{2}", arrowPoolTag, AD_Data.POOLTAG_PROJECTILE, projectileTypeSkill.GetUniqueTag());
-                    addProjSkill.SetPoolTag(projectilePoolTag);
-                    addProjSkill.SetAbility(ability);
-                    CCPooler.AddPoolList(projectilePoolTag, projectileTypeSkill.DefaultSpawnSize(), projectile.gameObject, isTracking: false);
+                addProjSkill.SetAbility(ability);
+                var prefabDictionary = addProjSkill.GetProjectileDic();
+                foreach (var keyValuePair in prefabDictionary) {
+                    string tag = string.Format("{0}{1}{2}", arrowPoolTag, AD_Data.POOLTAG_PROJECTILE, keyValuePair.Key);
+                    addProjSkill.AddPoolTag(tag);
+                    CCPooler.AddPoolList(tag, addProjSkill.DefaultSpawnSize(), keyValuePair.Value, false);
                 }
             }
             else {
-                CatLog.WLog($"잘못된 ActivationType : {skillData}는(은) Projectile Type이 아닙니다.");
+                CatLog.WLog($"잘못된 Item의 ActiveType: {skillData}는(은) ProjectileType이 아닙니다. (ActiveType을 확인)");
             }
         }
 

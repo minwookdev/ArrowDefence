@@ -311,10 +311,11 @@
             //active camera shake
             CineCam.Inst.ShakeCamera(5f, .1f);
             //================================================<< RELOAD ARROW >>================================================
+            arrowType = (arrowType == ARROWTYPE.ARROW_SPECIAL) ? previousType : arrowType;
             switch (arrowType) {    //Reload Arrow by current equipped Arrow Type.
-                case ARROWTYPE.ARROW_MAIN:    arrowTr = CCPooler.SpawnFromPool<Transform>(AD_Data.POOLTAG_MAINARROW, bowTr, initArrowScale, ClampPointTop.position, Quaternion.identity); break;
-                case ARROWTYPE.ARROW_SUB:     arrowTr = CCPooler.SpawnFromPool<Transform>(AD_Data.POOLTAG_SUBARROW, bowTr, initArrowScale, ClampPointTop.position, Quaternion.identity);  break;
-                case ARROWTYPE.ARROW_SPECIAL: throw new System.NotImplementedException("this arrow Type is NotImplemented.");
+                case ARROWTYPE.ARROW_MAIN: arrowTr = CCPooler.SpawnFromPool<Transform>(AD_Data.POOLTAG_MAINARROW, bowTr, initArrowScale, ClampPointTop.position, Quaternion.identity); break;
+                case ARROWTYPE.ARROW_SUB:  arrowTr = CCPooler.SpawnFromPool<Transform>(AD_Data.POOLTAG_SUBARROW, bowTr, initArrowScale, ClampPointTop.position, Quaternion.identity);  break;
+                default: throw new System.NotImplementedException();
             }
 
             //Get Arrow Componenet with init Clamp Points.
@@ -339,24 +340,22 @@
         }
 
         System.Collections.IEnumerator AutoModeArrSwapCo(ARROWTYPE type) {
-            if (arrowType == type) { //same arrow Type, Exit Coroutine <- Not Need this Line
-                CatLog.WLog("this Type Arrow is Already Loaded.");
-                yield break;
-            }
-
-            //Wait Arrow Swapable State..
-            yield return arrSwapWait;
+            yield return arrSwapWait; //Wait Swapable State (WAIT) || (FIND) || (TRAC)
 
             AD_BowRope.instance.CatchPointClear();
             if (arrowComponent != null)
                 arrowComponent.DisableRequest();
-            arrowTr   = null; arrowComponent = null;
+            arrowTr = null; arrowComponent = null;
+            if (type == ARROWTYPE.ARROW_SPECIAL) {
+                previousType = arrowType;
+            }
             arrowType = type;
 
             switch (arrowType) {
-                case ARROWTYPE.ARROW_MAIN: arrowTr = CCPooler.SpawnFromPool<Transform>(AD_Data.POOLTAG_MAINARROW, bowTr, initArrowScale, ClampPointTop.position, Quaternion.identity); break;
-                case ARROWTYPE.ARROW_SUB:  arrowTr = CCPooler.SpawnFromPool<Transform>(AD_Data.POOLTAG_SUBARROW, bowTr, initArrowScale, ClampPointTop.position, Quaternion.identity); break;
-                case ARROWTYPE.ARROW_SPECIAL: CatLog.ELog("This Arrow type is Not Implemented."); yield break;
+                case ARROWTYPE.ARROW_MAIN:    arrowTr = CCPooler.SpawnFromPool<Transform>(AD_Data.POOLTAG_MAINARROW, bowTr, initArrowScale, ClampPointTop.position, Quaternion.identity);     break;
+                case ARROWTYPE.ARROW_SUB:     arrowTr = CCPooler.SpawnFromPool<Transform>(AD_Data.POOLTAG_SUBARROW, bowTr, initArrowScale, ClampPointTop.position, Quaternion.identity);      break;
+                case ARROWTYPE.ARROW_SPECIAL: arrowTr = CCPooler.SpawnFromPool<Transform>(AD_Data.POOLTAG_SPECIAL_ARROW, bowTr, initArrowScale, ClampPointTop.position, Quaternion.identity); break;
+                default: throw new System.NotImplementedException();
             }
 
             arrowComponent = arrowTr.GetComponent<AD_Arrow>().Reload(ClampPointBottom, ClampPointTop, initArrowRot);

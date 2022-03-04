@@ -79,9 +79,17 @@
             }
         }
 
-        public static T GetRandom<T>(this T[] array)
-        {
+        public static T GetRandom<T>(this T[] array) {
             return array[Random.Range(0, array.Length)];
+        }
+
+        public static T GetRandom<T>(this T[] array, out int index) {
+            index = Random.Range(0, array.Length);
+            return array[index];
+        }
+
+        public static int GetRandIdx<T>(this T[] array) {
+            return Random.Range(0, array.Length);
         }
 
         public static GameObject GetControllerByTag() {
@@ -414,6 +422,10 @@
 
         public static float RangeFloat(float min, float max) {
             return Random.Range(min, max);
+        }
+
+        public static T GetRandomIndex<T>(T[] array) {
+            return array[UnityEngine.Random.Range(0, array.Length)];
         }
     }
 

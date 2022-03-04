@@ -29,7 +29,7 @@
             //Save First Logo Position
             var tempLogoPos = logoTr.anchoredPosition;
             var saveLogoPos = tempLogoPos;
-            tempLogoPos.y += 10f;
+            tempLogoPos.y += 300f;
             logoTr.anchoredPosition = tempLogoPos;
 
             //Clear Text and Alpha
@@ -38,11 +38,11 @@
 
             panelTr.gameObject.SetActive(true);
             panelSeq = DOTween.Sequence()
-                .Append(logoTr.DOLocalMove(saveLogoPos, 1f))
-                .Prepend(imagePanelBack.DOFade(saveBackPanelColor.a, .5f))
-                .Append(buttonCanvasGroup.DOFade(1f, 0.3f))
-                .Insert(1f, tmptips.DOText(stageTips, 2f))
-                .OnComplete(() => frontPanelTr.gameObject.SetActive(false));
+                              .Append(logoTr.DOAnchorPos(saveLogoPos, 1f))
+                              .Prepend(imagePanelBack.DOFade(saveBackPanelColor.a, .5f))
+                              .Append(buttonCanvasGroup.DOFade(1f, 0.3f))
+                              .Insert(1f, tmptips.DOText(stageTips, 2f))
+                              .OnComplete(() => frontPanelTr.gameObject.SetActive(false));
             //Don't set SetAutoKill because no re-run is required.
         }
 

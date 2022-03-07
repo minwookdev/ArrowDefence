@@ -36,6 +36,12 @@
         EXIT,
     }
 
+    public enum SPAWNSTATE {
+        NONE,
+        BREAK,
+        SPAWN,
+    }
+
     #endregion
 
     #region EQUIPMENT

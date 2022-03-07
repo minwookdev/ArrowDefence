@@ -32,8 +32,35 @@
             SceneManager.LoadScene(loadingScene);
         }
 
+        public void LoadScene(string sceneName, float waitRealTime = 0f) {
+            NextScene = sceneName;
+            SceneChangeCallback?.Invoke();
+            if (waitRealTime <= 0f) {
+                SceneManager.LoadScene(loadingScene);
+            }
+            else {
+                StartCoroutine(WaitLoadScene(waitRealTime));
+            }
+        }
+
+        public void ReloadScene(float waitRealTime = 0f) {
+            NextScene = SceneManager.GetSceneAt(0).name;
+            SceneChangeCallback?.Invoke();
+            if(waitRealTime <= 0f) {
+                SceneManager.LoadScene(loadingScene);
+            }
+            else {
+                StartCoroutine(WaitLoadScene(waitRealTime));
+            }
+        }
+
         public string GetCurrentSceneName() {
             return SceneManager.GetActiveScene().name;
+        }
+
+        System.Collections.IEnumerator WaitLoadScene(float waitRealTime) {
+            yield return new UnityEngine.WaitForSecondsRealtime(waitRealTime);
+            SceneManager.LoadScene(loadingScene);
         }
 
         public System.Collections.IEnumerator AdditiveLoadUIScene() {
@@ -43,7 +70,5 @@
             SceneManager.SetActiveScene(targetScene);
             CatLog.Log($"UIScene LoadingTime : {UnityEngine.Time.time - loadStartTime}sec");
         }
-
-
     }
 }

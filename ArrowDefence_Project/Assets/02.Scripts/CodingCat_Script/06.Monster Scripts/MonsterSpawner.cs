@@ -5,7 +5,8 @@
 
     public class MonsterSpawner : MonoBehaviour {
         [Header("STAGE DIFFICULTY")]
-        [SerializeField] STAGEDIFF stageDiff = STAGEDIFF.EASY;
+        [SerializeField] STAGEDIFF stageDifficulty = STAGEDIFF.EASY;
+        [SerializeField] [ReadOnly] SPAWNSTATE spawnerState = SPAWNSTATE.NONE;
 
         [Header("SPAWN POINT")]
         [SerializeField] Transform[] spawnPointsTr = null;
@@ -13,9 +14,7 @@
         [Header("MONSTER DATA")]
         [SerializeField] [Tooltip("[0: Normal] [1: Freq] [2: Elite] [3: EMPTY] [4: EMPTY]")] GameObject[] groundMobPrefabs = null;
         [SerializeField] [Tooltip("[0: Normal] [1: Freq] [2: Elite] [3. EMPTY] [4: EMPTY]")] GameObject[] flyingMobPrefabs = null;
-        [SerializeField] [ReadOnly] [Tooltip("DO NOT MODIFY THIS FIELD")] string[] groundMobTagArray;
-        [SerializeField] [ReadOnly] [Tooltip("DO NOT MODIFY THIS FIELD")] string[] flyingMobTagArray;
-        [SerializeField] [ReadOnly] [Tooltip("DO NOT MODIFY THIS FIELD")] List<SpawnMonster> spawnMonsterList = null;
+        [SerializeField] [ReadOnly] [Tooltip("DO NOT MODIFY THIS FIELD")] List<SpawnMonster> groundMosnterList = null;
         [SerializeField] bool isStaticGroupSpawn = false;
 
         [Header("SPAWN TIMER")]
@@ -28,7 +27,7 @@
         private float checkerCount = 2f;
 
         private Coroutine spawnCoroutine = null;
-        private WaitForSeconds waitSpawnInterval = new WaitForSeconds(1.75f);
+        private WaitForSeconds groupSpawnInterval = new WaitForSeconds(1.75f);
         private int[] sidePositionArray = new int[2] { -1, 1 };
         private int[] spawnTrOddNumbers;
         private short[] formationChances;
@@ -91,33 +90,39 @@
             InitializeMonsters(out string[] tagsArray);
             float[] spawnChances = GetGroundUnitSpawnChances();
 
-            spawnMonsterList = new List<SpawnMonster>();
+            groundMosnterList = new List<SpawnMonster>();
             for (int i = 0; i < tagsArray.Length; i++) {
-                if (!string.IsNullOrEmpty(tagsArray[i])) spawnMonsterList.Add(new SpawnMonster(tagsArray[i], spawnChances[i]));
-                else                                     spawnMonsterList.Add(new SpawnMonster(tagsArray[i], 0f));
+                if (!string.IsNullOrEmpty(tagsArray[i])) groundMosnterList.Add(new SpawnMonster(tagsArray[i], spawnChances[i]));
+                else                                     groundMosnterList.Add(new SpawnMonster(tagsArray[i], 0f));
             }
             totalSpawnChance = GetTotalSpawnChance();
             formationChances = GetGroupSpawnChances();
+
+            StartSpawnState(SPAWNSTATE.BREAK);
+        }
+
+        private void Update() {
+            UpdateState();
         }
 
         #region GETTER || SETTER
 
         string GetRandomMonsterTag() {
             float randomPoint = Random.value * totalSpawnChance;
-            for (int i = 0; i < spawnMonsterList.Count; i++) {
-                if(randomPoint < spawnMonsterList[i].SpawnChance) {
-                    return spawnMonsterList[i].SpawnString;
+            for (int i = 0; i < groundMosnterList.Count; i++) {
+                if(randomPoint < groundMosnterList[i].SpawnChance) {
+                    return groundMosnterList[i].SpawnString;
                 }
                 else {
-                    randomPoint -= spawnMonsterList[i].SpawnChance;
+                    randomPoint -= groundMosnterList[i].SpawnChance;
                 }
             }
 
             //if the Random.value is One, Not return String..
             //Return Last Index Element
-            for (int i = spawnMonsterList.Count; i >= 0; --i) {
-                if(!spawnMonsterList[i].IsEmpty()) {
-                    return spawnMonsterList[i].SpawnString;
+            for (int i = groundMosnterList.Count; i >= 0; --i) {
+                if(!groundMosnterList[i].IsEmpty()) {
+                    return groundMosnterList[i].SpawnString;
                 }
             }
 
@@ -125,7 +130,7 @@
         }
 
         float[] GetGroundUnitSpawnChances() {
-            switch (stageDiff) {
+            switch (stageDifficulty) {
                 case STAGEDIFF.NONE: return new float[3] { 100f, 35f, 15f };
                 case STAGEDIFF.EASY: return new float[3] { 100f, 30f, 10f };
                 case STAGEDIFF.NOML: return new float[3] { 100f, 35f, 15f };
@@ -138,14 +143,14 @@
 
         float GetTotalSpawnChance() {
             float totalChance = 0f;
-            foreach (var element in spawnMonsterList) {
+            foreach (var element in groundMosnterList) {
                 totalChance += element.SpawnChance;
             }
             return totalChance;
         }
 
         float GetRandomInterval() {
-            switch (stageDiff) {
+            switch (stageDifficulty) {
                 case STAGEDIFF.NONE: return RandomEx.RangeFloat(2f, 2.5f);
                 case STAGEDIFF.EASY: return RandomEx.RangeFloat(2.5f, 3.5f);
                 case STAGEDIFF.NOML: return RandomEx.RangeFloat(2.5f, 3f);
@@ -157,7 +162,7 @@
         }
 
         int GetRandomStack() {
-            switch (stageDiff) {
+            switch (stageDifficulty) {
                 case STAGEDIFF.NONE: return RandomEx.RangeInt(3, 4);
                 case STAGEDIFF.EASY: return RandomEx.RangeInt(4, 4);
                 case STAGEDIFF.NOML: return RandomEx.RangeInt(3, 4);
@@ -169,7 +174,7 @@
         }
 
         short[] GetGroupSpawnChances() {
-            switch (stageDiff) {
+            switch (stageDifficulty) {    // short{ [1. SQUAD] [2. PLATOON] [3. COMPANY] };
                 case STAGEDIFF.NONE: return new short[3] { 100, 40, 20 };
                 case STAGEDIFF.EASY: return new short[3] { 100, 30, 10 };
                 case STAGEDIFF.NOML: return new short[3] { 100, 40, 20 };
@@ -201,42 +206,15 @@
 
         #endregion
 
-        private void Update() {
-            switch (GameManager.Instance.GameState) {
-                case GAMESTATE.STATE_BEFOREBATTLE:                    break;
-                case GAMESTATE.STATE_INBATTLE:     UpdateSpawner();   break;
-                case GAMESTATE.STATE_BOSSBATTLE:                      break;
-                case GAMESTATE.STATE_ENDBATTLE:    UpdateGameClear(); break;
-                case GAMESTATE.STATE_GAMEOVER:     UpdateGameOver();  break;
-            }
-
-            //============================ [ TEST : ALIVE MONSTER CHECKER ] ============================
-            UpdateAliveMonsterChecker();
-            //==========================================================================================
-        }
-
-        void UpdateSpawner() {
-            //Decrease Spawn Interval Time
-            currentSpawnTime -= Time.deltaTime;
-
-            if (currentSpawnTime <= 0f) {
-                currentSpawnStack--;
-                if (currentSpawnStack < 0) {
-                    spawnCoroutine    = StartCoroutine(SpawnGroupCo());
-                    currentSpawnStack = GetRandomStack();
-                }
-                else {
-                    SpawnSingle();
-                }
-                currentSpawnTime = GetRandomInterval();
-            }
-        }
+        #region SPAWN_SINGLE
 
         void SpawnSingle() {
             CCPooler.SpawnFromPool(GetRandomMonsterTag(), spawnPointsTr.GetRandom().position, Quaternion.identity);
         }
 
-        #region SPAWNER_GROUP
+        #endregion
+
+        #region SPAWN_GROUP
 
         IEnumerator SpawnGroupCo() {
             var formationNumber = GetRandomFormationNumber();
@@ -256,7 +234,7 @@
                 if (!isStaticGroupSpawn) {
                     monsterSpawnTag = GetRandomMonsterTag();
                 }
-                yield return waitSpawnInterval;
+                yield return groupSpawnInterval;
             }
         }
 
@@ -267,7 +245,7 @@
             string monsterTag = GetRandomMonsterTag();
             while (currentSpawnedCount <= 4) {
                 if(currentSpawnedCount % 2 == 0 && currentSpawnedCount != 0) {
-                    yield return waitSpawnInterval;
+                    yield return groupSpawnInterval;
                 }
 
                 CCPooler.SpawnFromPool(GetRandomMonsterTag(), spawnPointsTr[randomSpawnPosNumber].position, Quaternion.identity);
@@ -295,7 +273,7 @@
 
         #endregion
 
-        void UpdateAliveMonsterChecker() {
+        void CheckAliveMosnters() {
             if (isCheckAliveMonster == false) return;
 
             checkerCount -= Time.unscaledDeltaTime;
@@ -306,28 +284,110 @@
             }
         }
 
-        void UpdateGameOver() {
+        void CheckEndBattle() {
+            switch (GameManager.Instance.GameState) {
+                case GAMESTATE.STATE_BOSSBATTLE: ChangeSpawnState(SPAWNSTATE.BREAK); break;
+                case GAMESTATE.STATE_ENDBATTLE:  ChangeSpawnState(SPAWNSTATE.BREAK); break;
+                case GAMESTATE.STATE_GAMEOVER:   ChangeSpawnState(SPAWNSTATE.BREAK); break;
+                default: break;
+            }
+        }
+
+        #region MACHINE
+
+        void StartSpawnState(SPAWNSTATE state) {
+            spawnerState = state;
+            switch (spawnerState) {
+                case SPAWNSTATE.BREAK: STATE_BREAK(STATEFLOW.ENTER); break;
+                case SPAWNSTATE.SPAWN: STATE_SPAWN(STATEFLOW.ENTER); break;
+                default: break;
+            }
+        }
+
+        void UpdateState() {
+            switch (spawnerState) {
+                case SPAWNSTATE.BREAK: STATE_SPAWN(STATEFLOW.UPDATE); break;
+                case SPAWNSTATE.SPAWN: STATE_BREAK(STATEFLOW.UPDATE); break;
+                default: throw new System.NotImplementedException();
+            }
+        }
+
+        void ChangeSpawnState(SPAWNSTATE state) {
+            switch (spawnerState) {
+                case SPAWNSTATE.BREAK: STATE_BREAK(STATEFLOW.EXIT); break;
+                case SPAWNSTATE.SPAWN: STATE_SPAWN(STATEFLOW.EXIT); break;
+                default: throw new System.NotImplementedException();
+            }
+
+            spawnerState = state;
+
+            switch (spawnerState) {
+                case SPAWNSTATE.BREAK: STATE_BREAK(STATEFLOW.ENTER); break;
+                case SPAWNSTATE.SPAWN: STATE_SPAWN(STATEFLOW.ENTER); break;
+                default: throw new System.NotImplementedException();
+            }
+        }
+
+        void STATE_BREAK(STATEFLOW flow) {
+            switch (flow) {
+                case STATEFLOW.ENTER:                  break;
+                case STATEFLOW.UPDATE: BREAK_UPDATE(); break;
+                case STATEFLOW.EXIT:                   break;
+            }
+        }
+
+        void STATE_SPAWN(STATEFLOW flow) {
+            switch (flow) {
+                case STATEFLOW.ENTER:                  break;
+                case STATEFLOW.UPDATE: SPAWN_UPDATE(); break;
+                case STATEFLOW.EXIT:   SPAWN_EXIT();   break;
+            }
+        }
+
+        #endregion
+
+        #region STATE
+
+        void BREAK_UPDATE() {
+            switch (GameManager.Instance.GameState) { //Wait GameState to In-Battle
+                case GAMESTATE.STATE_INBATTLE:     ChangeSpawnState(SPAWNSTATE.SPAWN); break;
+                default:                                                               break;
+            }
+        }
+
+        void SPAWN_UPDATE() {
+            CheckEndBattle(); //Check Battle-End
+            if (isCheckAliveMonster == true) {
+                CheckAliveMosnters();
+            }
+
+            //Decrease Spawn Interval Time
+            currentSpawnTime -= Time.deltaTime;
+
+            if (currentSpawnTime <= 0f) {
+                currentSpawnStack--;
+                if (currentSpawnStack < 0) {
+                    spawnCoroutine = StartCoroutine(SpawnGroupCo());
+                    currentSpawnStack = GetRandomStack();
+                }
+                else {
+                    SpawnSingle();
+                }
+                currentSpawnTime = GetRandomInterval();
+            }
+        }
+
+        void SPAWN_EXIT() {
             if(spawnCoroutine != null) {
                 StopCoroutine(spawnCoroutine);
             }
         }
 
-        void UpdateGameClear() {
-            if (spawnCoroutine != null) {
-                StopCoroutine(spawnCoroutine);
-            }
-        }
-
-#if UNITY_EDITOR
-        public void MonsterDebug(string monsterTag, Vector2 spawnPos) {
-            CCPooler.SpawnFromPool(monsterTag, spawnPos, Quaternion.identity);
-        }
-#endif
+        #endregion
 
         internal sealed class SpawnMonster {
-            public GameObject MonsterPref { get; private set; }
-            public string SpawnString { get; private set; }
-            public float SpawnChance { get; private set; }
+            public string SpawnString { get; private set; } = "";
+            public float SpawnChance { get; private set; }  = 0f;
 
             internal SpawnMonster(string tag, float spawnchance) {
                 SpawnString = tag;

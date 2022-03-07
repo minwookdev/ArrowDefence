@@ -62,8 +62,7 @@
                      })
                      .OnComplete(() => {
                          Games.UI.ItemTooltip.Inst.ReleaseParent();
-                         SceneLoader.Instance.ReloadScene();
-                         fadePanel.DOKill(); /*Scene의 변경과 동시에 이루어지면서 DoTween의 Null Error를 방지하기 위함*/
+                         SceneLoader.Instance.ReloadScene(1f);
                      });
         }
 
@@ -79,8 +78,7 @@
                 })
                 .OnComplete(() => {
                     Games.UI.ItemTooltip.Inst.ReleaseParent();
-                    SceneLoader.Instance.LoadScene(AD_Data.SCENE_MAIN);
-                    fadePanel.DOKill(); /*Scene의 변경과 동시에 이루어지면서 DoTween의 Null Error를 방지하기 위함*/
+                    SceneLoader.Instance.LoadScene(AD_Data.SCENE_MAIN, 1f);
                     
                 });
         }

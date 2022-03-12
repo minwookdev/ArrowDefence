@@ -213,6 +213,10 @@
 
         #region FIND
 
+        public bool IsExist(AD_item target) {
+            return (invenList.Find(item => ReferenceEquals(item, target)) != null) ? true : false;
+        }
+
         /// <summary>
         /// ALL Item List Get
         /// </summary>
@@ -261,6 +265,66 @@
             var itemList = invenList.FindAll(x => x.GetItemType == ITEMTYPE.ITEM_MATERIAL ||
                                                   x.GetItemType == ITEMTYPE.ITEM_CONSUMABLE);
             return itemList;
+        }
+
+        public AD_item[] GetAllBluePrints() {
+            return invenList.FindAll(item => item.GetID.StartsWith("2")).ToArray();
+        }
+
+        public AD_item[] GetBluePrints(string[] matchKeys) {
+            //설계도 아이템 축약
+            var bluePrints = invenList.FindAll(item => item.GetID.StartsWith("2"));
+            if (bluePrints.Count <= 0) {
+                return bluePrints.ToArray();
+            }
+
+            var toRemove = new List<AD_item>(); //반환될 리스트에서 삭제될 요소
+            for (int i = 0; i < bluePrints.Count; i++) {
+                for (int j = 0; j < matchKeys.Length; j++) {
+                    if (bluePrints[i].GetID.Equals(matchKeys[j]) == true) {
+                        continue;
+                    }
+
+                    if (j == matchKeys.Length - 1) {
+                        toRemove.Add(bluePrints[i]);
+                    }
+                }
+            }
+
+            bluePrints.RemoveAll(toRemove.Contains);
+            return bluePrints.ToArray();
+        }
+
+        public AD_item[] GetBluePrints(BLUEPRINTTYPE type) {
+            string targetId;
+            switch (type) {
+                case BLUEPRINTTYPE.MATERIAL:   targetId = "21"; break;
+                case BLUEPRINTTYPE.CONSUMABLE: targetId = "22"; break;
+                case BLUEPRINTTYPE.BOW:        targetId = "23"; break;
+                case BLUEPRINTTYPE.ARROW:      targetId = "24"; break;
+                case BLUEPRINTTYPE.ARTIFACT:   targetId = "25"; break;
+                default: throw new NotImplementedException();
+            }
+
+            return invenList.FindAll(item => item.GetID.Substring(0, 2).Equals(targetId)).ToArray();
+        }
+
+        public AD_item[] GetUpgradeableItems(string[] matchKeys) {
+            var upgradeableItems = invenList.FindAll(item => item.GetItemType == ITEMTYPE.ITEM_EQUIPMENT);
+            for (int i = upgradeableItems.Count - 1; i >= 0; i--) {
+                for (int j = 0; j < matchKeys.Length; j++) {
+                    if (upgradeableItems[i].GetID.Equals(matchKeys[j])) {
+                        continue;
+                    }
+
+                    if(j == matchKeys.Length - 1) { //LastIndex
+                        upgradeableItems.Remove(upgradeableItems[i]);
+                        break;
+                    }
+                }
+            }
+
+            return upgradeableItems.ToArray();
         }
 
         #endregion

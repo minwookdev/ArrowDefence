@@ -24,9 +24,9 @@
         void DecAmount(int value);
     }
 
-    [Serializable] //Abstract Class 는 Serailizable 속성 달려있어도 Inspector에서 표기되지 않는다
+    [Serializable] 
     public abstract class AD_item {
-        protected int       Item_Id;
+        protected string    Item_Id;
         protected string    Item_Name;
         protected string    Item_Desc;
         protected int       Item_Amount;
@@ -36,7 +36,7 @@
 
         #region PROPERTY_FIELD
 
-        public int       GetID            { get { return Item_Id; } }
+        public string    GetID            { get { return Item_Id; } }
         public string    GetName          { get { return Item_Name; } }
         public string    GetDesc          { get { return Item_Desc; } }
         public int       GetAmount        { get { return Item_Amount; } }

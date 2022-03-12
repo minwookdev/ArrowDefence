@@ -102,6 +102,31 @@ public class MainSceneRoute : MonoBehaviour
 
         //Init Notify
         Notify.Inst.Init(parentRectTr);
+
+        //string testString = "785162";
+        //string subString = testString.Substring(0, 1);
+        //CatLog.Log($"Sub String is : {subString}");
+        //if (subString.Equals("8")) {
+        //    CatLog.Log("SubStirng is Matched.");
+        //}
+        //else {
+        //    CatLog.Log("SubString is Not Matched.");
+        //}
+
+        //System.Collections.Generic.List<string> stringList = new System.Collections.Generic.List<string>();
+        //stringList.Add("A");
+        //stringList.Add("B");
+        //stringList.Add("C");
+        //stringList.Add("D");
+        //stringList.Add("E");
+        //stringList.Add("F");
+        //stringList.Add("G"); //:7
+        //
+        //int stringListCount = 0;
+        //for (int i = stringList.Count - 1; i >= 0; i--) {
+        //    CatLog.Log($"{stringList[i]}");
+        //}
+        //CatLog.Log($"String List Count: {stringListCount}");
     }
 
     private void OnDestroy() {

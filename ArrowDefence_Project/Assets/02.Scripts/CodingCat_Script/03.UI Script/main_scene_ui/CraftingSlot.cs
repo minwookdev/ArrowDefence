@@ -8,12 +8,26 @@
         [SerializeField] RectTransform choosePanelRectTr   = null;
         [SerializeField] Button chooseButton = null;
 
+        public bool IsActive {
+            get {
+                return this.gameObject.activeSelf;
+            }
+        }
+
         public void AddListnerToButton(UnityEngine.Events.UnityAction unityAction) {
             if(unityAction == null) {
                 throw new System.Exception("Unity Action is Null.");
             }
 
             chooseButton.onClick.AddListener(unityAction);
+        }
+
+        public void EnableSlot() {
+            gameObject.SetActive(true);
+        }
+
+        public void DisableSlot() {
+            gameObject.SetActive(false);
         }
     }
 }

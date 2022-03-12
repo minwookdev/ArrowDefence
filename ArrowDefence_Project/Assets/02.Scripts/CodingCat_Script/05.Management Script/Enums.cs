@@ -130,6 +130,15 @@
         TIME,
         ATCK,
     }
+
+    public enum BLUEPRINTTYPE {
+        ALL        = 0,
+        BOW        = 1,
+        ARROW      = 2,
+        ARTIFACT   = 3,
+        MATERIAL   = 4,
+        CONSUMABLE = 5
+    }
 }
 
 

@@ -7,6 +7,10 @@
         [SerializeField] [ReadOnly] RectTransform openedPanelTr = null;
         [SerializeField] [ReadOnly] PANEL openedPanelType = PANEL.NONE;
 
+        [Header("TABLE")]
+        [SerializeField] CraftingRecipeSO craftingRecipeTable = null;
+        [SerializeField] UpgradeRecipeSO   upgradeRecipeTable = null;
+
         [Header("CRFTING")]
         [SerializeField] CraftingFunc craftingFunction = null;
 
@@ -21,13 +25,14 @@
         }
         #endregion
 
-        private void Start() {
-            craftingFunction.Start(ButtonEvent_OpenCraftingChoosePanel);
+        private void OnEnable() {
+            craftingFunction.Enable();
+            upgradeFunction.Enable();
         }
 
-        private void OnEnable() {
-            //현재 생성된 Crafting 슬롯과 갯수가 일치하는지 체크해야함
-            //일치하지않으면 어떤조건에따라 슬롯하나를 더 사용할 수 있게됐다는 뜻이니까 하나 생성하는 로직포함
+        private void Start() {
+            craftingFunction.Start(ButtonEvent_OpenCraftingChoosePanel, 1, craftingRecipeTable);
+            upgradeFunction.Start(upgradeRecipeTable);
         }
 
         private void Update() {
@@ -46,13 +51,20 @@
             CloseOpenedPanel();
             openedPanelTr = upgradeFunction.OpenPanel(UpgradeFunc.PANELTYPE.MAIN, mainAnchoredPos);
             openedPanelType = PANEL.UPGRADE;
-
         }
 
         public void ButtonEvent_OpenUpgradeChoosePanel() {
             CloseOpenedPanel();
             openedPanelTr = upgradeFunction.OpenPanel(UpgradeFunc.PANELTYPE.CHOOSE, mainAnchoredPos);
             openedPanelType = PANEL.UPGRADE;
+        }
+
+        public void ButtonEvent_ItemInfoPopupClose() {
+            upgradeFunction.CloseItemInfoPopup();
+        }
+
+        public void ButtonEvent_ItemInfoPopupSelect() {
+            upgradeFunction.SelectUpgradeableItem();
         }
         //======================================================== [ CRAFTING ] ========================================================
         public void ButtonEvent_OpenCrafting() {
@@ -72,6 +84,23 @@
             openedPanelTr = craftingFunction.OpenPanel(CraftingFunc.PANELTYPE.CHOOSE, mainAnchoredPos);
             openedPanelType = PANEL.CRAFTING;
         }
+
+        public void ButtonEvent_SelectBluePrintType(int loadNumber) {
+            switch (loadNumber) {
+                case 0: craftingFunction.RefreshSelectPanel(BLUEPRINTTYPE.ALL);        break;
+                case 1: craftingFunction.RefreshSelectPanel(BLUEPRINTTYPE.BOW);        break;
+                case 2: craftingFunction.RefreshSelectPanel(BLUEPRINTTYPE.ARROW);      break;
+                case 3: craftingFunction.RefreshSelectPanel(BLUEPRINTTYPE.ARTIFACT);   break;
+                case 4: craftingFunction.RefreshSelectPanel(BLUEPRINTTYPE.MATERIAL);   break;
+                case 5: craftingFunction.RefreshSelectPanel(BLUEPRINTTYPE.CONSUMABLE); break;
+                default: throw new System.NotImplementedException();
+            }
+        }
+
+        public void ButtonEvent_Close(GameObject target) {
+            target.SetActive(false);
+        }
+
         //==============================================================================================================================
         public void CloseOpenedPanel() {
             switch (openedPanelType) {
@@ -82,7 +111,6 @@
                 default: throw new System.NotImplementedException();
             }
             openedPanelType = PANEL.NONE;
-            CatLog.Log("Waorked CloseOpenedPanel !");
         }
         //==============================================================================================================================
         #endregion

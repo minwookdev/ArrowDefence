@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0cb9bc41b2b5174e8c100fe50bbf0f2, type: 3}
+  m_Name: UpgadeRecipe_v1.0
+  m_EditorClassIdentifier: 
+  recipeArray:
+  - KeyItem: {fileID: 11400000, guid: 35e318914cb3bb445b2ba96680d7eacc, type: 2}
+    Materials:
+    - Mat: {fileID: 11400000, guid: 818e48ff8014cd743904a971f1118bab, type: 2}
+      Required: 10
+    - Mat: {fileID: 11400000, guid: f8cf2d491cdbd38409db2b0178418dce, type: 2}
+      Required: 10
+    - Mat: {fileID: 11400000, guid: d81beb11892aa284da11b476736ed6d9, type: 2}
+      Required: 5
+    FailedProb: 10
+    Result: {fileID: 0}

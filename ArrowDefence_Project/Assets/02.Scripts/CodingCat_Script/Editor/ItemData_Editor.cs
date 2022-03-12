@@ -67,7 +67,7 @@ public class MatItemData_Editor : Editor
 
         item.Item_Grade = (ITEMGRADE)EditorGUILayout.EnumPopup(ItemData_Editor.ItemGradeText, item.Item_Grade);
 
-        item.Item_Id = EditorGUILayout.IntField(ItemData_Editor.ItemIdText, item.Item_Id);
+        item.Item_Id = EditorGUILayout.TextField(ItemData_Editor.ItemIdText, item.Item_Id);
 
         item.Item_Name = EditorGUILayout.TextField(ItemData_Editor.ItemNameText, item.Item_Name);
 
@@ -138,7 +138,7 @@ public class ConItemData_Editor : Editor
 
         item.Item_Grade = (ITEMGRADE)EditorGUILayout.EnumPopup(ItemData_Editor.ItemGradeText, item.Item_Grade);
 
-        item.Item_Id = EditorGUILayout.IntField(ItemData_Editor.ItemIdText, item.Item_Id);
+        item.Item_Id = EditorGUILayout.TextField(ItemData_Editor.ItemIdText, item.Item_Id);
 
         item.Item_Name = EditorGUILayout.TextField(ItemData_Editor.ItemNameText, item.Item_Name);
 
@@ -248,7 +248,7 @@ public class BowItemData_Editor : Editor
 
         item.Item_Grade = (ITEMGRADE)EditorGUILayout.EnumPopup(ItemData_Editor.ItemGradeText, item.Item_Grade);
 
-        item.Item_Id = EditorGUILayout.IntField(ItemData_Editor.ItemIdText, item.Item_Id);
+        item.Item_Id = EditorGUILayout.TextField(ItemData_Editor.ItemIdText, item.Item_Id);
 
         item.Item_Name = EditorGUILayout.TextField(ItemData_Editor.ItemNameText, item.Item_Name);
 
@@ -505,7 +505,7 @@ public class ArrowItemData_Editor : Editor
 
         item.Item_Grade = (ITEMGRADE)EditorGUILayout.EnumPopup(ItemData_Editor.ItemGradeText, item.Item_Grade);
 
-        item.Item_Id = EditorGUILayout.IntField(ItemData_Editor.ItemIdText, item.Item_Id);
+        item.Item_Id = EditorGUILayout.TextField(ItemData_Editor.ItemIdText, item.Item_Id);
 
         item.Item_Name = EditorGUILayout.TextField(ItemData_Editor.ItemNameText, item.Item_Name);
 
@@ -687,7 +687,7 @@ public class AccessItemData_Editor : Editor
 
         item.Item_Grade = (ITEMGRADE)EditorGUILayout.EnumPopup(ItemData_Editor.ItemGradeText, item.Item_Grade);
 
-        item.Item_Id = EditorGUILayout.IntField(ItemData_Editor.ItemIdText, item.Item_Id);
+        item.Item_Id = EditorGUILayout.TextField(ItemData_Editor.ItemIdText, item.Item_Id);
 
         item.Item_Name = EditorGUILayout.TextField(ItemData_Editor.ItemNameText, item.Item_Name);
 
@@ -968,7 +968,7 @@ public class CreateItemDataAsset
     [UnityEditor.MenuItem("ActionCat/Scriptable Object/Item Data Asset/Material Item Asset")]
     public static void CreateMaterialItemAsset()
     {
-        string createAssetPath = "Assets/05. Scriptable_Object/ItemAssets/2.Material/Material_Item.asset";
+        string createAssetPath = "Assets/05.SO/SO.Item/2.Material/(code)-consumable-(name).asset";
         var asset = ScriptableObject.CreateInstance<ItemData_Mat>();
         AssetDatabase.CreateAsset(asset, createAssetPath);
         AssetDatabase.SaveAssets();
@@ -981,7 +981,7 @@ public class CreateItemDataAsset
     [UnityEditor.MenuItem("ActionCat/Scriptable Object/Item Data Asset/Consumable Item Asset")]
     public static void CreateConsumableItemAsset()
     {
-        string createAssetPath = "Assets/05. Scriptable_Object/ItemAssets/1.Consume/Consumable_Item.asset";
+        string createAssetPath = "Assets/05.SO/SO.Item/1.Consume/(code)-consumable-(name).asset";
         var asset = ScriptableObject.CreateInstance<ItemData_Con>();
         AssetDatabase.CreateAsset(asset, createAssetPath);
         AssetDatabase.SaveAssets();
@@ -994,7 +994,7 @@ public class CreateItemDataAsset
     [UnityEditor.MenuItem("ActionCat/Scriptable Object/Item Data Asset/Bow Item Asset")]
     public static void CreateBowItemAsset()
     {
-        string createAssetPath = "Assets/05. Scriptable_Object/ItemAssets/0.Equipment/Bow/Bow_Item.asset";
+        string createAssetPath = "Assets/05.SO/SO.Item/0.Equipment/Bow/(code)-bow-(name).asset";
         var asset = ScriptableObject.CreateInstance<ItemData_Equip_Bow>();
         AssetDatabase.CreateAsset(asset, createAssetPath);
         AssetDatabase.SaveAssets();
@@ -1007,7 +1007,7 @@ public class CreateItemDataAsset
     [UnityEditor.MenuItem("ActionCat/Scriptable Object/Item Data Asset/Arrow Item Asset")]
     public static void CreateArrowItemAsset()
     {
-        string createAssetPath = "Assets/05. Scriptable_Object/ItemAssets/0.Equipment/Arrow/Arrow_Item.asset";
+        string createAssetPath = "Assets/05.SO/SO.Item/0.Equipment/Arrow/(code)-arrow-(name).asset";
         var asset = ScriptableObject.CreateInstance<ItemData_Equip_Arrow>();
         AssetDatabase.CreateAsset(asset, createAssetPath);
         AssetDatabase.SaveAssets();
@@ -1018,9 +1018,8 @@ public class CreateItemDataAsset
     }
 
     [UnityEditor.MenuItem("ActionCat/Scriptable Object/Item Data Asset/Accessory Item Asset")]
-    public static void CreateAccessoryItemAsset()
-    {
-        string createAssetPath = "Assets/05. Scriptable_Object/ItemAssets/0.Equipment/Aceessory/Accessory_Item.asset";
+    public static void CreateAccessoryItemAsset() {
+        string createAssetPath = "Assets/05.SO/SO.Item/0.Equipment/Aceessory/(code)-accessory-(name).asset";
         var asset = ScriptableObject.CreateInstance<ItemData_Equip_Accessory>();
         AssetDatabase.CreateAsset(asset, createAssetPath);
         AssetDatabase.SaveAssets();

@@ -71,7 +71,7 @@
 
 #endregion
 
-#region GET-PLAYER
+#region PLAYER_DATA
 
         public void InitEquips(Transform bowInitPos, Transform bowParent, int mainArrPoolQuantity, int subArrPoolQuantity, 
                                out UI.ArrSSData[] arrSlotData, out UI.ACSData[] acspSlotData, UI.SwapSlots swapSlot) {
@@ -215,6 +215,21 @@
 
         public GlobalAbility GetGlobalAbility() {
             return CCPlayerData.ability.GlobalAbilityField;
+        }
+
+        public AD_item[] GetBluePrints(BLUEPRINTTYPE type) {
+            switch (type) {
+                case BLUEPRINTTYPE.ALL: return CCPlayerData.inventory.GetAllBluePrints();
+                default:                return CCPlayerData.inventory.GetBluePrints(type);
+            }
+        }
+
+        public AD_item[] GetUpgradeableItems(string[] keys) {
+            return CCPlayerData.inventory.GetUpgradeableItems(keys);
+        }
+
+        public int GetCraftingSlotCount() {
+            return 1;
         }
 
 #endregion

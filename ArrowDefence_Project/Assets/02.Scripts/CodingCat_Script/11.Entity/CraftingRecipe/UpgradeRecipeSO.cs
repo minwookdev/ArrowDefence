@@ -39,6 +39,24 @@
             }
         }
 
+        public bool TryGetRecipe(string itemid, out UpgradeRecipe recipe) {
+            return recipeDictionary.TryGetValue(itemid, out recipe);
+        }
+
+        public string[] GetKeys(EQUIP_ITEMTYPE type) {
+            List<string> allKeys = new List<string>(DictionaryKeys);
+            string startString;
+            switch (type) {
+                case EQUIP_ITEMTYPE.BOW:      startString = "3"; break;
+                case EQUIP_ITEMTYPE.ARROW:    startString = "4"; break;
+                case EQUIP_ITEMTYPE.ARTIFACT: startString = "5"; break;
+                default: throw new System.NotImplementedException();
+            }
+
+            allKeys.RemoveAll(key => key.StartsWith(startString) == false);
+            return allKeys.ToArray();
+        }
+
         #region EDITOR_ONLY
 #if UNITY_EDITOR
         [UnityEditor.MenuItem("ActionCat/Scriptable Object/UpgradeRecipe Asset")]

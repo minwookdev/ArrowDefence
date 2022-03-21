@@ -13,7 +13,7 @@
 
         public Item_Accessory(ItemData_Equip_Accessory item) : base() {
             //Set Equipment Item Type
-            this.EquipType = EQUIP_ITEMTYPE.EQUIP_ACCESSORY;
+            this.EquipType = EQUIP_ITEMTYPE.ARTIFACT;
 
             //Set Default Item Data
             this.Item_Id     = item.Item_Id;
@@ -28,7 +28,7 @@
 
         public Item_Accessory(Item_Accessory item) : base() {
             //Set Equipment Item Type
-            this.EquipType = EQUIP_ITEMTYPE.EQUIP_ACCESSORY;
+            this.EquipType = EQUIP_ITEMTYPE.ARTIFACT;
 
             //Set Default Item Data
             this.Item_Id     = item.Item_Id;

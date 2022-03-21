@@ -127,10 +127,17 @@ public class MainSceneRoute : MonoBehaviour
         //    CatLog.Log($"{stringList[i]}");
         //}
         //CatLog.Log($"String List Count: {stringListCount}");
+        string testString = I2.Loc.ScriptLocalization.Battle;
+        CatLog.Log(testString);
+        
     }
 
     private void OnDestroy() {
         _inst = null;
+    }
+
+    public static void OpenPreview(AD_item previewitem) {
+        _inst.itemInfoPop.OpenPreview(previewitem);
     }
 
     /// <summary>

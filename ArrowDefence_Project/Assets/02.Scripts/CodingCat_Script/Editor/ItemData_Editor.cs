@@ -968,7 +968,7 @@ public class CreateItemDataAsset
     [UnityEditor.MenuItem("ActionCat/Scriptable Object/Item Data Asset/Material Item Asset")]
     public static void CreateMaterialItemAsset()
     {
-        string createAssetPath = "Assets/05.SO/SO.Item/2.Material/(code)-consumable-(name).asset";
+        string createAssetPath = "Assets/05.SO/SO.Item/2.Material/(code)-material-(name).asset";
         var asset = ScriptableObject.CreateInstance<ItemData_Mat>();
         AssetDatabase.CreateAsset(asset, createAssetPath);
         AssetDatabase.SaveAssets();

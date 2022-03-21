@@ -57,14 +57,14 @@
 
                 //Init-Bow Slot
                 BowItem_Slot.gameObject.SetActive(true);
-                BowItem_Slot.Setup(item);
+                BowItem_Slot.EnableSlot(item);
 
                 //Init-Bow ShowCase
                 UpdateShowcase(item);
             }
             else {
                 if (BowItem_Slot.gameObject.activeSelf)
-                    BowItem_Slot.Clear();
+                    BowItem_Slot.DisableSlot();
                 imageShowcase.enabled = false;
             }
 
@@ -72,22 +72,22 @@
             if(equipment.IsEquippedArrowMain())
             {
                 ArrowItem_Slot0.gameObject.SetActive(true);
-                ArrowItem_Slot0.Setup(CCPlayerData.equipments.GetMainArrow());
+                ArrowItem_Slot0.EnableSlot(CCPlayerData.equipments.GetMainArrow());
             }
             else
             {
-                if (ArrowItem_Slot0.gameObject.activeSelf) ArrowItem_Slot0.Clear();
+                if (ArrowItem_Slot0.gameObject.activeSelf) ArrowItem_Slot0.DisableSlot();
             }
 
             //Equipment Item : Arrow (Sub)
             if(equipment.IsEquippedArrowSub())
             {
                 ArrowItem_Slot1.gameObject.SetActive(true);
-                ArrowItem_Slot1.Setup(CCPlayerData.equipments.GetSubArrow());
+                ArrowItem_Slot1.EnableSlot(CCPlayerData.equipments.GetSubArrow());
             }
             else
             {
-                if (ArrowItem_Slot1.gameObject.activeSelf) ArrowItem_Slot1.Clear();
+                if (ArrowItem_Slot1.gameObject.activeSelf) ArrowItem_Slot1.DisableSlot();
             }
 
             //Equipment Item : Accessories
@@ -98,29 +98,29 @@
                 if (accessories[i] != null)
                 {
                     switch (i) { 
-                        case 0: Access_Slot0.gameObject.SetActive(true); Access_Slot0.Setup(accessories[i]); break;
-                        case 1: Access_Slot1.gameObject.SetActive(true); Access_Slot1.Setup(accessories[i]); break;
-                        case 2: Access_Slot2.gameObject.SetActive(true); Access_Slot2.Setup(accessories[i]); break;
+                        case 0: Access_Slot0.gameObject.SetActive(true); Access_Slot0.EnableSlot(accessories[i]); break;
+                        case 1: Access_Slot1.gameObject.SetActive(true); Access_Slot1.EnableSlot(accessories[i]); break;
+                        case 2: Access_Slot2.gameObject.SetActive(true); Access_Slot2.EnableSlot(accessories[i]); break;
                     }
                 }
                 else
                 {
                     switch (i) { 
-                        case 0: if (Access_Slot0.gameObject.activeSelf) Access_Slot0.Clear(); break;
-                        case 1: if (Access_Slot1.gameObject.activeSelf) Access_Slot1.Clear(); break;
-                        case 2: if (Access_Slot2.gameObject.activeSelf) Access_Slot2.Clear(); break;
+                        case 0: if (Access_Slot0.gameObject.activeSelf) Access_Slot0.DisableSlot(); break;
+                        case 1: if (Access_Slot1.gameObject.activeSelf) Access_Slot1.DisableSlot(); break;
+                        case 2: if (Access_Slot2.gameObject.activeSelf) Access_Slot2.DisableSlot(); break;
                     }
                 }
             }
 
             //Equipment Item Slot :: Special Arrow
             if (equipment.IsEquippedSpArr) {
-                ArrowItem_Slot_Sp.Setup(equipment.GetSpArrOrNull);
+                ArrowItem_Slot_Sp.EnableSlot(equipment.GetSpArrOrNull);
                 ArrowItem_Slot_Sp.gameObject.SetActive(true);
             }
             else {
                 if(ArrowItem_Slot_Sp.gameObject.activeSelf) {
-                    ArrowItem_Slot_Sp.Clear();
+                    ArrowItem_Slot_Sp.DisableSlot();
                 }
             }
         }

@@ -197,7 +197,7 @@
         /// Find the Item Reference and removes an Item from the Inventory
         /// </summary>
         /// <param name="target"></param>
-        public void DelItem(AD_item target) {
+        public void RemoveItem(AD_item target) {
             if (invenList.Contains(target)) {
                 invenList.Remove(target);
                 CatLog.Log($"인벤토리에서 해당 아이템 {target.GetName}를(을) 제거하였습니다.");
@@ -205,6 +205,40 @@
             else {
                 CatLog.WLog("인벤토리 내부에 해당 아이템이 없습니다.");
             }
+        }
+
+        public bool RemoveItem(string itemid, int removeAmount) {
+            var findItems = invenList.FindAll(item => item.GetID.Equals(itemid));
+            int findItemsTotalAmount = 0;
+            findItems.ForEach((item) => findItemsTotalAmount += item.GetAmount);
+            if(findItems.Count <= 0 || removeAmount > findItemsTotalAmount) {
+                return false;
+            }
+
+            var toRemove = new List<AD_item>();
+            for (int i = findItems.Count - 1; i >= 0; i--) {
+                if (removeAmount <= 0) 
+                    break;
+
+                var decreaseAmount = findItems[i].GetAmount - removeAmount;
+                if (decreaseAmount <= 0) {
+                    toRemove.Add(findItems[i]);
+                }
+                else {
+                    if (findItems[i] is IStackable stackable) { //Mateiral, Consumable
+                        stackable.SetAmount(decreaseAmount);
+                    }
+                    else { //Equipment
+                        toRemove.Add(findItems[i]);
+                        CatLog.ELog($"장비 아이템의 수량 지정 에러, 아이템 이름 : {findItems[i].GetName}");
+                    }
+                }
+
+                removeAmount -= findItems[i].GetAmount;
+            }
+
+            invenList.RemoveAll(toRemove.Contains);
+            return true;
         }
 
         public void Clear() => invenList.Clear();
@@ -215,6 +249,23 @@
 
         public bool IsExist(AD_item target) {
             return (invenList.Find(item => ReferenceEquals(item, target)) != null) ? true : false;
+        }
+
+        public bool TryGetAmount(string itemId, out int amount) {
+            var findItems = invenList.FindAll((item) => item.GetID.Equals(itemId));
+            amount = 0;
+            if (findItems.Count > 0) {
+                //target item 이 존재
+                foreach (var item in findItems) {
+                    amount += item.GetAmount;
+                }
+                return true;
+            }
+            else {
+                //target item 이 존재하지 않음
+                return false;
+            }
+
         }
 
         /// <summary>
@@ -310,21 +361,18 @@
         }
 
         public AD_item[] GetUpgradeableItems(string[] matchKeys) {
-            var upgradeableItems = invenList.FindAll(item => item.GetItemType == ITEMTYPE.ITEM_EQUIPMENT);
-            for (int i = upgradeableItems.Count - 1; i >= 0; i--) {
+            var equipments = invenList.FindAll(item => item.GetItemType == ITEMTYPE.ITEM_EQUIPMENT);
+            var result = new List<AD_item>();
+            for (int i = 0; i < equipments.Count; i++) {
                 for (int j = 0; j < matchKeys.Length; j++) {
-                    if (upgradeableItems[i].GetID.Equals(matchKeys[j])) {
-                        continue;
-                    }
-
-                    if(j == matchKeys.Length - 1) { //LastIndex
-                        upgradeableItems.Remove(upgradeableItems[i]);
+                    if(equipments[i].GetID.Equals(matchKeys[i])) {
+                        result.Add(equipments[i]);
                         break;
                     }
                 }
             }
 
-            return upgradeableItems.ToArray();
+            return result.ToArray();
         }
 
         #endregion

@@ -1,6 +1,7 @@
 ﻿namespace ActionCat.UI {
     using UnityEngine;
     using System.Collections.Generic;
+    using TMPro;
 
     [System.Serializable]
     public class CraftingFunc {
@@ -19,16 +20,38 @@
         [SerializeField] [ReadOnly] [LabelEx("Slot Debugging")] 
         List<CraftingSlot> slots = null;
 
-        [Header("PANEL CHOOSE")]
-        [SerializeField] RectTransform choosePanelParentTr = null;
-        [SerializeField] BluePrintSlot bluePrintSlotPrefab = null;
-        [SerializeField] [ReadOnly] [LabelEx("Slot Debugging")]
-        List<BluePrintSlot> bpSlots = null;
+        [Header("BLUEPRINT SELECT")]
+        [SerializeField] RectTransform bpSlotParentTr = null;
+        [SerializeField] BluePrintSlot bpSlotPrefab   = null;
+        [SerializeField] BluePrintSlot bpSelectedSlot = null;
         [SerializeField] RectTransform noResultRectTr = null;
         [SerializeField] Toggle toggle = null;
         private BLUEPRINTTYPE loadBluePrintType = BLUEPRINTTYPE.ALL;
+        [SerializeField] [ReadOnly] [LabelEx("Slot Debugging")]
+        List<BluePrintSlot> bpSlotList = null;
 
+        [Header("BLUEPRINT INFO POPUP")]
+        [SerializeField] BluePrintInfoPopup infoPopup = null;
+
+        [Header("CONFIRM")]
+        [SerializeField] TextMeshProUGUI textConfirmItemName = null;
+
+        AD_item itemRefSelected = null;
         CraftingRecipeSO recipe = null;
+        [SerializeField] int selectedSlotNumber = 0;
+
+        public int SelectedSlotNumner {
+            get {
+                return selectedSlotNumber;
+            }
+            set {
+                if (value <= -1) {
+                    throw new System.Exception();
+                }
+
+                selectedSlotNumber = value;
+            }
+        }
         #region PROPERTY
         public PANELTYPE OpenedPanelType {
             get {
@@ -38,7 +61,7 @@
         #endregion
 
         //======================================================================================================================================
-        //=========================================================== [ LIFE CYCLE ] ===========================================================
+        //========================================================= [ PANEL, POPUP ] ===========================================================
 
         public RectTransform OpenPanel(PANELTYPE type, Vector2 anchoredPos) {
             openedPanelType = type;
@@ -63,41 +86,251 @@
         public void ClosePanel() {
             switch (openedPanelType) {
                 case PANELTYPE.NONE:   return;
-                case PANELTYPE.MAIN:   craftingPanels[0].anchoredPosition = navigateRectTr[0].anchoredPosition; break;
-                case PANELTYPE.CHOOSE: craftingPanels[1].anchoredPosition = navigateRectTr[1].anchoredPosition; break;
+                case PANELTYPE.MAIN:   
+                    craftingPanels[0].anchoredPosition = navigateRectTr[0].anchoredPosition; 
+                    break;
+                case PANELTYPE.CHOOSE: 
+                    craftingPanels[1].anchoredPosition = navigateRectTr[1].anchoredPosition;
+                    itemRefSelected = null;
+                    if (bpSelectedSlot != null) {
+                        bpSelectedSlot.DeSelected();
+                        bpSelectedSlot = null;
+                    }
+                    bpSlotList.ForEach(slot => slot.DisableSlot());
+                    //Restore Select Panel Position.
+                    //Clear Item Reference.
+                    //Clear Selected Slot.
+                    //Disable All Enabled Slots.
+                    break;
                 default: throw new System.NotImplementedException();
             }
             openedPanelType = PANELTYPE.NONE;
         }
 
-        public void ClosePopup() {
+        /// <summary>
+        /// 선택된 설계도 슬롯을 버튼을 사용하여 팝업을 호출하는 메서드.
+        /// </summary>
+        /// <param name="log"></param>
+        /// <returns></returns>
+        public bool OpenItemInfo(out string log) {
+            if(bpSelectedSlot == null) {
+                log = "First, Select a BluePrint.";
+                return false;
+            }
 
+            if(itemRefSelected == null) {
+                log = "BluePrint Reference is Null";
+                return false;
+            }
+
+            //Find Recipe Data to Selected BluePrint Item
+            var isFindRecipe = recipe.TryGetRecipe(itemRefSelected.GetID, out CraftingRecipe findRecipe);
+            if (!isFindRecipe) {
+                log = "Not Found Recipe Data";
+                return false;
+            }
+
+            //Setting Item Info Popup
+            infoPopup.SetPopup(itemRefSelected, findRecipe);
+            craftingPopups[0].anchoredPosition = craftingPanels[1].anchoredPosition;
+            openedPopupType = POPUPTYPE.ITEMINFO;
+
+            bpSelectedSlot.DeSelected();
+            bpSelectedSlot = null;
+
+            log = "";
+            return true;
+        }
+
+        /// <summary>
+        /// 설계도 슬롯 자체에서 PointerClick 이벤트의 팝업을 호출하는 메서드.
+        /// </summary>
+        /// <param name="item"></param>
+        public void OpenItemInfo(AD_item item) {
+            if(bpSelectedSlot != null) {
+                bpSelectedSlot.DeSelected();
+                bpSelectedSlot = null;
+            }
+
+            //Find Recipe Data to Selected BluePrint Item
+            itemRefSelected = item;
+            var isFindRecipe = recipe.TryGetRecipe(itemRefSelected.GetID, out CraftingRecipe findRecipe);
+            if (!isFindRecipe) {
+                throw new System.Exception($"Not Found Recipe, Try Key: {itemRefSelected.GetID}, Name:{itemRefSelected.GetName}");
+            }
+
+            //Setting Item Info Popup
+            infoPopup.SetPopup(itemRefSelected, findRecipe);
+
+            //Move Center to Item Info Popup
+            craftingPopups[0].anchoredPosition = craftingPanels[1].anchoredPosition;
+            openedPopupType = POPUPTYPE.ITEMINFO;
+        }
+
+        public void SelectBluePirnt(BluePrintSlot slot, bool isSelectedSlot, AD_item itemRef) {
+            if (isSelectedSlot) {                            //이미 Selected 상태인 Slot에서 DeSelected 요청
+                if(!ReferenceEquals(slot, bpSelectedSlot)) { //요청자가 지금 들고있는 슬롯인지 확인
+                    throw new System.Exception("Slot Not Matched !");
+                }
+
+                bpSelectedSlot.DeSelected();
+                bpSelectedSlot = null;
+
+                //Relaese, Selected Item
+                itemRefSelected = null;
+            }
+            else { //Selected 상태 요청
+                if (bpSelectedSlot != null) { //다른 슬롯을 이미 들고있다면 DeSelected 처리
+                    bpSelectedSlot.DeSelected();
+                    bpSelectedSlot = null;
+                }
+
+                bpSelectedSlot = slot;
+                bpSelectedSlot.Selected();
+
+                //Assign New Item, Recipe Reference
+                itemRefSelected = itemRef;
+            }
+        }
+
+        public void CloseItemInfo() {
+            craftingPopups[0].anchoredPosition = navigateRectTr[2].anchoredPosition;
+            openedPopupType = POPUPTYPE.NONE;
+            itemRefSelected = null;
+        }
+
+        public bool TryOpenConfirm() {
+            if(!IsCraftable(out string resultItemName)) {
+                Notify.Inst.Show(resultItemName);
+                return false;
+            }
+
+            if (bpSelectedSlot != null) {
+                bpSelectedSlot.DeSelected();
+                bpSelectedSlot = null;
+            }
+
+            if(openedPopupType == POPUPTYPE.ITEMINFO) {
+                craftingPopups[0].anchoredPosition = navigateRectTr[2].anchoredPosition;
+            }
+
+            textConfirmItemName.text = resultItemName;
+            craftingPopups[3].anchoredPosition = craftingPanels[1].anchoredPosition;
+            openedPopupType = POPUPTYPE.CONFIRM;
+            return true;
+        }
+
+        public void CloseConfirm() {
+            itemRefSelected = null;
+            craftingPopups[3].anchoredPosition = navigateRectTr[4].anchoredPosition;
+            openedPopupType = POPUPTYPE.NONE;
+        }
+
+        public void Confirm(Vector2 anchoredPosition) {
+            bool successCrafting = TryCrafting(out string failedLog, out CraftingRecipe findRecipe);
+            if (!successCrafting) {
+                CatLog.ELog(failedLog, true);
+                return;
+            }
+
+            itemRefSelected = null;
+            openedPopupType = POPUPTYPE.NONE;
+            craftingPopups[3].anchoredPosition = navigateRectTr[4].anchoredPosition;
+
+            //Start Crafting
+            GameManager.Instance.CraftingStart(selectedSlotNumber, findRecipe);
+
+            ClosePanel();
+            OpenPanel(PANELTYPE.MAIN, anchoredPosition);
+        }
+
+        //======================================================================================================================================
+        //============================================================ [ FUNCTION ] ============================================================
+
+        bool IsCraftable(out string resultName) {
+            if(itemRefSelected == null) {
+                resultName = "Please, Select Item First.";
+                return false;
+            }
+
+            bool isFind = recipe.TryGetRecipe(itemRefSelected.GetID, out CraftingRecipe findRecipe);
+            if (!isFind) throw new System.Exception($"Recipe Not Found, BluePrint Name: {itemRefSelected.GetName}");
+            for (int i = 0; i < findRecipe.Mats.Length; i++) {
+                if (GameManager.Instance.TryGetItemAmount(findRecipe.Mats[i].Mateiral.Item_Id, out int amount) && amount >= findRecipe.Mats[i].Required) {
+                    continue;
+                }
+                else {
+                    resultName = "Don't have enough materials to crafting.";
+                    return false;
+                }
+            }
+
+            resultName = findRecipe.Result.Item.Item_Name;
+            return true;
+        }
+
+        bool TryCrafting(out string log, out CraftingRecipe craftRecipe) {
+            recipe.TryGetRecipe(itemRefSelected.GetID, out CraftingRecipe findRecipe);
+            //Remove Material Items
+            var mats = findRecipe.Mats;
+            for (int i = 0; i < mats.Length; i++) {
+                bool successItemRemove = GameManager.Instance.TryRemoveItem(mats[i].Mateiral.Item_Id, mats[i].Required);
+                if (!successItemRemove) {
+                    log = $"WARNING ! CRAFTING ERROR -> {mats[i].Mateiral.Item_Name}";
+                    craftRecipe = null;
+                    return false;
+                }
+            }
+
+            //Remove BluePrint Item
+            if(!GameManager.Instance.TryRemoveItem(findRecipe.BluePrint.Item_Id, 1)) {
+                log = $"WARNING ! CRAFTING ERROR -> {findRecipe.BluePrint.Item_Name}";
+                craftRecipe = null;
+                return false;
+            }
+
+            log = "";
+            craftRecipe = findRecipe;
+            return true;
         }
 
         //======================================================================================================================================
         //=========================================================== [ INITIALIZE ] ===========================================================
 
-        void InitPanelMain(UnityEngine.Events.UnityAction unityAction, byte slotCount) {
+        void InitPanelMain(UnityEngine.Events.UnityAction<int> unityAction, int slotCount) { 
             //기존 씬에 있던 TempSlot들 비-활성화
-            var sceneSlots = slotParentRectTr.GetComponentsInChildren<CraftingSlot>();
-            foreach (var slot in sceneSlots) {
+            var sceneExistSlots = slotParentRectTr.GetComponentsInChildren<CraftingSlot>();
+            foreach (var slot in sceneExistSlots) {
                 slot.DisableSlot();
             }
 
             slots = new List<CraftingSlot>();
-            for (int i = 0; i < slotCount; i++) {
-                var newSlot = GameObject.Instantiate<CraftingSlot>(slotPrefab, slotParentRectTr);
-                newSlot.AddListnerToButton(unityAction);
-                slots.Add(newSlot);
-            }
-
+            AddCraftingSlot(slotCount, unityAction);
         }
 
-        void InitPanelSelect() {
-            //현재 Parnet에 깔려있는 Slot Prefab 캐싱 및 비-활성화
-            bpSlots = new List<BluePrintSlot>(choosePanelParentTr.GetComponentsInChildren<BluePrintSlot>());
-            for (int i = 0; i < bpSlots.Count; i++) {
-                bpSlots[i].DisableSlot();
+        void InitPanelSelect(byte spawnSlotCount) {
+            //씬에 깔려있는 Slot들 비활성화 처리 후 BluePrint Prefab으로 잡힌 오브젝트 생성
+            bpSlotList = new List<BluePrintSlot>();
+            var sceneExistSlots = bpSlotParentTr.GetComponentsInChildren<BluePrintSlot>();
+            foreach (var slot in sceneExistSlots) {
+                slot.DisableSlot();
+            }
+            bpSlotList = new List<BluePrintSlot>();
+            AddBluePrintSlot(spawnSlotCount);
+        }
+
+        void AddBluePrintSlot(byte spawnSlotCount) {
+            for (int i = 0; i < spawnSlotCount; i++) {
+                bpSlotList.Add(GameObject.Instantiate<BluePrintSlot>(bpSlotPrefab, bpSlotParentTr).InitSlot(this));
+            }
+        }
+
+        void AddCraftingSlot(int spawnSlotCount, UnityEngine.Events.UnityAction<int> unityAction) {
+            for (int i = 0; i < spawnSlotCount; i++) {
+                var newSlot = GameObject.Instantiate<CraftingSlot>(slotPrefab, slotParentRectTr);
+                newSlot.gameObject.name = "crafting_slot_pref";
+                newSlot.AddListnerToButton(unityAction);
+                slots.Add(newSlot);
             }
         }
 
@@ -105,26 +338,24 @@
         //============================================================ [ REFRESH ] =============================================================
 
         void RefreshCraftingSlot() {
-            var userCraftingSlotCount = GameManager.Instance.GetCraftingSlotCount();
-            var needSlotCount = userCraftingSlotCount - slots.Count;
-            if (needSlotCount > 0) {
-                ///for (int i = 0; i < needSlotCount; i++) {
-                ///    var newSlot = GameObject.Instantiate<CraftingSlot>(slotPrefab, slotParentRectTr);
-                ///    slots.Add(newSlot);
-                ///}
-                CatLog.WLog("초기화된 CraftingSlot Count의 값 차이가 발생했습니다. (Refresh 로직의 개선이 필요)");
-            }
-            else if (needSlotCount < 0) {
-                ///for (int i = slots.Count; i >= slots.Count - needSlotCount; --i) {
-                ///    if (slots[i].IsActive) {
-                ///        slots[i].DisableSlot();
-                ///    }
-                ///}
-                CatLog.WLog("초기화된 CraftingSlot Count의 값 차이가 발생했습니다. (Refresh 로직의 개선이 필요)");
+            slots.ForEach(slot => slot.DisableSlot());
+
+            var craftingSlotCount = GameManager.Instance.GetCraftingInfoSize();
+            if(craftingSlotCount <= 0) { //유저의 제작슬롯이 없으면 로드하지 않음
+                return;
             }
 
-            for (int i = 0; i < userCraftingSlotCount; i++) {
-                slots[i].EnableSlot(); // <- Input CraftingSlot Data
+            var craftingSlots = GameManager.Instance.GetCraftingInfos();
+            int needSlotCount = craftingSlots.Length - slots.Count;
+            if (needSlotCount > 0) {
+                CatLog.ELog("Must Allocate More Crafting Slots.");
+                //깔려있는 Crafting Slot이 부족할 때 ERROR 출력
+                //CRAFTING SLOT은 EVENT와 엮여있어서 현재로직으로는 INIT당시의 생성된 이후, 추가적으로 생성하기 힘듦.
+                //추가적인 슬롯 생성이 필요한 시점에 CRAFTING SLOT에 매개변수로 들어가는 UNITY ACTON를 개선하면 가능하다.
+            }
+
+            for (int i = 0; i < craftingSlots.Length; i++) {
+                slots[i].EnableSlot(craftingSlots[i], i); // <- Input CraftingSlot Data
             }
         }
 
@@ -132,7 +363,14 @@
         /// 항상 LoadBluePrintType field를 사용해서 BluePrint를 가져옴
         /// </summary>
         void RefreshSelectPanel() {
-            bpSlots.ForEach((item) => { //모든 슬롯 비-활성화
+            if(bpSelectedSlot != null) {
+                bpSelectedSlot.DeSelected();
+                bpSelectedSlot = null;
+            }
+
+            itemRefSelected = null;
+
+            bpSlotList.ForEach((item) => { //모든 슬롯 비-활성화
                 if (item.IsActive) {
                     item.DisableSlot();
                 }
@@ -146,11 +384,11 @@
             } 
 
             noResultRectTr.gameObject.SetActive(false);
-            int needSlotCount = bluePrints.Length - bpSlots.Count;
+            int needSlotCount = bluePrints.Length - bpSlotList.Count;
             if (needSlotCount > 0) { // 부족한 슬롯 만큼 생성 후 캐싱
                 for (int i = 0; i < needSlotCount; i++) {
-                    var newSlot = GameObject.Instantiate<BluePrintSlot>(bluePrintSlotPrefab, choosePanelParentTr);
-                    bpSlots.Add(newSlot);
+                    var newSlot = GameObject.Instantiate<BluePrintSlot>(bpSlotPrefab, bpSlotParentTr);
+                    bpSlotList.Add(newSlot);
                 }
             }
             else if (needSlotCount < 0) {
@@ -162,7 +400,7 @@
             }
 
             for (int i = 0; i < bluePrints.Length; i++) {
-                bpSlots[i].EnableSlot(bluePrints[i]);
+                bpSlotList[i].EnableSlot(bluePrints[i]);
             }
         }
 
@@ -176,7 +414,7 @@
                 return; //열려있는 Type과 동일하면 return
             }
 
-            bpSlots.ForEach((slot) => { //모든 설계도 슬롯 비-활성화
+            bpSlotList.ForEach((slot) => { //모든 설계도 슬롯 비-활성화
                 if (slot.IsActive) {
                     slot.DisableSlot();
                 }
@@ -195,11 +433,11 @@
             }
 
             noResultRectTr.gameObject.SetActive(false);
-            int requiredSlotCount = blueprints.Length - bpSlots.Count;
+            int requiredSlotCount = blueprints.Length - bpSlotList.Count;
             if (requiredSlotCount > 0) {
                 for (int i = 0; i < requiredSlotCount; i++) {
-                    var newSlot = GameObject.Instantiate<BluePrintSlot>(bluePrintSlotPrefab, choosePanelParentTr);
-                    bpSlots.Add(newSlot);
+                    var newSlot = GameObject.Instantiate<BluePrintSlot>(bpSlotPrefab, bpSlotParentTr);
+                    bpSlotList.Add(newSlot);
                 }
             }
             else if (requiredSlotCount < 0) {
@@ -211,7 +449,7 @@
             }
 
             for (int i = 0; i < blueprints.Length; i++) {
-                bpSlots[i].EnableSlot(blueprints[i]);
+                bpSlotList[i].EnableSlot(blueprints[i]);
             }
 
         }
@@ -222,9 +460,9 @@
         /// <summary>
         /// 해당 클래스는 MonoBehaviour가 아님, UI_Crafting에 의존하여 처리
         /// </summary>
-        public void Start(UnityEngine.Events.UnityAction unityAction, byte slotCount, CraftingRecipeSO recipeTable) {
+        public void Start(UnityEngine.Events.UnityAction<int> unityAction, int slotCount, byte bluePrintSlotCount, CraftingRecipeSO recipeTable) {
             InitPanelMain(unityAction, slotCount);
-            InitPanelSelect();
+            InitPanelSelect(bluePrintSlotCount);
             recipe = recipeTable;
         }
 
@@ -271,11 +509,10 @@
         [System.Serializable]
         internal sealed class Toggle {
             [SerializeField] GameObject[] enables  = null;
-            [SerializeField] GameObject[] disables = null;
             [SerializeField] RectTransform[] highlightPosArray = null;
             [SerializeField] RectTransform highlightBar = null;
-            sbyte enableSlotIndex = 0; // 초기에 Enable 되어있는 Index값 default: -1
             Vector2 tempPos = Vector2.zero;
+            public sbyte EnableSlotIndex { get; private set; } = 0;
 
             /// <summary>
             /// Range: [0] ~ [SlotLength - 1]
@@ -286,16 +523,16 @@
                     throw new System.Exception("Index Range Over");
                 }
 
-                if(enableSlotIndex != -1) {
-                    enables[enableSlotIndex].SetActive(false);
+                if(EnableSlotIndex != -1) {
+                    enables[EnableSlotIndex].SetActive(false);
                 }
 
-                enableSlotIndex = index;
-                enables[enableSlotIndex].SetActive(true);
+                EnableSlotIndex = index;
+                enables[EnableSlotIndex].SetActive(true);
 
                 //Set Position Highlight Bar
                 tempPos   = highlightBar.anchoredPosition;
-                tempPos.x = highlightPosArray[enableSlotIndex].anchoredPosition.x;
+                tempPos.x = highlightPosArray[EnableSlotIndex].anchoredPosition.x;
                 highlightBar.anchoredPosition = tempPos;
             }
         }

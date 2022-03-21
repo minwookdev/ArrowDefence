@@ -18,7 +18,7 @@
         /// </summary>
         /// <param name="item">Bow Item Data Address</param>
         public Item_Bow(ItemData_Equip_Bow item) : base() {
-            this.EquipType = EQUIP_ITEMTYPE.EQUIP_BOW;
+            this.EquipType = EQUIP_ITEMTYPE.BOW;
 
             this.Item_Id      = item.Item_Id;
             this.Item_Name    = item.Item_Name;
@@ -38,7 +38,7 @@
         /// </summary>
         /// <param name="item"></param>
         public Item_Bow(Item_Bow item) : base() {
-            this.EquipType = EQUIP_ITEMTYPE.EQUIP_BOW;
+            this.EquipType = EQUIP_ITEMTYPE.BOW;
 
             this.Item_Id     = item.Item_Id;
             this.Item_Name   = item.Item_Name;

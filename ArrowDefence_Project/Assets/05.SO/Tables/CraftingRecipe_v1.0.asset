@@ -13,12 +13,37 @@ MonoBehaviour:
   m_Name: CraftingRecipe_v1.0
   m_EditorClassIdentifier: 
   RecipeArray:
-  - BluePrint: {fileID: 0}
+  - BluePrint: {fileID: 11400000, guid: 10cdfa00ee1ca464bbaebe40365d94b1, type: 2}
     Mats:
-    - Mateiral: {fileID: 0}
-      Required: 15
-    ResultItem: {fileID: 0}
-  - BluePrint: {fileID: 0}
-    Mats: []
-    ResultItem: {fileID: 0}
+    - Mateiral: {fileID: 11400000, guid: 818e48ff8014cd743904a971f1118bab, type: 2}
+      Required: 10
+    - Mateiral: {fileID: 11400000, guid: f8cf2d491cdbd38409db2b0178418dce, type: 2}
+      Required: 10
+    - Mateiral: {fileID: 11400000, guid: d81beb11892aa284da11b476736ed6d9, type: 2}
+      Required: 5
+    Result:
+      Item: {fileID: 11400000, guid: 534308bb287ef8147b6442afbe44fbda, type: 2}
+      Count: 1
+  - BluePrint: {fileID: 11400000, guid: e30fd3ea9f6f592448d47e732a12b10f, type: 2}
+    Mats:
+    - Mateiral: {fileID: 11400000, guid: 818e48ff8014cd743904a971f1118bab, type: 2}
+      Required: 5
+    - Mateiral: {fileID: 11400000, guid: f8cf2d491cdbd38409db2b0178418dce, type: 2}
+      Required: 5
+    - Mateiral: {fileID: 11400000, guid: d81beb11892aa284da11b476736ed6d9, type: 2}
+      Required: 10
+    Result:
+      Item: {fileID: 11400000, guid: 35e318914cb3bb445b2ba96680d7eacc, type: 2}
+      Count: 1
+  - BluePrint: {fileID: 11400000, guid: bc3cc51adda172a41a6b2034696ac94a, type: 2}
+    Mats:
+    - Mateiral: {fileID: 11400000, guid: d81beb11892aa284da11b476736ed6d9, type: 2}
+      Required: 10
+    - Mateiral: {fileID: 11400000, guid: 651977433f75de345bc072a75944188e, type: 2}
+      Required: 5
+    - Mateiral: {fileID: 11400000, guid: 6727f1d234cbc2a428aa767cc63796f6, type: 2}
+      Required: 5
+    Result:
+      Item: {fileID: 11400000, guid: ff271f23b6bff6e4d8e272b2ea31189d, type: 2}
+      Count: 1
   version: 1.0

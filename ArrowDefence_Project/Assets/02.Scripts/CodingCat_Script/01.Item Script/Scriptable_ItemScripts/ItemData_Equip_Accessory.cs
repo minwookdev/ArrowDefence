@@ -27,7 +27,7 @@
 
 
         public ItemData_Equip_Accessory() : base() {
-            this.Equip_Type = EQUIP_ITEMTYPE.EQUIP_ACCESSORY;
+            this.Equip_Type = EQUIP_ITEMTYPE.ARTIFACT;
         }
 
         public void OnEnable() {

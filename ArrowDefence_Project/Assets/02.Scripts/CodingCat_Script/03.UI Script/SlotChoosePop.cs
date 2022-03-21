@@ -39,13 +39,13 @@
                 if (playerEquips.IsEquippedArrowMain())
                 {
                     arrowSlot0.gameObject.SetActive(true);
-                    arrowSlot0.Setup(playerEquips.GetMainArrow());
+                    arrowSlot0.EnableSlot(playerEquips.GetMainArrow());
                 }
 
                 if(playerEquips.IsEquippedArrowSub())
                 {
                     arrowSlot1.gameObject.SetActive(true);
-                    arrowSlot1.Setup(playerEquips.GetSubArrow());
+                    arrowSlot1.EnableSlot(playerEquips.GetSubArrow());
                 }
 
             }
@@ -62,7 +62,7 @@
                     if(accessories[i] != null)
                     {
                         accessSlots[i].gameObject.SetActive(true);
-                        accessSlots[i].Setup(accessories[i]);
+                        accessSlots[i].EnableSlot(accessories[i]);
                     }
                     continue;
                 }
@@ -75,8 +75,8 @@
         {
             if(objectLeftPanel.activeSelf)
             {
-                if (arrowSlot0.gameObject.activeSelf) arrowSlot0.Clear();
-                if (arrowSlot1.gameObject.activeSelf) arrowSlot1.Clear();
+                if (arrowSlot0.gameObject.activeSelf) arrowSlot0.DisableSlot();
+                if (arrowSlot1.gameObject.activeSelf) arrowSlot1.DisableSlot();
 
                 objectLeftPanel.SetActive(false);
             }
@@ -84,7 +84,7 @@
             {
                 foreach (var slot in accessSlots)
                 {
-                    if (slot.gameObject.activeSelf) slot.Clear();
+                    if (slot.gameObject.activeSelf) slot.DisableSlot();
                 }
 
                 objectRightPanel.SetActive(false);

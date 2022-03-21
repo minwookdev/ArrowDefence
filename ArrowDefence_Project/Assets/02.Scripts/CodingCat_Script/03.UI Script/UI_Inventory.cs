@@ -156,7 +156,7 @@
             for (int i = 0; i < inventoryList.Count; i++)
             {
                 slotList[i].gameObject.SetActive(true);
-                slotList[i].Setup(inventoryList[i]);
+                slotList[i].EnableSlot(inventoryList[i]);
                 //아이템이 100개 200개씩 되어도 문제가 없도록 구현
             }
         }
@@ -192,13 +192,13 @@
 
             for(int i =0;i<inventoryList.Count;i++) {
                 slotList[i].gameObject.SetActive(true);
-                slotList[i].Setup(inventoryList[i]);
+                slotList[i].EnableSlot(inventoryList[i]);
             }
         }
         
 
         private void ClearUIinventory() {
-            slotList.FindAll(x => x.gameObject.activeSelf == true).ForEach(x => x.Clear());
+            slotList.FindAll(x => x.gameObject.activeSelf == true).ForEach(x => x.DisableSlot());
             CatLog.Log(StringColor.YELLOW, "Inventory: Clear All Slots.");
         }
 

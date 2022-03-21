@@ -5,18 +5,21 @@
     using UnityEngine.EventSystems;
     using UnityEngine.UI;
 
-    public class UI_ItemSlot : MonoBehaviour, IPointerClickHandler
-    {
+    public class UI_ItemSlot : MonoBehaviour, IPointerClickHandler {
+        [Header("COMPONENT")]
         public TextMeshProUGUI ItemStackTmp;
         public Image ItemImg;
         public AD_item ItemAddress;
         public Image ItemFrame;
         public Sprite[] Frames;
 
+        [Header("OPTION")]
+        [SerializeField] bool ignoreClick = false;
+
         public void SetItemSprite(Sprite sprite) => ItemImg.sprite = sprite;
 
         //Setup 함수 받아서 Slot 변수들 설정과 해당 Item 주소값 들고있게함
-        public void Setup(AD_item address) {
+        public void EnableSlot(AD_item address) {
             ItemAddress = address;
 
             //Set Item Sprite
@@ -35,8 +38,23 @@
             this.ItemFrame.sprite = Frames[(int)address.GetGrade];
         }
 
-        public void Clear()
-        {
+        public void EnableSlot(ItemData item, int notationNumber = 0) {
+            ItemImg.sprite = item.Item_Sprite;
+            ItemImg.preserveAspect = true;
+            ItemFrame.sprite = Frames[(int)item.Item_Grade];
+
+            if(notationNumber <= 0) {
+                ItemStackTmp.gameObject.SetActive(false);
+            }
+            else {
+                ItemStackTmp.text = notationNumber.ToString();
+                ItemStackTmp.gameObject.SetActive(true);
+            }
+            
+            gameObject.SetActive(true);
+        }
+
+        public void DisableSlot() {
             //Data 정리하고 자체 Disable 처리
             ItemAddress = null;
             ItemStackTmp.text = "";
@@ -46,32 +64,11 @@
         }
 
         void IPointerClickHandler.OnPointerClick(PointerEventData data) {
+            if (ignoreClick) {
+                return;
+            }
+
             MainSceneRoute.OpenItemInfo(ItemAddress);
-            #region FEEDBACKINLOG
-
-            //if(ItemAddress.GetItemType != ITEMTYPE.ITEM_EQUIPMENT)
-            //{
-            //    string itemInfoStr = "Item Info \n" +
-            //        $"Name : {ItemAddress.GetName}" +
-            //        $"Desc : {}";
-            //}
-            //else
-            //{
-            //    if(ItemAddress is Item_Bow)
-            //    {
-            //        Item_Bow item = (Item_Bow)ItemAddress;
-            //    }
-            //    else if (ItemAddress is Item_Arrow)
-            //    {
-            //        Item_Arrow item = (Item_Arrow)ItemAddress;
-            //    }
-            //    else if(ItemAddress is Item_Accessory)
-            //    {
-            //        Item_Accessory item = (Item_Accessory)ItemAddress;
-            //    }
-            //}
-
-            #endregion
         }
 
         #region SLOT_SETTING_METHOD

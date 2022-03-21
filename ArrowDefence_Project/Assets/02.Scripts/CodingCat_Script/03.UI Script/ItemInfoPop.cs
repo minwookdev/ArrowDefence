@@ -180,6 +180,7 @@
             [SerializeField] TextMeshProUGUI tmp_ItemCount;
             [SerializeField] Button btn_SellItem;
             [SerializeField] Button btn_Fuse;
+            [SerializeField] RectTransform rectTrBtnGroup = null;
 
             //Equip & Release Entry
             [Header("Equip & Release Button")]
@@ -199,6 +200,8 @@
 
             //Item Address
             AD_item itemAddress;
+
+            bool isPreviewOpenMode = false;
 
             void FixDescriptionRectSize(string itemDesc) {
                 var rectTransform = tmp_ItemDesc.gameObject.GetComponent<RectTransform>();
@@ -224,7 +227,7 @@
                 FixDescriptionRectSize(item.GetDesc);
             }
 
-            public void EnablePopup_Material(Item_Material address, Sprite frame) {
+            public void EnablePopup_Material(Item_Material address, Sprite frame, bool enablebuttons = true) {
                 //Enable Default Item Info.
                 SetDefaultItemInfo(address, "MATERIAL", true, frame);
 
@@ -236,6 +239,11 @@
 
                 //Disable Equip & Release Button Group
                 equipmentButtonGroup.gameObject.SetActive(false);
+                isPreviewOpenMode = (!enablebuttons) ? true : false;
+
+                //Is Hide Buttons?
+                rectTrBtnGroup.gameObject.SetActive(enablebuttons);
+                isPreviewOpenMode = (!enablebuttons) ? true : false;
 
                 //Enable Button
                 //btn_SellItem.gameObject.SetActive(true);
@@ -248,7 +256,7 @@
                 popupGameObject.SetActive(true);
             }
 
-            public void EnablePopup_Consumable(Item_Consumable address, Sprite frame) {
+            public void EnablePopup_Consumable(Item_Consumable address, Sprite frame, bool enablebuttons = true) {
                 //Default Item Data Setting
                 SetDefaultItemInfo(address, "CONSUMABLE", true, frame);
 
@@ -260,6 +268,10 @@
 
                 //Disable Equipments Button Group
                 equipmentButtonGroup.gameObject.SetActive(false);
+                isPreviewOpenMode = (!enablebuttons) ? true : false;
+
+                //Is Hide Buttons?
+                rectTrBtnGroup.gameObject.SetActive(enablebuttons);
 
                 //Enable Button
                 //btn_SellItem.gameObject.SetActive(true);
@@ -272,7 +284,7 @@
                 popupGameObject.SetActive(true);
             }
 
-            public void EnablePopup_Bow(Item_Bow address, Sprite frame) {
+            public void EnablePopup_Bow(Item_Bow address, Sprite frame, bool enablebuttons = true) {
                 //Default Item Data Setting
                 SetDefaultItemInfo(address, "BOW", false, frame);
 
@@ -314,6 +326,10 @@
                 //Enable Condition-Match Button
                 SwitchEquipButton(isAvailableEquip);
 
+                //Is Hide Buttons?
+                rectTrBtnGroup.gameObject.SetActive(enablebuttons);
+                isPreviewOpenMode = (!enablebuttons) ? true : false;
+
                 //Get Item Address
                 itemAddress = address;
 
@@ -321,7 +337,7 @@
                 popupGameObject.SetActive(true);
             }
 
-            public void EnablePopup_Arrow(Item_Arrow address, Sprite frame) {
+            public void EnablePopup_Arrow(Item_Arrow address, Sprite frame, bool enablebuttons = true) {
                 //Default Item Data Setting
                 SetDefaultItemInfo(address, "ARROW", false, frame);
 
@@ -362,6 +378,10 @@
                 //Enable Condition-Match Button
                 SwitchEquipButton(isEquippedItem);
 
+                //Is Hide Buttons?
+                rectTrBtnGroup.gameObject.SetActive(enablebuttons);
+                isPreviewOpenMode = (!enablebuttons) ? true : false;
+
                 //Get Item Address
                 itemAddress = address;
 
@@ -369,7 +389,7 @@
                 popupGameObject.SetActive(true);
             }
 
-            public void EnablePopup_Artifact(Item_Accessory address, Sprite frame) {
+            public void EnablePopup_Artifact(Item_Accessory address, Sprite frame, bool enablebuttons = true) {
                 //Default Item Data Setting
                 SetDefaultItemInfo(address, "ARTIFACT", false, frame);
 
@@ -417,6 +437,10 @@
                     SwitchEquipButton(true);
                 }
 
+                //Is Hide Buttons?
+                rectTrBtnGroup.gameObject.SetActive(enablebuttons);
+                isPreviewOpenMode = (!enablebuttons) ? true : false;
+
                 //Get Item Address
                 itemAddress = address;
 
@@ -424,7 +448,7 @@
                 popupGameObject.SetActive(true);
             }
 
-            public void EnablePopup_SpArrow(Item_SpArr address, Sprite frame) {
+            public void EnablePopup_SpArrow(Item_SpArr address, Sprite frame, bool enablebuttons = true) {
                 SetDefaultItemInfo(address, "SPECIAL ARROW", false, frame); // Set Default Item Data
                 abilitySlots.EnableSlots(address.AbilitiesOrNull);          // Set Item Ability Data
                 var skills      = address.GetSkillInfos;                    // Set Equipment Item Skill Data
@@ -464,6 +488,10 @@
                 }
 
                 SwitchEquipButton(isActiveEquipButton);
+
+                //Is Hide Buttons?
+                rectTrBtnGroup.gameObject.SetActive(enablebuttons);
+                isPreviewOpenMode = (!enablebuttons) ? true : false;
 
                 itemAddress = address;              // Get Item Address
                 popupGameObject.SetActive(true);    // Enable Popup
@@ -587,9 +615,11 @@
             #region CLOSE_POPUP
 
             public void Close() {
-                //Update Inventory, Equipments UI
-                UI_Equipments.Instance.UpdateEquipUI();
-                UI_Inventory.InvenUpdate();
+                //Update Inventory, Equipments UI Only Normal Mode
+                if(!isPreviewOpenMode) {
+                    UI_Equipments.Instance.UpdateEquipUI();
+                    UI_Inventory.InvenUpdate();
+                }
 
                 //Close Self
                 DisablePopup();
@@ -946,7 +976,6 @@
         [Header("Item Grade Frames")]
         public Sprite[] Frames;
 
-
         [Header("Item Popup Type")]
         [Space(10)]
         public ItemPop_Normal    ItemPop;               //Material, Consumable Item Popup
@@ -955,6 +984,9 @@
         public ItemPop_Equip_Accessory ItemPop_Access;  //Equipment Accessory Item Popup
         [SerializeField] ItemPopupIntegrated itemPopup; //통합 아이템 팝업 [모든 아이템 종류의 정보 팝업을 하나로 관리]
         private Popup_Type       popType = Popup_Type.None; //현재 열려있는 팝업타입 통합되면 Type 필요없을듯
+
+        [Header("PREVIEW")]
+        [SerializeField] GameObject btn_Select = null;
 
         /*
             index[0] Material Item, Consumable Item
@@ -1005,7 +1037,7 @@
             itemPopup.EnablePopup_Consumable(item, Frames[(int)item.GetGrade]);
         }
 
-        public void OpenPopup_EquipmentItem(Item_Equipment equipItem) {
+        public void OpenPopup_EquipmentItem(Item_Equipment equipItem, bool isEnableSelectButton = true) {
             gameObject.SetActive(true);
             switch (equipItem) {
                 case Item_Bow            bow: itemPopup.EnablePopup_Bow(bow, Frames[(int)bow.GetGrade]);                break;
@@ -1013,6 +1045,30 @@
                 case Item_Arrow        arrow: itemPopup.EnablePopup_Arrow(arrow, Frames[(int)arrow.GetGrade]);          break;
                 case Item_Accessory artifact: itemPopup.EnablePopup_Artifact(artifact, Frames[(int)artifact.GetGrade]); break;
             }
+
+            if (btn_Select != null) {
+                btn_Select.SetActive(isEnableSelectButton);
+            }
+        }
+
+        public void OpenPreview(AD_item item) {
+            var frame = Frames[(int)item.GetGrade];
+            switch (item.GetItemType) {
+                case ITEMTYPE.ITEM_MATERIAL:   itemPopup.EnablePopup_Material((Item_Material)item, frame, false);     break;
+                case ITEMTYPE.ITEM_CONSUMABLE: itemPopup.EnablePopup_Consumable((Item_Consumable)item, frame, false); break;
+                case ITEMTYPE.ITEM_EQUIPMENT:
+                    switch (item) {
+                        case Item_Bow       equipment: itemPopup.EnablePopup_Bow(equipment, frame, false);      break;
+                        case Item_Arrow     equipment: itemPopup.EnablePopup_Arrow(equipment, frame, false);    break;
+                        case Item_Accessory equipment: itemPopup.EnablePopup_Artifact(equipment, frame, false); break;
+                        case Item_SpArr     equipment: itemPopup.EnablePopup_SpArrow(equipment, frame, false);  break;
+                        default: break;
+                    }
+                    break;
+                default: throw new System.NotImplementedException();
+            }
+            gameObject.SetActive(true);
+
         }
 
         #endregion

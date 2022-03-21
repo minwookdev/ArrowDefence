@@ -38,7 +38,7 @@
         /// </summary>
         /// <param name="item"></param>
         public Item_Arrow (ItemData_Equip_Arrow item) : base() {
-            this.EquipType = EQUIP_ITEMTYPE.EQUIP_ARROW;
+            this.EquipType = EQUIP_ITEMTYPE.ARROW;
 
             this.Item_Id     = item.Item_Id;
             this.Item_Name   = item.Item_Name;
@@ -70,7 +70,7 @@
         /// </summary>
         /// <param name="item"></param>
         public Item_Arrow(Item_Arrow item) : base() {
-            this.EquipType = EQUIP_ITEMTYPE.EQUIP_ARROW;
+            this.EquipType = EQUIP_ITEMTYPE.ARROW;
 
             this.Item_Id     = item.Item_Id;
             this.Item_Name   = item.Item_Name;

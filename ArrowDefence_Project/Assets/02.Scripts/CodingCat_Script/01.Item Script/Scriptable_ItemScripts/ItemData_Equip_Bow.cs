@@ -36,7 +36,7 @@
         }
 
         public ItemData_Equip_Bow() : base() {
-            Equip_Type = EQUIP_ITEMTYPE.EQUIP_BOW;
+            Equip_Type = EQUIP_ITEMTYPE.BOW;
         }
 
         public void OnEnable() {

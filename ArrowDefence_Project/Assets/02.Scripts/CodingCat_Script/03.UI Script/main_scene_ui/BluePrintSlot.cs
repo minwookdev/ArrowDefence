@@ -2,16 +2,35 @@
     using UnityEngine;
     using UnityEngine.UI;
     using UnityEngine.EventSystems;
+    using DG.Tweening;
     using TMPro;
 
-    public class BluePrintSlot : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerClickHandler {
+    public class BluePrintSlot : MonoBehaviour, IPointerDownHandler, IPointerClickHandler, IPointerExitHandler, 
+                                                IBeginDragHandler, IDragHandler, IEndDragHandler {
         [Header("COMPONENT")]
+        [SerializeField] RectTransform rectTr = null;
         [SerializeField] Image imageIcon  = null;
         [SerializeField] Image imageFrame = null;
         [SerializeField] TextMeshProUGUI textAmount = null;
+        [SerializeField] ScrollRect scrollView = null;
 
         [Header("FRAMES")]
         [SerializeField] Sprite[] frameSprites = null;
+        [SerializeField] GameObject selectedFrame = null;
+
+        [Space(10f)]
+        [Header("DEBUG")]
+        [SerializeField] bool isPressed  = false;
+        [SerializeField] bool isSelected = false;
+        ActionCat.UI.CraftingFunc crafting = null;
+
+        Vector3 normalScale  = new Vector3(1f, 1f, 1f);
+        Vector3 pressedScale = new Vector3(1.1f, 1.1f, 1f);
+        float scalingTime = 0.3f;
+        float currentPressedTime = 0f;
+        float maxPressedTime = 1f;
+
+        AD_item itemReference = null;
 
         public bool IsActive {
             get {
@@ -19,10 +38,38 @@
             }
         }
 
+        private void Update() {
+            if (isPressed) {
+                currentPressedTime += Time.deltaTime;
+                if (currentPressedTime >= maxPressedTime) {
+                    crafting.SelectBluePirnt(this, isSelected, itemReference);
+                    isPressed = false;
+                    currentPressedTime = 0f;
+                }
+            }
+        }
+
+        public BluePrintSlot InitSlot(UI.CraftingFunc parent) {
+            crafting = parent;
+            return this;
+        }
+
+        public void Selected() {
+            isSelected = true;
+            selectedFrame.SetActive(true);
+        }
+
+        public void DeSelected() {
+            isSelected = false;
+            selectedFrame.SetActive(false);
+        }
+
         public void EnableSlot(AD_item item) {
             imageIcon.sprite  = item.GetSprite;
-            textAmount.text   = (item.GetAmount > 1) ? item.GetAmount.ToString() : ""; 
+            textAmount.text   = item.GetAmount.ToString();
             imageFrame.sprite = GetFrameSptite(item.GetGrade);
+
+            itemReference = item;
 
             if(gameObject.activeSelf == false) {
                 gameObject.SetActive(true);
@@ -30,6 +77,7 @@
         }
 
         public void DisableSlot() {
+            itemReference = null;
             gameObject.SetActive(false);
         }
 
@@ -47,15 +95,41 @@
         }
 
         void IPointerClickHandler.OnPointerClick(PointerEventData eventData) {
-            throw new System.NotImplementedException();
+            if (isPressed == true) {
+                crafting.OpenItemInfo(itemReference);
+                isPressed = false;
+                currentPressedTime = 0f;
+            }
+            ScaleTrigger();
+            CatLog.Log("Called Pointer Click !");
         }
 
         void IPointerDownHandler.OnPointerDown(PointerEventData eventData) {
-            throw new System.NotImplementedException();
+            isPressed = true;
+            ScaleTrigger();
         }
 
-        void IPointerUpHandler.OnPointerUp(PointerEventData eventData) {
-            throw new System.NotImplementedException();
+        void IPointerExitHandler.OnPointerExit(PointerEventData eventData) {
+            isPressed = false;
+            currentPressedTime = 0f;
+            ScaleTrigger();
+        }
+
+        void IBeginDragHandler.OnBeginDrag(PointerEventData eventData) {
+            scrollView.OnBeginDrag(eventData);
+        }
+
+        void IDragHandler.OnDrag(PointerEventData eventData) {
+            scrollView.OnDrag(eventData);
+        }
+
+        void IEndDragHandler.OnEndDrag(PointerEventData eventData) {
+            scrollView.OnEndDrag(eventData);
+        }
+
+        void ScaleTrigger() {
+            Vector3 targetScale = (isPressed) ? pressedScale : normalScale;
+            rectTr.DOScale(targetScale, scalingTime);
         }
     }
 }

@@ -16,7 +16,7 @@
         public ACEffector2D[] effects;
 
         public ItemData_Equip_Arrow() : base() {
-            this.Equip_Type = EQUIP_ITEMTYPE.EQUIP_ARROW;
+            this.Equip_Type = EQUIP_ITEMTYPE.ARROW;
         }
 
         private void OnValidate() {

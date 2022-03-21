@@ -91,14 +91,32 @@ public class CraftingRecipeArrayDrawer : PropertyDrawer {
             GUILayout.EndVertical();
             
             GUILayout.BeginVertical("GroupBox");
-            EditorGUILayout.PropertyField(property.FindPropertyRelative(nameof(CraftingRecipe.ResultItem)));
+
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("RESULT");
+            SerializedProperty result = property.FindPropertyRelative(nameof(CraftingRecipe.Result));
+            EditorGUILayout.PropertyField(result.FindPropertyRelative(nameof(CraftingRecipe.Results.Item)), new GUIContent(""));
+            EditorGUILayout.PropertyField(result.FindPropertyRelative(nameof(CraftingRecipe.Results.Count)), new GUIContent(""));
+            GUILayout.EndHorizontal();
+
+            //EditorGUILayout.PropertyField(property.FindPropertyRelative(nameof(CraftingRecipe.ResultItem)));
+
+            //SerializedObject resultObject = new SerializedObject(property.FindPropertyRelative(nameof(CraftingRecipe.ResultItems)).objectReferenceValue);
+            //EditorGUILayout.PropertyField(resultObject.FindProperty(nameof(CraftingRecipe.ResultItems.Item)));
+            //EditorGUILayout.PropertyField(resultObject.FindProperty(nameof(CraftingRecipe.ResultItems.Count)));
+            //resultObject.ApplyModifiedProperties();
+
+            //EditorGUILayout.PropertyField(property.FindPropertyRelative)
+
+            //EditorGUILayout.PropertyField(property.FindPropertyRelative(nameof(CraftingRecipe.ResultItems.Item)));
+            //EditorGUILayout.PropertyField(property.FindPropertyRelative(nameof(CraftingRecipe.ResultItems.Count)));
             GUILayout.EndVertical();
         }
         EditorGUI.indentLevel = originalIndentLevel;
     }
 }
 
-[CustomPropertyDrawer(typeof(CraftingRecipe.CraftingMaterial))]
+[CustomPropertyDrawer(typeof(CraftingRecipe.Materials))]
 public class MatsArrayDrawer : PropertyDrawer {
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label) {
         GUILayout.BeginHorizontal();
@@ -106,14 +124,14 @@ public class MatsArrayDrawer : PropertyDrawer {
         GUILayout.BeginHorizontal();
         GUILayout.Space(15f);
         GUILayout.Label("Mateial");
-        EditorGUILayout.PropertyField(property.FindPropertyRelative(nameof(CraftingRecipe.CraftingMaterial.Mateiral)), new GUIContent(""));
+        EditorGUILayout.PropertyField(property.FindPropertyRelative(nameof(CraftingRecipe.Materials.Mateiral)), new GUIContent(""));
         GUILayout.EndHorizontal();
 
         GUILayout.Space(15f);
 
         GUILayout.BeginHorizontal();
         GUILayout.Label("Required");
-        EditorGUILayout.PropertyField(property.FindPropertyRelative(nameof(CraftingRecipe.CraftingMaterial.Required)), new GUIContent(""));
+        EditorGUILayout.PropertyField(property.FindPropertyRelative(nameof(CraftingRecipe.Materials.Required)), new GUIContent(""));
         GUILayout.EndHorizontal();
 
         GUILayout.EndHorizontal();

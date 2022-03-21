@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b120a5a30e835e4b9cc469531a63e5e, type: 3}
   m_Name: Item_Health_Potion
   m_EditorClassIdentifier: 
-  Item_Type: 0
+  Item_Type: 1
   Item_Grade: 0
   Item_Id: 2001
   Item_Amount: 12

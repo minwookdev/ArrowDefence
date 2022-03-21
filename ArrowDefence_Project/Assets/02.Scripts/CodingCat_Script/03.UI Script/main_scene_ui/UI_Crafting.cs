@@ -30,8 +30,16 @@
             upgradeFunction.Enable();
         }
 
+        private void OnDisable() {
+            CloseOpenedPanel();
+            upgradeFunction.ClearSelected();
+        }
+
         private void Start() {
-            craftingFunction.Start(ButtonEvent_OpenCraftingChoosePanel, 1, craftingRecipeTable);
+            //Get Temp Crafting Slot
+            GameManager.Instance.TEST_CREATE_TEMP_CRAFTING_SLOT();
+
+            craftingFunction.Start(BE_CT_OPENSELECTPANEL, 5, 10, craftingRecipeTable);
             upgradeFunction.Start(upgradeRecipeTable);
         }
 
@@ -49,23 +57,87 @@
             }
 
             CloseOpenedPanel();
-            openedPanelTr = upgradeFunction.OpenPanel(UpgradeFunc.PANELTYPE.MAIN, mainAnchoredPos);
+            openedPanelTr = upgradeFunction.OpenPanel(UpgradeFunc.PANELTYPE.MAIN, mainAnchoredPos, true);
             openedPanelType = PANEL.UPGRADE;
         }
 
         public void ButtonEvent_OpenUpgradeChoosePanel() {
             CloseOpenedPanel();
-            openedPanelTr = upgradeFunction.OpenPanel(UpgradeFunc.PANELTYPE.CHOOSE, mainAnchoredPos);
+            openedPanelTr = upgradeFunction.OpenPanel(UpgradeFunc.PANELTYPE.CHOOSE, mainAnchoredPos, true);
             openedPanelType = PANEL.UPGRADE;
         }
 
-        public void ButtonEvent_ItemInfoPopupClose() {
-            upgradeFunction.CloseItemInfoPopup();
+        public void ButtonEvent_Upgrade_CloseItemInfo() {
+            upgradeFunction.CloseOpenedPopup();
         }
 
-        public void ButtonEvent_ItemInfoPopupSelect() {
-            upgradeFunction.SelectUpgradeableItem();
+        public void ButtonEvent_Upgrade_SelectItem() {
+            upgradeFunction.SetMainPanel();
+            upgradeFunction.CloseOpenedPopup();
+            upgradeFunction.CloseOpenedPanel();
+            upgradeFunction.OpenPanel(UpgradeFunc.PANELTYPE.MAIN, mainAnchoredPos, false);
         }
+
+        public void ButtonEvent_Upgrade_Start() {
+            if (upgradeFunction.IsCheckUpgradeable(out byte exceptionNumnber)) {
+                upgradeFunction.SetConfirmPopup();
+                upgradeFunction.OpenPopup(UpgradeFunc.POPUPTYPE.CONFIRM, mainAnchoredPos);
+                CatLog.Log("업그레이드 조건 충족.");
+            }
+            else {
+                switch (exceptionNumnber) {
+                    case 0:  Notify.Inst.Show("Please Select Upgradeable Item.");  break;
+                    case 1:  Notify.Inst.Show("Insufficient material.");           break;
+                    default: Notify.Inst.Show("Not Reported Error, Failed Check"); break;
+                }
+                CatLog.Log("업그레이드 조건 불충족.");
+            }
+        }
+
+        public void ButtonEvent_Upgrade_Confirm() {
+            if (upgradeFunction.TryItemUpgrade()) {
+                upgradeFunction.SetResultPanel();
+                upgradeFunction.OpenPanel(UpgradeFunc.PANELTYPE.MAIN, mainAnchoredPos, true); //Clear Panel
+                upgradeFunction.CloseOpenedPopup();
+                upgradeFunction.OpenPopup(UpgradeFunc.POPUPTYPE.ITEMGET, mainAnchoredPos);
+            }
+            else {
+                throw new System.Exception();
+            }
+        }
+
+        public void ButtonEvent_Upgrade_Confirm_Back() {
+            upgradeFunction.CloseOpenedPopup();
+        }
+
+        public void ButtonEvent_Upgade_ItemGet() {
+            upgradeFunction.CloseOpenedPopup();
+        }
+
+        public void ButtonEvent_Upgrade_MainWithSelectedItem() {
+            if (upgradeFunction.TryReleaseSelectedSlot() == false) {
+                return;
+            }
+            upgradeFunction.SetMainPanel();
+            upgradeFunction.CloseOpenedPanel();
+            upgradeFunction.OpenPanel(UpgradeFunc.PANELTYPE.MAIN, mainAnchoredPos, false);
+        }
+
+        public void ButtonEvent_Upgrade_SelectItemType(int enableNumber) {
+            upgradeFunction.SetSelectPanel((sbyte)enableNumber);
+        }
+
+        public void BE_UG_PREVIEW() {
+            bool success = upgradeFunction.TryOpenPreview(mainAnchoredPos, out string log);
+            if (!success) {
+                Notify.Inst.Show(log);
+            }
+        }
+
+        public void BE_UG_INCPROB() {
+            Notify.Inst.Show("This is an unimplemented featrue.");
+        }
+
         //======================================================== [ CRAFTING ] ========================================================
         public void ButtonEvent_OpenCrafting() {
             if(openedPanelType == PANEL.CRAFTING) { //똑같은 버튼을 다시 누르면 패널 닫고 리턴
@@ -73,14 +145,23 @@
                     CloseOpenedPanel(); return;
                 }
             }
+            else if (openedPanelType == PANEL.UPGRADE) {
+                upgradeFunction.ClearSelected();
+            }
 
             CloseOpenedPanel();
             openedPanelTr = craftingFunction.OpenPanel(CraftingFunc.PANELTYPE.MAIN, mainAnchoredPos);
             openedPanelType = PANEL.CRAFTING;
         }
 
-        void ButtonEvent_OpenCraftingChoosePanel() {
+        /// <summary>
+        /// Crafting Slot의 Button Event로 등록되는 메서드
+        /// </summary>
+        void BE_CT_OPENSELECTPANEL(int slotNumber) {
             CloseOpenedPanel();
+
+            craftingFunction.SelectedSlotNumner = slotNumber;
+
             openedPanelTr = craftingFunction.OpenPanel(CraftingFunc.PANELTYPE.CHOOSE, mainAnchoredPos);
             openedPanelType = PANEL.CRAFTING;
         }
@@ -101,13 +182,40 @@
             target.SetActive(false);
         }
 
+        public void BE_CT_OPENITEMINFO() {
+            bool isSuccess = craftingFunction.OpenItemInfo(out string log);
+            if (!isSuccess) {
+                Notify.Inst.Show(log);
+            }
+        }
+
+        public void BE_CT_BACKTOMAIN() {
+            craftingFunction.OpenPanel(CraftingFunc.PANELTYPE.MAIN, mainAnchoredPos);
+        }
+
+        public void BE_CT_CLOSEITEMINFO() {
+            craftingFunction.CloseItemInfo();
+        }
+
+        public void BE_CT_TRYOPENCONFIRM() {
+            craftingFunction.TryOpenConfirm();
+        }
+
+        public void BE_CT_CLOSECONFIRM() {
+            craftingFunction.CloseConfirm();
+        }
+
+        public void BE_CT_CRAFTINGSTART() {
+            craftingFunction.Confirm(mainAnchoredPos);
+        }
+
         //==============================================================================================================================
         public void CloseOpenedPanel() {
             switch (openedPanelType) {
-                case PANEL.NONE:                                    return;
-                case PANEL.UPGRADE:   upgradeFunction.ClosePanel(); break;
-                case PANEL.CRAFTING: craftingFunction.ClosePanel(); break;
-                case PANEL.ENHANCE:                                 break;
+                case PANEL.NONE:                                         return;
+                case PANEL.UPGRADE:  upgradeFunction.CloseOpenedPanel(); break;
+                case PANEL.CRAFTING: craftingFunction.ClosePanel();      break;
+                case PANEL.ENHANCE:                                      break;
                 default: throw new System.NotImplementedException();
             }
             openedPanelType = PANEL.NONE;

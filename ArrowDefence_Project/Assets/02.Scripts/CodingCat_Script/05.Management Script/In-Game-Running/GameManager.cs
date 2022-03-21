@@ -224,12 +224,50 @@
             }
         }
 
-        public AD_item[] GetUpgradeableItems(string[] keys) {
+        public AD_item[] FindUpgradeableItems(string[] keys) {
             return CCPlayerData.inventory.GetUpgradeableItems(keys);
         }
 
-        public int GetCraftingSlotCount() {
-            return 1;
+        public bool TryGetItemAmount(string targetId, out int amount) {
+            return CCPlayerData.inventory.TryGetAmount(targetId, out amount);
+        }
+
+        public bool FindItemRef(AD_item target) {
+            return CCPlayerData.inventory.IsExist(target);
+        }
+
+        public bool TryRemoveItem(string itemid, int removeAmount) {
+            return CCPlayerData.inventory.RemoveItem(itemid, removeAmount);
+        }
+
+        public bool TryRemoveItem(AD_item itemref) {
+            if(CCPlayerData.inventory.IsExist(itemref)) {
+                CCPlayerData.inventory.RemoveItem(itemref);
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+
+        public void AddItem(ItemData entity, int amount) {
+            CCPlayerData.inventory.AddItem(entity, amount);
+        }
+
+        public int GetCraftingInfoSize() {
+            return CCPlayerData.infos.CraftSlotSize;
+        }
+
+        public CraftingInfo[] GetCraftingInfos() {
+            return CCPlayerData.infos.CraftingInfos;
+        }
+
+        public void CraftingStart(int index, CraftingRecipe recipe) {
+            CCPlayerData.infos.CraftingStart(index, recipe);
+        }
+
+        public void TEST_CREATE_TEMP_CRAFTING_SLOT() {
+            CCPlayerData.TEST_CREATE_TEMP_CRAFTING_SLOT();
         }
 
 #endregion

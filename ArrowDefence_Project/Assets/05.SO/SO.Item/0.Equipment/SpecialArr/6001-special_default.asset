@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Item_Type: 2
   Item_Grade: 4
-  Item_Id: 6001
+  Item_Id: 7001
   Item_Amount: 1
   Item_Name: Explosion Arrow
   Item_Desc: this is a draft of a  special arrow.

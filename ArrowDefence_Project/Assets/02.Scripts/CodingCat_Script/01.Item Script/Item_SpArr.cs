@@ -58,7 +58,7 @@
         }
 
         public Item_SpArr(ItemDt_SpArr data) : base() {
-            EquipType   = EQUIP_ITEMTYPE.EQUIP_ARROW;
+            EquipType   = EQUIP_ITEMTYPE.ARROW;
             Item_Id     = data.Item_Id;
             Item_Name   = data.Item_Name;
             Item_Desc   = data.Item_Desc;

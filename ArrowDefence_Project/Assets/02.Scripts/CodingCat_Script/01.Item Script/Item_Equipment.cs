@@ -1,8 +1,8 @@
 ﻿namespace ActionCat {
     public enum EQUIP_ITEMTYPE {
-        EQUIP_BOW       = 0,
-        EQUIP_ARROW     = 1,
-        EQUIP_ACCESSORY = 2
+        BOW      = 0,
+        ARROW    = 1,
+        ARTIFACT = 2
     }
 
     public abstract class Item_Equipment : AD_item {

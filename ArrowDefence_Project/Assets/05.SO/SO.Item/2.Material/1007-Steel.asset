@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2bdcf03d18a58e3429ec4a48a2be872a, type: 3}
   m_Name: 1007-Steel
   m_EditorClassIdentifier: 
-  Item_Type: 1
+  Item_Type: 0
   Item_Grade: 1
   Item_Id: 1007
   Item_Amount: 5

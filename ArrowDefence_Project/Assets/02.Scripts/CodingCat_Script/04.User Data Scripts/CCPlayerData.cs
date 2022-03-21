@@ -27,12 +27,9 @@
                 CatLog.ELog("UserData 저장 실패.");
                 throw exception;
             }
-
-
         }
 
-        public static void LoadUserData()
-        {
+        public static void LoadUserData() {
             //Load Inventory
             if (ES3.KeyExists(KEY_INVENTORY))
             {
@@ -67,6 +64,13 @@
                 CatLog.Log("성공적으로 Settings를 불러왔습니다.");
             }
             else CatLog.WLog("ES3 Game Settings KEY값이 없습니다.");
+        }
+
+        public static void TEST_CREATE_TEMP_CRAFTING_SLOT() {
+            infos.AddCraftSlot(3);
+            infos.OpenSlot(0);
+            //infos.OpenSlot(1);
+            //infos.OpenSlot(2);
         }
     }
 }

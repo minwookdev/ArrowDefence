@@ -36,6 +36,9 @@
         [Header("CONFIRM")]
         [SerializeField] TextMeshProUGUI textConfirmItemName = null;
 
+        [Header("RESULT")]
+        [SerializeField] UI_ItemSlot resultItemSlot = null;
+
         AD_item itemRefSelected = null;
         CraftingRecipeSO recipe = null;
         [SerializeField] int selectedSlotNumber = 0;
@@ -244,6 +247,21 @@
             OpenPanel(PANELTYPE.MAIN, anchoredPosition);
         }
 
+        void ReceiptResult(ItemData item, int amount) {
+            //Reuslt Popup Slot Set, Popup Positioning
+            resultItemSlot.EnableSlot(item, amount);
+            craftingPopups[1].anchoredPosition = craftingPanels[0].anchoredPosition;
+            openedPopupType = POPUPTYPE.GETITEM;
+
+            //Refresh Crafting Slot Panel
+            RefreshCraftingSlot();
+        }
+
+        public void CloseResult() {
+            craftingPopups[1].anchoredPosition = navigateRectTr[3].anchoredPosition;
+            openedPopupType = POPUPTYPE.NONE;
+        }
+
         //======================================================================================================================================
         //============================================================ [ FUNCTION ] ============================================================
 
@@ -329,7 +347,8 @@
             for (int i = 0; i < spawnSlotCount; i++) {
                 var newSlot = GameObject.Instantiate<CraftingSlot>(slotPrefab, slotParentRectTr);
                 newSlot.gameObject.name = "crafting_slot_pref";
-                newSlot.AddListnerToButton(unityAction);
+                newSlot.AddListnerToSelectButton(unityAction);
+                newSlot.AddListnerToReceiptButton(ReceiptResult);
                 slots.Add(newSlot);
             }
         }

@@ -258,6 +258,15 @@
             return CCPlayerData.infos.CraftSlotSize;
         }
 
+        public bool IsAvailableCraftingSlot(int slotNumber) {
+            var craftingSlot = CCPlayerData.infos.CraftingInfos[slotNumber];
+            if (craftingSlot == null || !craftingSlot.IsAvailable) {
+                return false;
+            }
+
+            return true;
+        }
+
         public CraftingInfo[] GetCraftingInfos() {
             return CCPlayerData.infos.CraftingInfos;
         }
@@ -268,6 +277,10 @@
 
         public void TEST_CREATE_TEMP_CRAFTING_SLOT() {
             CCPlayerData.TEST_CREATE_TEMP_CRAFTING_SLOT();
+        }
+
+        public bool TryReceipt(int slotNumber, out ItemData resultItemRef, out int resultItemAmount) {
+            return CCPlayerData.infos.CraftingInfos[slotNumber].TryReceipt(out resultItemRef, out resultItemAmount);
         }
 
 #endregion

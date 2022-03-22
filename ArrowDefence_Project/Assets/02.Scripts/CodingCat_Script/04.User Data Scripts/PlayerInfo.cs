@@ -53,11 +53,11 @@
 
         public void CraftingStart(int index, CraftingRecipe recipe) {
             if (craftingInfoList[index] == null) {
-                throw new System.Exception("ERROR CRAFTING: NULL 인덱스 접근시도.");
+                throw new System.Exception("CRAFTING START FAILED: 슬롯 인덱스 NULL.");
             }
 
             if (craftingInfoList[index].InProgress) {
-                throw new System.Exception("ERROR CRAFTING: 이미 제작이 진행중인 슬롯.");
+                throw new System.Exception("CRAFTING START FAILED: 이미 제작이 진행중인 슬롯.");
             }
 
             craftingInfoList[index].Start(recipe.CraftingTime, recipe.Result.Count, recipe.Result.Item);
@@ -115,8 +115,8 @@
 
     public class CraftingInfo {
         public bool IsSkipable { get; private set; } = false;
-        public byte Current    { get; private set; } = 0;
-        public byte Max        { get; private set; } = 0;
+        public int Current    { get; private set; } = 0;
+        public int Max        { get; private set; } = 0;
         public ItemData Result { get; private set; } = null;
         private int amount = 0;
 
@@ -143,7 +143,7 @@
 
         public float Progress {
             get {
-                return Current / Max;
+                return (float)Current / Max;
             }
         }
         #endregion
@@ -156,7 +156,7 @@
             }
 
             Current = 0;
-            Max     = System.Convert.ToByte(craftingTime);
+            Max     = craftingTime;
             Result  = resultItem;
             amount  = craftingAmount;
             IsSkipable = true;
@@ -180,8 +180,20 @@
             IsAvailable = true;
         }
 
-        public void Receipt() {
+        public bool TryReceipt(out ItemData resultItemRef, out int resultAmount) {
+            if(!IsComplete) {
+                CatLog.ELog("Crafting is Not Complete !");
+                resultItemRef = null;
+                resultAmount  = 0;
+                return false;
+            }
 
+            CCPlayerData.inventory.AddItem(Result, amount);
+            resultItemRef = Result;
+            resultAmount  = amount;
+
+            Clear();
+            return true;
         }
     }
 

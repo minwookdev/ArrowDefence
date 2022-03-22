@@ -1,11 +1,16 @@
 ﻿namespace ActionCat.UI {
     using UnityEngine;
+    using DG.Tweening;
 
     public class UI_Crafting : MonoBehaviour {
         [Header("COMPONENT")]
         [SerializeField] RectTransform mainPanelTr = null;
         [SerializeField] [ReadOnly] RectTransform openedPanelTr = null;
         [SerializeField] [ReadOnly] PANEL openedPanelType = PANEL.NONE;
+
+        [Header("MAIN")]
+        [SerializeField] RectTransform mainPanelRectTr = null;
+        [SerializeField] CanvasGroup mainCanvasGroup   = null;
 
         [Header("TABLE")]
         [SerializeField] CraftingRecipeSO craftingRecipeTable = null;
@@ -28,6 +33,18 @@
         private void OnEnable() {
             craftingFunction.Enable();
             upgradeFunction.Enable();
+        }
+
+        public void OpenMain() {
+            //Open Panel Tween
+            mainCanvasGroup.alpha = 0f;
+            gameObject.SetActive(true);
+            mainCanvasGroup.alpha = 1f;
+        }
+
+        public void CloseMain() {
+            //Close Panel Tween
+            gameObject.SetActive(false);
         }
 
         private void OnDisable() {
@@ -160,6 +177,10 @@
         void BE_CT_OPENSELECTPANEL(int slotNumber) {
             CloseOpenedPanel();
 
+            if(GameManager.Instance.IsAvailableCraftingSlot(slotNumber) == false) {
+                throw new System.Exception("This Slot is Not Available or Not Assignment.");
+            }
+
             craftingFunction.SelectedSlotNumner = slotNumber;
 
             openedPanelTr = craftingFunction.OpenPanel(CraftingFunc.PANELTYPE.CHOOSE, mainAnchoredPos);
@@ -207,6 +228,10 @@
 
         public void BE_CT_CRAFTINGSTART() {
             craftingFunction.Confirm(mainAnchoredPos);
+        }
+
+        public void BE_CT_CLOSERESULT() {
+            craftingFunction.CloseResult();
         }
 
         //==============================================================================================================================

@@ -33,4 +33,10 @@
         System.Collections.IEnumerator Start();
     }
 
+    public interface IMainMenu {
+        bool IsTweenPlaying();
+        void MenuOpen();
+        void MenuClose();
+    }
+
 }

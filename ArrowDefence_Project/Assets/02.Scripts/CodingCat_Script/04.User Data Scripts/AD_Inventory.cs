@@ -365,7 +365,7 @@
             var result = new List<AD_item>();
             for (int i = 0; i < equipments.Count; i++) {
                 for (int j = 0; j < matchKeys.Length; j++) {
-                    if(equipments[i].GetID.Equals(matchKeys[i])) {
+                    if(equipments[i].GetID.Equals(matchKeys[j])) {
                         result.Add(equipments[i]);
                         break;
                     }

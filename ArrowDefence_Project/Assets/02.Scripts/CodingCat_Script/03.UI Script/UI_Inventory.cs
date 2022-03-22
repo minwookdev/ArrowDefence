@@ -91,9 +91,21 @@
         [Header("Item Sort Panel")]
         public ItemSortPanel SortPanel;
 
+        [Header("MAIN")]
+        [SerializeField] CanvasGroup mainCanvasGroup = null;
+        [SerializeField] RectTransform mainRectTr    = null;
+
         public delegate void InventoryUpdate();
         public static InventoryUpdate InvenUpdate;
         //event 붙여버리면 다른데에서 사용이 불가능해진다
+        
+        public void OpenMain() {
+            gameObject.SetActive(true);
+        }
+
+        public void CloseMain() {
+            gameObject.SetActive(false);
+        }
 
         private void Awake()
         {

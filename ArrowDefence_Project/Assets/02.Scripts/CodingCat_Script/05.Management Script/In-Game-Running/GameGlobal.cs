@@ -359,6 +359,33 @@
             return new List<T>(array);
         }
 
+        public static void Foreach<T>(this T[] array, System.Action<T> action) {
+            foreach (var item in array) {
+                action(item);
+            }
+        }
+
+        /// <summary>
+        /// Returns false if the array length is 0.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="array"></param>
+        /// <param name="predicate"></param>
+        /// <returns></returns>
+        public static bool TrueForAll<T>(this T[] array, System.Predicate<T> predicate) {
+            if(array.Length <= 0) {
+                return false;
+            }
+
+            foreach (var item in array) {
+                if(predicate(item) == false) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
         #endregion
 
         #region TIME

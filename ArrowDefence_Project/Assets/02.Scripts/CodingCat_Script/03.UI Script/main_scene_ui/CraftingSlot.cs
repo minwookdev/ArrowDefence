@@ -26,6 +26,8 @@
         [SerializeField] Image imageFrame = null;
         [SerializeField] Sprite[] frames = null;
 
+        System.Action<ItemData, int> receiptAction = null;
+
         int craftSlotNumber = -1;
 
         string colorStartString = "";
@@ -37,7 +39,7 @@
             }
         }
 
-        public void AddListnerToButton(UnityEngine.Events.UnityAction<int> unityAction) {
+        public void AddListnerToSelectButton(UnityEngine.Events.UnityAction<int> unityAction) {
             if(unityAction == null) {
                 throw new System.Exception("Unity Action is Null.");
             }
@@ -47,6 +49,8 @@
             entry.callback.AddListener(eventData => unityAction(craftSlotNumber));
             selectBluePrintTrigger.triggers.Add(entry);
         }
+
+        public void AddListnerToReceiptButton(System.Action<ItemData, int> action) => receiptAction = action;
 
         public void EnableSlot(Data.CraftingInfo craftinginfo, int slotNumber) {
             gameObject.SetActive(true); //alwyas enable
@@ -88,7 +92,7 @@
             buttonQuick.gameObject.SetActive(!craftinginfo.IsComplete);
             buttonReceipt.gameObject.SetActive(craftinginfo.IsComplete);
 
-            textState.text = (craftinginfo.IsComplete) ? "CRAFTING COMPLETE RECIEPT THE ITEM !" : "STAGE CLEAR REMAINING";
+            textState.text = (craftinginfo.IsComplete) ? "CRAFTING COMPLETE !" : "STAGE CLEAR REMAINING";
         }
 
         public void DisableSlot() {
@@ -98,6 +102,19 @@
 
         public void QuickComplete() {
             Notify.Inst.Show("This is an unimplemented featrue.");
+        }
+
+        public void BE_RECEIPT() {
+            var success = GameManager.Instance.TryReceipt(craftSlotNumber, out ItemData resultItem, out int itemAmount);
+            if (!success) {
+                throw new System.Exception();
+            }
+
+            receiptAction(resultItem, itemAmount);
+        }
+
+        public void BE_QUICK() {
+            Notify.Inst.Show("This is an unImplemented featrue");
         }
     }
 }

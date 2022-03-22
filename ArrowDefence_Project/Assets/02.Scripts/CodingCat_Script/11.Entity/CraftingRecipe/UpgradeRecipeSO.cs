@@ -77,6 +77,8 @@
     public sealed class UpgradeRecipe {
         public ItemData_Equip KeyItem = null;
         public Material[] Materials = null;
+
+        [Space(10f)]
         public float FailedProb = 0f;
         public ItemData_Equip Result = null;
 

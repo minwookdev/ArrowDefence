@@ -1,115 +1,76 @@
 ﻿using System;
-using System.Linq;
 using UnityEngine;
 using DG.Tweening;
 using ActionCat;
-using ActionCat.UI;
 using ActionCat.Interface;
 
 public class MainSceneRoute : MonoBehaviour {
     static MainSceneRoute _inst;
-
-    public GameObject currentOpenedMenu;
-    [Space(10)]
-    public GameObject[] menuObjects = new GameObject[4];
-
-    private Sequence menuOpenSeq;
-    private bool isTweenDone = true;
-    private float openMenuTime = 0.5f;
-    private float closeMenuTime = 0.2f; //Less than Menu Open Time.
-
     [Header("CANVAS")]
-    [SerializeField] RectTransform parentRectTr = null;
+    [SerializeField] RectTransform mainUICanvas = null;
 
-    [Header("FADE EFFECT")]
-    [Space(10)]
-    public CanvasGroup ImgFade = null;
-    public float FadeTime = 2.0f;
+    [Header("MENU")]
+    [SerializeField] [ReadOnly] PANELTYPE openedPanelType = PANELTYPE.NONE;
+    [SerializeField] GameObject[] panels = null;
+    IMainMenu[] menus = new IMainMenu[] { };
 
-    [Header("POPUP'S")]
-    [Space(10)]
+    [Header("POPUP")]
     public BattlePopup battlePop;
     public ItemInfoPop itemInfoPop;
 
-    [Header("PANELS")]
-    [SerializeField] [ReadOnly] PANELTYPE openedPanelType = PANELTYPE.NONE;
-    [SerializeField] UI_Inventory panelInventory = null;
-    [SerializeField] UI_Crafting panelCrafting   = null;
-    [SerializeField] UI_BattleSelect panelBattle = null;
-    [SerializeField] UI_Shop panelShop           = null;
-    [SerializeField] IMainMenu[] menus = null;
+    [Header("FADE")]
+    public CanvasGroup ImgFade = null;
+    public float FadeTime = 2.0f;
 
     [Header("SAVE & LOAD")]
     public bool isAutoLoad;
 
-    private void Awake() => _inst = this;
+    private void Awake() {
+        _inst = this;
+        for (int i = 0; i < panels.Length; i++) {
+            if (panels[i].TryGetComponent<IMainMenu>(out IMainMenu iMainMenu)) {
+                menus = GameGlobal.AddArray<IMainMenu>(menus, iMainMenu);
+            }
+        }
+
+        if(menus.Length != panels.Length) {
+            CatLog.WLog("Not Full-Cached MainMenu Interface !");
+        }
+    }
 
     private void Start() {
         GameManager.Instance.Initialize();
 
-        //스타트 시 초기 Scale 값 초기화 (테스트용)
-        //MenuOpen Tween에 잔상 방지 -> 추후 수정
-        foreach (var item in menuObjects) {
-            if (item.activeSelf) {
-                currentOpenedMenu = item;
-            }
-            else {
-                item.transform.localScale = Vector3.zero;
-            }
-        }
+        //Init Notify
+        Notify.Inst.Init(mainUICanvas);
 
         //Fade Effect When Etnering The Battle Scene (if Don't Work This Function, Enable The DEV Variable)
-        this.OnSceneEnteringFadeOut();
+        FadeOut();
 
-        if (openMenuTime <= closeMenuTime) {
-            CatLog.WLog("OpenMenuTime is less than CloseMenuTime.");
-        }
-
-        //Auto Load SaveData
-        if (isAutoLoad)
+        //User SaveData Auto Load
+        if (isAutoLoad) {
             ActionCat.GameManager.Instance.AutoLoadUserData();
+        }
+            
+    }
 
-        //Init Notify
-        Notify.Inst.Init(parentRectTr);
+    private void Update() {
+        if (Input.GetKeyDown(KeyCode.Z)) {
+            var allCraftingSlots = ActionCat.Data.CCPlayerData.infos.CraftingInfos;
+            foreach (var slot in allCraftingSlots) {
+                slot.Update();
+            }
+        }
+    }
 
-        //string testString = "785162";
-        //string subString = testString.Substring(0, 1);
-        //CatLog.Log($"Sub String is : {subString}");
-        //if (subString.Equals("8")) {
-        //    CatLog.Log("SubStirng is Matched.");
-        //}
-        //else {
-        //    CatLog.Log("SubString is Not Matched.");
-        //}
-
-        //System.Collections.Generic.List<string> stringList = new System.Collections.Generic.List<string>();
-        //stringList.Add("A");
-        //stringList.Add("B");
-        //stringList.Add("C");
-        //stringList.Add("D");
-        //stringList.Add("E");
-        //stringList.Add("F");
-        //stringList.Add("G"); //:7
-        //
-        //int stringListCount = 0;
-        //for (int i = stringList.Count - 1; i >= 0; i--) {
-        //    CatLog.Log($"{stringList[i]}");
-        //}
-
-        //CatLog.Log($"String List Count: {stringListCount}");
-        //string testString = I2.Loc.ScriptLocalization.Battle;
-        //CatLog.Log(testString);
-
-        //var tempArray = new string[3] { "A", "B", "C" };
-        //var tempArraySeconds = new string[3] { "A", "A", "A" };
-        //
-        //var resultFirst   = tempArray.TrueForAll(element => element == "A");
-        //var resultSeconds = tempArraySeconds.TrueForAll(element => element == "A");
-        //CatLog.Log($"{resultFirst}");
-        //CatLog.Log($"{resultSeconds}");
+    private void OnDestroy() {
+        _inst = null;
     }
 
     #region BUTTON_EVENT
+
+    //======================================================================================================================================
+    //============================================================ [ MAIN MENU ] ===========================================================
 
     public void BE_OPEN_MAINMENU(int index) {
         //Ignore Panel
@@ -157,22 +118,33 @@ public class MainSceneRoute : MonoBehaviour {
         openedPanelType = PANELTYPE.NONE;
     }
 
+    //======================================================================================================================================
+    //============================================================== [ POPUP ] =============================================================
+
+    public void BE_CLOSE_POPUP(GameObject go) {
+        go.SetActive(false);
+    }
+
+    public void BE_LOAD_TITLE() {
+        //Go to Title Scene
+        ImgFade.DOFade(1f, FadeTime)
+               .OnStart(() => {
+                   ImgFade.blocksRaycasts = false;
+                   ImgFade.gameObject.SetActive(true);
+               })
+               .OnComplete(() => SceneLoader.Instance.LoadScene(AD_Data.SCENE_TITLE));
+    }
+
+    public void BE_STAGE_SELECTOR(int index) {
+        battlePop.EnablePopup(index);
+    }
+
     #endregion
 
-    private void Update() {
-        if (Input.GetKeyDown(KeyCode.Z)) {
-            var allCraftingSlots = ActionCat.Data.CCPlayerData.infos.CraftingInfos;
-            foreach (var slot in allCraftingSlots) {
-                slot.Update();
-            }
-        }
-    }
+    //======================================================================================================================================
+    //============================================================= [ ITEMINFO ] ===========================================================
 
-    private void OnDestroy() {
-        _inst = null;
-    }
-
-    public static void OpenPreview(AD_item previewitem) {
+    public static void OPEN_ITEMINFO_PREVIEW(AD_item previewitem) {
         _inst.itemInfoPop.OpenPreview(previewitem);
     }
 
@@ -180,7 +152,7 @@ public class MainSceneRoute : MonoBehaviour {
     /// Open Item Information Popup When Click in the Invnetory Items
     /// </summary>
     /// <param name="item"></param>
-    public static void OpenItemInfo(AD_item item) {
+    public static void OPEN_ITEMINFO(AD_item item) {
         switch (item) {
             case Item_Consumable  conItem: _inst.itemInfoPop.OpenPopup_ConsumableItem(conItem);  break;
             case Item_Material    matItem: _inst.itemInfoPop.OpenPopup_MaterialItem(matItem);    break; 
@@ -189,7 +161,10 @@ public class MainSceneRoute : MonoBehaviour {
         }
     }
 
-    public static void Fade(Action startAction, Action completeAction) {
+    //======================================================================================================================================
+    //=============================================================== [ FADE ] =============================================================
+
+    public static void FadeIn(Action startAction, Action completeAction) {
         _inst.ImgFade.DOFade(1f, _inst.FadeTime)
                      .OnStart(() => {
                          _inst.ImgFade.blocksRaycasts = false;
@@ -201,100 +176,10 @@ public class MainSceneRoute : MonoBehaviour {
                      });
     }
 
-    public void OpenMenuItem(GameObject target)
-    {
-        if(target.activeSelf == false && isTweenDone)
-        {
-            if (currentOpenedMenu != null)
-            {
-                currentOpenedMenu.GetComponent<CanvasGroup>()
-                                 .DOFade(0, closeMenuTime)
-                                 .OnStart(() => currentOpenedMenu.GetComponent<CanvasGroup>().blocksRaycasts = false)
-                                 .OnComplete(() => { currentOpenedMenu.SetActive(false);
-                                 });
-            }
-
-            //this.MenuOpenTween(target.transform);
-            menuOpenSeq = MenuOpenSequence(target.transform);
+    private void FadeOut() {
+        if (GameManager.Instance.IsDevMode) {
+            return;
         }
-        else
-        {
-            CatLog.Log("This Menu is Already Opened or Menu Openning");
-        }
-    }
-
-    public void ExitMenuItem(GameObject target)
-    {
-        if(currentOpenedMenu == target)
-        {
-            //target.SetActive(false);
-            //currentOpenedMenu = null;
-            target.GetComponent<CanvasGroup>().DOFade(0, closeMenuTime)
-                                              .OnStart(() => target.GetComponent<CanvasGroup>()
-                                                                  .blocksRaycasts = false)
-                                              .OnComplete(() => { target.SetActive(false);
-                                                                  currentOpenedMenu = null;});
-        }
-        else
-        {
-            CatLog.WLog("Wrong Exit Button Route Check This Button. ");
-        }
-    }
-
-    //매번 값을 넣어주는 방식이 아닌 Repeat처럼 활용할 방법은 없는지?
-    private void MenuOpenTween(Transform target)
-    {
-        var targetCG = target.GetComponent<CanvasGroup>();
-
-        menuOpenSeq = DOTween.Sequence();
-        menuOpenSeq.SetAutoKill(true).
-           OnStart(() => {
-               this.isTweenDone = false;
-               target.gameObject.SetActive(true);
-               targetCG.blocksRaycasts = false;
-               targetCG.alpha = 0;
-               target.localScale = Vector3.zero;
-           })
-          .Append(target.DOScale(1f, openMenuTime))
-          .Join(targetCG.DOFade(1f, openMenuTime))
-          .OnComplete(() => { this.isTweenDone = true;
-                              targetCG.blocksRaycasts = true;
-                              currentOpenedMenu = target.gameObject;
-          });
-    }
-
-
-    public void Button_ClosePopup(GameObject obj)
-    {
-        obj.SetActive(false);
-    }
-
-    public void OnBtnLoadBattle()
-    {
-        //현재 DEV 스테이지에 한해서 Scene 이동하도록 구현
-        ImgFade.DOFade(1f, FadeTime)
-               .OnStart(() =>
-               {   ImgFade.blocksRaycasts = false;
-                   ImgFade.gameObject.SetActive(true);
-               })
-               .OnComplete(() => { SceneLoader.Instance.LoadScene(AD_Data.SCENE_BATTLE_DEV); });
-    }
-
-    public void OnBtnLoadTitle()
-    {
-        //현재 Settings Button 을 누르면 바로 Title Scene 으로 이동하도록 구현
-        ImgFade.DOFade(1f, FadeTime)
-               .OnStart(() =>
-               {
-                   ImgFade.blocksRaycasts = false;
-                   ImgFade.gameObject.SetActive(true);
-               })
-               .OnComplete(() => SceneLoader.Instance.LoadScene(AD_Data.SCENE_TITLE));
-    }
-
-    private void OnSceneEnteringFadeOut()
-    {
-        if (ActionCat.GameManager.Instance.IsDevMode) return;
 
         ImgFade.alpha = 1f;
 
@@ -307,13 +192,8 @@ public class MainSceneRoute : MonoBehaviour {
 
     }
 
-    #region BATTLE_POPUP
-
-    public void BattleStageSelector(int idx) {
-        battlePop.EnablePopup(idx);
-    }
-
-    #endregion
+    //======================================================================================================================================
+    //======================================================================================================================================
 
     enum PANELTYPE {
         NONE,
@@ -322,66 +202,58 @@ public class MainSceneRoute : MonoBehaviour {
         SHOP,
         BATTLE
     }
-
-    Sequence MenuOpenSequence(Transform target)
-    {
-        var targetCG = target.GetComponent<CanvasGroup>();
-
-        return DOTween.Sequence()
-                      .SetAutoKill(true)
-                      .OnStart(() =>
-                      {
-                          this.isTweenDone = false;
-                          target.gameObject.SetActive(true);
-                          targetCG.blocksRaycasts = false;
-                          targetCG.alpha = 0f;
-                          target.localScale = Vector3.zero;
-                      })
-                      .Append(target.DOScale(1f, openMenuTime))
-                      .Join(targetCG.DOFade(1f, openMenuTime))
-                      .OnComplete(() =>
-                      {
-                          this.isTweenDone = true;
-                          targetCG.blocksRaycasts = true;
-                          currentOpenedMenu = target.gameObject;
-                      });
-    }
 }
 
 namespace ActionCat.UI.MainMenu {
     using DG.Tweening;
     internal sealed class MainMenuTween {
-        Sequence menuSequence  = null;
-        Sequence closeSequence = null;
+        Sequence mainSequence  = null;
         float openMenuTime = 0.5f;
         float closeMenuTime = 0.3f;
         
         //PROPERTY
         public bool IsTweenPlaying {
             get {
-                return menuSequence.IsPlaying();
+                return mainSequence.IsActive();
             }
         }
 
-        public void MenuOpenTween(RectTransform rt, CanvasGroup cg) {
+        /// <summary>
+        /// other가 지정되어 있다면, tween이 시작되기 전에, other object를 활성화 합니다.
+        /// </summary>
+        /// <param name="rt"></param>
+        /// <param name="cg"></param>
+        /// <param name="other"></param>
+        public void MenuOpenTween(RectTransform rt, CanvasGroup cg, GameObject other = null) {
             rt.localScale = Vector3.zero;
             cg.alpha      = StNum.floatZero;
-            rt.gameObject.SetActive(true);
-            menuSequence = OpenSequence(rt, cg);
+            if (other == null) {
+                rt.gameObject.SetActive(true);
+            }
+            else {
+                other.SetActive(true);
+            }
+            mainSequence = OpenSequence(rt, cg);
         }
 
-        public void MenuCloseTween(RectTransform rt, CanvasGroup cg) {
+        /// <summary>
+        /// other가 지정되어 있다면, tween이 시작되기 전에, other object를 비 활성화 합니다.
+        /// </summary>
+        /// <param name="rt"></param>
+        /// <param name="cg"></param>
+        /// <param name="other"></param>
+        public void MenuCloseTween(RectTransform rt, CanvasGroup cg, GameObject other = null) {
             cg.DOFade(StNum.floatZero, closeMenuTime)
               .OnStart(() => cg.blocksRaycasts = false)
               .OnComplete(() => {
                   cg.blocksRaycasts = true;
-                  rt.gameObject.SetActive(false);
+                  if(other == null) {
+                      rt.gameObject.SetActive(false);
+                  }
+                  else {
+                      other.SetActive(false);
+                  }
               });
-        }
-
-        internal MainMenuTween(float openTime, float closeTime) {
-            openMenuTime  = openTime;
-            closeMenuTime = closeTime;
         }
 
         Sequence OpenSequence(RectTransform rt, CanvasGroup cg) {
@@ -408,6 +280,11 @@ namespace ActionCat.UI.MainMenu {
                           .OnComplete(() => {
                               cg.blocksRaycasts = false;
                           });
+        }
+
+        internal MainMenuTween(float openTime, float closeTime) {
+            openMenuTime  = openTime;
+            closeMenuTime = closeTime;
         }
     }
 }

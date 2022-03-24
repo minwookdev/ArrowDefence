@@ -23,9 +23,9 @@
 
             CatLog.Log($"Crafting Recipe Initialized, Check the Init Report" + '\n' +
                        $"Title: {this.name}" + '\n' +
-                       $"Total Assigned Items: {((RecipeArray != null || RecipeArray.Length > 0) ? RecipeArray.Length.ToString() : "0")}" + '\n' +
-                       $"Success Items: [Not Supported]" + '\n' +
-                       $"Failed Items: [Not Supported]");
+                       $"Total Assigned Items: {((RecipeDictionary != null || RecipeDictionary.Count > 0) ? RecipeDictionary.Count.ToString() : "0")}" + '\n' +
+                       $"Success Items: {RecipeDictionary.Count}" + '\n' +
+                       $"Failed Items: {RecipeArray.Length - RecipeDictionary.Count}");
         }
 
         public bool TryGetRecipe(string itemId, out CraftingRecipe recipe) {

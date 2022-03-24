@@ -1,8 +1,11 @@
 ﻿namespace ActionCat.UI {
     using UnityEngine;
+    using UnityEngine.UI;
+    using ActionCat.Interface;
+    using TMPro;
     using DG.Tweening;
 
-    public class UI_Crafting : MonoBehaviour {
+    public class UI_Crafting : MonoBehaviour, IMainMenu {
         [Header("COMPONENT")]
         [SerializeField] RectTransform mainPanelTr = null;
         [SerializeField] [ReadOnly] RectTransform openedPanelTr = null;
@@ -22,6 +25,8 @@
         [Header("UPGRADE")]
         [SerializeField] UpgradeFunc upgradeFunction  = null;
 
+        UI.MainMenu.MainMenuTween tween = new MainMenu.MainMenuTween(.5f, .3f);
+
         #region PROPERTY
         Vector2 mainAnchoredPos {
             get {
@@ -29,6 +34,19 @@
             }
         }
         #endregion
+
+        bool IMainMenu.IsTweenPlaying() {
+            return tween.IsTweenPlaying;
+        }
+
+        void IMainMenu.MenuOpen() {
+            tween.MenuOpenTween(mainPanelRectTr, mainCanvasGroup, gameObject);
+        }
+
+        void IMainMenu.MenuClose() {
+            ClearPanel();
+            tween.MenuCloseTween(mainPanelRectTr, mainCanvasGroup, gameObject);
+        }
 
         private void OnEnable() {
             craftingFunction.Enable();
@@ -48,6 +66,10 @@
         }
 
         private void OnDisable() {
+            //ClearPanel();
+        }
+
+        void ClearPanel() {
             CloseOpenedPanel();
             upgradeFunction.ClearSelected();
         }
@@ -128,7 +150,7 @@
         }
 
         public void ButtonEvent_Upgade_ItemGet() {
-            upgradeFunction.CloseOpenedPopup();
+            upgradeFunction.BE_RESULT();
         }
 
         public void ButtonEvent_Upgrade_MainWithSelectedItem() {
@@ -245,6 +267,7 @@
             }
             openedPanelType = PANEL.NONE;
         }
+
         //==============================================================================================================================
         #endregion
 
@@ -253,6 +276,92 @@
             UPGRADE  = 1,
             CRAFTING = 2,
             ENHANCE  = 3,
+        }
+    }
+
+    internal sealed class TweenGetItemPopup {
+        private CanvasGroup backPanelCG = null;
+        private TextMeshProUGUI textMain = null;
+        private TextMeshProUGUI textSub  = null;
+        private Image imageHorizontal = null;
+
+        Sequence mainSequence = null;
+        Sequence slotSequence = null;
+        string originSubString = "";
+        float slotTweenStartTime = 0f;
+
+        public bool IsPlaying {
+            get {
+                //return (mainSequence.IsPlaying() || slotSequence.IsPlaying());
+                bool isplaying = false;
+                if(mainSequence.IsPlaying()) {
+                    isplaying = true;
+                }
+                if(slotSequence.IsPlaying()) { //이녀석 계속 워닝 뱉으니까 로직 수정 좀 해주기
+                    isplaying = true;
+                }
+
+                return isplaying;
+            }
+        }
+
+        internal TweenGetItemPopup(CanvasGroup cg, TextMeshProUGUI txtMain, TextMeshProUGUI txtSub, Image itemBar) {
+            backPanelCG     = cg;
+            textMain        = txtMain;
+            textSub         = txtSub;
+            imageHorizontal = itemBar;
+            originSubString = textSub.text;
+
+            float fadeTime = 0.5f;
+            float fillTime = 0.3f;
+            slotTweenStartTime = fadeTime + fillTime;
+
+            //Sequence Assignment
+            mainSequence = DOTween.Sequence()
+                                  .OnStart(() => {
+                                      backPanelCG.alpha = StNum.floatZero;
+                                      textMain.alpha = StNum.floatZero;
+                                      imageHorizontal.fillAmount = StNum.floatZero;
+                                      textSub.text = "";
+                                  })
+                                  .Append(cg.DOFade(StNum.floatOne, fadeTime))
+                                  .Append(imageHorizontal.DOFillAmount(StNum.floatOne, fillTime))
+                                  .Insert(0.25f, textMain.DOFade(StNum.floatOne, 0.5f))
+                                  .Insert(0.5f,   textSub.DOText(originSubString, 0.8f))
+                                  .SetAutoKill(false)
+                                  .Pause();
+        }
+
+        public void TweenStart(RectTransform[] slotRectTrArray) {
+            mainSequence.Restart(); //Start Panel Main Sequence
+
+            //Set Tween Slots
+            slotSequence = DOTween.Sequence().SetDelay(slotTweenStartTime);
+            for (int i = 0; i < slotRectTrArray.Length; i++) {
+                slotRectTrArray[i].localScale = Vector3.zero;
+                var cg = slotRectTrArray[i].GetComponent<CanvasGroup>();
+                cg.alpha = 0f;
+                slotSequence.Append(SlotTweenSequence(slotRectTrArray[i], cg));
+            }
+        }
+
+        public void TweenSkip() {
+            mainSequence.Complete();
+
+            if (slotSequence.IsPlaying()) {
+                slotSequence.Complete();
+            }
+        }
+
+        Sequence SlotTweenSequence(RectTransform slotRt, CanvasGroup canvasGroup) {
+            return DOTween.Sequence()
+                          .OnStart(() => {
+                              slotRt.localScale = Vector3.zero;
+                              slotRt.GetComponent<CanvasGroup>().alpha = StNum.floatZero;
+                          })
+                          .Append(slotRt.DOScale(Vector3.one, 1f).SetEase(Ease.OutBack))
+                          .Join(slotRt.GetComponent<CanvasGroup>().DOFade(StNum.floatOne, 0.5f))
+                          .PrependInterval(0.2f);
         }
     }
 }

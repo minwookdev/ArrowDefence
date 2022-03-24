@@ -1,9 +1,9 @@
-﻿namespace ActionCat
-{
+﻿namespace ActionCat {
     using System;
     using System.Collections.Generic;
-    using ActionCat.Data;
     using UnityEngine;
+    using ActionCat.Data;
+    using ActionCat.Interface;
 
     [Serializable]
     public class SwitchButton
@@ -75,8 +75,7 @@
     /// <summary>
     /// Main Scene UI Inventory Script
     /// </summary>
-    public class UI_Inventory : MonoBehaviour
-    {
+    public class UI_Inventory : MonoBehaviour, IMainMenu {
         [Header("Player Data Setting")]
         //public AD_PlayerData playerData;
         private List<AD_item> inventoryList = new List<AD_item>();
@@ -98,13 +97,18 @@
         public delegate void InventoryUpdate();
         public static InventoryUpdate InvenUpdate;
         //event 붙여버리면 다른데에서 사용이 불가능해진다
-        
-        public void OpenMain() {
-            gameObject.SetActive(true);
+        UI.MainMenu.MainMenuTween tween = new UI.MainMenu.MainMenuTween(.5f, .3f);
+       
+        bool IMainMenu.IsTweenPlaying() {
+            return tween.IsTweenPlaying;
         }
 
-        public void CloseMain() {
-            gameObject.SetActive(false);
+        void IMainMenu.MenuOpen() {
+            tween.MenuOpenTween(mainRectTr, mainCanvasGroup);
+        }
+
+        void IMainMenu.MenuClose() {
+            tween.MenuCloseTween(mainRectTr, mainCanvasGroup);
         }
 
         private void Awake()

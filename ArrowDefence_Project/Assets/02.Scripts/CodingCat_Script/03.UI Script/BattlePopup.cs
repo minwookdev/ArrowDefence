@@ -49,7 +49,7 @@ public class BattlePopup : MonoBehaviour {
         }
 
         //Load a Sceen with tag string
-        MainSceneRoute.Fade(() => ActionCat.Data.CCPlayerData.equipments.UpdatePlayerAbility(), 
+        MainSceneRoute.FadeIn(() => ActionCat.Data.CCPlayerData.equipments.UpdatePlayerAbility(), 
                             () => SceneLoader.Instance.LoadScene(stageTag)); ;
     }
 

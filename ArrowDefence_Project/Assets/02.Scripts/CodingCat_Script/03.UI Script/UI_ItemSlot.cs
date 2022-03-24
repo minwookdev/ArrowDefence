@@ -68,7 +68,7 @@
                 return;
             }
 
-            MainSceneRoute.OpenItemInfo(ItemAddress);
+            MainSceneRoute.OPEN_ITEMINFO(ItemAddress);
         }
 
         #region SLOT_SETTING_METHOD

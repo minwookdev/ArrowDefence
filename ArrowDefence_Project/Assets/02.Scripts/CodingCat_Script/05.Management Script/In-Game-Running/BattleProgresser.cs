@@ -445,8 +445,8 @@
             if (currentEndDelayTime >= EndBattleDelay) {
                 IsOpenedResult = true;
 
-                //Update Stage Info
-                SendStageInfo();
+                //Update User Information
+                UpdateUserInfo();
 
                 //Add Items in Player Inventory
                 DropItemsAddInventory();
@@ -486,8 +486,10 @@
 
         #region STAGE_INFO
 
-        void SendStageInfo() {
+        void UpdateUserInfo() {
             GameManager.Instance.UpdateStageData(stageKey, in battleData);
+            GameManager.Instance.UpdateCraftingInfo();
+            
         }
 
         void IncreaseKillCount() {

@@ -39,6 +39,10 @@
 
         [Header("RESULT")]
         [SerializeField] UI_ItemSlot resultSlot = null;
+        [SerializeField] CanvasGroup resultBackCanvasGroup = null;
+        [SerializeField] TextMeshProUGUI resultMainText = null;
+        [SerializeField] TextMeshProUGUI resultSubText = null;
+        [SerializeField] UnityEngine.UI.Image resultHorizontalBar = null;
 
         //Upgrade Recipe Scriptable Object
         UpgradeRecipeSO recipe = null;
@@ -48,6 +52,8 @@
         UpgradeRecipe selectedRecipe = null;
         AD_item selectedItemRef      = null;
         Item_Equipment previewCache  = null;
+
+        TweenGetItemPopup itemGetPopupTween = null;
         #region PROPERTY
         public PANELTYPE OpenedPanelType {
             get {
@@ -68,6 +74,8 @@
             //Panel 초기화
             InitMainPanel();
             InitSelectPanel();
+
+            itemGetPopupTween = new TweenGetItemPopup(resultBackCanvasGroup, resultMainText, resultSubText, resultHorizontalBar);
         }
 
         public void Enable() {
@@ -312,6 +320,17 @@
 
         public void SetResultPanel() {
             resultSlot.EnableSlot(selectedRecipe.Result);
+            var slotRects = new RectTransform[1] { resultSlot.GetComponent<RectTransform>() };
+            itemGetPopupTween.TweenStart(slotRects);
+        }
+
+        public void BE_RESULT() {
+            if (itemGetPopupTween.IsPlaying) {
+                itemGetPopupTween.TweenSkip();
+            }
+            else {
+                CloseOpenedPopup();
+            }
         }
 
         public void SetConfirmPopup() {
@@ -338,7 +357,7 @@
                 }
             }
 
-            infoPopup.OpenPopup_EquipmentItem(previewCache, false);
+            infoPopup.OpenPreview(previewCache);
             OpenPopup(POPUPTYPE.ITEMINFO, anchoredPosition);
             log = "";
             return true;

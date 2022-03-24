@@ -328,6 +328,10 @@
             CCPlayerData.infos.UpdateStageInfo(key, in data);
         }
 
+        public void UpdateCraftingInfo() {
+            CCPlayerData.infos.UpdateCraftingInfo();
+        }
+
         public bool TryGetStageData(string key, out StageInfo stageInfo) {
             return CCPlayerData.infos.TryGetStageData(key, out stageInfo);
         }

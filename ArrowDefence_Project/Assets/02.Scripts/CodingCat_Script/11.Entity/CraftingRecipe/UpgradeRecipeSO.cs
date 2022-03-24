@@ -36,6 +36,12 @@
                                     $"Item Name: {recipeArray[i].KeyItem.Item_Name}");
                     }
                 }
+
+                CatLog.Log("Upgrade Recipe initialized, Check the Init Report" + '\n' +
+                           $"Title: {this.name}" + '\n' + 
+                           $"Total Assigned Recipe Count: {((recipeDictionary != null || recipeDictionary.Count > 0) ? recipeDictionary.Count.ToString() : "0")}" + '\n' +
+                           $"Init Success Recipe: {recipeDictionary.Count.ToString()}" + '\n' + 
+                           $"Init Failed Recipe: {recipeArray.Length - recipeDictionary.Count}");
             }
         }
 

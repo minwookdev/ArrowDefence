@@ -63,6 +63,10 @@
             craftingInfoList[index].Start(recipe.CraftingTime, recipe.Result.Count, recipe.Result.Item);
         }
 
+        public void UpdateCraftingInfo() {
+            craftingInfoList.ForEach(slot => slot.Update());
+        }
+
         #region CONSTRUCTOR [for ES3]
         public PlayerInfo() { }
         ~PlayerInfo() { }

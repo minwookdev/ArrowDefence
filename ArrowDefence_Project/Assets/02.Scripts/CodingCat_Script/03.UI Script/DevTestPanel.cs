@@ -41,7 +41,7 @@
 
         private void Start() {
             //광고 매니저 초기화
-            AdsManager.Instance.InitAdsManager();
+            AdsManager.Instance.InitRuntimeMgr();
             enabledColor = ImgInterstitialAds.color;
         }
 
@@ -53,7 +53,7 @@
             else {   
                 ImgInterstitialAds.color = ColorNotReady;
             }
-
+            
             //Check The Ready RewardAds
             if(AdsManager.Instance.IsReadyRewardAds()) {
                 ImgRewardAds.color = enabledColor;

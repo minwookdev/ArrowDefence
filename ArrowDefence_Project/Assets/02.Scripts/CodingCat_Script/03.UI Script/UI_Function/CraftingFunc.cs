@@ -38,10 +38,21 @@
 
         [Header("RESULT")]
         [SerializeField] UI_ItemSlot resultItemSlot = null;
+        [SerializeField] CanvasGroup resultPopupBack = null;
+        [SerializeField] TextMeshProUGUI textResultMain = null;
+        [SerializeField] TextMeshProUGUI textResultSub = null;
+        [SerializeField] UnityEngine.UI.Image imageResultHorizontal = null;
 
+        [Space(5f)]
+        [Header("DEBUG")]
         AD_item itemRefSelected = null;
         CraftingRecipeSO recipe = null;
-        [SerializeField] int selectedSlotNumber = 0;
+        [SerializeField] [ReadOnly] int selectedSlotNumber = 0;
+
+        //New ItemGet Popup Tween Class
+        TweenGetItemPopup itemGetPopupTween = null;
+
+        
 
         public int SelectedSlotNumner {
             get {
@@ -250,6 +261,11 @@
         void ReceiptResult(ItemData item, int amount) {
             //Reuslt Popup Slot Set, Popup Positioning
             resultItemSlot.EnableSlot(item, amount);
+
+            //Play ResultPopup Tween
+            var slotRectTransform = resultItemSlot.GetComponent<RectTransform>();
+            itemGetPopupTween.TweenStart(slotRectTransform);
+            
             craftingPopups[1].anchoredPosition = craftingPanels[0].anchoredPosition;
             openedPopupType = POPUPTYPE.GETITEM;
 
@@ -258,8 +274,13 @@
         }
 
         public void CloseResult() {
-            craftingPopups[1].anchoredPosition = navigateRectTr[3].anchoredPosition;
-            openedPopupType = POPUPTYPE.NONE;
+            if (itemGetPopupTween.IsPlaying) {
+                itemGetPopupTween.TweenSkip();
+            }
+            else {
+                craftingPopups[1].anchoredPosition = navigateRectTr[3].anchoredPosition;
+                openedPopupType = POPUPTYPE.NONE;
+            }
         }
 
         //======================================================================================================================================
@@ -482,6 +503,8 @@
             InitPanelMain(unityAction, slotCount);
             InitPanelSelect(bluePrintSlotCount);
             recipe = recipeTable;
+
+            itemGetPopupTween = new TweenGetItemPopup(resultPopupBack, textResultMain, textResultSub, imageResultHorizontal);
         }
 
         public void Enable() {

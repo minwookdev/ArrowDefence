@@ -271,6 +271,10 @@
             return CCPlayerData.infos.CraftingInfos;
         }
 
+        public CraftingInfo GetCraftingInfo(int index) {
+            return CCPlayerData.infos.CraftingInfos[index];
+        }
+
         public void CraftingStart(int index, CraftingRecipe recipe) {
             CCPlayerData.infos.CraftingStart(index, recipe);
         }

@@ -172,6 +172,8 @@
 
         void Awake() {
             Cover(false);
+            GameManager.Instance.Initialize();
+            AdsManager.Instance.InitRuntimeMgr();
         }
 
         IEnumerator Start() {

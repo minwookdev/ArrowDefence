@@ -53,6 +53,8 @@
         [SerializeField] GameObject prefMessage;
         bool isInit = false;
 
+        string endColor = "</color>";
+
         public void Init(RectTransform parentCanvas) {
             if(isInit == true) {
                 CatLog.WLog("Notify Manager is Already Initialized this Scene."); return;
@@ -78,13 +80,13 @@
             isInit = true;
         }
 
-        public void Show(string text) {
+        public void Show(string text, StringColor color = StringColor.WHITE) {
             if(!isInit) {
                 throw new System.Exception("Notify is Not Initialized or missing component");
             }
 
             notifyText.AlphaOne();
-            notifyText.text = text;
+            notifyText.text = string.Format("{1}{0}{2}", text, GetColor(color), endColor);
             notifySeq.Restart();
         }
 
@@ -110,6 +112,18 @@
 
             DontDestroyOnLoad(gameObject);
             isInit = false;
+        }
+
+        string GetColor(StringColor color) {
+            switch (color) {
+                case StringColor.YELLOW: return "<color=red>";
+                case StringColor.BLUE:   return "<color=blue>";
+                case StringColor.RED:    return "<color=red>";
+                case StringColor.GREEN:  return "<color=green>";
+                case StringColor.WHITE:  return "<color=white>";
+                case StringColor.BLACK:  return "<color=black>";
+                default: throw new System.NotImplementedException();
+            }
         }
 
         private void OnApplicationQuit() {

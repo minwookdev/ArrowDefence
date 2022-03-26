@@ -36,6 +36,10 @@ public class MainSceneRoute : MonoBehaviour {
         if(menus.Length != panels.Length) {
             CatLog.WLog("Not Full-Cached MainMenu Interface !");
         }
+
+        //Try Initialize Manager Objects
+        GameManager.Instance.Initialize();
+        AdsManager.Instance.InitRuntimeMgr();
     }
 
     private void Start() {
@@ -59,6 +63,7 @@ public class MainSceneRoute : MonoBehaviour {
             var allCraftingSlots = ActionCat.Data.CCPlayerData.infos.CraftingInfos;
             foreach (var slot in allCraftingSlots) {
                 slot.Update();
+                CatLog.Log("Increase All Crafting Timer.");
             }
         }
     }

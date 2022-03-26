@@ -84,8 +84,16 @@ MonoBehaviour:
         keys: []
         values: []
       mCustomRewardedAdIds:
-        keys: []
-        values: []
+        keys:
+        - mName: CraftingTimeSkip
+          mUseCustomName: 1
+        - mName: UpgradeChanceIncrease
+          mUseCustomName: 1
+        values:
+        - mIosId: 
+          mAndroidId: ca-app-pub-2591473426186700/5715793707
+        - mIosId: 
+          mAndroidId: ca-app-pub-2591473426186700/5907365391
       mCustomRewardedInterstitialAdIds:
         keys: []
         values: []

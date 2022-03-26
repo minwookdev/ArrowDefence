@@ -184,6 +184,10 @@
             IsAvailable = true;
         }
 
+        public void QuickComplete() {
+            Current = Max;
+        }
+
         public bool TryReceipt(out ItemData resultItemRef, out int resultAmount) {
             if(!IsComplete) {
                 CatLog.ELog("Crafting is Not Complete !");

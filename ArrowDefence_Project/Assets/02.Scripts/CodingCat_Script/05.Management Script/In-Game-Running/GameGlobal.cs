@@ -425,6 +425,15 @@
             text.color = tempColor;
         }
         #endregion
+
+        #region UPGRADE
+
+        public static bool TryUpgrade(float failedProb) {
+            float totalProb = 200f; // Real Failed probablity: failedProb / totalProb * 100
+            return (RandomEx.RangeFloat(StNum.floatZero, totalProb) < failedProb) ? false : true;
+        }
+
+        #endregion
     }
 
     public static class StNum {

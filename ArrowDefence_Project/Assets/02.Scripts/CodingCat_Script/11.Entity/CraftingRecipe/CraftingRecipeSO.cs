@@ -67,7 +67,7 @@
 #if UNITY_EDITOR
         [UnityEditor.MenuItem("ActionCat/Scriptable Object/CraftingRecipe Asset")]
         public static void CreateCraftingRecipeScriptableObject() {
-            string assetCreatePath = "Assets/05.SO/Tables/CraftingRecipe_(version).asset";
+            string assetCreatePath = "Assets/05.SO/Tables/CraftingRecipe_(version).asset";  
             var asset = ScriptableObject.CreateInstance<CraftingRecipeSO>();
             UnityEditor.AssetDatabase.CreateAsset(asset, assetCreatePath);
             UnityEditor.AssetDatabase.SaveAssets();

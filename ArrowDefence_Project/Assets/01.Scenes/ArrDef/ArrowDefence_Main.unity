@@ -3181,7 +3181,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
-  m_Maskable: 1
+  m_Maskable: 0
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -3418,8 +3418,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 520505234}
   m_HandleRect: {fileID: 520505233}
   m_Direction: 3
-  m_Value: 0
-  m_Size: 1
+  m_Value: 1
+  m_Size: 0.99999994
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -60231,6 +60231,8 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 70db338447d354c36a0975fb616b135e, type: 3}
   - {fileID: 21300000, guid: 1757479cd707b4180a861faf78aeccb2, type: 3}
   - {fileID: 21300000, guid: 74670eb495c42448db0be880cfa86790, type: 3}
+  imageAdBtn: {fileID: 1545725038}
+  textAdBtn: {fileID: 1147705948}
 --- !u!114 &1018097653
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -68366,6 +68368,10 @@ MonoBehaviour:
     infoPopup: {fileID: 1885936584}
     textConfirmItemName: {fileID: 2124342778}
     resultItemSlot: {fileID: 296519232}
+    resultPopupBack: {fileID: 678476223}
+    textResultMain: {fileID: 1617362841}
+    textResultSub: {fileID: 1411199411}
+    imageResultHorizontal: {fileID: 1719996972}
     selectedSlotNumber: 0
   upgradeFunction:
     navigateRectTr:
@@ -68413,6 +68419,9 @@ MonoBehaviour:
     resultMainText: {fileID: 1271322973}
     resultSubText: {fileID: 1075877859}
     resultHorizontalBar: {fileID: 1535348704}
+    imagesAd:
+    - {fileID: 51064451}
+    - {fileID: 1728880107}
 --- !u!1 &1145159794
 GameObject:
   m_ObjectHideFlags: 0
@@ -73967,6 +73976,8 @@ MonoBehaviour:
   imageSlotIcon: {fileID: 0}
   imageFrame: {fileID: 0}
   frames: []
+  imageAdBtn: {fileID: 0}
+  textAdBtn: {fileID: 0}
 --- !u!114 &1228409920
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -77545,6 +77556,8 @@ MonoBehaviour:
   imageSlotIcon: {fileID: 0}
   imageFrame: {fileID: 0}
   frames: []
+  imageAdBtn: {fileID: 0}
+  textAdBtn: {fileID: 0}
 --- !u!1 &1304258413
 GameObject:
   m_ObjectHideFlags: 0
@@ -104852,7 +104865,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 1.5999985, y: 1.5}
+  m_AnchoredPosition: {x: 2, y: 1}
   m_SizeDelta: {x: 40, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1728880107
@@ -104870,13 +104883,13 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
-  m_Maskable: 1
+  m_Maskable: 0
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 82afb9d3d586740d9a1d6427f713e784, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 1d5f231cf509e46ab9a5c5549d6dab69, type: 3}
   m_Type: 0
-  m_PreserveAspect: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
@@ -110239,7 +110252,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 0
+  m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:

@@ -84,6 +84,7 @@
 
         private void Update() {
             craftingFunction.Update();
+            upgradeFunction.Update();
         }
 
         #region BUTTON_EVENT
@@ -134,11 +135,17 @@
         }
 
         public void ButtonEvent_Upgrade_Confirm() {
-            if (upgradeFunction.TryItemUpgrade()) {
-                upgradeFunction.SetResultPanel();
-                upgradeFunction.OpenPanel(UpgradeFunc.PANELTYPE.MAIN, mainAnchoredPos, true); //Clear Panel
-                upgradeFunction.CloseOpenedPopup();
-                upgradeFunction.OpenPopup(UpgradeFunc.POPUPTYPE.ITEMGET, mainAnchoredPos);
+            if (upgradeFunction.TryItemUpgrade(out bool? isUpgradeSuccess)) {
+                if (isUpgradeSuccess.Value == true) { //Is Upgrade Success
+                    upgradeFunction.SetResultPopup();
+                    upgradeFunction.OpenPanel(UpgradeFunc.PANELTYPE.MAIN, mainAnchoredPos, true); //claer panel
+                    upgradeFunction.CloseOpenedPopup();
+                    upgradeFunction.OpenPopup(UpgradeFunc.POPUPTYPE.ITEMGET, mainAnchoredPos);
+                }
+                else { //Is Upgrade Failed
+                    Notify.Inst.Show("You Failed Upgrade...", StringColor.RED);
+                    upgradeFunction.OpenPanel(UpgradeFunc.PANELTYPE.MAIN, mainAnchoredPos, true); //clear panel
+                }
             }
             else {
                 throw new System.Exception();
@@ -174,7 +181,7 @@
         }
 
         public void BE_UG_INCPROB() {
-            Notify.Inst.Show("This is an unimplemented featrue.");
+            upgradeFunction.Ads();
         }
 
         //======================================================== [ CRAFTING ] ========================================================
@@ -289,19 +296,11 @@
         Sequence slotSequence = null;
         string originSubString = "";
         float slotTweenStartTime = 0f;
+        bool isPlayingSlotTween = false;
 
         public bool IsPlaying {
             get {
-                //return (mainSequence.IsPlaying() || slotSequence.IsPlaying());
-                bool isplaying = false;
-                if(mainSequence.IsPlaying()) {
-                    isplaying = true;
-                }
-                if(slotSequence.IsPlaying()) { //이녀석 계속 워닝 뱉으니까 로직 수정 좀 해주기
-                    isplaying = true;
-                }
-
-                return isplaying;
+                return (mainSequence.IsPlaying() || isPlayingSlotTween);
             }
         }
 
@@ -327,41 +326,54 @@
                                   .Append(cg.DOFade(StNum.floatOne, fadeTime))
                                   .Append(imageHorizontal.DOFillAmount(StNum.floatOne, fillTime))
                                   .Insert(0.25f, textMain.DOFade(StNum.floatOne, 0.5f))
-                                  .Insert(0.5f,   textSub.DOText(originSubString, 0.8f))
+                                  .Insert(0.5f,   textSub.DOText(originSubString, 0.4f))
                                   .SetAutoKill(false)
                                   .Pause();
         }
 
-        public void TweenStart(RectTransform[] slotRectTrArray) {
-            mainSequence.Restart(); //Start Panel Main Sequence
-
-            //Set Tween Slots
-            slotSequence = DOTween.Sequence().SetDelay(slotTweenStartTime);
+        /// <summary>
+        /// Slot RectTrasnform은 언제나 CanvasGroup Component가지고 있어야 함.
+        /// </summary>
+        /// <param name="slotRectTrArray"></param>
+        public void TweenStart(params RectTransform[] slotRectTrArray) {
+            //Set Tween Slots, Slot Array만큼 Sequence 연결해줌
+            slotSequence = DOTween.Sequence()
+                                  .SetDelay(slotTweenStartTime)
+                                  .OnStart(() => isPlayingSlotTween = true)
+                                  .OnComplete(() => isPlayingSlotTween = false)
+                                  .Pause(); //바로 실행하지 않고 정지
             for (int i = 0; i < slotRectTrArray.Length; i++) {
-                slotRectTrArray[i].localScale = Vector3.zero;
-                var cg = slotRectTrArray[i].GetComponent<CanvasGroup>();
+                var isCanvasgroup = slotRectTrArray[i].TryGetComponent<CanvasGroup>(out CanvasGroup cg);
+                if(!isCanvasgroup) {
+                    throw new System.Exception("Slot is Not Has CanvasGroup, Stop Tweening");
+                }
+                //SetDelay가 존재하기 때문에 OnStart에서 준비해주면 늦음
                 cg.alpha = 0f;
+                slotRectTrArray[i].localScale = Vector3.zero;
                 slotSequence.Append(SlotTweenSequence(slotRectTrArray[i], cg));
             }
+
+            mainSequence.Restart(); //Start Panel Main Sequence
+            slotSequence.Restart(); //Start Slot Tween Sequence
         }
 
         public void TweenSkip() {
-            mainSequence.Complete();
+            if(mainSequence.IsPlaying()) {
+                mainSequence.Complete();
+            }
 
-            if (slotSequence.IsPlaying()) {
+            if (isPlayingSlotTween) {
                 slotSequence.Complete();
             }
         }
 
         Sequence SlotTweenSequence(RectTransform slotRt, CanvasGroup canvasGroup) {
             return DOTween.Sequence()
-                          .OnStart(() => {
-                              slotRt.localScale = Vector3.zero;
-                              slotRt.GetComponent<CanvasGroup>().alpha = StNum.floatZero;
-                          })
-                          .Append(slotRt.DOScale(Vector3.one, 1f).SetEase(Ease.OutBack))
-                          .Join(slotRt.GetComponent<CanvasGroup>().DOFade(StNum.floatOne, 0.5f))
-                          .PrependInterval(0.2f);
+                          .OnStart(() => isPlayingSlotTween = true)
+                          .OnComplete(() => isPlayingSlotTween = false)
+                          .Append(slotRt.DOScale(Vector3.one, 0.5f).SetEase(Ease.OutBack))
+                          .Join(canvasGroup.DOFade(StNum.floatOne, 0.2f))
+                          .PrependInterval(0.2f); //각 Slot간 Tween간격
         }
     }
 }

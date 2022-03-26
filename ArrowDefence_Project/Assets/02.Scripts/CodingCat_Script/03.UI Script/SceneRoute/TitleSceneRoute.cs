@@ -13,8 +13,9 @@ public class TitleSceneRoute : MonoBehaviour
     public Image ImgFade = null;
     public float FadeTime = 2.0f;
 
-    public void Start() {
+    public void Awake() {
         GameManager.Instance.Initialize();
+        AdsManager.Instance.InitRuntimeMgr();
     }
 
     #region Action_Btn

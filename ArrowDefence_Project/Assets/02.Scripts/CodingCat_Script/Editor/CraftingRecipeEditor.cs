@@ -71,6 +71,10 @@ public class CraftingRecipeArrayDrawer : PropertyDrawer {
             GUILayout.EndVertical();
 
             GUILayout.BeginVertical("GroupBox");
+            EditorGUILayout.PropertyField(property.FindPropertyRelative(nameof(CraftingRecipe.CraftingTime)));
+            GUILayout.EndVertical();
+
+            GUILayout.BeginVertical("GroupBox");
             SerializedProperty materialArray = property.FindPropertyRelative(nameof(CraftingRecipe.Mats));
             GUILayout.BeginHorizontal();
             GUILayout.Space(15f);
@@ -79,7 +83,7 @@ public class CraftingRecipeArrayDrawer : PropertyDrawer {
             materialArray.arraySize = EditorGUILayout.IntField(materialArray.arraySize);
             Rect expandedPosition = position;
             expandedPosition.x += 80f;
-            expandedPosition.y += 85f;
+            expandedPosition.y += 135f;
             materialArray.isExpanded = EditorGUI.Foldout(expandedPosition, materialArray.isExpanded, new GUIContent(""));
             //if(materialArray.isExpanded = EditorGUI.Foldout())
             GUILayout.EndHorizontal();

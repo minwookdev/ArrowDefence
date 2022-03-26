@@ -44,6 +44,15 @@
         [SerializeField] TextMeshProUGUI resultSubText = null;
         [SerializeField] UnityEngine.UI.Image resultHorizontalBar = null;
 
+        [Header("ADS")]
+        [SerializeField] UnityEngine.UI.Image[] imagesAd = null;
+        float currentAdsReadyCheckTime = 0f;
+        Color disableBtnColor = new Color(.4f, .4f, .4f, 1f);
+        Color enableBtnColor  = new Color(1f, 1f, 1f, 1f);
+        Color tempColor;
+        bool isReadyAds = false;
+        bool IsAdsApplied = false;
+
         //Upgrade Recipe Scriptable Object
         UpgradeRecipeSO recipe = null;
 
@@ -53,7 +62,9 @@
         AD_item selectedItemRef      = null;
         Item_Equipment previewCache  = null;
 
+        //New ItemGet Popup Tween Class
         TweenGetItemPopup itemGetPopupTween = null;
+
         #region PROPERTY
         public PANELTYPE OpenedPanelType {
             get {
@@ -81,6 +92,26 @@
         public void Enable() {
             if(selectedItemRef != null) {
                 selectedItemRef = null;
+            }
+
+            //SetColor Ad Buttons 
+            foreach (var image in imagesAd) {
+                image.color = disableBtnColor;
+            }
+        }
+
+        public void Update() {
+            currentAdsReadyCheckTime += Time.deltaTime;
+            if (currentAdsReadyCheckTime >= 2f) { //1f = Update Time
+                isReadyAds = AdsManager.Instance.IsReadyRewardedAds(REWARDEDAD.UPGRADE);
+                tempColor = (isReadyAds) ? enableBtnColor : disableBtnColor;
+                foreach (var image in imagesAd) {
+                    if (image.color != tempColor) {
+                        image.color = tempColor;
+                        //Change Ads Button Color 
+                    }
+                }
+                currentAdsReadyCheckTime = 0f;
             }
         }
 
@@ -198,7 +229,7 @@
             //Upgrade Main Panel is Always Clear on Refresh Function
             requirementSlotList.ForEach((slot) => slot.DisableSlot());
             requirementTextRectTr.gameObject.SetActive(true);
-            textSuccessProb.text = "00 %";
+            //textSuccessProb.text = "00 %";
             textUpgradeResultName.text = "ITEM NAME FIELD";
 
             previewItemSlot.DisableSlot();
@@ -212,6 +243,9 @@
 
             //Clear Selected Data
             ClearSelected();
+
+            //Probablity Text Update
+            UpdateProbText();
         }
 
         void RefreshSelectPanel() {
@@ -278,11 +312,11 @@
             }
 
             requirementTextRectTr.gameObject.SetActive(false);
-            textSuccessProb.text = string.Format("{0} %", (100f - targetRecipe.FailedProb));
             textUpgradeResultName.text = targetRecipe.Result.Item_Name;
             selectedItemSlot.EnableSlot(targetRecipe.KeyItem);
             previewItemSlot.EnableSlot(targetRecipe.Result);
             selectedRecipe = targetRecipe;
+            UpdateProbText(); //Update Probablity Text
         }
 
         public void SetSelectPanel(sbyte enableNumber) {
@@ -318,10 +352,13 @@
             upgradeableTextRectTr.gameObject.SetActive(upgradeableItems.Length <= 0);
         }
 
-        public void SetResultPanel() {
+        public void SetResultPopup() {
             resultSlot.EnableSlot(selectedRecipe.Result);
-            var slotRects = new RectTransform[1] { resultSlot.GetComponent<RectTransform>() };
-            itemGetPopupTween.TweenStart(slotRects);
+            //Result ItemSlot을 배열로 넣어야 하는 경우 생기면 요렇게 넣어줌.
+            //Result Slot을 여러개 띄워야 하는 경우 생기면 트위닝 로직 테스트 해야함
+            //var slotRects = new RectTransform[1] { resultSlot.GetComponent<RectTransform>() };
+            var rectTrasnform = resultSlot.GetComponent<RectTransform>();
+            itemGetPopupTween.TweenStart(rectTrasnform);
         }
 
         public void BE_RESULT() {
@@ -470,7 +507,7 @@
             return isPossible;
         }
 
-        public bool TryItemUpgrade() {
+        public bool TryItemUpgrade(out bool? isSuccessUpgrade) {
             var findMaterialList = new List<bool>();
             for (int i = 0; i < selectedRecipe.Materials.Length; i++) {
                 var isFind = GameManager.Instance.TryGetItemAmount(selectedRecipe.Materials[i].Mat.Item_Id, out int amount);
@@ -491,22 +528,69 @@
                 if (!isFindAllMaterialItems)  Notify.Inst.Show("Not Enough Upgrade Requirement");
                 else if (!isFindSelectedItem) Notify.Inst.Show("Not Assignment Selected Item in Inventory");
 
+                isSuccessUpgrade = null;
                 return false;
             }
 
-
+            //Material Items 제거
             for (int i = 0; i < selectedRecipe.Materials.Length; i++) {
                 if(GameManager.Instance.TryRemoveItem(selectedRecipe.Materials[i].Mat.Item_Id, selectedRecipe.Materials[i].Required) == false) {
                     throw new System.Exception("Warning !, Item Upgrade Failed.");
                 }
             }
 
+            //강화 실패확률에 따른 강화 실패 --> 재료 아이템만 소진되고 강화 종료
+            if (GameGlobal.TryUpgrade(selectedRecipe.FailedProb) == false) {
+                isSuccessUpgrade = false;
+                return true;
+            }
+
+            //Upgrade Item 제거 (얘가 존재하는지 먼저 위에서 확인하고 여기서는 지워주기만 하도록 로직 수정해야함)
             if (GameManager.Instance.TryRemoveItem(selectedItemRef) == false) {
                 throw new System.Exception("Warning !, Item Upgrade Failed. Selected Item Not Found");
             }
 
             GameManager.Instance.AddItem(selectedRecipe.Result, selectedRecipe.Result.Item_Amount);
+            isSuccessUpgrade = true;
             return true;
+        }
+
+        public void Ads() {
+            if (selectedRecipe == null || selectedItemRef == null) {
+                Notify.Inst.Show("First, Select an Item to Upgrade.");
+                return;
+            }
+
+            if (IsAdsApplied) {
+                Notify.Inst.Show("Already Applied Chance Increase !");
+                return;
+            }
+
+            if (!isReadyAds) {
+                Notify.Inst.Show("Please try again Later.");
+                return;
+            }
+
+#if UNITY_EDITOR
+            IsAdsApplied = true;
+#elif UNITY_ANDROID
+            //구현중
+#endif
+            UpdateProbText();
+        }
+
+        void UpdateProbText() {
+            if(selectedRecipe == null) {
+                textSuccessProb.fontSize = 40f;
+                textSuccessProb.text = "00 %";
+                return;
+            }
+
+            float successProbablity = (IsAdsApplied) ? (selectedRecipe.FailedProb - (selectedRecipe.FailedProb * 0.5f)) : selectedRecipe.FailedProb;
+            successProbablity = 100f - successProbablity;
+            string successProbString = string.Format("{1}{0} %{2}", successProbablity, (IsAdsApplied) ? "<color=green>" : "<color=white>", "</color>");
+            textSuccessProb.fontSize = 48f;
+            textSuccessProb.text = successProbString;
         }
 
         //=============================================================== [ ENUM ] =============================================================

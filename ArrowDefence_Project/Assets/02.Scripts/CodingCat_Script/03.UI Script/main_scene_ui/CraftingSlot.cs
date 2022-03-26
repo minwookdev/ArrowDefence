@@ -26,17 +26,33 @@
         [SerializeField] Image imageFrame = null;
         [SerializeField] Sprite[] frames = null;
 
+        [Header("ADS")]
+        [SerializeField] Image imageAdBtn = null;
+        [SerializeField] TextMeshProUGUI textAdBtn = null;
+        Color tempColor;
+        Color enableColor = new Color(1f, 1f, 1f, 1f);
+        Color disableColor = new Color(.35f, .35f, .35f, 1f);
+
         System.Action<ItemData, int> receiptAction = null;
+        //System.Action quickButtonAction = null;
 
         int craftSlotNumber = -1;
 
         string colorStartString = "";
         string colorEndString   = "</color>";
+        bool isReadyAds = false;
 
         public bool IsActive {
             get {
                 return this.gameObject.activeSelf;
             }
+        }
+
+        private void Update() {
+            isReadyAds = AdsManager.Instance.IsReadyRewardedAds(REWARDEDAD.CRAFTING);
+            tempColor = (isReadyAds) ? enableColor : disableColor;
+            SetColorButton(tempColor);
+            
         }
 
         public void AddListnerToSelectButton(UnityEngine.Events.UnityAction<int> unityAction) {
@@ -51,6 +67,8 @@
         }
 
         public void AddListnerToReceiptButton(System.Action<ItemData, int> action) => receiptAction = action;
+
+        //public void AddListnerToQuickButton(System.Action action) => quickButtonAction = action;
 
         public void EnableSlot(Data.CraftingInfo craftinginfo, int slotNumber) {
             gameObject.SetActive(true); //alwyas enable
@@ -114,7 +132,43 @@
         }
 
         public void BE_QUICK() {
-            Notify.Inst.Show("This is an unImplemented featrue");
+            if (!isReadyAds) { //광고가 준비되지 않음
+                Notify.Inst.Show("Please try again Later.");
+                return;
+            }
+
+            var craftingInfo = GameManager.Instance.GetCraftingInfo(craftSlotNumber);
+            if (craftingInfo == null || craftingInfo.IsComplete) {
+                //잘못된 슬롯 넘버 할당되거나 이미 크래프팅 완료됨
+                throw new System.Exception("invalid access.");
+            }
+
+            if (!craftingInfo.IsSkipable) {
+                Notify.Inst.Show("This crafting is non-skipable.");
+                return;
+            }
+#if UNITY_EDITOR
+            //빠른 제작 조건 달성
+            craftingInfo.QuickComplete();
+#elif UNITY_ANDROID
+            //보상형 광고 시청여부에 따라 Quick Complete 발생시켜줌
+#endif
+
+            //A. 광고 보는데 성공하면 액션-콜 하고 실패하면 그냥 넘기기
+            //B. 자체적으로 해당 슬록만 업데이트 진행
+
+            //자체적으로 본 슬롯만 업데이트
+            EnableSlot(craftingInfo, craftSlotNumber);
+        }
+
+        void SetColorButton(Color color) {
+            if (imageAdBtn.color != color) {
+                imageAdBtn.color = color;
+            }
+
+            if (textAdBtn.color != color) {
+                textAdBtn.color = color;
+            }
         }
     }
 }

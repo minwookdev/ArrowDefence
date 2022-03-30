@@ -51,6 +51,15 @@
             craftingInfoList[index].Available();
         }
 
+        public void OpenSlot(params byte[] index) {
+            for (int i = 0; i < index.Length; i++) {
+                if( craftingInfoList[index[i]].IsAvailable == true) {
+                    return;
+                }
+                craftingInfoList[index[i]].Available();
+            }
+        }
+
         public void CraftingStart(int index, CraftingRecipe recipe) {
             if (craftingInfoList[index] == null) {
                 throw new System.Exception("CRAFTING START FAILED: 슬롯 인덱스 NULL.");

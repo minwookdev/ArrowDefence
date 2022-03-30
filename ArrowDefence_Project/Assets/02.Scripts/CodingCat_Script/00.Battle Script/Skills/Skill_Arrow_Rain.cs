@@ -12,15 +12,22 @@
         private bool isDrawLine = false;
         private ArrowRain_LineRender debugLineRender;
 
+        public override string GetNameByTerms() {
+            throw new System.NotImplementedException();
+        }
+
+        public override string GetDescByTerms() {
+            throw new System.NotImplementedException();
+        }
+
 
         /// <summary>
         /// Constructor using Skill Data Scriptableobject. (Main)
         /// </summary>
-        /// <param name="data"></param>
-        public Skill_Arrow_Rain(SkillDataArrowRain data)
-            : base(data.SkillId, data.SkillName, data.SkillDesc, data.SkillLevel, data.SkillType, data.SkillIconSprite) {
-            this.arrowCount = data.ArrowShotCount;
-            this.shotDelay  = data.ShotInterval;
+        /// <param name="entity"></param>
+        public Skill_Arrow_Rain(SkillDataArrowRain entity) : base(entity) {
+            this.arrowCount = entity.ArrowShotCount;
+            this.shotDelay  = entity.ShotInterval;
         }
         #region ES3
         public Skill_Arrow_Rain() : base() { }

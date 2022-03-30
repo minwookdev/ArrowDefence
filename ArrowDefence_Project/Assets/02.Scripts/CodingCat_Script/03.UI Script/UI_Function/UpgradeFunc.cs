@@ -2,6 +2,7 @@
     using UnityEngine;
     using System.Collections.Generic;
     using TMPro;
+    using DG.Tweening;
 
     [System.Serializable]
     public class UpgradeFunc {
@@ -74,7 +75,7 @@
         #endregion
 
         //======================================================================================================================================
-        //=========================================================== [ LIFE CYCLE ] ===========================================================
+        //=========================================================== [ LIFE-CYCLE ] ===========================================================
 
         public void Start(UpgradeRecipeSO recipe) {
             this.recipe = recipe;
@@ -116,7 +117,7 @@
         }
 
         //======================================================================================================================================
-        //============================================================== [ OPEN ] ==============================================================
+        //========================================================== [ OPEN MENU ] =============================================================
 
         public RectTransform OpenPanel(PANELTYPE type, Vector2 anchoredPos, bool isclearpanel) {
             openedPanelType = type;
@@ -143,6 +144,7 @@
                 case POPUPTYPE.ITEMINFO: upgradePopups[0].anchoredPosition = anchoredPos; return upgradePopups[0];
                 case POPUPTYPE.ITEMGET:  upgradePopups[1].anchoredPosition = anchoredPos; return upgradePopups[1];
                 case POPUPTYPE.CONFIRM:  upgradePopups[2].anchoredPosition = anchoredPos; return upgradePopups[2];
+                case POPUPTYPE.ADS:      upgradePopups[3].anchoredPosition = anchoredPos; return upgradePopups[3];
                 default: throw new System.NotImplementedException();
             }
         }
@@ -172,13 +174,24 @@
                 case POPUPTYPE.ITEMINFO: upgradePopups[0].anchoredPosition = navigateRectTr[2].anchoredPosition; break;
                 case POPUPTYPE.ITEMGET:  upgradePopups[1].anchoredPosition = navigateRectTr[3].anchoredPosition; break;
                 case POPUPTYPE.CONFIRM:  upgradePopups[2].anchoredPosition = navigateRectTr[4].anchoredPosition; break;
+                case POPUPTYPE.ADS:      upgradePopups[3].anchoredPosition = navigateRectTr[5].anchoredPosition; break;
                 default: throw new System.NotImplementedException();
             }
             openedPopupType = POPUPTYPE.NONE;
         }
 
+        public void ClearSelected() {
+            selectedItemRef = null;
+            selectedRecipe  = null;
+            if (selectedSlot != null) {
+                selectedSlot.DeSelected();
+                selectedSlot = null;
+            }
+            previewCache = null;
+        }
+
         //======================================================================================================================================
-        //=========================================================== [ INITIALIZE ] ===========================================================
+        //============================================================== [ MAIN ] ==============================================================
 
         void InitMainPanel() {
             requirementSlotList = new List<RequirementSlot>();
@@ -201,30 +214,6 @@
             }
         }
 
-        void InitSelectPanel() {
-            upgradeableSlotList = new List<UpgradeableSlot>();
-            var sceneExistSlots = upgradeableSlotParent.GetComponentsInChildren<UpgradeableSlot>();
-
-            AddUpgradeAbleSlot(count: 10);
-
-            foreach (var slot in upgradeableSlotList) {
-                slot.DisableSlot();
-            }
-
-            upgradeableTextRectTr.gameObject.SetActive(true);
-
-            //Scene에 존재하고 있던 Prefab 비-활성화, 새로 생성한 Prefab만 사용
-            if (sceneExistSlots.Length > 1) {
-                CatLog.WLog("Scene Exist Slots Size Over, Recommanded delete other Slots.");
-            }
-            foreach (var slot in sceneExistSlots) {
-                slot.DisableSlot();
-            }
-        }
-
-        //======================================================================================================================================
-        //============================================================= [ REFRESH ] ============================================================
-
         void RefreshMainPanel() {
             //Upgrade Main Panel is Always Clear on Refresh Function
             requirementSlotList.ForEach((slot) => slot.DisableSlot());
@@ -246,6 +235,156 @@
 
             //Probablity Text Update
             UpdateProbText();
+        }
+
+        public void SetMainPanel() {
+            if (selectedItemRef == null) {
+                throw new System.Exception("Item Reference is null.");
+            }
+
+            if (recipe.TryGetRecipe(selectedItemRef.GetID, out UpgradeRecipe targetRecipe)) {
+                var requireSlotCount = targetRecipe.Materials.Length - requirementSlotList.Count;
+                if (requireSlotCount > 0) {
+                    AddRequirementSlot(requireSlotCount);
+                }
+
+                for (int i = 0; i < targetRecipe.Materials.Length; i++) {
+                    requirementSlotList[i].EnableSlot(targetRecipe.Materials[i]);
+                }
+            }
+            else {
+                throw new System.NotImplementedException($"Recipe Not Found !, Item ID: {selectedItemRef.GetID}");
+            }
+
+            requirementTextRectTr.gameObject.SetActive(false);
+            textUpgradeResultName.text = targetRecipe.Result.Item_Name;
+            selectedItemSlot.EnableSlot(targetRecipe.KeyItem);
+            previewItemSlot.EnableSlot(targetRecipe.Result);
+            selectedRecipe = targetRecipe;
+            UpdateProbText(); //Update Probablity Text
+        }
+
+        public bool TryOpenPreview(Vector2 anchoredPosition, out string log) {
+            if(previewCache == null) {
+                if (selectedRecipe == null) {
+                    log = "Please Select Upgrade Item First.";
+                    return false;
+                }
+
+                if(selectedRecipe.Result == null) {
+                    log = "Upgrade Result Item is Not Assignment.";
+                    return false;
+                }
+
+                //매번 previewCache새로 할당하지 않는 방법으로 개선
+                switch (selectedRecipe.Result) {
+                    case ItemData_Equip_Bow equipmentEntity:       previewCache = new Item_Bow(equipmentEntity);       break;
+                    case ItemData_Equip_Accessory equipmentEntity: previewCache = new Item_Accessory(equipmentEntity); break;
+                    case ItemData_Equip_Arrow equipmentEntity:     previewCache = new Item_Arrow(equipmentEntity);     break;
+                    default: log = "Not Supported Equipment Type"; return false;
+                }
+            }
+
+            infoPopup.OpenPreview_Upgrade(previewCache, true);
+            OpenPopup(POPUPTYPE.ITEMINFO, anchoredPosition);
+            log = "";
+            return true;
+        }
+
+        void AddRequirementSlot(int count) {
+            if(count <= 0) {
+                return;
+            }
+
+            for (int i = 0; i < count; i++) {
+                var newSlot = GameObject.Instantiate<RequirementSlot>(requirementSlotPref, requirementSlotParent);
+                newSlot.name = "slot_requirement_pref";
+                requirementSlotList.Add(newSlot);
+            }
+        }
+
+        public bool IsCheckUpgradeable(out byte exceptionNumber) {
+            //Selected Item is null
+            if (selectedItemRef == null) {
+                exceptionNumber = 0; 
+                return false;
+            }
+
+            //Reqruiement Material Items is null
+            bool isPossible = (requirementSlotList.FindAll(slot => slot.gameObject.activeSelf == true).TrueForAll(slot => slot.IsRequirementCondition == true));
+            if (!isPossible) {
+                exceptionNumber = 1;
+                return isPossible;
+            }
+
+            exceptionNumber = 255;
+            return isPossible;
+        }
+
+        public bool Ads() {
+            if (selectedRecipe == null || selectedItemRef == null) {
+                Notify.Inst.Show("First, Select an Item to Upgrade.");
+                return false;
+            }
+
+            if (IsAdsApplied) {
+                Notify.Inst.Show("The Chance Increase is already in Effect.");
+                return false;
+            }
+
+            if (!isReadyAds) {
+                Notify.Inst.Show("Please try again in a few Seconds.");
+                return false;
+            }
+
+            //광고 재생가능
+            return true;
+        }
+
+        public void AdsCompleted() {
+            IsAdsApplied = true;
+            UpdateProbText();
+        }
+
+        public void UpdateProbText() {
+            string successProbString = string.Format("{0}{1} %{2}", (IsAdsApplied) ? "<color=green>" : "<color=white>", 
+                                                                    (selectedRecipe != null) ? (100f - GameGlobal.GetUpgradeFailedProb(selectedRecipe.FailedProb, IsAdsApplied)).ToString() : "00",
+                                                                    "</color>");
+            textSuccessProb.fontSize = (IsAdsApplied) ? 48f : 40f;
+            textSuccessProb.text     = successProbString;
+
+            //Scale Tween
+            if (IsAdsApplied) {
+                textSuccessProb.DOScale(1f, 0.5f).From(Vector3.zero).SetEase(Ease.OutBack);
+            }
+
+            //fontColor = 광고효과 적용 유/무에 따른 (그린) : (화이트)
+            //fontSize  = 광고효과 적용 유/무에 따른 (48): (40)
+            //text      = 선택중인 아이템의 유/무에 따른 (100 - 확률) % : (00) %
+        }
+
+        //======================================================================================================================================
+        //============================================================ [ SELECTION ] ===========================================================
+
+        void InitSelectPanel() {
+            upgradeableSlotList = new List<UpgradeableSlot>();
+            var sceneExistSlots = upgradeableSlotParent.GetComponentsInChildren<UpgradeableSlot>();
+
+            AddUpgradeAbleSlot(count: 10);
+
+            foreach (var slot in upgradeableSlotList) {
+                slot.DisableSlot();
+            }
+
+            upgradeableTextRectTr.gameObject.SetActive(true);
+
+            //Scene에 존재하고 있던 Prefab 비-활성화, 새로 생성한 Prefab만 사용
+            if (sceneExistSlots.Length > 1) {
+                CatLog.WLog("Scene Exist Slots Size Over, Recommanded delete other Slots.");
+            }
+            foreach (var slot in sceneExistSlots) {
+                slot.DisableSlot();
+            }
         }
 
         void RefreshSelectPanel() {
@@ -279,46 +418,6 @@
             upgradeableTextRectTr.gameObject.SetActive(isDisableText);
         }
 
-        public void ClearSelected() {
-            selectedItemRef = null;
-            selectedRecipe  = null;
-            if (selectedSlot != null) {
-                selectedSlot.DeSelected();
-                selectedSlot = null;
-            }
-            previewCache = null;
-        }
-        
-        //========================================================= [ SET PANEL OR POPUP ] =====================================================
-        //======================================================================================================================================
-
-        public void SetMainPanel() {
-            if (selectedItemRef == null) {
-                throw new System.Exception("Item Reference is null.");
-            }
-
-            if (recipe.TryGetRecipe(selectedItemRef.GetID, out UpgradeRecipe targetRecipe)) {
-                var requireSlotCount = targetRecipe.Materials.Length - requirementSlotList.Count;
-                if (requireSlotCount > 0) {
-                    AddRequirementSlot(requireSlotCount);
-                }
-
-                for (int i = 0; i < targetRecipe.Materials.Length; i++) {
-                    requirementSlotList[i].EnableSlot(targetRecipe.Materials[i]);
-                }
-            }
-            else {
-                throw new System.NotImplementedException($"Recipe Not Found !, Item ID: {selectedItemRef.GetID}");
-            }
-
-            requirementTextRectTr.gameObject.SetActive(false);
-            textUpgradeResultName.text = targetRecipe.Result.Item_Name;
-            selectedItemSlot.EnableSlot(targetRecipe.KeyItem);
-            previewItemSlot.EnableSlot(targetRecipe.Result);
-            selectedRecipe = targetRecipe;
-            UpdateProbText(); //Update Probablity Text
-        }
-
         public void SetSelectPanel(sbyte enableNumber) {
             if(enableNumber == toggleButton.EnableSlotIndex) { //같은타입 불러오기는 리턴
                 return;
@@ -350,69 +449,6 @@
 
             //Text Enable/Disable
             upgradeableTextRectTr.gameObject.SetActive(upgradeableItems.Length <= 0);
-        }
-
-        public void SetResultPopup() {
-            resultSlot.EnableSlot(selectedRecipe.Result);
-            //Result ItemSlot을 배열로 넣어야 하는 경우 생기면 요렇게 넣어줌.
-            //Result Slot을 여러개 띄워야 하는 경우 생기면 트위닝 로직 테스트 해야함
-            //var slotRects = new RectTransform[1] { resultSlot.GetComponent<RectTransform>() };
-            var rectTrasnform = resultSlot.GetComponent<RectTransform>();
-            itemGetPopupTween.TweenStart(rectTrasnform);
-        }
-
-        public void BE_RESULT() {
-            if (itemGetPopupTween.IsPlaying) {
-                itemGetPopupTween.TweenSkip();
-            }
-            else {
-                CloseOpenedPopup();
-            }
-        }
-
-        public void SetConfirmPopup() {
-            textResultItemName.text = string.Format("[ {0} ]", selectedRecipe.Result.Item_Name);
-        }
-
-        public bool TryOpenPreview(Vector2 anchoredPosition, out string log) {
-            if(previewCache == null) {
-                if (selectedRecipe == null) {
-                    log = "Please Select Upgrade Item First.";
-                    return false;
-                }
-
-                if(selectedRecipe.Result == null) {
-                    log = "Upgrade Result Item is Not Assignment.";
-                    return false;
-                }
-
-                switch (selectedRecipe.Result) {
-                    case ItemData_Equip_Bow equipmentEntity:       previewCache = new Item_Bow(equipmentEntity);       break;
-                    case ItemData_Equip_Accessory equipmentEntity: previewCache = new Item_Accessory(equipmentEntity); break;
-                    case ItemData_Equip_Arrow equipmentEntity:     previewCache = new Item_Arrow(equipmentEntity);     break;
-                    default: log = "Not Supported Equipment Type"; return false;
-                }
-            }
-
-            infoPopup.OpenPreview(previewCache);
-            OpenPopup(POPUPTYPE.ITEMINFO, anchoredPosition);
-            log = "";
-            return true;
-        }
-
-        //============================================================= [ FUNCTION ] ===========================================================
-        //======================================================================================================================================
-
-        void AddRequirementSlot(int count) {
-            if(count <= 0) {
-                return;
-            }
-
-            for (int i = 0; i < count; i++) {
-                var newSlot = GameObject.Instantiate<RequirementSlot>(requirementSlotPref, requirementSlotParent);
-                newSlot.name = "slot_requirement_pref";
-                requirementSlotList.Add(newSlot);
-            }
         }
 
         void AddUpgradeAbleSlot(int count) {
@@ -454,6 +490,41 @@
             }
         }
 
+        public bool TryReleaseSelectedSlot() {
+            if (selectedSlot == null) {
+                Notify.Inst.Show("Please Select an Item to Upgrade.");
+                return false;
+            }
+
+            selectedSlot.DeSelected();
+            selectedSlot = null;
+            return true;
+        }
+
+        //======================================================================================================================================
+        //============================================================= [ RESULT ] =============================================================
+
+        public void SetResultPopup() {
+            resultSlot.EnableSlot(selectedRecipe.Result);
+            //Result ItemSlot을 배열로 넣어야 하는 경우 생기면 요렇게 넣어줌.
+            //Result Slot을 여러개 띄워야 하는 경우 생기면 트위닝 로직 테스트 해야함
+            //var slotRects = new RectTransform[1] { resultSlot.GetComponent<RectTransform>() };
+            var rectTrasnform = resultSlot.GetComponent<RectTransform>();
+            itemGetPopupTween.TweenStart(rectTrasnform);
+        }
+
+        public void BE_RESULT() {
+            if (itemGetPopupTween.IsPlaying) {
+                itemGetPopupTween.TweenSkip();
+            }
+            else {
+                CloseOpenedPopup();
+            }
+        }
+
+        //======================================================================================================================================
+        //============================================================ [ ITEM INFO ] ===========================================================
+
         void OpenItemInfoPopup(AD_item item) {
             if(selectedSlot != null) {
                 selectedSlot.DeSelected();
@@ -469,7 +540,7 @@
 
             //Set ItemInfo Popup to selected item reference
             if (selectedItemRef is Item_Equipment equipment) {
-                infoPopup.OpenPopup_EquipmentItem(equipment);
+                infoPopup.OpenPopup_Upgradeable(equipment);
             }
             else {
                 CatLog.ELog("Failed Setting ItemInfo Popup, itemRef is Not Equipment Type.");
@@ -478,33 +549,11 @@
             OpenPopup(POPUPTYPE.ITEMINFO);
         }
 
-        public bool TryReleaseSelectedSlot() {
-            if (selectedSlot == null) {
-                Notify.Inst.Show("Please Select an Item to Upgrade.");
-                return false;
-            }
+        //======================================================================================================================================
+        //============================================================= [ CONFIRM ] ============================================================
 
-            selectedSlot.DeSelected();
-            selectedSlot = null;
-            return true;
-        }
-
-        public bool IsCheckUpgradeable(out byte exceptionNumber) {
-            //Selected Item is null
-            if (selectedItemRef == null) {
-                exceptionNumber = 0; 
-                return false;
-            }
-
-            //Reqruiement Material Items is null
-            bool isPossible = (requirementSlotList.FindAll(slot => slot.gameObject.activeSelf == true).TrueForAll(slot => slot.IsRequirementCondition == true));
-            if (!isPossible) {
-                exceptionNumber = 1;
-                return isPossible;
-            }
-
-            exceptionNumber = 255;
-            return isPossible;
+        public void SetConfirmPopup() {
+            textResultItemName.text = string.Format("[ {0} ]", selectedRecipe.Result.Item_Name);
         }
 
         public bool TryItemUpgrade(out bool? isSuccessUpgrade) {
@@ -535,12 +584,12 @@
             //Material Items 제거
             for (int i = 0; i < selectedRecipe.Materials.Length; i++) {
                 if(GameManager.Instance.TryRemoveItem(selectedRecipe.Materials[i].Mat.Item_Id, selectedRecipe.Materials[i].Required) == false) {
-                    throw new System.Exception("Warning !, Item Upgrade Failed.");
+                    throw new System.Exception("Warning !, Item Upgrade Failed."); 
                 }
             }
 
-            //강화 실패확률에 따른 강화 실패 --> 재료 아이템만 소진되고 강화 종료
-            if (GameGlobal.TryUpgrade(selectedRecipe.FailedProb) == false) {
+            //강화 시도 - 강화 실패확률에 따른 강화 실패 --> 재료 아이템만 소진되고 강화 종료, 광고효과 비활성화
+            if (GameGlobal.TryUpgrade(selectedRecipe.FailedProb, ref IsAdsApplied) == false) {
                 isSuccessUpgrade = false;
                 return true;
             }
@@ -555,42 +604,12 @@
             return true;
         }
 
-        public void Ads() {
-            if (selectedRecipe == null || selectedItemRef == null) {
-                Notify.Inst.Show("First, Select an Item to Upgrade.");
-                return;
-            }
+        //======================================================================================================================================
+        //=============================================================== [ ADS ] ==============================================================
 
-            if (IsAdsApplied) {
-                Notify.Inst.Show("Already Applied Chance Increase !");
-                return;
-            }
-
-            if (!isReadyAds) {
-                Notify.Inst.Show("Please try again Later.");
-                return;
-            }
-
-#if UNITY_EDITOR
-            IsAdsApplied = true;
-#elif UNITY_ANDROID
-            //구현중
-#endif
-            UpdateProbText();
-        }
-
-        void UpdateProbText() {
-            if(selectedRecipe == null) {
-                textSuccessProb.fontSize = 40f;
-                textSuccessProb.text = "00 %";
-                return;
-            }
-
-            float successProbablity = (IsAdsApplied) ? (selectedRecipe.FailedProb - (selectedRecipe.FailedProb * 0.5f)) : selectedRecipe.FailedProb;
-            successProbablity = 100f - successProbablity;
-            string successProbString = string.Format("{1}{0} %{2}", successProbablity, (IsAdsApplied) ? "<color=green>" : "<color=white>", "</color>");
-            textSuccessProb.fontSize = 48f;
-            textSuccessProb.text = successProbString;
+        public void OpenAdsPopup() {
+            upgradePopups[3].anchoredPosition = upgradePanels[0].anchoredPosition;
+            openedPopupType = POPUPTYPE.ADS;
         }
 
         //=============================================================== [ ENUM ] =============================================================
@@ -607,6 +626,7 @@
             ITEMINFO = 1,
             ITEMGET  = 2,
             CONFIRM  = 3,
+            ADS      = 4,
         }
 
         //======================================================================================================================================

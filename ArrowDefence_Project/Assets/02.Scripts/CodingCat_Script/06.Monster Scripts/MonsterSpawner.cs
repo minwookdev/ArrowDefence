@@ -308,6 +308,7 @@
             switch (spawnerState) {
                 case SPAWNSTATE.BREAK: STATE_SPAWN(STATEFLOW.UPDATE); break;
                 case SPAWNSTATE.SPAWN: STATE_BREAK(STATEFLOW.UPDATE); break;
+                case SPAWNSTATE.NONE:  break; //SPANER NOT STARTED
                 default: throw new System.NotImplementedException();
             }
         }

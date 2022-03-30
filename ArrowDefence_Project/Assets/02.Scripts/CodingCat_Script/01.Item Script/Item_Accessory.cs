@@ -11,7 +11,7 @@
             }
         }
 
-        public Item_Accessory(ItemData_Equip_Accessory item) : base() {
+        public Item_Accessory(ItemData_Equip_Accessory item) : base(item.NameTerms, item.DescTerms) {
             //Set Equipment Item Type
             this.EquipType = EQUIP_ITEMTYPE.ARTIFACT;
 
@@ -26,7 +26,7 @@
             specialEffect = GetNewEffect(item.SPEffectAsset);
         }
 
-        public Item_Accessory(Item_Accessory item) : base() {
+        public Item_Accessory(Item_Accessory item) : base(item.termsName, item.termsDesc) {
             //Set Equipment Item Type
             this.EquipType = EQUIP_ITEMTYPE.ARTIFACT;
 

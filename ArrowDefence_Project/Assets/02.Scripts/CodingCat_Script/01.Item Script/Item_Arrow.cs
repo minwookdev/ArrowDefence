@@ -37,7 +37,7 @@
         /// Constructor for Item ScriptableObject
         /// </summary>
         /// <param name="item"></param>
-        public Item_Arrow (ItemData_Equip_Arrow item) : base() {
+        public Item_Arrow (ItemData_Equip_Arrow item) : base(item.NameTerms, item.DescTerms) {
             this.EquipType = EQUIP_ITEMTYPE.ARROW;
 
             this.Item_Id     = item.Item_Id;
@@ -69,7 +69,7 @@
         /// Constructor for Item Clone
         /// </summary>
         /// <param name="item"></param>
-        public Item_Arrow(Item_Arrow item) : base() {
+        public Item_Arrow(Item_Arrow item) : base(item.termsName, item.termsDesc) {
             this.EquipType = EQUIP_ITEMTYPE.ARROW;
 
             this.Item_Id     = item.Item_Id;

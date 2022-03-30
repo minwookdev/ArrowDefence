@@ -1,6 +1,6 @@
-﻿namespace ActionCat
-{
+﻿namespace ActionCat {
     using UnityEngine;
+    using I2.Loc;
 
     [System.Serializable]
     public abstract class ItemData : ScriptableObject {
@@ -12,6 +12,9 @@
         public string Item_Name;
         public string Item_Desc;
         public Sprite Item_Sprite;
+
+        [TermsPopup] public string NameTerms;
+        [TermsPopup] public string DescTerms;
 
         public virtual string GetItemTypeStr(bool toUpper = false) {
             string itemtypestr = "";

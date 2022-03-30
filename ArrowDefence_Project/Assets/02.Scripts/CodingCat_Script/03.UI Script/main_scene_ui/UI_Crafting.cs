@@ -76,7 +76,7 @@
 
         private void Start() {
             //Get Temp Crafting Slot
-            GameManager.Instance.TEST_CREATE_TEMP_CRAFTING_SLOT();
+            GameManager.Instance.CheckSaveData();
 
             craftingFunction.Start(BE_CT_OPENSELECTPANEL, 5, 10, craftingRecipeTable);
             upgradeFunction.Start(upgradeRecipeTable);
@@ -136,18 +136,21 @@
 
         public void ButtonEvent_Upgrade_Confirm() {
             if (upgradeFunction.TryItemUpgrade(out bool? isUpgradeSuccess)) {
-                if (isUpgradeSuccess.Value == true) { //Is Upgrade Success
+                if (isUpgradeSuccess.Value == true) { 
+                    //업그레이드 성공 (확률에 의한 성공)
                     upgradeFunction.SetResultPopup();
                     upgradeFunction.OpenPanel(UpgradeFunc.PANELTYPE.MAIN, mainAnchoredPos, true); //claer panel
                     upgradeFunction.CloseOpenedPopup();
                     upgradeFunction.OpenPopup(UpgradeFunc.POPUPTYPE.ITEMGET, mainAnchoredPos);
                 }
-                else { //Is Upgrade Failed
+                else {
+                    //업그레이드 실패 (확률에 의한 실패)
                     Notify.Inst.Show("You Failed Upgrade...", StringColor.RED);
+                    upgradeFunction.CloseOpenedPopup(); //팝업닫고, 새로고침
                     upgradeFunction.OpenPanel(UpgradeFunc.PANELTYPE.MAIN, mainAnchoredPos, true); //clear panel
                 }
             }
-            else {
+            else { //오류로 인한 실패 (예외)
                 throw new System.Exception();
             }
         }
@@ -181,7 +184,29 @@
         }
 
         public void BE_UG_INCPROB() {
-            upgradeFunction.Ads();
+            var isPlayAds = upgradeFunction.Ads();
+            if (isPlayAds) {
+                upgradeFunction.OpenPopup(UpgradeFunc.POPUPTYPE.ADS, mainAnchoredPos);
+            }
+        }
+
+        public void BE_UG_ADS() {
+            upgradeFunction.CloseOpenedPopup();
+#if UNITY_EDITOR
+            //강제 광고효과 활성화
+            upgradeFunction.AdsCompleted();
+#elif UNITY_ANDROID
+            //광고 재생
+            AdsManager.Instance.ShowUpgradeRewardedAds(this.gameObject);
+#endif
+        }
+
+        public void BE_UG_ADS_CLOSE() {
+            upgradeFunction.CloseOpenedPopup();
+        }
+
+        public void CompletedUpgradeAds() {
+            upgradeFunction.AdsCompleted();
         }
 
         //======================================================== [ CRAFTING ] ========================================================
@@ -210,7 +235,7 @@
                 throw new System.Exception("This Slot is Not Available or Not Assignment.");
             }
 
-            craftingFunction.SelectedSlotNumner = slotNumber;
+            craftingFunction.SelectedSlotNumber = slotNumber;
 
             openedPanelTr = craftingFunction.OpenPanel(CraftingFunc.PANELTYPE.CHOOSE, mainAnchoredPos);
             openedPanelType = PANEL.CRAFTING;
@@ -263,6 +288,26 @@
             craftingFunction.CloseResult();
         }
 
+        public void BE_CT_ADS_CLOSE() {
+            craftingFunction.CloseAdsPopup();
+            craftingFunction.SelectedSlotNumber = 0;
+        }
+
+        public void BE_CT_ADS_CONFIRM() {
+            craftingFunction.CloseAdsPopup();
+#if UNITY_EDITOR
+            //강제 광고효과 활성화
+            craftingFunction.QuickComplete();
+#elif UNITY_ANDROID
+            //광고 재생
+            AdsManager.Instance.ShowCraftingRewardedAds(this.gameObject);
+#endif
+        }
+
+        public void CompletedCraftingAds() {
+            craftingFunction.QuickComplete();
+        }
+
         //==============================================================================================================================
         public void CloseOpenedPanel() {
             switch (openedPanelType) {
@@ -276,7 +321,7 @@
         }
 
         //==============================================================================================================================
-        #endregion
+#endregion
 
         enum PANEL {
             NONE     = 0,

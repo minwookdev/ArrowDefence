@@ -26,6 +26,8 @@
         /// Call When Arrow GameObject Disable
         /// </summary>
         public abstract void Clear();
+
+        public abstract string GetDescription(string localizedString);
     }
 
     public abstract class AttackActiveTypeAS : ArrowSkill {
@@ -103,6 +105,10 @@
         List<Collider2D> tempCollList = null;
         int currentChainCount         = 0;  // Current Chain Count
         string[] effectPoolTags;
+
+        public override string GetDescription(string localizedString) {
+            return string.Format(localizedString, maxChainCount);
+        }
 
         public override bool OnHit(Collider2D target, ref DamageStruct damage, Vector3 contact, Vector2 direction) {
             //=============================================[ PHASE I. ACTIVATING & TARGET CHECKER ]=========================================================
@@ -276,6 +282,10 @@
         bool isResult = false;
         float tempRadius = 5f;
         Collider2D[] tempArray = null;
+
+        public override string GetDescription(string localizedString) {
+            throw new System.NotImplementedException();
+        }
 
         ///관통 횟수에 따른 데미지 감소효과 구현
 

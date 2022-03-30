@@ -20,13 +20,15 @@ public class AimSightDataEditor : Editor {
     SerializedProperty levelProp;
     SerializedProperty spriteProp;
 
+    SerializedProperty nameTermsProp = null;
+    SerializedProperty descTermsProp = null;
+
     SerializedProperty matProp;
     SerializedProperty lineWidthProp;
 
     SerializedProperty aimsightPrefProp;
 
-    public void OnEnable()
-    {
+    public void OnEnable() {
         sobject = new SerializedObject(target);
 
         idProp     = sobject.FindProperty("SkillId");
@@ -39,11 +41,13 @@ public class AimSightDataEditor : Editor {
         matProp       = sobject.FindProperty("LineRenderMat");
         lineWidthProp = sobject.FindProperty("LineWidth");
 
+        nameTermsProp = sobject.FindProperty(nameof(SkillDataAimSight.NameTerms));
+        descTermsProp = sobject.FindProperty(nameof(SkillDataAimSight.DescTerms));
+
         aimsightPrefProp = sobject.FindProperty(nameof(SkillDataAimSight.AimSightPref));
     }
 
-    public override void OnInspectorGUI()
-    {
+    public override void OnInspectorGUI() {
         //base.OnInspectorGUI();
         EditorGUI.BeginDisabledGroup(true);
         EditorGUILayout.ObjectField("Script", MonoScript.FromScriptableObject((SkillDataAimSight)target),
@@ -69,6 +73,10 @@ public class AimSightDataEditor : Editor {
         //Description Field
         GUILayout.Label("Description");
         descProp.stringValue = EditorGUILayout.TextArea(descProp.stringValue, GUILayout.Height(50f));
+
+        //NAME, DESCRIPTION TERMS FIELD 
+        EditorGUILayout.PropertyField(nameTermsProp);
+        EditorGUILayout.PropertyField(descTermsProp);
 
         //Type Field [LOCK]
         EditorGUI.BeginDisabledGroup(true);
@@ -107,8 +115,7 @@ public class AimSightDataEditor : Editor {
 }
 
 [CustomEditor(typeof(SkillDataSlowTime))]
-public class SlowTimeDataEditor : Editor
-{
+public class SlowTimeDataEditor : Editor {
     SerializedObject sobject;
 
     SerializedProperty idProp;
@@ -118,12 +125,14 @@ public class SlowTimeDataEditor : Editor
     SerializedProperty levelProp;
     SerializedProperty spriteProp;
 
+    SerializedProperty nameTermsProp = null;
+    SerializedProperty descTermsProp = null;
+
     SerializedProperty ratioProp;
     SerializedProperty durationProp;
     SerializedProperty cooldownProp;
 
-    public void OnEnable()
-    {
+    public void OnEnable() {
         sobject = new SerializedObject(target);
 
         //Default Property
@@ -138,10 +147,12 @@ public class SlowTimeDataEditor : Editor
         ratioProp = sobject.FindProperty("TimeSlowRatio");
         durationProp = sobject.FindProperty("Duration");
         cooldownProp = sobject.FindProperty("CoolDown");
+
+        nameTermsProp = sobject.FindProperty(nameof(SkillDataSlowTime.NameTerms));
+        descTermsProp = sobject.FindProperty(nameof(SkillDataSlowTime.DescTerms));
     }
 
-    public override void OnInspectorGUI()
-    {
+    public override void OnInspectorGUI() {
         //base.OnInspectorGUI();
         EditorGUI.BeginDisabledGroup(true);
         EditorGUILayout.ObjectField("Script", MonoScript.FromScriptableObject((SkillDataSlowTime)target),
@@ -167,6 +178,10 @@ public class SlowTimeDataEditor : Editor
         //Description Field
         GUILayout.Label("Description");
         descProp.stringValue = EditorGUILayout.TextArea(descProp.stringValue, GUILayout.Height(50f));
+
+        //NAME, DESCRIPTION TERMS PROP
+        EditorGUILayout.PropertyField(nameTermsProp);
+        EditorGUILayout.PropertyField(descTermsProp);
 
         //Type Field [LOCK]
         EditorGUI.BeginDisabledGroup(true);

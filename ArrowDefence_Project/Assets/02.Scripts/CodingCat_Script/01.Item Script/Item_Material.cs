@@ -6,7 +6,7 @@
         /// </summary>
         /// <param name="item">New Material Item Data</param>
         /// <param name="quantity">Item Quantity int</param>
-        public Item_Material(ItemData_Mat item, int quantity) {
+        public Item_Material(ItemData_Mat item, int quantity) : base(item.NameTerms, item.DescTerms) {
             //Item Type Field (Static)
             this.Item_Type = ITEMTYPE.ITEM_MATERIAL;
 

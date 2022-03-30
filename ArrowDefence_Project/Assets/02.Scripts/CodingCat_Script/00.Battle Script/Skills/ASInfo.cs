@@ -9,6 +9,8 @@
         ARROWSKILL_ACTIVETYPE activeType;
         UnityEngine.Sprite iconSprite;
         ArrowSkill skillData;
+        string nameTerms;
+        string descTerms;
 
         //PROPERTIES
         public ArrowSkill SkillData {
@@ -41,6 +43,8 @@
             activeType = so.ActiveType;
             iconSprite = so.IconSprite;
             skillData  = GetNewSkill(so.ArrowSkill);
+            nameTerms  = so.NameTerms;
+            descTerms  = so.DescTerms;
         }
 
         /// <summary>
@@ -56,6 +60,8 @@
             activeType = origin.activeType;
             iconSprite = origin.iconSprite;
             skillData  = origin.skillData;
+            nameTerms  = origin.nameTerms;
+            descTerms  = origin.descTerms;
         }
 
         public ArrowSkill GetNewSkill(ArrowSkill data) {
@@ -73,6 +79,16 @@
                 //======================================================================================
                 default: throw new System.NotImplementedException("this type is Not Implemented !");
             }
+        }
+
+        public string GetNameByTerms() {
+            I2.Loc.LocalizedString loc = nameTerms;
+            return loc;
+        }
+
+        public string GetDescByTerms() {
+            I2.Loc.LocalizedString loc = descTerms;
+            return skillData.GetDescription(loc);
         }
 
         public void Release() {

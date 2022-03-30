@@ -11,15 +11,26 @@
         string effectPoolTag = "";
         WaitForSeconds rapidShotWait = new WaitForSeconds(0.2f);
 
+        public override string GetNameByTerms() {
+            I2.Loc.LocalizedString loc = termsName;
+            return loc;
+        }
+
+        public override string GetDescByTerms() {
+            I2.Loc.LocalizedString loc = termsDesc;
+            return string.Format(loc, arrowCount);
+        }
+
+        public override string ToString() => "Rapid_Shot";
 
         /// <summary>
         /// Constructor using Skill Data Scriptableobject. (Main)
         /// </summary>
-        /// <param name="data"></param>
-        public Skill_Rapid_Shot(SkillDataRapidShot data) : base(data.SkillId, data.SkillName, data.SkillDesc, data.SkillLevel, data.SkillType, data.SkillIconSprite) {
-            this.arrowCount   = data.ArrowShotCount;
-            this.shotDelay    = data.ShotInterval;
-            this.muzzleEffect = data.muzzleEffect;
+        /// <param name="entity"></param>
+        public Skill_Rapid_Shot(SkillDataRapidShot entity) : base(entity) {
+            this.arrowCount   = entity.ArrowShotCount;
+            this.shotDelay    = entity.ShotInterval;
+            this.muzzleEffect = entity.muzzleEffect;
         }
         #region ES3
         public Skill_Rapid_Shot() : base() { }
@@ -30,8 +41,6 @@
             CCPooler.AddPoolList(effectPoolTag, 5, muzzleEffect.gameObject, false);
             CatLog.Log("RAPID SHOT INITIALIZE COMPLETE.");
         }
-
-        public override string ToString() => "Rapid_Shot";
 
         public override void BowSpecialSkill(Transform bowTr, AD_BowController controller, ref DamageStruct damage, Vector3 initPos, ARROWTYPE type) {
             ///Get the GameObject's MonoBehavior and run a Coroutine with it.

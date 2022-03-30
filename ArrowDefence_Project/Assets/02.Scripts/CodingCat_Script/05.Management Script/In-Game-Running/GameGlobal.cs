@@ -428,9 +428,17 @@
 
         #region UPGRADE
 
-        public static bool TryUpgrade(float failedProb) {
+        public static bool TryUpgrade(float failedProb, ref bool adsApplied) {
             float totalProb = 200f; // Real Failed probablity: failedProb / totalProb * 100
-            return (RandomEx.RangeFloat(StNum.floatZero, totalProb) < failedProb) ? false : true;
+            bool result = (RandomEx.RangeFloat(StNum.floatZero, totalProb) < GameGlobal.GetUpgradeFailedProb(failedProb, adsApplied)) ? false : true;
+            if (adsApplied) { //효과 적용중이라면 해제
+                adsApplied = false;
+            }
+            return result;
+        }
+
+        public static float GetUpgradeFailedProb(float failedProb, bool isAdsApplied) {
+            return (isAdsApplied) ? failedProb - (failedProb * 0.5f) : failedProb;
         }
 
         #endregion

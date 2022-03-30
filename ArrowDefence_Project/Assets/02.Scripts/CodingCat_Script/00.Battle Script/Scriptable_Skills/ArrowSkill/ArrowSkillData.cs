@@ -1,6 +1,6 @@
-﻿namespace ActionCat
-{
+﻿namespace ActionCat {
     using UnityEngine;
+    using I2.Loc;
 
     public class ArrowSkillData : ScriptableObject {
         //Basic Arrow Skill Data
@@ -14,6 +14,9 @@
         protected ArrowSkill skillData = null;
         public ARROWSKILL_ACTIVETYPE ActiveType;
         public ACEffector2D[] effects = null;
+
+        [TermsPopup] public string NameTerms = null;
+        [TermsPopup] public string DescTerms = null;
 
         //PROPERTIES
         public ArrowSkill ArrowSkill {

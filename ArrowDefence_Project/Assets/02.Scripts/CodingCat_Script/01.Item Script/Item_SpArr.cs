@@ -57,7 +57,7 @@
             CCPooler.AddPoolList(AD_Data.POOLTAG_SPECIAL_ARROW, poolQuatity, spArrowPref, false);
         }
 
-        public Item_SpArr(ItemDt_SpArr data) : base() {
+        public Item_SpArr(ItemDt_SpArr data) : base(data.NameTerms, data.DescTerms) {
             EquipType   = EQUIP_ITEMTYPE.ARROW;
             Item_Id     = data.Item_Id;
             Item_Name   = data.Item_Name;

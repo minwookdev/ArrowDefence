@@ -22,8 +22,10 @@ public class SpreadShot_DataEditor : Editor
     SerializedProperty arrowCountProp;
     SerializedProperty spreadAngleProp;
 
-    public void OnEnable()
-    {
+    SerializedProperty nameTermsProp = null;
+    SerializedProperty descTermsProp = null;
+
+    public void OnEnable() {
         sobject = new SerializedObject(target);
 
         idProp     = sobject.FindProperty("SkillId");
@@ -35,10 +37,12 @@ public class SpreadShot_DataEditor : Editor
 
         arrowCountProp  = sobject.FindProperty("ArrowShotCount");
         spreadAngleProp = sobject.FindProperty("SpreadAngle");
+
+        nameTermsProp = sobject.FindProperty(nameof(SkillDataSpreadShot.NameTerms));
+        descTermsProp = sobject.FindProperty(nameof(SkillDataSpreadShot.DescTerms));
     }
 
-    public override void OnInspectorGUI()
-    {
+    public override void OnInspectorGUI() {
         //base.OnInspectorGUI();
         EditorGUI.BeginDisabledGroup(true);
         EditorGUILayout.ObjectField("Script", MonoScript.FromScriptableObject((SkillDataSpreadShot)target),
@@ -64,6 +68,10 @@ public class SpreadShot_DataEditor : Editor
         //Description Field
         GUILayout.Label("Skill Description");
         descProp.stringValue = EditorGUILayout.TextArea(descProp.stringValue, GUILayout.Height(50f));
+
+        //Name, Description Terms Field
+        EditorGUILayout.PropertyField(nameTermsProp);
+        EditorGUILayout.PropertyField(descTermsProp);
 
         //Type Field [LOCK]
         EditorGUI.BeginDisabledGroup(true);
@@ -116,8 +124,10 @@ public class RapidShot_DataEditor : Editor
     SerializedProperty intervalProp;
     SerializedProperty effectProp;
 
-    public void OnEnable()
-    {
+    SerializedProperty nameTermsProp = null;
+    SerializedProperty descTermsProp = null;
+
+    public void OnEnable() {
         sobject = new SerializedObject(target);
 
         idProp     = sobject.FindProperty("SkillId");
@@ -130,10 +140,12 @@ public class RapidShot_DataEditor : Editor
 
         arrowCountProp  = sobject.FindProperty("ArrowShotCount");
         intervalProp    = sobject.FindProperty("ShotInterval");
+
+        nameTermsProp = sobject.FindProperty(nameof(SkillDataSpreadShot.NameTerms));
+        descTermsProp = sobject.FindProperty(nameof(SkillDataSpreadShot.DescTerms));
     }
 
-    public override void OnInspectorGUI()
-    {
+    public override void OnInspectorGUI() {
         //base.OnInspectorGUI();
         EditorGUI.BeginDisabledGroup(true);
         EditorGUILayout.ObjectField("Script", MonoScript.FromScriptableObject((SkillDataRapidShot)target),
@@ -159,6 +171,10 @@ public class RapidShot_DataEditor : Editor
         //Description Field
         GUILayout.Label("Skill Description");
         descProp.stringValue = EditorGUILayout.TextArea(descProp.stringValue, GUILayout.Height(50f));
+
+        //Name, Description Terms Field
+        EditorGUILayout.PropertyField(nameTermsProp);
+        EditorGUILayout.PropertyField(descTermsProp);
 
         //Type Field [LOCK]
         EditorGUI.BeginDisabledGroup(true);
@@ -213,8 +229,10 @@ public class RainArrow_DataEditor : Editor
     SerializedProperty arrowCountProp;
     SerializedProperty intervalProp;
 
-    public void OnEnable()
-    {
+    SerializedProperty nameTermsProp = null;
+    SerializedProperty descTermsProp = null;
+
+    public void OnEnable() {
         sobject = new SerializedObject(target);
                    
         idProp     = sobject.FindProperty("SkillId");
@@ -226,10 +244,12 @@ public class RainArrow_DataEditor : Editor
 
         arrowCountProp = sobject.FindProperty("ArrowShotCount");
         intervalProp   = sobject.FindProperty("ShotInterval");
+
+        nameTermsProp = sobject.FindProperty(nameof(SkillDataSpreadShot.NameTerms));
+        descTermsProp = sobject.FindProperty(nameof(SkillDataSpreadShot.DescTerms));
     }
 
-    public override void OnInspectorGUI()
-    {
+    public override void OnInspectorGUI() {
         //base.OnInspectorGUI();
         EditorGUI.BeginDisabledGroup(true);
         EditorGUILayout.ObjectField("Script", MonoScript.FromScriptableObject((SkillDataArrowRain)target),
@@ -255,6 +275,10 @@ public class RainArrow_DataEditor : Editor
         //Description Field
         GUILayout.Label("Skill Description");
         descProp.stringValue = EditorGUILayout.TextArea(descProp.stringValue, GUILayout.Height(50f));
+
+        //Name, Description Terms Field
+        EditorGUILayout.PropertyField(nameTermsProp);
+        EditorGUILayout.PropertyField(descTermsProp);
 
         //Type Field [LOCK]
         EditorGUI.BeginDisabledGroup(true);
@@ -303,6 +327,9 @@ public class Empty_DataEditor : Editor
     SerializedProperty levelProp;
     SerializedProperty spriteProp;
 
+    SerializedProperty nameTermsProp = null;
+    SerializedProperty descTermsProp = null;
+
     public void OnEnable()
     {
         sobject = new SerializedObject(target);
@@ -314,7 +341,8 @@ public class Empty_DataEditor : Editor
         levelProp  = sobject.FindProperty("SkillLevel");
         spriteProp = sobject.FindProperty("SkillIconSprite");
 
-        //levelProperty = sobject.FindProperty(nameof(SkillData_Empty.SkillName));
+        nameTermsProp = sobject.FindProperty(nameof(SkillDataSpreadShot.NameTerms));
+        descTermsProp = sobject.FindProperty(nameof(SkillDataSpreadShot.DescTerms));
     }
 
     public override void OnInspectorGUI()
@@ -344,6 +372,10 @@ public class Empty_DataEditor : Editor
         //Description Field
         GUILayout.Label("Skill Description");
         descProp.stringValue = EditorGUILayout.TextArea(descProp.stringValue, GUILayout.Height(50f));
+
+        //Name, Description Terms Field
+        EditorGUILayout.PropertyField(nameTermsProp);
+        EditorGUILayout.PropertyField(descTermsProp);
 
         //Type Field [LOCK]
         EditorGUI.BeginDisabledGroup(true);

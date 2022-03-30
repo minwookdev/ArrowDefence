@@ -185,6 +185,16 @@
             [SerializeField] EventTrigger btn_Release;
             EventTrigger.Entry equipEntry;
             EventTrigger.Entry releaseEntry;
+            bool isExistBtns {
+                get {
+                    if (btn_Equip != null && btn_Release != null) {
+                        return true;
+                    }
+                    else {
+                        return false;
+                    }
+                }
+            }
 
             //Equipment Item Info
             [Header("Skill Slot")]
@@ -197,7 +207,7 @@
             //Item Address
             AD_item itemAddress;
 
-            bool isPreviewOpenMode = false;
+            [SerializeField] [ReadOnly] bool isPreviewOpenMode = false;
 
             void FixDescriptionRectSize(string itemDesc) {
                 var rectTransform = tmp_ItemDesc.gameObject.GetComponent<RectTransform>();
@@ -210,8 +220,8 @@
             }
 
             void SetDefaultItemInfo(AD_item item, string type, bool isCounting, Sprite frame) {
-                tmp_ItemName.text = item.GetName;
-                tmp_ItemDesc.text = item.GetDesc;
+                tmp_ItemName.text = item.GetNameByTerms;
+                tmp_ItemDesc.text = item.GetDescByTerms;
                 tmp_ItemType.text = type;
                 if (isCounting)
                      tmp_ItemCount.text = item.GetAmount.ToString();
@@ -223,7 +233,14 @@
                 FixDescriptionRectSize(item.GetDesc);
             }
 
-            public void EnablePopup_Material(Item_Material address, Sprite frame, bool enablebuttons = true) {
+            /// <summary>
+            /// 재료 아이템 팝업
+            /// </summary>
+            /// <param name="address"></param>
+            /// <param name="frame"></param>
+            /// <param name="enableButtonGroup">버튼 그룹 활성화 여부</param>
+            /// <param name="isPreview">인벤토리에서 사용하는 아이템 팝업이 아닌 모든 경우</param>
+            public void EnablePopup(Item_Material address, Sprite frame, bool enableButtonGroup = true, bool isPreview = false) {
                 //Enable Default Item Info.
                 SetDefaultItemInfo(address, "MATERIAL", true, frame);
 
@@ -233,26 +250,28 @@
                 //Disable All SkillSlots
                 DisableSkillSlot();
 
-                //Disable Equip & Release Button Group
-                equipmentButtonGroup.gameObject.SetActive(false);
-                isPreviewOpenMode = (!enablebuttons) ? true : false;
+                rectTrBtnGroup.gameObject.SetActive(enableButtonGroup); //전체 버튼그룹 비활성화
+                isPreviewOpenMode = isPreview;
+                if (isExistBtns) {                                      //장착/해제 버튼 활성화 여부: 재료 아이템 비활성화
+                    equipmentButtonGroup.gameObject.SetActive(false);
+                }
 
-                //Is Hide Buttons?
-                rectTrBtnGroup.gameObject.SetActive(enablebuttons);
-                isPreviewOpenMode = (!enablebuttons) ? true : false;
-
-                //Enable Button
-                //btn_SellItem.gameObject.SetActive(true);
-                //btn_Fuse.gameObject.SetActive(true);
-
-                //Get Item Address
-                itemAddress = address;
+                if (!isPreviewOpenMode) { //assignment item address
+                    itemAddress = address;
+                }
 
                 //Enable Popup
                 popupGameObject.SetActive(true);
             }
 
-            public void EnablePopup_Consumable(Item_Consumable address, Sprite frame, bool enablebuttons = true) {
+            /// <summary>
+            /// 소모성 아이템 팝업
+            /// </summary>
+            /// <param name="address"></param>
+            /// <param name="frame"></param>
+            /// <param name="enablebuttons">버튼 그룹 활성화 여부</param>
+            /// <param name="isPreview">인벤토리에서 사용하는 아이템 팝업이 아닌 모든 경우</param>
+            public void EnablePopup(Item_Consumable address, Sprite frame, bool enablebuttons = true, bool isPreview = false) {
                 //Default Item Data Setting
                 SetDefaultItemInfo(address, "CONSUMABLE", true, frame);
 
@@ -262,25 +281,28 @@
                 //Disable All Skill Slot
                 DisableSkillSlot();
 
-                //Disable Equipments Button Group
-                equipmentButtonGroup.gameObject.SetActive(false);
-                isPreviewOpenMode = (!enablebuttons) ? true : false;
+                rectTrBtnGroup.gameObject.SetActive(enablebuttons);     //전체 버튼그룹 비활성화
+                isPreviewOpenMode = isPreview;
+                if (isExistBtns) {                                      //장착/해제 버튼 활성화 여부: 소모성 아이템 비활성화
+                    equipmentButtonGroup.gameObject.SetActive(false);
+                }
 
-                //Is Hide Buttons?
-                rectTrBtnGroup.gameObject.SetActive(enablebuttons);
-
-                //Enable Button
-                //btn_SellItem.gameObject.SetActive(true);
-                //btn_Fuse.gameObject.SetActive(true);
-
-                //Get Item Address
-                itemAddress = address;
+                if (!isPreviewOpenMode) { //assignment item Address
+                    itemAddress = address;
+                }
 
                 //Enable Popup
                 popupGameObject.SetActive(true);
             }
 
-            public void EnablePopup_Bow(Item_Bow address, Sprite frame, bool enablebuttons = true) {
+            /// <summary>
+            /// 활 아이템 팝업
+            /// </summary>
+            /// <param name="address"></param>
+            /// <param name="frame"></param>
+            /// <param name="enablebuttons">버튼 그룹 활성화 여부</param>
+            /// <param name="isPreview">인벤토리에서 사용하는 아이템 팝업이 아닌 모든 경우</param>
+            public void EnablePopup(Item_Bow address, Sprite frame, bool enablebuttons = true, bool isPreview = false) {
                 //Default Item Data Setting
                 SetDefaultItemInfo(address, "BOW", false, frame);
 
@@ -291,49 +313,59 @@
                 var skills = address.GetSkillsOrNull();
                 for (int i = 0; i < skills.Length; i++) {
                     if(skills[i] != null) {
-                        SkillSlots[i].ActiveSlot(skills[i].Name, skills[i].Description,
-                                                 skills[i].Level, skills[i].IconSprite);
+                        SkillSlots[i].ActiveSlot(skills[i].GetNameByTerms(), 
+                                                 skills[i].GetDescByTerms(),
+                                                 skills[i].Level, 
+                                                 skills[i].IconSprite);
                     }
                     else {
                         SkillSlots[i].DisableSlot();
                     }
                 }
 
-                bool isAvailableEquip = false;
-                if (ReferenceEquals(CCPlayerData.equipments.GetBowItem(), address) == false) {
-                    isAvailableEquip = true;
-                }
-                
-                if (isAvailableEquip == true) { //현재 장착중인 아이템이 아닌 경우 : 장착 버튼 활성화
-                    //init-Equip EventEntry
-                    equipEntry = new EventTrigger.Entry();
-                    equipEntry.eventID = EventTriggerType.PointerClick;
-                    equipEntry.callback.AddListener((eventdata) => EventEntryEquipBow(address));
-                    btn_Equip.triggers.Add(equipEntry);
-                }
-                else { //현재 장착중인 아이템인 경우 : 해제 버튼 활성화
-                    //Init-Release EventEntry
-                    releaseEntry = new EventTrigger.Entry();
-                    releaseEntry.eventID = EventTriggerType.PointerClick;
-                    releaseEntry.callback.AddListener((eventdata) => EventEntryReleaseBow());
-                    btn_Release.triggers.Add(releaseEntry);
-                }
-
-                //Enable Condition-Match Button
-                SwitchEquipButton(isAvailableEquip);
-
-                //Is Hide Buttons?
                 rectTrBtnGroup.gameObject.SetActive(enablebuttons);
-                isPreviewOpenMode = (!enablebuttons) ? true : false;
+                isPreviewOpenMode = isPreview;
+                if (isExistBtns) {
+                    bool isAvailableEquip = false;
+                    if (ReferenceEquals(CCPlayerData.equipments.GetBowItem(), address) == false) {
+                        isAvailableEquip = true;
+                    }
 
-                //Get Item Address
-                itemAddress = address;
+                    if (isAvailableEquip == true) { //현재 장착중인 아이템이 아닌 경우 : 장착 버튼 활성화
+                                                    //init-Equip EventEntry
+                        equipEntry = new EventTrigger.Entry();
+                        equipEntry.eventID = EventTriggerType.PointerClick;
+                        equipEntry.callback.AddListener((eventdata) => EventEntryEquipBow(address));
+                        btn_Equip.triggers.Add(equipEntry);
+                    }
+                    else { //현재 장착중인 아이템인 경우 : 해제 버튼 활성화
+                           //Init-Release EventEntry
+                        releaseEntry = new EventTrigger.Entry();
+                        releaseEntry.eventID = EventTriggerType.PointerClick;
+                        releaseEntry.callback.AddListener((eventdata) => EventEntryReleaseBow());
+                        btn_Release.triggers.Add(releaseEntry);
+                    }
+
+                    //Enable Condition-Match Button
+                    SwitchEquipButton(isAvailableEquip);
+                }
+
+                if (!isPreviewOpenMode) { //assignment Item Address
+                    itemAddress = address;
+                }
 
                 //Enable Popup
                 popupGameObject.SetActive(true);
             }
 
-            public void EnablePopup_Arrow(Item_Arrow address, Sprite frame, bool enablebuttons = true) {
+            /// <summary>
+            /// 화살 아이템 팝업
+            /// </summary>
+            /// <param name="address"></param>
+            /// <param name="frame"></param>
+            /// <param name="enablebuttons">버튼 그룹 활성화 여부</param>
+            /// <param name="isPreview">인벤토리에서 사용하는 아이템 팝업이 아닌 모든 경우</param>
+            public void EnablePopup(Item_Arrow address, Sprite frame, bool enablebuttons = true, bool isPreview = false) {
                 //Default Item Data Setting
                 SetDefaultItemInfo(address, "ARROW", false, frame);
 
@@ -352,40 +384,48 @@
                     }
                 }
 
-                //Check address Item is Equipped ?
-                bool isEquippedItem = (ReferenceEquals(CCPlayerData.equipments.GetMainArrow(), address) ||
-                                       ReferenceEquals(CCPlayerData.equipments.GetSubArrow(),  address)) ? false : true;
-                //Init-EventEntry Condition-Match
-                if(isEquippedItem) {
-                    //Equip EventTrigger Event Add
-                    equipEntry = new EventTrigger.Entry();
-                    equipEntry.eventID = EventTriggerType.PointerClick;
-                    equipEntry.callback.AddListener((eventdata) => EventEntryEquipArrow(address));
-                    btn_Equip.triggers.Add(equipEntry);
-                }
-                else {
-                    //Release EventTrigger Event Add
-                    releaseEntry = new EventTrigger.Entry();
-                    releaseEntry.eventID = EventTriggerType.PointerClick;
-                    releaseEntry.callback.AddListener((eventdata) => EventEntryReleaseArrow(address));
-                    btn_Release.triggers.Add(releaseEntry);
-                }
-
-                //Enable Condition-Match Button
-                SwitchEquipButton(isEquippedItem);
-
-                //Is Hide Buttons?
                 rectTrBtnGroup.gameObject.SetActive(enablebuttons);
-                isPreviewOpenMode = (!enablebuttons) ? true : false;
+                isPreviewOpenMode = isPreview;
+                if (isExistBtns) {
+                    //Check address Item is Equipped ?
+                    bool isEquippedItem = (ReferenceEquals(CCPlayerData.equipments.GetMainArrow(), address) ||
+                                           ReferenceEquals(CCPlayerData.equipments.GetSubArrow(), address)) ? false : true;
+                    //Init-EventEntry Condition-Match
+                    if (isEquippedItem) {
+                        //Equip EventTrigger Event Add
+                        equipEntry = new EventTrigger.Entry();
+                        equipEntry.eventID = EventTriggerType.PointerClick;
+                        equipEntry.callback.AddListener((eventdata) => EventEntryEquipArrow(address));
+                        btn_Equip.triggers.Add(equipEntry);
+                    }
+                    else {
+                        //Release EventTrigger Event Add
+                        releaseEntry = new EventTrigger.Entry();
+                        releaseEntry.eventID = EventTriggerType.PointerClick;
+                        releaseEntry.callback.AddListener((eventdata) => EventEntryReleaseArrow(address));
+                        btn_Release.triggers.Add(releaseEntry);
+                    }
 
-                //Get Item Address
-                itemAddress = address;
+                    //Enable Condition-Match Button
+                    SwitchEquipButton(isEquippedItem);
+                }
+
+                if (!isPreviewOpenMode) { //assignment Item Address
+                    itemAddress = address;
+                }
 
                 //Enable Popup
                 popupGameObject.SetActive(true);
             }
 
-            public void EnablePopup_Artifact(Item_Accessory address, Sprite frame, bool enablebuttons = true) {
+            /// <summary>
+            /// 유물 아이템 팝업
+            /// </summary>
+            /// <param name="address"></param>
+            /// <param name="frame"></param>
+            /// <param name="enablebuttons">버튼 그룹 활성화 여부</param>
+            /// <param name="isPreview">인벤토리에서 사용하는 아이템 팝업이 아닌 모든 경우</param>
+            public void EnablePopup(Item_Accessory address, Sprite frame, bool enablebuttons = true, bool isPreview = false) {
                 //Default Item Data Setting
                 SetDefaultItemInfo(address, "ARTIFACT", false, frame);
 
@@ -402,49 +442,57 @@
                     SkillSlots[0].DisableSlot();
                 }   SkillSlots[1].DisableSlot(); //Secondary Slot is Always Disable.
 
-                //장착중 유물 체크, 장착 슬롯 확인작업.
-                byte artifactIdx    = 0; 
-                bool isEquippedItem = false;
-                foreach (var artifact in CCPlayerData.equipments.GetAccessories()) {
-                    if(ReferenceEquals(artifact, address)) {
-                        isEquippedItem = true; 
-                        break;
-                    }
-                    artifactIdx++;
-                }
-
-                //현재 Equipment에 장착중인 유물 아이템.
-                if(isEquippedItem == true) {
-                    //Release Button Event 할당하고, Button 활성화
-                    releaseEntry = new EventTrigger.Entry();
-                    releaseEntry.eventID = EventTriggerType.PointerClick;   // ↓ 클로저 확인 필요 NULL 잡는지 확인
-                    releaseEntry.callback.AddListener((eventdata) => EventEntryReleaseArtifact(artifactIdx));
-                    btn_Release.triggers.Add(releaseEntry);
-
-                    SwitchEquipButton(false);
-                }
-                else { //장착중인 유물아이템이 아님.
-                    //Equip Button Event 할당 후, Button 활성화
-                    equipEntry = new EventTrigger.Entry();
-                    equipEntry.eventID = EventTriggerType.PointerClick;
-                    equipEntry.callback.AddListener((eventdata) => EventEntryEquipArtifact(address));
-                    btn_Equip.triggers.Add(equipEntry);
-
-                    SwitchEquipButton(true);
-                }
-
-                //Is Hide Buttons?
                 rectTrBtnGroup.gameObject.SetActive(enablebuttons);
-                isPreviewOpenMode = (!enablebuttons) ? true : false;
+                isPreviewOpenMode = isPreview;
+                if (isExistBtns) {
+                    //장착중 유물 체크, 장착 슬롯 확인작업.
+                    byte artifactIdx = 0;
+                    bool isEquippedItem = false;
+                    foreach (var artifact in CCPlayerData.equipments.GetAccessories()) {
+                        if (ReferenceEquals(artifact, address)) {
+                            isEquippedItem = true;
+                            break;
+                        }
+                        artifactIdx++;
+                    }
 
-                //Get Item Address
-                itemAddress = address;
+                    //현재 Equipment에 장착중인 유물 아이템.
+                    if (isEquippedItem == true) {
+                        //Release Button Event 할당하고, Button 활성화
+                        releaseEntry = new EventTrigger.Entry();
+                        releaseEntry.eventID = EventTriggerType.PointerClick;   // ↓ 클로저 확인 필요 NULL 잡는지 확인
+                        releaseEntry.callback.AddListener((eventdata) => EventEntryReleaseArtifact(artifactIdx));
+                        btn_Release.triggers.Add(releaseEntry);
+
+                        SwitchEquipButton(false);
+                    }
+                    else { //장착중인 유물아이템이 아님.
+                           //Equip Button Event 할당 후, Button 활성화
+                        equipEntry = new EventTrigger.Entry();
+                        equipEntry.eventID = EventTriggerType.PointerClick;
+                        equipEntry.callback.AddListener((eventdata) => EventEntryEquipArtifact(address));
+                        btn_Equip.triggers.Add(equipEntry);
+
+                        SwitchEquipButton(true);
+                    }
+                }
+
+                if (!isPreviewOpenMode) { //assignment item address
+                    itemAddress = address;
+                }
 
                 //Enable Popup
                 popupGameObject.SetActive(true);
             }
 
-            public void EnablePopup_SpArrow(Item_SpArr address, Sprite frame, bool enablebuttons = true) {
+            /// <summary>
+            /// 특수 화살 아이템 팝업
+            /// </summary>
+            /// <param name="address"></param>
+            /// <param name="frame"></param>
+            /// <param name="enablebuttons">버튼 그룹 활성화 여부</param>
+            /// <param name="isPreview">인벤토리에서 사용하는 아이템 팝업이 아닌 모든 경우</param>
+            public void EnablePopup(Item_SpArr address, Sprite frame, bool enablebuttons = true, bool isPreview = false) {
                 SetDefaultItemInfo(address, "SPECIAL ARROW", false, frame); // Set Default Item Data
                 abilitySlots.EnableSlots(address.AbilitiesOrNull);          // Set Item Ability Data
                 var skills      = address.GetSkillInfos;                    // Set Equipment Item Skill Data
@@ -468,29 +516,33 @@
                 //    else                      SkillSlots[i].DisableSlot();
                 //}
 
-                //Check this item is Equipped
-                bool isActiveEquipButton = (ReferenceEquals(CCPlayerData.equipments.GetSpArrOrNull, address)) ? false : true;
-                if (isActiveEquipButton == true) { //Equip Button Event Entry add
-                    equipEntry = new EventTrigger.Entry();
-                    equipEntry.eventID = EventTriggerType.PointerClick;
-                    equipEntry.callback.AddListener((eventData) => EventEntryEquipSpArr(address));
-                    btn_Equip.triggers.Add(equipEntry);
-                }
-                else {
-                    releaseEntry = new EventTrigger.Entry();
-                    releaseEntry.eventID = EventTriggerType.PointerClick;
-                    releaseEntry.callback.AddListener((eventData) => EventEntryReleaseSpArr());
-                    btn_Release.triggers.Add(releaseEntry);
-                }
-
-                SwitchEquipButton(isActiveEquipButton);
-
-                //Is Hide Buttons?
                 rectTrBtnGroup.gameObject.SetActive(enablebuttons);
-                isPreviewOpenMode = (!enablebuttons) ? true : false;
+                isPreviewOpenMode = isPreview;
+                if (isExistBtns) {
+                    //Check this item is Equipped
+                    bool isActiveEquipButton = (ReferenceEquals(CCPlayerData.equipments.GetSpArrOrNull, address)) ? false : true;
+                    if (isActiveEquipButton == true) { //Equip Button Event Entry add
+                        equipEntry = new EventTrigger.Entry();
+                        equipEntry.eventID = EventTriggerType.PointerClick;
+                        equipEntry.callback.AddListener((eventData) => EventEntryEquipSpArr(address));
+                        btn_Equip.triggers.Add(equipEntry);
+                    }
+                    else {
+                        releaseEntry = new EventTrigger.Entry();
+                        releaseEntry.eventID = EventTriggerType.PointerClick;
+                        releaseEntry.callback.AddListener((eventData) => EventEntryReleaseSpArr());
+                        btn_Release.triggers.Add(releaseEntry);
+                    }
 
-                itemAddress = address;              // Get Item Address
-                popupGameObject.SetActive(true);    // Enable Popup
+                    SwitchEquipButton(isActiveEquipButton);
+                }
+
+                if (!isPreviewOpenMode) { //assignment item address
+                    itemAddress = address;
+                }
+
+                //Enable Popup
+                popupGameObject.SetActive(true);    
             }
 
             void DisablePopup() {
@@ -508,20 +560,22 @@
                 //Clear Ability Slots
                 abilitySlots.DisableAllSlots();
 
-                //Clear Event Entry
-                equipEntry   = null;
-                releaseEntry = null;
+                if (isExistBtns) {
+                    //Clear Event Entry
+                    equipEntry = null;
+                    releaseEntry = null;
 
-                //Clear EventTriggers
-                btn_Equip.triggers.Clear(); 
-                btn_Release.triggers.Clear();
+                    //Clear EventTriggers
+                    btn_Equip.triggers.Clear();
+                    btn_Release.triggers.Clear();
 
-                //Disable Release, Equip Button
-                btn_Equip.gameObject.SetActive(false);
-                btn_Release.gameObject.SetActive(false);
+                    //Disable Release, Equip Button
+                    btn_Equip.gameObject.SetActive(false);
+                    btn_Release.gameObject.SetActive(false);
 
-                //Disable Equipments Button Group
-                equipmentButtonGroup.gameObject.SetActive(false);    
+                    //Disable Equipments Button Group
+                    equipmentButtonGroup.gameObject.SetActive(false);
+                }
 
                 //Clear item Address
                 itemAddress = null;
@@ -610,9 +664,12 @@
 
             #region CLOSE_POPUP
 
+            /// <summary>
+            /// 프리뷰 팝업이 아닐 때만 이걸로 비활성화 해줌.
+            /// </summary>
             public void Close() {
-                //Update Inventory, Equipments UI Only Normal Mode
-                if(!isPreviewOpenMode) {
+                if (!isPreviewOpenMode) {
+                    //Update Inventory, Equipments UI Only Normal Mode
                     UI_Equipments.Instance.UpdateEquipUI();
                     UI_Inventory.InvenUpdate();
                 }
@@ -644,53 +701,67 @@
 
         #region OPEN_ITEM_INFO
 
-        public void OpenPopup_MaterialItem(Item_Material item) {
+        public void OpenPopup(Item_Material item) {
             gameObject.SetActive(true);
-            itemPopup.EnablePopup_Material(item, Frames[(int)item.GetGrade]);
+            itemPopup.EnablePopup(item, Frames[(int)item.GetGrade]);
         }
 
-        public void OpenPopup_ConsumableItem(Item_Consumable item) {
+        public void OpenPopup(Item_Consumable item) {
             gameObject.SetActive(true);
-            itemPopup.EnablePopup_Consumable(item, Frames[(int)item.GetGrade]);
+            itemPopup.EnablePopup(item, Frames[(int)item.GetGrade]);
         }
 
-        public void OpenPopup_EquipmentItem(Item_Equipment equipItem) {
+        public void OpenPopup(Item_Equipment equipItem) {
             gameObject.SetActive(true);
             switch (equipItem) {
-                case Item_Bow            bow: itemPopup.EnablePopup_Bow(bow, Frames[(int)bow.GetGrade]);                       break;
-                case Item_SpArr specialArrow: itemPopup.EnablePopup_SpArrow(specialArrow, Frames[(int)specialArrow.GetGrade]); break;
-                case Item_Arrow        arrow: itemPopup.EnablePopup_Arrow(arrow, Frames[(int)arrow.GetGrade]);                 break;
-                case Item_Accessory artifact: itemPopup.EnablePopup_Artifact(artifact, Frames[(int)artifact.GetGrade]);        break;
+                case Item_Bow       equipment: itemPopup.EnablePopup(equipment, Frames[(int)equipment.GetGrade]); break;
+                case Item_SpArr     equipment: itemPopup.EnablePopup(equipment, Frames[(int)equipment.GetGrade]); break;
+                case Item_Arrow     equipment: itemPopup.EnablePopup(equipment, Frames[(int)equipment.GetGrade]); break;
+                case Item_Accessory equipment: itemPopup.EnablePopup(equipment, Frames[(int)equipment.GetGrade]); break;
+            }
+        }
+
+        /// <summary>
+        /// 업그레이드 가능 아이템 팝업
+        /// </summary>
+        /// <param name="equipItem"></param>
+        public void OpenPopup_Upgradeable(Item_Equipment equipItem) {
+            var frame = Frames[(int)equipItem.GetGrade];
+            switch (equipItem) {
+                case Item_Bow       equipment: itemPopup.EnablePopup(equipment, frame, true, true); break;
+                case Item_SpArr     equipment: itemPopup.EnablePopup(equipment, frame, true, true); break;
+                case Item_Arrow     equipment: itemPopup.EnablePopup(equipment, frame, true, true); break;
+                case Item_Accessory equipment: itemPopup.EnablePopup(equipment, frame, true, true); break;
+                default: throw new System.NotImplementedException();
             }
 
-            if (btn_Select != null) { 
-                //UPGRADE PANEL과 같이 사용하기 떄문에, SELECT BUTTON이 항당되어있는 UPGRADE INFO PANEL이라면 항상 버튼 활성화
-                btn_Select.SetActive(true);
-            }
+            btn_Select.SetActive(true);
         }
 
         /// <summary>
         /// CRAFTING PANEL의 완성품 프리뷰 기능
         /// </summary>
         /// <param name="item"></param>
-        public void OpenPreview(AD_item item) {
+        public void OpenPreview_Crafting(AD_item item) {
             var frame = Frames[(int)item.GetGrade];
             switch (item.GetItemType) {
-                case ITEMTYPE.ITEM_MATERIAL:   itemPopup.EnablePopup_Material((Item_Material)item, frame, false);     break;
-                case ITEMTYPE.ITEM_CONSUMABLE: itemPopup.EnablePopup_Consumable((Item_Consumable)item, frame, false); break;
+                case ITEMTYPE.ITEM_MATERIAL:   itemPopup.EnablePopup((Item_Material)item, frame, false, true);   break;
+                case ITEMTYPE.ITEM_CONSUMABLE: itemPopup.EnablePopup((Item_Consumable)item, frame, false, true); break;
                 case ITEMTYPE.ITEM_EQUIPMENT:
                     switch (item) {
-                        case Item_Bow       equipment: itemPopup.EnablePopup_Bow(equipment, frame, false);      break;
-                        case Item_Arrow     equipment: itemPopup.EnablePopup_Arrow(equipment, frame, false);    break;
-                        case Item_Accessory equipment: itemPopup.EnablePopup_Artifact(equipment, frame, false); break;
-                        case Item_SpArr     equipment: itemPopup.EnablePopup_SpArrow(equipment, frame, false);  break;
-                        default: break;
+                        case Item_Bow       equipment: itemPopup.EnablePopup(equipment, frame, false, true); break;
+                        case Item_SpArr     equipment: itemPopup.EnablePopup(equipment, frame, false, true); break;
+                        case Item_Arrow     equipment: itemPopup.EnablePopup(equipment, frame, false, true); break;
+                        case Item_Accessory equipment: itemPopup.EnablePopup(equipment, frame, false, true); break;
+                        default: throw new System.NotImplementedException();
                     }
                     break;
                 default: throw new System.NotImplementedException();
             }
 
-            gameObject.SetActive(true);
+            if (!gameObject.activeSelf) {
+                gameObject.SetActive(true);
+            }
         }
 
         /// <summary>
@@ -698,23 +769,24 @@
         /// </summary>
         /// <param name="previewItem"></param>
         /// <param name="enableSelectButton"></param>
-        public void OpenPreview(Item_Equipment previewItem) {
+        public void OpenPreview_Upgrade(Item_Equipment previewItem, bool enableSelectButton) {
             var frame = Frames[(int)previewItem.GetGrade];
             switch (previewItem) {
-                case Item_Bow       equipment: itemPopup.EnablePopup_Bow(equipment, frame, false);      break;
-                case Item_Arrow     equipment: itemPopup.EnablePopup_Arrow(equipment, frame, false);    break;
-                case Item_Accessory equipment: itemPopup.EnablePopup_Artifact(equipment, frame, false); break;
-                case Item_SpArr     equipment: itemPopup.EnablePopup_SpArrow(equipment, frame, false);  break;
+                case Item_Bow       equipment: itemPopup.EnablePopup(equipment, frame, false, true); break;
+                case Item_Arrow     equipment: itemPopup.EnablePopup(equipment, frame, false, true); break;
+                case Item_Accessory equipment: itemPopup.EnablePopup(equipment, frame, false, true); break;
+                case Item_SpArr     equipment: itemPopup.EnablePopup(equipment, frame, false, true); break;
                 default: throw new System.NotImplementedException();
             } //Preview Open은 항상 모든 버튼을 숨김처리
-
-            if(btn_Select != null) {
-                btn_Select.SetActive(false);
+            
+            if (!gameObject.activeSelf) {
+                gameObject.SetActive(true);
             }
-
-            gameObject.SetActive(true);
         }
 
+        /// <summary>
+        /// Never Use Preview Item Popup
+        /// </summary>
         public void Close() {
             itemPopup.Close();
         }

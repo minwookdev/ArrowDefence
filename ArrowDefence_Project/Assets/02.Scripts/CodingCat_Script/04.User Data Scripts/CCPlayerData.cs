@@ -1,5 +1,4 @@
-﻿namespace ActionCat.Data
-{
+﻿namespace ActionCat.Data {
     public static class CCPlayerData {
         public static AD_Inventory      inventory  = new AD_Inventory();
         public static Player_Equipments equipments = new Player_Equipments();
@@ -11,6 +10,19 @@
         static readonly string KEY_EQUIPMENT = "KEY_EQUIPMENT";
         static readonly string KEY_INFOS     = "KEY_INFOS";
         static readonly string KEY_SETTINGS  = "KEY_SETTINGS";
+
+        public static bool IsSaveExistence = false;
+
+        public static void CheckSaveData() {
+            if (IsSaveExistence) return;
+
+            //세이브 데이터를 불러오지 못한 경우 EX)세이브 데이터 없음. 
+            //게임진행에 필요한 최소의 조건 충족 EX)기초 아이템 지급.
+            infos.AddCraftSlot(3); //초기에 3개 오픈
+            infos.OpenSlot(0, 1, 2);
+
+            IsSaveExistence = true;
+        }
 
         public static void SaveUserData() {
             //ES3.Save<AD_Inventory>(inventoryKey, inventory);
@@ -64,13 +76,16 @@
                 CatLog.Log("성공적으로 Settings를 불러왔습니다.");
             }
             else CatLog.WLog("ES3 Game Settings KEY값이 없습니다.");
+
+            //데이터 로드하는거 하나로 묶어주고, 데이터 없음 판정에서는 false처리 해주기
+            IsSaveExistence = true;
         }
 
         public static void TEST_CREATE_TEMP_CRAFTING_SLOT() {
             infos.AddCraftSlot(3);
             infos.OpenSlot(0);
-            //infos.OpenSlot(1);
-            //infos.OpenSlot(2);
+            infos.OpenSlot(1);
+            infos.OpenSlot(2);
         }
     }
 }

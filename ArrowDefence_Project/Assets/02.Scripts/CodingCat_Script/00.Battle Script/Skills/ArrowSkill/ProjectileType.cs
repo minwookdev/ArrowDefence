@@ -71,6 +71,10 @@
     //=========================================================================================================================================================
     //================================================================= [ SPLIT ARROW ] =======================================================================
     public class SplitArrow : ProjectileType {
+        public override string GetDescription(string localizedString) {
+            throw new System.NotImplementedException();
+        }
+
         public override void Clear() {
             throw new System.NotImplementedException();
         }
@@ -102,6 +106,10 @@
     //=========================================================================================================================================================
     //================================================================= [ SPLIT DAGGER ] ======================================================================
     public class SplitDagger : ProjectileType {
+        public override string GetDescription(string localizedString) {
+            throw new System.NotImplementedException();
+        }
+
         private int projectileCount;
 
         //Not Saved
@@ -159,6 +167,10 @@
     //=========================================================================================================================================================
     //=============================================================== [ ELEMENTAL - FIRE ] ====================================================================
     public class ElementalFire : ProjectileType {
+        public override string GetDescription(string localizedString) {
+            throw new System.NotImplementedException();
+        }
+
         private float activationProbability;
 
         protected override string[] GetUniqueTags() {
@@ -213,6 +225,10 @@
         private short addExplosionDamage;
 
         public override int DefaultSpawnSize() => 3;
+
+        public override string GetDescription(string localizedString) {
+            throw new System.NotImplementedException();
+        }
 
         protected override string[] GetUniqueTags() {
             return new string[3] { "explosion", "smallEx", "shockwave" };

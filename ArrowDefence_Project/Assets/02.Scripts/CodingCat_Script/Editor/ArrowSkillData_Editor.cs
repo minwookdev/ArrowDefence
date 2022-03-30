@@ -14,6 +14,8 @@ public class ArrowSkillData_Editor : Editor
     protected SerializedProperty spriteProp;
     protected SerializedProperty activeTypeProp;
     protected SerializedProperty effectProp;
+    protected SerializedProperty nameTermsProp = null;
+    protected SerializedProperty descTermsProp = null;
 
     protected void InitSerializedObject()
     {
@@ -27,10 +29,11 @@ public class ArrowSkillData_Editor : Editor
         spriteProp     = sobject.FindProperty("IconSprite");
         activeTypeProp = sobject.FindProperty("ActiveType");
         effectProp     = sobject.FindProperty(nameof(ArrowSkillData.effects));
+        nameTermsProp  = sobject.FindProperty(nameof(ArrowSkillData.NameTerms));
+        descTermsProp  = sobject.FindProperty(nameof(ArrowSkillData.DescTerms));
     }
 
-    public virtual void DrawMonoScript()
-    {
+    public virtual void DrawMonoScript() {
         EditorGUI.BeginDisabledGroup(true);
         EditorGUILayout.ObjectField("Script", MonoScript.FromScriptableObject((ArrowSkillData)target),
                                                                         typeof(ArrowSkillData), false);
@@ -40,8 +43,7 @@ public class ArrowSkillData_Editor : Editor
     /// <summary>
     /// 함수 호출 후, 반드시 다음 라인에 GUILayout.EndVertical(); 코드 작성해야합니다.
     /// </summary>
-    protected void DrawDefaultSkillData()
-    {
+    protected void DrawDefaultSkillData() {
         //DrawMonoScript();
 
         sobject.Update();
@@ -62,6 +64,10 @@ public class ArrowSkillData_Editor : Editor
         //Skill Desc Field
         GUILayout.Label("Description");
         descProp.stringValue = EditorGUILayout.TextArea(descProp.stringValue, GUILayout.Height(50f));
+
+        //SKILL NAME, DESCRIPTION TERMS
+        EditorGUILayout.PropertyField(nameTermsProp);
+        EditorGUILayout.PropertyField(descTermsProp);
 
         //Type Field [LOCK]
         EditorGUI.BeginDisabledGroup(true);

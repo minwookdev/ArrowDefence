@@ -9,6 +9,9 @@
         protected SKILL_LEVEL level;
         protected BOWSKILL_TYPE skillType;
 
+        protected string termsName;
+        protected string termsDesc;
+
         #region PROPERTY
         public string Id { get => id; }
         public string Name { get => name; }
@@ -25,6 +28,12 @@
         }
         public SKILL_LEVEL Level { get => level; }
         public BOWSKILL_TYPE Type { get => skillType; }
+        public string NameTerms {
+            get => termsName;
+        }
+        public string DescTerms {
+            get => termsDesc;
+        }
         #endregion
 
         /// <summary>
@@ -42,6 +51,17 @@
             this.iconSprite = sprite;
         }
 
+        protected AD_BowSkill(BowSkillData entity) {
+            this.id         = entity.SkillId;
+            this.name       = entity.SkillName;
+            this.desc       = entity.SkillDesc;
+            this.level      = entity.SkillLevel;
+            this.skillType  = entity.SkillType;
+            this.iconSprite = entity.SkillIconSprite;
+            this.termsName  = entity.NameTerms;
+            this.termsDesc  = entity.DescTerms;
+        }
+
         public abstract void Init();
 
         public abstract void BowSpecialSkill(Transform bowTr, AD_BowController controller, ref DamageStruct damage, Vector3 initPos, ARROWTYPE type);
@@ -53,6 +73,16 @@
                 case ARROWTYPE.ARROW_SPECIAL: tag = null;                                    return false;
                 default: throw new System.NotImplementedException($"This Arrow Type is Not Implemented. (TYPE: {type})");
             }
+        }
+
+        public virtual string GetNameByTerms() {
+            I2.Loc.LocalizedString loc = termsName;
+            return loc;
+        }
+
+        public virtual string GetDescByTerms() {
+            I2.Loc.LocalizedString loc = termsDesc;
+            return loc;
         }
     }
 }

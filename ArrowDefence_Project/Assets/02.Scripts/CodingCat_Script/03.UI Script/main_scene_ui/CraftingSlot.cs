@@ -33,6 +33,7 @@
         Color enableColor = new Color(1f, 1f, 1f, 1f);
         Color disableColor = new Color(.35f, .35f, .35f, 1f);
 
+        CraftingFunc craftingParent = null; //action너무 많아지니까 걍 부모 받아서 사용..으음 근데 하나 더 추가되도 실질적으로 가지고있게 되는 Action은 두개다..
         System.Action<ItemData, int> receiptAction = null;
         //System.Action quickButtonAction = null;
 
@@ -68,9 +69,8 @@
 
         public void AddListnerToReceiptButton(System.Action<ItemData, int> action) => receiptAction = action;
 
-        //public void AddListnerToQuickButton(System.Action action) => quickButtonAction = action;
-
-        public void EnableSlot(Data.CraftingInfo craftinginfo, int slotNumber) {
+        public void EnableSlot(Data.CraftingInfo craftinginfo, int slotNumber, CraftingFunc parent) {
+            craftingParent = parent;
             gameObject.SetActive(true); //alwyas enable
 
             if (!craftinginfo.IsAvailable) {
@@ -116,10 +116,7 @@
         public void DisableSlot() {
             gameObject.SetActive(false);
             craftSlotNumber = -1;
-        }
-
-        public void QuickComplete() {
-            Notify.Inst.Show("This is an unimplemented featrue.");
+            craftingParent  = null;
         }
 
         public void BE_RECEIPT() {
@@ -133,7 +130,7 @@
 
         public void BE_QUICK() {
             if (!isReadyAds) { //광고가 준비되지 않음
-                Notify.Inst.Show("Please try again Later.");
+                Notify.Inst.Show("Please try again in a few Seconds.");
                 return;
             }
 
@@ -144,21 +141,18 @@
             }
 
             if (!craftingInfo.IsSkipable) {
-                Notify.Inst.Show("This crafting is non-skipable.");
+                Notify.Inst.Show("This Crafting is non-skipable.");
                 return;
             }
-#if UNITY_EDITOR
-            //빠른 제작 조건 달성
+
+            //광고 확인팝업
+            craftingParent.OpenAdsPopup(craftSlotNumber);
+        }
+
+        public void QuickComplete() {
+            var craftingInfo = GameManager.Instance.GetCraftingInfo(craftSlotNumber);
             craftingInfo.QuickComplete();
-#elif UNITY_ANDROID
-            //보상형 광고 시청여부에 따라 Quick Complete 발생시켜줌
-#endif
-
-            //A. 광고 보는데 성공하면 액션-콜 하고 실패하면 그냥 넘기기
-            //B. 자체적으로 해당 슬록만 업데이트 진행
-
-            //자체적으로 본 슬롯만 업데이트
-            EnableSlot(craftingInfo, craftSlotNumber);
+            EnableSlot(craftingInfo, craftSlotNumber, craftingParent); //자체적으로 해당 슬롯만 업데이트
         }
 
         void SetColorButton(Color color) {

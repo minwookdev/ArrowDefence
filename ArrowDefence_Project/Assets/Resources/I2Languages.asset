@@ -17,6 +17,16 @@ MonoBehaviour:
     UserAgreesToHaveItInsideThePluginsFolder: 0
     GoogleLiveSyncIsUptoDate: 1
     mTerms:
+    - Term: ABILITY_DAMAGE
+      TermType: 0
+      Description: 
+      Languages:
+      - Damage
+      - "\uB370\uBBF8\uC9C0"
+      - "\u30C0\u30E1\u30FC\u30B8"
+      - 
+      Flags: 00000000
+      Languages_Touch: []
     - Term: CRAFTING_PANEL_COMPLETE
       TermType: 0
       Description: 
@@ -119,7 +129,7 @@ MonoBehaviour:
       - 
       Flags: 00000000
       Languages_Touch: []
-    - Term: ITEM_ARROW_CELESTIAL
+    - Term: ItemName/ITEM_ARROW_CELESTIAL
       TermType: 0
       Description: 
       Languages:
@@ -129,7 +139,7 @@ MonoBehaviour:
       - 
       Flags: 00000000
       Languages_Touch: []
-    - Term: ITEM_ARROW_GRIFFON
+    - Term: ItemName/ITEM_ARROW_GRIFFON
       TermType: 0
       Description: 
       Languages:
@@ -139,7 +149,7 @@ MonoBehaviour:
       - 
       Flags: 00000000
       Languages_Touch: []
-    - Term: ITEM_ARROW_PIERCING
+    - Term: ItemName/ITEM_ARROW_PIERCING
       TermType: 0
       Description: 
       Languages:
@@ -149,7 +159,7 @@ MonoBehaviour:
       - 
       Flags: 00000000
       Languages_Touch: []
-    - Term: ITEM_ARROW_POSEIDON
+    - Term: ItemName/ITEM_ARROW_POSEIDON
       TermType: 0
       Description: 
       Languages:
@@ -159,7 +169,7 @@ MonoBehaviour:
       - 
       Flags: 00000000
       Languages_Touch: []
-    - Term: ITEM_ARROW_SIGN
+    - Term: ItemName/ITEM_ARROW_SIGN
       TermType: 0
       Description: 
       Languages:
@@ -169,7 +179,7 @@ MonoBehaviour:
       - 
       Flags: 00000000
       Languages_Touch: []
-    - Term: ITEM_ARROW_STALKER
+    - Term: ItemName/ITEM_ARROW_STALKER
       TermType: 0
       Description: 
       Languages:
@@ -179,7 +189,7 @@ MonoBehaviour:
       - 
       Flags: 00000000
       Languages_Touch: []
-    - Term: ITEM_ARROW_STEEL
+    - Term: ItemName/ITEM_ARROW_STEEL
       TermType: 0
       Description: 
       Languages:
@@ -189,7 +199,7 @@ MonoBehaviour:
       - 
       Flags: 00000000
       Languages_Touch: []
-    - Term: ITEM_ARROW_THUNDER
+    - Term: ItemName/ITEM_ARROW_THUNDER
       TermType: 0
       Description: 
       Languages:
@@ -199,7 +209,7 @@ MonoBehaviour:
       - 
       Flags: 00000000
       Languages_Touch: []
-    - Term: ITEM_BOW_BEGINNERS
+    - Term: ItemName/ITEM_BOW_BEGINNERS
       TermType: 0
       Description: 
       Languages:
@@ -209,7 +219,7 @@ MonoBehaviour:
       - 
       Flags: 00000000
       Languages_Touch: []
-    - Term: ITEM_BOW_CELESTIAL
+    - Term: ItemName/ITEM_BOW_CELESTIAL
       TermType: 0
       Description: 
       Languages:
@@ -219,17 +229,7 @@ MonoBehaviour:
       - 
       Flags: 00000000
       Languages_Touch: []
-    - Term: ITEM_BOW_GRIFFON
-      TermType: 0
-      Description: 
-      Languages:
-      - Griffon Bow
-      - "\uADF8\uB9AC\uD3F0 \uBCF4\uC6B0"
-      - "\u30B0\u30EA\u30D5\u30A9\u30F3\u30DC\u30A6"
-      - 
-      Flags: 00000000
-      Languages_Touch: []
-    - Term: ITEM_BOW_HORN
+    - Term: ItemName/ITEM_BOW_HORN
       TermType: 0
       Description: 
       Languages:
@@ -239,7 +239,7 @@ MonoBehaviour:
       - 
       Flags: 00000000
       Languages_Touch: []
-    - Term: ITEM_BOW_POSEIDON
+    - Term: ItemName/ITEM_BOW_POSEIDON
       TermType: 0
       Description: 
       Languages:
@@ -249,7 +249,7 @@ MonoBehaviour:
       - 
       Flags: 00000000
       Languages_Touch: []
-    - Term: ITEM_BOW_RECURVE
+    - Term: ItemName/ITEM_BOW_RECURVE
       TermType: 0
       Description: 
       Languages:
@@ -259,7 +259,7 @@ MonoBehaviour:
       - 
       Flags: 00000000
       Languages_Touch: []
-    - Term: ITEM_BOW_SHORT
+    - Term: ItemName/ITEM_BOW_SHORT
       TermType: 0
       Description: 
       Languages:
@@ -269,7 +269,7 @@ MonoBehaviour:
       - 
       Flags: 00000000
       Languages_Touch: []
-    - Term: ITEM_BOW_SPIKE
+    - Term: ItemName/ITEM_BOW_SPIKE
       TermType: 0
       Description: 
       Languages:
@@ -279,7 +279,7 @@ MonoBehaviour:
       - 
       Flags: 00000000
       Languages_Touch: []
-    - Term: ITEM_BOW_STALKER
+    - Term: ItemName/ITEM_BOW_STALKER
       TermType: 0
       Description: 
       Languages:
@@ -289,68 +289,13 @@ MonoBehaviour:
       - 
       Flags: 00000000
       Languages_Touch: []
-    - Term: ITEM_BOW_THUNDER
+    - Term: ItemName/ITEM_BOW_THUNDER
       TermType: 0
       Description: 
       Languages:
       - Thunder Bow
       - "\uCC9C\uB465 \uD65C"
       - "\u96F7\u5F13"
-      - 
-      Flags: 00000000
-      Languages_Touch: []
-    - Term: ITEM_MATERIAL_BLUEPRINT
-      TermType: 0
-      Description: 
-      Languages:
-      - It Is A Blueprint For Making ~.
-      - "~\uB97C(\uC744) \uC81C\uC791\uD558\uAE30 \uC704\uD55C \uC124\uACC4\uB3C4
-        \uC785\uB2C8\uB2E4."
-      - "\u301C\u3092\u88FD\u4F5C\u3059\u308B\u305F\u3081\u306E\u8A2D\u8A08\u56F3\u3067\u3059\u3002"
-      - 
-      Flags: 00000000
-      Languages_Touch: []
-    - Term: ITEM_MATERIAL_DUNGEON
-      TermType: 0
-      Description: 
-      Languages:
-      - Materials That Can Be Obtained In The Dungeon Area.
-      - "\uB358\uC804\uC9C0\uC5ED\uC5D0\uC11C \uD68D\uB4DD\uD560 \uC218 \uC788\uB294
-        \uC7AC\uB8CC\uC785\uB2C8\uB2E4."
-      - "\u30C0\u30F3\u30B8\u30E7\u30F3\u5730\u57DF\u3067\u7372\u5F97\u3067\u304D\u308B\u6750\u6599\u3067\u3059\u3002"
-      - 
-      Flags: 00000000
-      Languages_Touch: []
-    - Term: ITEM_MATERIAL_FOREST
-      TermType: 0
-      Description: 
-      Languages:
-      - A Material That Can Be Obtained In A Remote Forest Area.
-      - "\uC678\uC9C4 \uC232 \uC9C0\uC5ED\uC5D0\uC11C \uD68D\uB4DD\uD560 \uC218 \uC788\uB294
-        \uC7AC\uB8CC\uC785\uB2C8\uB2E4."
-      - "\u5916\u9707\u306E\u68EE\u5730\u57DF\u3067\u7372\u5F97\u3067\u304D\u308B\u6750\u6599\u3067\u3059\u3002"
-      - 
-      Flags: 00000000
-      Languages_Touch: []
-    - Term: ITEM_MATERIAL_MINE
-      TermType: 0
-      Description: 
-      Languages:
-      - A Material That Can Be Obtained In The Mine Area.
-      - "\uAD11\uC0B0 \uC9C0\uC5ED\uC5D0\uC11C \uD68D\uB4DD\uD560 \uC218 \uC788\uB294
-        \uC7AC\uB8CC\uC785\uB2C8\uB2E4."
-      - "\u9271\u5C71\u5730\u57DF\u3067\u7372\u5F97\u3067\u304D\u308B\u6750\u6599\u3067\u3059\u3002"
-      - 
-      Flags: 00000000
-      Languages_Touch: []
-    - Term: ITEM_MATERIAL_SNOW_MOUNTAIN
-      TermType: 0
-      Description: 
-      Languages:
-      - It Is A Material That Can Be Obtained In The Snowy Mountain Area.
-      - "\uC124\uC0B0 \uC9C0\uC5ED\uC5D0\uC11C \uD68D\uB4DD\uD560 \uC218 \uC788\uB294
-        \uC7AC\uB8CC \uC785\uB2C8\uB2E4."
-      - "\u96EA\u5C71\u5730\u57DF\u3067\u7372\u5F97\u3067\u304D\u308B\u6750\u6599\u3067\u3059\u3002"
       - 
       Flags: 00000000
       Languages_Touch: []
@@ -444,7 +389,7 @@ MonoBehaviour:
       - 
       Flags: 00000000
       Languages_Touch: []
-    - Term: SKILL_ARROW_BLADERAIN
+    - Term: SkillDesc/SKILL_ARROW_BLADERAIN
       TermType: 0
       Description: 
       Languages:
@@ -457,7 +402,7 @@ MonoBehaviour:
       - 
       Flags: 00000000
       Languages_Touch: []
-    - Term: SKILL_ARROW_ELEMENTAL_COLD
+    - Term: SkillDesc/SKILL_ARROW_ELEMENTAL_COLD
       TermType: 0
       Description: 
       Languages:
@@ -471,7 +416,7 @@ MonoBehaviour:
       - 
       Flags: 00000000
       Languages_Touch: []
-    - Term: SKILL_ARROW_ELEMENTAL_FIRE
+    - Term: SkillDesc/SKILL_ARROW_ELEMENTAL_FIRE
       TermType: 0
       Description: 
       Languages:
@@ -485,7 +430,7 @@ MonoBehaviour:
       - 
       Flags: 00000000
       Languages_Touch: []
-    - Term: SKILL_ARROW_HOMING
+    - Term: SkillDesc/SKILL_ARROW_HOMING
       TermType: 0
       Description: 
       Languages:
@@ -496,7 +441,7 @@ MonoBehaviour:
       - 
       Flags: 00000000
       Languages_Touch: []
-    - Term: SKILL_ARROW_NINJASTARS
+    - Term: SkillDesc/SKILL_ARROW_NINJASTARS
       TermType: 0
       Description: 
       Languages:
@@ -511,7 +456,7 @@ MonoBehaviour:
       - 
       Flags: 00000000
       Languages_Touch: []
-    - Term: SKILL_ARROW_PIERCING
+    - Term: SkillDesc/SKILL_ARROW_PIERCING
       TermType: 0
       Description: 
       Languages:
@@ -524,7 +469,7 @@ MonoBehaviour:
       - 
       Flags: 00000000
       Languages_Touch: []
-    - Term: SKILL_ARROW_RICOCHET
+    - Term: SkillDesc/SKILL_ARROW_RICOCHET
       TermType: 0
       Description: 
       Languages:
@@ -538,7 +483,7 @@ MonoBehaviour:
       - 
       Flags: 00000000
       Languages_Touch: []
-    - Term: SKILL_ARROW_SPLITDAGGER
+    - Term: SkillDesc/SKILL_ARROW_SPLITDAGGER
       TermType: 0
       Description: 
       Languages:
@@ -551,7 +496,7 @@ MonoBehaviour:
       - 
       Flags: 00000000
       Languages_Touch: []
-    - Term: SKILL_ARTIFACT_CURE
+    - Term: SkillDesc/SKILL_ARTIFACT_CURE
       TermType: 0
       Description: 
       Languages:
@@ -564,7 +509,7 @@ MonoBehaviour:
       - 
       Flags: 00000000
       Languages_Touch: []
-    - Term: SKILL_ARTIFACT_CURSE_SLOW
+    - Term: SkillDesc/SKILL_ARTIFACT_CURSE_SLOW
       TermType: 0
       Description: 
       Languages:
@@ -577,7 +522,7 @@ MonoBehaviour:
       - 
       Flags: 00000000
       Languages_Touch: []
-    - Term: SKILL_ARTIFACT_CURSE_WEAK
+    - Term: SkillDesc/SKILL_ARTIFACT_CURSE_WEAK
       TermType: 0
       Description: 
       Languages:
@@ -590,7 +535,7 @@ MonoBehaviour:
       - 
       Flags: 00000000
       Languages_Touch: []
-    - Term: SKILL_ARTIFACT_TIMEMANIPULATION
+    - Term: SkillDesc/SKILL_ARTIFACT_TIMEMANIPULATION
       TermType: 0
       Description: 
       Languages:
@@ -601,7 +546,7 @@ MonoBehaviour:
       - 
       Flags: 00000000
       Languages_Touch: []
-    - Term: SKILL_BOW_CROSSFIRE
+    - Term: SkillDesc/SKILL_BOW_CROSSFIRE
       TermType: 0
       Description: 
       Languages:
@@ -615,7 +560,7 @@ MonoBehaviour:
       - 
       Flags: 00000000
       Languages_Touch: []
-    - Term: SKILL_BOW_RAPIDSHOT
+    - Term: SkillDesc/SKILL_BOW_RAPIDSHOT
       TermType: 0
       Description: 
       Languages:
@@ -627,7 +572,7 @@ MonoBehaviour:
       - 
       Flags: 00000000
       Languages_Touch: []
-    - Term: SKILL_BOW_SKILL_EMPTY
+    - Term: SkillDesc/SKILL_BOW_SKILL_EMPTY
       TermType: 0
       Description: 
       Languages:
@@ -640,7 +585,7 @@ MonoBehaviour:
       - 
       Flags: 00000000
       Languages_Touch: []
-    - Term: SKILL_BOW_SPREADSHOT
+    - Term: SkillDesc/SKILL_BOW_SPREADSHOT
       TermType: 0
       Description: 
       Languages:
@@ -651,7 +596,7 @@ MonoBehaviour:
       - 
       Flags: 00000000
       Languages_Touch: []
-    - Term: SKILL_BOW_STORM
+    - Term: SkillDesc/SKILL_BOW_STORM
       TermType: 0
       Description: 
       Languages:
@@ -662,7 +607,7 @@ MonoBehaviour:
       - 
       Flags: 00000000
       Languages_Touch: []
-    - Term: SKILL_BOW_SUPPORTFIRE
+    - Term: SkillDesc/SKILL_BOW_SUPPORTFIRE
       TermType: 0
       Description: 
       Languages:
@@ -676,7 +621,7 @@ MonoBehaviour:
       - 
       Flags: 00000000
       Languages_Touch: []
-    - Term: SKILL_BOW_SUPPORTTOWER
+    - Term: SkillDesc/SKILL_BOW_SUPPORTTOWER
       TermType: 0
       Description: 
       Languages:
@@ -689,7 +634,7 @@ MonoBehaviour:
       - 
       Flags: 00000000
       Languages_Touch: []
-    - Term: SKILL_SPECIAL_EMPLIFY_ELEMENTAL
+    - Term: SkillDesc/SKILL_SPECIAL_EMPLIFY_ELEMENTAL
       TermType: 0
       Description: 
       Languages:
@@ -702,7 +647,7 @@ MonoBehaviour:
       - 
       Flags: 00000000
       Languages_Touch: []
-    - Term: SKILL_SPECIAL_EXPLOSION_CHAIN
+    - Term: SkillDesc/SKILL_SPECIAL_EXPLOSION_CHAIN
       TermType: 0
       Description: 
       Languages:
@@ -715,7 +660,7 @@ MonoBehaviour:
       - 
       Flags: 00000000
       Languages_Touch: []
-    - Term: SKILL_SPECIAL_EXPLOSIVE_CHARGE
+    - Term: SkillDesc/SKILL_SPECIAL_EXPLOSIVE_CHARGE
       TermType: 0
       Description: 
       Languages:
@@ -829,13 +774,98 @@ MonoBehaviour:
       - 
       Flags: 00000000
       Languages_Touch: []
-    - Term: ABILITY_DAMAGE
+    - Term: ItemName/ITEM_NAME_BOW_GRIFFON
       TermType: 0
       Description: 
       Languages:
-      - Damage
-      - "\uB370\uBBF8\uC9C0"
-      - "\u30C0\u30E1\u30FC\u30B8"
+      - Griffon Bow
+      - "\uADF8\uB9AC\uD3F0 \uBCF4\uC6B0"
+      - "\u30B0\u30EA\u30D5\u30A9\u30F3\u30DC\u30A6"
+      - 
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: ItemDesc/ITEM_DESC_MATERIAL_BLUEPRINT
+      TermType: 0
+      Description: 
+      Languages:
+      - It Is A Blueprint For Making ~.
+      - "~\uB97C(\uC744) \uC81C\uC791\uD558\uAE30 \uC704\uD55C \uC124\uACC4\uB3C4
+        \uC785\uB2C8\uB2E4."
+      - "\u301C\u3092\u88FD\u4F5C\u3059\u308B\u305F\u3081\u306E\u8A2D\u8A08\u56F3\u3067\u3059\u3002"
+      - 
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: ItemDesc/ITEM_DESC_MATERIAL_DUNGEON
+      TermType: 0
+      Description: 
+      Languages:
+      - Materials That Can Be Obtained In The Dungeon Area.
+      - "\uB358\uC804\uC9C0\uC5ED\uC5D0\uC11C \uD68D\uB4DD\uD560 \uC218 \uC788\uB294
+        \uC7AC\uB8CC\uC785\uB2C8\uB2E4."
+      - "\u30C0\u30F3\u30B8\u30E7\u30F3\u5730\u57DF\u3067\u7372\u5F97\u3067\u304D\u308B\u6750\u6599\u3067\u3059\u3002"
+      - 
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: ItemDesc/ITEM_DESC_MATERIAL_FOREST
+      TermType: 0
+      Description: 
+      Languages:
+      - A Material That Can Be Obtained In A Remote Forest Area.
+      - "\uC678\uC9C4 \uC232 \uC9C0\uC5ED\uC5D0\uC11C \uD68D\uB4DD\uD560 \uC218 \uC788\uB294
+        \uC7AC\uB8CC\uC785\uB2C8\uB2E4."
+      - "\u5916\u9707\u306E\u68EE\u5730\u57DF\u3067\u7372\u5F97\u3067\u304D\u308B\u6750\u6599\u3067\u3059\u3002"
+      - 
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: ItemDesc/ITEM_DESC_MATERIAL_MINE
+      TermType: 0
+      Description: 
+      Languages:
+      - A Material That Can Be Obtained In The Mine Area.
+      - "\uAD11\uC0B0 \uC9C0\uC5ED\uC5D0\uC11C \uD68D\uB4DD\uD560 \uC218 \uC788\uB294
+        \uC7AC\uB8CC\uC785\uB2C8\uB2E4."
+      - "\u9271\u5C71\u5730\u57DF\u3067\u7372\u5F97\u3067\u304D\u308B\u6750\u6599\u3067\u3059\u3002"
+      - 
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: ItemDesc/ITEM_DESC_MATERIAL_SNOW_MOUNTAIN
+      TermType: 0
+      Description: 
+      Languages:
+      - It Is A Material That Can Be Obtained In The Snowy Mountain Area.
+      - "\uC124\uC0B0 \uC9C0\uC5ED\uC5D0\uC11C \uD68D\uB4DD\uD560 \uC218 \uC788\uB294
+        \uC7AC\uB8CC \uC785\uB2C8\uB2E4."
+      - "\u96EA\u5C71\u5730\u57DF\u3067\u7372\u5F97\u3067\u304D\u308B\u6750\u6599\u3067\u3059\u3002"
+      - 
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: ItemName/WOOD_NAME
+      TermType: 0
+      Description: 
+      Languages:
+      - Wood
+      - "\uBAA9\uC7AC"
+      - "\u6728\u6750"
+      - Wood
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: SkillName/SKILL_NAME_SPREADSHOT
+      TermType: 0
+      Description: 
+      Languages:
+      - Spread Shot
+      - "\uC2A4\uD504\uB808\uB4DC \uC0F7"
+      - "\u30B9\u30D7\u30EC\u30C3\u30C9\u30B7\u30E7\u30C3\u30C8"
+      - 
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: SkillName/SKILL_NAME_RAPIDSHOT
+      TermType: 0
+      Description: 
+      Languages:
+      - Rapid Shot
+      - "\uBE60\uB978 \uC0AC\uACA9"
+      - "\u30E9\u30D4\u30C3\u30C9\u30B7\u30E7\u30C3\u30C8"
       - 
       Flags: 00000000
       Languages_Touch: []
@@ -855,12 +885,12 @@ MonoBehaviour:
     - Name: Description
       Code: 
       Flags: 0
-    IgnoreDeviceLanguage: 0
+    IgnoreDeviceLanguage: 1
     _AllowUnloadingLanguages: 0
     Google_WebServiceURL: https://script.google.com/macros/s/AKfycbxYjUzjGG_es5yU7qqC_vY6npuTL7-WcbV7M9hmeeneG6NhZwWl0Y3tsQgAwzBtyjzf/exec
     Google_SpreadsheetKey: 1CXNU3vVmmc8hy4Pu9Sf5q2s8sRINjOoXe-p5TvM3uhc
     Google_SpreadsheetName: I2Loc ArrowDefence Localization
-    Google_LastUpdatedVersion: 1647639690801
+    Google_LastUpdatedVersion: 1648563225100
     Google_Password: Both7851@#
     GoogleUpdateFrequency: 3
     GoogleInEditorCheckFrequency: 2

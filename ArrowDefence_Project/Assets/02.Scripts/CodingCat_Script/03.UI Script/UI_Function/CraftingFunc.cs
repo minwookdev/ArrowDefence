@@ -52,9 +52,7 @@
         //New ItemGet Popup Tween Class
         TweenGetItemPopup itemGetPopupTween = null;
 
-        
-
-        public int SelectedSlotNumner {
+        public int SelectedSlotNumber {
             get {
                 return selectedSlotNumber;
             }
@@ -73,6 +71,40 @@
             }
         }
         #endregion
+
+        //======================================================================================================================================
+        //========================================================== [ LIFE CYCLE ] ============================================================
+
+        /// <summary>
+        /// 해당 클래스는 MonoBehaviour가 아님, UI_Crafting에 의존하여 처리
+        /// </summary>
+        public void Start(UnityEngine.Events.UnityAction<int> unityAction, int slotCount, byte bluePrintSlotCount, CraftingRecipeSO recipeTable) {
+            InitPanelMain(unityAction, slotCount);
+            InitPanelSelect(bluePrintSlotCount);
+            recipe = recipeTable;
+
+            itemGetPopupTween = new TweenGetItemPopup(resultPopupBack, textResultMain, textResultSub, imageResultHorizontal);
+        }
+
+        public void Enable() {
+
+        }
+
+        /// <summary>
+        /// 해당 클래스는 MonoBehaviour가 아님, UI_Crafting에 의존하여 처리
+        /// </summary>
+        public void Update() {
+            switch (openedPanelType) {
+                case PANELTYPE.NONE:                      break;
+                case PANELTYPE.MAIN:   UpdatePanelMain(); break;
+                case PANELTYPE.CHOOSE:                    break;
+                default: throw new System.NotImplementedException();
+            }
+        }
+
+        void UpdatePanelMain() {
+
+        }
 
         //======================================================================================================================================
         //========================================================= [ PANEL, POPUP ] ===========================================================
@@ -111,166 +143,10 @@
                         bpSelectedSlot = null;
                     }
                     bpSlotList.ForEach(slot => slot.DisableSlot());
-                    //Restore Select Panel Position.
-                    //Clear Item Reference.
-                    //Clear Selected Slot.
-                    //Disable All Enabled Slots.
                     break;
                 default: throw new System.NotImplementedException();
             }
             openedPanelType = PANELTYPE.NONE;
-        }
-
-        /// <summary>
-        /// 선택된 설계도 슬롯을 버튼을 사용하여 팝업을 호출하는 메서드.
-        /// </summary>
-        /// <param name="log"></param>
-        /// <returns></returns>
-        public bool OpenItemInfo(out string log) {
-            if(bpSelectedSlot == null) {
-                log = "First, Select a BluePrint.";
-                return false;
-            }
-
-            if(itemRefSelected == null) {
-                log = "BluePrint Reference is Null";
-                return false;
-            }
-
-            //Find Recipe Data to Selected BluePrint Item
-            var isFindRecipe = recipe.TryGetRecipe(itemRefSelected.GetID, out CraftingRecipe findRecipe);
-            if (!isFindRecipe) {
-                log = "Not Found Recipe Data";
-                return false;
-            }
-
-            //Setting Item Info Popup
-            infoPopup.SetPopup(itemRefSelected, findRecipe);
-            craftingPopups[0].anchoredPosition = craftingPanels[1].anchoredPosition;
-            openedPopupType = POPUPTYPE.ITEMINFO;
-
-            bpSelectedSlot.DeSelected();
-            bpSelectedSlot = null;
-
-            log = "";
-            return true;
-        }
-
-        /// <summary>
-        /// 설계도 슬롯 자체에서 PointerClick 이벤트의 팝업을 호출하는 메서드.
-        /// </summary>
-        /// <param name="item"></param>
-        public void OpenItemInfo(AD_item item) {
-            if(bpSelectedSlot != null) {
-                bpSelectedSlot.DeSelected();
-                bpSelectedSlot = null;
-            }
-
-            //Find Recipe Data to Selected BluePrint Item
-            itemRefSelected = item;
-            var isFindRecipe = recipe.TryGetRecipe(itemRefSelected.GetID, out CraftingRecipe findRecipe);
-            if (!isFindRecipe) {
-                throw new System.Exception($"Not Found Recipe, Try Key: {itemRefSelected.GetID}, Name:{itemRefSelected.GetName}");
-            }
-
-            //Setting Item Info Popup
-            infoPopup.SetPopup(itemRefSelected, findRecipe);
-
-            //Move Center to Item Info Popup
-            craftingPopups[0].anchoredPosition = craftingPanels[1].anchoredPosition;
-            openedPopupType = POPUPTYPE.ITEMINFO;
-        }
-
-        public void SelectBluePirnt(BluePrintSlot slot, bool isSelectedSlot, AD_item itemRef) {
-            if (isSelectedSlot) {                            //이미 Selected 상태인 Slot에서 DeSelected 요청
-                if(!ReferenceEquals(slot, bpSelectedSlot)) { //요청자가 지금 들고있는 슬롯인지 확인
-                    throw new System.Exception("Slot Not Matched !");
-                }
-
-                bpSelectedSlot.DeSelected();
-                bpSelectedSlot = null;
-
-                //Relaese, Selected Item
-                itemRefSelected = null;
-            }
-            else { //Selected 상태 요청
-                if (bpSelectedSlot != null) { //다른 슬롯을 이미 들고있다면 DeSelected 처리
-                    bpSelectedSlot.DeSelected();
-                    bpSelectedSlot = null;
-                }
-
-                bpSelectedSlot = slot;
-                bpSelectedSlot.Selected();
-
-                //Assign New Item, Recipe Reference
-                itemRefSelected = itemRef;
-            }
-        }
-
-        public void CloseItemInfo() {
-            craftingPopups[0].anchoredPosition = navigateRectTr[2].anchoredPosition;
-            openedPopupType = POPUPTYPE.NONE;
-            itemRefSelected = null;
-        }
-
-        public bool TryOpenConfirm() {
-            if(!IsCraftable(out string resultItemName)) {
-                Notify.Inst.Show(resultItemName);
-                return false;
-            }
-
-            if (bpSelectedSlot != null) {
-                bpSelectedSlot.DeSelected();
-                bpSelectedSlot = null;
-            }
-
-            if(openedPopupType == POPUPTYPE.ITEMINFO) {
-                craftingPopups[0].anchoredPosition = navigateRectTr[2].anchoredPosition;
-            }
-
-            textConfirmItemName.text = resultItemName;
-            craftingPopups[3].anchoredPosition = craftingPanels[1].anchoredPosition;
-            openedPopupType = POPUPTYPE.CONFIRM;
-            return true;
-        }
-
-        public void CloseConfirm() {
-            itemRefSelected = null;
-            craftingPopups[3].anchoredPosition = navigateRectTr[4].anchoredPosition;
-            openedPopupType = POPUPTYPE.NONE;
-        }
-
-        public void Confirm(Vector2 anchoredPosition) {
-            bool successCrafting = TryCrafting(out string failedLog, out CraftingRecipe findRecipe);
-            if (!successCrafting) {
-                CatLog.ELog(failedLog, true);
-                return;
-            }
-
-            itemRefSelected = null;
-            openedPopupType = POPUPTYPE.NONE;
-            craftingPopups[3].anchoredPosition = navigateRectTr[4].anchoredPosition;
-
-            //Start Crafting
-            GameManager.Instance.CraftingStart(selectedSlotNumber, findRecipe);
-
-            ClosePanel();
-            OpenPanel(PANELTYPE.MAIN, anchoredPosition);
-        }
-
-        void ReceiptResult(ItemData item, int amount) {
-            //Reuslt Popup Slot Set, Popup Positioning
-            resultItemSlot.EnableSlot(item, amount);
-
-            //Play ResultPopup Tween
-            var slotRectTransform = resultItemSlot.GetComponent<RectTransform>();
-            itemGetPopupTween.TweenStart(slotRectTransform);
-            
-            craftingPopups[1].anchoredPosition = craftingPanels[0].anchoredPosition;
-            openedPopupType = POPUPTYPE.GETITEM;
-
-            //Refresh Crafting Slot Panel
-            RefreshCraftingSlot();
         }
 
         public void CloseResult() {
@@ -284,57 +160,7 @@
         }
 
         //======================================================================================================================================
-        //============================================================ [ FUNCTION ] ============================================================
-
-        bool IsCraftable(out string resultName) {
-            if(itemRefSelected == null) {
-                resultName = "Please, Select Item First.";
-                return false;
-            }
-
-            bool isFind = recipe.TryGetRecipe(itemRefSelected.GetID, out CraftingRecipe findRecipe);
-            if (!isFind) throw new System.Exception($"Recipe Not Found, BluePrint Name: {itemRefSelected.GetName}");
-            for (int i = 0; i < findRecipe.Mats.Length; i++) {
-                if (GameManager.Instance.TryGetItemAmount(findRecipe.Mats[i].Mateiral.Item_Id, out int amount) && amount >= findRecipe.Mats[i].Required) {
-                    continue;
-                }
-                else {
-                    resultName = "Don't have enough materials to crafting.";
-                    return false;
-                }
-            }
-
-            resultName = findRecipe.Result.Item.Item_Name;
-            return true;
-        }
-
-        bool TryCrafting(out string log, out CraftingRecipe craftRecipe) {
-            recipe.TryGetRecipe(itemRefSelected.GetID, out CraftingRecipe findRecipe);
-            //Remove Material Items
-            var mats = findRecipe.Mats;
-            for (int i = 0; i < mats.Length; i++) {
-                bool successItemRemove = GameManager.Instance.TryRemoveItem(mats[i].Mateiral.Item_Id, mats[i].Required);
-                if (!successItemRemove) {
-                    log = $"WARNING ! CRAFTING ERROR -> {mats[i].Mateiral.Item_Name}";
-                    craftRecipe = null;
-                    return false;
-                }
-            }
-
-            //Remove BluePrint Item
-            if(!GameManager.Instance.TryRemoveItem(findRecipe.BluePrint.Item_Id, 1)) {
-                log = $"WARNING ! CRAFTING ERROR -> {findRecipe.BluePrint.Item_Name}";
-                craftRecipe = null;
-                return false;
-            }
-
-            log = "";
-            craftRecipe = findRecipe;
-            return true;
-        }
-
-        //======================================================================================================================================
-        //=========================================================== [ INITIALIZE ] ===========================================================
+        //============================================================== [ MAIN ] ==============================================================
 
         void InitPanelMain(UnityEngine.Events.UnityAction<int> unityAction, int slotCount) { 
             //기존 씬에 있던 TempSlot들 비-활성화
@@ -346,36 +172,6 @@
             slots = new List<CraftingSlot>();
             AddCraftingSlot(slotCount, unityAction);
         }
-
-        void InitPanelSelect(byte spawnSlotCount) {
-            //씬에 깔려있는 Slot들 비활성화 처리 후 BluePrint Prefab으로 잡힌 오브젝트 생성
-            bpSlotList = new List<BluePrintSlot>();
-            var sceneExistSlots = bpSlotParentTr.GetComponentsInChildren<BluePrintSlot>();
-            foreach (var slot in sceneExistSlots) {
-                slot.DisableSlot();
-            }
-            bpSlotList = new List<BluePrintSlot>();
-            AddBluePrintSlot(spawnSlotCount);
-        }
-
-        void AddBluePrintSlot(byte spawnSlotCount) {
-            for (int i = 0; i < spawnSlotCount; i++) {
-                bpSlotList.Add(GameObject.Instantiate<BluePrintSlot>(bpSlotPrefab, bpSlotParentTr).InitSlot(this));
-            }
-        }
-
-        void AddCraftingSlot(int spawnSlotCount, UnityEngine.Events.UnityAction<int> unityAction) {
-            for (int i = 0; i < spawnSlotCount; i++) {
-                var newSlot = GameObject.Instantiate<CraftingSlot>(slotPrefab, slotParentRectTr);
-                newSlot.gameObject.name = "crafting_slot_pref";
-                newSlot.AddListnerToSelectButton(unityAction);
-                newSlot.AddListnerToReceiptButton(ReceiptResult);
-                slots.Add(newSlot);
-            }
-        }
-
-        //======================================================================================================================================
-        //============================================================ [ REFRESH ] =============================================================
 
         void RefreshCraftingSlot() {
             slots.ForEach(slot => slot.DisableSlot());
@@ -395,8 +191,46 @@
             }
 
             for (int i = 0; i < craftingSlots.Length; i++) {
-                slots[i].EnableSlot(craftingSlots[i], i); // <- Input CraftingSlot Data
+                slots[i].EnableSlot(craftingSlots[i], i, this); // <- Input CraftingSlot Data
             }
+        }
+
+        void AddCraftingSlot(int spawnSlotCount, UnityEngine.Events.UnityAction<int> unityAction) {
+            for (int i = 0; i < spawnSlotCount; i++) {
+                var newSlot = GameObject.Instantiate<CraftingSlot>(slotPrefab, slotParentRectTr);
+                newSlot.gameObject.name = "crafting_slot_pref";
+                newSlot.AddListnerToSelectButton(unityAction);
+                newSlot.AddListnerToReceiptButton(ReceiptResult);
+                slots.Add(newSlot);
+            }
+        }
+
+        void ReceiptResult(ItemData item, int amount) {
+            //Reuslt Popup Slot Set, Popup Positioning
+            resultItemSlot.EnableSlot(item, amount);
+
+            //Play ResultPopup Tween
+            var slotRectTransform = resultItemSlot.GetComponent<RectTransform>();
+            itemGetPopupTween.TweenStart(slotRectTransform);
+            
+            craftingPopups[1].anchoredPosition = craftingPanels[0].anchoredPosition;
+            openedPopupType = POPUPTYPE.GETITEM;
+
+            //Refresh Crafting Slot Panel
+            RefreshCraftingSlot();
+        }
+
+        //======================================================================================================================================
+        //============================================================ [ SELECTION ] ===========================================================
+        void InitPanelSelect(byte spawnSlotCount) {
+            //씬에 깔려있는 Slot들 비활성화 처리 후 BluePrint Prefab으로 잡힌 오브젝트 생성
+            bpSlotList = new List<BluePrintSlot>();
+            var sceneExistSlots = bpSlotParentTr.GetComponentsInChildren<BluePrintSlot>();
+            foreach (var slot in sceneExistSlots) {
+                slot.DisableSlot();
+            }
+            bpSlotList = new List<BluePrintSlot>();
+            AddBluePrintSlot(spawnSlotCount);
         }
 
         /// <summary>
@@ -493,38 +327,219 @@
             }
         }
 
-        //======================================================================================================================================
-        //========================================================== [ LIFE CYCLE ] ============================================================
-
-        /// <summary>
-        /// 해당 클래스는 MonoBehaviour가 아님, UI_Crafting에 의존하여 처리
-        /// </summary>
-        public void Start(UnityEngine.Events.UnityAction<int> unityAction, int slotCount, byte bluePrintSlotCount, CraftingRecipeSO recipeTable) {
-            InitPanelMain(unityAction, slotCount);
-            InitPanelSelect(bluePrintSlotCount);
-            recipe = recipeTable;
-
-            itemGetPopupTween = new TweenGetItemPopup(resultPopupBack, textResultMain, textResultSub, imageResultHorizontal);
-        }
-
-        public void Enable() {
-
-        }
-
-        /// <summary>
-        /// 해당 클래스는 MonoBehaviour가 아님, UI_Crafting에 의존하여 처리
-        /// </summary>
-        public void Update() {
-            switch (openedPanelType) {
-                case PANELTYPE.NONE:                      break;
-                case PANELTYPE.MAIN:   UpdatePanelMain(); break;
-                case PANELTYPE.CHOOSE:                    break;
-                default: throw new System.NotImplementedException();
+        void AddBluePrintSlot(byte spawnSlotCount) {
+            for (int i = 0; i < spawnSlotCount; i++) {
+                bpSlotList.Add(GameObject.Instantiate<BluePrintSlot>(bpSlotPrefab, bpSlotParentTr).InitSlot(this));
             }
         }
 
-        void UpdatePanelMain() {
+        public void SelectBluePirnt(BluePrintSlot slot, bool isSelectedSlot, AD_item itemRef) {
+            if (isSelectedSlot) {                            //이미 Selected 상태인 Slot에서 DeSelected 요청
+                if(!ReferenceEquals(slot, bpSelectedSlot)) { //요청자가 지금 들고있는 슬롯인지 확인
+                    throw new System.Exception("Slot Not Matched !");
+                }
 
+                bpSelectedSlot.DeSelected();
+                bpSelectedSlot = null;
+
+                //Relaese, Selected Item
+                itemRefSelected = null;
+            }
+            else { //Selected 상태 요청
+                if (bpSelectedSlot != null) { //다른 슬롯을 이미 들고있다면 DeSelected 처리
+                    bpSelectedSlot.DeSelected();
+                    bpSelectedSlot = null;
+                }
+
+                bpSelectedSlot = slot;
+                bpSelectedSlot.Selected();
+
+                //Assign New Item, Recipe Reference
+                itemRefSelected = itemRef;
+            }
+        }
+
+        //======================================================================================================================================
+        //============================================================= [ ITEMINFO ] ===========================================================
+
+        /// <summary>
+        /// 선택된 설계도 슬롯을 버튼을 사용하여 팝업을 호출하는 메서드.
+        /// </summary>
+        /// <param name="log"></param>
+        /// <returns></returns>
+        public bool OpenItemInfo(out string log) {
+            if(bpSelectedSlot == null) {
+                log = "First, Select a BluePrint.";
+                return false;
+            }
+
+            if(itemRefSelected == null) {
+                log = "BluePrint Reference is Null";
+                return false;
+            }
+
+            //Find Recipe Data to Selected BluePrint Item
+            var isFindRecipe = recipe.TryGetRecipe(itemRefSelected.GetID, out CraftingRecipe findRecipe);
+            if (!isFindRecipe) {
+                log = "Not Found Recipe Data";
+                return false;
+            }
+
+            //Setting Item Info Popup
+            infoPopup.SetPopup(itemRefSelected, findRecipe);
+            craftingPopups[0].anchoredPosition = craftingPanels[1].anchoredPosition;
+            openedPopupType = POPUPTYPE.ITEMINFO;
+
+            bpSelectedSlot.DeSelected();
+            bpSelectedSlot = null;
+
+            log = "";
+            return true;
+        }
+
+        /// <summary>
+        /// 설계도 슬롯 자체에서 PointerClick 이벤트의 팝업을 호출하는 메서드.
+        /// </summary>
+        /// <param name="item"></param>
+        public void OpenItemInfo(AD_item item) {
+            if(bpSelectedSlot != null) {
+                bpSelectedSlot.DeSelected();
+                bpSelectedSlot = null;
+            }
+
+            //Find Recipe Data to Selected BluePrint Item
+            itemRefSelected = item;
+            var isFindRecipe = recipe.TryGetRecipe(itemRefSelected.GetID, out CraftingRecipe findRecipe);
+            if (!isFindRecipe) {
+                throw new System.Exception($"Not Found Recipe, Try Key: {itemRefSelected.GetID}, Name:{itemRefSelected.GetName}");
+            }
+
+            //Setting Item Info Popup
+            infoPopup.SetPopup(itemRefSelected, findRecipe);
+
+            //Move Center to Item Info Popup
+            craftingPopups[0].anchoredPosition = craftingPanels[1].anchoredPosition;
+            openedPopupType = POPUPTYPE.ITEMINFO;
+        }
+
+        public void CloseItemInfo() {
+            craftingPopups[0].anchoredPosition = navigateRectTr[2].anchoredPosition;
+            openedPopupType = POPUPTYPE.NONE;
+            itemRefSelected = null;
+        }
+
+        //======================================================================================================================================
+        //============================================================= [ CONFIRM ] ============================================================
+
+        public bool TryOpenConfirm() {
+            if(!IsCraftable(out string resultItemName)) {
+                Notify.Inst.Show(resultItemName);
+                return false;
+            }
+
+            if (bpSelectedSlot != null) {
+                bpSelectedSlot.DeSelected();
+                bpSelectedSlot = null;
+            }
+
+            if(openedPopupType == POPUPTYPE.ITEMINFO) {
+                craftingPopups[0].anchoredPosition = navigateRectTr[2].anchoredPosition;
+            }
+
+            textConfirmItemName.text = resultItemName;
+            craftingPopups[3].anchoredPosition = craftingPanels[1].anchoredPosition;
+            openedPopupType = POPUPTYPE.CONFIRM;
+            return true;
+        }
+
+        public void CloseConfirm() {
+            itemRefSelected = null;
+            craftingPopups[3].anchoredPosition = navigateRectTr[4].anchoredPosition;
+            openedPopupType = POPUPTYPE.NONE;
+        }
+
+        public void Confirm(Vector2 anchoredPosition) {
+            bool successCrafting = TryCrafting(out string failedLog, out CraftingRecipe findRecipe);
+            if (!successCrafting) {
+                CatLog.ELog(failedLog, true);
+                return;
+            }
+
+            itemRefSelected = null;
+            openedPopupType = POPUPTYPE.NONE;
+            craftingPopups[3].anchoredPosition = navigateRectTr[4].anchoredPosition;
+
+            //Start Crafting
+            GameManager.Instance.CraftingStart(selectedSlotNumber, findRecipe);
+
+            ClosePanel();
+            OpenPanel(PANELTYPE.MAIN, anchoredPosition);
+        }
+
+        bool IsCraftable(out string resultName) {
+            if(itemRefSelected == null) {
+                resultName = "Please, Select Item First.";
+                return false;
+            }
+
+            bool isFind = recipe.TryGetRecipe(itemRefSelected.GetID, out CraftingRecipe findRecipe);
+            if (!isFind) throw new System.Exception($"Recipe Not Found, BluePrint Name: {itemRefSelected.GetName}");
+            for (int i = 0; i < findRecipe.Mats.Length; i++) {
+                if (GameManager.Instance.TryGetItemAmount(findRecipe.Mats[i].Mateiral.Item_Id, out int amount) && amount >= findRecipe.Mats[i].Required) {
+                    continue;
+                }
+                else {
+                    resultName = "Don't have enough materials to crafting.";
+                    return false;
+                }
+            }
+
+            resultName = findRecipe.Result.Item.Item_Name;
+            return true;
+        }
+
+        bool TryCrafting(out string log, out CraftingRecipe craftRecipe) {
+            recipe.TryGetRecipe(itemRefSelected.GetID, out CraftingRecipe findRecipe);
+            //Remove Material Items
+            var mats = findRecipe.Mats;
+            for (int i = 0; i < mats.Length; i++) {
+                bool successItemRemove = GameManager.Instance.TryRemoveItem(mats[i].Mateiral.Item_Id, mats[i].Required);
+                if (!successItemRemove) {
+                    log = $"WARNING ! CRAFTING ERROR -> {mats[i].Mateiral.Item_Name}";
+                    craftRecipe = null;
+                    return false;
+                }
+            }
+
+            //Remove BluePrint Item
+            if(!GameManager.Instance.TryRemoveItem(findRecipe.BluePrint.Item_Id, 1)) {
+                log = $"WARNING ! CRAFTING ERROR -> {findRecipe.BluePrint.Item_Name}";
+                craftRecipe = null;
+                return false;
+            }
+
+            log = "";
+            craftRecipe = findRecipe;
+            return true;
+        }
+
+        //======================================================================================================================================
+        //=============================================================== [ ADS ] ==============================================================
+
+        public void OpenAdsPopup(int index) {
+            craftingPopups[2].anchoredPosition = craftingPanels[0].anchoredPosition;
+            openedPopupType = POPUPTYPE.ADS;
+            SelectedSlotNumber = index;
+        }
+
+        public void CloseAdsPopup() {
+            craftingPopups[2].anchoredPosition = navigateRectTr[5].anchoredPosition;
+            openedPopupType = POPUPTYPE.NONE;
+        }
+
+        public void QuickComplete() {
+            slots[SelectedSlotNumber].QuickComplete();
+            SelectedSlotNumber = 0;
         }
 
         //======================================================================================================================================

@@ -1,9 +1,8 @@
-﻿namespace ActionCat
-{
+﻿namespace ActionCat {
     using UnityEngine;
+    using I2.Loc;
 
-    public class AccessorySkillData : ScriptableObject
-    {
+    public class AccessorySkillData : ScriptableObject {
         //Default Skill Data
         public string SkillId;
         public string SkillName;
@@ -13,8 +12,10 @@
         public Sprite SkillIconSprite;
         protected AccessorySPEffect SkillData;
 
-        public AccessorySPEffect Skill()
-        {
+        [TermsPopup] public string NameTerms;
+        [TermsPopup] public string DescTerms;
+
+        public AccessorySPEffect Skill() {
             if (SkillData != null) return SkillData;
             else                   return null;
         }

@@ -3,10 +3,12 @@
     using UnityEngine;
     using UnityEngine.UI;
     using UnityEngine.EventSystems;
+    using DG.Tweening;
 
     public class UpgradeableSlot : MonoBehaviour, IPointerDownHandler, IPointerClickHandler, IPointerExitHandler, IEndDragHandler, IBeginDragHandler, IDragHandler {
         [Header("COMPONENT")]
         [SerializeField] ScrollRect scrollView = null;
+        [SerializeField] RectTransform rectTr = null;
         [SerializeField] RectTransform selectedImageRectTr = null;
         [SerializeField] Image imageItemIcon  = null;
         [SerializeField] Image imageItemFrame = null;
@@ -17,9 +19,15 @@
 
         [Header("STATE")]
         [SerializeField] [ReadOnly] private bool isSelected = false;
-        [SerializeField] [ReadOnly] private bool isTouched  = false;
+        [SerializeField] [ReadOnly] private bool isPressed  = false;
         [SerializeField] [ReadOnly] private float currentTouchTime = 0f;
         private float maxTouchTime = 1.5f;
+
+        //DOSCALE
+        float scalingTime = 0.3f;
+        Vector3 pressedScale = new Vector3(1.1f, 1.1f, 1f);
+        Vector3 normalScale  = new Vector3(1f, 1f, 1f);
+        Vector3 tempScale;
 
         public bool IsActive {
             get {
@@ -33,7 +41,7 @@
         }
 
         private void Update() {
-            if(isTouched == true) {
+            if(isPressed == true) {
                 currentTouchTime += Time.unscaledDeltaTime;
 
                 //MaxTime이상 Touching하고 있으면 Select 판별
@@ -65,31 +73,34 @@
 
         public void Selected() {
             isSelected = true;
-            isTouched  = false;
+            isPressed  = false;
             selectedImageRectTr.gameObject.SetActive(true);
         }
 
         public void DeSelected() {
             isSelected = false;
-            isTouched  = false;
+            isPressed  = false;
             selectedImageRectTr.gameObject.SetActive(false);
         }
 
         #endregion
 
         void IPointerClickHandler.OnPointerClick(PointerEventData eventData) {
-            if (isTouched) {
+            if (isPressed) {
                 actionOpenInfoPanel(itemRef);
             }
+            ScaleTrigger();
         }
         
         void IPointerDownHandler.OnPointerDown(PointerEventData eventData) {
             currentTouchTime = 0f;
-            isTouched = true;
+            isPressed = true;
+            ScaleTrigger();
         }
         
         void IPointerExitHandler.OnPointerExit(PointerEventData eventData) {
-            isTouched = false;
+            isPressed = false;
+            ScaleTrigger();
         }
         
 
@@ -97,7 +108,7 @@
 
         void IEndDragHandler.OnEndDrag(PointerEventData eventData) {
             scrollView.OnEndDrag(eventData);
-            if (isTouched) {
+            if (isPressed) {
                 actionOpenInfoPanel(itemRef);
             }
         }
@@ -108,6 +119,11 @@
 
         void IDragHandler.OnDrag(PointerEventData eventData) {
             scrollView.OnDrag(eventData);
+        }
+
+        void ScaleTrigger() {
+            tempScale = (isPressed) ? pressedScale : normalScale;
+            rectTr.DOScale(tempScale, scalingTime);
         }
 
         #endregion

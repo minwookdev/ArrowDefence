@@ -34,6 +34,9 @@
         protected ITEMTYPE  Item_Type;
         protected ITEMGRADE Item_Grade;
 
+        protected string termsName;
+        protected string termsDesc;
+
         #region PROPERTY_FIELD
 
         public string    GetID            { get { return Item_Id; } }
@@ -44,6 +47,36 @@
         public ITEMTYPE  GetItemType      { get { return Item_Type; } }
         public ITEMGRADE GetGrade         { get { return Item_Grade; } }
 
+        public string GetNameByTerms {
+            get {
+                if (string.IsNullOrEmpty(termsName)) {
+                    return "";
+                }
+
+                I2.Loc.LocalizedString localString = termsName;
+                return localString;
+            }
+        }
+
+        public string GetDescByTerms {
+            get {
+                if (string.IsNullOrEmpty(termsDesc)) {
+                    return "";
+                }
+
+                I2.Loc.LocalizedString localString = termsDesc;
+                return localString;
+            }
+        }
+
+        public string GetNameTerms {
+            get => termsName;
+        }
+
+        public string GetDescTerms {
+            get => termsDesc;
+        }
+
         #endregion
 
         /// <summary>
@@ -51,7 +84,20 @@
         /// </summary>
         /// <returns></returns>
         public abstract object GetItem();
+
+        //기본적인 아이템 정보는 이걸로 다 받는건 어떰??
+        protected AD_item(string nameTerms, string descTerms) {
+            this.termsName = nameTerms;
+            this.termsDesc = descTerms;
+        }
+
+        #region ES3
+        protected AD_item() {
+
+        }
+        ~AD_item() {
+
+        }
+        #endregion
     }
-
-
 }

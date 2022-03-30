@@ -6,14 +6,23 @@
         private byte arrowCount;
         private float spreadAngle;
 
+        public override string GetNameByTerms() {
+            I2.Loc.LocalizedString loc = termsName;
+            return loc;
+        }
+
+        public override string GetDescByTerms() {
+            I2.Loc.LocalizedString loc = termsDesc;
+            return string.Format(loc, arrowCount);
+        }
+
         /// <summary>
         /// Constructor using Skill Data Scriptableobject. (Main)
         /// </summary>
-        /// <param name="data"></param>
-        public Skill_Multiple_Shot(SkillDataSpreadShot data)
-            : base(data.SkillId, data.SkillName, data.SkillDesc, data.SkillLevel, data.SkillType, data.SkillIconSprite) {
-            this.arrowCount  = data.ArrowShotCount;
-            this.spreadAngle = data.SpreadAngle;
+        /// <param name="entity"></param>
+        public Skill_Multiple_Shot(SkillDataSpreadShot entity) : base(entity) {
+            this.arrowCount  = entity.ArrowShotCount;
+            this.spreadAngle = entity.SpreadAngle;
         }
         #region ES3
         public Skill_Multiple_Shot() : base() { }

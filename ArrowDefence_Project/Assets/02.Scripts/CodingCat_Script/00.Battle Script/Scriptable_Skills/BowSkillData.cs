@@ -1,9 +1,8 @@
-﻿namespace ActionCat
-{
+﻿namespace ActionCat {
     using UnityEngine;
+    using I2.Loc;
 
-    public class BowSkillData : ScriptableObject
-    {
+    public class BowSkillData : ScriptableObject {
         //Basic Skill Data
         public string SkillId;
         public string SkillName;
@@ -12,6 +11,9 @@
         public SKILL_LEVEL SkillLevel;
         public Sprite SkillIconSprite;
         protected AD_BowSkill SkillData;
+
+        [TermsPopup] public string NameTerms;
+        [TermsPopup] public string DescTerms;
 
         public AD_BowSkill Skill()
         {

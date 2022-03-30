@@ -18,10 +18,16 @@
             }
         }
 
-        protected Item_Equipment() {
+        protected Item_Equipment(string nameTerms, string descTerms) : base(nameTerms, descTerms) {
             this.Item_Amount = 1;
             this.Item_Type = ITEMTYPE.ITEM_EQUIPMENT;
         }
+
+        #region ES3
+        protected Item_Equipment() {
+
+        }
+        #endregion
 
         public override object GetItem() => throw new System.NotImplementedException();
 

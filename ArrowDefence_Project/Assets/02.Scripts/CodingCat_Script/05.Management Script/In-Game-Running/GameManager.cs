@@ -279,8 +279,8 @@
             CCPlayerData.infos.CraftingStart(index, recipe);
         }
 
-        public void TEST_CREATE_TEMP_CRAFTING_SLOT() {
-            CCPlayerData.TEST_CREATE_TEMP_CRAFTING_SLOT();
+        public void CheckSaveData() {
+            CCPlayerData.CheckSaveData();
         }
 
         public bool TryReceipt(int slotNumber, out ItemData resultItemRef, out int resultItemAmount) {

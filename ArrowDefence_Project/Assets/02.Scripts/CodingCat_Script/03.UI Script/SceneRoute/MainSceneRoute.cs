@@ -25,6 +25,11 @@ public class MainSceneRoute : MonoBehaviour {
     [Header("SAVE & LOAD")]
     public bool isAutoLoad;
 
+    [Header("I2")]
+    [I2.Loc.TermsPopup]
+    public string _stringWithTermPopup;
+    string formatString = "{0}Log{1}";
+
     private void Awake() {
         _inst = this;
         for (int i = 0; i < panels.Length; i++) {
@@ -55,7 +60,15 @@ public class MainSceneRoute : MonoBehaviour {
         if (isAutoLoad) {
             ActionCat.GameManager.Instance.AutoLoadUserData();
         }
-            
+
+        //I2.Loc.LocalizedString localString = "ABILITY_DAMAGE";
+        //string translate = localString;
+        //CatLog.Log(translate);
+        //CatLog.Log(_stringWithTermPopup);
+        I2.Loc.LocalizedString localString = _stringWithTermPopup;
+        CatLog.Log(localString);
+        string tempString = string.Format(formatString, "<color=green>", "</color>"); //<- Skill Description은 이런식? 으로 각각의 스킬 클래스 안에서 사용해주면 어떰?
+        CatLog.Log(tempString);
     }
 
     private void Update() {
@@ -150,7 +163,7 @@ public class MainSceneRoute : MonoBehaviour {
     //============================================================= [ ITEMINFO ] ===========================================================
 
     public static void OPEN_ITEMINFO_PREVIEW(AD_item previewitem) {
-        _inst.itemInfoPop.OpenPreview(previewitem);
+        _inst.itemInfoPop.OpenPreview_Crafting(previewitem);
     }
 
     /// <summary>
@@ -159,9 +172,9 @@ public class MainSceneRoute : MonoBehaviour {
     /// <param name="item"></param>
     public static void OPEN_ITEMINFO(AD_item item) {
         switch (item) {
-            case Item_Consumable  conItem: _inst.itemInfoPop.OpenPopup_ConsumableItem(conItem);  break;
-            case Item_Material    matItem: _inst.itemInfoPop.OpenPopup_MaterialItem(matItem);    break; 
-            case Item_Equipment equipItem: _inst.itemInfoPop.OpenPopup_EquipmentItem(equipItem); break;
+            case Item_Consumable  conItem: _inst.itemInfoPop.OpenPopup(conItem);  break;
+            case Item_Material    matItem: _inst.itemInfoPop.OpenPopup(matItem);    break; 
+            case Item_Equipment equipItem: _inst.itemInfoPop.OpenPopup(equipItem); break;
             default: throw new System.NotImplementedException();
         }
     }

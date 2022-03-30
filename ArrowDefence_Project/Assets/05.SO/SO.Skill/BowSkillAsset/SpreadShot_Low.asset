@@ -19,5 +19,7 @@ MonoBehaviour:
   SkillType: 1
   SkillLevel: 0
   SkillIconSprite: {fileID: 21300000, guid: a029fc7e9de73e1498ba9fa5b68279f7, type: 3}
+  NameTerms: SkillName/SKILL_NAME_SPREADSHOT
+  DescTerms: SkillDesc/SKILL_BOW_SPREADSHOT
   ArrowShotCount: 3
   SpreadAngle: 20

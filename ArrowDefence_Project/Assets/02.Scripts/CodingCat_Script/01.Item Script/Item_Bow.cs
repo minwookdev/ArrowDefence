@@ -17,7 +17,7 @@
         /// Bow Item Constructor (Item Data Type)
         /// </summary>
         /// <param name="item">Bow Item Data Address</param>
-        public Item_Bow(ItemData_Equip_Bow item) : base() {
+        public Item_Bow(ItemData_Equip_Bow item) : base(item.NameTerms, item.DescTerms) {
             this.EquipType = EQUIP_ITEMTYPE.BOW;
 
             this.Item_Id      = item.Item_Id;
@@ -37,7 +37,7 @@
         /// Bow Item Constructor (Item Type)
         /// </summary>
         /// <param name="item"></param>
-        public Item_Bow(Item_Bow item) : base() {
+        public Item_Bow(Item_Bow item) : base(item.termsName, item.termsDesc) {
             this.EquipType = EQUIP_ITEMTYPE.BOW;
 
             this.Item_Id     = item.Item_Id;
@@ -53,7 +53,7 @@
             this.abilities = item.abilities;
         }
         #region ES3
-        public Item_Bow() : base() { }
+        public Item_Bow() { }
         #endregion
 
         protected override Ability[] GetNewAbilities(Ability[] abilities) {

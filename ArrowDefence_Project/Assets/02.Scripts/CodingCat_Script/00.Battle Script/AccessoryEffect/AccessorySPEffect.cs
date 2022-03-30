@@ -11,6 +11,8 @@
         protected ACSP_TYPE effectType;
         protected SKILL_LEVEL level;
         protected Sprite iconSprite;
+        protected string nameTerms;
+        protected string descTerms;
         #region PROPERTY
         public string ID { get => id; }
         public string Name { get => name; }
@@ -27,6 +29,13 @@
         }
         #endregion
 
+        public virtual string GetNameByTerms() {
+            I2.Loc.LocalizedString loc = nameTerms;
+            return loc;
+        }
+
+        public abstract string GetDescByTerms();
+
         protected AccessorySPEffect(string id, string name, string desc, ACSP_TYPE type, SKILL_LEVEL level, Sprite sprite) {
             this.id         = id;
             this.name       = name;
@@ -34,6 +43,17 @@
             this.effectType = type;
             this.level      = level;
             this.iconSprite = sprite;
+        }
+
+        protected AccessorySPEffect(AccessorySkillData entity) {
+            this.id         = entity.SkillId;
+            this.name       = entity.SkillName;
+            this.desc       = entity.SkillDesc;
+            this.effectType = entity.EffectType;
+            this.level      = entity.SkillLevel;
+            this.iconSprite = entity.SkillIconSprite;
+            this.nameTerms  = entity.NameTerms;
+            this.descTerms  = entity.DescTerms;
         }
         #region ES3
         public AccessorySPEffect() { }
@@ -54,6 +74,10 @@
     public class Acsp_AimSight : AccessorySPEffect, IToString {
         private GameObject aimSightPref;
 
+        public override string GetDescByTerms() {
+            throw new System.NotImplementedException();
+        }
+
         public override void Init() {
             var controller = GameGlobal.GetControllerByTag().GetComponent<AD_BowController>();
             var parent     = controller.GetSlotTrOrNull;
@@ -68,10 +92,9 @@
         /// <summary>
         /// Constructor using Skill Data Scriptableobject. (Main)
         /// </summary>
-        /// <param name="data"></param>
-        public Acsp_AimSight(SkillDataAimSight data)
-            : base(data.SkillId, data.SkillName, data.SkillDesc, data.EffectType, data.SkillLevel, data.SkillIconSprite) {
-            aimSightPref = data.AimSightPref;
+        /// <param name="entity"></param>
+        public Acsp_AimSight(SkillDataAimSight entity) : base(entity) {
+            aimSightPref = entity.AimSightPref;
         }
         #region ES3
         public Acsp_AimSight() : base() { }
@@ -86,17 +109,20 @@
 
         public float Cooldown { get => cooldown; }
 
+        public override string GetDescByTerms() {
+            throw new System.NotImplementedException();
+        }
+
         public override void Init() {
             return;
         }
 
         public override string ToString() => "Slow Time";
 
-        public Acsp_SlowTime(SkillDataSlowTime data) : 
-            base(data.SkillId, data.SkillName, data.SkillDesc, data.EffectType, data.SkillLevel, data.SkillIconSprite) {
-            this.timeSlowRatio = data.TimeSlowRatio;
-            this.duration      = data.Duration;
-            this.cooldown      = data.CoolDown;
+        public Acsp_SlowTime(SkillDataSlowTime entity) : base(entity) {
+            this.timeSlowRatio = entity.TimeSlowRatio;
+            this.duration      = entity.Duration;
+            this.cooldown      = entity.CoolDown;
         }
         #region ES3
         public Acsp_SlowTime() : base() { }

@@ -32,13 +32,18 @@ public static class ItemData_Editor
 }
 
 [CustomEditor(typeof(ItemData_Mat))]
-public class MatItemData_Editor : Editor
-{
+public class MatItemData_Editor : Editor {
     ItemData_Mat item;
+    //New
+    SerializedObject serialObject = null;
+    SerializedProperty nameTermProp = null;
+    SerializedProperty descTermProp = null;
 
-    private void OnEnable()
-    {
+    private void OnEnable() {
         item = (ItemData_Mat)target;
+        serialObject = new SerializedObject(target);
+        nameTermProp = serialObject.FindProperty(nameof(ItemData_Mat.NameTerms));
+        descTermProp = serialObject.FindProperty(nameof(ItemData_Mat.DescTerms));
     }
 
 
@@ -74,6 +79,9 @@ public class MatItemData_Editor : Editor
         EditorGUILayout.LabelField(ItemData_Editor.ItemDescText);
         item.Item_Desc = EditorGUILayout.TextArea(item.Item_Desc, GUILayout.Height(50f));
 
+        EditorGUILayout.PropertyField(nameTermProp);
+        EditorGUILayout.PropertyField(descTermProp);
+
         item.Item_Amount = EditorGUILayout.IntField(ItemData_Editor.ItemAmountText, item.Item_Amount);
 
         item.Item_Sprite = (Sprite)EditorGUILayout.ObjectField(ItemData_Editor.ItemSpriteText, item.Item_Sprite, 
@@ -99,18 +107,24 @@ public class MatItemData_Editor : Editor
 
         GUILayout.EndVertical();
 
-        //serializedObject.ApplyModifiedProperties();
+        serialObject.ApplyModifiedProperties();
     }
 }
 
 [CustomEditor(typeof(ItemData_Con))]
-public class ConItemData_Editor : Editor
-{
+public class ConItemData_Editor : Editor {
     ItemData_Con item;
+    //New
+    SerializedObject serialObject   = null;
+    SerializedProperty nameTermProp = null;
+    SerializedProperty descTermProp = null;
 
-    public void OnEnable()
-    {
+    public void OnEnable() {
         item = (ItemData_Con)target;
+
+        serialObject = new SerializedObject(target);
+        nameTermProp = serialObject.FindProperty(nameof(ItemData_Con.NameTerms));
+        descTermProp = serialObject.FindProperty(nameof(ItemData_Con.DescTerms));
     }
 
     public override void OnInspectorGUI()
@@ -145,6 +159,9 @@ public class ConItemData_Editor : Editor
         EditorGUILayout.LabelField(ItemData_Editor.ItemDescText);
         item.Item_Desc = EditorGUILayout.TextArea(item.Item_Desc, GUILayout.Height(50f));
 
+        EditorGUILayout.PropertyField(nameTermProp);
+        EditorGUILayout.PropertyField(descTermProp);
+
         item.Item_Amount = EditorGUILayout.IntField(ItemData_Editor.ItemAmountText, item.Item_Amount);
 
         item.Item_Sprite = (Sprite)EditorGUILayout.ObjectField(ItemData_Editor.ItemSpriteText, item.Item_Sprite,
@@ -169,8 +186,7 @@ public class ConItemData_Editor : Editor
         #endregion
 
         GUILayout.EndVertical();
-
-        //serializedObject.ApplyModifiedProperties();
+        serialObject.ApplyModifiedProperties();
     }
 }
 
@@ -181,6 +197,10 @@ public class BowItemData_Editor : Editor
 
     //Serialized Object
     SerializedObject serialObject;
+
+    //Default Item Property
+    SerializedProperty nameTermsProp = null;
+    SerializedProperty descTermsProp = null;
 
     //Bow Ability Property
     SerializedProperty abilDamageProp;
@@ -205,6 +225,9 @@ public class BowItemData_Editor : Editor
         abilCritDmgProp       = serialObject.FindProperty(nameof(ItemData_Equip_Bow.CriticalDamageMultiplier));
         abilChargedDamageProp = serialObject.FindProperty(nameof(ItemData_Equip_Bow.FullChargedMultiplier));
 
+        nameTermsProp = serialObject.FindProperty(nameof(ItemData_Equip_Bow.NameTerms));
+        descTermsProp = serialObject.FindProperty(nameof(ItemData_Equip_Bow.DescTerms));
+
         var texture = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/08.Sprites/Sprites/Scene_Main/Sprite_Icon/icon_star_grade_l.png");
         if(texture == null) {
             CatLog.WLog("Star Texture is Null");
@@ -222,8 +245,7 @@ public class BowItemData_Editor : Editor
         }
     }
 
-    public override void OnInspectorGUI()
-    {
+    public override void OnInspectorGUI() {
         if (item == null) return;
 
         EditorGUI.BeginDisabledGroup(true);
@@ -254,6 +276,9 @@ public class BowItemData_Editor : Editor
 
         EditorGUILayout.LabelField(ItemData_Editor.ItemDescText);
         item.Item_Desc = EditorGUILayout.TextArea(item.Item_Desc, GUILayout.Height(50f));
+
+        EditorGUILayout.PropertyField(nameTermsProp);
+        EditorGUILayout.PropertyField(descTermsProp);
 
         EditorGUI.BeginDisabledGroup(true);
         item.Item_Amount = EditorGUILayout.IntField(ItemData_Editor.ItemAmountText, item.Item_Amount);
@@ -449,6 +474,10 @@ public class ArrowItemData_Editor : Editor
     SerializedProperty speedProp;
     SerializedProperty effectProp;
 
+    //Default Item Property
+    SerializedProperty nameTermsProp = null;
+    SerializedProperty descTermsProp = null;
+
     //Is Ability Tap Foldout
     bool isAbilityTapFoldout = false;
     //Star Texture
@@ -462,6 +491,9 @@ public class ArrowItemData_Editor : Editor
         incDamageProp = serialObject.FindProperty(nameof(ItemData_Equip_Arrow.DamageInc));
         speedProp     = serialObject.FindProperty(nameof(ItemData_Equip_Arrow.Speed));
         effectProp    = serialObject.FindProperty(nameof(ItemData_Equip_Arrow.effects));
+
+        nameTermsProp = serialObject.FindProperty(nameof(ItemData_Equip_Arrow.NameTerms));
+        descTermsProp = serialObject.FindProperty(nameof(ItemData_Equip_Arrow.DescTerms));
 
         var texture = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/08.Sprites/Sprites/Scene_Main/Sprite_Icon/icon_star_grade_l.png");
         if (texture == null) {
@@ -480,8 +512,7 @@ public class ArrowItemData_Editor : Editor
         }
     }
 
-    public override void OnInspectorGUI()
-    {
+    public override void OnInspectorGUI() {
         if (item == null) return;
 
         EditorGUI.BeginDisabledGroup(true);
@@ -511,6 +542,9 @@ public class ArrowItemData_Editor : Editor
 
         EditorGUILayout.LabelField(ItemData_Editor.ItemDescText);
         item.Item_Desc = EditorGUILayout.TextArea(item.Item_Desc, GUILayout.Height(50f));
+
+        EditorGUILayout.PropertyField(nameTermsProp);
+        EditorGUILayout.PropertyField(descTermsProp);
 
         EditorGUI.BeginDisabledGroup(true);
         item.Item_Amount = EditorGUILayout.IntField(ItemData_Editor.ItemAmountText, item.Item_Amount);
@@ -653,13 +687,18 @@ public class ArrowItemData_Editor : Editor
 }
 
 [CustomEditor(typeof(ItemData_Equip_Accessory))]
-public class AccessItemData_Editor : Editor
-{
+public class AccessItemData_Editor : Editor {
     ItemData_Equip_Accessory item;
+    SerializedObject serialObject = null;
+    SerializedProperty nameTermsProp = null;
+    SerializedProperty descTermsProp = null;
 
-    public void OnEnable()
-    {
+    public void OnEnable() {
         item = (ItemData_Equip_Accessory)target;
+
+        serialObject = new SerializedObject(target);
+        nameTermsProp = serialObject.FindProperty(nameof(ItemData_Equip_Accessory.NameTerms));
+        descTermsProp = serialObject.FindProperty(nameof(ItemData_Equip_Accessory.DescTerms));
     }
 
     public override void OnInspectorGUI()
@@ -693,6 +732,9 @@ public class AccessItemData_Editor : Editor
 
         EditorGUILayout.LabelField(ItemData_Editor.ItemDescText);
         item.Item_Desc = EditorGUILayout.TextArea(item.Item_Desc, GUILayout.Height(50f));
+
+        EditorGUILayout.PropertyField(nameTermsProp);
+        EditorGUILayout.PropertyField(descTermsProp);
 
         EditorGUI.BeginDisabledGroup(true);
         item.Item_Amount = EditorGUILayout.IntField(ItemData_Editor.ItemAmountText, item.Item_Amount);
@@ -791,8 +833,7 @@ public class AccessItemData_Editor : Editor
         #endregion
 
         GUILayout.EndVertical();
-
-        //serializedObject.ApplyModifiedProperties();
+        serialObject.ApplyModifiedProperties();
     }
 }
 
@@ -807,6 +848,9 @@ public class SpArrItemDataEditor : Editor {
     SerializedProperty ItemDescProp;
     SerializedProperty ItemAmountProp;
     SerializedProperty ItemSpriteProp;
+
+    SerializedProperty nameTermsProp = null;
+    SerializedProperty descTermsProp = null;
 
     SerializedProperty EquipTypeProp;
     SerializedProperty EquipAbilityProp;
@@ -834,6 +878,8 @@ public class SpArrItemDataEditor : Editor {
         ItemDescProp   = sobject.FindProperty(nameof(ItemDt_SpArr.Item_Desc));
         ItemAmountProp = sobject.FindProperty(nameof(ItemDt_SpArr.Item_Amount));
         ItemSpriteProp = sobject.FindProperty(nameof(ItemDt_SpArr.Item_Sprite));
+        nameTermsProp  = sobject.FindProperty(nameof(ItemDt_SpArr.NameTerms));
+        descTermsProp  = sobject.FindProperty(nameof(ItemDt_SpArr.DescTerms));
 
         EquipTypeProp    = sobject.FindProperty(nameof(ItemDt_SpArr.Equip_Type));
         EquipAbilityProp = sobject.FindProperty(nameof(ItemDt_SpArr.abilityDatas));
@@ -874,6 +920,8 @@ public class SpArrItemDataEditor : Editor {
         EditorGUILayout.PropertyField(ItemIdProp);
         EditorGUILayout.PropertyField(ItemNameProp);
         EditorGUILayout.PropertyField(ItemDescProp);
+        EditorGUILayout.PropertyField(nameTermsProp);
+        EditorGUILayout.PropertyField(descTermsProp);
         EditorGUI.BeginDisabledGroup(true);
         EditorGUILayout.PropertyField(ItemAmountProp);
         EditorGUI.EndDisabledGroup();

@@ -5,7 +5,7 @@
         /// </summary>
         /// <param name="item">New Item Data</param>
         /// <param name="quantity">Item Quantity int</param>
-        public Item_Consumable(ItemData_Con item, int quantity) {
+        public Item_Consumable(ItemData_Con item, int quantity) : base(item.NameTerms, item.DescTerms) {
             //Item Type Set (Static)
             this.Item_Type = ITEMTYPE.ITEM_CONSUMABLE;
 

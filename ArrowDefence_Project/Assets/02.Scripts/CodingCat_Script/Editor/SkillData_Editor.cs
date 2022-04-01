@@ -13,8 +13,6 @@ public class SpreadShot_DataEditor : Editor
     SerializedObject sobject;
 
     SerializedProperty idProp;
-    SerializedProperty nameProp;
-    SerializedProperty descProp;
     SerializedProperty typeProp;
     SerializedProperty levelProp;
     SerializedProperty spriteProp;
@@ -29,8 +27,6 @@ public class SpreadShot_DataEditor : Editor
         sobject = new SerializedObject(target);
 
         idProp     = sobject.FindProperty("SkillId");
-        nameProp   = sobject.FindProperty("SkillName");
-        descProp   = sobject.FindProperty("SkillDesc");
         typeProp   = sobject.FindProperty("SkillType");
         levelProp  = sobject.FindProperty("SkillLevel");
         spriteProp = sobject.FindProperty("SkillIconSprite");
@@ -62,12 +58,12 @@ public class SpreadShot_DataEditor : Editor
         //ID Field
         EditorGUILayout.PropertyField(idProp);
 
-        //Name Field
-        EditorGUILayout.PropertyField(nameProp, true);
-
-        //Description Field
-        GUILayout.Label("Skill Description");
-        descProp.stringValue = EditorGUILayout.TextArea(descProp.stringValue, GUILayout.Height(50f));
+        ////Name Field
+        //EditorGUILayout.PropertyField(nameProp, true);
+        //
+        ////Description Field
+        //GUILayout.Label("Skill Description");
+        //descProp.stringValue = EditorGUILayout.TextArea(descProp.stringValue, GUILayout.Height(50f));
 
         //Name, Description Terms Field
         EditorGUILayout.PropertyField(nameTermsProp);
@@ -114,8 +110,6 @@ public class RapidShot_DataEditor : Editor
     SerializedObject sobject;
 
     SerializedProperty idProp;
-    SerializedProperty nameProp;
-    SerializedProperty descProp;
     SerializedProperty typeProp;
     SerializedProperty levelProp;
     SerializedProperty spriteProp;
@@ -131,8 +125,6 @@ public class RapidShot_DataEditor : Editor
         sobject = new SerializedObject(target);
 
         idProp     = sobject.FindProperty("SkillId");
-        nameProp   = sobject.FindProperty("SkillName");
-        descProp   = sobject.FindProperty("SkillDesc");
         typeProp   = sobject.FindProperty("SkillType");
         levelProp  = sobject.FindProperty("SkillLevel");
         spriteProp = sobject.FindProperty("SkillIconSprite");
@@ -165,12 +157,12 @@ public class RapidShot_DataEditor : Editor
         //ID Field
         EditorGUILayout.PropertyField(idProp);
 
-        //Name Field
-        EditorGUILayout.PropertyField(nameProp, true);
-
-        //Description Field
-        GUILayout.Label("Skill Description");
-        descProp.stringValue = EditorGUILayout.TextArea(descProp.stringValue, GUILayout.Height(50f));
+        ////Name Field
+        //EditorGUILayout.PropertyField(nameProp, true);
+        //
+        ////Description Field
+        //GUILayout.Label("Skill Description");
+        //descProp.stringValue = EditorGUILayout.TextArea(descProp.stringValue, GUILayout.Height(50f));
 
         //Name, Description Terms Field
         EditorGUILayout.PropertyField(nameTermsProp);
@@ -220,8 +212,6 @@ public class RainArrow_DataEditor : Editor
     SerializedObject sobject;
 
     SerializedProperty idProp;
-    SerializedProperty nameProp;
-    SerializedProperty descProp;
     SerializedProperty typeProp;
     SerializedProperty levelProp;
     SerializedProperty spriteProp;
@@ -236,8 +226,6 @@ public class RainArrow_DataEditor : Editor
         sobject = new SerializedObject(target);
                    
         idProp     = sobject.FindProperty("SkillId");
-        nameProp   = sobject.FindProperty("SkillName");
-        descProp   = sobject.FindProperty("SkillDesc");
         typeProp   = sobject.FindProperty("SkillType");
         levelProp  = sobject.FindProperty("SkillLevel");
         spriteProp = sobject.FindProperty("SkillIconSprite");
@@ -269,12 +257,12 @@ public class RainArrow_DataEditor : Editor
         //ID Field
         EditorGUILayout.PropertyField(idProp);
 
-        //Name Field
-        EditorGUILayout.PropertyField(nameProp, true);
-
-        //Description Field
-        GUILayout.Label("Skill Description");
-        descProp.stringValue = EditorGUILayout.TextArea(descProp.stringValue, GUILayout.Height(50f));
+        ////Name Field
+        //EditorGUILayout.PropertyField(nameProp, true);
+        //
+        ////Description Field
+        //GUILayout.Label("Skill Description");
+        //descProp.stringValue = EditorGUILayout.TextArea(descProp.stringValue, GUILayout.Height(50f));
 
         //Name, Description Terms Field
         EditorGUILayout.PropertyField(nameTermsProp);
@@ -321,8 +309,6 @@ public class Empty_DataEditor : Editor
     SerializedObject sobject;
 
     SerializedProperty idProp;
-    SerializedProperty nameProp;
-    SerializedProperty descProp;
     SerializedProperty typeProp;
     SerializedProperty levelProp;
     SerializedProperty spriteProp;
@@ -335,8 +321,6 @@ public class Empty_DataEditor : Editor
         sobject = new SerializedObject(target);
 
         idProp     = sobject.FindProperty("SkillId");
-        nameProp   = sobject.FindProperty("SkillName");
-        descProp   = sobject.FindProperty("SkillDesc");
         typeProp   = sobject.FindProperty("SkillType");
         levelProp  = sobject.FindProperty("SkillLevel");
         spriteProp = sobject.FindProperty("SkillIconSprite");
@@ -366,12 +350,12 @@ public class Empty_DataEditor : Editor
         //ID Field
         EditorGUILayout.PropertyField(idProp);
 
-        //Name Field
-        EditorGUILayout.PropertyField(nameProp, true);
-
-        //Description Field
-        GUILayout.Label("Skill Description");
-        descProp.stringValue = EditorGUILayout.TextArea(descProp.stringValue, GUILayout.Height(50f));
+        ////Name Field
+        //EditorGUILayout.PropertyField(nameProp, true);
+        //
+        ////Description Field
+        //GUILayout.Label("Skill Description");
+        //descProp.stringValue = EditorGUILayout.TextArea(descProp.stringValue, GUILayout.Height(50f));
 
         //Name, Description Terms Field
         EditorGUILayout.PropertyField(nameTermsProp);

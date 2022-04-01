@@ -15,10 +15,12 @@ MonoBehaviour:
   Item_Type: 2
   Item_Grade: 1
   Item_Id: 4004
-  Item_Amount: 1
+  DefaultAmount: 1
   Item_Name: Steel Arrow
   Item_Desc: "\rSteel arrows found in any game."
   Item_Sprite: {fileID: 21300000, guid: e442fdcc5a634d14daedef9c815a9baa, type: 3}
+  NameTerms: ItemName/Arrow/ARROW_STEEL_1T
+  DescTerms: 
   Equip_Type: 1
   MainArrowObj: {fileID: 2957477139567338875, guid: 8f15211a26bb28743a54c7cf90cabb46,
     type: 3}

@@ -161,8 +161,8 @@
             itemAmountTmp.text   = amount;
 
             //init tooltip values
-            tmpName.text = data.Item_Name;
-            tmpDesc.text = data.Item_Desc;
+            tmpName.text = data.NameByTerms;
+            tmpDesc.text = data.DescByTerms;
 
             //Set temp ItemSlot Position.
             itemSlotRect.position = position;

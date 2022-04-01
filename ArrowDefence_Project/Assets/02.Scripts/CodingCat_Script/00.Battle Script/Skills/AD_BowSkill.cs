@@ -3,8 +3,6 @@
 
     public abstract class AD_BowSkill {
         protected string id;
-        protected string name;
-        protected string desc;
         protected Sprite iconSprite;
         protected SKILL_LEVEL level;
         protected BOWSKILL_TYPE skillType;
@@ -14,8 +12,6 @@
 
         #region PROPERTY
         public string Id { get => id; }
-        public string Name { get => name; }
-        public string Description { get => desc; }
         public Sprite IconSprite
         {
             get
@@ -34,6 +30,18 @@
         public string DescTerms {
             get => termsDesc;
         }
+        public string NameByTerms {
+            get {
+                I2.Loc.LocalizedString loc = termsName;
+                return loc;
+            }
+        }
+        public string DescByTerms {
+            get {
+                I2.Loc.LocalizedString loc = termsDesc;
+                return loc;
+            }
+        }
         #endregion
 
         /// <summary>
@@ -42,19 +50,8 @@
         public AD_BowSkill() { }
         ~AD_BowSkill() { }
 
-        protected AD_BowSkill(string skillid, string skillname, string skilldesc, SKILL_LEVEL level, BOWSKILL_TYPE type, Sprite sprite) {
-            this.id         = skillid;
-            this.name       = skillname;
-            this.desc       = skilldesc;
-            this.level      = level;
-            this.skillType  = type;
-            this.iconSprite = sprite;
-        }
-
         protected AD_BowSkill(BowSkillData entity) {
             this.id         = entity.SkillId;
-            this.name       = entity.SkillName;
-            this.desc       = entity.SkillDesc;
             this.level      = entity.SkillLevel;
             this.skillType  = entity.SkillType;
             this.iconSprite = entity.SkillIconSprite;

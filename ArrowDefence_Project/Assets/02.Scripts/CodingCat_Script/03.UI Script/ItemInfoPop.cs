@@ -171,12 +171,13 @@
             [SerializeField] Image img_ItemIcon;
             [SerializeField] Image img_Frame;
             [SerializeField] TextMeshProUGUI tmp_ItemName;
-            [SerializeField] TextMeshProUGUI tmp_ItemDesc;
             [SerializeField] TextMeshProUGUI tmp_ItemType;
             [SerializeField] TextMeshProUGUI tmp_ItemCount;
+            [SerializeField] TextMeshProUGUI tmp_ItemDesc;
             [SerializeField] Button btn_SellItem;
             [SerializeField] Button btn_Fuse;
             [SerializeField] RectTransform rectTrBtnGroup = null;
+            [SerializeField] RectTransform descRectTr = null;
 
             //Equip & Release Entry
             [Header("Equip & Release Button")]
@@ -221,7 +222,6 @@
 
             void SetDefaultItemInfo(AD_item item, string type, bool isCounting, Sprite frame) {
                 tmp_ItemName.text = item.GetNameByTerms;
-                tmp_ItemDesc.text = item.GetDescByTerms;
                 tmp_ItemType.text = type;
                 if (isCounting)
                      tmp_ItemCount.text = item.GetAmount.ToString();
@@ -229,8 +229,14 @@
                 img_ItemIcon.sprite = item.GetSprite;
                 img_Frame.sprite = frame;
 
-                //Item Description Rect Size Setting.
-                FixDescriptionRectSize(item.GetDesc);
+                //Set Item Description Field
+                tmp_ItemDesc.text = item.GetDescByTerms;
+                if (string.IsNullOrEmpty(item.GetDescByTerms)) {
+                    descRectTr.gameObject.SetActive(false);
+                }
+                else {
+                    descRectTr.gameObject.SetActive(true);
+                }
             }
 
             /// <summary>
@@ -376,8 +382,10 @@
                 var skills = address.SkillInfosOrNull;   //Get Skill Array Size : 2
                 for (int i = 0; i < skills.Length; i++) {
                     if(skills[i] != null) {
-                        SkillSlots[i].ActiveSlot(skills[i].SkillName, skills[i].SkillDesc,
-                                                 skills[i].SkillLevel, skills[i].IconSprite);
+                        SkillSlots[i].ActiveSlot(skills[i].NameByTerms, 
+                                                 skills[i].DescByTerms,
+                                                 skills[i].SkillLevel,
+                                                 skills[i].IconSprite);
                     }
                     else {
                         SkillSlots[i].DisableSlot();
@@ -435,8 +443,10 @@
                 //Enable Skill-Slots (Artifact Special Skill Max : Only 1)
                 var spEffect = address.SPEffectOrNull;
                 if(spEffect != null) {
-                    SkillSlots[0].ActiveSlot(spEffect.Name, spEffect.Description, 
-                                             spEffect.Level, spEffect.IconSprite);
+                    SkillSlots[0].ActiveSlot(spEffect.NameByTerms, 
+                                             spEffect.DescByTerms, 
+                                             spEffect.Level, 
+                                             spEffect.IconSprite);
                 }
                 else {
                     SkillSlots[0].DisableSlot();
@@ -501,7 +511,10 @@
                     if (i == 2) {
                         CatLog.WLog("Need More Skill Slots. Slot Index Over !"); break;
                     }
-                    SkillSlots[i].ActiveSlot(skills[i].SkillName, skills[i].SkillDesc, skills[i].SkillLevel, skills[i].IconSprite);
+                    SkillSlots[i].ActiveSlot(skills[i].NameByTerms, 
+                                             skills[i].DescByTerms, 
+                                             skills[i].SkillLevel, 
+                                             skills[i].IconSprite);
                     slotsLength--;
                 }
                 if (slotsLength > 0) {

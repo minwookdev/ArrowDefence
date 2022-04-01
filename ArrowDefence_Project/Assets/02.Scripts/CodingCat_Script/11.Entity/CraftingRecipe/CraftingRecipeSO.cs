@@ -57,7 +57,7 @@
                     }
 
                     if(recipe.Mats.Length > 5) {
-                        CatLog.ELog($"Material Array Size Always Less than 6, BluePrint: {recipe.BluePrint.Item_Name}");
+                        CatLog.ELog($"Material Array Size Always Less than 6, BluePrint: {recipe.BluePrint.NameByTerms}");
                     }
                 }
             }

@@ -15,12 +15,14 @@ MonoBehaviour:
   Item_Type: 2
   Item_Grade: 2
   Item_Id: 4008
-  Item_Amount: 1
+  DefaultAmount: 1
   Item_Name: Enhanced Hunting Arrow
   Item_Desc: 'A nice hunting arrow with purple feathers.
 
     [Enhanced]'
   Item_Sprite: {fileID: 21300000, guid: 60fec2f50945b0f48870657ef3bbf5d9, type: 3}
+  NameTerms: ItemName/Arrow/ARROW_STALKER_2T
+  DescTerms: 
   Equip_Type: 1
   MainArrowObj: {fileID: 3510703056981778556, guid: 20a96bc49e346704f874672ecd458dca,
     type: 3}

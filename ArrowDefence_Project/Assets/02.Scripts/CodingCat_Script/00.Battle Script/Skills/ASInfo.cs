@@ -1,9 +1,8 @@
 ﻿namespace ActionCat {
+    using I2.Loc;
     public class ASInfo {
         //FIELD
         string id;
-        string name;
-        string desc;
         SKILL_LEVEL level;
         ARROWSKILL type;
         ARROWSKILL_ACTIVETYPE activeType;
@@ -23,28 +22,36 @@
         }
 
         public string SkillId { get => id; }
-        public string SkillName { get => name; }
-        public string SkillDesc { get => desc; }
         public SKILL_LEVEL SkillLevel { get => level; }
         public ARROWSKILL SkillType { get => type; }
         public ARROWSKILL_ACTIVETYPE ActiveType { get => activeType; }
         public UnityEngine.Sprite IconSprite { get => iconSprite; }
+        public string NameByTerms {
+            get {
+                LocalizedString loc = nameTerms;
+                return loc;
+            }
+        }
+        public string DescByTerms {
+            get {
+                LocalizedString loc = descTerms;
+                return loc;
+            }
+        }
 
         /// <summary>
         /// Create New Arrow Skill Information to Item
         /// </summary>
-        /// <param name="so"></param>
-        public ASInfo(ArrowSkillData so) {
-            id         = so.SkillId;
-            name       = so.SkillName;
-            desc       = so.SkillDesc;
-            level      = so.SkillLevel;
-            type       = so.SkillType;
-            activeType = so.ActiveType;
-            iconSprite = so.IconSprite;
-            skillData  = GetNewSkill(so.ArrowSkill);
-            nameTerms  = so.NameTerms;
-            descTerms  = so.DescTerms;
+        /// <param name="entity"></param>
+        public ASInfo(ArrowSkillData entity) {
+            id         = entity.SkillId;
+            level      = entity.SkillLevel;
+            type       = entity.SkillType;
+            activeType = entity.ActiveType;
+            iconSprite = entity.IconSprite;
+            skillData  = GetNewSkill(entity.ArrowSkill);
+            nameTerms  = entity.NameTerms;
+            descTerms  = entity.DescTerms;
         }
 
         /// <summary>
@@ -53,8 +60,6 @@
         /// <param name="origin"></param>
         public ASInfo(ASInfo origin) {
             id         = origin.id;
-            name       = origin.name;
-            desc       = origin.desc;
             level      = origin.level;
             type       = origin.type;
             activeType = origin.activeType;

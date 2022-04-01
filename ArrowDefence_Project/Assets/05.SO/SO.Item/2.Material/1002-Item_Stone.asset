@@ -15,7 +15,9 @@ MonoBehaviour:
   Item_Type: 0
   Item_Grade: 0
   Item_Id: 1002
-  Item_Amount: 15
+  DefaultAmount: 10
   Item_Name: Stone
   Item_Desc: ' It is a material item that can be used as a material.'
   Item_Sprite: {fileID: 21300000, guid: 672f62a5c22684c5fb717c024cae1904, type: 3}
+  NameTerms: ItemName/STONE_NAME
+  DescTerms: ItemDesc/ITEM_DESC_MATERIAL_FOREST

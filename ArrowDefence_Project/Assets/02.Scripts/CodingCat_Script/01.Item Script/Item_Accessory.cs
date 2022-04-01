@@ -11,34 +11,14 @@
             }
         }
 
-        public Item_Accessory(ItemData_Equip_Accessory item) : base(item.NameTerms, item.DescTerms) {
-            //Set Equipment Item Type
-            this.EquipType = EQUIP_ITEMTYPE.ARTIFACT;
-
-            //Set Default Item Data
-            this.Item_Id     = item.Item_Id;
-            this.Item_Name   = item.Item_Name;
-            this.Item_Desc   = item.Item_Desc;
-            this.Item_Sprite = item.Item_Sprite;
-            this.Item_Grade  = item.Item_Grade;
-
-            //Set Accessory Item Data
-            specialEffect = GetNewEffect(item.SPEffectAsset);
+        public Item_Accessory(ItemData_Equip_Accessory entity) : base(entity) {
+            this.EquipType     = EQUIP_ITEMTYPE.ARTIFACT;
+            this.specialEffect = GetNewEffect(entity.SPEffectAsset);
         }
 
-        public Item_Accessory(Item_Accessory item) : base(item.termsName, item.termsDesc) {
-            //Set Equipment Item Type
-            this.EquipType = EQUIP_ITEMTYPE.ARTIFACT;
-
-            //Set Default Item Data
-            this.Item_Id     = item.Item_Id;
-            this.Item_Name   = item.Item_Name;
-            this.Item_Desc   = item.Item_Desc;
-            this.Item_Sprite = item.Item_Sprite;
-            this.Item_Grade  = item.Item_Grade;
-
-            //Set Accessory Item Data 
-            specialEffect = item.specialEffect;
+        public Item_Accessory(Item_Accessory origin) : base(origin) {
+            this.EquipType     = origin.EquipType;
+            this.specialEffect = origin.specialEffect;
         }
 
         /// <summary>

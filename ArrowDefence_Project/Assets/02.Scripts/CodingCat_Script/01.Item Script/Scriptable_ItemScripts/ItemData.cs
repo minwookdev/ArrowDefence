@@ -8,13 +8,25 @@
         public ITEMTYPE Item_Type;
         public ITEMGRADE Item_Grade;
         public string Item_Id;
-        public int Item_Amount;
-        public string Item_Name;
-        public string Item_Desc;
+        public int DefaultAmount;
         public Sprite Item_Sprite;
 
         [TermsPopup] public string NameTerms;
         [TermsPopup] public string DescTerms;
+
+        public string NameByTerms {
+            get {
+                I2.Loc.LocalizedString loc = NameTerms;
+                return loc;
+            }
+        }
+
+        public string DescByTerms {
+            get {
+                I2.Loc.LocalizedString loc = DescTerms;
+                return loc;
+            }
+        }
 
         public virtual string GetItemTypeStr(bool toUpper = false) {
             string itemtypestr = "";

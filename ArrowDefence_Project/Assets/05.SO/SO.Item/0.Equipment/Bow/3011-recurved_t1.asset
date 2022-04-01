@@ -10,21 +10,23 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 85b041e0ff5f89e41b19a84369197493, type: 3}
-  m_Name: 3008-short
+  m_Name: 3011-recurved_t1
   m_EditorClassIdentifier: 
   Item_Type: 2
-  Item_Grade: 0
-  Item_Id: 3008
-  Item_Amount: 1
-  Item_Name: Short Bow
-  Item_Desc: "\rIt is a short but destructive bow."
-  Item_Sprite: {fileID: 21300000, guid: 34e771a96bc647846babed9d764d0ccc, type: 3}
+  Item_Grade: 1
+  Item_Id: 3011
+  DefaultAmount: 1
+  Item_Name: Hunting Bow
+  Item_Desc: 
+  Item_Sprite: {fileID: 21300000, guid: 77277e4ce233c054fb79bf7b59360c3e, type: 3}
+  NameTerms: ItemName/ITEM_BOW_RECURVE_1T
+  DescTerms: 
   Equip_Type: 0
-  BowGameObject: {fileID: 1199833956013647908, guid: 041bd895a42effe48be785b5607c723e,
+  BowGameObject: {fileID: 6278583039945066392, guid: adf40239908c9784c8dce0492e065af5,
     type: 3}
-  SkillAsset_f: {fileID: 11400000, guid: 97062504f2a4e58418b96af3a5af4888, type: 2}
+  SkillAsset_f: {fileID: 11400000, guid: 520120a42f020a644b355ed8ca3469fd, type: 2}
   SkillAsset_s: {fileID: 0}
   BaseDamage: 120
-  CriticalDamageMultiplier: 2
-  FullChargedMultiplier: 1.5
+  CriticalDamageMultiplier: 1.8
+  FullChargedMultiplier: 2
   CriticalHitChance: 15

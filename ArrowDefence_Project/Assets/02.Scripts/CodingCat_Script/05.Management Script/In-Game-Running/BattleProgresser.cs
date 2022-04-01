@@ -374,7 +374,7 @@
         {
             dropItemList.ForEach((item) => {
                 CCPlayerData.inventory.AddItem(item.ItemAsset, item.Quantity);
-                CatLog.Log($"아이템 획득 : {item.ItemAsset.Item_Name}, 수량 : {item.Quantity}");
+                CatLog.Log($"아이템 획득 : {item.ItemAsset.NameByTerms}, 수량 : {item.Quantity}");
             });
         }
 

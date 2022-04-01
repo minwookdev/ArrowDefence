@@ -68,7 +68,7 @@
                 }
             }
 
-            CatLog.Log($"Get Equip Item Address : {itemAddress.GetName}");
+            CatLog.Log($"Get Equip Item Address : {itemAddress.GetNameByTerms}");
         }
 
         public void Clear()

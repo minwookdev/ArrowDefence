@@ -57,28 +57,16 @@
             CCPooler.AddPoolList(AD_Data.POOLTAG_SPECIAL_ARROW, poolQuatity, spArrowPref, false);
         }
 
-        public Item_SpArr(ItemDt_SpArr data) : base(data.NameTerms, data.DescTerms) {
-            EquipType   = EQUIP_ITEMTYPE.ARROW;
-            Item_Id     = data.Item_Id;
-            Item_Name   = data.Item_Name;
-            Item_Desc   = data.Item_Desc;
-            Item_Sprite = data.Item_Sprite;
-            Item_Grade  = data.Item_Grade;
-
-            //Ability
-            abilities = GetNewAbilities(data.abilityDatas);
-
-            //Special Arrow Prefab
-            spArrowPref = data.MainArrowObj;
-
-            //Skills Info
+        public Item_SpArr(ItemDt_SpArr entity) : base(entity) {
+            EquipType = EQUIP_ITEMTYPE.ARROW;
+            abilities = GetNewAbilities(entity.abilityDatas);
+            spArrowPref = entity.MainArrowObj;
             var tempList = new System.Collections.Generic.List<ASInfo>();
-            if (data.ArrowSkillFst != null) tempList.Add(new ASInfo(data.ArrowSkillFst));
-            if (data.ArrowSkillSec != null) tempList.Add(new ASInfo(data.ArrowSkillSec));
-            if (data.ArrowSkillTrd != null) tempList.Add(new ASInfo(data.ArrowSkillTrd));
+            if (entity.ArrowSkillFst != null) tempList.Add(new ASInfo(entity.ArrowSkillFst));
+            if (entity.ArrowSkillSec != null) tempList.Add(new ASInfo(entity.ArrowSkillSec));
+            if (entity.ArrowSkillTrd != null) tempList.Add(new ASInfo(entity.ArrowSkillTrd));
             skillInfos = tempList.ToArray();
-
-            condition = new SpArrCondition(data.ChargeType, data.MaxCost, data.MaxStackCount, data.CostIncrease);
+            condition = new SpArrCondition(entity.ChargeType, entity.MaxCost, entity.MaxStackCount, entity.CostIncrease);
         }
         #region ES3
         public Item_SpArr() { }

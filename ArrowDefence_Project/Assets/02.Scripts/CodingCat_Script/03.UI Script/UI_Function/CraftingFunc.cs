@@ -411,7 +411,7 @@
             itemRefSelected = item;
             var isFindRecipe = recipe.TryGetRecipe(itemRefSelected.GetID, out CraftingRecipe findRecipe);
             if (!isFindRecipe) {
-                throw new System.Exception($"Not Found Recipe, Try Key: {itemRefSelected.GetID}, Name:{itemRefSelected.GetName}");
+                throw new System.Exception($"Not Found Recipe, Try Key: {itemRefSelected.GetID}, Name:{itemRefSelected.GetTermsName}");
             }
 
             //Setting Item Info Popup
@@ -483,7 +483,7 @@
             }
 
             bool isFind = recipe.TryGetRecipe(itemRefSelected.GetID, out CraftingRecipe findRecipe);
-            if (!isFind) throw new System.Exception($"Recipe Not Found, BluePrint Name: {itemRefSelected.GetName}");
+            if (!isFind) throw new System.Exception($"Recipe Not Found, BluePrint Name: {itemRefSelected.GetTermsName}");
             for (int i = 0; i < findRecipe.Mats.Length; i++) {
                 if (GameManager.Instance.TryGetItemAmount(findRecipe.Mats[i].Mateiral.Item_Id, out int amount) && amount >= findRecipe.Mats[i].Required) {
                     continue;
@@ -494,7 +494,7 @@
                 }
             }
 
-            resultName = findRecipe.Result.Item.Item_Name;
+            resultName = findRecipe.Result.Item.NameByTerms;
             return true;
         }
 
@@ -505,7 +505,7 @@
             for (int i = 0; i < mats.Length; i++) {
                 bool successItemRemove = GameManager.Instance.TryRemoveItem(mats[i].Mateiral.Item_Id, mats[i].Required);
                 if (!successItemRemove) {
-                    log = $"WARNING ! CRAFTING ERROR -> {mats[i].Mateiral.Item_Name}";
+                    log = $"WARNING ! CRAFTING ERROR -> {mats[i].Mateiral.NameByTerms}";
                     craftRecipe = null;
                     return false;
                 }
@@ -513,7 +513,7 @@
 
             //Remove BluePrint Item
             if(!GameManager.Instance.TryRemoveItem(findRecipe.BluePrint.Item_Id, 1)) {
-                log = $"WARNING ! CRAFTING ERROR -> {findRecipe.BluePrint.Item_Name}";
+                log = $"WARNING ! CRAFTING ERROR -> {findRecipe.BluePrint.NameByTerms}";
                 craftRecipe = null;
                 return false;
             }

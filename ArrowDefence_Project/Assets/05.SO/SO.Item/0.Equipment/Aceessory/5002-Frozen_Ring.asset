@@ -15,10 +15,12 @@ MonoBehaviour:
   Item_Type: 2
   Item_Grade: 2
   Item_Id: 5002
-  Item_Amount: 1
+  DefaultAmount: 1
   Item_Name: Frozen Ring
   Item_Desc: "\rA ring with a special enchantment."
   Item_Sprite: {fileID: 21300000, guid: 5846e4684219e4f0888eac702223eb68, type: 3}
+  NameTerms: ItemName/Artifact/ARTIFACT_WATCH_1T
+  DescTerms: 
   Equip_Type: 2
   MaxNumberOfEffect: 0
   RFEffectAssets: []

@@ -101,7 +101,7 @@
 
             //Set Name, Progress Text
             textProgress.text = string.Format("[ {2}{0}{3} / {1} ]", craftinginfo.Current, craftinginfo.Max, colorStartString, colorEndString);
-            textPreviewItemName.text = craftinginfo.Result.Item_Name;
+            textPreviewItemName.text = craftinginfo.Result.NameByTerms;
 
             //Set Progress Slider [value = current / max]
             imageSlider.fillAmount = craftinginfo.Progress;

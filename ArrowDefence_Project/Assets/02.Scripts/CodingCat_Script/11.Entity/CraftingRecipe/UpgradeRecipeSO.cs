@@ -33,7 +33,7 @@
                     else {
                         CatLog.WLog($"[UpgradeRecipe Dictionary] Attempt to Insert Duplicate Key, Check Detail: \n " +
                                     $"Item ID: {recipeArray[i].KeyItem.Item_Id}, \n" +
-                                    $"Item Name: {recipeArray[i].KeyItem.Item_Name}");
+                                    $"Item Name: {recipeArray[i].KeyItem.NameByTerms}");
                     }
                 }
 

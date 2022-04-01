@@ -7,8 +7,6 @@ public class ArrowSkillData_Editor : Editor
     protected SerializedObject sobject;
 
     protected SerializedProperty idProp;
-    protected SerializedProperty nameProp;
-    protected SerializedProperty descProp;
     protected SerializedProperty levelProp;
     protected SerializedProperty typeProp;
     protected SerializedProperty spriteProp;
@@ -22,15 +20,13 @@ public class ArrowSkillData_Editor : Editor
         sobject = new SerializedObject(target);
 
         idProp         = sobject.FindProperty("SkillId");
-        nameProp       = sobject.FindProperty("SkillName");
-        descProp       = sobject.FindProperty("SkillDesc");
+        nameTermsProp  = sobject.FindProperty(nameof(ArrowSkillData.NameTerms));
+        descTermsProp  = sobject.FindProperty(nameof(ArrowSkillData.DescTerms));
         levelProp      = sobject.FindProperty("SkillLevel");
         typeProp       = sobject.FindProperty("SkillType");
         spriteProp     = sobject.FindProperty("IconSprite");
         activeTypeProp = sobject.FindProperty("ActiveType");
         effectProp     = sobject.FindProperty(nameof(ArrowSkillData.effects));
-        nameTermsProp  = sobject.FindProperty(nameof(ArrowSkillData.NameTerms));
-        descTermsProp  = sobject.FindProperty(nameof(ArrowSkillData.DescTerms));
     }
 
     public virtual void DrawMonoScript() {
@@ -59,11 +55,11 @@ public class ArrowSkillData_Editor : Editor
         EditorGUILayout.PropertyField(idProp);
 
         //Skill Name Field
-        EditorGUILayout.PropertyField(nameProp);
-
-        //Skill Desc Field
-        GUILayout.Label("Description");
-        descProp.stringValue = EditorGUILayout.TextArea(descProp.stringValue, GUILayout.Height(50f));
+        //EditorGUILayout.PropertyField(nameProp);
+        //
+        ////Skill Desc Field
+        //GUILayout.Label("Description");
+        //descProp.stringValue = EditorGUILayout.TextArea(descProp.stringValue, GUILayout.Height(50f));
 
         //SKILL NAME, DESCRIPTION TERMS
         EditorGUILayout.PropertyField(nameTermsProp);

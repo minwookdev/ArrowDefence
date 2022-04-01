@@ -69,11 +69,11 @@
             }
         }
 
-        public string GetNameTerms {
+        public string GetTermsName {
             get => termsName;
         }
 
-        public string GetDescTerms {
+        public string GetTermsDesc {
             get => termsDesc;
         }
 
@@ -85,12 +85,45 @@
         /// <returns></returns>
         public abstract object GetItem();
 
-        //기본적인 아이템 정보는 이걸로 다 받는건 어떰??
+        
+        /// <summary>
+        /// Only Terms Constructor
+        /// </summary>
+        /// <param name="nameTerms"></param>
+        /// <param name="descTerms"></param>
         protected AD_item(string nameTerms, string descTerms) {
             this.termsName = nameTerms;
             this.termsDesc = descTerms;
         }
 
+        /// <summary>
+        /// Default Amount Constructor
+        /// </summary>
+        /// <param name="entity"></param>
+        protected AD_item(ItemData entity) {
+            this.Item_Id     = entity.Item_Id;
+            this.Item_Amount = entity.DefaultAmount;
+            this.Item_Sprite = entity.Item_Sprite;
+            this.Item_Type   = entity.Item_Type;
+            this.Item_Grade  = entity.Item_Grade;
+            this.termsName   = entity.NameTerms;
+            this.termsDesc   = entity.DescTerms;
+        }
+
+        /// <summary>
+        /// Custom Amount Constructor
+        /// </summary>
+        /// <param name="entity">Item Entity</param>
+        /// <param name="amount">Amount</param>
+        protected AD_item(ItemData entity, int amount) {
+            this.Item_Id     = entity.Item_Id;
+            this.Item_Amount = amount;
+            this.Item_Sprite = entity.Item_Sprite;
+            this.Item_Type   = entity.Item_Type;
+            this.Item_Grade  = entity.Item_Grade;
+            this.termsName   = entity.NameTerms;
+            this.termsDesc   = entity.DescTerms;
+        }
         #region ES3
         protected AD_item() {
 

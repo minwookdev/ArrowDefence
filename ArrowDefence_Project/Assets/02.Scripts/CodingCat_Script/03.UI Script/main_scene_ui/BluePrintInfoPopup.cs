@@ -11,7 +11,9 @@
         [SerializeField] Sprite[] frames = null;
 
         [Header("DESCRIPTION")]
+        [SerializeField] TextMeshProUGUI textName = null;
         [SerializeField] TextMeshProUGUI textDesc = null;
+        [SerializeField] RectTransform rectTrDesc = null;
 
         [Header("REQUIREMENT SLOT")]
         [SerializeField] Crafting.CraftingRequirement[] matSlots = null;
@@ -22,7 +24,16 @@
             imageItemIcon.sprite = item.GetSprite;
             imageFrame.sprite    = frames[(int)item.GetGrade];
             textItemAmount.text  = item.GetAmount.ToString();
-            textDesc.text        = item.GetDesc;
+            textName.text        = item.GetNameByTerms;
+
+            textDesc.text = item.GetDescByTerms;
+            //rectTrDesc.gameObject.SetActive((!string.IsNullOrEmpty(item.GetDescByTerms)));
+            if (string.IsNullOrEmpty(item.GetDescByTerms)) {
+                rectTrDesc.gameObject.SetActive(false);
+            }
+            else {
+                rectTrDesc.gameObject.SetActive(true);
+            }
 
             var mats = recipe.Mats;
             byte enableSlotNumber = 0;

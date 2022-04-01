@@ -257,7 +257,7 @@
             }
 
             requirementTextRectTr.gameObject.SetActive(false);
-            textUpgradeResultName.text = targetRecipe.Result.Item_Name;
+            textUpgradeResultName.text = targetRecipe.Result.NameByTerms;
             selectedItemSlot.EnableSlot(targetRecipe.KeyItem);
             previewItemSlot.EnableSlot(targetRecipe.Result);
             selectedRecipe = targetRecipe;
@@ -553,7 +553,7 @@
         //============================================================= [ CONFIRM ] ============================================================
 
         public void SetConfirmPopup() {
-            textResultItemName.text = string.Format("[ {0} ]", selectedRecipe.Result.Item_Name);
+            textResultItemName.text = string.Format("[ {0} ]", selectedRecipe.Result.NameByTerms);
         }
 
         public bool TryItemUpgrade(out bool? isSuccessUpgrade) {
@@ -599,7 +599,7 @@
                 throw new System.Exception("Warning !, Item Upgrade Failed. Selected Item Not Found");
             }
 
-            GameManager.Instance.AddItem(selectedRecipe.Result, selectedRecipe.Result.Item_Amount);
+            GameManager.Instance.AddItem(selectedRecipe.Result, selectedRecipe.Result.DefaultAmount);
             isSuccessUpgrade = true;
             return true;
         }

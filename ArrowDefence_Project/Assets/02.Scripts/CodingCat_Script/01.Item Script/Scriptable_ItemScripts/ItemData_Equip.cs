@@ -5,7 +5,7 @@
 
         protected ItemData_Equip() {
             Item_Type   = ITEMTYPE.ITEM_EQUIPMENT;
-            Item_Amount = 1;
+            DefaultAmount = 1;
         }
     }
 }

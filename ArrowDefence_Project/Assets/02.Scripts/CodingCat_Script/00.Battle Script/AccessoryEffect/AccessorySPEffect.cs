@@ -15,8 +15,6 @@
         protected string descTerms;
         #region PROPERTY
         public string ID { get => id; }
-        public string Name { get => name; }
-        public string Description { get => desc; }
         public ACSP_TYPE SpEffectType { get => effectType; }
         public SKILL_LEVEL Level { get => level; }
         public Sprite IconSprite {
@@ -25,6 +23,28 @@
                     return iconSprite;
                 else
                     return null;
+            }
+        }
+        public string NameByTerms {
+            get {
+                I2.Loc.LocalizedString loc = nameTerms;
+                return loc;
+            }
+        }
+        public string DescByTerms {
+            get {
+                I2.Loc.LocalizedString loc = descTerms;
+                return loc;
+            }
+        }
+        public string NameTerms {
+            get {
+                return nameTerms;
+            }
+        }
+        public string DescTerms {
+            get {
+                return descTerms;
             }
         }
         #endregion
@@ -36,19 +56,8 @@
 
         public abstract string GetDescByTerms();
 
-        protected AccessorySPEffect(string id, string name, string desc, ACSP_TYPE type, SKILL_LEVEL level, Sprite sprite) {
-            this.id         = id;
-            this.name       = name;
-            this.desc       = desc;
-            this.effectType = type;
-            this.level      = level;
-            this.iconSprite = sprite;
-        }
-
         protected AccessorySPEffect(AccessorySkillData entity) {
             this.id         = entity.SkillId;
-            this.name       = entity.SkillName;
-            this.desc       = entity.SkillDesc;
             this.effectType = entity.EffectType;
             this.level      = entity.SkillLevel;
             this.iconSprite = entity.SkillIconSprite;

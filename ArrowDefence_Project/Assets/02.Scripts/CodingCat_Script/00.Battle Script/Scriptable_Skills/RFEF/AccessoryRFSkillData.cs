@@ -1,6 +1,6 @@
-﻿namespace ActionCat
-{
+﻿namespace ActionCat {
     using UnityEngine;
+    using I2.Loc;
 
     public class AccessoryRFSkillData : ScriptableObject
     {
@@ -11,5 +11,8 @@
         public string SkillDesc;
         public RFEF_TYPE EffectType;
         protected AccessoryRFEffect SkillData;
+
+        [TermsPopup] public string NameTerms;
+        [TermsPopup] public string DescTerms;
     }
 }

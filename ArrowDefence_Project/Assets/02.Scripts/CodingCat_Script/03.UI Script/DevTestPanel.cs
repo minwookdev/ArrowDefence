@@ -129,7 +129,7 @@
             }
 
             foreach (var item in itemList) {
-                CCPlayerData.inventory.AddItem(item, item.Item_Amount);
+                CCPlayerData.inventory.AddItem(item, item.DefaultAmount);
             }
 
             CatLog.Log($"{itemList.Count} 개의 아이템이 전달.");

@@ -13,16 +13,15 @@ MonoBehaviour:
   m_Name: 5001-Dragon_Eyeball
   m_EditorClassIdentifier: 
   Item_Type: 2
-  Item_Grade: 3
+  Item_Grade: 1
   Item_Id: 5001
-  Item_Amount: 1
+  DefaultAmount: 1
   Item_Name: Dragon's Eye
   Item_Desc: "\rThe eye that once colored the world with doom is illuminating everything."
   Item_Sprite: {fileID: 21300000, guid: 4f7b6ffe7b0e2488c8e98abcd0a85dea, type: 3}
+  NameTerms: ItemName/Artifact/ARTIFACT_SIGHT_1T
+  DescTerms: 
   Equip_Type: 2
-  BaseDamage: 0
-  CriticalHitChance: 0
-  CriticalMultiplier: 1
   MaxNumberOfEffect: 0
   RFEffectAssets: []
   SPEffectAsset: {fileID: 11400000, guid: 345c0c7a5eb770541b536cf2a0700542, type: 2}

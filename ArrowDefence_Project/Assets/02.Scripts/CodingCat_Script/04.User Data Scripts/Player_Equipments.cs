@@ -55,7 +55,7 @@
             }
 
             //CCPlayerData.status.UpdateMainWeaponAbility(this);
-            CatLog.Log($"{this.EquippedBow.GetName} 아이템이 장착되었습니다 : 활");
+            CatLog.Log($"{this.EquippedBow.GetTermsName} 아이템이 장착되었습니다 : 활");
         }
 
         public void Release_BowItem()
@@ -72,7 +72,7 @@
 
             this.EquippedArrow_f = new Item_Arrow(item);
             CCPlayerData.inventory.RemoveItem(item);
-            CatLog.Log($"{this.EquippedArrow_f.GetName} 아이템이 장착되었습니다 : 화살");
+            CatLog.Log($"{this.EquippedArrow_f.GetTermsName} 아이템이 장착되었습니다 : 화살");
         }
 
         public void Release_ArrowItem() {
@@ -88,7 +88,7 @@
 
             this.EquippedArrow_s = new Item_Arrow(item);
             CCPlayerData.inventory.RemoveItem(item);
-            CatLog.Log($"{this.EquippedArrow_s.GetName} 아이템이 장착되었습니다.");
+            CatLog.Log($"{this.EquippedArrow_s.GetTermsName} 아이템이 장착되었습니다.");
         }
 
         public void Release_SubArrow()
@@ -112,7 +112,7 @@
                 default: CatLog.ELog($"PlayerEquipment : Wrong idx Accessory index number {idx}"); return;
             }
 
-            CatLog.Log($"{item.GetName} Item Equipped, Type : Accessory");
+            CatLog.Log($"{item.GetTermsName} Item Equipped, Type : Accessory");
             CCPlayerData.inventory.RemoveItem(item);
         }
 
@@ -138,7 +138,7 @@
             }
             EquippedSpArr = item; // 실험적인 기능. 문제가 없다면 다른 아이템에도 동일 로직 적용
             CCPlayerData.inventory.RemoveItem(item);
-            CatLog.Log(StringColor.GREEN, $"Equipment: Item Equipped {EquippedSpArr.GetName}");
+            CatLog.Log(StringColor.GREEN, $"Equipment: Item Equipped {EquippedSpArr.GetTermsName}");
         }
 
         public void Release_SpArrow() {

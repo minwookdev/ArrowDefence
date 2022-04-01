@@ -23,6 +23,21 @@
             this.Item_Type = ITEMTYPE.ITEM_EQUIPMENT;
         }
 
+        protected Item_Equipment(Item_Equipment origin) : base(origin.termsName, origin.termsDesc) {
+            this.Item_Id     = origin.Item_Id;
+            this.Item_Amount = 1;
+            this.Item_Sprite = origin.Item_Sprite;
+            this.Item_Type   = ITEMTYPE.ITEM_EQUIPMENT;
+            this.Item_Grade  = origin.Item_Grade;
+        }
+
+        protected Item_Equipment(ItemData_Equip entity) : base(entity.NameTerms, entity.DescTerms) {
+            this.Item_Id     = entity.Item_Id;
+            this.Item_Amount = 1;
+            this.Item_Sprite = entity.Item_Sprite;
+            this.Item_Type   = ITEMTYPE.ITEM_EQUIPMENT;
+            this.Item_Grade  = entity.Item_Grade;
+        }
         #region ES3
         protected Item_Equipment() {
 

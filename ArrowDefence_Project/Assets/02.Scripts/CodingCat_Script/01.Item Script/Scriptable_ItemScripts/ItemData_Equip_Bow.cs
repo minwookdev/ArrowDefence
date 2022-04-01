@@ -53,7 +53,7 @@
             if (CriticalHitChance > 0) {
                 //Convert To Byte, Check the Byte Range.
                 if (CriticalHitChance < 0 || CriticalHitChance > 255) {
-                    CatLog.WLog($"Bow Item : {Item_Name}, Critical Hit Chance value is Out of Range. {CriticalHitChance}");
+                    CatLog.WLog($"Bow Item : {NameTerms}, Critical Hit Chance value is Out of Range. {CriticalHitChance}");
                 }
                 else {
                     tempAbility.Add(new AbilityCritChance(System.Convert.ToByte(CriticalHitChance)));

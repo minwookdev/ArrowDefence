@@ -200,7 +200,7 @@
         public void RemoveItem(AD_item target) {
             if (invenList.Contains(target)) {
                 invenList.Remove(target);
-                CatLog.Log($"인벤토리에서 해당 아이템 {target.GetName}를(을) 제거하였습니다.");
+                CatLog.Log($"인벤토리에서 해당 아이템 {target.GetTermsName}를(을) 제거하였습니다.");
             }
             else {
                 CatLog.WLog("인벤토리 내부에 해당 아이템이 없습니다.");
@@ -230,7 +230,7 @@
                     }
                     else { //Equipment
                         toRemove.Add(findItems[i]);
-                        CatLog.ELog($"장비 아이템의 수량 지정 에러, 아이템 이름 : {findItems[i].GetName}");
+                        CatLog.ELog($"장비 아이템의 수량 지정 에러, 아이템 이름 : {findItems[i].GetTermsName}");
                     }
                 }
 

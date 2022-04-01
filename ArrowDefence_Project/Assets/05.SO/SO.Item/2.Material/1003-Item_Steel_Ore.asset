@@ -15,8 +15,10 @@ MonoBehaviour:
   Item_Type: 0
   Item_Grade: 1
   Item_Id: 1003
-  Item_Amount: 10
+  DefaultAmount: 10
   Item_Name: Steel Ore
   Item_Desc: "\rIt is a material that can be obtained from nature, \nand can be used
     throughout the \nmanufacture of equipment."
   Item_Sprite: {fileID: 21300000, guid: 5ff1144c7f8c8944ab52b78b21e7aa53, type: 3}
+  NameTerms: ItemName/STEELORE_NAME
+  DescTerms: ItemDesc/ITEM_DESC_MATERIAL_FOREST

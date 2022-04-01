@@ -77,17 +77,17 @@ public class PlayerData_Editor : EditorWindow
 
         //Equipped Bow
         if (CCPlayerData.equipments.IsEquippedBow())
-            EditorGUILayout.LabelField("Equipped Bow Item : ", CCPlayerData.equipments.GetBowItem().GetName);
+            EditorGUILayout.LabelField("Equipped Bow Item : ", CCPlayerData.equipments.GetBowItem().GetTermsName);
         else
             EditorGUILayout.LabelField("Euqippped Bow Item : ", "NULL");
         //Equipped Arrow (Main)
         if (CCPlayerData.equipments.IsEquippedArrowMain())
-            EditorGUILayout.LabelField("Equipped Main Arrow Item : ", CCPlayerData.equipments.GetMainArrow().GetName);
+            EditorGUILayout.LabelField("Equipped Main Arrow Item : ", CCPlayerData.equipments.GetMainArrow().GetTermsName);
         else
             EditorGUILayout.LabelField("Equipped Main Arrow Item : ", "NULL");
         //Equipped Arrow (Sub)
         if (CCPlayerData.equipments.IsEquippedArrowSub())
-            EditorGUILayout.LabelField("Equipped Sub Arrow Item : ", CCPlayerData.equipments.GetSubArrow().GetName);
+            EditorGUILayout.LabelField("Equipped Sub Arrow Item : ", CCPlayerData.equipments.GetSubArrow().GetTermsName);
         else 
             EditorGUILayout.LabelField("Equipped Sub Arrow Item : ", "NULL");
 
@@ -98,17 +98,17 @@ public class PlayerData_Editor : EditorWindow
 
         //Equipped Accessory (f)
         if (CCPlayerData.equipments.IsEquippedAccessory(0))
-            EditorGUILayout.LabelField("Equipped Accessory [0] : ", accessories[0].GetName);
+            EditorGUILayout.LabelField("Equipped Accessory [0] : ", accessories[0].GetTermsName);
         else
             EditorGUILayout.LabelField("Equipped Accessory [0] : ", "NULL");
         //Equipped Accessory (s)
         if (CCPlayerData.equipments.IsEquippedAccessory(1))
-            EditorGUILayout.LabelField("Equipped Accessory [1] : ", accessories[1].GetName);
+            EditorGUILayout.LabelField("Equipped Accessory [1] : ", accessories[1].GetTermsName);
         else
             EditorGUILayout.LabelField("Equipped Accessory [1] : ", "NULL");
         //Equipped Accessory (t)
         if (CCPlayerData.equipments.IsEquippedAccessory(2))
-            EditorGUILayout.LabelField("Equipped Accessory [2] : ", accessories[2].GetName);
+            EditorGUILayout.LabelField("Equipped Accessory [2] : ", accessories[2].GetTermsName);
         else
             EditorGUILayout.LabelField("Equipped Accessory [2] : ", "NULL");
 
@@ -169,9 +169,9 @@ public class ItemInfo
 
     public void InitItem_Mat (Item_Material item) 
     {
-        this.Name   = item.GetName;
+        this.Name   = item.GetTermsName;
         this.Id     = item.GetID.ToString();
-        this.Desc   = item.GetDesc;
+        this.Desc   = item.GetTermsDesc;
         this.Type   = item.GetItemType.ToString();
         this.Grade  = item.GetGrade.ToString();
         this.Amount = item.GetAmount.ToString();
@@ -183,9 +183,9 @@ public class ItemInfo
 
     public void InitItem_Con (Item_Consumable item)
     {
-        this.Name   = item.GetName;
+        this.Name   = item.GetTermsName;
         this.Id     = item.GetID.ToString();
-        this.Desc   = item.GetDesc;
+        this.Desc   = item.GetTermsDesc;
         this.Type   = item.GetItemType.ToString();
         this.Grade  = item.GetGrade.ToString();
         this.Amount = item.GetAmount.ToString();
@@ -197,9 +197,9 @@ public class ItemInfo
 
     public void InitItem_Bow (Item_Bow item)
     {
-        this.Name   = item.GetName;
+        this.Name   = item.GetTermsName;
         this.Id     = item.GetID.ToString();
-        this.Desc   = item.GetDesc;
+        this.Desc   = item.GetTermsDesc;
         this.Type   = item.GetItemType.ToString();
         this.Grade  = item.GetGrade.ToString();
         this.Amount = item.GetAmount.ToString();
@@ -223,9 +223,9 @@ public class ItemInfo
 
     public void InitItem_Arrow (Item_Arrow item)
     {
-        this.Name   = item.GetName;
+        this.Name   = item.GetTermsName;
         this.Id     = item.GetID.ToString();
-        this.Desc   = item.GetDesc;
+        this.Desc   = item.GetTermsDesc;
         this.Type   = item.GetItemType.ToString();
         this.Grade  = item.GetGrade.ToString();
         this.Amount = item.GetAmount.ToString();
@@ -238,9 +238,9 @@ public class ItemInfo
     
     public void InitItem_Access (Item_Accessory item)
     {
-        this.Name   = item.GetName;
+        this.Name   = item.GetTermsName;
         this.Id     = item.GetID.ToString();
-        this.Desc   = item.GetDesc;
+        this.Desc   = item.GetTermsDesc;
         this.Type   = item.GetItemType.ToString();
         this.Grade  = item.GetGrade.ToString();
         this.Amount = item.GetAmount.ToString();

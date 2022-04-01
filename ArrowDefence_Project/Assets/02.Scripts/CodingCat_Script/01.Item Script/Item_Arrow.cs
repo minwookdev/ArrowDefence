@@ -34,64 +34,37 @@
         }
 
         /// <summary>
-        /// Constructor for Item ScriptableObject
+        /// Arrow Item Entity Constructor
         /// </summary>
-        /// <param name="item"></param>
-        public Item_Arrow (ItemData_Equip_Arrow item) : base(item.NameTerms, item.DescTerms) {
+        /// <param name="entity"></param>
+        public Item_Arrow(ItemData_Equip_Arrow entity) : base(entity) {
             this.EquipType = EQUIP_ITEMTYPE.ARROW;
 
-            this.Item_Id     = item.Item_Id;
-            this.Item_Name   = item.Item_Name;
-            this.Item_Desc   = item.Item_Desc;
-            this.Item_Sprite = item.Item_Sprite;
-            this.Item_Grade  = item.Item_Grade;
+            this.MainArrowObject = entity.MainArrowObj;
+            this.LessArrowObject = entity.LessArrowObj;
+            this.speed           = entity.Speed;
 
-            //Init Arrow Prefab
-            this.MainArrowObject = item.MainArrowObj;
-            this.LessArrowObject = item.LessArrowObj;
-            this.speed = item.Speed;
-
-            //Init-Arrow Skill Info
-            if (item.ArrowSkillFst != null) {
-                this.arrowSkillInfoFst = new ASInfo(item.ArrowSkillFst);
-            }
-            if (item.ArrowSkillSec != null) {
-                this.arrowSkillInfoSec = new ASInfo(item.ArrowSkillSec);
-            }
-
-            //Init-Ability Info
-            this.abilities = GetNewAbilities(item.abilityDatas);
-
-            this.effects = item.effects;
+            this.arrowSkillInfoFst = (entity.ArrowSkillFst != null) ? new ASInfo(entity.ArrowSkillFst) : null;
+            this.arrowSkillInfoSec = (entity.ArrowSkillSec != null) ? new ASInfo(entity.ArrowSkillSec) : null;
+            this.abilities         = GetNewAbilities(entity.abilityDatas);
+            this.effects           = entity.effects;
         }
 
         /// <summary>
-        /// Constructor for Item Clone
+        /// Item Clone Constructor
         /// </summary>
-        /// <param name="item"></param>
-        public Item_Arrow(Item_Arrow item) : base(item.termsName, item.termsDesc) {
-            this.EquipType = EQUIP_ITEMTYPE.ARROW;
-
-            this.Item_Id     = item.Item_Id;
-            this.Item_Name   = item.Item_Name;
-            this.Item_Desc   = item.Item_Desc;
-            this.Item_Sprite = item.Item_Sprite;
-            this.Item_Grade  = item.Item_Grade;
-
-            //Init Arrow Prefab
-            this.MainArrowObject = item.MainArrowObject;
-            this.LessArrowObject = item.LessArrowObject;
-            this.speed = item.speed;
-
-            //Init Arrow Skill Data
-            this.arrowSkillInfoFst = item.arrowSkillInfoFst;
-            this.arrowSkillInfoSec = item.arrowSkillInfoSec;
-
-            //Init-Ability Info
-            this.abilities = item.abilities;
-
-            this.effects = item.effects;
+        /// <param name="origin"></param>
+        public Item_Arrow(Item_Arrow origin) : base(origin) {
+            this.EquipType         = origin.EquipType;
+            this.MainArrowObject   = origin.MainArrowObject;
+            this.LessArrowObject   = origin.LessArrowObject;
+            this.speed             = origin.speed;
+            this.arrowSkillInfoFst = origin.arrowSkillInfoFst;
+            this.arrowSkillInfoSec = origin.arrowSkillInfoSec;
+            this.abilities         = origin.abilities;
+            this.effects           = origin.effects;
         }
+
         #region ES3
         public Item_Arrow() : base() { }
         #endregion

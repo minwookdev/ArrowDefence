@@ -74,15 +74,15 @@ public class MatItemData_Editor : Editor {
 
         item.Item_Id = EditorGUILayout.TextField(ItemData_Editor.ItemIdText, item.Item_Id);
 
-        item.Item_Name = EditorGUILayout.TextField(ItemData_Editor.ItemNameText, item.Item_Name);
-
-        EditorGUILayout.LabelField(ItemData_Editor.ItemDescText);
-        item.Item_Desc = EditorGUILayout.TextArea(item.Item_Desc, GUILayout.Height(50f));
+        //item.Item_Name = EditorGUILayout.TextField(ItemData_Editor.ItemNameText, item.Item_Name);
+        //
+        //EditorGUILayout.LabelField(ItemData_Editor.ItemDescText);
+        //item.Item_Desc = EditorGUILayout.TextArea(item.Item_Desc, GUILayout.Height(50f));
 
         EditorGUILayout.PropertyField(nameTermProp);
         EditorGUILayout.PropertyField(descTermProp);
 
-        item.Item_Amount = EditorGUILayout.IntField(ItemData_Editor.ItemAmountText, item.Item_Amount);
+        item.DefaultAmount = EditorGUILayout.IntField("Default Amount", item.DefaultAmount);
 
         item.Item_Sprite = (Sprite)EditorGUILayout.ObjectField(ItemData_Editor.ItemSpriteText, item.Item_Sprite, 
                                                                 typeof(Sprite), allowSceneObjects: true);
@@ -98,7 +98,7 @@ public class MatItemData_Editor : Editor {
             EditorUtility.SetDirty(item);
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
-            CatLog.Log($"<color=green>{item.Item_Name} : Apply the Modified Value</color>");
+            CatLog.Log($"<color=green>{item.NameByTerms} : Apply the Modified Value</color>");
             //changeChecker = false;
         }
         GUILayout.Space(5f);
@@ -154,15 +154,15 @@ public class ConItemData_Editor : Editor {
 
         item.Item_Id = EditorGUILayout.TextField(ItemData_Editor.ItemIdText, item.Item_Id);
 
-        item.Item_Name = EditorGUILayout.TextField(ItemData_Editor.ItemNameText, item.Item_Name);
-
-        EditorGUILayout.LabelField(ItemData_Editor.ItemDescText);
-        item.Item_Desc = EditorGUILayout.TextArea(item.Item_Desc, GUILayout.Height(50f));
+        //item.Item_Name = EditorGUILayout.TextField(ItemData_Editor.ItemNameText, item.Item_Name);
+        //
+        //EditorGUILayout.LabelField(ItemData_Editor.ItemDescText);
+        //item.Item_Desc = EditorGUILayout.TextArea(item.Item_Desc, GUILayout.Height(50f));
 
         EditorGUILayout.PropertyField(nameTermProp);
         EditorGUILayout.PropertyField(descTermProp);
 
-        item.Item_Amount = EditorGUILayout.IntField(ItemData_Editor.ItemAmountText, item.Item_Amount);
+        item.DefaultAmount = EditorGUILayout.IntField("Default Amount", item.DefaultAmount);
 
         item.Item_Sprite = (Sprite)EditorGUILayout.ObjectField(ItemData_Editor.ItemSpriteText, item.Item_Sprite,
                                                                 typeof(Sprite), allowSceneObjects: true);
@@ -178,7 +178,7 @@ public class ConItemData_Editor : Editor {
             EditorUtility.SetDirty(item);
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
-            CatLog.Log($"<color=green>{item.Item_Name} : Apply the Modified Value</color>");
+            CatLog.Log($"<color=green>{item.NameByTerms} : Apply the Modified Value</color>");
             //changeChecker = false;
         }
         GUILayout.Space(5f);
@@ -272,16 +272,16 @@ public class BowItemData_Editor : Editor
 
         item.Item_Id = EditorGUILayout.TextField(ItemData_Editor.ItemIdText, item.Item_Id);
 
-        item.Item_Name = EditorGUILayout.TextField(ItemData_Editor.ItemNameText, item.Item_Name);
-
-        EditorGUILayout.LabelField(ItemData_Editor.ItemDescText);
-        item.Item_Desc = EditorGUILayout.TextArea(item.Item_Desc, GUILayout.Height(50f));
+        //item.Item_Name = EditorGUILayout.TextField(ItemData_Editor.ItemNameText, item.Item_Name);
+        //
+        //EditorGUILayout.LabelField(ItemData_Editor.ItemDescText);
+        //item.Item_Desc = EditorGUILayout.TextArea(item.Item_Desc, GUILayout.Height(50f));
 
         EditorGUILayout.PropertyField(nameTermsProp);
         EditorGUILayout.PropertyField(descTermsProp);
 
         EditorGUI.BeginDisabledGroup(true);
-        item.Item_Amount = EditorGUILayout.IntField(ItemData_Editor.ItemAmountText, item.Item_Amount);
+        item.DefaultAmount = EditorGUILayout.IntField("Default Amount", item.DefaultAmount);
         EditorGUI.EndDisabledGroup();
 
         item.Item_Sprite = (Sprite)EditorGUILayout.ObjectField(ItemData_Editor.ItemSpriteText, item.Item_Sprite,
@@ -416,7 +416,7 @@ public class BowItemData_Editor : Editor
             EditorUtility.SetDirty(item);
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
-            CatLog.Log($"<color=green>{item.Item_Name} : Apply the Modified Value</color>");
+            CatLog.Log($"<color=green>{item.NameByTerms} : Apply the Modified Value</color>");
             //changeChecker = false;
 
             //Repaint();
@@ -440,7 +440,7 @@ public class BowItemData_Editor : Editor
         //EditorGUILayout.LabelField(saveString);
         
 
-        serializedObject.ApplyModifiedProperties();
+        serialObject.ApplyModifiedProperties();
         
         //EditorApplication.update.Invoke();
     }
@@ -538,16 +538,16 @@ public class ArrowItemData_Editor : Editor
 
         item.Item_Id = EditorGUILayout.TextField(ItemData_Editor.ItemIdText, item.Item_Id);
 
-        item.Item_Name = EditorGUILayout.TextField(ItemData_Editor.ItemNameText, item.Item_Name);
-
-        EditorGUILayout.LabelField(ItemData_Editor.ItemDescText);
-        item.Item_Desc = EditorGUILayout.TextArea(item.Item_Desc, GUILayout.Height(50f));
+        //item.Item_Name = EditorGUILayout.TextField(ItemData_Editor.ItemNameText, item.Item_Name);
+        //
+        //EditorGUILayout.LabelField(ItemData_Editor.ItemDescText);
+        //item.Item_Desc = EditorGUILayout.TextArea(item.Item_Desc, GUILayout.Height(50f));
 
         EditorGUILayout.PropertyField(nameTermsProp);
         EditorGUILayout.PropertyField(descTermsProp);
 
         EditorGUI.BeginDisabledGroup(true);
-        item.Item_Amount = EditorGUILayout.IntField(ItemData_Editor.ItemAmountText, item.Item_Amount);
+        item.DefaultAmount = EditorGUILayout.IntField("Default Amount", item.DefaultAmount);
         EditorGUI.EndDisabledGroup();
 
         item.Item_Sprite = (Sprite)EditorGUILayout.ObjectField(ItemData_Editor.ItemSpriteText, item.Item_Sprite,
@@ -655,7 +655,7 @@ public class ArrowItemData_Editor : Editor
             EditorUtility.SetDirty(item);
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
-            CatLog.Log($"<color=green>{item.Item_Name} : Apply the Modified Value</color>");
+            CatLog.Log($"<color=green>{item.NameByTerms} : Apply the Modified Value</color>");
             //changeChecker = false;
         }
         GUILayout.Space(5f);
@@ -728,16 +728,16 @@ public class AccessItemData_Editor : Editor {
 
         item.Item_Id = EditorGUILayout.TextField(ItemData_Editor.ItemIdText, item.Item_Id);
 
-        item.Item_Name = EditorGUILayout.TextField(ItemData_Editor.ItemNameText, item.Item_Name);
-
-        EditorGUILayout.LabelField(ItemData_Editor.ItemDescText);
-        item.Item_Desc = EditorGUILayout.TextArea(item.Item_Desc, GUILayout.Height(50f));
+        //item.Item_Name = EditorGUILayout.TextField(ItemData_Editor.ItemNameText, item.Item_Name);
+        //
+        //EditorGUILayout.LabelField(ItemData_Editor.ItemDescText);
+        //item.Item_Desc = EditorGUILayout.TextArea(item.Item_Desc, GUILayout.Height(50f));
 
         EditorGUILayout.PropertyField(nameTermsProp);
         EditorGUILayout.PropertyField(descTermsProp);
 
         EditorGUI.BeginDisabledGroup(true);
-        item.Item_Amount = EditorGUILayout.IntField(ItemData_Editor.ItemAmountText, item.Item_Amount);
+        item.DefaultAmount = EditorGUILayout.IntField("Default Amount", item.DefaultAmount);
         EditorGUI.EndDisabledGroup();
 
         item.Item_Sprite = (Sprite)EditorGUILayout.ObjectField(ItemData_Editor.ItemSpriteText, item.Item_Sprite,
@@ -821,7 +821,7 @@ public class AccessItemData_Editor : Editor {
             EditorUtility.SetDirty(item);
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
-            CatLog.Log($"<color=green>{item.Item_Name} : Apply the Modified Value</color>");
+            CatLog.Log($"<color=green>{item.NameByTerms} : Apply the Modified Value</color>");
 
             //item.SetAccessoryEffect();
             item.OnEnable(); //Accessory Special Effect & Reinforcement Effect 할당을 위해 OnEnable 호출
@@ -844,8 +844,6 @@ public class SpArrItemDataEditor : Editor {
     SerializedProperty ItemTypeProp;
     SerializedProperty ItemGradeProp;
     SerializedProperty ItemIdProp;
-    SerializedProperty ItemNameProp;
-    SerializedProperty ItemDescProp;
     SerializedProperty ItemAmountProp;
     SerializedProperty ItemSpriteProp;
 
@@ -874,9 +872,7 @@ public class SpArrItemDataEditor : Editor {
         ItemTypeProp   = sobject.FindProperty(nameof(ItemDt_SpArr.Item_Type));
         ItemGradeProp  = sobject.FindProperty(nameof(ItemDt_SpArr.Item_Grade));
         ItemIdProp     = sobject.FindProperty(nameof(ItemDt_SpArr.Item_Id));
-        ItemNameProp   = sobject.FindProperty(nameof(ItemDt_SpArr.Item_Name));
-        ItemDescProp   = sobject.FindProperty(nameof(ItemDt_SpArr.Item_Desc));
-        ItemAmountProp = sobject.FindProperty(nameof(ItemDt_SpArr.Item_Amount));
+        ItemAmountProp = sobject.FindProperty(nameof(ItemDt_SpArr.DefaultAmount));
         ItemSpriteProp = sobject.FindProperty(nameof(ItemDt_SpArr.Item_Sprite));
         nameTermsProp  = sobject.FindProperty(nameof(ItemDt_SpArr.NameTerms));
         descTermsProp  = sobject.FindProperty(nameof(ItemDt_SpArr.DescTerms));
@@ -918,8 +914,6 @@ public class SpArrItemDataEditor : Editor {
         EditorGUI.EndDisabledGroup();
         EditorGUILayout.PropertyField(ItemGradeProp);
         EditorGUILayout.PropertyField(ItemIdProp);
-        EditorGUILayout.PropertyField(ItemNameProp);
-        EditorGUILayout.PropertyField(ItemDescProp);
         EditorGUILayout.PropertyField(nameTermsProp);
         EditorGUILayout.PropertyField(descTermsProp);
         EditorGUI.BeginDisabledGroup(true);

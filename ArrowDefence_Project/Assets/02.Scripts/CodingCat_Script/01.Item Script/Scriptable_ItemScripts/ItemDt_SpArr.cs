@@ -17,8 +17,8 @@
         }
 
         void CheckCondition() {
-            if (ChargeType == CHARGETYPE.NONE) CatLog.WLog($"Special Arrow ({Item_Name}), Not Setting Charge Type.");
-            if (MaxStackCount <= 0)            CatLog.WLog($"Special Arrow ({Item_Name}), Not Setting MaxStackCount.");
+            if (ChargeType == CHARGETYPE.NONE) CatLog.WLog($"Special Arrow ({NameTerms}), Not Setting Charge Type.");
+            if (MaxStackCount <= 0)            CatLog.WLog($"Special Arrow ({NameTerms}), Not Setting MaxStackCount.");
         }
     }
 }

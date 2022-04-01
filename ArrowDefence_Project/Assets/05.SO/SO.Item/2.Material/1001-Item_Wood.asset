@@ -15,7 +15,7 @@ MonoBehaviour:
   Item_Type: 0
   Item_Grade: 0
   Item_Id: 1001
-  Item_Amount: 10
+  DefaultAmount: 15
   Item_Name: Wood
   Item_Desc: 
   Item_Sprite: {fileID: 21300000, guid: 464c8e919b3731244841a86f766d4ce4, type: 3}

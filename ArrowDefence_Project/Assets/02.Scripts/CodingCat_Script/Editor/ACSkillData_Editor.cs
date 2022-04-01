@@ -2,8 +2,7 @@
 using UnityEditor;
 using ActionCat;
 
-public class ACSkillData_Editor
-{
+public class ACSkillData_Editor {
 
 }
 
@@ -14,8 +13,6 @@ public class AimSightDataEditor : Editor {
     SerializedObject sobject;
 
     SerializedProperty idProp;
-    SerializedProperty nameProp;
-    SerializedProperty descProp;
     SerializedProperty typeProp;
     SerializedProperty levelProp;
     SerializedProperty spriteProp;
@@ -32,8 +29,6 @@ public class AimSightDataEditor : Editor {
         sobject = new SerializedObject(target);
 
         idProp     = sobject.FindProperty("SkillId");
-        nameProp   = sobject.FindProperty("SkillName");
-        descProp   = sobject.FindProperty("SkillDesc");
         typeProp   = sobject.FindProperty("EffectType");
         levelProp  = sobject.FindProperty("SkillLevel");
         spriteProp = sobject.FindProperty("SkillIconSprite");
@@ -68,11 +63,11 @@ public class AimSightDataEditor : Editor {
         EditorGUILayout.PropertyField(idProp);
 
         //Name Field
-        EditorGUILayout.PropertyField(nameProp);
-
-        //Description Field
-        GUILayout.Label("Description");
-        descProp.stringValue = EditorGUILayout.TextArea(descProp.stringValue, GUILayout.Height(50f));
+        //EditorGUILayout.PropertyField(nameProp);
+        //
+        ////Description Field
+        //GUILayout.Label("Description");
+        //descProp.stringValue = EditorGUILayout.TextArea(descProp.stringValue, GUILayout.Height(50f));
 
         //NAME, DESCRIPTION TERMS FIELD 
         EditorGUILayout.PropertyField(nameTermsProp);
@@ -119,8 +114,6 @@ public class SlowTimeDataEditor : Editor {
     SerializedObject sobject;
 
     SerializedProperty idProp;
-    SerializedProperty nameProp;
-    SerializedProperty descProp;
     SerializedProperty typeProp;
     SerializedProperty levelProp;
     SerializedProperty spriteProp;
@@ -137,8 +130,6 @@ public class SlowTimeDataEditor : Editor {
 
         //Default Property
         idProp     = sobject.FindProperty("SkillId");
-        nameProp   = sobject.FindProperty("SkillName");
-        descProp   = sobject.FindProperty("SkillDesc");
         typeProp   = sobject.FindProperty("EffectType");
         levelProp  = sobject.FindProperty("SkillLevel");
         spriteProp = sobject.FindProperty("SkillIconSprite");
@@ -173,11 +164,11 @@ public class SlowTimeDataEditor : Editor {
         EditorGUILayout.PropertyField(idProp);
 
         //Name Field
-        EditorGUILayout.PropertyField(nameProp);
-
-        //Description Field
-        GUILayout.Label("Description");
-        descProp.stringValue = EditorGUILayout.TextArea(descProp.stringValue, GUILayout.Height(50f));
+        //EditorGUILayout.PropertyField(nameProp);
+        //
+        ////Description Field
+        //GUILayout.Label("Description");
+        //descProp.stringValue = EditorGUILayout.TextArea(descProp.stringValue, GUILayout.Height(50f));
 
         //NAME, DESCRIPTION TERMS PROP
         EditorGUILayout.PropertyField(nameTermsProp);
@@ -229,22 +220,23 @@ public class RFEditor_DamageUp : Editor
     SerializedObject sobject;
 
     SerializedProperty idProp;
-    SerializedProperty nameProp;
-    SerializedProperty descProp;
     SerializedProperty typeProp;
 
     SerializedProperty valueProp;
 
-    public void OnEnable()
-    {
+    SerializedProperty termsNameProp = null;
+    SerializedProperty termsDescProp = null;
+
+    public void OnEnable() {
         sobject = new SerializedObject(target);
 
         idProp   = sobject.FindProperty("SkillId");
-        nameProp = sobject.FindProperty("SkillName");
-        descProp = sobject.FindProperty("SkillDesc");
         typeProp = sobject.FindProperty("EffectType");
 
         valueProp = sobject.FindProperty("DamageIncreaseValue");
+
+        termsNameProp = sobject.FindProperty(nameof(RFDataDamageUp.NameTerms));
+        termsDescProp = sobject.FindProperty(nameof(RFDataDamageUp.DescTerms));
     }
 
     public override void OnInspectorGUI()
@@ -268,12 +260,15 @@ public class RFEditor_DamageUp : Editor
         EditorGUILayout.PropertyField(idProp);
 
         //Name Field
-        EditorGUILayout.PropertyField(nameProp);
+        //EditorGUILayout.PropertyField(nameProp);
 
         //Desc Field
         //GUILayout.Label("Description");
         //descProp.stringValue = EditorGUILayout.TextArea(descProp.stringValue, GUILayout.Height(50f));
-        EditorGUILayout.PropertyField(descProp);
+        //EditorGUILayout.PropertyField(descProp);
+
+        EditorGUILayout.PropertyField(termsNameProp);
+        EditorGUILayout.PropertyField(termsDescProp);
 
         //Effecy Type Field
         EditorGUI.BeginDisabledGroup(true);

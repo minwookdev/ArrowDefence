@@ -14,7 +14,7 @@
             itemSlot.EnableSlot(item, needAmount);
 
             colorStartString       = (currentAmount < needAmount) ? "<color=red>" : "<color=green>";
-            textName.text          = string.Format("[ {0} ]", item.Item_Name);
+            textName.text          = string.Format("[ {0} ]", item.NameByTerms);
             textCurrentAmount.text = string.Format("{1}{0}{2}", currentAmount, colorStartString, "</color>");
             textNeedAmount.text    = needAmount.ToString();
 

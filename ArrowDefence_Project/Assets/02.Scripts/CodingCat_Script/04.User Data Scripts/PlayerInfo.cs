@@ -127,10 +127,11 @@
     }
 
     public class CraftingInfo {
-        public bool IsSkipable { get; private set; } = false;
-        public int Current    { get; private set; } = 0;
-        public int Max        { get; private set; } = 0;
-        public ItemData Result { get; private set; } = null;
+        public bool IsAvailable { get; private set; } = false;
+        public bool IsSkipable  { get; private set; } = false;
+        public int Current      { get; private set; } = 0;
+        public int Max          { get; private set; } = 0;
+        public ItemData Result  { get; private set; } = null;
         private int amount = 0;
 
         #region PROPERTY
@@ -161,7 +162,6 @@
         }
         #endregion
 
-        public bool IsAvailable { get; private set; } = false;
 
         public void Start(int craftingTime, int craftingAmount, ItemData resultItem) {
             if(resultItem == null) {

@@ -4,21 +4,22 @@ using UnityEngine;
 namespace ES3Types
 {
 	[UnityEngine.Scripting.Preserve]
-	[ES3PropertiesAttribute("bowSkill_Fst", "bowSkill_Sec", "bowGameObject", "EquipType", "abilities", "Item_Id", "Item_Amount", "Item_Sprite", "Item_Type", "Item_Grade", "termsName", "termsDesc")]
-	public class ES3UserType_Item_Bow : ES3ObjectType
+	[ES3PropertiesAttribute("spArrowPref", "skillInfos", "condition", "specialArrDefaultSpeed", "EquipType", "abilities", "Item_Id", "Item_Amount", "Item_Sprite", "Item_Type", "Item_Grade", "termsName", "termsDesc")]
+	public class ES3UserType_Item_SpArr : ES3ObjectType
 	{
 		public static ES3Type Instance = null;
 
-		public ES3UserType_Item_Bow() : base(typeof(ActionCat.Item_Bow)){ Instance = this; priority = 1; }
+		public ES3UserType_Item_SpArr() : base(typeof(ActionCat.Item_SpArr)){ Instance = this; priority = 1; }
 
 
 		protected override void WriteObject(object obj, ES3Writer writer)
 		{
-			var instance = (ActionCat.Item_Bow)obj;
+			var instance = (ActionCat.Item_SpArr)obj;
 			
-			writer.WritePrivateField("bowSkill_Fst", instance);
-			writer.WritePrivateField("bowSkill_Sec", instance);
-			writer.WritePrivateFieldByRef("bowGameObject", instance);
+			writer.WritePrivateFieldByRef("spArrowPref", instance);
+			writer.WritePrivateField("skillInfos", instance);
+			writer.WritePrivateField("condition", instance);
+			writer.WritePrivateField("specialArrDefaultSpeed", instance);
 			writer.WritePrivateField("EquipType", instance);
 			writer.WritePrivateField("abilities", instance);
 			writer.WritePrivateField("Item_Id", instance);
@@ -32,20 +33,23 @@ namespace ES3Types
 
 		protected override void ReadObject<T>(ES3Reader reader, object obj)
 		{
-			var instance = (ActionCat.Item_Bow)obj;
+			var instance = (ActionCat.Item_SpArr)obj;
 			foreach(string propertyName in reader.Properties)
 			{
 				switch(propertyName)
 				{
 					
-					case "bowSkill_Fst":
-					reader.SetPrivateField("bowSkill_Fst", reader.Read<ActionCat.AD_BowSkill>(), instance);
+					case "spArrowPref":
+					reader.SetPrivateField("spArrowPref", reader.Read<UnityEngine.GameObject>(), instance);
 					break;
-					case "bowSkill_Sec":
-					reader.SetPrivateField("bowSkill_Sec", reader.Read<ActionCat.AD_BowSkill>(), instance);
+					case "skillInfos":
+					reader.SetPrivateField("skillInfos", reader.Read<ActionCat.ASInfo[]>(), instance);
 					break;
-					case "bowGameObject":
-					reader.SetPrivateField("bowGameObject", reader.Read<UnityEngine.GameObject>(), instance);
+					case "condition":
+					reader.SetPrivateField("condition", reader.Read<ActionCat.SpArrCondition>(), instance);
+					break;
+					case "specialArrDefaultSpeed":
+					reader.SetPrivateField("specialArrDefaultSpeed", reader.Read<System.Single>(), instance);
 					break;
 					case "EquipType":
 					reader.SetPrivateField("EquipType", reader.Read<ActionCat.EQUIP_ITEMTYPE>(), instance);
@@ -83,18 +87,18 @@ namespace ES3Types
 
 		protected override object ReadObject<T>(ES3Reader reader)
 		{
-			var instance = new ActionCat.Item_Bow();
+			var instance = new ActionCat.Item_SpArr();
 			ReadObject<T>(reader, instance);
 			return instance;
 		}
 	}
 
 
-	public class ES3UserType_Item_BowArray : ES3ArrayType
+	public class ES3UserType_Item_SpArrArray : ES3ArrayType
 	{
 		public static ES3Type Instance;
 
-		public ES3UserType_Item_BowArray() : base(typeof(ActionCat.Item_Bow[]), ES3UserType_Item_Bow.Instance)
+		public ES3UserType_Item_SpArrArray() : base(typeof(ActionCat.Item_SpArr[]), ES3UserType_Item_SpArr.Instance)
 		{
 			Instance = this;
 		}

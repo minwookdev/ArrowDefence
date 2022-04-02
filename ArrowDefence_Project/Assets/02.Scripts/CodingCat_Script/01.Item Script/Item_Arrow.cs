@@ -102,7 +102,7 @@
         {
             if(MainArrowObject == null)
             {
-                CatLog.ELog($"{Item_Name} Item is Not have a Main Arrow Object");
+                CatLog.ELog($"{termsName} Item is Not have a Main Arrow Object");
                 return null;
             }
             else
@@ -115,7 +115,7 @@
         {
             if(LessArrowObject == null)
             {
-                CatLog.ELog($"{Item_Name} Item is Not have a Less Arrow Object");
+                CatLog.ELog($"{termsName} Item is Not have a Less Arrow Object");
                 return null;
             }
             else
@@ -137,7 +137,7 @@
                     var arrSkill_f = arrowSkillInfoFst.SkillData as AttackActiveTypeAS;
                     var arrSkill_s = arrowSkillInfoSec.SkillData as AttackActiveTypeAS;
                     if (arrSkill_f != null && arrSkill_s != null) {
-                        throw new System.Exception($"Item Initialize Failed, {Item_Name} has Duplicate skill type.");
+                        throw new System.Exception($"Item Initialize Failed, {termsName} has Duplicate skill type.");
                     }
                     else if (arrSkill_f != null) {  // firstslot is HitType skill
                         if(arrSkill_f.IsEffectUser == true) {
@@ -179,14 +179,14 @@
 
         public void Init(string mainArrowObjTag, string lessArrowObjTag, int poolQuantity, PlayerAbilitySlot ability) {
             if(MainArrowObject == null || LessArrowObject == null) {
-                throw new System.Exception($"ArrowItem : {Item_Name} is ArrowPrefab NULL.");
+                throw new System.Exception($"ArrowItem : {termsName} is ArrowPrefab NULL.");
             }
 
             bool isMainArr = MainArrowObject.TryGetComponent<AD_Arrow>(out AD_Arrow mainArrow);
             bool isLessArr = LessArrowObject.TryGetComponent<AD_Arrow_less>(out AD_Arrow_less lessArrow);
 
             if(isMainArr == false || isLessArr == false) {
-                throw new System.Exception($"ArrItem : {Item_Name} is Component Not Assignment.");
+                throw new System.Exception($"ArrItem : {termsName} is Component Not Assignment.");
             }
 
             System.Collections.Generic.List<string> effectPoolTags = new System.Collections.Generic.List<string>();

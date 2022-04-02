@@ -4,7 +4,7 @@ using UnityEngine;
 namespace ES3Types
 {
 	[UnityEngine.Scripting.Preserve]
-	[ES3PropertiesAttribute("MainArrowObject", "LessArrowObject", "speed", "arrowSkillInfoFst", "arrowSkillInfoSec", "effects", "EquipType", "abilities", "Item_Id", "Item_Name", "Item_Desc", "Item_Amount", "Item_Sprite", "Item_Type", "Item_Grade")]
+	[ES3PropertiesAttribute("MainArrowObject", "LessArrowObject", "speed", "arrowSkillInfoFst", "arrowSkillInfoSec", "effects", "EquipType", "abilities", "Item_Id", "Item_Amount", "Item_Sprite", "Item_Type", "Item_Grade", "termsName", "termsDesc")]
 	public class ES3UserType_Item_Arrow : ES3ObjectType
 	{
 		public static ES3Type Instance = null;
@@ -25,12 +25,12 @@ namespace ES3Types
 			writer.WritePrivateField("EquipType", instance);
 			writer.WritePrivateField("abilities", instance);
 			writer.WritePrivateField("Item_Id", instance);
-			writer.WritePrivateField("Item_Name", instance);
-			writer.WritePrivateField("Item_Desc", instance);
 			writer.WritePrivateField("Item_Amount", instance);
 			writer.WritePrivateFieldByRef("Item_Sprite", instance);
 			writer.WritePrivateField("Item_Type", instance);
 			writer.WritePrivateField("Item_Grade", instance);
+			writer.WritePrivateField("termsName", instance);
+			writer.WritePrivateField("termsDesc", instance);
 		}
 
 		protected override void ReadObject<T>(ES3Reader reader, object obj)
@@ -66,13 +66,7 @@ namespace ES3Types
 					reader.SetPrivateField("abilities", reader.Read<ActionCat.Ability[]>(), instance);
 					break;
 					case "Item_Id":
-					reader.SetPrivateField("Item_Id", reader.Read<System.Int32>(), instance);
-					break;
-					case "Item_Name":
-					reader.SetPrivateField("Item_Name", reader.Read<System.String>(), instance);
-					break;
-					case "Item_Desc":
-					reader.SetPrivateField("Item_Desc", reader.Read<System.String>(), instance);
+					reader.SetPrivateField("Item_Id", reader.Read<System.String>(), instance);
 					break;
 					case "Item_Amount":
 					reader.SetPrivateField("Item_Amount", reader.Read<System.Int32>(), instance);
@@ -85,6 +79,12 @@ namespace ES3Types
 					break;
 					case "Item_Grade":
 					reader.SetPrivateField("Item_Grade", reader.Read<ActionCat.ITEMGRADE>(), instance);
+					break;
+					case "termsName":
+					reader.SetPrivateField("termsName", reader.Read<System.String>(), instance);
+					break;
+					case "termsDesc":
+					reader.SetPrivateField("termsDesc", reader.Read<System.String>(), instance);
 					break;
 					default:
 						reader.Skip();

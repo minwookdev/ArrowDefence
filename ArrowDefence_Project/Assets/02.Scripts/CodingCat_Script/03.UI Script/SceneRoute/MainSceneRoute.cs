@@ -69,6 +69,10 @@ public class MainSceneRoute : MonoBehaviour {
         CatLog.Log(localString);
         string tempString = string.Format(formatString, "<color=green>", "</color>"); //<- Skill Description은 이런식? 으로 각각의 스킬 클래스 안에서 사용해주면 어떰?
         CatLog.Log(tempString);
+
+        //bool settingsExam = false;
+        //ES3.Save<bool>("TestKey", settingsExam, )
+        CatLog.Log($"data path: {Application.streamingAssetsPath}");
     }
 
     private void Update() {

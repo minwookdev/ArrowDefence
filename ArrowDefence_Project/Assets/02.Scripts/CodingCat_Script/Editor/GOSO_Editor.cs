@@ -2,12 +2,12 @@
 using UnityEditor;
 using ActionCat;
 
-[CustomEditor(typeof(GlobalSO))]
-public class GlobalSOEditor : Editor
+[CustomEditor(typeof(GOSO))]
+public class GOSO_Editor : Editor
 {
     [MenuItem("ActionCat/Open Global ScriptableObject")]
     public static void OpenInspector() {
-        Selection.activeObject = GlobalSO.Inst;
+        Selection.activeObject = GOSO.Inst;
     }
 
     public override void OnInspectorGUI() {

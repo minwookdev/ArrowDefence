@@ -37,7 +37,7 @@
         #endregion
 
         public override void Init() {
-            effectPoolTag = GlobalSO.Inst.POOLTAG_RAPIDSHOT_EFFECT;
+            effectPoolTag = "Eff_Rapid_Muzzle_01";
             CCPooler.AddPoolList(effectPoolTag, 5, muzzleEffect.gameObject, false);
             CatLog.Log("RAPID SHOT INITIALIZE COMPLETE.");
         }

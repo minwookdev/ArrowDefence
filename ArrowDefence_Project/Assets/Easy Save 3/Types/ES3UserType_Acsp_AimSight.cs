@@ -4,7 +4,7 @@ using UnityEngine;
 namespace ES3Types
 {
 	[UnityEngine.Scripting.Preserve]
-	[ES3PropertiesAttribute("aimSightPref", "id", "name", "desc", "effectType", "level", "iconSprite")]
+	[ES3PropertiesAttribute("aimSightPref", "id", "name", "desc", "effectType", "level", "iconSprite", "nameTerms", "descTerms")]
 	public class ES3UserType_Acsp_AimSight : ES3ObjectType
 	{
 		public static ES3Type Instance = null;
@@ -23,6 +23,8 @@ namespace ES3Types
 			writer.WritePrivateField("effectType", instance);
 			writer.WritePrivateField("level", instance);
 			writer.WritePrivateFieldByRef("iconSprite", instance);
+			writer.WritePrivateField("nameTerms", instance);
+			writer.WritePrivateField("descTerms", instance);
 		}
 
 		protected override void ReadObject<T>(ES3Reader reader, object obj)
@@ -53,6 +55,12 @@ namespace ES3Types
 					break;
 					case "iconSprite":
 					reader.SetPrivateField("iconSprite", reader.Read<UnityEngine.Sprite>(), instance);
+					break;
+					case "nameTerms":
+					reader.SetPrivateField("nameTerms", reader.Read<System.String>(), instance);
+					break;
+					case "descTerms":
+					reader.SetPrivateField("descTerms", reader.Read<System.String>(), instance);
 					break;
 					default:
 						reader.Skip();

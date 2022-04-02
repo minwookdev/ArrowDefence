@@ -4,7 +4,7 @@ using UnityEngine;
 namespace ES3Types
 {
 	[UnityEngine.Scripting.Preserve]
-	[ES3PropertiesAttribute("EquippedBow", "EquippedArrow_f", "EquippedArrow_s", "EquippedAccessory_f", "EquippedAccessory_s", "EquippedAccessory_t")]
+	[ES3PropertiesAttribute("EquippedBow", "EquippedArrow_f", "EquippedArrow_s", "EquippedSpArr", "EquippedAccessory_f", "EquippedAccessory_s", "EquippedAccessory_t")]
 	public class ES3UserType_Player_Equipments : ES3ObjectType
 	{
 		public static ES3Type Instance = null;
@@ -19,6 +19,7 @@ namespace ES3Types
 			writer.WritePrivateField("EquippedBow", instance);
 			writer.WritePrivateField("EquippedArrow_f", instance);
 			writer.WritePrivateField("EquippedArrow_s", instance);
+			writer.WritePrivateField("EquippedSpArr", instance);
 			writer.WritePrivateField("EquippedAccessory_f", instance);
 			writer.WritePrivateField("EquippedAccessory_s", instance);
 			writer.WritePrivateField("EquippedAccessory_t", instance);
@@ -40,6 +41,9 @@ namespace ES3Types
 					break;
 					case "EquippedArrow_s":
 					reader.SetPrivateField("EquippedArrow_s", reader.Read<ActionCat.Item_Arrow>(), instance);
+					break;
+					case "EquippedSpArr":
+					reader.SetPrivateField("EquippedSpArr", reader.Read<ActionCat.Item_SpArr>(), instance);
 					break;
 					case "EquippedAccessory_f":
 					reader.SetPrivateField("EquippedAccessory_f", reader.Read<ActionCat.Item_Accessory>(), instance);

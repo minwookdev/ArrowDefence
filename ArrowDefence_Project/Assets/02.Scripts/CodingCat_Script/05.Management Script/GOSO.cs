@@ -4,11 +4,11 @@
     using UnityEditor;
 #endif
 
-    public class GlobalSO : ScriptableObject {
+    public class GOSO : ScriptableObject {
         private const string FileDirectory = "Assets/Resources";
-        private const string FilePath      = "Assets/Resources/GlobalSO.asset";
+        private const string FilePath      = "Assets/Resources/GOSO.asset";
 
-        private static GlobalSO _inst;
+        private static GOSO _inst;
 
         [Header("POOLTAG")]
         public string POOLTAG_RAPIDSHOT_EFFECT = "";
@@ -17,13 +17,13 @@
         [Header("SORTING ORDER")]
         public string SORTINGLAYER_EFFECT = "";
 
-        public static GlobalSO Inst {
+        public static GOSO Inst {
             get {
                 if(_inst != null) {
                     return _inst;
                 }
 
-                _inst = Resources.Load<GlobalSO>("GlobalSO");
+                _inst = Resources.Load<GOSO>("GOSO");
 
 #if UNITY_EDITOR
                 if (_inst == null) {
@@ -31,10 +31,10 @@
                         AssetDatabase.CreateFolder("Assets", "Resources");
                     }
 
-                    _inst = AssetDatabase.LoadAssetAtPath<GlobalSO>(FilePath);
+                    _inst = AssetDatabase.LoadAssetAtPath<GOSO>(FilePath);
 
                     if(_inst == null) {
-                        _inst = CreateInstance<GlobalSO>();
+                        _inst = CreateInstance<GOSO>();
                         AssetDatabase.CreateAsset(_inst, FilePath);
                     }
                 }

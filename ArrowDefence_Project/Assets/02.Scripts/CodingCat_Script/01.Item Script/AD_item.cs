@@ -27,8 +27,6 @@
     [Serializable] 
     public abstract class AD_item {
         protected string    Item_Id;
-        protected string    Item_Name;
-        protected string    Item_Desc;
         protected int       Item_Amount;
         protected Sprite    Item_Sprite;
         protected ITEMTYPE  Item_Type;
@@ -40,8 +38,6 @@
         #region PROPERTY_FIELD
 
         public string    GetID            { get { return Item_Id; } }
-        public string    GetName          { get { return Item_Name; } }
-        public string    GetDesc          { get { return Item_Desc; } }
         public int       GetAmount        { get { return Item_Amount; } }
         public Sprite    GetSprite        { get { return Item_Sprite; } }
         public ITEMTYPE  GetItemType      { get { return Item_Type; } }

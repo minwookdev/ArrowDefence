@@ -101,7 +101,7 @@
             var tags = new List<string>();
             if (muzzleEffect != null) {
                 for (int i = 0; i < muzzleEffect.Length; i++) {
-                    string pooltag = GlobalSO.Inst.POOLTAG_MUZZLE + i.ToString();
+                    string pooltag = GOSO.Inst.POOLTAG_MUZZLE + i.ToString();
                     CCPooler.AddPoolList(pooltag, 2, muzzleEffect[i].gameObject, false);
                     tags.Add(pooltag);
                 }

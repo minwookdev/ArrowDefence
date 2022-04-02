@@ -4,7 +4,7 @@ using UnityEngine;
 namespace ES3Types
 {
 	[UnityEngine.Scripting.Preserve]
-	[ES3PropertiesAttribute("arrowCount", "shotDelay", "muzzleEffect", "id", "name", "desc", "iconSprite", "level", "skillType")]
+	[ES3PropertiesAttribute("arrowCount", "shotDelay", "muzzleEffect", "id", "iconSprite", "level", "skillType", "termsName", "termsDesc")]
 	public class ES3UserType_Skill_Rapid_Shot : ES3ObjectType
 	{
 		public static ES3Type Instance = null;
@@ -20,11 +20,11 @@ namespace ES3Types
 			writer.WritePrivateField("shotDelay", instance);
 			writer.WritePrivateFieldByRef("muzzleEffect", instance);
 			writer.WritePrivateField("id", instance);
-			writer.WritePrivateField("name", instance);
-			writer.WritePrivateField("desc", instance);
 			writer.WritePrivateFieldByRef("iconSprite", instance);
 			writer.WritePrivateField("level", instance);
 			writer.WritePrivateField("skillType", instance);
+			writer.WritePrivateField("termsName", instance);
+			writer.WritePrivateField("termsDesc", instance);
 		}
 
 		protected override void ReadObject<T>(ES3Reader reader, object obj)
@@ -47,12 +47,6 @@ namespace ES3Types
 					case "id":
 					reader.SetPrivateField("id", reader.Read<System.String>(), instance);
 					break;
-					case "name":
-					reader.SetPrivateField("name", reader.Read<System.String>(), instance);
-					break;
-					case "desc":
-					reader.SetPrivateField("desc", reader.Read<System.String>(), instance);
-					break;
 					case "iconSprite":
 					reader.SetPrivateField("iconSprite", reader.Read<UnityEngine.Sprite>(), instance);
 					break;
@@ -61,6 +55,12 @@ namespace ES3Types
 					break;
 					case "skillType":
 					reader.SetPrivateField("skillType", reader.Read<ActionCat.BOWSKILL_TYPE>(), instance);
+					break;
+					case "termsName":
+					reader.SetPrivateField("termsName", reader.Read<System.String>(), instance);
+					break;
+					case "termsDesc":
+					reader.SetPrivateField("termsDesc", reader.Read<System.String>(), instance);
 					break;
 					default:
 						reader.Skip();

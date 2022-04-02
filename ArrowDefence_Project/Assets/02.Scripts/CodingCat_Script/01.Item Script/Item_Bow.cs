@@ -142,7 +142,7 @@
         {
             if(bowGameObject == null)
             {
-                CatLog.ELog($"{Item_Name} is Bow GameObject is NULL, return Function");
+                CatLog.ELog($"{termsName} is Bow GameObject is NULL, return Function");
                 return;
             }
 

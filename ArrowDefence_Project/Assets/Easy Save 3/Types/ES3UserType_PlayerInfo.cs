@@ -4,7 +4,7 @@ using UnityEngine;
 namespace ES3Types
 {
 	[UnityEngine.Scripting.Preserve]
-	[ES3PropertiesAttribute("stageInfo")]
+	[ES3PropertiesAttribute("stageInfo", "craftingInfoList")]
 	public class ES3UserType_PlayerInfo : ES3ObjectType
 	{
 		public static ES3Type Instance = null;
@@ -17,6 +17,7 @@ namespace ES3Types
 			var instance = (ActionCat.Data.PlayerInfo)obj;
 			
 			writer.WritePrivateField("stageInfo", instance);
+			writer.WritePrivateField("craftingInfoList", instance);
 		}
 
 		protected override void ReadObject<T>(ES3Reader reader, object obj)
@@ -29,6 +30,9 @@ namespace ES3Types
 					
 					case "stageInfo":
 					reader.SetPrivateField("stageInfo", reader.Read<System.Collections.Generic.Dictionary<System.String, ActionCat.Data.StageInfo>>(), instance);
+					break;
+					case "craftingInfoList":
+					reader.SetPrivateField("craftingInfoList", reader.Read<System.Collections.Generic.List<ActionCat.Data.CraftingInfo>>(), instance);
 					break;
 					default:
 						reader.Skip();

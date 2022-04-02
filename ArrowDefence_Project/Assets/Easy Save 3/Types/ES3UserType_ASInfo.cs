@@ -4,7 +4,7 @@ using UnityEngine;
 namespace ES3Types
 {
 	[UnityEngine.Scripting.Preserve]
-	[ES3PropertiesAttribute("id", "name", "desc", "level", "type", "activeType", "iconSprite", "skillData")]
+	[ES3PropertiesAttribute("id", "level", "type", "activeType", "iconSprite", "skillData", "nameTerms", "descTerms")]
 	public class ES3UserType_ASInfo : ES3ObjectType
 	{
 		public static ES3Type Instance = null;
@@ -17,13 +17,13 @@ namespace ES3Types
 			var instance = (ActionCat.ASInfo)obj;
 			
 			writer.WritePrivateField("id", instance);
-			writer.WritePrivateField("name", instance);
-			writer.WritePrivateField("desc", instance);
 			writer.WritePrivateField("level", instance);
 			writer.WritePrivateField("type", instance);
 			writer.WritePrivateField("activeType", instance);
 			writer.WritePrivateFieldByRef("iconSprite", instance);
 			writer.WritePrivateField("skillData", instance);
+			writer.WritePrivateField("nameTerms", instance);
+			writer.WritePrivateField("descTerms", instance);
 		}
 
 		protected override void ReadObject<T>(ES3Reader reader, object obj)
@@ -36,12 +36,6 @@ namespace ES3Types
 					
 					case "id":
 					reader.SetPrivateField("id", reader.Read<System.String>(), instance);
-					break;
-					case "name":
-					reader.SetPrivateField("name", reader.Read<System.String>(), instance);
-					break;
-					case "desc":
-					reader.SetPrivateField("desc", reader.Read<System.String>(), instance);
 					break;
 					case "level":
 					reader.SetPrivateField("level", reader.Read<ActionCat.SKILL_LEVEL>(), instance);
@@ -57,6 +51,12 @@ namespace ES3Types
 					break;
 					case "skillData":
 					reader.SetPrivateField("skillData", reader.Read<ActionCat.ArrowSkill>(), instance);
+					break;
+					case "nameTerms":
+					reader.SetPrivateField("nameTerms", reader.Read<System.String>(), instance);
+					break;
+					case "descTerms":
+					reader.SetPrivateField("descTerms", reader.Read<System.String>(), instance);
 					break;
 					default:
 						reader.Skip();

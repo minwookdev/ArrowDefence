@@ -106,14 +106,15 @@
     //=========================================================================================================================================================
     //================================================================= [ SPLIT DAGGER ] ======================================================================
     public class SplitDagger : ProjectileType {
-        public override string GetDescription(string localizedString) {
-            throw new System.NotImplementedException();
-        }
-
+        //SAVED
         private int projectileCount;
 
         //Not Saved
         private float intervalAngle;
+
+        public override string GetDescription(string localizedString) {
+            throw new System.NotImplementedException();
+        }
 
         protected override string[] GetUniqueTags() {
             return new string[1] { "splitdagger" };

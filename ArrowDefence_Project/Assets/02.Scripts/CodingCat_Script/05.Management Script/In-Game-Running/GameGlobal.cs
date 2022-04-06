@@ -232,9 +232,13 @@
 
         public static string GetStageKey(STAGETYPE stageType) {
             switch (stageType) {
-                case STAGETYPE.STAGE_DEV:              return AD_Data.STAGE_KEY_DEV;
-                case STAGETYPE.STAGE_FOREST_SECLUDED:  return AD_Data.STAGE_KEY_FOREST_SECLUDED;
-                case STAGETYPE.STAGE_DUNGEON_ENTRANCE: return AD_Data.STAGE_KEY_DUNGEON_ENTRANCE;
+                case STAGETYPE.FOREST_SECLUDED_E: return AD_Data.STAGE_KEY_FOREST_SECLUDED_EASY;
+                case STAGETYPE.FOREST_SECLUDED_N: return AD_Data.STAGE_KEY_FOREST_SECLUDED_NORMAL;
+                case STAGETYPE.FOREST_SECLUDED_H: return AD_Data.STAGE_KEY_FOREST_SECLUDED_HARD;
+                case STAGETYPE.DUNGEON_E:         return AD_Data.STAGE_KEY_DUNGEON_ENTRANE_EASY;
+                case STAGETYPE.DUNGEON_N:         return AD_Data.STAGE_KEY_DUNGEON_ENTRANE_NORMAL;
+                case STAGETYPE.DUNGEON_H:         return AD_Data.STAGE_KEY_DUNGEON_ENTRANE_HARD;
+                case STAGETYPE.STAGE_DEV:         return AD_Data.STAGE_KEY_DEV;
                 default: throw new System.NotImplementedException("Not Implemented this Stage Type");
             }
         }

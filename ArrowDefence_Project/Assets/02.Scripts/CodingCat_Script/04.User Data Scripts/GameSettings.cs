@@ -34,8 +34,8 @@
 
 namespace ActionCat.Data.StageData {
     public sealed class StageSetting {
-        public bool isOnAutoMode { get; private set; }    = false;
-        public bool isOnSpawnMutant { get; private set; } = false;
+        public bool isOnAutoMode { get; private set; }   = false;
+        public bool isOnEliteSpawn { get; private set; } = false;
 
         public void SetAutoMode(bool isOn) {
             isOnAutoMode = isOn;
@@ -43,8 +43,8 @@ namespace ActionCat.Data.StageData {
         }
 
         public void SetMutant(bool isOn) {
-            isOnSpawnMutant = isOn;
-            CatLog.Log($"Stage Settings Spawn Mutant : {isOnSpawnMutant}");
+            isOnEliteSpawn = isOn;
+            CatLog.Log($"Stage Settings Spawn Mutant : {isOnEliteSpawn}");
         }
     }
 }

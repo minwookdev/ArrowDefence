@@ -240,6 +240,35 @@
             }
 
             /// <summary>
+            /// isShowAmount가 true일때, default amount가 들어감
+            /// </summary>
+            /// <param name="entity"></param>
+            /// <param name="isShowAmount"></param>
+            void SetDefaultItemInfo(ItemData entity, Sprite frame, bool isShowAmount = false) {
+                tmp_ItemName.text = entity.NameByTerms;
+                switch (entity.Item_Type) {
+                    case ITEMTYPE.ITEM_MATERIAL:   tmp_ItemType.text = "MATERIAL";   break;
+                    case ITEMTYPE.ITEM_CONSUMABLE: tmp_ItemType.text = "CONSUMABLE"; break;
+                    case ITEMTYPE.ITEM_EQUIPMENT:  tmp_ItemType.text = "EQUIPMENT";  break;
+                    default: throw new System.NotImplementedException();
+                }
+
+                tmp_ItemCount.text  = (isShowAmount) ? entity.DefaultAmount.ToString() : "";
+                img_ItemIcon.sprite = entity.Item_Sprite;
+                img_Frame.sprite    = frame;
+
+                //Set Item Description Field
+                string description = entity.DescByTerms;
+                if (string.IsNullOrEmpty(description)) {
+                    descRectTr.gameObject.SetActive(false);
+                }
+                else {
+                    descRectTr.gameObject.SetActive(true);
+                    tmp_ItemDesc.text = description;
+                }
+            }
+
+            /// <summary>
             /// 재료 아이템 팝업
             /// </summary>
             /// <param name="address"></param>
@@ -556,6 +585,15 @@
 
                 //Enable Popup
                 popupGameObject.SetActive(true);    
+            }
+
+            /// <summary>
+            /// 사용금지
+            /// </summary>
+            /// <param name="entity"></param>
+            /// <param name="frame"></param>
+            public void OpenEntityInfo(ItemData entity, Sprite frame) {
+                SetDefaultItemInfo(entity, frame);
             }
 
             void DisablePopup() {

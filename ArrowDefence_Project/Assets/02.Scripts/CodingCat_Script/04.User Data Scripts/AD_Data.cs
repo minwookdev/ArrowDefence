@@ -9,12 +9,15 @@ public static class AD_Data {
     public static readonly string SCENE_TITLE         = "ArrowDefence_Title";
     public static readonly string SCENE_MAIN          = "ArrowDefence_Main";
     public static readonly string SCENE_LOADING       = "ArrowDefence_Loading";
-    public static readonly string SCENE_BATTLE_DEV    = "ArrowDefence_Battle_Dev";
+
     //BATTLE SCENE STRING 
-    public static readonly string SCENE_BATTLE_FOREST_NORMAL  = "ArrowDefence_Battle_Forest_Normal";
-    public static readonly string SCENE_BATTLE_FOREST_HARD    = "ArrowDefence_Battle_Forest_Hard";
-    public static readonly string SCENE_BATTLE_DUNGEON_NORMAL = "ArrowDefence_Battle_Dungeon_Normal";
-    public static readonly string SCENE_BATTLE_DUNGEON_HARD   = "ArrowDefence_Battle_Dungeon_Hard";
+    public static readonly string SCENE_BATTLE_FOREST_EASY    = "Forest_Secluded_Easy";
+    public static readonly string SCENE_BATTLE_FOREST_NORMAL  = "Forest_Secluded_Normal";
+    public static readonly string SCENE_BATTLE_FOREST_HARD    = "Forest_Secluded_Hard";
+    public static readonly string SCENE_BATTLE_DUNGEON_EASY   = "Dungeon_Entrance_Easy";
+    public static readonly string SCENE_BATTLE_DUNGEON_NORMAL = "Dungeon_Entrance_Normal";
+    public static readonly string SCENE_BATTLE_DUNGEON_HARD   = "Dungeon_Entrance_Hard";
+    public static readonly string SCENE_BATTLE_DEV            = "_dev_stage";
 
     /// <summary>
     /// Stage Info Panel Battle Stage Name String Data
@@ -69,7 +72,13 @@ public static class AD_Data {
     /// <summary>
     /// Stage Info Dictionary Key
     /// </summary>
-    public static readonly string STAGE_KEY_DEV              = "DEV";
     public static readonly string STAGE_KEY_FOREST_SECLUDED  = "SECLUDED_FOREST";
     public static readonly string STAGE_KEY_DUNGEON_ENTRANCE = "ENTRANCE_DUNGEON";
+    public static readonly string STAGE_KEY_FOREST_SECLUDED_EASY   = "forest_secluded_e";
+    public static readonly string STAGE_KEY_FOREST_SECLUDED_NORMAL = "forest_secluded_n";
+    public static readonly string STAGE_KEY_FOREST_SECLUDED_HARD   = "forest_secluded_h";
+    public static readonly string STAGE_KEY_DUNGEON_ENTRANE_EASY   = "dungeon_entrance_e";
+    public static readonly string STAGE_KEY_DUNGEON_ENTRANE_NORMAL = "dungeon_entrance_n";
+    public static readonly string STAGE_KEY_DUNGEON_ENTRANE_HARD   = "dungeon_entrance_h";
+    public static readonly string STAGE_KEY_DEV                    = "dev";
 }

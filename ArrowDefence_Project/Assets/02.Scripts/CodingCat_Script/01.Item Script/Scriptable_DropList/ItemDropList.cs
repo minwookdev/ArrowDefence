@@ -75,10 +75,9 @@
 
 #if UNITY_EDITOR
         [UnityEditor.MenuItem("ActionCat/Scriptable Object/ItemDropList Asset")]
-        public static void CreateItemDropListAssetInstance()
-        {
+        public static void CreateItemDropListAssetInstance() {
             var asset = ScriptableObject.CreateInstance<ItemDropList>();
-            UnityEditor.AssetDatabase.CreateAsset(asset, "Assets/05. Scriptable_Object/DropListAssets/DropList.asset");
+            UnityEditor.AssetDatabase.CreateAsset(asset, "Assets/05.SO/SO.DropTable/(name)_(stage).asset");
             UnityEditor.AssetDatabase.SaveAssets();
             UnityEditor.AssetDatabase.Refresh();
 

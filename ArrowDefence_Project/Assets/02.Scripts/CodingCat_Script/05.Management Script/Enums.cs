@@ -79,12 +79,17 @@
 
     #region BATTLE
 
-    public enum STAGETYPE
-    {
+    public enum STAGETYPE {
         NONE = 0, //throw error
         STAGE_DEV = 1,
         STAGE_FOREST_SECLUDED = 2,
         STAGE_DUNGEON_ENTRANCE = 3,
+        FOREST_SECLUDED_E,
+        FOREST_SECLUDED_N,
+        FOREST_SECLUDED_H,
+        DUNGEON_E,
+        DUNGEON_N,
+        DUNGEON_H
     }
 
     public enum AUTOSTATE

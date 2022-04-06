@@ -1514,7 +1514,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1028119012}
   m_Layer: 0
-  m_Name: $hCanvas
+  m_Name: --->Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1686,7 +1686,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1239428576}
   m_Layer: 0
-  m_Name: $hCamera
+  m_Name: --->Camera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2268,7 +2268,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1663309670}
   m_Layer: 0
-  m_Name: $hRoute
+  m_Name: --->Route
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

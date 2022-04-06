@@ -157,8 +157,8 @@ public class MainSceneRoute : MonoBehaviour {
                .OnComplete(() => SceneLoader.Instance.LoadScene(AD_Data.SCENE_TITLE));
     }
 
-    public void BE_STAGE_SELECTOR(int index) {
-        battlePop.EnablePopup(index);
+    public static void OpenBattlePopup(STAGETYPE type) {
+        _inst.battlePop.EnablePopup(type);
     }
 
     #endregion

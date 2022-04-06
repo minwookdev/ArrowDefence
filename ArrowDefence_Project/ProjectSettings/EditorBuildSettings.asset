@@ -15,17 +15,29 @@ EditorBuildSettings:
     path: Assets/01.Scenes/ArrDef/ArrowDefence_Loading.unity
     guid: 7e15587eb59b4034fb9c082586b59a83
   - enabled: 1
-    path: Assets/01.Scenes/ArrDef/ArrDef_Battle/ArrowDefence_Battle_Dev.unity
-    guid: a312859d3776ca64b9daf77e7968e09c
-  - enabled: 1
-    path: Assets/01.Scenes/ArrDef/ArrDef_Battle/ArrowDefence_Battle_Forest_Normal.unity
-    guid: 39c4609395b8fe842b3c24b1e19fd3b4
-  - enabled: 1
-    path: Assets/01.Scenes/ArrDef/ArrDef_Battle/ArrowDefence_Battle_Dungeon_Normal.unity
-    guid: b72477f165631d34a8213a64fb4a4332
-  - enabled: 1
     path: Assets/01.Scenes/ArrDef/ArrDef_UI/ArrowDefence_Battle_UI.unity
     guid: 5d8e11c4d4438504cac16efabded54ff
+  - enabled: 1
+    path: Assets/01.Scenes/ArrDef/ArrDef_Battle/Forest_Secluded_Easy.unity
+    guid: 39c4609395b8fe842b3c24b1e19fd3b4
+  - enabled: 1
+    path: Assets/01.Scenes/ArrDef/ArrDef_Battle/Forest_Secluded_Normal.unity
+    guid: 3709278c694fab246b368c97bf24b901
+  - enabled: 1
+    path: Assets/01.Scenes/ArrDef/ArrDef_Battle/Forest_Secluded_Hard.unity
+    guid: 4c5a9ff2bde2de948a256869683d463c
+  - enabled: 1
+    path: Assets/01.Scenes/ArrDef/ArrDef_Battle/Dungeon_Entrance_Easy.unity
+    guid: b72477f165631d34a8213a64fb4a4332
+  - enabled: 1
+    path: Assets/01.Scenes/ArrDef/ArrDef_Battle/Dungeon_Entrance_Normal.unity
+    guid: 011bff95290dd204fb3fa3a1cb71f252
+  - enabled: 1
+    path: Assets/01.Scenes/ArrDef/ArrDef_Battle/Dungeon_Entrance_Hard.unity
+    guid: 01e218cc68077d84f8968bf648f3105a
+  - enabled: 1
+    path: Assets/01.Scenes/ArrDef/ArrDef_Battle/_dev_stage.unity
+    guid: a312859d3776ca64b9daf77e7968e09c
   - enabled: 0
     path: Assets/01.Scenes/ArrDef/tempscene.unity
     guid: 4a6c559912b269546a8277f892c2dc26

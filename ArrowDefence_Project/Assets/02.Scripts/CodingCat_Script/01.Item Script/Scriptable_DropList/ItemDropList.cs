@@ -1,13 +1,9 @@
-﻿namespace ActionCat
-{
+﻿namespace ActionCat {
     using UnityEngine;
 
-    //[CreateAssetMenu(fileName = "", menuName = "")]
-    public class ItemDropList : ScriptableObject
-    {
+    public class ItemDropList : ScriptableObject {
         [System.Serializable]
-        public class DropTable
-        {
+        public class DropTable {
             public ItemData ItemAsset;
             public float DropChance;
             public int[] QuantityRange = new int[1] { 1 };
@@ -27,9 +23,15 @@
         }
 
         public DropTable[] DropTableArray;
+        public DropTable[] RewardTableArray;
 
-        private void OnEnable()
-        {
+        public int TotalTableSize {
+            get {
+                return ((DropTableArray == null) ? 0 : DropTableArray.Length) + ((RewardTableArray == null) ? 0 : RewardTableArray.Length);
+            }
+        }
+
+        private void OnEnable() {
             if (DropTableArray == null) return;
 
             //OnCheckTotalChanceValue();

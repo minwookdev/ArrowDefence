@@ -268,6 +268,10 @@
                 }
             }
 
+            public void DisableAmountText() {
+                tmp_ItemCount.text = "";
+            }
+
             /// <summary>
             /// 재료 아이템 팝업
             /// </summary>
@@ -793,11 +797,21 @@
         /// CRAFTING PANEL의 완성품 프리뷰 기능
         /// </summary>
         /// <param name="item"></param>
-        public void OpenPreview_Crafting(AD_item item) {
+        public void OpenPreview_Crafting(AD_item item, bool disableAmountText = false) {
             var frame = Frames[(int)item.GetGrade];
             switch (item.GetItemType) {
-                case ITEMTYPE.ITEM_MATERIAL:   itemPopup.EnablePopup((Item_Material)item, frame, false, true);   break;
-                case ITEMTYPE.ITEM_CONSUMABLE: itemPopup.EnablePopup((Item_Consumable)item, frame, false, true); break;
+                case ITEMTYPE.ITEM_MATERIAL:   
+                    itemPopup.EnablePopup((Item_Material)item, frame, false, true);   
+                    if (disableAmountText) {
+                        itemPopup.DisableAmountText();
+                    }
+                    break;
+                case ITEMTYPE.ITEM_CONSUMABLE: 
+                    itemPopup.EnablePopup((Item_Consumable)item, frame, false, true); 
+                    if (disableAmountText) {
+                        itemPopup.DisableAmountText();
+                    }
+                    break;
                 case ITEMTYPE.ITEM_EQUIPMENT:
                     switch (item) {
                         case Item_Bow       equipment: itemPopup.EnablePopup(equipment, frame, false, true); break;

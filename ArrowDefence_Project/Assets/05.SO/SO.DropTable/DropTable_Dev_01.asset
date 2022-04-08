@@ -22,3 +22,10 @@ MonoBehaviour:
   - ItemAsset: {fileID: 11400000, guid: 2a445904b5855114f872d1826d693bcf, type: 2}
     DropChance: 20
     QuantityRange: 01000000
+  RewardTableArray:
+  - ItemAsset: {fileID: 0}
+    DropChance: 0
+    QuantityRange: 0000000000000000
+  - ItemAsset: {fileID: 0}
+    DropChance: 0
+    QuantityRange: 0000000000000000

@@ -14,10 +14,11 @@
         [SerializeField] MonsterSlot[] monsterSlots;
 
         [Header("DROP LIST")]
+        [SerializeField] ScrollRect dropListScrollRect = null;
         [SerializeField] RectTransform dropListParent = null;
-        [SerializeField] List<UI_ItemDataSlot> dropListSlots = null;
-        [SerializeField] ItemData[] dropEntities = null;
-        [SerializeField] int[] rewardedSlotIndexs;
+        [SerializeField] ItemDropList dropTable       = null;
+        [SerializeField] UI_ItemDataSlot slotPref     = null;
+        List<UI_ItemDataSlot> dropListSlots = null;
 
         [Header("CHALLENGES")]
         [SerializeField] ChallengeInfos challengeInfos = null;
@@ -31,31 +32,18 @@
         [SerializeField] bool isDebug = false;
 
         void Start() {
-            //Set MonsterSlots, DropListSlots
-            SetMonsterSlots();
-            DropListSlotCaching();
-
             // Update Challenge Panel
-            ChallengePanelSet(ref isAchieveAll);
-
-            // Update Settings Panel
-            SettingsPanelSet(isAchieveAll);
+            UpdateChallengeList(ref isAchieveAll, out bool isClearedStage);
+            UpdateMonsterList();
+            UpdateDropTableList(isClearedStage);
+            UpdateSettingsPanel(isAchieveAll);
         }
 
         void OnEnable() {
             
         }
 
-        void UpdateChallengeInfo(ref bool isAchieveAll) {
-            switch (stageType) {
-                case STAGETYPE.STAGE_DEV:              ChallengePanelSet(ref isAchieveAll); break;
-                case STAGETYPE.STAGE_FOREST_SECLUDED:  SetChallengeStageFst(); break;
-                case STAGETYPE.STAGE_DUNGEON_ENTRANCE: SetChallengeStageSec(); break;
-                default: throw new System.NotImplementedException("this Stage Type is NotImplemented.");
-            }
-        }
-
-        void SettingsPanelSet(bool isOpenPanel) {
+        void UpdateSettingsPanel(bool isOpenPanel) {
             //1. Settings Panel이 열렸는지 체크
             //2-1. 열렸으면 PlayerData.GameSettings에서 키가있는지 확인
             //2-2. 키가 없으면 바로 생성해주고 데이터 가져와서 세팅해줌.
@@ -76,10 +64,11 @@
             }
         }
 
-        void DropListSlotCaching() {
+        void UpdateDropTableList(bool isClearedStage) {
             dropListSlots = new List<UI_ItemDataSlot>();
             for (int i = 0; i < dropListParent.childCount; i++) {
                 if (dropListParent.GetChild(i).TryGetComponent<UI_ItemDataSlot>(out UI_ItemDataSlot slot)) {
+                    slot.SetScrollRect(dropListScrollRect);
                     dropListSlots.Add(slot);
                 }
                 else {
@@ -87,20 +76,29 @@
                 }
             }
 
-            //부족한 슬롯 수 계산
-            sbyte needSlotCount = (sbyte)(dropEntities.Length - dropListSlots.Count);
-            if (needSlotCount > 0) {
-                for (sbyte i = 0; i < needSlotCount; i++) {
-                    dropListSlots.Add(GameObject.Instantiate(dropListSlots[0], dropListParent));
+            //부족한 슬롯 수 계산 및 새로 할당
+            sbyte slotNeedCount = (sbyte)(dropTable.TotalTableSize - dropListSlots.Count);
+            if (slotNeedCount > 0) {
+                for (sbyte i = 0; i < slotNeedCount; i++) {
+                    var newslot = GameObject.Instantiate(slotPref, dropListParent);
+                    newslot.SetScrollRect(dropListScrollRect);
+                    dropListSlots.Add(newslot);
                 }
             }
 
             byte enableSlotCount = 0;
-            for (int i = 0; i < dropEntities.Length; i++) {
-                dropListSlots[i].EnableDropListSlot(dropEntities[i]);
+            var DropsTable  = dropTable.DropTableArray;
+            var rewardTable = dropTable.RewardTableArray;
+            //첫 클리어 보상 슬롯 먼저 활성화
+            foreach (var reward in rewardTable) {
+                dropListSlots[enableSlotCount].EnableDropListSlot(reward.ItemAsset, true);
                 enableSlotCount++;
             }
-
+            //드랍 테이블의 아이템으로 활성화
+            foreach (var drops in DropsTable) {
+                dropListSlots[enableSlotCount].EnableDropListSlot(drops.ItemAsset);
+                enableSlotCount++;
+            }
             //잉여슬롯 비활성화
             if (enableSlotCount < dropListSlots.Count) {
                 for (int i = enableSlotCount; i < dropListSlots.Count; i++) {
@@ -109,7 +107,7 @@
             }
         }
 
-        void SetMonsterSlots() {
+        void UpdateMonsterList() {
             byte enableSlotCount = 0;
             for (int i = 0; i < monsterEntities.Length; i++) {
                 monsterSlots[i].EnableSlot(monsterEntities[i]);
@@ -147,23 +145,18 @@
 
         }
 
-        void ChallengePanelSet(ref bool isAchieveAll) {
+        void UpdateChallengeList(ref bool isAchieveAll, out bool isClearedStage) {
             challengeInfos.DisableAllStar();
-            //Get Players Stage Progress Data
-            if (GameManager.Instance.TryGetStageData(GameGlobal.GetStageKey(stageType), out Data.StageInfo data)) {
-                var byteArray = new Data.StageAchievement().GetStarCount(stageType, data, out isAchieveAll);
+            isClearedStage = GameManager.Instance.TryGetStageData(GameGlobal.GetStageKey(stageType), out Data.StageInfo info);
+            if (isClearedStage) { //StageData 못받아오면 Cleared 기록이 없다는 것임
+                var byteArray = new Data.StageAchievement().GetStarCount(stageType, info, out isAchieveAll);
                 for (int i = 0; i < byteArray.Length; i++) {
                     challengeInfos.EnableStar(byteArray[i]);
                 }
 
-                if (isAchieveAll == true && data.IsUseableAuto == false) {
-                    data.EnableAutoUse();
-                }
-            }
-
-            if (data == null || data.IsStageCleared == false) {
-                for (int i = 0; i < rewardedSlotIndexs.Length; i++) {
-                    dropListSlots[rewardedSlotIndexs[i]].EnableRewardTag();
+                //Unlock Auto Trigger
+                if (isAchieveAll == true && info.IsUseableAuto == false) {
+                    info.EnableAutoUse();
                 }
             }
         }

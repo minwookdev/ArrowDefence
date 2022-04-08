@@ -16,8 +16,6 @@ MonoBehaviour:
   Item_Grade: 0
   Item_Id: 3008
   DefaultAmount: 1
-  Item_Name: Short Bow
-  Item_Desc: "\rIt is a short but destructive bow."
   Item_Sprite: {fileID: 21300000, guid: 34e771a96bc647846babed9d764d0ccc, type: 3}
   NameTerms: ItemName/ITEM_BOW_SHORT_1T
   DescTerms: 
@@ -26,7 +24,7 @@ MonoBehaviour:
     type: 3}
   SkillAsset_f: {fileID: 11400000, guid: 97062504f2a4e58418b96af3a5af4888, type: 2}
   SkillAsset_s: {fileID: 0}
-  BaseDamage: 120
-  CriticalDamageMultiplier: 2
-  FullChargedMultiplier: 1.5
-  CriticalHitChance: 15
+  BaseDamage: 60
+  CriticalDamageMultiplier: 1.55
+  FullChargedMultiplier: 1.2
+  CriticalHitChance: 5

@@ -111,16 +111,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6867096f57d1d2143ac618c6f55644af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stageDiff: 0
-  TopLeft: {x: -3.8, y: 10, z: 0}
-  BottomRight: {x: 3.8, y: 9, z: 0}
-  monsterPrefNormal: {fileID: 113046968082111223, guid: e769450a1b6c233448b3f6a6ac19c000,
-    type: 3}
-  monsterPrefFreq: {fileID: 1513067888068708607, guid: d30dbadb9ea15b0448f87f59ceb3d4a2,
-    type: 3}
-  monsterPrefElite: {fileID: 0}
-  spawnTimer: 0
-  isNotSpawnMonster: 0
+  stageDifficulty: 1
+  spawnerState: 0
+  spawnPointsTr: []
+  groundMobPrefabs: []
+  flyingMobPrefabs: []
+  isStaticGroupSpawn: 0
+  currentSpawnTime: 0
+  currentSpawnStack: 0
   isCheckAliveMonster: 0
   checkerInterval: 2
 --- !u!114 &3204541759480302795
@@ -148,7 +146,7 @@ MonoBehaviour:
   ParentTransform: {fileID: 0}
   BowInitPosition: {fileID: 0}
   MaxPlayerHealth: 200
-  DropListAsset: {fileID: 11400000, guid: 834b46e9df025194da792695df7f4b4b, type: 2}
+  DropListAsset: {fileID: 0}
   dropCorrection: 20
   dropItemList: []
   IsQuickGameClear: 0

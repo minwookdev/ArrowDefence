@@ -99,7 +99,7 @@
                 KilledCount = data.totalKilledCount;
             }
 
-            if(IsUsedResurrect == true) {
+            if (IsUsedResurrect == true) {
                 IsUsedResurrect = data.isUsedResurrect;
             }
             

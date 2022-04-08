@@ -97,20 +97,25 @@
             ItemImg.sprite   = itemDataAddress.Item_Sprite;
             ItemFrame.sprite = Frames[(int)itemDataAddress.Item_Grade];
             ItemStackTmp.gameObject.SetActive(false);
+            rectTrRewardTag.gameObject.SetActive(isOnTag);
 
             //init temp item class
             switch (itemDataAddress) {
-                case ItemData_Mat             temp: tempItem = new Item_Material(temp, temp.DefaultAmount);   break;
-                case ItemData_Con             temp: tempItem = new Item_Consumable(temp, temp.DefaultAmount); break;
-                case ItemData_Equip_Bow       temp: tempItem = new Item_Bow(temp);                            break;
-                case ItemData_Equip_Arrow     temp: tempItem = new Item_Arrow(temp);                          break;
-                case ItemData_Equip_Accessory temp: tempItem = new Item_Accessory(temp);                      break;
+                case ItemData_Mat             temp: tempItem = new Item_Material(temp, 1);   break;
+                case ItemData_Con             temp: tempItem = new Item_Consumable(temp, 1); break;
+                case ItemData_Equip_Bow       temp: tempItem = new Item_Bow(temp);           break;
+                case ItemData_Equip_Arrow     temp: tempItem = new Item_Arrow(temp);         break;
+                case ItemData_Equip_Accessory temp: tempItem = new Item_Accessory(temp);     break;
                 default: throw new System.NotImplementedException();
             }
         }
 
-        public void EnableRewardTag() {
-            rectTrRewardTag.gameObject.SetActive(true);
+        public void SetScrollRect(ScrollRect scrollRect) {
+            this.scrollRect = scrollRect;
+            isScrollRectParent = (this.scrollRect != null);
+            if (!isScrollRectParent) {
+                CatLog.Log("Failed ScrollRect Assignment.");
+            }
         }
 
         /// <summary>
@@ -145,7 +150,7 @@
                 Games.UI.ItemTooltip.Inst.Expose(slotRectTr.position, tooltipParent, itemDataAddress, ItemFrame.sprite, ItemStackTmp.text);
             }
             else {
-                MainSceneRoute.OPEN_ITEMINFO_PREVIEW(tempItem);
+                MainSceneRoute.OpenInfo_DropListItem_Preview(tempItem);
             }
         }
 

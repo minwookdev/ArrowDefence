@@ -8,17 +8,24 @@ public class DropList_Editor : Editor
     SerializedObject sobject;
 
     SerializedProperty dropListProp;
+    SerializedProperty rewardTableProp = null;
 
-    GUIStyle labelColorGreen = new GUIStyle();
-    GUIStyle labelColorRed = new GUIStyle();
+    GUIStyle rewardLabelStyle = new GUIStyle();
+    GUIStyle labelColorGreen  = new GUIStyle();
+    GUIStyle labelColorRed    = new GUIStyle();
 
-    public void OnEnable()
-    {
+    public void OnEnable() {
         sobject = new SerializedObject(target);
-        dropListProp = sobject.FindProperty("DropTableArray");
+        dropListProp    = sobject.FindProperty("DropTableArray");
+        rewardTableProp = sobject.FindProperty(nameof(ItemDropList.RewardTableArray));
 
         labelColorGreen.normal.textColor = Color.green;
         labelColorRed.normal.textColor = Color.red;
+
+        rewardLabelStyle.fontSize = 24;
+        rewardLabelStyle.fontStyle = FontStyle.BoldAndItalic;
+        rewardLabelStyle.alignment = TextAnchor.UpperLeft;
+        rewardLabelStyle.normal.textColor = new Color(1f, 1f, 1f);
     }
 
     public override void OnInspectorGUI()
@@ -78,6 +85,28 @@ public class DropList_Editor : Editor
 
         GUILayout.EndVertical();
 
+        GUILayout.BeginVertical("GroupBox");
+        GUILayout.Label("REWARD TABLE", rewardLabelStyle);
+        GUILayout.BeginHorizontal();
+        GUILayout.Label("REWARD TABLE ARRAY SIZE");
+        GUIStyle alignmentStyle = new GUIStyle(GUI.skin.textField);
+        alignmentStyle.alignment = TextAnchor.MiddleCenter;
+        //alignmentStyle.normal.background.
+        //alignmentStyle.normal.background.height = 30;
+        //rewardTableProp.arraySize = EditorGUILayout.IntField(rewardTableProp.arraySize, alignmentStyle, GUILayout.Width(100f), GUILayout.Height(30f));
+        rewardTableProp.arraySize = EditorGUILayout.IntField(rewardTableProp.arraySize, alignmentStyle);
+        GUILayout.EndHorizontal();
+        //EditorGUILayout.PropertyField(rewardTableProp);
+
+        //Draw Reward Array Element
+        for (int i = 0; i < rewardTableProp.arraySize; i++) {
+            EditorGUILayout.BeginVertical("GroupBox");
+            EditorGUILayout.PropertyField(rewardTableProp.GetArrayElementAtIndex(i), new GUIContent("REWARD ITEM " + i));
+            EditorGUILayout.EndVertical();
+        }
+
+        GUILayout.EndVertical();
+
         sobject.ApplyModifiedProperties();
     }
 }
@@ -109,12 +138,12 @@ public class DropTableArrayDraw : PropertyDrawer
                 //contentPosition.y += 18f;
             }
             int indent = EditorGUI.indentLevel;
-            EditorGUI.indentLevel = 0;
+            EditorGUI.indentLevel = 1;
             EditorGUILayout.BeginVertical();
             //Array 내부 변수 하나씩 다 잡아줌. 따로 원하는 위치에 하고싶은 경우 EditorGUI.PropertyField() 사용
             //Rect는 position을 변형하여 사용해주면 된다
-            EditorGUILayout.PropertyField(property.FindPropertyRelative("ItemAsset"), new GUIContent("Item Asset"));
-            EditorGUILayout.PropertyField(property.FindPropertyRelative("DropChance"), new GUIContent("Item Drop Chance"));
+            EditorGUILayout.PropertyField(property.FindPropertyRelative("ItemAsset"), new GUIContent("Item Asset"), GUILayout.Width(350f));
+            EditorGUILayout.PropertyField(property.FindPropertyRelative("DropChance"), new GUIContent("Item Drop Chance"), GUILayout.Width(350f));
             EditorGUILayout.BeginVertical("GroupBox");
             //EditorGUILayout.PropertyField(property.FindPropertyRelative("QuantityRange"), new GUIContent("Drop Quantity Range"));
 

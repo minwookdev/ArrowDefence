@@ -12,4 +12,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6371e27e94bb915498268c572af10bd5, type: 3}
   m_Name: droptable_forest_secluded_0
   m_EditorClassIdentifier: 
-  DropTableArray: []
+  DropTableArray:
+  - ItemAsset: {fileID: 11400000, guid: 818e48ff8014cd743904a971f1118bab, type: 2}
+    DropChance: 1500
+    QuantityRange: 050000000a000000
+  - ItemAsset: {fileID: 11400000, guid: f8cf2d491cdbd38409db2b0178418dce, type: 2}
+    DropChance: 1000
+    QuantityRange: 0300000007000000
+  - ItemAsset: {fileID: 11400000, guid: f8b55570f728f0340aad9eecc52166a5, type: 2}
+    DropChance: 100
+    QuantityRange: 0100000003000000
+  - ItemAsset: {fileID: 11400000, guid: 818c0b76c0b2795478faf92a00f6710d, type: 2}
+    DropChance: 10
+    QuantityRange: 01000000
+  - ItemAsset: {fileID: 11400000, guid: 58c3f71b49ebf3949a71d182aca88652, type: 2}
+    DropChance: 50
+    QuantityRange: 01000000
+  - ItemAsset: {fileID: 11400000, guid: 21e7111e042292140be507b2f0d69c2a, type: 2}
+    DropChance: 50
+    QuantityRange: 01000000
+  RewardTableArray:
+  - ItemAsset: {fileID: 11400000, guid: 534308bb287ef8147b6442afbe44fbda, type: 2}
+    DropChance: 0
+    QuantityRange: 01000000

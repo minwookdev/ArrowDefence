@@ -90,7 +90,7 @@
         }
 
         public void BE_PREVIEW() {
-            MainSceneRoute.OPEN_ITEMINFO_PREVIEW(previewCache);
+            MainSceneRoute.OpenInfo_CraftingItem_Preview(previewCache);
         }
     }
 }

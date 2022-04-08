@@ -8,15 +8,19 @@
             if (info == null) throw new Exception("Stage Info is Null.");
 
             switch (type) {
-                case STAGETYPE.NONE:                   throw new Exception("StageType is NONE.");
-                case STAGETYPE.STAGE_DEV:              return GetByteDev(info, out isAllAchievementCleared);
-                case STAGETYPE.STAGE_FOREST_SECLUDED:  return GetByteForest(info, out isAllAchievementCleared);
-                case STAGETYPE.STAGE_DUNGEON_ENTRANCE: return GetByteDungeon(info, out isAllAchievementCleared);
+                case STAGETYPE.NONE: throw new Exception("StageType is NONE.");
+                case STAGETYPE.FOREST_SECLUDED_E: return GetBytesForestEasy(info, out isAllAchievementCleared);  
+                case STAGETYPE.FOREST_SECLUDED_N: return GetBytesForestNormal(info, out isAllAchievementCleared);
+                case STAGETYPE.FOREST_SECLUDED_H: return GetBytesForestHard(info, out isAllAchievementCleared);  
+                case STAGETYPE.DUNGEON_E: throw new System.NotImplementedException();
+                case STAGETYPE.DUNGEON_N: throw new System.NotImplementedException();
+                case STAGETYPE.DUNGEON_H: throw new System.NotImplementedException();
+                case STAGETYPE.STAGE_DEV: return GetBytesDevStage(info, out isAllAchievementCleared);
                 default: throw new NotImplementedException("this StageType is Not Implemented.");
             }
         }
 
-        byte[] GetByteDev(StageInfo info, out bool isAllCleared) {
+        byte[] GetBytesDevStage(StageInfo info, out bool isAllCleared) {
             var byteList = new List<byte>();
             //=========================================<< ACHIEVEMENT FIRST >>=========================================
             if (info.IsChallengeAchieve(data => data.IsStageCleared == true, out bool achieveFirst)) {
@@ -42,11 +46,58 @@
             //=========================================================================================================
         }
 
-        byte[] GetByteForest(StageInfo info, out bool isAllCleared) {
-            isAllCleared = false;
-            byte[] tempArray = new byte[3] { 0, 1, 2 };
-            return tempArray;
+        //=============================================================================================================
+        //========================================== << SECLUDED FOREST >> ============================================
+        byte[] GetBytesForestEasy(StageInfo info, out bool isAllAchieveCleared) {
+            List<byte> byteList = new List<byte>();
+            if (info.IsChallengeAchieve(data => data.IsStageCleared == true, out bool achievefirst)) {
+                byteList.Add(0);
+            }
+            if (info.IsChallengeAchieve(data => data.KilledCount >= 30, out bool achieveseconds)) {
+                byteList.Add(1);
+            }
+            if (info.IsChallengeAchieve(data => data.IsUsedResurrect == false, out bool achievethird)) {
+                byteList.Add(2);
+            }
+
+            isAllAchieveCleared = (achievefirst && achieveseconds && achievethird);
+            return byteList.ToArray();
         }
+
+        byte[] GetBytesForestNormal(StageInfo info, out bool isAllAchieveCleared) {
+            var byteList = new List<byte>();
+            if (info.IsChallengeAchieve(data => data.KilledCount >= 40, out bool achievefirst)) {
+                byteList.Add(0);
+            }
+            if (info.IsChallengeAchieve(data => data.MaxComboCount >= 10, out bool achieveseconds)) {
+                byteList.Add(1);
+            }
+            if (info.IsChallengeAchieve(data => data.ClearedCount >= 3, out bool achievethird)) {
+                byteList.Add(2);
+            }
+
+            isAllAchieveCleared = (achievefirst && achieveseconds && achievethird);
+            return byteList.ToArray();
+        }
+
+        byte[] GetBytesForestHard(StageInfo info, out bool isAllAchieveCleared) {
+            var byteList = new List<byte>();
+            if (info.IsChallengeAchieve(data => data.KilledCount >= 50, out bool achievefirst)) {
+                byteList.Add(0);
+            }
+            if (info.IsChallengeAchieve(data => data.IsUsedResurrect == false, out bool achieveseconds)) {
+                byteList.Add(1);
+            }
+            if (info.IsChallengeAchieve(data => data.ClearedCount >= 3, out bool achievethird)) {
+                byteList.Add(2);
+            }
+
+            isAllAchieveCleared = (achievefirst && achieveseconds && achievethird);
+            return byteList.ToArray();
+        }
+
+        //=============================================================================================================
+        //========================================= << DUNGEON ENTRANCE >> ============================================
 
         byte[] GetByteDungeon(StageInfo info, out bool isAllCleared) {
             isAllCleared = false;
@@ -54,6 +105,8 @@
             return tempArray;
         }
 
+        //=============================================================================================================
+        //=============================================================================================================
         #endregion
 
         #region BATTLEDATA

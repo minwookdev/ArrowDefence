@@ -166,18 +166,22 @@ public class MainSceneRoute : MonoBehaviour {
     //======================================================================================================================================
     //============================================================= [ ITEMINFO ] ===========================================================
 
-    public static void OPEN_ITEMINFO_PREVIEW(AD_item previewitem) {
+    public static void OpenInfo_CraftingItem_Preview(AD_item previewitem) {
         _inst.itemInfoPop.OpenPreview_Crafting(previewitem);
+    }
+
+    public static void OpenInfo_DropListItem_Preview(AD_item previewItem) {
+        _inst.itemInfoPop.OpenPreview_Crafting(previewItem, disableAmountText: true);
     }
 
     /// <summary>
     /// Open Item Information Popup When Click in the Invnetory Items
     /// </summary>
     /// <param name="item"></param>
-    public static void OPEN_ITEMINFO(AD_item item) {
+    public static void OpenInfo_InventoryItem(AD_item item) {
         switch (item) {
-            case Item_Consumable  conItem: _inst.itemInfoPop.OpenPopup(conItem);  break;
-            case Item_Material    matItem: _inst.itemInfoPop.OpenPopup(matItem);    break; 
+            case Item_Consumable  conItem: _inst.itemInfoPop.OpenPopup(conItem);   break;
+            case Item_Material    matItem: _inst.itemInfoPop.OpenPopup(matItem);   break; 
             case Item_Equipment equipItem: _inst.itemInfoPop.OpenPopup(equipItem); break;
             default: throw new System.NotImplementedException();
         }

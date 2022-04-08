@@ -16,8 +16,6 @@ MonoBehaviour:
   Item_Grade: 1
   Item_Id: 3011
   DefaultAmount: 1
-  Item_Name: Hunting Bow
-  Item_Desc: 
   Item_Sprite: {fileID: 21300000, guid: 77277e4ce233c054fb79bf7b59360c3e, type: 3}
   NameTerms: ItemName/ITEM_BOW_RECURVE_1T
   DescTerms: 
@@ -26,7 +24,7 @@ MonoBehaviour:
     type: 3}
   SkillAsset_f: {fileID: 11400000, guid: 520120a42f020a644b355ed8ca3469fd, type: 2}
   SkillAsset_s: {fileID: 0}
-  BaseDamage: 120
-  CriticalDamageMultiplier: 1.8
-  FullChargedMultiplier: 2
-  CriticalHitChance: 15
+  BaseDamage: 50
+  CriticalDamageMultiplier: 1.5
+  FullChargedMultiplier: 1.65
+  CriticalHitChance: 0

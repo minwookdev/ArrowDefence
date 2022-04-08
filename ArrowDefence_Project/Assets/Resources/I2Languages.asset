@@ -15,8 +15,28 @@ MonoBehaviour:
   mSource:
     UserAgreesToHaveItOnTheScene: 0
     UserAgreesToHaveItInsideThePluginsFolder: 0
-    GoogleLiveSyncIsUptoDate: 1
+    GoogleLiveSyncIsUptoDate: 0
     mTerms:
+    - Term: ItemDesc/Consumable/DESC_HEALTH_POTION
+      TermType: 0
+      Description: 
+      Languages:
+      - Restore Health.
+      - "\uAC74\uAC15\uC744 \uD68C\uBCF5\uD569\uB2C8\uB2E4."
+      - "\u5065\u5EB7\u3092\u56DE\u5FA9\u3057\u307E\u3059\u3002"
+      - 
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: ItemDesc/Consumable/DESC_MANA_POTION
+      TermType: 0
+      Description: 
+      Languages:
+      - Restores Mana.
+      - "\uB9C8\uB098\uB97C \uD68C\uBCF5\uD569\uB2C8\uB2E4."
+      - "\u30DE\u30CA\u3092\u56DE\u5FA9\u3057\u307E\u3059\u3002"
+      - 
+      Flags: 00000000
+      Languages_Touch: []
     - Term: ItemDesc/ITEM_DESC_MATERIAL_BLUEPRINT
       TermType: 0
       Description: 
@@ -32,10 +52,21 @@ MonoBehaviour:
       TermType: 0
       Description: 
       Languages:
-      - Materials That Can Be Obtained In The Dungeon Area.
-      - "\uB358\uC804\uC9C0\uC5ED\uC5D0\uC11C \uD68D\uB4DD\uD560 \uC218 \uC788\uB294
-        \uC7AC\uB8CC\uC785\uB2C8\uB2E4."
-      - "\u30C0\u30F3\u30B8\u30E7\u30F3\u5730\u57DF\u3067\u7372\u5F97\u3067\u304D\u308B\u6750\u6599\u3067\u3059\u3002"
+      - Materials That Can Be Obtained From The Dungeon Entrance Area.
+      - "\uB358\uC804\uC785\uAD6C \uC9C0\uC5ED\uC5D0\uC11C \uD68D\uB4DD\uD560 \uC218
+        \uC788\uB294 \uC7AC\uB8CC\uC785\uB2C8\uB2E4."
+      - "\u30C0\u30F3\u30B8\u30E7\u30F3\u5165\u53E3\u5730\u57DF\u3067\u7372\u5F97\u3067\u304D\u308B\u6750\u6599\u3067\u3059\u3002"
+      - 
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: ItemDesc/ITEM_DESC_MATERIAL_DUNGEON_RARE
+      TermType: 0
+      Description: 
+      Languages:
+      - A Rare Material That Can Be Obtained From The Dungeon Entrance Area.
+      - "\uB358\uC804\uC785\uAD6C \uC9C0\uC5ED\uC5D0\uC11C \uD68D\uB4DD\uD560 \uC218
+        \uC788\uB294 \uD76C\uADC0\uD55C \uC7AC\uB8CC\uC785\uB2C8\uB2E4."
+      - "\u30C0\u30F3\u30B8\u30E7\u30F3\u5165\u53E3\u30A8\u30EA\u30A2\u3067\u7372\u5F97\u3067\u304D\u308B\u73CD\u3057\u3044\u6750\u6599\u3067\u3059\u3002"
       - 
       Flags: 00000000
       Languages_Touch: []
@@ -47,6 +78,17 @@ MonoBehaviour:
       - "\uC678\uC9C4 \uC232 \uC9C0\uC5ED\uC5D0\uC11C \uD68D\uB4DD\uD560 \uC218 \uC788\uB294
         \uC7AC\uB8CC\uC785\uB2C8\uB2E4."
       - "\u5916\u9707\u306E\u68EE\u5730\u57DF\u3067\u7372\u5F97\u3067\u304D\u308B\u6750\u6599\u3067\u3059\u3002"
+      - 
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: ItemDesc/ITEM_DESC_MATERIAL_FOREST_RARE
+      TermType: 0
+      Description: 
+      Languages:
+      - It Is A Rare Material That Can Be Obtained In The Remote Forest Area.
+      - "\uC678\uC9C4 \uC232 \uC9C0\uC5ED\uC5D0\uC11C \uD68D\uB4DD\uD560 \uC218 \uC788\uB294
+        \uD76C\uADC0\uD55C \uC7AC\uB8CC\uC785\uB2C8\uB2E4."
+      - "\u5916\u9707\u306E\u68EE\u5730\u57DF\u3067\u7372\u5F97\u3067\u304D\u308B\u73CD\u3057\u3044\u7D20\u6750\u3067\u3059\u3002"
       - 
       Flags: 00000000
       Languages_Touch: []
@@ -69,6 +111,176 @@ MonoBehaviour:
       - "\uC124\uC0B0 \uC9C0\uC5ED\uC5D0\uC11C \uD68D\uB4DD\uD560 \uC218 \uC788\uB294
         \uC7AC\uB8CC \uC785\uB2C8\uB2E4."
       - "\u96EA\u5C71\u5730\u57DF\u3067\u7372\u5F97\u3067\u304D\u308B\u6750\u6599\u3067\u3059\u3002"
+      - 
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: ItemName/Arrow/ARROW_STALKER_1T
+      TermType: 0
+      Description: 
+      Languages:
+      - Stalker Arrow
+      - "\uCD94\uC801\uC790 \uD654\uC0B4"
+      - "\u30B9\u30C8\u30FC\u30AB\u30FC\u30A2\u30ED\u30FC"
+      - 
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: ItemName/Arrow/ARROW_STALKER_2T
+      TermType: 0
+      Description: 
+      Languages:
+      - Stalker Arrow [2Tier]
+      - "\uCD94\uC801\uC790 \uD654\uC0B4 [2\uD2F0\uC5B4]"
+      - "\u30B9\u30C8\u30FC\u30AB\u30FC\u30A2\u30ED\u30FC[2T]"
+      - 
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: ItemName/Arrow/ARROW_STALKER_3T
+      TermType: 0
+      Description: 
+      Languages:
+      - Stalker Arrow [3Tier]
+      - "\uC2A4\uD1A0\uCEE4 \uD654\uC0B4 [3\uD2F0\uC5B4]"
+      - "\u30B9\u30C8\u30FC\u30AB\u30FC\u30A2\u30ED\u30FC[3\u30C6\u30A3\u30A2]"
+      - 
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: ItemName/Arrow/ARROW_STEEL_1T
+      TermType: 0
+      Description: 
+      Languages:
+      - Steel Arrow
+      - "\uAC15\uCCA0 \uD654\uC0B4"
+      - "\u92FC\u306E\u77E2"
+      - 
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: ItemName/Arrow/ARROW_STEEL_2T
+      TermType: 0
+      Description: 
+      Languages:
+      - Steel Arrow [2Tier]
+      - "\uAC15\uCCA0 \uD654\uC0B4 [2\uD2F0\uC5B4]"
+      - "\u30B9\u30C1\u30FC\u30EB\u30A2\u30ED\u30FC[2\u6BB5]"
+      - 
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: ItemName/Arrow/ARROW_STEEL_3T
+      TermType: 0
+      Description: 
+      Languages:
+      - Steel Arrow [3Tier]
+      - "\uAC15\uCCA0 \uD654\uC0B4 [3\uD2F0\uC5B4]"
+      - "\u92FC\u306E\u77E2[3\u5C64]"
+      - 
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: ItemName/Arrow/ITEM_ARROW_EXPLOSION_1T
+      TermType: 0
+      Description: 
+      Languages:
+      - Explosion Arrow
+      - "\uD3ED\uBC1C \uD654\uC0B4"
+      - "\u7206\u767A\u306E\u77E2"
+      - 
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: ItemName/Arrow/ITEM_ARROW_EXPLOSION_2T
+      TermType: 0
+      Description: 
+      Languages:
+      - Explosion Arrow (2Tier)
+      - "\uD3ED\uBC1C \uD654\uC0B4 (2\uD2F0\uC5B4)"
+      - "\u7206\u767A\u306E\u77E2\uFF082\u5C64\uFF09"
+      - 
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: ItemName/Arrow/ITEM_ARROW_EXPLOSION_3T
+      TermType: 0
+      Description: 
+      Languages:
+      - Explosion Arrow (3Tier)
+      - "\uD3ED\uBC1C \uD654\uC0B4 (3\uD2F0\uC5B4)"
+      - "\u7206\u767A\u306E\u77E2\uFF083\u5C64\uFF09"
+      - 
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: ItemName/Artifact/ARTIFACT_SIGHT_1T
+      TermType: 0
+      Description: 
+      Languages:
+      - Red Sight
+      - "\uB808\uB4DC \uC0AC\uC774\uD2B8"
+      - "\u8D64\u3044\u5149\u666F"
+      - 
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: ItemName/Artifact/ARTIFACT_SIGHT_2T
+      TermType: 0
+      Description: 
+      Languages:
+      - Red Sight [2Tier]
+      - "\uB808\uB4DC \uC0AC\uC774\uD2B8 [2\uD2F0\uC5B4]"
+      - "\u30EC\u30C3\u30C9\u30B5\u30A4\u30C8[2\u30C6\u30A3\u30A2]"
+      - 
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: ItemName/Artifact/ARTIFACT_SIGHT_3T
+      TermType: 0
+      Description: 
+      Languages:
+      - Red Sight [3Tier]
+      - "\uB808\uB4DC \uC0AC\uC774\uD2B8 [3\uD2F0\uC5B4]"
+      - "\u30EC\u30C3\u30C9\u30B5\u30A4\u30C8[3\u30C6\u30A3\u30A2]"
+      - 
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: ItemName/Artifact/ARTIFACT_WATCH_1T
+      TermType: 0
+      Description: 
+      Languages:
+      - Mysterious Pocket Watch
+      - "\uC2E0\uBE44\uD55C \uD68C\uC911\uC2DC\uACC4"
+      - "\u4E0D\u601D\u8B70\u306A\u61D0\u4E2D\u6642\u8A08"
+      - 
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: ItemName/Artifact/ARTIFACT_WATCH_2T
+      TermType: 0
+      Description: 
+      Languages:
+      - Mysterious Pocket Watch [2Tier]
+      - "\uC2E0\uBE44\uD55C \uD68C\uC911\uC2DC\uACC4 [2\uD2F0\uC5B4]"
+      - "\u4E0D\u601D\u8B70\u306A\u61D0\u4E2D\u6642\u8A08[2\u6BB5]"
+      - 
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: ItemName/Artifact/ARTIFACT_WATCH_3T
+      TermType: 0
+      Description: 
+      Languages:
+      - Mysterious Pocket Watch [3Tier]
+      - "\uC2E0\uBE44\uD55C \uD68C\uC911\uC2DC\uACC4 [3\uD2F0\uC5B4]"
+      - "\u4E0D\u601D\u8B70\u306A\u61D0\u4E2D\u6642\u8A08\u30103\u6BB5\u3011"
+      - 
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: ItemName/Consumable/CON_HEALTH_POTION
+      TermType: 0
+      Description: 
+      Languages:
+      - Health Potion
+      - "\uAC74\uAC15\uC758 \uBB18\uC57D"
+      - "\u5065\u5EB7\u30DD\u30FC\u30B7\u30E7\u30F3"
+      - 
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: ItemName/Consumable/CON_MANA_POTION
+      TermType: 0
+      Description: 
+      Languages:
+      - Mana Potion
+      - "\uB9C8\uB098 \uBB3C\uC57D"
+      - "\u30DE\u30CA\u30DD\u30FC\u30B7\u30E7\u30F3"
       - 
       Flags: 00000000
       Languages_Touch: []
@@ -192,6 +404,66 @@ MonoBehaviour:
       - 
       Flags: 00000000
       Languages_Touch: []
+    - Term: ItemName/ITEM_BOW_RECURVE_1T
+      TermType: 0
+      Description: 
+      Languages:
+      - Recurve Bow
+      - "\uB9AC\uCEE4\uBE0C \uBCF4\uC6B0"
+      - "\u5F8C\u308D\u306B\u53CD\u3089\u3059\u5F13"
+      - 
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: ItemName/ITEM_BOW_RECURVE_2T
+      TermType: 0
+      Description: 
+      Languages:
+      - Recurve Bow (2Tier)
+      - "\uB9AC\uCEE4\uBE0C \uBCF4\uC6B0 (2\uD2F0\uC5B4)"
+      - "\u5F8C\u308D\u306B\u53CD\u3089\u3059\u5F13\uFF082\u5C64\uFF09"
+      - 
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: ItemName/ITEM_BOW_RECURVE_3T
+      TermType: 0
+      Description: 
+      Languages:
+      - Recurve Bow (3Tier)
+      - "\uB9AC\uCEE4\uBE0C \uBCF4\uC6B0 (3\uD2F0\uC5B4)"
+      - "\u5F8C\u308D\u306B\u53CD\u3089\u3059\u5F13\uFF083\u5C64\uFF09"
+      - 
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: ItemName/ITEM_BOW_SHORT_1T
+      TermType: 0
+      Description: 
+      Languages:
+      - Short Bow
+      - "\uB2E8\uAD81"
+      - "\u30B7\u30E7\u30FC\u30C8\u30DC\u30A61\u30C6\u30A3\u30A2"
+      - 
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: ItemName/ITEM_BOW_SHORT_2T
+      TermType: 0
+      Description: 
+      Languages:
+      - Short Bow (2Tier)
+      - "\uB2E8\uAD81 (2\uD2F0\uC5B4)"
+      - "\u30B7\u30E7\u30FC\u30C8\u30DC\u30A62\u30C6\u30A3\u30A2"
+      - 
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: ItemName/ITEM_BOW_SHORT_3T
+      TermType: 0
+      Description: 
+      Languages:
+      - Short Bow (3Tier)
+      - "\uB2E8\uAD81 (3\uD2F0\uC5B4)"
+      - "\u30B7\u30E7\u30FC\u30C8\u30DC\u30A6\uFF083\u30C6\u30A3\u30A2\uFF09"
+      - 
+      Flags: 00000000
+      Languages_Touch: []
     - Term: ItemName/ITEM_BOW_SPIKE
       TermType: 0
       Description: 
@@ -232,7 +504,207 @@ MonoBehaviour:
       - 
       Flags: 00000000
       Languages_Touch: []
-    - Term: ItemName/WOOD_NAME
+    - Term: ItemName/Material/ANIMAL_REMAINS
+      TermType: 0
+      Description: 
+      Languages:
+      - Animal Remains
+      - "\uB3D9\uBB3C\uC758 \uC720\uACE8"
+      - "\u52D5\u7269\u304C\u6B8B\u3063\u3066\u3044\u308B"
+      - 
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: ItemName/Material/BLACKSTRAP
+      TermType: 0
+      Description: 
+      Languages:
+      - Black Strap
+      - "\uAC80\uC740 \uC2A4\uD2B8\uB7A9"
+      - "\u30D6\u30E9\u30C3\u30AF\u30B9\u30C8\u30E9\u30C3\u30D7"
+      - 
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: ItemName/Material/BONE_NAME
+      TermType: 0
+      Description: 
+      Languages:
+      - Bone
+      - "\uBF08"
+      - "\u9AA8"
+      - 
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: ItemName/Material/CAPTAINSWORDPIECE
+      TermType: 0
+      Description: 
+      Languages:
+      - Captain's Sword Piece
+      - "\uD574\uACE8 \uB300\uC7A5\uC758 \uAC80 \uC870\uAC01"
+      - "\u982D\u84CB\u9AA8\u5927\u8178\u306E\u5263\u306E\u5F6B\u523B"
+      - 
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: ItemName/Material/DUNGEONCRYSTAL
+      TermType: 0
+      Description: 
+      Languages:
+      - Dungeon Crystal
+      - "\uB358\uC804 \uD06C\uB9AC\uC2A4\uD0C8"
+      - "\u30C0\u30F3\u30B8\u30E7\u30F3\u30AF\u30EA\u30B9\u30BF\u30EB"
+      - 
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: ItemName/Material/DUNGEONRUNE_NAME
+      TermType: 0
+      Description: 
+      Languages:
+      - RUNE:DUNGEON ENTRANCE
+      - "\uB8EC:\uB358\uC804 \uC785\uAD6C"
+      - "\u30EB\u30FC\u30F3\uFF1A\u30C0\u30F3\u30B8\u30E7\u30F3\u5165\u53E3"
+      - 
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: ItemName/Material/FEATHER_NAME
+      TermType: 0
+      Description: 
+      Languages:
+      - Feathers
+      - "\uAE43\uD138"
+      - "\u7FBD"
+      - 
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: ItemName/Material/FORESTCRYSTAL_NAME
+      TermType: 0
+      Description: 
+      Languages:
+      - Forest Crystal
+      - "\uC232\uC758 \uC218\uC815"
+      - "\u68EE\u306E\u7D50\u6676"
+      - 
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: ItemName/Material/FORESTRUNE_NAME
+      TermType: 0
+      Description: 
+      Languages:
+      - RUNE:SECLUDED FOREST
+      - "\uB8EC: \uC678\uB534 \uC232"
+      - "\u30EB\u30FC\u30F3\uFF1A\u4EBA\u91CC\u96E2\u308C\u305F\u68EE"
+      - 
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: ItemName/Material/HERBALPOUCH_NAME
+      TermType: 0
+      Description: 
+      Languages:
+      - Herbal Pouch
+      - "\uC57D\uCD08 \uC8FC\uBA38\uB2C8"
+      - "\u30CF\u30FC\u30D6\u30DD\u30B1\u30C3\u30C8"
+      - 
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: ItemName/Material/LEATHERPIECE_NAME
+      TermType: 0
+      Description: 
+      Languages:
+      - Leather Piece
+      - "\uAC00\uC8FD \uC870\uAC01"
+      - "\u9769\u7247"
+      - 
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: ItemName/Material/LEATHERSTRAP_NAME
+      TermType: 0
+      Description: 
+      Languages:
+      - Leather Strap
+      - "\uAC00\uC8FD \uB048"
+      - "\u30EC\u30B6\u30FC\u30B9\u30C8\u30E9\u30C3\u30D7"
+      - 
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: ItemName/Material/MANAFLOWER_NAME
+      TermType: 0
+      Description: 
+      Languages:
+      - Mana Flower
+      - "\uB9C8\uB098 \uAF43"
+      - "\u30DE\u30CA\u306E\u82B1"
+      - 
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: ItemName/Material/MONSTERLEATHER_NAME
+      TermType: 0
+      Description: 
+      Languages:
+      - Monster Leather
+      - "\uBAAC\uC2A4\uD130 \uAC00\uC8FD"
+      - "\u30E2\u30F3\u30B9\u30BF\u30FC\u30EC\u30B6\u30FC"
+      - 
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: ItemName/Material/OLDARROW
+      TermType: 0
+      Description: 
+      Languages:
+      - Old Arrow
+      - "\uC624\uB798\uB41C \uD654\uC0B4"
+      - "\u53E4\u3044\u77E2"
+      - 
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: ItemName/Material/OLDJEWELRY
+      TermType: 0
+      Description: 
+      Languages:
+      - Old Jewelry
+      - "\uB0A1\uC740 \uBCF4\uC11D"
+      - "\u53E4\u3044\u5B9D\u77F3"
+      - 
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: ItemName/Material/QUALITYFEATHER_NAME
+      TermType: 0
+      Description: 
+      Languages:
+      - Quality Feathers
+      - "\uC9C8 \uC88B\uC740 \uAE43\uD138"
+      - "\u8CEA\u306E\u826F\u3044\u7FBD"
+      - 
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: ItemName/Material/RUSTYHATCHET
+      TermType: 0
+      Description: 
+      Languages:
+      - Rusty Hatchet
+      - "\uB179\uC2A8 \uC190\uB3C4\uB07C"
+      - "\u3055\u3073\u305F\u624B\u65A7"
+      - 
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: ItemName/Material/STEELORE_NAME
+      TermType: 0
+      Description: 
+      Languages:
+      - Steel Ore
+      - "\uCCA0\uAC15 \uAD11\uC11D"
+      - "\u92FC\u9271\u77F3"
+      - 
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: ItemName/Material/STONE_NAME
+      TermType: 0
+      Description: 
+      Languages:
+      - Stone
+      - "\uB3CC"
+      - "\u7D50\u77F3"
+      - 
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: ItemName/Material/WOOD_NAME
       TermType: 0
       Description: 
       Languages:
@@ -277,9 +749,9 @@ MonoBehaviour:
       Description: 
       Languages:
       - Skeleton Prankster
-      - 
+      - "\uD574\uACE8 \uB09C\uB3D9\uAFBC"
       - "\u982D\u84CB\u9AA8\u306E\u304A\u3082\u3061\u3083"
-      - "\uB09C\uB3D9\uAFBC"
+      - 
       Flags: 00000000
       Languages_Touch: []
     - Term: Monster/MONSTER_ROBBERY
@@ -849,273 +1321,75 @@ MonoBehaviour:
       - 
       Flags: 00000000
       Languages_Touch: []
-    - Term: ItemName/STONE_NAME
+    - Term: ItemDesc/BluePrint/BP_BOW
       TermType: 0
       Description: 
       Languages:
-      - Stone
-      - "\uB3CC"
-      - "\u7D50\u77F3"
+      - This Is A Blueprint For Making A Bow Item.
+      - "\uD65C \uC544\uC774\uD15C\uC744 \uC81C\uC791\uD558\uAE30 \uC704\uD55C \uC124\uACC4\uB3C4\uC785\uB2C8\uB2E4."
+      - "\u5F13\u30A2\u30A4\u30C6\u30E0\u3092\u88FD\u4F5C\u3059\u308B\u305F\u3081\u306E\u8A2D\u8A08\u56F3\u3067\u3059\u3002"
       - 
       Flags: 00000000
       Languages_Touch: []
-    - Term: ItemName/STEELORE_NAME
+    - Term: ItemDesc/BluePrint/BP_ARROW
       TermType: 0
       Description: 
       Languages:
-      - Steel Ore
-      - "\uCCA0\uAC15 \uAD11\uC11D"
-      - "\u92FC\u9271\u77F3"
+      - This Is A Blueprint For Making Arrow Items.
+      - "\uD654\uC0B4 \uC544\uC774\uD15C\uC744 \uC81C\uC791\uD558\uAE30 \uC704\uD55C
+        \uC124\uACC4\uB3C4\uC785\uB2C8\uB2E4."
+      - "\u77E2\u30A2\u30A4\u30C6\u30E0\u3092\u88FD\u4F5C\u3059\u308B\u305F\u3081\u306E\u8A2D\u8A08\u56F3\u3067\u3059\u3002"
       - 
       Flags: 00000000
       Languages_Touch: []
-    - Term: ItemName/ITEM_BOW_SHORT_1T
+    - Term: ItemDesc/BluePrint/BP_ARTIFACT
       TermType: 0
       Description: 
       Languages:
-      - Short Bow
-      - "\uB2E8\uAD81"
-      - "\u30B7\u30E7\u30FC\u30C8\u30DC\u30A61\u30C6\u30A3\u30A2"
+      - A Blueprint For Crafting An Artifact Item.
+      - "\uC720\uBB3C \uC544\uC774\uD15C\uC744 \uC81C\uC791\uD558\uAE30 \uC704\uD55C
+        \uC124\uACC4\uB3C4\uC785\uB2C8\uB2E4."
+      - "\u907A\u7269\u30A2\u30A4\u30C6\u30E0\u3092\u88FD\u4F5C\u3059\u308B\u305F\u3081\u306E\u8A2D\u8A08\u56F3\u3067\u3059\u3002"
       - 
       Flags: 00000000
       Languages_Touch: []
-    - Term: ItemName/ITEM_BOW_SHORT_2T
+    - Term: ItemDesc/BluePrint/BP_MATERIAL
       TermType: 0
       Description: 
       Languages:
-      - Short Bow (2Tier)
-      - "\uB2E8\uAD81 (2\uD2F0\uC5B4)"
-      - "\u30B7\u30E7\u30FC\u30C8\u30DC\u30A62\u30C6\u30A3\u30A2"
+      - 
+      - 
+      - 
       - 
       Flags: 00000000
       Languages_Touch: []
-    - Term: ItemName/ITEM_BOW_SHORT_3T
+    - Term: ItemDesc/BluePrint/BP_CONSUMABLE
       TermType: 0
       Description: 
       Languages:
-      - Short Bow (3Tier)
-      - "\uB2E8\uAD81 (3\uD2F0\uC5B4)"
-      - "\u30B7\u30E7\u30FC\u30C8\u30DC\u30A6\uFF083\u30C6\u30A3\u30A2\uFF09"
+      - 
+      - 
+      - 
       - 
       Flags: 00000000
       Languages_Touch: []
-    - Term: ItemName/ITEM_BOW_RECURVE_3T
+    - Term: ItemName/BluePrint/BP_RECURVE_BOW_T1
       TermType: 0
       Description: 
       Languages:
-      - Recurve Bow (3Tier)
-      - "\uB9AC\uCEE4\uBE0C \uBCF4\uC6B0 (3\uD2F0\uC5B4)"
-      - "\u5F8C\u308D\u306B\u53CD\u3089\u3059\u5F13\uFF083\u5C64\uFF09"
+      - Recurve Bow [T1] BluePrint
+      - "\uB9AC\uCEE4\uBE0C \uBCF4\uC6B0 [T1] \uC124\uACC4\uB3C4"
+      - "\u30EA\u30AB\u30FC\u30D6\u30DC\u30A6[T1]\u56F3\u9762"
       - 
       Flags: 00000000
       Languages_Touch: []
-    - Term: ItemName/ITEM_BOW_RECURVE_1T
+    - Term: ItemName/BluePrint/BP_SHORT_BOW_T1
       TermType: 0
       Description: 
       Languages:
-      - Recurve Bow
-      - "\uB9AC\uCEE4\uBE0C \uBCF4\uC6B0"
-      - "\u5F8C\u308D\u306B\u53CD\u3089\u3059\u5F13"
-      - 
-      Flags: 00000000
-      Languages_Touch: []
-    - Term: ItemName/ITEM_BOW_RECURVE_2T
-      TermType: 0
-      Description: 
-      Languages:
-      - Recurve Bow (2Tier)
-      - "\uB9AC\uCEE4\uBE0C \uBCF4\uC6B0 (2\uD2F0\uC5B4)"
-      - "\u5F8C\u308D\u306B\u53CD\u3089\u3059\u5F13\uFF082\u5C64\uFF09"
-      - 
-      Flags: 00000000
-      Languages_Touch: []
-    - Term: ItemName/Arrow/ITEM_ARROW_EXPLOSION_1T
-      TermType: 0
-      Description: 
-      Languages:
-      - Explosion Arrow
-      - "\uD3ED\uBC1C \uD654\uC0B4"
-      - "\u7206\u767A\u306E\u77E2"
-      - 
-      Flags: 00000000
-      Languages_Touch: []
-    - Term: ItemName/Arrow/ITEM_ARROW_EXPLOSION_2T
-      TermType: 0
-      Description: 
-      Languages:
-      - Explosion Arrow (2Tier)
-      - "\uD3ED\uBC1C \uD654\uC0B4 (2\uD2F0\uC5B4)"
-      - "\u7206\u767A\u306E\u77E2\uFF082\u5C64\uFF09"
-      - 
-      Flags: 00000000
-      Languages_Touch: []
-    - Term: ItemName/Arrow/ITEM_ARROW_EXPLOSION_3T
-      TermType: 0
-      Description: 
-      Languages:
-      - Explosion Arrow (3Tier)
-      - "\uD3ED\uBC1C \uD654\uC0B4 (3\uD2F0\uC5B4)"
-      - "\u7206\u767A\u306E\u77E2\uFF083\u5C64\uFF09"
-      - 
-      Flags: 00000000
-      Languages_Touch: []
-    - Term: ItemName/Arrow/ARROW_STALKER_1T
-      TermType: 0
-      Description: 
-      Languages:
-      - Stalker Arrow
-      - "\uCD94\uC801\uC790 \uD654\uC0B4"
-      - "\u30B9\u30C8\u30FC\u30AB\u30FC\u30A2\u30ED\u30FC"
-      - 
-      Flags: 00000000
-      Languages_Touch: []
-    - Term: ItemName/Arrow/ARROW_STALKER_2T
-      TermType: 0
-      Description: 
-      Languages:
-      - Stalker Arrow [2Tier]
-      - "\uCD94\uC801\uC790 \uD654\uC0B4 [2\uD2F0\uC5B4]"
-      - "\u30B9\u30C8\u30FC\u30AB\u30FC\u30A2\u30ED\u30FC[2T]"
-      - 
-      Flags: 00000000
-      Languages_Touch: []
-    - Term: ItemName/Arrow/ARROW_STALKER_3T
-      TermType: 0
-      Description: 
-      Languages:
-      - Stalker Arrow [3Tier]
-      - "\uC2A4\uD1A0\uCEE4 \uD654\uC0B4 [3\uD2F0\uC5B4]"
-      - "\u30B9\u30C8\u30FC\u30AB\u30FC\u30A2\u30ED\u30FC[3\u30C6\u30A3\u30A2]"
-      - 
-      Flags: 00000000
-      Languages_Touch: []
-    - Term: ItemName/Arrow/ARROW_STEEL_1T
-      TermType: 0
-      Description: 
-      Languages:
-      - Steel Arrow
-      - "\uAC15\uCCA0 \uD654\uC0B4"
-      - "\u92FC\u306E\u77E2"
-      - 
-      Flags: 00000000
-      Languages_Touch: []
-    - Term: ItemName/Arrow/ARROW_STEEL_2T
-      TermType: 0
-      Description: 
-      Languages:
-      - Steel Arrow [2Tier]
-      - "\uAC15\uCCA0 \uD654\uC0B4 [2\uD2F0\uC5B4]"
-      - "\u30B9\u30C1\u30FC\u30EB\u30A2\u30ED\u30FC[2\u6BB5]"
-      - 
-      Flags: 00000000
-      Languages_Touch: []
-    - Term: ItemName/Arrow/ARROW_STEEL_3T
-      TermType: 0
-      Description: 
-      Languages:
-      - Steel Arrow [3Tier]
-      - "\uAC15\uCCA0 \uD654\uC0B4 [3\uD2F0\uC5B4]"
-      - "\u92FC\u306E\u77E2[3\u5C64]"
-      - 
-      Flags: 00000000
-      Languages_Touch: []
-    - Term: ItemName/Artifact/ARTIFACT_SIGHT_1T
-      TermType: 0
-      Description: 
-      Languages:
-      - Red Sight
-      - "\uB808\uB4DC \uC0AC\uC774\uD2B8"
-      - "\u8D64\u3044\u5149\u666F"
-      - 
-      Flags: 00000000
-      Languages_Touch: []
-    - Term: ItemName/Artifact/ARTIFACT_SIGHT_2T
-      TermType: 0
-      Description: 
-      Languages:
-      - Red Sight [2Tier]
-      - "\uB808\uB4DC \uC0AC\uC774\uD2B8 [2\uD2F0\uC5B4]"
-      - "\u30EC\u30C3\u30C9\u30B5\u30A4\u30C8[2\u30C6\u30A3\u30A2]"
-      - 
-      Flags: 00000000
-      Languages_Touch: []
-    - Term: ItemName/Artifact/ARTIFACT_SIGHT_3T
-      TermType: 0
-      Description: 
-      Languages:
-      - Red Sight [3Tier]
-      - "\uB808\uB4DC \uC0AC\uC774\uD2B8 [3\uD2F0\uC5B4]"
-      - "\u30EC\u30C3\u30C9\u30B5\u30A4\u30C8[3\u30C6\u30A3\u30A2]"
-      - 
-      Flags: 00000000
-      Languages_Touch: []
-    - Term: ItemName/Artifact/ARTIFACT_WATCH_1T
-      TermType: 0
-      Description: 
-      Languages:
-      - Mysterious Pocket Watch
-      - "\uC2E0\uBE44\uD55C \uD68C\uC911\uC2DC\uACC4"
-      - "\u4E0D\u601D\u8B70\u306A\u61D0\u4E2D\u6642\u8A08"
-      - 
-      Flags: 00000000
-      Languages_Touch: []
-    - Term: ItemName/Artifact/ARTIFACT_WATCH_2T
-      TermType: 0
-      Description: 
-      Languages:
-      - Mysterious Pocket Watch [2Tier]
-      - "\uC2E0\uBE44\uD55C \uD68C\uC911\uC2DC\uACC4 [2\uD2F0\uC5B4]"
-      - "\u4E0D\u601D\u8B70\u306A\u61D0\u4E2D\u6642\u8A08[2\u6BB5]"
-      - 
-      Flags: 00000000
-      Languages_Touch: []
-    - Term: ItemName/Artifact/ARTIFACT_WATCH_3T
-      TermType: 0
-      Description: 
-      Languages:
-      - Mysterious Pocket Watch [3Tier]
-      - "\uC2E0\uBE44\uD55C \uD68C\uC911\uC2DC\uACC4 [3\uD2F0\uC5B4]"
-      - "\u4E0D\u601D\u8B70\u306A\u61D0\u4E2D\u6642\u8A08\u30103\u6BB5\u3011"
-      - 
-      Flags: 00000000
-      Languages_Touch: []
-    - Term: ItemName/Consumable/CON_HEALTH_POTION
-      TermType: 0
-      Description: 
-      Languages:
-      - Health Potion
-      - "\uAC74\uAC15\uC758 \uBB18\uC57D"
-      - "\u5065\u5EB7\u30DD\u30FC\u30B7\u30E7\u30F3"
-      - 
-      Flags: 00000000
-      Languages_Touch: []
-    - Term: ItemName/Consumable/CON_MANA_POTION
-      TermType: 0
-      Description: 
-      Languages:
-      - Mana Potion
-      - "\uB9C8\uB098 \uBB3C\uC57D"
-      - "\u30DE\u30CA\u30DD\u30FC\u30B7\u30E7\u30F3"
-      - 
-      Flags: 00000000
-      Languages_Touch: []
-    - Term: ItemDesc/Consumable/DESC_HEALTH_POTION
-      TermType: 0
-      Description: 
-      Languages:
-      - Restore Health.
-      - "\uAC74\uAC15\uC744 \uD68C\uBCF5\uD569\uB2C8\uB2E4."
-      - "\u5065\u5EB7\u3092\u56DE\u5FA9\u3057\u307E\u3059\u3002"
-      - 
-      Flags: 00000000
-      Languages_Touch: []
-    - Term: ItemDesc/Consumable/DESC_MANA_POTION
-      TermType: 0
-      Description: 
-      Languages:
-      - Restores Mana.
-      - "\uB9C8\uB098\uB97C \uD68C\uBCF5\uD569\uB2C8\uB2E4."
-      - "\u30DE\u30CA\u3092\u56DE\u5FA9\u3057\u307E\u3059\u3002"
+      - Short Bow [T0] Blueprint
+      - "\uB2E8\uAD81 [T0] \uC124\uACC4\uB3C4"
+      - "\u30B7\u30E7\u30FC\u30C8\u30DC\u30A6[T0]\u8A2D\u8A08\u56F3"
       - 
       Flags: 00000000
       Languages_Touch: []
@@ -1140,7 +1414,7 @@ MonoBehaviour:
     Google_WebServiceURL: https://script.google.com/macros/s/AKfycbxYjUzjGG_es5yU7qqC_vY6npuTL7-WcbV7M9hmeeneG6NhZwWl0Y3tsQgAwzBtyjzf/exec
     Google_SpreadsheetKey: 1CXNU3vVmmc8hy4Pu9Sf5q2s8sRINjOoXe-p5TvM3uhc
     Google_SpreadsheetName: I2Loc ArrowDefence Localization
-    Google_LastUpdatedVersion: 1648563225100
+    Google_LastUpdatedVersion: 1649328891665
     Google_Password: Both7851@#
     GoogleUpdateFrequency: 3
     GoogleInEditorCheckFrequency: 2

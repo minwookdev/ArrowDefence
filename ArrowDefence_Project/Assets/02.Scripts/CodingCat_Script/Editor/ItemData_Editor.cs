@@ -920,6 +920,21 @@ public class SpArrItemDataEditor : Editor {
         EditorGUILayout.PropertyField(ItemAmountProp);
         EditorGUI.EndDisabledGroup();
         EditorGUILayout.PropertyField(ItemSpriteProp, new GUIContent("Item Icon"));
+        var itemIconSprite = AssetPreview.GetAssetPreview(ItemSpriteProp.objectReferenceValue);
+        if (itemIconSprite != null) {
+            //GUILayout.BeginArea(new Rect(100f, 100f, 100f, 100f)); 이 방법도 다른곳에서는 유용할 듯 !
+            var previewLogoStyle = new GUIStyle();
+            previewLogoStyle.fontSize = 18;
+            previewLogoStyle.fontStyle = FontStyle.BoldAndItalic;
+            previewLogoStyle.normal.textColor = new Color(1f, 1f, 1f);
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("ICON SPRITE PREVIEW", previewLogoStyle);
+            GUILayout.FlexibleSpace();
+            GUILayout.Label(itemIconSprite, new GUIStyle(GUI.skin.box), GUILayout.Width(100f), GUILayout.Height(100f));
+            GUILayout.EndHorizontal();
+            //GUI.DrawTexture(new Rect(100f, 100f, 100f, 100f), itemIconSprite);
+            //GUILayout.EndArea();
+        }
         GUILayout.EndVertical();
         #endregion
         #region Equipment_Info

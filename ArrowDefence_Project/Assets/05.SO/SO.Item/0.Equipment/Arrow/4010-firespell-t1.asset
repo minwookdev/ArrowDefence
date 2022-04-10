@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: 4010-firespell-t1
   m_EditorClassIdentifier: 
   Item_Type: 2
-  Item_Grade: 0
-  Item_Id: 
+  Item_Grade: 1
+  Item_Id: 4010
   DefaultAmount: 1
-  Item_Sprite: {fileID: 0}
+  Item_Sprite: {fileID: 21300000, guid: a9cc77562b5989544a2abbe8626e6faf, type: 3}
   NameTerms: 
   DescTerms: 
   Equip_Type: 1

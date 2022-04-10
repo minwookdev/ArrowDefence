@@ -475,6 +475,15 @@
         public static T GetRandomIndex<T>(T[] array) {
             return array[UnityEngine.Random.Range(0, array.Length)];
         }
+
+        /// <summary>
+        /// included max value
+        /// </summary>
+        /// <param name="quantityRange"></param>
+        /// <returns></returns>
+        public static int GetRandomItemAmount(int[] quantityRange) {
+            return RangeInt(quantityRange[0], quantityRange[quantityRange.Length - 1]);
+        }
     }
 
     #region ENUMS_BATTLE

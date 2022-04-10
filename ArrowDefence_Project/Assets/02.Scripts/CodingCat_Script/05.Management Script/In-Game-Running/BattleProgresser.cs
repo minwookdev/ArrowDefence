@@ -370,8 +370,7 @@
         /// <summary>
         /// Add DropItems to Player Inventory
         /// </summary>
-        private void DropItemsAddInventory()
-        {
+        private void DropItemsAddInventory() {
             dropItemList.ForEach((item) => {
                 CCPlayerData.inventory.AddItem(item.ItemAsset, item.Quantity);
                 CatLog.Log($"아이템 획득 : {item.ItemAsset.NameByTerms}, 수량 : {item.Quantity}");
@@ -447,11 +446,11 @@
             if (currentEndDelayTime >= EndBattleDelay) {
                 IsOpenedResult = true;
 
-                //Update User Information
-                UpdateUserInfo();
-
                 //Add Items in Player Inventory
                 DropItemsAddInventory();
+
+                //Update User Information
+                UpdateUserInfo();
 
                 //Open Clear Result Panel
                 //battleSceneUI.OnEnableResultPanel(dropItemList);
@@ -489,9 +488,16 @@
         #region STAGE_INFO
 
         void UpdateUserInfo() {
-            GameManager.Instance.UpdateStageData(stageKey, in battleData);
+            var isValueExistence = GameManager.Instance.UpdateStageData(stageKey, in battleData);
+            if (!isValueExistence) { //기존에 이 스테이지에 대한 플레이 데이터가 없었을 경우, 초회 클리어 아이템 지급
+                var rewards = DropListAsset.GetRewardTable;
+                for (int i = 0; i < rewards.Length; i++) {
+                    var rewardItemAmount = rewards[i].DefaultQuantity;
+                    CCPlayerData.inventory.AddItem(rewards[i].ItemAsset, rewardItemAmount);
+                    CatLog.Log($"초회클리어 보상 아이템 획득: {rewards[i].ItemAsset.NameByTerms}, 수량: {rewardItemAmount}");
+                }
+            }
             GameManager.Instance.UpdateCraftingInfo();
-            
         }
 
         void IncreaseKillCount() {

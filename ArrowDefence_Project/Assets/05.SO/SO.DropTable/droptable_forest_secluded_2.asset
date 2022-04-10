@@ -12,4 +12,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6371e27e94bb915498268c572af10bd5, type: 3}
   m_Name: droptable_forest_secluded_2
   m_EditorClassIdentifier: 
-  DropTableArray: []
+  DropTableArray:
+  - ItemAsset: {fileID: 11400000, guid: 95042cf7521292b45946a9575aa69d2c, type: 2}
+    DropChance: 1600
+    QuantityRange: 050000000a000000
+  - ItemAsset: {fileID: 11400000, guid: 4f56483e299df2b4d8d0c4b89b5de01d, type: 2}
+    DropChance: 600
+    QuantityRange: 0300000005000000
+  - ItemAsset: {fileID: 11400000, guid: d3376c0393f758a46a2c8a99a7179a64, type: 2}
+    DropChance: 50
+    QuantityRange: 0100000002000000
+  - ItemAsset: {fileID: 11400000, guid: 818c0b76c0b2795478faf92a00f6710d, type: 2}
+    DropChance: 50
+    QuantityRange: 01000000
+  - ItemAsset: {fileID: 11400000, guid: ac295f27df087a441a14a1f227cf44ef, type: 2}
+    DropChance: 30
+    QuantityRange: 01000000
+  - ItemAsset: {fileID: 11400000, guid: 45b9ce496f58ebb41ab3b7e936262d45, type: 2}
+    DropChance: 30
+    QuantityRange: 01000000
+  - ItemAsset: {fileID: 11400000, guid: 121cb3203bb67b742b30cc7043be56cc, type: 2}
+    DropChance: 10
+    QuantityRange: 01000000
+  RewardTableArray:
+  - ItemAsset: {fileID: 11400000, guid: 8e6a38037c8cfb749a94b046b7449f6c, type: 2}
+    DropChance: -1
+    QuantityRange: 01000000
+  - ItemAsset: {fileID: 11400000, guid: 15a7258e5bb78284097b656c38616710, type: 2}
+    DropChance: -1
+    QuantityRange: 01000000

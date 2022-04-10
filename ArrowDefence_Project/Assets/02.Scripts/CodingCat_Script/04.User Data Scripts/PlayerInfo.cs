@@ -21,16 +21,20 @@
         }
 
         /// <summary>
-        /// Update Stage Info Dictionary
+        /// Stage Info Dictionary Update. [if not exist the value, create new element]
         /// </summary>
-        public void UpdateStageInfo(string key, in BattleData data) {
-            //Try Update Stage Info Data
-            if(stageInfo.TryGetValue(key, out StageInfo info)) {
+        /// <param name="stagekey"></param>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        public bool UpdateStageInfo(string stagekey, in BattleData data) {
+            var isExistenceValue = stageInfo.TryGetValue(stagekey, out StageInfo info);
+            if (isExistenceValue) {
                 info.UpdateInfo(in data);
             }
-            else { //if the failed, Add New Stage Info Dictionary
-                stageInfo.Add(key, new StageInfo(in data));
+            else {
+                stageInfo.Add(stagekey, new StageInfo(in data));
             }
+            return isExistenceValue;
         }
 
         public bool TryGetStageData(string key, out StageInfo data) {

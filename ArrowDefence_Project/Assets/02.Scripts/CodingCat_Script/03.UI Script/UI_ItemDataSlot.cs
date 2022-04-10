@@ -104,6 +104,7 @@
                 case ItemData_Mat             temp: tempItem = new Item_Material(temp, 1);   break;
                 case ItemData_Con             temp: tempItem = new Item_Consumable(temp, 1); break;
                 case ItemData_Equip_Bow       temp: tempItem = new Item_Bow(temp);           break;
+                case ItemDt_SpArr             temp: tempItem = new Item_SpArr(temp);         break;
                 case ItemData_Equip_Arrow     temp: tempItem = new Item_Arrow(temp);         break;
                 case ItemData_Equip_Accessory temp: tempItem = new Item_Accessory(temp);     break;
                 default: throw new System.NotImplementedException();

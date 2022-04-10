@@ -328,8 +328,8 @@
             trigger.triggers.Add(m_slotEntryUp);
         }
 
-        public void UpdateStageData(string key, in BattleData data) {
-            CCPlayerData.infos.UpdateStageInfo(key, in data);
+        public bool UpdateStageData(string stagekey, in BattleData data) {
+            return CCPlayerData.infos.UpdateStageInfo(stagekey, in data);
         }
 
         public void UpdateCraftingInfo() {
@@ -427,7 +427,8 @@
 
             for (int i = 0; i < dropListArray.Length; i++) {
                 if (randomPoint < dropListArray[i].DropChance) {
-                    return new DropItem(GameGlobal.RandomIntInArray(dropListArray[i].QuantityRange), dropListArray[i].ItemAsset);
+                    return new DropItem(dropListArray[i].DefaultQuantity, dropListArray[i].ItemAsset);
+                    //return new DropItem(GameGlobal.RandomIntInArray(dropListArray[i].QuantityRange), dropListArray[i].ItemAsset);
                 }
                 else {
                     randomPoint -= dropListArray[i].DropChance;
@@ -435,8 +436,9 @@
             }
 
             //Last index Item
-            var last = dropListArray.Length - 1;
-            return new DropItem(GameGlobal.RandomIntInArray(dropListArray[last].QuantityRange), dropListArray[last].ItemAsset);
+            var lastIndexItem = dropListArray[dropListArray.Length - 1];
+            return new DropItem(lastIndexItem.DefaultQuantity, lastIndexItem.ItemAsset);
+            //return new DropItem(GameGlobal.RandomIntInArray(dropListArray[last].QuantityRange), dropListArray[last].ItemAsset);
 
 #region GET_LOW_CAHNCE_ITEM
             //var minimunChanceOfItem = dropListArray[0];

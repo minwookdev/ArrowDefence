@@ -8,6 +8,12 @@
             public float DropChance;
             public int[] QuantityRange = new int[1] { 1 };
 
+            public int DefaultQuantity {
+                get {
+                    return RandomEx.GetRandomItemAmount(QuantityRange);
+                }
+            }
+
             public void CheckQuantity()
             {
                 if(QuantityRange.Length <= 0) QuantityRange = new int[] { 1 };
@@ -29,6 +35,17 @@
             get {
                 return ((DropTableArray == null) ? 0 : DropTableArray.Length) + ((RewardTableArray == null) ? 0 : RewardTableArray.Length);
             }
+        }
+
+        public DropTable[] GetRewardTable {
+            get { //if value is null, return empty droptable array
+                return (RewardTableArray != null) ? RewardTableArray : new DropTable[0] { };
+            }
+        }
+
+        public int GetTotalTableSize(bool includeRewardTableSize) {
+            return (includeRewardTableSize) ? ((DropTableArray == null ? 0 : DropTableArray.Length) + (RewardTableArray == null ? 0 : RewardTableArray.Length)) :
+                                              ((DropTableArray == null ? 0 : DropTableArray.Length));
         }
 
         private void OnEnable() {
@@ -67,10 +84,8 @@
             CatLog.Log(StringColor.YELLOW, $"DROP TABLE : {this.name}, TOTAL DROP CHANCE : {totalChance}%");
         }
 
-        private void OnCheckQuantityArray()
-        {
-            foreach (var item in DropTableArray)
-            {
+        private void OnCheckQuantityArray() {
+            foreach (var item in DropTableArray) {
                 item.CheckQuantity();
             }
         }

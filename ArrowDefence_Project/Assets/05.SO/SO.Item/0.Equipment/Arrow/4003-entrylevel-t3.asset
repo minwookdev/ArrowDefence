@@ -15,10 +15,10 @@ MonoBehaviour:
   Item_Type: 2
   Item_Grade: 0
   Item_Id: 4003
-  Item_Amount: 1
-  Item_Name: Beginner's Arrow
-  Item_Desc: An improvised, low-quality iron arrow.
-  Item_Sprite: {fileID: 21300000, guid: 597738adf4e1c1542b4e8fea019cedbb, type: 3}
+  DefaultAmount: 1
+  Item_Sprite: {fileID: 21300000, guid: 96e2a0c208d702544a05214aaa15f25c, type: 3}
+  NameTerms: 
+  DescTerms: 
   Equip_Type: 1
   MainArrowObj: {fileID: 1123326281355546838, guid: aa3b31143ec88dd4aa84c997f7e1a284,
     type: 3}

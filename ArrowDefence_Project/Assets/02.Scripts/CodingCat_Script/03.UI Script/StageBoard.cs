@@ -77,7 +77,7 @@
             }
 
             //부족한 슬롯 수 계산 및 새로 할당
-            sbyte slotNeedCount = (sbyte)(dropTable.TotalTableSize - dropListSlots.Count);
+            sbyte slotNeedCount = (sbyte)(dropTable.GetTotalTableSize(isClearedStage) - dropListSlots.Count);
             if (slotNeedCount > 0) {
                 for (sbyte i = 0; i < slotNeedCount; i++) {
                     var newslot = GameObject.Instantiate(slotPref, dropListParent);
@@ -89,10 +89,12 @@
             byte enableSlotCount = 0;
             var DropsTable  = dropTable.DropTableArray;
             var rewardTable = dropTable.RewardTableArray;
-            //첫 클리어 보상 슬롯 먼저 활성화
-            foreach (var reward in rewardTable) {
-                dropListSlots[enableSlotCount].EnableDropListSlot(reward.ItemAsset, true);
-                enableSlotCount++;
+            //초회 클리어 보상 슬롯 활성화, 클리어 기록이 없는 스테이지 한정
+            if (!isClearedStage) { 
+                foreach (var reward in rewardTable) {
+                    dropListSlots[enableSlotCount].EnableDropListSlot(reward.ItemAsset, true);
+                    enableSlotCount++;
+                }
             }
             //드랍 테이블의 아이템으로 활성화
             foreach (var drops in DropsTable) {

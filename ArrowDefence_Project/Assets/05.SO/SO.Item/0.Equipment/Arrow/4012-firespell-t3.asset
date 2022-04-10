@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: 4012-firespell-t3
   m_EditorClassIdentifier: 
   Item_Type: 2
-  Item_Grade: 0
+  Item_Grade: 1
   Item_Id: 
   DefaultAmount: 1
   Item_Sprite: {fileID: 0}

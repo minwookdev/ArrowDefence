@@ -16,9 +16,7 @@ MonoBehaviour:
   Item_Grade: 4
   Item_Id: 7001
   DefaultAmount: 1
-  Item_Name: Explosion Arrow
-  Item_Desc: this is a draft of a  special arrow.
-  Item_Sprite: {fileID: 21300000, guid: 0d6c8a18cba27c243ab0dc43afd9bbbd, type: 3}
+  Item_Sprite: {fileID: 21300000, guid: 66dd3c6fd362fc641b9258935d93df68, type: 3}
   NameTerms: ItemName/Arrow/ITEM_ARROW_EXPLOSION_1T
   DescTerms: 
   Equip_Type: 1

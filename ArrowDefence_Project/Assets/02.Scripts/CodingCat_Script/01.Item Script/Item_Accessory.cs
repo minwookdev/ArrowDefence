@@ -34,6 +34,7 @@
             switch (data) {
                 case SkillDataAimSight newData: return new Acsp_AimSight(newData);
                 case SkillDataSlowTime newData: return new Acsp_SlowTime(newData);
+                case null:                      return null;
                 default: throw new System.NotImplementedException();
             }
         }

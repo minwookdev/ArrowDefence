@@ -13,17 +13,20 @@ MonoBehaviour:
   m_Name: 4002-entrylevel-t2
   m_EditorClassIdentifier: 
   Item_Type: 2
-  Item_Grade: 0
-  Item_Id: 
+  Item_Grade: 1
+  Item_Id: 4002
   DefaultAmount: 1
   Item_Sprite: {fileID: 21300000, guid: 96e2a0c208d702544a05214aaa15f25c, type: 3}
-  NameTerms: 
+  NameTerms: ItemName/Arrow/ARROW_ENTRYLEVEL_T2
   DescTerms: 
   Equip_Type: 1
-  MainArrowObj: {fileID: 0}
-  LessArrowObj: {fileID: 0}
+  MainArrowObj: {fileID: 4613396934045542665, guid: 325eb93314050af4da019cb4aa867d31,
+    type: 3}
+  LessArrowObj: {fileID: 1829620067157272142, guid: e28f357264a17a84c846e990654c6ea4,
+    type: 3}
   ArrowSkillFst: {fileID: 0}
   ArrowSkillSec: {fileID: 0}
-  DamageInc: 1
-  Speed: 18
-  effects: []
+  DamageInc: 1.11
+  Speed: 19
+  effects:
+  - {fileID: 9152076937454663170, guid: d702d250e9628a142987494c9b1e5108, type: 3}

@@ -14,16 +14,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Item_Type: 2
   Item_Grade: 0
-  Item_Id: 
+  Item_Id: 4001
   DefaultAmount: 1
   Item_Sprite: {fileID: 21300000, guid: 96e2a0c208d702544a05214aaa15f25c, type: 3}
-  NameTerms: 
+  NameTerms: ItemName/Arrow/ARROW_ENTRYLEVEL_T1
   DescTerms: 
   Equip_Type: 1
-  MainArrowObj: {fileID: 0}
-  LessArrowObj: {fileID: 0}
+  MainArrowObj: {fileID: 2957477139567338875, guid: 8f15211a26bb28743a54c7cf90cabb46,
+    type: 3}
+  LessArrowObj: {fileID: 4854250247361223595, guid: 48d81cbefb2be6340b4f84a290cde580,
+    type: 3}
   ArrowSkillFst: {fileID: 0}
   ArrowSkillSec: {fileID: 0}
-  DamageInc: 1
+  DamageInc: 1.01
   Speed: 18
-  effects: []
+  effects:
+  - {fileID: 9152076937454663170, guid: d702d250e9628a142987494c9b1e5108, type: 3}

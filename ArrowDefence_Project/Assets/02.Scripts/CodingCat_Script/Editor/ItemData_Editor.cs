@@ -312,7 +312,8 @@ public class BowItemData_Editor : Editor
         EditorGUI.indentLevel = 1;
         isAbilityTapFoldout = EditorGUILayout.Foldout(isAbilityTapFoldout, "Ability Sliders");
         EditorGUI.indentLevel = tempIndent;
-        if (isAbilityTapFoldout == true) {
+        //isAbilityTapFoldout = true;
+        if (isAbilityTapFoldout) {
             #region ABILITY_DAMAGE
             var damageCount = abilDamageProp.intValue;
             if (damageCount <= 100)      DrawStar(1);
@@ -579,7 +580,8 @@ public class ArrowItemData_Editor : Editor
         EditorGUI.indentLevel = 1;
         isAbilityTapFoldout = EditorGUILayout.Foldout(isAbilityTapFoldout, "Ability Sliders");
         EditorGUI.indentLevel = tempIndent;
-        if(isAbilityTapFoldout == true) {
+        isAbilityTapFoldout = true;
+        if (isAbilityTapFoldout) {
             #region ABILITY_SPEED
             var speed = speedProp.floatValue;
             if (speed <= 18)      DrawStar(0);

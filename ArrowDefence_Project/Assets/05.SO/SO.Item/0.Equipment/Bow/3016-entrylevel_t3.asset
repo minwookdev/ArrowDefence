@@ -17,14 +17,14 @@ MonoBehaviour:
   Item_Id: 3016
   DefaultAmount: 1
   Item_Sprite: {fileID: 21300000, guid: 4d959710934c05747bccfa1b227f8620, type: 3}
-  NameTerms: 
+  NameTerms: ItemName/Bow/BOW_ENTRY_T3
   DescTerms: 
   Equip_Type: 0
-  BowGameObject: {fileID: 2772393570774568332, guid: 94fbb0808b1b74f43b4e4ad92904d9ca,
+  BowGameObject: {fileID: 4517517997932246186, guid: 33d1003c5c923fa4fab053d4fe04c0ca,
     type: 3}
   SkillAsset_f: {fileID: 0}
   SkillAsset_s: {fileID: 0}
-  BaseDamage: 30
-  CriticalDamageMultiplier: 1.5
-  FullChargedMultiplier: 1.2
-  CriticalHitChance: 0
+  BaseDamage: 120
+  CriticalDamageMultiplier: 1.8
+  FullChargedMultiplier: 1.6
+  CriticalHitChance: 8

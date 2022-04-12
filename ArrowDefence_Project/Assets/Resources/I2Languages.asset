@@ -17,6 +17,68 @@ MonoBehaviour:
     UserAgreesToHaveItInsideThePluginsFolder: 0
     GoogleLiveSyncIsUptoDate: 1
     mTerms:
+    - Term: ItemDesc/BluePrint/BP_ARROW
+      TermType: 0
+      Description: 
+      Languages:
+      - This Is A Blueprint For Making Arrow Items.
+      - "\uD654\uC0B4 \uC544\uC774\uD15C\uC744 \uC81C\uC791\uD558\uAE30 \uC704\uD55C
+        \uC124\uACC4\uB3C4\uC785\uB2C8\uB2E4."
+      - "\u77E2\u30A2\u30A4\u30C6\u30E0\u3092\u88FD\u4F5C\u3059\u308B\u305F\u3081\u306E\u8A2D\u8A08\u56F3\u3067\u3059\u3002"
+      - 
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: ItemDesc/BluePrint/BP_ARTIFACT
+      TermType: 0
+      Description: 
+      Languages:
+      - A Blueprint For Crafting An Artifact Item.
+      - "\uC720\uBB3C \uC544\uC774\uD15C\uC744 \uC81C\uC791\uD558\uAE30 \uC704\uD55C
+        \uC124\uACC4\uB3C4\uC785\uB2C8\uB2E4."
+      - "\u907A\u7269\u30A2\u30A4\u30C6\u30E0\u3092\u88FD\u4F5C\u3059\u308B\u305F\u3081\u306E\u8A2D\u8A08\u56F3\u3067\u3059\u3002"
+      - 
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: ItemDesc/BluePrint/BP_BOW
+      TermType: 0
+      Description: 
+      Languages:
+      - This Is A Blueprint For Making A Bow Item.
+      - "\uD65C \uC544\uC774\uD15C\uC744 \uC81C\uC791\uD558\uAE30 \uC704\uD55C \uC124\uACC4\uB3C4\uC785\uB2C8\uB2E4."
+      - "\u5F13\u30A2\u30A4\u30C6\u30E0\u3092\u88FD\u4F5C\u3059\u308B\u305F\u3081\u306E\u8A2D\u8A08\u56F3\u3067\u3059\u3002"
+      - 
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: ItemDesc/BluePrint/BP_CONSUMABLE
+      TermType: 0
+      Description: 
+      Languages:
+      - 
+      - 
+      - 
+      - 
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: ItemDesc/BluePrint/BP_MATERIAL
+      TermType: 0
+      Description: 
+      Languages:
+      - 
+      - 
+      - 
+      - 
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: ItemDesc/BluePrint/BP_SPECIAL_ARROW
+      TermType: 0
+      Description: 
+      Languages:
+      - This Is A Blueprint For Making Special Arrow Items.
+      - "\uD2B9\uC218 \uD654\uC0B4 \uC544\uC774\uD15C \uC81C\uC791 \uB3C4\uBA74\uC785\uB2C8\uB2E4."
+      - "\u3053\u308C\u306F\u3001\u7279\u5225\u306A\u77E2\u5370\u30A2\u30A4\u30C6\u30E0\u3092\u4F5C\u6210\u3059\u308B\u305F\u3081\u306E\u9752\u5199\u771F\u3067\u3059\u3002"
+      - 
+      Flags: 00000000
+      Languages_Touch: []
     - Term: ItemDesc/Consumable/DESC_HEALTH_POTION
       TermType: 0
       Description: 
@@ -111,6 +173,36 @@ MonoBehaviour:
       - "\uC124\uC0B0 \uC9C0\uC5ED\uC5D0\uC11C \uD68D\uB4DD\uD560 \uC218 \uC788\uB294
         \uC7AC\uB8CC \uC785\uB2C8\uB2E4."
       - "\u96EA\u5C71\u5730\u57DF\u3067\u7372\u5F97\u3067\u304D\u308B\u6750\u6599\u3067\u3059\u3002"
+      - 
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: ItemName/Arrow/ARROW_ENTRYLEVEL_T1
+      TermType: 0
+      Description: 
+      Languages:
+      - Standard Arrow
+      - "\uBCF4\uAE09\uD615 \uD654\uC0B4"
+      - "\u666E\u53CA\u578B\u77E2"
+      - 
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: ItemName/Arrow/ARROW_ENTRYLEVEL_T2
+      TermType: 0
+      Description: 
+      Languages:
+      - Standard Arrow [2T]
+      - "\uBCF4\uAE09\uD615 \uD654\uC0B4 [2T]"
+      - "\u666E\u53CA\u578B\u77E2 [2T]"
+      - 
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: ItemName/Arrow/ARROW_ENTRYLEVEL_T3
+      TermType: 0
+      Description: 
+      Languages:
+      - Standard Arrow [3T]
+      - "\uBCF4\uAE09\uD615 \uD654\uC0B4 [3T]"
+      - "\u666E\u53CA\u578B\u77E2 [3T]"
       - 
       Flags: 00000000
       Languages_Touch: []
@@ -264,6 +356,66 @@ MonoBehaviour:
       - 
       Flags: 00000000
       Languages_Touch: []
+    - Term: ItemName/BluePrint/BP_ARROW_FIRESPELL_T1
+      TermType: 0
+      Description: 
+      Languages:
+      - Fire Spell Arrow [T1] Blueprint
+      - "\uD654\uC5FC \uC8FC\uBB38 \uD654\uC0B4 [T1] \uB3C4\uBA74"
+      - "\u706B\u306E\u546A\u6587\u306E\u77E2[T1]\u9752\u5199\u771F"
+      - 
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: ItemName/BluePrint/BP_ARROW_PIERCING_T1
+      TermType: 0
+      Description: 
+      Languages:
+      - Piercing Arrow [T1] Blueprint
+      - "\uAFF0\uB6AB\uB294 \uD654\uC0B4 [T1] \uC124\uACC4\uB3C4"
+      - "\u30D4\u30A2\u30B9\u77E2\u5370[T1]\u8A2D\u8A08\u56F3"
+      - 
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: ItemName/BluePrint/BP_ARROW_STALKER_T1
+      TermType: 0
+      Description: 
+      Languages:
+      - Stalker Arrow [T1] Blueprint
+      - "\uCD94\uC801\uC790 \uD654\uC0B4 [T1] \uC124\uACC4\uB3C4"
+      - "\u30C8\u30EC\u30FC\u30B5\u30FC\u306E\u77E2[T1]\u8A2D\u8A08\u56F3"
+      - 
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: ItemName/BluePrint/BP_BOW_RECURVE_T1
+      TermType: 0
+      Description: 
+      Languages:
+      - Recurve Bow [T1] Blueprint
+      - "\uB9AC\uCEE4\uBE0C \uBCF4\uC6B0 [T1] \uC124\uACC4\uB3C4"
+      - "\u30EA\u30AB\u30FC\u30D6\u30DC\u30A6[T1]\u56F3\u9762"
+      - 
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: ItemName/BluePrint/BP_BOW_SHORT_T1
+      TermType: 0
+      Description: 
+      Languages:
+      - Short Bow [T0] Blueprint
+      - "\uB2E8\uAD81 [T0] \uC124\uACC4\uB3C4"
+      - "\u30B7\u30E7\u30FC\u30C8\u30DC\u30A6[T0]\u8A2D\u8A08\u56F3"
+      - 
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: ItemName/BluePrint/BP_SP_EXPLOSIVE_T1
+      TermType: 0
+      Description: 
+      Languages:
+      - Explosion Arrow [T1] Blueprint
+      - "\uD3ED\uBC1C \uD654\uC0B4 [T1] \uB3C4\uBA74"
+      - "\u7206\u767A\u306E\u77E2[T1]\u306E\u9752\u5199\u771F"
+      - 
+      Flags: 00000000
+      Languages_Touch: []
     - Term: ItemName/Consumable/CON_HEALTH_POTION
       TermType: 0
       Description: 
@@ -364,7 +516,7 @@ MonoBehaviour:
       - 
       Flags: 00000000
       Languages_Touch: []
-    - Term: ItemName/ITEM_BOW_BEGINNERS
+    - Term: ItemName/Bow/ITEM_BOW_BEGINNERS
       TermType: 0
       Description: 
       Languages:
@@ -374,7 +526,7 @@ MonoBehaviour:
       - 
       Flags: 00000000
       Languages_Touch: []
-    - Term: ItemName/ITEM_BOW_CELESTIAL
+    - Term: ItemName/Bow/ITEM_BOW_CELESTIAL
       TermType: 0
       Description: 
       Languages:
@@ -384,7 +536,7 @@ MonoBehaviour:
       - 
       Flags: 00000000
       Languages_Touch: []
-    - Term: ItemName/ITEM_BOW_HORN
+    - Term: ItemName/Bow/ITEM_BOW_HORN
       TermType: 0
       Description: 
       Languages:
@@ -394,7 +546,7 @@ MonoBehaviour:
       - 
       Flags: 00000000
       Languages_Touch: []
-    - Term: ItemName/ITEM_BOW_POSEIDON
+    - Term: ItemName/Bow/ITEM_BOW_POSEIDON
       TermType: 0
       Description: 
       Languages:
@@ -404,7 +556,7 @@ MonoBehaviour:
       - 
       Flags: 00000000
       Languages_Touch: []
-    - Term: ItemName/ITEM_BOW_RECURVE_1T
+    - Term: ItemName/Bow/ITEM_BOW_RECURVE_1T
       TermType: 0
       Description: 
       Languages:
@@ -414,7 +566,7 @@ MonoBehaviour:
       - 
       Flags: 00000000
       Languages_Touch: []
-    - Term: ItemName/ITEM_BOW_RECURVE_2T
+    - Term: ItemName/Bow/ITEM_BOW_RECURVE_2T
       TermType: 0
       Description: 
       Languages:
@@ -424,7 +576,7 @@ MonoBehaviour:
       - 
       Flags: 00000000
       Languages_Touch: []
-    - Term: ItemName/ITEM_BOW_RECURVE_3T
+    - Term: ItemName/Bow/ITEM_BOW_RECURVE_3T
       TermType: 0
       Description: 
       Languages:
@@ -434,7 +586,7 @@ MonoBehaviour:
       - 
       Flags: 00000000
       Languages_Touch: []
-    - Term: ItemName/ITEM_BOW_SHORT_1T
+    - Term: ItemName/Bow/ITEM_BOW_SHORT_1T
       TermType: 0
       Description: 
       Languages:
@@ -444,7 +596,7 @@ MonoBehaviour:
       - 
       Flags: 00000000
       Languages_Touch: []
-    - Term: ItemName/ITEM_BOW_SHORT_2T
+    - Term: ItemName/Bow/ITEM_BOW_SHORT_2T
       TermType: 0
       Description: 
       Languages:
@@ -454,7 +606,7 @@ MonoBehaviour:
       - 
       Flags: 00000000
       Languages_Touch: []
-    - Term: ItemName/ITEM_BOW_SHORT_3T
+    - Term: ItemName/Bow/ITEM_BOW_SHORT_3T
       TermType: 0
       Description: 
       Languages:
@@ -464,7 +616,7 @@ MonoBehaviour:
       - 
       Flags: 00000000
       Languages_Touch: []
-    - Term: ItemName/ITEM_BOW_SPIKE
+    - Term: ItemName/Bow/ITEM_BOW_SPIKE
       TermType: 0
       Description: 
       Languages:
@@ -474,7 +626,7 @@ MonoBehaviour:
       - 
       Flags: 00000000
       Languages_Touch: []
-    - Term: ItemName/ITEM_BOW_STALKER
+    - Term: ItemName/Bow/ITEM_BOW_STALKER
       TermType: 0
       Description: 
       Languages:
@@ -484,7 +636,7 @@ MonoBehaviour:
       - 
       Flags: 00000000
       Languages_Touch: []
-    - Term: ItemName/ITEM_BOW_THUNDER
+    - Term: ItemName/Bow/ITEM_BOW_THUNDER
       TermType: 0
       Description: 
       Languages:
@@ -494,7 +646,7 @@ MonoBehaviour:
       - 
       Flags: 00000000
       Languages_Touch: []
-    - Term: ItemName/ITEM_NAME_BOW_GRIFFON
+    - Term: ItemName/Bow/ITEM_NAME_BOW_GRIFFON
       TermType: 0
       Description: 
       Languages:
@@ -1321,125 +1473,33 @@ MonoBehaviour:
       - 
       Flags: 00000000
       Languages_Touch: []
-    - Term: ItemDesc/BluePrint/BP_BOW
+    - Term: ItemName/Bow/BOW_ENTRY_T1
       TermType: 0
       Description: 
       Languages:
-      - This Is A Blueprint For Making A Bow Item.
-      - "\uD65C \uC544\uC774\uD15C\uC744 \uC81C\uC791\uD558\uAE30 \uC704\uD55C \uC124\uACC4\uB3C4\uC785\uB2C8\uB2E4."
-      - "\u5F13\u30A2\u30A4\u30C6\u30E0\u3092\u88FD\u4F5C\u3059\u308B\u305F\u3081\u306E\u8A2D\u8A08\u56F3\u3067\u3059\u3002"
+      - Entry-Level Bow [1T]
+      - "\uBCF4\uAE09\uD615 \uD65C [1T]"
+      - "\u666E\u53CA\u578B\u5F13 [1T]"
       - 
       Flags: 00000000
       Languages_Touch: []
-    - Term: ItemDesc/BluePrint/BP_ARROW
+    - Term: ItemName/Bow/BOW_ENTRY_T2
       TermType: 0
       Description: 
       Languages:
-      - This Is A Blueprint For Making Arrow Items.
-      - "\uD654\uC0B4 \uC544\uC774\uD15C\uC744 \uC81C\uC791\uD558\uAE30 \uC704\uD55C
-        \uC124\uACC4\uB3C4\uC785\uB2C8\uB2E4."
-      - "\u77E2\u30A2\u30A4\u30C6\u30E0\u3092\u88FD\u4F5C\u3059\u308B\u305F\u3081\u306E\u8A2D\u8A08\u56F3\u3067\u3059\u3002"
+      - Entry-Level Bow [2T]
+      - "\uBCF4\uAE09\uD615 \uD65C [2T]"
+      - "\u666E\u53CA\u578B\u5F13 [2T]"
       - 
       Flags: 00000000
       Languages_Touch: []
-    - Term: ItemDesc/BluePrint/BP_ARTIFACT
+    - Term: ItemName/Bow/BOW_ENTRY_T3
       TermType: 0
       Description: 
       Languages:
-      - A Blueprint For Crafting An Artifact Item.
-      - "\uC720\uBB3C \uC544\uC774\uD15C\uC744 \uC81C\uC791\uD558\uAE30 \uC704\uD55C
-        \uC124\uACC4\uB3C4\uC785\uB2C8\uB2E4."
-      - "\u907A\u7269\u30A2\u30A4\u30C6\u30E0\u3092\u88FD\u4F5C\u3059\u308B\u305F\u3081\u306E\u8A2D\u8A08\u56F3\u3067\u3059\u3002"
-      - 
-      Flags: 00000000
-      Languages_Touch: []
-    - Term: ItemDesc/BluePrint/BP_MATERIAL
-      TermType: 0
-      Description: 
-      Languages:
-      - 
-      - 
-      - 
-      - 
-      Flags: 00000000
-      Languages_Touch: []
-    - Term: ItemDesc/BluePrint/BP_CONSUMABLE
-      TermType: 0
-      Description: 
-      Languages:
-      - 
-      - 
-      - 
-      - 
-      Flags: 00000000
-      Languages_Touch: []
-    - Term: ItemName/BluePrint/BP_ARROW_FIRESPELL_T1
-      TermType: 0
-      Description: 
-      Languages:
-      - Fire Spell Arrow [T1] Blueprint
-      - "\uD654\uC5FC \uC8FC\uBB38 \uD654\uC0B4 [T1] \uB3C4\uBA74"
-      - "\u706B\u306E\u546A\u6587\u306E\u77E2[T1]\u9752\u5199\u771F"
-      - 
-      Flags: 00000000
-      Languages_Touch: []
-    - Term: ItemName/BluePrint/BP_ARROW_PIERCING_T1
-      TermType: 0
-      Description: 
-      Languages:
-      - Piercing Arrow [T1] Blueprint
-      - "\uAFF0\uB6AB\uB294 \uD654\uC0B4 [T1] \uC124\uACC4\uB3C4"
-      - "\u30D4\u30A2\u30B9\u77E2\u5370[T1]\u8A2D\u8A08\u56F3"
-      - 
-      Flags: 00000000
-      Languages_Touch: []
-    - Term: ItemName/BluePrint/BP_ARROW_STALKER_T1
-      TermType: 0
-      Description: 
-      Languages:
-      - Stalker Arrow [T1] Blueprint
-      - "\uCD94\uC801\uC790 \uD654\uC0B4 [T1] \uC124\uACC4\uB3C4"
-      - "\u30C8\u30EC\u30FC\u30B5\u30FC\u306E\u77E2[T1]\u8A2D\u8A08\u56F3"
-      - 
-      Flags: 00000000
-      Languages_Touch: []
-    - Term: ItemName/BluePrint/BP_BOW_RECURVE_T1
-      TermType: 0
-      Description: 
-      Languages:
-      - Recurve Bow [T1] Blueprint
-      - "\uB9AC\uCEE4\uBE0C \uBCF4\uC6B0 [T1] \uC124\uACC4\uB3C4"
-      - "\u30EA\u30AB\u30FC\u30D6\u30DC\u30A6[T1]\u56F3\u9762"
-      - 
-      Flags: 00000000
-      Languages_Touch: []
-    - Term: ItemName/BluePrint/BP_BOW_SHORT_T1
-      TermType: 0
-      Description: 
-      Languages:
-      - Short Bow [T0] Blueprint
-      - "\uB2E8\uAD81 [T0] \uC124\uACC4\uB3C4"
-      - "\u30B7\u30E7\u30FC\u30C8\u30DC\u30A6[T0]\u8A2D\u8A08\u56F3"
-      - 
-      Flags: 00000000
-      Languages_Touch: []
-    - Term: ItemDesc/BluePrint/BP_SPECIAL_ARROW
-      TermType: 0
-      Description: 
-      Languages:
-      - This Is A Blueprint For Making Special Arrow Items.
-      - "\uD2B9\uC218 \uD654\uC0B4 \uC544\uC774\uD15C \uC81C\uC791 \uB3C4\uBA74\uC785\uB2C8\uB2E4."
-      - "\u3053\u308C\u306F\u3001\u7279\u5225\u306A\u77E2\u5370\u30A2\u30A4\u30C6\u30E0\u3092\u4F5C\u6210\u3059\u308B\u305F\u3081\u306E\u9752\u5199\u771F\u3067\u3059\u3002"
-      - 
-      Flags: 00000000
-      Languages_Touch: []
-    - Term: ItemName/BluePrint/BP_SP_EXPLOSIVE_T1
-      TermType: 0
-      Description: 
-      Languages:
-      - Explosion Arrow [T1] Blueprint
-      - "\uD3ED\uBC1C \uD654\uC0B4 [T1] \uB3C4\uBA74"
-      - "\u7206\u767A\u306E\u77E2[T1]\u306E\u9752\u5199\u771F"
+      - Entry-Level Bow [3T]
+      - "\uBCF4\uAE09\uD615 \uD65C [3T]"
+      - "\u666E\u53CA\u578B\u5F13 [3T]"
       - 
       Flags: 00000000
       Languages_Touch: []

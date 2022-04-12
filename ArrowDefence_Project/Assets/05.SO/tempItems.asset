@@ -13,15 +13,5 @@ MonoBehaviour:
   m_Name: tempItems
   m_EditorClassIdentifier: 
   tempItems:
-  - {fileID: 11400000, guid: 818e48ff8014cd743904a971f1118bab, type: 2}
-  - {fileID: 11400000, guid: f8cf2d491cdbd38409db2b0178418dce, type: 2}
-  - {fileID: 11400000, guid: d81beb11892aa284da11b476736ed6d9, type: 2}
-  - {fileID: 11400000, guid: 10cdfa00ee1ca464bbaebe40365d94b1, type: 2}
-  - {fileID: 11400000, guid: 9c39ae69e7cff464f9752e9da948ef20, type: 2}
-  - {fileID: 11400000, guid: d1268d0ee00fac84a9429c766fd2edff, type: 2}
-  - {fileID: 11400000, guid: 35e318914cb3bb445b2ba96680d7eacc, type: 2}
-  - {fileID: 11400000, guid: 4281f4c496660d946b11d546253599bd, type: 2}
-  - {fileID: 11400000, guid: 818e48ff8014cd743904a971f1118bab, type: 2}
-  - {fileID: 11400000, guid: f8cf2d491cdbd38409db2b0178418dce, type: 2}
-  - {fileID: 11400000, guid: 10cdfa00ee1ca464bbaebe40365d94b1, type: 2}
-  - {fileID: 11400000, guid: 534308bb287ef8147b6442afbe44fbda, type: 2}
+  - {fileID: 11400000, guid: 7587c4bee74573e49a959676141e9625, type: 2}
+  - {fileID: 11400000, guid: e503007e901a880448a5186432880cf4, type: 2}

@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: 3008-short_t1
   m_EditorClassIdentifier: 
   Item_Type: 2
-  Item_Grade: 0
+  Item_Grade: 1
   Item_Id: 3008
   DefaultAmount: 1
-  Item_Sprite: {fileID: 21300000, guid: 34e771a96bc647846babed9d764d0ccc, type: 3}
-  NameTerms: ItemName/ITEM_BOW_SHORT_1T
+  Item_Sprite: {fileID: 21300000, guid: aed516fd3ed1c5f49ac402c9e913d144, type: 3}
+  NameTerms: ItemName/Bow/ITEM_BOW_SHORT_1T
   DescTerms: 
   Equip_Type: 0
   BowGameObject: {fileID: 1199833956013647908, guid: 041bd895a42effe48be785b5607c723e,

@@ -13,16 +13,16 @@ MonoBehaviour:
   m_Name: 4006-piercing_t3
   m_EditorClassIdentifier: 
   Item_Type: 2
-  Item_Grade: 2
+  Item_Grade: 3
   Item_Id: 4006
   DefaultAmount: 1
   Item_Sprite: {fileID: 21300000, guid: e6d58d2d283f8d847b62e0d05c8887d6, type: 3}
   NameTerms: ItemName/Arrow/ARROW_STEEL_3T
   DescTerms: 
   Equip_Type: 1
-  MainArrowObj: {fileID: 6199448580062092923, guid: dbe690811fb32bc47a1e35ff510ab344,
+  MainArrowObj: {fileID: 2957477139567338875, guid: 5637d9e201f1b7c4687bcc28bc690ee4,
     type: 3}
-  LessArrowObj: {fileID: 2479388407814401152, guid: 818eaa1e1966a8e40a9c0cc87cb3956f,
+  LessArrowObj: {fileID: 4854250247361223595, guid: 98e084946b473504f8bc6990a070b470,
     type: 3}
   ArrowSkillFst: {fileID: 11400000, guid: a947278377de35645989528dc16ce14b, type: 2}
   ArrowSkillSec: {fileID: 0}

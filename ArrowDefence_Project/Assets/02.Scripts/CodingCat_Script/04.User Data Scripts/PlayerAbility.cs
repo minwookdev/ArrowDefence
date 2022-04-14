@@ -108,12 +108,23 @@
         }
     }
 
-    public class GlobalAbility {
-        public float IncreaseDropRate { private set; get; } = .0f;
+    public class GlobalAbility {                                 // [Default Global Ability Values]
+        public float IncreaseDropRate { private set; get; }      = .0f;
         public float ChargedShotMultiplier { private set; get; } = 1.2f;
-        public float MinDamagePer { private set; get; } = 0.9f; // 90~
-        public float MaxDamagePer { private set; get; } = 1.1f; // ~110
-        public float IncreaseSpArrCost { private set; get; } = 0f;
+        public float MinDamagePer { private set; get; }          = 0.9f; // 90~
+        public float MaxDamagePer { private set; get; }          = 1.1f; // ~110
+        public float IncreaseSpArrCost { private set; get; }     = 0f;
+
+        public GlobalAbility(Ability[] bowAbilities, Ability[] mainArrowAbility, Ability[] subArrowAbility, Ability[] artifactAbility, Ability[] specialArrowAbilities) {
+            if (bowAbilities != null) {
+                foreach (var ability in bowAbilities) {
+                    switch (ability.AbilityType) {
+                        case ABILITY_TYPE.CHARGEDAMAGE: ChargedShotMultiplier += ability.GetCount(); break;
+                        default: break;
+                    }
+                }
+            }
+        }
     }
 
     public class PlayerAbility {
@@ -161,61 +172,65 @@
         public void UpdateAbility(Player_Equipments equip) {
             //Update Bow Abilities // ↓ Default Value.
             tempDamage = 0f; tempCritChance = 0; tempCritDmgMultiplier = 1.5f; tempChargedDmgMultiplier = 1.2f;
-            if (equip.IsEquippedBow() == true) {
-                var abilities = equip.GetBowItem().AbilitiesOrNull;
-                if (abilities != null) {
-                    for (int i = 0; i < abilities.Length; i++) {
-                        switch (abilities[i]) {
-                            case AbilityDamage damage: tempDamage = damage.GetCount(); break;
-                            case AbilityChargedDamage chargedDamage: tempChargedDmgMultiplier = chargedDamage.GetCount(); break;
-                            case AbilityCritChance critChance: tempCritChance = System.Convert.ToByte(critChance.GetCount()); break;
-                            case AbilityCritDamage critDamage: tempCritDmgMultiplier = critDamage.GetCount(); break;
-                            default: throw new System.NotImplementedException("This Ability Type is Not Implemented !");
-                        }
+            Ability[] bowAbilities = (equip.IsEquippedBow()) ? equip.GetBowItem().AbilitiesOrNull : null;
+            if (bowAbilities != null) {
+                for (int i = 0; i < bowAbilities.Length; i++) {
+                    switch (bowAbilities[i]) {
+                        case AbilityDamage damage:               tempDamage               = damage.GetCount(); break;
+                        case AbilityChargedDamage chargedDamage: tempChargedDmgMultiplier = chargedDamage.GetCount(); break;
+                        case AbilityCritChance critChance:       tempCritChance           = System.Convert.ToByte(critChance.GetCount()); break;
+                        case AbilityCritDamage critDamage:       tempCritDmgMultiplier    = critDamage.GetCount(); break;
+                        default: throw new System.NotImplementedException();
                     }
                 }
             }
 
             //Update Arrow Ability : Main
             float tempMainArrowIncDamage = 1f;
-            if (equip.IsEquippedArrowMain() == true) {
-                var abilities = equip.GetMainArrow().AbilitiesOrNull;
-                if (abilities != null) {
-                    for (int i = 0; i < abilities.Length; i++) {
-                        switch (abilities[i]) {
-                            case AbilityIncDamageRate incDamage: tempMainArrowIncDamage = incDamage.GetCount(); break;
-                            case AbilitySpeed speed: break;
-                            default: throw new System.NotImplementedException("This Ability Type is Not Implemented !");
-                        }
+            Ability[] mainArrowAbilities = (equip.IsEquippedArrowMain()) ? equip.GetMainArrow().AbilitiesOrNull : null;
+            if (mainArrowAbilities != null) {
+                for (int i = 0; i < mainArrowAbilities.Length; i++) {
+                    switch (mainArrowAbilities[i]) {
+                        case IncDamageRate incDamage: tempMainArrowIncDamage = incDamage.GetCount(); break;
+                        case AbilitySpeed speed:                                                     break;
+                        default: throw new System.NotImplementedException();
                     }
                 }
             }
 
             //Update Arrow Ability : Sub
             float tempSubArrowIncDamage = 1f;
-            if (equip.IsEquippedArrowSub() == true) {
-                var abilities = equip.GetSubArrow().AbilitiesOrNull;
-                if (abilities != null) {
-                    for (int i = 0; i < abilities.Length; i++) {
-                        switch (abilities[i]) {
-                            case AbilityIncDamageRate incDamage: tempSubArrowIncDamage = incDamage.GetCount(); break;
-                            case AbilitySpeed speed: break;
-                            default: throw new System.NotImplementedException("This Ability Type is Not Implemented !");
-                        }
+            Ability[] subArrowAbilities = (equip.IsEquippedArrowSub()) ? equip.GetSubArrow().AbilitiesOrNull : null;
+            if (subArrowAbilities != null) {
+                for (int i = 0; i < subArrowAbilities.Length; i++) {
+                    switch (subArrowAbilities[i]) {
+                        case IncDamageRate incDamage: tempSubArrowIncDamage = incDamage.GetCount(); break;
+                        case AbilitySpeed speed:                                                    break;
+                        default: throw new System.NotImplementedException();
                     }
                 }
             }
 
             //Update Arrow Ability: Special
             float tempSpecialArrowIncDamage = 1f;
-            if(equip.IsEquippedSpArr == true) {
-                var abilities = equip.GetSpArrow().AbilitiesOrNull;
-                if(abilities != null) {
-                    for (int i = 0; i < abilities.Length; i++) {
-                        switch (abilities[i]) {
-                            case AbilityIncDamageRate incDamage: break;
-                            case AbilitySpeed             speed: break;
-                            default: throw new System.NotImplementedException("this ability type is Not Implamented !");
+            Ability[] specialArrowAbilities = (equip.IsEquippedSpArr) ? equip.GetSpArrow().AbilitiesOrNull : null;
+            if (specialArrowAbilities != null) {
+                for (int i = 0; i < specialArrowAbilities.Length; i++) {
+                    switch (specialArrowAbilities[i]) {
+                        default: throw new System.NotImplementedException();
+                    }
+                }
+            }
+
+            //Get Artifact 
+            System.Collections.Generic.List<Ability> artifactAbilities = new System.Collections.Generic.List<Ability>();
+            var artifacts = equip.GetAccessories(); //각 유물 장착 슬롯마다 분류해줘야하는 경우에, 각각 slot에 해당하는 list로 분류해주기
+            for (int i = 0; i < artifacts.Length; i++) {
+                if (artifacts[i] != null) {
+                    var abilities = artifacts[i].AbilitiesOrNull;
+                    if (abilities != null) {
+                        for (int j = 0; j < abilities.Length; j++) { //작성시점: 유물의 Ability 분류진행 하지않는 상태
+                            artifactAbilities.Add(abilities[i]);
                         }
                     }
                 }
@@ -227,7 +242,7 @@
             specialSlotAbility = new PlayerAbilitySlot(tempDamage, tempSpecialArrowIncDamage, tempCritChance, tempCritDmgMultiplier);
 
             //Init-Global Ability
-            GlobalAbilityField = new GlobalAbility();
+            GlobalAbilityField = new GlobalAbility(bowAbilities, mainArrowAbilities, subArrowAbilities, artifactAbilities.ToArray(), specialArrowAbilities);
         }
     }
 }

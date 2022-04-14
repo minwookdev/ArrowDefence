@@ -9,12 +9,12 @@ namespace ES3Types
 	{
 		public static ES3Type Instance = null;
 
-		public ES3UserType_AbilityIncDamageRate() : base(typeof(ActionCat.AbilityIncDamageRate)){ Instance = this; priority = 1; }
+		public ES3UserType_AbilityIncDamageRate() : base(typeof(ActionCat.IncDamageRate)){ Instance = this; priority = 1; }
 
 
 		protected override void WriteObject(object obj, ES3Writer writer)
 		{
-			var instance = (ActionCat.AbilityIncDamageRate)obj;
+			var instance = (ActionCat.IncDamageRate)obj;
 			
 			writer.WritePrivateField("incDamageRate", instance);
 			writer.WritePrivateField("abilityType", instance);
@@ -22,7 +22,7 @@ namespace ES3Types
 
 		protected override void ReadObject<T>(ES3Reader reader, object obj)
 		{
-			var instance = (ActionCat.AbilityIncDamageRate)obj;
+			var instance = (ActionCat.IncDamageRate)obj;
 			foreach(string propertyName in reader.Properties)
 			{
 				switch(propertyName)
@@ -43,7 +43,7 @@ namespace ES3Types
 
 		protected override object ReadObject<T>(ES3Reader reader)
 		{
-			var instance = new ActionCat.AbilityIncDamageRate();
+			var instance = new ActionCat.IncDamageRate();
 			ReadObject<T>(reader, instance);
 			return instance;
 		}
@@ -54,7 +54,7 @@ namespace ES3Types
 	{
 		public static ES3Type Instance;
 
-		public ES3UserType_AbilityIncDamageRateArray() : base(typeof(ActionCat.AbilityIncDamageRate[]), ES3UserType_AbilityIncDamageRate.Instance)
+		public ES3UserType_AbilityIncDamageRateArray() : base(typeof(ActionCat.IncDamageRate[]), ES3UserType_AbilityIncDamageRate.Instance)
 		{
 			Instance = this;
 		}

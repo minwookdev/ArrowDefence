@@ -74,9 +74,9 @@
             for (int i = 0; i < abilities.Length; i++) {
                 switch (abilities[i].AbilityType) {
                     case ABILITY_TYPE.DAMAGEINC:
-                        var damageIncrease = abilities[i] as AbilityIncDamageRate;
+                        var damageIncrease = abilities[i] as IncDamageRate;
                         if (damageIncrease != null) {
-                            tempList.Add(new AbilityIncDamageRate(damageIncrease.GetCount()));
+                            tempList.Add(new IncDamageRate(damageIncrease.GetCount()));
                         }
                         else {
                             CatLog.ELog("New Ability Type Not Matched !");

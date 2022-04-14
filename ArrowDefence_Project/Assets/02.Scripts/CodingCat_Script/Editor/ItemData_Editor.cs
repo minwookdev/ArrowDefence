@@ -208,15 +208,12 @@ public class BowItemData_Editor : Editor
     SerializedProperty abilCritChanceProp;
     SerializedProperty abilChargedDamageProp;
 
-    //Star Texture
-    Texture2D enableStarTexture  = null;
-    Texture2D disableStarTexture = null;
-
     //Ability Foldout
     bool isAbilityTapFoldout = false;
 
-    public void OnEnable()
-    {
+    AbilityDrawer abilityDrawer = null;
+
+    public void OnEnable() {
         item = (ItemData_Equip_Bow)target;
 
         serialObject = new SerializedObject(target);
@@ -228,21 +225,7 @@ public class BowItemData_Editor : Editor
         nameTermsProp = serialObject.FindProperty(nameof(ItemData_Equip_Bow.NameTerms));
         descTermsProp = serialObject.FindProperty(nameof(ItemData_Equip_Bow.DescTerms));
 
-        var texture = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/08.Sprites/Sprites/Scene_Main/Sprite_Icon/icon_star_grade_l.png");
-        if(texture == null) {
-            CatLog.WLog("Star Texture is Null");
-        }
-        else {
-            enableStarTexture = texture;
-        }
-
-        var disableTexture = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/08.Sprites/Sprites/Scene_Main/Sprite_Icon/icon_star_grade_l_d.png");
-        if(disableTexture != null) {
-            disableStarTexture = disableTexture;
-        }
-        else {
-            CatLog.Log("Disable Star Textrue is Null");
-        }
+        abilityDrawer = new AbilityDrawer();
     }
 
     public override void OnInspectorGUI() {
@@ -312,51 +295,16 @@ public class BowItemData_Editor : Editor
         EditorGUI.indentLevel = 1;
         isAbilityTapFoldout = EditorGUILayout.Foldout(isAbilityTapFoldout, "Ability Sliders");
         EditorGUI.indentLevel = tempIndent;
-        //isAbilityTapFoldout = true;
+        isAbilityTapFoldout = true;
         if (isAbilityTapFoldout) {
-            #region ABILITY_DAMAGE
-            var damageCount = abilDamageProp.intValue;
-            if (damageCount <= 100)      DrawStar(1);
-            else if (damageCount <= 200) DrawStar(2);
-            else if (damageCount <= 300) DrawStar(3);
-            else if (damageCount <= 400) DrawStar(4);
-            else if (damageCount <= 500) DrawStar(5);
-            else                         DrawStar(0);
+            abilityDrawer.Draw(AbilityDamage.GetGradeCount(abilDamageProp.intValue));
             EditorGUILayout.PropertyField(abilDamageProp);
-            #endregion
-            #region ABILITY_CRIT_CHANCE
-            var critHitChanceCount = abilCritChanceProp.intValue;
-            if (critHitChanceCount <= 0)       DrawStar(0);
-            else if (critHitChanceCount <= 6)  DrawStar(1);
-            else if (critHitChanceCount <= 12) DrawStar(2);
-            else if (critHitChanceCount <= 18) DrawStar(3);
-            else if (critHitChanceCount <= 24) DrawStar(4);
-            else if (critHitChanceCount <= 30) DrawStar(5);
-            else                               DrawStar(0);
+            abilityDrawer.Draw(AbilityCritChance.GetGradeCount(abilCritChanceProp.intValue));
             EditorGUILayout.PropertyField(abilCritChanceProp);
-            #endregion
-            #region ABILITY_CRIT_MULTI
-            var critDamageMultiCount = abilCritDmgProp.floatValue;
-            if (critDamageMultiCount <= 1.5f)      DrawStar(0);
-            else if (critDamageMultiCount <= 1.8f) DrawStar(1);
-            else if (critDamageMultiCount <= 2.1f) DrawStar(2);
-            else if (critDamageMultiCount <= 2.4f) DrawStar(3);
-            else if (critDamageMultiCount <= 2.7f) DrawStar(4);
-            else if (critDamageMultiCount <= 3.0f) DrawStar(5);
-            else                                   DrawStar(0);
+            abilityDrawer.Draw(AbilityCritDamage.GetGradeCount(abilCritDmgProp.floatValue));
             EditorGUILayout.PropertyField(abilCritDmgProp);
-            #endregion
-            #region ABILITY_ARMOR_PENETRATE
-            var chargedDamageCount = abilChargedDamageProp.floatValue;
-            if (chargedDamageCount <= 1.2f)      DrawStar(0);
-            else if (chargedDamageCount <= 1.5f) DrawStar(1);
-            else if (chargedDamageCount <= 1.8f) DrawStar(2);
-            else if (chargedDamageCount <= 2.1f) DrawStar(3);
-            else if (chargedDamageCount <= 2.5f) DrawStar(4);
-            else if (chargedDamageCount <= 3.0f) DrawStar(5);
-            else                                 DrawStar(0);
+            abilityDrawer.Draw(AbilityChargedDamage.GetGradeCount(abilChargedDamageProp.floatValue));
             EditorGUILayout.PropertyField(abilChargedDamageProp);
-            #endregion
             serialObject.ApplyModifiedProperties();
         }
         GUILayout.EndVertical();
@@ -445,24 +393,6 @@ public class BowItemData_Editor : Editor
         
         //EditorApplication.update.Invoke();
     }
-
-    void DrawStar(byte enable) {
-        byte maxStarCount = 5;
-        GUILayout.BeginHorizontal();
-        for (int i = 0; i < enable; i++) {
-            maxStarCount--;
-            //Draw Enable Texture
-            GUILayout.Label(enableStarTexture, GUILayout.Width(30f), GUILayout.Height(30f));
-        }
-
-        if(maxStarCount > 0) {
-            for (int i = 0; i < maxStarCount; i++) {
-                //Draw Disable Texture
-                GUILayout.Label(disableStarTexture, GUILayout.Width(30f), GUILayout.Height(30f));
-            }
-        }
-        GUILayout.EndHorizontal();
-    }
 }
 
 [CustomEditor(typeof(ItemData_Equip_Arrow))]
@@ -496,7 +426,7 @@ public class ArrowItemData_Editor : Editor
         nameTermsProp = serialObject.FindProperty(nameof(ItemData_Equip_Arrow.NameTerms));
         descTermsProp = serialObject.FindProperty(nameof(ItemData_Equip_Arrow.DescTerms));
 
-        var texture = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/08.Sprites/Sprites/Scene_Main/Sprite_Icon/icon_star_grade_l.png");
+        var texture = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/08.Sprites/ui_element/Scene_Main/Sprite_Icon/icon_star_grade_l.png");
         if (texture == null) {
             CatLog.WLog("Star Texture is Null");
         }
@@ -504,7 +434,7 @@ public class ArrowItemData_Editor : Editor
             enableStarTexture = texture;
         }
 
-        var disableTexture = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/08.Sprites/Sprites/Scene_Main/Sprite_Icon/icon_star_grade_l_d.png");
+        var disableTexture = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/08.Sprites/ui_element/Scene_Main/Sprite_Icon/icon_star_grade_l_d.png");
         if (disableTexture != null) {
             disableStarTexture = disableTexture;
         }
@@ -881,8 +811,8 @@ public class SpArrItemDataEditor : Editor {
 
         EquipTypeProp    = sobject.FindProperty(nameof(ItemDt_SpArr.Equip_Type));
         EquipAbilityProp = sobject.FindProperty(nameof(ItemDt_SpArr.abilityDatas));
-        enableStarTexture  = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/08.Sprites/Sprites/Scene_Main/Sprite_Icon/icon_star_grade_l.png");
-        disableStarTexture = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/08.Sprites/Sprites/Scene_Main/Sprite_Icon/icon_star_grade_l_d.png");
+        enableStarTexture  = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/08.Sprites/ui_element/Scene_Main/Sprite_Icon/icon_star_grade_l.png");
+        disableStarTexture = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/08.Sprites/ui_element/Scene_Main/Sprite_Icon/icon_star_grade_l_d.png");
         if(enableStarTexture == null || disableStarTexture == null) {
             CatLog.WLog("Ability Star Texture is Null, Check the Texture Path");
         }
@@ -1014,6 +944,51 @@ public class SpArrItemDataEditor : Editor {
                 //Draw Disable Texture
                 GUILayout.Label(disableStarTexture, GUILayout.Width(30f), GUILayout.Height(30f));
             }
+        }
+        GUILayout.EndHorizontal();
+    }
+}
+
+internal sealed class AbilityDrawer {
+    Texture2D enableStarTexture = null;
+    Texture2D disableStarTexure = null;
+    Texture2D halfStarTexture   = null;
+    float textureSize  = 30f;
+    bool isInitialized = false;
+
+    internal AbilityDrawer() {
+        enableStarTexture = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/08.Sprites/ui_element/Scene_Main/Sprite_Icon/icon_star_grade_l.png");
+        disableStarTexure = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/08.Sprites/ui_element/Scene_Main/Sprite_Icon/icon_star_grade_l_d.png");
+        halfStarTexture   = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/08.Sprites/ui_element/Scene_Main/Sprite_Icon/icon_star_grade_l_half.png");
+        if (enableStarTexture == null || disableStarTexure == null || halfStarTexture == null) {
+            throw new System.Exception("Ability Grade Star Texture is Null. Check the Texture Path.");
+        }
+        isInitialized = true;
+    }
+
+    /// <summary>
+    /// Draw Ability Grade Star
+    /// </summary>
+    /// <param name="gradeCount">Range 0~10</param>
+    public void Draw(int gradeCount) {
+        if(!isInitialized) {
+            throw new System.Exception("Ability Preview is Not Initialzied.");
+        }
+
+        float calculatedGrade = (float)gradeCount / 2;
+        bool isHalf = !((calculatedGrade % 1) == 0);
+        byte totalStarCount = 5;
+        GUILayout.BeginHorizontal();
+        for (int i = 0; i < ((isHalf) ? calculatedGrade - 1 : calculatedGrade); i++) {
+            GUILayout.Label(enableStarTexture, GUILayout.Width(textureSize), GUILayout.Height(textureSize));
+            totalStarCount--;
+        }
+        if (isHalf) {
+            GUILayout.Label(halfStarTexture, GUILayout.Width(textureSize), GUILayout.Height(textureSize));
+            totalStarCount--;
+        }
+        for (int i = 0; i < totalStarCount; i++) {
+            GUILayout.Label(disableStarTexure, GUILayout.Width(textureSize), GUILayout.Height(textureSize));
         }
         GUILayout.EndHorizontal();
     }

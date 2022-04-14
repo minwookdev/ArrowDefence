@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf2d431614543144c88942f47ae83b63, type: 3}
+  m_Name: 4008-stalker_t2
+  m_EditorClassIdentifier: 
+  Item_Type: 2
+  Item_Grade: 2
+  Item_Id: 4008
+  DefaultAmount: 1
+  Item_Sprite: {fileID: 21300000, guid: e1a8c62155f64c547a89e4643e3ab747, type: 3}
+  NameTerms: ItemName/Arrow/ARROW_STALKER_2T
+  DescTerms: 
+  Equip_Type: 1
+  MainArrowObj: {fileID: 3510703056981778556, guid: 20a96bc49e346704f874672ecd458dca,
+    type: 3}
+  LessArrowObj: {fileID: 551979332388609518, guid: 46704234dcf8d5b468cae3046c421e3b,
+    type: 3}
+  ArrowSkillFst: {fileID: 11400000, guid: 0893f7ccbe805e346b4b5499d3b28cd1, type: 2}
+  ArrowSkillSec: {fileID: 0}
+  DamageInc: 1
+  Speed: 18
+  effects: []

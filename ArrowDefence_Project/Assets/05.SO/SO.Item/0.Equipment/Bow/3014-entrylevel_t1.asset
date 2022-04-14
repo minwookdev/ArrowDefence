@@ -16,7 +16,7 @@ MonoBehaviour:
   Item_Grade: 0
   Item_Id: 3014
   DefaultAmount: 1
-  Item_Sprite: {fileID: 21300000, guid: 55349368195a7f2408b653a2bcf9316e, type: 3}
+  Item_Sprite: {fileID: 21300000, guid: 7a8de18631d3e514e9ddfc5f6597cc15, type: 3}
   NameTerms: ItemName/Bow/BOW_ENTRY_T1
   DescTerms: 
   Equip_Type: 0

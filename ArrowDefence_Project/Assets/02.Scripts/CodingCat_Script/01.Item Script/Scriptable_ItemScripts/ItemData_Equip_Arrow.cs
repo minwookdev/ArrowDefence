@@ -39,7 +39,7 @@
         void InitAbility() {
             System.Collections.Generic.List<Ability> tempAbility = new System.Collections.Generic.List<Ability>();
             //1. Add Ability Damage Increase.
-            if (DamageInc > 0f) tempAbility.Add(new AbilityIncDamageRate(DamageInc));
+            if (DamageInc > 0f) tempAbility.Add(new IncDamageRate(DamageInc));
             //2. Add Ability Increase Arrow Speed.
             if (Speed > 18f)    tempAbility.Add(new AbilitySpeed(Speed));
 

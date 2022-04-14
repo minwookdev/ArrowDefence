@@ -73,6 +73,9 @@ public class MainSceneRoute : MonoBehaviour {
         //bool settingsExam = false;
         //ES3.Save<bool>("TestKey", settingsExam, )
         CatLog.Log($"data path: {Application.streamingAssetsPath}");
+
+        float tempValue = (float)0.125f / 0.125f;
+        CatLog.Log($"Calculate Grade: {Mathf.CeilToInt(tempValue)}");
     }
 
     private void Update() {

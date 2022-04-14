@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9beafe79164400040bc948d5b58aaf49, type: 3}
+  m_Name: 7002-explosive_t2
+  m_EditorClassIdentifier: 
+  Item_Type: 2
+  Item_Grade: 4
+  Item_Id: 7002
+  DefaultAmount: 1
+  Item_Sprite: {fileID: 21300000, guid: 7bd2e1ab1a6278549901cf43001dcb62, type: 3}
+  NameTerms: ItemName/Arrow/ITEM_ARROW_EXPLOSION_2T
+  DescTerms: 
+  Equip_Type: 1
+  MainArrowObj: {fileID: 8706528957568387701, guid: 525c69bdcbe82df4f9a7ab3e66d92565,
+    type: 3}
+  LessArrowObj: {fileID: 0}
+  ArrowSkillFst: {fileID: 11400000, guid: 715fba3fd71c75446a795b621327456c, type: 2}
+  ArrowSkillSec: {fileID: 0}
+  DamageInc: 1
+  Speed: 18
+  effects: []
+  ArrowSkillTrd: {fileID: 0}
+  ChargeType: 1
+  MaxCost: 20
+  MaxStackCount: 3
+  CostIncrease: 10

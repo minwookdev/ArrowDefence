@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb150c1ba29bbff4db2a5c801d6437ee, type: 3}
+  m_Name: 5001-dummy
+  m_EditorClassIdentifier: 
+  Item_Type: 2
+  Item_Grade: 1
+  Item_Id: 5001
+  DefaultAmount: 1
+  Item_Name: Dragon's Eye
+  Item_Desc: "\rThe eye that once colored the world with doom is illuminating everything."
+  Item_Sprite: {fileID: 21300000, guid: 4f7b6ffe7b0e2488c8e98abcd0a85dea, type: 3}
+  NameTerms: ItemName/Artifact/ARTIFACT_SIGHT_1T
+  DescTerms: 
+  Equip_Type: 2
+  MaxNumberOfEffect: 0
+  RFEffectAssets: []
+  SPEffectAsset: {fileID: 11400000, guid: 345c0c7a5eb770541b536cf2a0700542, type: 2}

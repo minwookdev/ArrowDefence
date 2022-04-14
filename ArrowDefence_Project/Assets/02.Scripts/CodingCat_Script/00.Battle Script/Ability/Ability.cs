@@ -17,23 +17,20 @@
     //=======================================================================================================================================================
     //================================================================== << BASE DAMAGE >> ==================================================================
     public class AbilityDamage : Ability {
-        private short damageCount;
+        public const short MaxValue = 500;
+        public const int UnitValue  = 50;
+        private short increaseValue;
 
         public override float GetCount() {
-            return damageCount;
+            return increaseValue;
         }
 
         public override string GetName() {
-            return "Damage";
+            return I2.Loc.ScriptLocalization.ABILITY.DAMAGE;
         }
 
-        public override byte GetGrade() {
-            if (damageCount <= 100)      return 1;
-            else if (damageCount <= 200) return 2;
-            else if (damageCount <= 300) return 3;
-            else if (damageCount <= 400) return 4;
-            else if (damageCount <= 500) return 5;
-            else                         return 0;
+        public override byte GetGrade() { // 1~500 [50]
+            return System.Convert.ToByte(UnityEngine.Mathf.CeilToInt((float)increaseValue / UnitValue));
         }
 
         public override bool Upgrade() {
@@ -42,34 +39,35 @@
 
         public AbilityDamage(int damage) {
             abilityType = ABILITY_TYPE.DAMAGE;
-            damageCount = System.Convert.ToInt16(damage);
+            if (damage > short.MaxValue) {
+                damage = short.MaxValue;
+            }
+            increaseValue = System.Convert.ToInt16(damage);
         }
         #region ES3
         public AbilityDamage() { }
         ~AbilityDamage() { }
         #endregion
+
+        public static int GetGradeCount(int number) => UnityEngine.Mathf.CeilToInt((float)number / UnitValue);
     }
     //=======================================================================================================================================================
     //================================================================ << CHARGED DAMAGE >> =================================================================
     public class AbilityChargedDamage : Ability {
-        float chargedShotDamageMulti;
+        public const float MaxValue  = 1.25f;
+        public const float UnitValue = .125f;
+        float increaseValue;
 
         public override float GetCount() {
-            return chargedShotDamageMulti;
+            return increaseValue;
         }
 
-        public override byte GetGrade() {
-            if (chargedShotDamageMulti <= 1.2f)      return 0;
-            else if (chargedShotDamageMulti <= 1.5f) return 1;
-            else if (chargedShotDamageMulti <= 1.8f) return 2;
-            else if (chargedShotDamageMulti <= 2.1f) return 3;
-            else if (chargedShotDamageMulti <= 2.5f) return 4;
-            else if (chargedShotDamageMulti <= 3f)   return 5;
-            else                                     return 0;
+        public override byte GetGrade() { // 0.1~1.25, [0.125]
+            return System.Convert.ToByte(UnityEngine.Mathf.CeilToInt((float)increaseValue / UnitValue));
         }
 
         public override string GetName() {
-            return "Charged Shot";
+            return I2.Loc.ScriptLocalization.ABILITY.CHARGEDSHOT_DMG;
         }
 
         public override bool Upgrade() {
@@ -77,68 +75,67 @@
         }
 
         public AbilityChargedDamage(float count) {
-            abilityType            = ABILITY_TYPE.CHARGEDAMAGE;
-            chargedShotDamageMulti = count;
+            abilityType   = ABILITY_TYPE.CHARGEDAMAGE;
+            increaseValue = count;
         }
         #region ES3
         public AbilityChargedDamage() { }
         ~AbilityChargedDamage() { }
         #endregion
+
+        public static int GetGradeCount(float number) => UnityEngine.Mathf.CeilToInt((float)number / UnitValue);
     }
     //=======================================================================================================================================================
     //=============================================================== << CRITICAL CHANCE >> =================================================================
     public class AbilityCritChance : Ability {
-        byte critHitChance;
+        public const byte MaxValue = 30;
+        public const int UnitValue = 3;
+        byte increaseValue;
         public override float GetCount() {
-            return critHitChance;
+            return increaseValue;
         }
 
-        public override byte GetGrade() {
-            if (critHitChance <= 0)       return 0;
-            else if (critHitChance <= 6)  return 1;
-            else if (critHitChance <= 12) return 2;
-            else if (critHitChance <= 18) return 3;
-            else if (critHitChance <= 24) return 4;
-            else if (critHitChance <= 30) return 5;
-            else                          return 0;
+        public override byte GetGrade() { //0~30 [3]
+            return System.Convert.ToByte(UnityEngine.Mathf.CeilToInt((float)increaseValue / UnitValue));
         }
 
         public override string GetName() {
-            return "Critical Chance";
+            return I2.Loc.ScriptLocalization.ABILITY.CRIT_CHANCE;
         }
 
         public override bool Upgrade() {
             throw new System.NotImplementedException();
         }
 
-        public AbilityCritChance(byte value) {
+        public AbilityCritChance(int value) {
             abilityType   = ABILITY_TYPE.CRITICALCHANCE;
-            critHitChance = value;
+            if(value > byte.MaxValue) {
+                value = byte.MaxValue;
+            }
+            increaseValue = System.Convert.ToByte(value);
         }
         #region ES3
         public AbilityCritChance() { }
         #endregion
+
+        public static int GetGradeCount(int number) => UnityEngine.Mathf.CeilToInt((float)number / UnitValue);
     }
     //=======================================================================================================================================================
     //=============================================================== << CRITICAL DAMAGE >> =================================================================
     public class AbilityCritDamage : Ability {
-        float critDamageMultiplier;
+        public const float MaxValue  = 1.5f;
+        public const float UnitValue = 0.15f;
+        float increaseValue;
         public override float GetCount() {
-            return critDamageMultiplier;
+            return increaseValue;
         }
 
-        public override byte GetGrade() {
-            if (critDamageMultiplier <= 1.5f)      return 0;
-            else if (critDamageMultiplier <= 1.8f) return 1;
-            else if (critDamageMultiplier <= 2.1f) return 2;
-            else if (critDamageMultiplier <= 2.4f) return 3;
-            else if (critDamageMultiplier <= 2.7f) return 4;
-            else if (critDamageMultiplier <= 3.0f) return 5;
-            else                                   return 0;
+        public override byte GetGrade() { //0f~1.5f [.3f]
+            return System.Convert.ToByte(UnityEngine.Mathf.CeilToInt((float)increaseValue / 0.15f));
         }
 
         public override string GetName() {
-            return "Critical Damage";
+            return I2.Loc.ScriptLocalization.ABILITY.CRIT_DAMAGE;
         }
 
         public override bool Upgrade() {
@@ -147,11 +144,13 @@
 
         public AbilityCritDamage(float value) {
             abilityType          = ABILITY_TYPE.CRITICALDAMAGE;
-            critDamageMultiplier = value;
+            increaseValue = value;
         }
         #region ES3
         public AbilityCritDamage() { }
         #endregion
+
+        public static int GetGradeCount(float number) => UnityEngine.Mathf.CeilToInt((float)number / 0.15f);
     }
     #endregion
 
@@ -166,16 +165,16 @@
 
         public override byte GetGrade() {
             if (speed <= 18f)      return 0;
-            else if (speed <= 20f) return 1;
-            else if (speed <= 22f) return 2;
-            else if (speed <= 24f) return 3;
-            else if (speed <= 26f) return 4;
-            else if (speed <= 28f) return 5;
-            else                   return 0;
+            else if (speed <= 21f) return 1;
+            else if (speed <= 24f) return 2;
+            else if (speed <= 27f) return 3;
+            else if (speed <= 30f) return 4;
+            else if (speed <= 33f) return 5;
+            else throw new System.Exception("Ability:Speed Value is RangeOver. [18~33]");
         }
 
         public override string GetName() {
-            return "Arrow Speed";
+            return I2.Loc.ScriptLocalization.ABILITY.ARROWSPEED;
         }
 
         public override bool Upgrade() {
@@ -192,37 +191,114 @@
     }
     //=======================================================================================================================================================
     //============================================================= << DAMAGE INCREASE RATE >> ==============================================================
-    public class AbilityIncDamageRate : Ability {
-        float incDamageRate;
+    public class IncDamageRate : Ability {
+        float increaseRate;
 
         public override float GetCount() {
-            return incDamageRate;
+            return increaseRate;
         }
 
         public override byte GetGrade() {
-            if (incDamageRate <= 1f)        return 0;
-            else if (incDamageRate <= 1.1f) return 1;
-            else if (incDamageRate <= 1.2f) return 2;
-            else if (incDamageRate <= 1.3f) return 3;
-            else if (incDamageRate <= 1.4f) return 4;
-            else if (incDamageRate <= 1.5f) return 5;
-            else                            return 0;
+            if (increaseRate <= 1f)        return 0;
+            else if (increaseRate <= 1.1f) return 1;
+            else if (increaseRate <= 1.2f) return 2;
+            else if (increaseRate <= 1.3f) return 3;
+            else if (increaseRate <= 1.4f) return 4;
+            else if (increaseRate <= 1.5f) return 5;
+            else                           return 0;
         }
 
         public override string GetName() {
-            return "Increase Damage";
+            return I2.Loc.ScriptLocalization.ABILITY.INC_DAMAGE_RATE;
         }
 
         public override bool Upgrade() {
             throw new System.NotImplementedException();
         }
 
-        public AbilityIncDamageRate(float value) {
-            abilityType   = ABILITY_TYPE.DAMAGEINC;
-            incDamageRate = value;
+        public IncDamageRate(float value) {
+            abilityType  = ABILITY_TYPE.DAMAGEINC;
+            increaseRate = value;
         }
         #region ES3
-        public AbilityIncDamageRate() { }
+        public IncDamageRate() { }
+        #endregion
+    }
+    //=======================================================================================================================================================
+    //=============================================================== << PROJECTILE DAMAGE >> ===============================================================
+    public class IncProjectileDamage : Ability {
+        short increaseValue; // 10~50
+
+        public override float GetCount() {
+            return increaseValue;
+        }
+
+        public override byte GetGrade() {
+            if (increaseValue <= 10)      return 1;
+            else if (increaseValue <= 20) return 2;
+            else if (increaseValue <= 30) return 3;
+            else if (increaseValue <= 40) return 4;
+            else if (increaseValue <= 50) return 5;
+            else {
+                throw new System.NotImplementedException();
+            }
+        }
+
+        public override string GetName() {
+            return I2.Loc.ScriptLocalization.ABILITY.PROJECTILE_DAMAGE;
+        }
+
+        public override bool Upgrade() {
+            throw new System.NotImplementedException();
+        }
+
+        public IncProjectileDamage(short value) {
+            abilityType  = ABILITY_TYPE.PROJECTILEDAMAGE;
+            increaseValue = value;
+        }
+        #region ES3
+        public IncProjectileDamage() {
+
+        }
+        #endregion
+    }
+    //=======================================================================================================================================================
+    //================================================================= << SPELL DAMAGE >> ==================================================================
+    public class IncSpellDamage : Ability {
+        short increaseValue; // 60~240
+
+        public override float GetCount() {
+            return increaseValue;
+        }
+
+        public override byte GetGrade() {
+            if (increaseValue <= 60)       return 1;
+            else if (increaseValue <= 96)  return 1;
+            else if (increaseValue <= 132) return 2;
+            else if (increaseValue <= 168) return 3;
+            else if (increaseValue <= 204) return 4;
+            else if (increaseValue <= 240) return 5;
+            else {
+                throw new System.NotImplementedException();
+            }
+        }
+
+        public override string GetName() {
+            return I2.Loc.ScriptLocalization.ABILITY.SPELL_DAMAGE;
+        }
+
+        public override bool Upgrade() {
+            throw new System.NotImplementedException();
+        }
+
+        public IncSpellDamage(short value) {
+            this.increaseValue = value;
+            this.abilityType = ABILITY_TYPE.SPELLDAMAGE;
+        }
+        #region ES3
+        public IncSpellDamage() {
+
+        }
         #endregion
     }
     //=======================================================================================================================================================

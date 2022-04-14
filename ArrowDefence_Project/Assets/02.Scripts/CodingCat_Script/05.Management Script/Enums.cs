@@ -59,6 +59,8 @@
         //ARROW PROPERTY
         DAMAGEINC = 6,
         ARROWSPEED = 7,
+        PROJECTILEDAMAGE = 8,
+        SPELLDAMAGE = 9,
         //ACCESSORY PROPERTY
     }
 

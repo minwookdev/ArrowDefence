@@ -16,10 +16,8 @@ MonoBehaviour:
   Item_Grade: 3
   Item_Id: 3013
   DefaultAmount: 1
-  Item_Name: Polished Hunting Bow
-  Item_Desc: 
-  Item_Sprite: {fileID: 21300000, guid: f64d550dd4427bb43b7711c61a032d20, type: 3}
-  NameTerms: ItemName/ITEM_BOW_RECURVE_3T
+  Item_Sprite: {fileID: 21300000, guid: 170b22861490f3f41a556565a25a5d4c, type: 3}
+  NameTerms: ItemName/Bow/ITEM_BOW_RECURVE_3T
   DescTerms: 
   Equip_Type: 0
   BowGameObject: {fileID: 5063279129060135535, guid: 757a4754cd126084ba8d4e697409ed45,

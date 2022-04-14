@@ -42,7 +42,7 @@
                     case ABILITY_TYPE.DAMAGE:
                         var damage = abilities[i] as AbilityDamage;
                         if (damage != null) {
-                            tempList.Add(new AbilityDamage(System.Convert.ToInt16(damage.GetCount())));
+                            tempList.Add(new AbilityDamage(System.Convert.ToInt32(damage.GetCount())));
                         }
                         else {
                             CatLog.ELog("Ability Type Not Matched.");
@@ -58,7 +58,7 @@
                     case ABILITY_TYPE.CRITICALCHANCE:
                         var criticalChance = abilities[i] as AbilityCritChance;
                         if (criticalChance != null) {
-                            tempList.Add(new AbilityCritChance(System.Convert.ToByte(criticalChance.GetCount())));
+                            tempList.Add(new AbilityCritChance(System.Convert.ToInt32(criticalChance.GetCount())));
                         }
                         else {
                             CatLog.ELog("Ability Type Not Matched.");

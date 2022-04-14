@@ -11,10 +11,10 @@
         public BowSkillData SkillAsset_s;
 
         //Inherence Ability
-        [Range(0, 500)]   public int BaseDamage = 0;
-        [Range(1.5f, 3f)] public float CriticalDamageMultiplier = 1.5f;
-        [Range(1.2f, 3f)] public float FullChargedMultiplier = 1.2f;
-        [Range(0, 30)]    public int CriticalHitChance = 0;
+        [RangeEx(0, 500, 50, "DAMAGE")]    public int BaseDamage = 0;
+        [RangeEx(0, 30, 3, "CRIT CHANCE")] public int CriticalHitChance = 0;
+        [RangeEx(0f, 1.5f, 0.15f, "CRIT DAMAGE")] public float CriticalDamageMultiplier = 0f;
+        [RangeEx(0f, 1.25f, 0.125f, "CHARGED DAMAGE")] public float FullChargedMultiplier = 0f;
 
         //PROPERTY
         public AD_BowSkill SkillFst {
@@ -40,40 +40,48 @@
         }
 
         public void OnEnable() {
-            InitBowAbilities();
+            InitAbilities();
         }
 
-        private void InitBowAbilities() {
+        private void InitAbilities() {
             System.Collections.Generic.List<Ability> tempAbility = new System.Collections.Generic.List<Ability>();
             //1. Add Base Damage Ability.
-            if (BaseDamage > 0f && BaseDamage <= 32767) {
+            if (BaseDamage > 0f) { //
                 tempAbility.Add(new AbilityDamage(BaseDamage));
+                if (BaseDamage > AbilityDamage.MaxValue) {
+                    CatLog.WLog($"Bow Item Entity: {name}, BaseDamage RangeOver !");
+                }
             }
+
             //2. Add Critical Hit Chance Ability.
             if (CriticalHitChance > 0) {
-                //Convert To Byte, Check the Byte Range.
-                if (CriticalHitChance < 0 || CriticalHitChance > 255) {
-                    CatLog.WLog($"Bow Item : {NameTerms}, Critical Hit Chance value is Out of Range. {CriticalHitChance}");
-                }
-                else {
-                    tempAbility.Add(new AbilityCritChance(System.Convert.ToByte(CriticalHitChance)));
+                tempAbility.Add(new AbilityCritChance(System.Convert.ToByte(CriticalHitChance)));
+                if (CriticalHitChance > AbilityCritChance.MaxValue) {
+                    CatLog.WLog($"Bow Item Entity: {name}, CriticalChance value RangeOver !");
                 }
             }
+
             //3. Add Critical Hit Damage Ability.
-            if (CriticalDamageMultiplier > 1.5f) {
+            if (CriticalDamageMultiplier > 0f) {
                 tempAbility.Add(new AbilityCritDamage(CriticalDamageMultiplier));
+                if (CriticalDamageMultiplier > AbilityCritDamage.MaxValue) {
+                    CatLog.WLog($"Bow Item Entity: {name}, CriticalDamage value RangeOver !");
+                }
             }
+
             //4. Add Ability Charged Damage Multiplier.
-            if (FullChargedMultiplier > 1.2f) {
+            if (FullChargedMultiplier > 0f) {
                 tempAbility.Add(new AbilityChargedDamage(FullChargedMultiplier));
+                if (FullChargedMultiplier > AbilityChargedDamage.MaxValue) {
+                    CatLog.WLog($"Bow Item Entity: {name}, FullCharged Damage value RangeOver !");
+                }
             }
 
             //Final. if the tempAbility Length is Bigger than 1, Init the Ability Array.
+            if(tempAbility.Count > 4) {
+                throw new System.Exception("Bow Ability Length Over, this is less than 5.");
+            }
             abilityDatas = tempAbility.ToArray();
-            //if(tempAbility.Count > 0) {
-            //    abilityDatas = tempAbility.ToArray();
-            //}
-
         }
     }
 

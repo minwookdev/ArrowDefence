@@ -17,5 +17,5 @@ MonoBehaviour:
   Item_Id: 2501
   DefaultAmount: 1
   Item_Sprite: {fileID: 21300000, guid: 1a48503ce42be93469684ca4bc0aac11, type: 3}
-  NameTerms: 
+  NameTerms: ItemName/BluePrint/BP_ARTIFACT_CURE_T1
   DescTerms: ItemDesc/BluePrint/BP_ARTIFACT

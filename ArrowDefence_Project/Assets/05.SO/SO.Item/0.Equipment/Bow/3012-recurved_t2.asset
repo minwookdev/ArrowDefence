@@ -16,10 +16,8 @@ MonoBehaviour:
   Item_Grade: 2
   Item_Id: 3012
   DefaultAmount: 1
-  Item_Name: Enhanced Hunting Bow
-  Item_Desc: 
-  Item_Sprite: {fileID: 21300000, guid: ebc810353737c284baba400b7aa2fa19, type: 3}
-  NameTerms: ItemName/ITEM_BOW_RECURVE_2T
+  Item_Sprite: {fileID: 21300000, guid: 5f6456fe4898940488b45a4298ae8024, type: 3}
+  NameTerms: ItemName/Bow/ITEM_BOW_RECURVE_2T
   DescTerms: 
   Equip_Type: 0
   BowGameObject: {fileID: 7438080295175813248, guid: 91c357be7e9d1724c8d73dd1d0536a99,

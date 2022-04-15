@@ -207,6 +207,8 @@ public class BowItemData_Editor : Editor
     SerializedProperty abilCritDmgProp;
     SerializedProperty abilCritChanceProp;
     SerializedProperty abilChargedDamageProp;
+    SerializedProperty armorPenetrationProp = null;
+    SerializedProperty additionalArrowFireProp = null;
 
     //Ability Foldout
     bool isAbilityTapFoldout = false;
@@ -221,6 +223,8 @@ public class BowItemData_Editor : Editor
         abilCritChanceProp    = serialObject.FindProperty(nameof(ItemData_Equip_Bow.CriticalHitChance));
         abilCritDmgProp       = serialObject.FindProperty(nameof(ItemData_Equip_Bow.CriticalDamageMultiplier));
         abilChargedDamageProp = serialObject.FindProperty(nameof(ItemData_Equip_Bow.FullChargedMultiplier));
+        armorPenetrationProp = serialObject.FindProperty(nameof(ItemData_Equip_Bow.ArmorPenetration));
+        additionalArrowFireProp = serialObject.FindProperty(nameof(ItemData_Equip_Bow.AdditionalArrowFire));
 
         nameTermsProp = serialObject.FindProperty(nameof(ItemData_Equip_Bow.NameTerms));
         descTermsProp = serialObject.FindProperty(nameof(ItemData_Equip_Bow.DescTerms));
@@ -305,6 +309,10 @@ public class BowItemData_Editor : Editor
             EditorGUILayout.PropertyField(abilCritDmgProp);
             abilityDrawer.Draw(AbilityChargedDamage.GetGradeCount(abilChargedDamageProp.floatValue));
             EditorGUILayout.PropertyField(abilChargedDamageProp);
+            abilityDrawer.Draw(PenetrationArmor.GetGradeCount(armorPenetrationProp.intValue));
+            EditorGUILayout.PropertyField(armorPenetrationProp);
+            abilityDrawer.Draw(AdditionalFire.GetGradeCount(additionalArrowFireProp.intValue));
+            EditorGUILayout.PropertyField(additionalArrowFireProp);
             serialObject.ApplyModifiedProperties();
         }
         GUILayout.EndVertical();
@@ -401,8 +409,11 @@ public class ArrowItemData_Editor : Editor
     ItemData_Equip_Arrow item;
 
     SerializedObject serialObject;
-    SerializedProperty incDamageProp;
+    SerializedProperty incArrowDamageProp;
     SerializedProperty speedProp;
+    SerializedProperty projectileDamageProp = null;
+    SerializedProperty spellDamageProp = null;
+    SerializedProperty elementalActivationProp = null;
     SerializedProperty effectProp;
 
     //Default Item Property
@@ -411,36 +422,23 @@ public class ArrowItemData_Editor : Editor
 
     //Is Ability Tap Foldout
     bool isAbilityTapFoldout = false;
-    //Star Texture
-    Texture2D enableStarTexture = null;
-    Texture2D disableStarTexture = null;
+    AbilityDrawer abilityDrawer = null;
 
     public void OnEnable() {
         item = (ItemData_Equip_Arrow)target;
 
         serialObject  = new SerializedObject(target);
-        incDamageProp = serialObject.FindProperty(nameof(ItemData_Equip_Arrow.DamageInc));
-        speedProp     = serialObject.FindProperty(nameof(ItemData_Equip_Arrow.Speed));
         effectProp    = serialObject.FindProperty(nameof(ItemData_Equip_Arrow.effects));
+
+        speedProp            = serialObject.FindProperty(nameof(ItemData_Equip_Arrow.additionalSpeed));
+        incArrowDamageProp   = serialObject.FindProperty(nameof(ItemData_Equip_Arrow.arrowDamageIncRate));
+        projectileDamageProp = serialObject.FindProperty(nameof(ItemData_Equip_Arrow.projectileDamageInc));
+        spellDamageProp      = serialObject.FindProperty(nameof(ItemData_Equip_Arrow.spellDamageInc));
+        elementalActivationProp = serialObject.FindProperty(nameof(ItemData_Equip_Arrow.elementalActivation));
 
         nameTermsProp = serialObject.FindProperty(nameof(ItemData_Equip_Arrow.NameTerms));
         descTermsProp = serialObject.FindProperty(nameof(ItemData_Equip_Arrow.DescTerms));
-
-        var texture = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/08.Sprites/ui_element/Scene_Main/Sprite_Icon/icon_star_grade_l.png");
-        if (texture == null) {
-            CatLog.WLog("Star Texture is Null");
-        }
-        else {
-            enableStarTexture = texture;
-        }
-
-        var disableTexture = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/08.Sprites/ui_element/Scene_Main/Sprite_Icon/icon_star_grade_l_d.png");
-        if (disableTexture != null) {
-            disableStarTexture = disableTexture;
-        }
-        else {
-            CatLog.Log("Disable Star Textrue is Null");
-        }
+        abilityDrawer = new AbilityDrawer();
     }
 
     public override void OnInspectorGUI() {
@@ -512,30 +510,17 @@ public class ArrowItemData_Editor : Editor
         EditorGUI.indentLevel = tempIndent;
         isAbilityTapFoldout = true;
         if (isAbilityTapFoldout) {
-            #region ABILITY_SPEED
-            var speed = speedProp.floatValue;
-            if (speed <= 18)      DrawStar(0);
-            else if (speed <= 20) DrawStar(1);
-            else if (speed <= 22) DrawStar(2);
-            else if (speed <= 24) DrawStar(3);
-            else if (speed <= 26) DrawStar(4);
-            else if (speed <= 28) DrawStar(5);
-            else                  DrawStar(0);
             //Draw Proeprty
+            abilityDrawer.Draw(AbilitySpeed.GetGradeCount(speedProp.floatValue));
             EditorGUILayout.PropertyField(speedProp); 
-            #endregion
-            #region ABILITY_INC_DAMAGE
-            var damage = incDamageProp.floatValue;
-            if (damage <= 1f)        DrawStar(0);
-            else if (damage <= 1.1f) DrawStar(1);
-            else if (damage <= 1.2f) DrawStar(2);
-            else if (damage <= 1.3f) DrawStar(3);
-            else if (damage <= 1.4f) DrawStar(4);
-            else if (damage <= 1.5f) DrawStar(5);
-            else                     DrawStar(0);
-            //Draw Property
-            EditorGUILayout.PropertyField(incDamageProp); 
-            #endregion
+            abilityDrawer.Draw(IncArrowDamageRate.GetGradeCount(incArrowDamageProp.floatValue));
+            EditorGUILayout.PropertyField(incArrowDamageProp);
+            abilityDrawer.Draw(IncProjectileDamage.GetGradeCount(projectileDamageProp.intValue));
+            EditorGUILayout.PropertyField(projectileDamageProp);
+            abilityDrawer.Draw(IncSpellDamage.GetGradeCount(spellDamageProp.intValue));
+            EditorGUILayout.PropertyField(spellDamageProp);
+            abilityDrawer.Draw(ElementalActivation.GetGradeCount(elementalActivationProp.intValue));
+            EditorGUILayout.PropertyField(elementalActivationProp);
         }
         GUILayout.EndVertical();
 
@@ -597,24 +582,6 @@ public class ArrowItemData_Editor : Editor
         GUILayout.EndVertical();
 
         serialObject.ApplyModifiedProperties();
-    }
-
-    void DrawStar(byte enable) {
-        byte maxStarCount = 5;
-        GUILayout.BeginHorizontal();
-        for (int i = 0; i < enable; i++) {
-            maxStarCount--;
-            //Draw Enable Texture
-            GUILayout.Label(enableStarTexture, GUILayout.Width(30f), GUILayout.Height(30f));
-        }
-
-        if (maxStarCount > 0) {
-            for (int i = 0; i < maxStarCount; i++) {
-                //Draw Disable Texture
-                GUILayout.Label(disableStarTexture, GUILayout.Width(30f), GUILayout.Height(30f));
-            }
-        }
-        GUILayout.EndHorizontal();
     }
 }
 

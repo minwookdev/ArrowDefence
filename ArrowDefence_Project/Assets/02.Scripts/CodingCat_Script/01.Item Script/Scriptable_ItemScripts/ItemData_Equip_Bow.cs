@@ -11,10 +11,18 @@
         public BowSkillData SkillAsset_s;
 
         //Inherence Ability
-        [RangeEx(0, 500, 50, "DAMAGE")]    public int BaseDamage = 0;
-        [RangeEx(0, 30, 3, "CRIT CHANCE")] public int CriticalHitChance = 0;
-        [RangeEx(0f, 1.5f, 0.15f, "CRIT DAMAGE")] public float CriticalDamageMultiplier = 0f;
-        [RangeEx(0f, 1.25f, 0.125f, "CHARGED DAMAGE")] public float FullChargedMultiplier = 0f;
+        [RangeEx(0, 500, 50, "DAMAGE")]    
+        public short BaseDamage = 0;
+        [RangeEx(0, 30, 3, "CRIT CHANCE")] 
+        public byte CriticalHitChance = 0;
+        [RangeEx(0f, 1.5f, 0.15f, "CRIT DAMAGE")] 
+        public float CriticalDamageMultiplier = 0f;
+        [RangeEx(0f, 1.25f, 0.125f, "CHARGED DAMAGE")] 
+        public float FullChargedMultiplier = 0f;
+        [RangeEx(0, 150, 15, "AROMOR PENETRATION")]
+        public short ArmorPenetration = 0;
+        [RangeEx(0, 5, 1, "ADDITIONAL ARROW")]
+        public byte AdditionalArrowFire = 0;
 
         //PROPERTY
         public AD_BowSkill SkillFst {
@@ -47,34 +55,50 @@
             System.Collections.Generic.List<Ability> tempAbility = new System.Collections.Generic.List<Ability>();
             //1. Add Base Damage Ability.
             if (BaseDamage > 0f) { //
-                tempAbility.Add(new AbilityDamage(BaseDamage));
                 if (BaseDamage > AbilityDamage.MaxValue) {
-                    CatLog.WLog($"Bow Item Entity: {name}, BaseDamage RangeOver !");
+                    throw new System.Exception($"Item: {name}, Damage value is RangeOver !");
                 }
+                tempAbility.Add(new AbilityDamage(BaseDamage));
             }
 
             //2. Add Critical Hit Chance Ability.
             if (CriticalHitChance > 0) {
-                tempAbility.Add(new AbilityCritChance(System.Convert.ToByte(CriticalHitChance)));
                 if (CriticalHitChance > AbilityCritChance.MaxValue) {
-                    CatLog.WLog($"Bow Item Entity: {name}, CriticalChance value RangeOver !");
+                    throw new System.Exception($"Item: {name}, Critical Hit Chance Value is RangeOver !");
                 }
+                tempAbility.Add(new AbilityCritChance(System.Convert.ToByte(CriticalHitChance)));
             }
 
             //3. Add Critical Hit Damage Ability.
             if (CriticalDamageMultiplier > 0f) {
-                tempAbility.Add(new AbilityCritDamage(CriticalDamageMultiplier));
                 if (CriticalDamageMultiplier > AbilityCritDamage.MaxValue) {
-                    CatLog.WLog($"Bow Item Entity: {name}, CriticalDamage value RangeOver !");
+                    throw new System.Exception($"Item: {name}, Critical Damage Value is RangeOver !");
                 }
+                tempAbility.Add(new AbilityCritDamage(CriticalDamageMultiplier));
             }
 
             //4. Add Ability Charged Damage Multiplier.
             if (FullChargedMultiplier > 0f) {
-                tempAbility.Add(new AbilityChargedDamage(FullChargedMultiplier));
                 if (FullChargedMultiplier > AbilityChargedDamage.MaxValue) {
-                    CatLog.WLog($"Bow Item Entity: {name}, FullCharged Damage value RangeOver !");
+                    throw new System.Exception($"Item: {name}, Charged Damage Value is RangeOver !");
                 }
+                tempAbility.Add(new AbilityChargedDamage(FullChargedMultiplier));
+            }
+
+            //5. Add Armor Penetration
+            if (ArmorPenetration > 0) {
+                if (ArmorPenetration > PenetrationArmor.MaxValue) {
+                    throw new System.Exception($"Item: {name}, ArmorPenetration Value is RangeOver !");
+                }
+                tempAbility.Add(new PenetrationArmor(ArmorPenetration));
+            }
+
+            //6. Add Additional Arrow Fire
+            if (AdditionalArrowFire > 0) {
+                if (AdditionalArrowFire > AdditionalFire.MaxValue) {
+                    throw new System.Exception($"Item: {name}, Additional Arorw Fire Value is RangeOver !");
+                }
+                tempAbility.Add(new AdditionalFire(AdditionalArrowFire));
             }
 
             //Final. if the tempAbility Length is Bigger than 1, Init the Ability Array.

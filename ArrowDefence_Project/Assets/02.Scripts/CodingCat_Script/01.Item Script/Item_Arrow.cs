@@ -42,7 +42,7 @@
 
             this.MainArrowObject = entity.MainArrowObj;
             this.LessArrowObject = entity.LessArrowObj;
-            this.speed           = entity.Speed;
+            this.speed           = entity.additionalSpeed;
 
             this.arrowSkillInfoFst = (entity.ArrowSkillFst != null) ? new ASInfo(entity.ArrowSkillFst) : null;
             this.arrowSkillInfoSec = (entity.ArrowSkillSec != null) ? new ASInfo(entity.ArrowSkillSec) : null;
@@ -73,10 +73,10 @@
             var tempList = new System.Collections.Generic.List<Ability>();
             for (int i = 0; i < abilities.Length; i++) {
                 switch (abilities[i].AbilityType) {
-                    case ABILITY_TYPE.DAMAGEINC:
-                        var damageIncrease = abilities[i] as IncDamageRate;
+                    case ABILITY_TYPE.ARROWDAMAGEINC:
+                        var damageIncrease = abilities[i] as IncArrowDamageRate;
                         if (damageIncrease != null) {
-                            tempList.Add(new IncDamageRate(damageIncrease.GetCount()));
+                            tempList.Add(new IncArrowDamageRate(damageIncrease.GetValueToSingle()));
                         }
                         else {
                             CatLog.ELog("New Ability Type Not Matched !");
@@ -84,7 +84,7 @@
                     case ABILITY_TYPE.ARROWSPEED:
                         var speed = abilities[i] as AbilitySpeed;
                         if (speed != null) {
-                            tempList.Add(new AbilitySpeed(speed.GetCount()));
+                            tempList.Add(new AbilitySpeed(speed.GetValueToSingle()));
                         }
                         else {
                             CatLog.ELog("New Ability Type Not Matched !");

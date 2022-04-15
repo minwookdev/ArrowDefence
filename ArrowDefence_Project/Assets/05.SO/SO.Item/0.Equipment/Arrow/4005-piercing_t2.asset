@@ -26,7 +26,10 @@ MonoBehaviour:
     type: 3}
   ArrowSkillFst: {fileID: 11400000, guid: 2c77fc02409a4904298394d78062cf2a, type: 2}
   ArrowSkillSec: {fileID: 0}
-  DamageInc: 1.3
-  Speed: 19
+  additionalSpeed: 0
+  arrowDamageIncRate: 0
+  projectileDamageInc: 0
+  spellDamageInc: 0
+  elementalActivation: 0
   effects:
   - {fileID: 9152076937454663170, guid: d702d250e9628a142987494c9b1e5108, type: 3}

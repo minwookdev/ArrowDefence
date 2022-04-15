@@ -42,7 +42,7 @@
                     case ABILITY_TYPE.DAMAGE:
                         var damage = abilities[i] as AbilityDamage;
                         if (damage != null) {
-                            tempList.Add(new AbilityDamage(System.Convert.ToInt32(damage.GetCount())));
+                            tempList.Add(new AbilityDamage(damage.Value));
                         }
                         else {
                             CatLog.ELog("Ability Type Not Matched.");
@@ -50,7 +50,7 @@
                     case ABILITY_TYPE.CHARGEDAMAGE:
                         var chargedDamage = abilities[i] as AbilityChargedDamage;
                         if (chargedDamage != null) {
-                            tempList.Add(new AbilityChargedDamage(chargedDamage.GetCount()));
+                            tempList.Add(new AbilityChargedDamage(chargedDamage.Value));
                         }
                         else {
                             CatLog.ELog("Ability Type Not Matched.");
@@ -58,7 +58,7 @@
                     case ABILITY_TYPE.CRITICALCHANCE:
                         var criticalChance = abilities[i] as AbilityCritChance;
                         if (criticalChance != null) {
-                            tempList.Add(new AbilityCritChance(System.Convert.ToInt32(criticalChance.GetCount())));
+                            tempList.Add(new AbilityCritChance(criticalChance.Value));
                         }
                         else {
                             CatLog.ELog("Ability Type Not Matched.");
@@ -66,13 +66,28 @@
                     case ABILITY_TYPE.CRITICALDAMAGE:
                         var criticalDamage = abilities[i] as AbilityCritDamage;
                         if (criticalDamage != null) {
-                            tempList.Add(new AbilityCritDamage(criticalDamage.GetCount()));
+                            tempList.Add(new AbilityCritDamage(criticalDamage.Value));
                         }
                         else {
                             CatLog.ELog("Ability Type Not Matched.");
                         } break;
-                    case ABILITY_TYPE.ARMORPENETRATE: throw new System.NotImplementedException();
-                    default:                          throw new System.NotImplementedException();
+                    case ABILITY_TYPE.ARMORPENETRATE:
+                        var penetration = abilities[i] as PenetrationArmor;
+                        if (penetration != null) {
+                            tempList.Add(new PenetrationArmor(penetration.Value));
+                        }
+                        else {
+                            CatLog.ELog("Ability Type Not Matched.");
+                        } break;
+                    case ABILITY_TYPE.ADDITIONALFIRE:
+                        var additionalFire = abilities[i] as AdditionalFire;
+                        if (additionalFire != null) {
+                            tempList.Add(new AdditionalFire(additionalFire.Value));
+                        }
+                        else {
+                            CatLog.ELog("Ability Type Not Matched.");
+                        } break;
+                    default: throw new System.NotImplementedException();
                 }
             } 
             return tempList.ToArray();

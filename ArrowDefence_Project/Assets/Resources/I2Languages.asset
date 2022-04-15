@@ -1693,6 +1693,26 @@ MonoBehaviour:
       - 
       Flags: 00000000
       Languages_Touch: []
+    - Term: ABILITY/ADDITIONAL_FIRE
+      TermType: 0
+      Description: 
+      Languages:
+      - Fire Additional Arrows
+      - "\uCD94\uAC00 \uD654\uC0B4 \uBC1C\uC0AC"
+      - "\u8FFD\u52A0\u77E2\u6253\u3061\u4E0A\u3052"
+      - 
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: ABILITY/ARMOR_PENETRATION
+      TermType: 0
+      Description: 
+      Languages:
+      - Defense Penetration
+      - "\uBC29\uC5B4 \uAD00\uD1B5\uB825"
+      - "\u9632\u5FA1\u8CAB\u901A\u529B"
+      - 
+      Flags: 00000000
+      Languages_Touch: []
     CaseInsensitiveTerms: 0
     OnMissingTranslation: 1
     mTerm_AppName: 

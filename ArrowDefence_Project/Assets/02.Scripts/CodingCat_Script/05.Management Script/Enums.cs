@@ -57,11 +57,13 @@
         CRITICALDAMAGE = 4,
         ARMORPENETRATE = 5,
         //ARROW PROPERTY
-        DAMAGEINC = 6,
+        ARROWDAMAGEINC = 6,
         ARROWSPEED = 7,
         PROJECTILEDAMAGE = 8,
         SPELLDAMAGE = 9,
         //ACCESSORY PROPERTY
+        ADDITIONALFIRE = 10,
+        ELEMENTALACTIVATION = 11,
     }
 
     #endregion

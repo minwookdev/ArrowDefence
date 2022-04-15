@@ -28,3 +28,5 @@ MonoBehaviour:
   CriticalHitChance: 0
   CriticalDamageMultiplier: 0
   FullChargedMultiplier: 0
+  ArmorPenetration: 0
+  AdditionalArrowFire: 0

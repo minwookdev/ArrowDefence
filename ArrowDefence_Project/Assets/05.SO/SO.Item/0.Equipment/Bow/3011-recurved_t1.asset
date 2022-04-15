@@ -26,5 +26,7 @@ MonoBehaviour:
   SkillAsset_s: {fileID: 0}
   BaseDamage: 0
   CriticalHitChance: 0
-  CriticalDamageMultiplier: 1.5
-  FullChargedMultiplier: 1.25
+  CriticalDamageMultiplier: 0
+  FullChargedMultiplier: 0
+  ArmorPenetration: 0
+  AdditionalArrowFire: 0

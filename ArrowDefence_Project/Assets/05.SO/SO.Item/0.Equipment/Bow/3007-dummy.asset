@@ -15,16 +15,18 @@ MonoBehaviour:
   Item_Type: 2
   Item_Grade: 1
   Item_Id: 3007
-  Item_Amount: 1
-  Item_Name: Enhanced Wooden Bow
-  Item_Desc: 
+  DefaultAmount: 1
   Item_Sprite: {fileID: 21300000, guid: 4d959710934c05747bccfa1b227f8620, type: 3}
+  NameTerms: 
+  DescTerms: 
   Equip_Type: 0
   BowGameObject: {fileID: 4517517997932246186, guid: d2014b5e14f65f4458283a2707c9be4d,
     type: 3}
   SkillAsset_f: {fileID: 11400000, guid: 520120a42f020a644b355ed8ca3469fd, type: 2}
   SkillAsset_s: {fileID: 0}
   BaseDamage: 0
-  CriticalDamageMultiplier: 1.5
-  FullChargedMultiplier: 1.2
   CriticalHitChance: 0
+  CriticalDamageMultiplier: 0
+  FullChargedMultiplier: 0
+  ArmorPenetration: 0
+  AdditionalArrowFire: 0

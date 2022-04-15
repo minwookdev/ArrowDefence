@@ -10,8 +10,11 @@
         public ArrowSkillData ArrowSkillSec;
 
         //Inherence Ability
-        [Range(1f, 1.5f)] public float DamageInc = 1f;
-        [Range(18f, 28f)] public float Speed = 18f;
+        [RangeEx(0f, 16f, 1.6f)] public float additionalSpeed = 0f;
+        [RangeEx(0f, 1f, 0.1f)]  public float arrowDamageIncRate = 0f;
+        [RangeEx(0, 50, 5)]      public short projectileDamageInc = 0;
+        [RangeEx(0, 150, 15)]    public short spellDamageInc = 0;
+        [RangeEx(0, 30, 3)]      public short elementalActivation = 0;
 
         public ACEffector2D[] effects;
 
@@ -38,16 +41,50 @@
 
         void InitAbility() {
             System.Collections.Generic.List<Ability> tempAbility = new System.Collections.Generic.List<Ability>();
-            //1. Add Ability Damage Increase.
-            if (DamageInc > 0f) tempAbility.Add(new IncDamageRate(DamageInc));
-            //2. Add Ability Increase Arrow Speed.
-            if (Speed > 18f)    tempAbility.Add(new AbilitySpeed(Speed));
+            //1. Add Ability Increase Arrow Speed.
+            if (additionalSpeed > 0f) {
+                if(additionalSpeed > AbilitySpeed.MaxValue) {
+                    throw new System.Exception();
+                }
+                tempAbility.Add(new AbilitySpeed(additionalSpeed));
+            }
 
-            //3. Temp Ability List to item Abilities.
+            //2. Add Ability Damage Increase.
+            if (arrowDamageIncRate > 0f) {
+                if(arrowDamageIncRate > IncArrowDamageRate.MaxValue) {
+                    throw new System.Exception();
+                }
+                tempAbility.Add(new IncArrowDamageRate(arrowDamageIncRate));
+            }
+
+            //3. projectiel Damage Increase
+            if (projectileDamageInc > 0) {
+                if (projectileDamageInc > IncProjectileDamage.MaxValue) {
+                    throw new System.Exception();
+                }
+                tempAbility.Add(new IncProjectileDamage(projectileDamageInc));
+            }
+
+            //4. Add Spell Damage Increase
+            if (spellDamageInc > 0) {
+                if (spellDamageInc > IncSpellDamage.MaxValue) {
+                    throw new System.Exception();
+                }
+                tempAbility.Add(new IncSpellDamage(spellDamageInc));
+            }
+
+            //5. Elemental Activation
+            if (elementalActivation > 0) {
+                if(elementalActivation > ElementalActivation.MaxValue) {
+                    throw new System.Exception();
+                }
+                tempAbility.Add(new ElementalActivation(elementalActivation));
+            }
+
+            if (tempAbility.Count > 4) { //Assignment Abilities Data
+                throw new System.Exception("Arrow Ability Max Length is less than 5.");
+            }
             abilityDatas = tempAbility.ToArray();
-            //if (tempAbility.Count > 0) {
-            //    abilityDatas = tempAbility.ToArray();
-            //}
         }
     }
 }

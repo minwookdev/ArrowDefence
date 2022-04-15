@@ -15,6 +15,8 @@ namespace I2.Loc
 			public static string INC_DAMAGE_RATE 		{ get{ return LocalizationManager.GetTranslation ("ABILITY/INC_DAMAGE_RATE"); } }
 			public static string PROJECTILE_DAMAGE 		{ get{ return LocalizationManager.GetTranslation ("ABILITY/PROJECTILE_DAMAGE"); } }
 			public static string SPELL_DAMAGE 		{ get{ return LocalizationManager.GetTranslation ("ABILITY/SPELL_DAMAGE"); } }
+			public static string ADDITIONAL_FIRE 		{ get{ return LocalizationManager.GetTranslation ("ABILITY/ADDITIONAL_FIRE"); } }
+			public static string ARMOR_PENETRATION 		{ get{ return LocalizationManager.GetTranslation ("ABILITY/ARMOR_PENETRATION"); } }
 		}
 	}
 
@@ -31,6 +33,8 @@ namespace I2.Loc
 		    public const string INC_DAMAGE_RATE = "ABILITY/INC_DAMAGE_RATE";
 		    public const string PROJECTILE_DAMAGE = "ABILITY/PROJECTILE_DAMAGE";
 		    public const string SPELL_DAMAGE = "ABILITY/SPELL_DAMAGE";
+		    public const string ADDITIONAL_FIRE = "ABILITY/ADDITIONAL_FIRE";
+		    public const string ARMOR_PENETRATION = "ABILITY/ARMOR_PENETRATION";
 		}
 	}
 }

@@ -119,7 +119,7 @@
             if (bowAbilities != null) {
                 foreach (var ability in bowAbilities) {
                     switch (ability.AbilityType) {
-                        case ABILITY_TYPE.CHARGEDAMAGE: ChargedShotMultiplier += ability.GetCount(); break;
+                        case ABILITY_TYPE.CHARGEDAMAGE: ChargedShotMultiplier += ability.GetValueToSingle(); break;
                         default: break;
                     }
                 }
@@ -176,10 +176,10 @@
             if (bowAbilities != null) {
                 for (int i = 0; i < bowAbilities.Length; i++) {
                     switch (bowAbilities[i]) {
-                        case AbilityDamage damage:               tempDamage               = damage.GetCount(); break;
-                        case AbilityChargedDamage chargedDamage: tempChargedDmgMultiplier = chargedDamage.GetCount(); break;
-                        case AbilityCritChance critChance:       tempCritChance           = System.Convert.ToByte(critChance.GetCount()); break;
-                        case AbilityCritDamage critDamage:       tempCritDmgMultiplier    = critDamage.GetCount(); break;
+                        case AbilityDamage damage:               tempDamage               = damage.GetValueToSingle(); break;
+                        case AbilityChargedDamage chargedDamage: tempChargedDmgMultiplier = chargedDamage.GetValueToSingle(); break;
+                        case AbilityCritChance critChance:       tempCritChance           = System.Convert.ToByte(critChance.GetValueToSingle()); break;
+                        case AbilityCritDamage critDamage:       tempCritDmgMultiplier    = critDamage.GetValueToSingle(); break;
                         default: throw new System.NotImplementedException();
                     }
                 }
@@ -191,7 +191,7 @@
             if (mainArrowAbilities != null) {
                 for (int i = 0; i < mainArrowAbilities.Length; i++) {
                     switch (mainArrowAbilities[i]) {
-                        case IncDamageRate incDamage: tempMainArrowIncDamage = incDamage.GetCount(); break;
+                        case IncArrowDamageRate incDamage: tempMainArrowIncDamage = incDamage.GetValueToSingle(); break;
                         case AbilitySpeed speed:                                                     break;
                         default: throw new System.NotImplementedException();
                     }
@@ -204,7 +204,7 @@
             if (subArrowAbilities != null) {
                 for (int i = 0; i < subArrowAbilities.Length; i++) {
                     switch (subArrowAbilities[i]) {
-                        case IncDamageRate incDamage: tempSubArrowIncDamage = incDamage.GetCount(); break;
+                        case IncArrowDamageRate incDamage: tempSubArrowIncDamage = incDamage.GetValueToSingle(); break;
                         case AbilitySpeed speed:                                                    break;
                         default: throw new System.NotImplementedException();
                     }

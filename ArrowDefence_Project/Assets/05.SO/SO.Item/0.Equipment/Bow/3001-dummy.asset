@@ -30,3 +30,4 @@ MonoBehaviour:
   FullChargedMultiplier: 0
   ArmorPenetration: 0
   AdditionalArrowFire: 0
+  ElementalActivation: 0

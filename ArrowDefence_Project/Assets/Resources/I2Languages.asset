@@ -1713,6 +1713,16 @@ MonoBehaviour:
       - 
       Flags: 00000000
       Languages_Touch: []
+    - Term: ABILITY/ELEMENTAL_ACTIVATION
+      TermType: 0
+      Description: 
+      Languages:
+      - Elemental Activation Chance Increase
+      - "\uC6D0\uC18C\uBC1C\uB3D9 \uD655\uB960 \uC99D\uAC00"
+      - "\u5143\u7D20\u767A\u52D5\u78BA\u7387\u5897\u52A0"
+      - 
+      Flags: 00000000
+      Languages_Touch: []
     CaseInsensitiveTerms: 0
     OnMissingTranslation: 1
     mTerm_AppName: 

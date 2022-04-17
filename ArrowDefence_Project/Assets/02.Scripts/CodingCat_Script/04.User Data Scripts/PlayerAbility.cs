@@ -9,7 +9,7 @@
         public float CritMulti { get; private set; }
 
         public DamageStruct(PlayerAbilitySlot ability, bool isCharged) {
-            Damage     = (isCharged) ? System.Convert.ToInt16(ability.RawDamage * Data.CCPlayerData.ability.GlobalAbilityField.ChargedShotMultiplier) : System.Convert.ToInt16(ability.RawDamage);
+            Damage     = (isCharged) ? System.Convert.ToInt16(ability.BaseDamage * Data.CCPlayerData.ability.GlobalAbilityField.ChargedShotMultiplier) : System.Convert.ToInt16(ability.BaseDamage);
             CritChance = ability.CritChance;
             CritMulti  = ability.CritDamageMultiplier;
             ArmorPene  = ability.ArmorPenetRate;
@@ -61,68 +61,133 @@
     }
 
     public class PlayerAbilitySlot {
-        public float RawDamage { private set; get; } = 0f;
-        public float DamageIncRate { private set; get; } = 0f;
+        public float BaseDamage { private set; get; } = 0f;
+        public float ArrowDamageIncRate { private set; get; } = 0f;
         public short ArmorPenetRate { private set; get; } = 0;
         public byte CritChance { private set; get; } = 0;
         public float CritDamageMultiplier { private set; get; } = 1.5f;
-        public float ElementalActivationRateIncrease { private set; get; } = 0f;
-
-        public void UpdateSlotAbility(float damage, float arrowIncDamage, byte critChance, float critMultiplier) {
-            RawDamage            = damage * arrowIncDamage;
-            DamageIncRate        = arrowIncDamage;
-            CritChance           = critChance;
-            CritDamageMultiplier = critMultiplier;
-            ArmorPenetRate       = 0;
-        }
-
-        /// <summary>
-        /// Init Class Constructor
-        /// </summary>
-        /// <param name="damage"></param>
-        /// <param name="arrowIncDamage"></param>
-        /// <param name="critchance"></param>
-        /// <param name="critMultiplier"></param>
-        public PlayerAbilitySlot(float damage, float arrowIncDamage, byte critchance, float critMultiplier) {
-            RawDamage            = damage * arrowIncDamage;
-            DamageIncRate        = arrowIncDamage;
-            CritChance           = critchance; 
-            CritDamageMultiplier = critMultiplier;
-            ArmorPenetRate       = 0;
-        }
+        public float ElementalActivationInc { private set; get; } = 0f;
+        public short ProjectileDamageInc { private set; get; } = 0;
+        public short SpellDamageInc { private set; get; } = 0;
 
         /// <summary>
         /// Clone Class Constructor
         /// </summary>
         /// <param name="origin"></param>
         public PlayerAbilitySlot(PlayerAbilitySlot origin) {
-            RawDamage            = origin.RawDamage;
-            DamageIncRate        = origin.DamageIncRate;
-            CritChance           = origin.CritChance;
-            CritDamageMultiplier = origin.CritDamageMultiplier;
-            ArmorPenetRate       = origin.ArmorPenetRate;
+            BaseDamage             = origin.BaseDamage;
+            CritChance             = origin.CritChance;
+            CritDamageMultiplier   = origin.CritDamageMultiplier;
+            ArmorPenetRate         = origin.ArmorPenetRate;
+            ArrowDamageIncRate     = origin.ArrowDamageIncRate;
+            ElementalActivationInc = origin.ElementalActivationInc;
+            ProjectileDamageInc    = origin.ProjectileDamageInc;
+            SpellDamageInc         = origin.SpellDamageInc;
         }
 
-        public short GetProjectileDamage(short projectileDamage) {
-            return System.Convert.ToInt16(projectileDamage * DamageIncRate);
+        public short GetProjectileDamage(short projectileDamage) { //Function For Get Projectile Damage
+            return System.Convert.ToInt16(projectileDamage * ArrowDamageIncRate);
+        }
+
+        public short GetProjectileDamage_New(short projectileDamage) {
+            return (short)(projectileDamage + ProjectileDamageInc);
+        }
+
+        /// <summary>
+        /// Main && Sub Ability Slot
+        /// </summary>
+        /// <param name="bow"></param>
+        /// <param name="arrow"></param>
+        public PlayerAbilitySlot(Item_Bow bow, Item_Arrow arrow, Ability[] artifacts) {
+            if (bow != null) {
+                foreach (var ability in bow.AbilitiesOrNull) {
+                    switch (ability.AbilityType) {
+                        case ABILITY_TYPE.DAMAGE:              BaseDamage             += ability.GetValueToSingle(); break;
+                        case ABILITY_TYPE.CRITICALCHANCE:      CritChance             += ability.GetValueToByte();   break;
+                        case ABILITY_TYPE.CRITICALDAMAGE:      CritDamageMultiplier   += ability.GetValueToSingle(); break;
+                        case ABILITY_TYPE.ARMORPENETRATE:      ArmorPenetRate         += ability.GetValueToInt16();  break;
+                        case ABILITY_TYPE.ELEMENTALACTIVATION: ElementalActivationInc += ability.GetValueToInt16();  break;
+                    }
+                }
+            }
+
+            if (arrow != null) {
+                foreach (var ability in arrow.AbilitiesOrNull) {
+                    switch (ability.AbilityType) {
+                        case ABILITY_TYPE.DAMAGE:          BaseDamage           += ability.GetValueToSingle(); break;
+                        case ABILITY_TYPE.CRITICALCHANCE:  CritChance           += ability.GetValueToByte();   break;
+                        case ABILITY_TYPE.CRITICALDAMAGE:  CritDamageMultiplier += ability.GetValueToSingle(); break;
+                        case ABILITY_TYPE.ARMORPENETRATE:  ArmorPenetRate       += ability.GetValueToInt16();  break;
+
+                        case ABILITY_TYPE.ARROWDAMAGEINC:   ArrowDamageIncRate  += ability.GetValueToSingle(); break;
+                        case ABILITY_TYPE.PROJECTILEDAMAGE: ProjectileDamageInc += ability.GetValueToInt16();  break;
+                        case ABILITY_TYPE.SPELLDAMAGE:      SpellDamageInc      += ability.GetValueToInt16();  break;
+                    }
+                }
+            }
+
+            for (int i = 0; i < artifacts.Length; i++) {
+
+            }
+
+            //Calc BaseDamage -> '증가율' 로 적용되는 옵션들은 요렇게 처리되도록 구현
+            BaseDamage = BaseDamage * ArrowDamageIncRate;
+        }
+
+        /// <summary>
+        /// Special Ability Slot
+        /// </summary>
+        /// <param name="bow"></param>
+        /// <param name="arrow"></param>
+        public PlayerAbilitySlot(Item_Bow bow, Item_SpArr arrow, Ability[] artifacts) {
+            if (bow != null) {
+                foreach (var ability in bow.AbilitiesOrNull) {
+                    switch (ability.AbilityType) {
+                        case ABILITY_TYPE.DAMAGE:              BaseDamage             += ability.GetValueToSingle(); break;
+                        case ABILITY_TYPE.CRITICALCHANCE:      CritChance             += ability.GetValueToByte();   break;
+                        case ABILITY_TYPE.CRITICALDAMAGE:      CritDamageMultiplier   += ability.GetValueToSingle(); break;
+                        case ABILITY_TYPE.ARMORPENETRATE:      ArmorPenetRate         += ability.GetValueToInt16();  break;
+                        case ABILITY_TYPE.ELEMENTALACTIVATION: ElementalActivationInc += ability.GetValueToInt16();  break;
+                    }
+                }
+            }
+
+            if (arrow != null) {
+                foreach (var ability in arrow.AbilitiesOrNull) {
+                    switch (ability.AbilityType) {
+                        case ABILITY_TYPE.DAMAGE:         BaseDamage           += ability.GetValueToSingle(); break;
+                        case ABILITY_TYPE.CRITICALCHANCE: CritChance           += ability.GetValueToByte();   break;
+                        case ABILITY_TYPE.CRITICALDAMAGE: CritDamageMultiplier += ability.GetValueToSingle(); break;
+                        case ABILITY_TYPE.ARMORPENETRATE: ArmorPenetRate       += ability.GetValueToInt16();  break;
+
+                        case ABILITY_TYPE.ARROWDAMAGEINC:   ArrowDamageIncRate  += ability.GetValueToSingle(); break;
+                        case ABILITY_TYPE.PROJECTILEDAMAGE: ProjectileDamageInc += ability.GetValueToInt16();  break;
+                        case ABILITY_TYPE.SPELLDAMAGE:      SpellDamageInc      += ability.GetValueToInt16();  break;
+                    }
+                }
+            }
+
+            for (int i = 0; i < artifacts.Length; i++) {
+
+            }
+
+            //Calc BaseDamage -> '증가율' 로 적용되는 옵션들은 요렇게 처리되도록 구현
+            BaseDamage = BaseDamage * ArrowDamageIncRate;
         }
     }
 
-    public class GlobalAbility {                                 // [Default Global Ability Values]
+    public class GlobalAbility { // [Default Global Ability Values]
         public float IncreaseDropRate { private set; get; }      = .0f;
         public float ChargedShotMultiplier { private set; get; } = 1.2f;
         public float MinDamagePer { private set; get; }          = 0.9f; // 90~
         public float MaxDamagePer { private set; get; }          = 1.1f; // ~110
         public float IncreaseSpArrCost { private set; get; }     = 0f;
+        public byte AdditionalArrowFire { private set; get; }    = 0;
 
-        public GlobalAbility(Ability[] bowAbilities, Ability[] mainArrowAbility, Ability[] subArrowAbility, Ability[] artifactAbility, Ability[] specialArrowAbilities) {
-            if (bowAbilities != null) {
-                foreach (var ability in bowAbilities) {
-                    switch (ability.AbilityType) {
-                        case ABILITY_TYPE.CHARGEDAMAGE: ChargedShotMultiplier += ability.GetValueToSingle(); break;
-                        default: break;
-                    }
-                }
+        public GlobalAbility(Item_Bow bow, Item_SpArr specialArr, Ability[] artifacts) {
+            if (bow != null) {
+                ChargedShotMultiplier = bow.IsExistAbility(ABILITY_TYPE.CHARGEDAMAGE, out Ability chargedShotMutliplier) ? ChargedShotMultiplier + chargedShotMutliplier.GetValueToSingle() : ChargedShotMultiplier;
+                AdditionalArrowFire   = bow.IsExistAbility(ABILITY_TYPE.ADDITIONALFIRE, out Ability additionalFire) ? (byte)(AdditionalArrowFire + additionalFire.GetValueToByte()) : AdditionalArrowFire;
             }
         }
     }
@@ -168,81 +233,26 @@
             }
         }
         #endregion
-
-        public void UpdateAbility(Player_Equipments equip) {
-            //Update Bow Abilities // ↓ Default Value.
-            tempDamage = 0f; tempCritChance = 0; tempCritDmgMultiplier = 1.5f; tempChargedDmgMultiplier = 1.2f;
-            Ability[] bowAbilities = (equip.IsEquippedBow()) ? equip.GetBowItem().AbilitiesOrNull : null;
-            if (bowAbilities != null) {
-                for (int i = 0; i < bowAbilities.Length; i++) {
-                    switch (bowAbilities[i]) {
-                        case AbilityDamage damage:               tempDamage               = damage.GetValueToSingle(); break;
-                        case AbilityChargedDamage chargedDamage: tempChargedDmgMultiplier = chargedDamage.GetValueToSingle(); break;
-                        case AbilityCritChance critChance:       tempCritChance           = System.Convert.ToByte(critChance.GetValueToSingle()); break;
-                        case AbilityCritDamage critDamage:       tempCritDmgMultiplier    = critDamage.GetValueToSingle(); break;
-                        default: throw new System.NotImplementedException();
+        public void UpdateAbility(Player_Equipments equipments) {
+            //Get All Artifact Abilities.
+            System.Collections.Generic.List<Ability> allArtifactAbilites = new System.Collections.Generic.List<Ability>();
+            foreach (var artifact in equipments.GetAccessories()) {
+                if (artifact != null) {
+                    var abilities = artifact.AbilitiesOrNull;
+                    for (int i = 0; i < abilities.Length; i++) {
+                        allArtifactAbilites.Add(abilities[i]);
                     }
                 }
             }
+            var artifactAbilitiesArray = allArtifactAbilites.ToArray();
 
-            //Update Arrow Ability : Main
-            float tempMainArrowIncDamage = 1f;
-            Ability[] mainArrowAbilities = (equip.IsEquippedArrowMain()) ? equip.GetMainArrow().AbilitiesOrNull : null;
-            if (mainArrowAbilities != null) {
-                for (int i = 0; i < mainArrowAbilities.Length; i++) {
-                    switch (mainArrowAbilities[i]) {
-                        case IncArrowDamageRate incDamage: tempMainArrowIncDamage = incDamage.GetValueToSingle(); break;
-                        case AbilitySpeed speed:                                                     break;
-                        default: throw new System.NotImplementedException();
-                    }
-                }
-            }
+            //Assignment New-Ability Slots
+            mainSlotAbility    = new PlayerAbilitySlot(equipments.GetBowItem(), equipments.GetMainArrow(), artifactAbilitiesArray);
+            subSlotAbility     = new PlayerAbilitySlot(equipments.GetBowItem(), equipments.GetSubArrow(), artifactAbilitiesArray);
+            specialSlotAbility = new PlayerAbilitySlot(equipments.GetBowItem(), equipments.GetSpArrOrNull, artifactAbilitiesArray);
 
-            //Update Arrow Ability : Sub
-            float tempSubArrowIncDamage = 1f;
-            Ability[] subArrowAbilities = (equip.IsEquippedArrowSub()) ? equip.GetSubArrow().AbilitiesOrNull : null;
-            if (subArrowAbilities != null) {
-                for (int i = 0; i < subArrowAbilities.Length; i++) {
-                    switch (subArrowAbilities[i]) {
-                        case IncArrowDamageRate incDamage: tempSubArrowIncDamage = incDamage.GetValueToSingle(); break;
-                        case AbilitySpeed speed:                                                    break;
-                        default: throw new System.NotImplementedException();
-                    }
-                }
-            }
-
-            //Update Arrow Ability: Special
-            float tempSpecialArrowIncDamage = 1f;
-            Ability[] specialArrowAbilities = (equip.IsEquippedSpArr) ? equip.GetSpArrow().AbilitiesOrNull : null;
-            if (specialArrowAbilities != null) {
-                for (int i = 0; i < specialArrowAbilities.Length; i++) {
-                    switch (specialArrowAbilities[i]) {
-                        default: throw new System.NotImplementedException();
-                    }
-                }
-            }
-
-            //Get Artifact 
-            System.Collections.Generic.List<Ability> artifactAbilities = new System.Collections.Generic.List<Ability>();
-            var artifacts = equip.GetAccessories(); //각 유물 장착 슬롯마다 분류해줘야하는 경우에, 각각 slot에 해당하는 list로 분류해주기
-            for (int i = 0; i < artifacts.Length; i++) {
-                if (artifacts[i] != null) {
-                    var abilities = artifacts[i].AbilitiesOrNull;
-                    if (abilities != null) {
-                        for (int j = 0; j < abilities.Length; j++) { //작성시점: 유물의 Ability 분류진행 하지않는 상태
-                            artifactAbilities.Add(abilities[i]);
-                        }
-                    }
-                }
-            }
-
-            //Init-Ability Slots
-            mainSlotAbility    = new PlayerAbilitySlot(tempDamage, tempMainArrowIncDamage, tempCritChance, tempCritDmgMultiplier);
-            subSlotAbility     = new PlayerAbilitySlot(tempDamage, tempSubArrowIncDamage, tempCritChance, tempCritDmgMultiplier);
-            specialSlotAbility = new PlayerAbilitySlot(tempDamage, tempSpecialArrowIncDamage, tempCritChance, tempCritDmgMultiplier);
-
-            //Init-Global Ability
-            GlobalAbilityField = new GlobalAbility(bowAbilities, mainArrowAbilities, subArrowAbilities, artifactAbilities.ToArray(), specialArrowAbilities);
+            //Assignment New-Global Ability
+            GlobalAbilityField = new GlobalAbility(equipments.GetBowItem(), equipments.GetSpArrOrNull, artifactAbilitiesArray);  
         }
     }
 }

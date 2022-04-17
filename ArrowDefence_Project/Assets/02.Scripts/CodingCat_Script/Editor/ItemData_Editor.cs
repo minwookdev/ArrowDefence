@@ -209,27 +209,35 @@ public class BowItemData_Editor : Editor
     SerializedProperty abilChargedDamageProp;
     SerializedProperty armorPenetrationProp = null;
     SerializedProperty additionalArrowFireProp = null;
+    SerializedProperty elementalActivation = null;
 
     //Ability Foldout
     bool isAbilityTapFoldout = false;
-
     AbilityDrawer abilityDrawer = null;
+    GUIStyle logoStyle = null;
 
     public void OnEnable() {
         item = (ItemData_Equip_Bow)target;
 
+        //Default Bow Properties
         serialObject = new SerializedObject(target);
-        abilDamageProp        = serialObject.FindProperty(nameof(ItemData_Equip_Bow.BaseDamage));
-        abilCritChanceProp    = serialObject.FindProperty(nameof(ItemData_Equip_Bow.CriticalHitChance));
-        abilCritDmgProp       = serialObject.FindProperty(nameof(ItemData_Equip_Bow.CriticalDamageMultiplier));
-        abilChargedDamageProp = serialObject.FindProperty(nameof(ItemData_Equip_Bow.FullChargedMultiplier));
-        armorPenetrationProp = serialObject.FindProperty(nameof(ItemData_Equip_Bow.ArmorPenetration));
-        additionalArrowFireProp = serialObject.FindProperty(nameof(ItemData_Equip_Bow.AdditionalArrowFire));
-
         nameTermsProp = serialObject.FindProperty(nameof(ItemData_Equip_Bow.NameTerms));
         descTermsProp = serialObject.FindProperty(nameof(ItemData_Equip_Bow.DescTerms));
 
+        //Boe Ability Properties
+        abilDamageProp          = serialObject.FindProperty(nameof(ItemData_Equip_Bow.BaseDamage));
+        abilCritChanceProp      = serialObject.FindProperty(nameof(ItemData_Equip_Bow.CriticalHitChance));
+        abilCritDmgProp         = serialObject.FindProperty(nameof(ItemData_Equip_Bow.CriticalDamageMultiplier));
+        abilChargedDamageProp   = serialObject.FindProperty(nameof(ItemData_Equip_Bow.FullChargedMultiplier));
+        armorPenetrationProp    = serialObject.FindProperty(nameof(ItemData_Equip_Bow.ArmorPenetration));
+        additionalArrowFireProp = serialObject.FindProperty(nameof(ItemData_Equip_Bow.AdditionalArrowFire));
+        elementalActivation     = serialObject.FindProperty(nameof(ItemData_Equip_Bow.ElementalActivation));
+
         abilityDrawer = new AbilityDrawer();
+        logoStyle = new GUIStyle();
+        logoStyle.fontSize = 16;
+        logoStyle.fontStyle = FontStyle.BoldAndItalic;
+        logoStyle.normal.textColor = new Color(1f, 1f, 1f);
     }
 
     public override void OnInspectorGUI() {
@@ -301,19 +309,25 @@ public class BowItemData_Editor : Editor
         EditorGUI.indentLevel = tempIndent;
         isAbilityTapFoldout = true;
         if (isAbilityTapFoldout) {
+            GUILayout.Space(10f);
+            GUILayout.Label("Inherence Abilities", logoStyle);
+            abilityDrawer.Draw(AbilityChargedDamage.GetGradeCount(abilChargedDamageProp.floatValue));
+            EditorGUILayout.PropertyField(abilChargedDamageProp);
+            abilityDrawer.Draw(AdditionalFire.GetGradeCount(additionalArrowFireProp.intValue));
+            EditorGUILayout.PropertyField(additionalArrowFireProp);
+            abilityDrawer.Draw(ElementalActivation.GetGradeCount(elementalActivation.intValue));
+            EditorGUILayout.PropertyField(elementalActivation);
+
+            GUILayout.Space(10f);
+            GUILayout.Label("Public Abilities", logoStyle);
             abilityDrawer.Draw(AbilityDamage.GetGradeCount(abilDamageProp.intValue));
             EditorGUILayout.PropertyField(abilDamageProp);
             abilityDrawer.Draw(AbilityCritChance.GetGradeCount(abilCritChanceProp.intValue));
             EditorGUILayout.PropertyField(abilCritChanceProp);
             abilityDrawer.Draw(AbilityCritDamage.GetGradeCount(abilCritDmgProp.floatValue));
             EditorGUILayout.PropertyField(abilCritDmgProp);
-            abilityDrawer.Draw(AbilityChargedDamage.GetGradeCount(abilChargedDamageProp.floatValue));
-            EditorGUILayout.PropertyField(abilChargedDamageProp);
             abilityDrawer.Draw(PenetrationArmor.GetGradeCount(armorPenetrationProp.intValue));
             EditorGUILayout.PropertyField(armorPenetrationProp);
-            abilityDrawer.Draw(AdditionalFire.GetGradeCount(additionalArrowFireProp.intValue));
-            EditorGUILayout.PropertyField(additionalArrowFireProp);
-            serialObject.ApplyModifiedProperties();
         }
         GUILayout.EndVertical();
         #endregion
@@ -404,41 +418,54 @@ public class BowItemData_Editor : Editor
 }
 
 [CustomEditor(typeof(ItemData_Equip_Arrow))]
-public class ArrowItemData_Editor : Editor
-{
+public class ArrowItemData_Editor : Editor {
+    //Arrow Default Field
     ItemData_Equip_Arrow item;
-
     SerializedObject serialObject;
+    SerializedProperty effectProp;
+    SerializedProperty nameTermsProp = null;
+    SerializedProperty descTermsProp = null;
+
+    //Ability SerializedProperty
     SerializedProperty incArrowDamageProp;
     SerializedProperty speedProp;
     SerializedProperty projectileDamageProp = null;
     SerializedProperty spellDamageProp = null;
-    SerializedProperty elementalActivationProp = null;
-    SerializedProperty effectProp;
-
-    //Default Item Property
-    SerializedProperty nameTermsProp = null;
-    SerializedProperty descTermsProp = null;
+    //SerializedProperty elementalActivationProp = null;
+    SerializedProperty damageIncProp = null;
+    SerializedProperty criticalChanceProp = null;
+    SerializedProperty criticalDamageProp = null;
+    SerializedProperty armorPenetrationProp = null;
 
     //Is Ability Tap Foldout
-    bool isAbilityTapFoldout = false;
+    GUIStyle logoStyle = null;
     AbilityDrawer abilityDrawer = null;
+    bool isAbilityTapFoldout = false;
 
     public void OnEnable() {
         item = (ItemData_Equip_Arrow)target;
-
         serialObject  = new SerializedObject(target);
         effectProp    = serialObject.FindProperty(nameof(ItemData_Equip_Arrow.effects));
-
-        speedProp            = serialObject.FindProperty(nameof(ItemData_Equip_Arrow.additionalSpeed));
-        incArrowDamageProp   = serialObject.FindProperty(nameof(ItemData_Equip_Arrow.arrowDamageIncRate));
-        projectileDamageProp = serialObject.FindProperty(nameof(ItemData_Equip_Arrow.projectileDamageInc));
-        spellDamageProp      = serialObject.FindProperty(nameof(ItemData_Equip_Arrow.spellDamageInc));
-        elementalActivationProp = serialObject.FindProperty(nameof(ItemData_Equip_Arrow.elementalActivation));
-
         nameTermsProp = serialObject.FindProperty(nameof(ItemData_Equip_Arrow.NameTerms));
         descTermsProp = serialObject.FindProperty(nameof(ItemData_Equip_Arrow.DescTerms));
+
+        //Ability Drawer
         abilityDrawer = new AbilityDrawer();
+        logoStyle     = new GUIStyle();
+        logoStyle.fontSize = 16;
+        logoStyle.fontStyle = FontStyle.BoldAndItalic;
+        logoStyle.normal.textColor = new Color(1f, 1f, 1f);
+
+        //Arrow Ability Fields
+        speedProp               = serialObject.FindProperty(nameof(ItemData_Equip_Arrow.AdditionalSpeed));
+        incArrowDamageProp      = serialObject.FindProperty(nameof(ItemData_Equip_Arrow.ArrowDamageInc));
+        projectileDamageProp    = serialObject.FindProperty(nameof(ItemData_Equip_Arrow.ProjectileDamageInc));
+        spellDamageProp         = serialObject.FindProperty(nameof(ItemData_Equip_Arrow.SpellDamageInc));
+        //elementalActivationProp = serialObject.FindProperty(nameof(ItemData_Equip_Arrow.ElementalActivation)); // <- Moveto Bow Item
+        damageIncProp           = serialObject.FindProperty(nameof(ItemData_Equip_Arrow.BaseDamageInc));
+        criticalChanceProp      = serialObject.FindProperty(nameof(ItemData_Equip_Arrow.CriticalChanceInc));
+        criticalDamageProp      = serialObject.FindProperty(nameof(ItemData_Equip_Arrow.CriticalDamageMultiplierInc));
+        armorPenetrationProp    = serialObject.FindProperty(nameof(ItemData_Equip_Arrow.ArmorPenetrationInc));
     }
 
     public override void OnInspectorGUI() {
@@ -510,7 +537,9 @@ public class ArrowItemData_Editor : Editor
         EditorGUI.indentLevel = tempIndent;
         isAbilityTapFoldout = true;
         if (isAbilityTapFoldout) {
-            //Draw Proeprty
+            //Draw Inherence Ability Properties
+            GUILayout.Space(10f);
+            GUILayout.Label("Inherence Abilities", logoStyle);
             abilityDrawer.Draw(AbilitySpeed.GetGradeCount(speedProp.floatValue));
             EditorGUILayout.PropertyField(speedProp); 
             abilityDrawer.Draw(IncArrowDamageRate.GetGradeCount(incArrowDamageProp.floatValue));
@@ -519,8 +548,19 @@ public class ArrowItemData_Editor : Editor
             EditorGUILayout.PropertyField(projectileDamageProp);
             abilityDrawer.Draw(IncSpellDamage.GetGradeCount(spellDamageProp.intValue));
             EditorGUILayout.PropertyField(spellDamageProp);
-            abilityDrawer.Draw(ElementalActivation.GetGradeCount(elementalActivationProp.intValue));
-            EditorGUILayout.PropertyField(elementalActivationProp);
+            //abilityDrawer.Draw(ElementalActivation.GetGradeCount(elementalActivationProp.intValue));
+            //EditorGUILayout.PropertyField(elementalActivationProp);
+            //Draw Public Ability Properties
+            GUILayout.Space(10f);
+            GUILayout.Label("Public Abilities", logoStyle);
+            abilityDrawer.Draw(AbilityDamage.GetGradeCount(damageIncProp.intValue));
+            EditorGUILayout.PropertyField(damageIncProp);
+            abilityDrawer.Draw(AbilityCritChance.GetGradeCount(criticalChanceProp.intValue));
+            EditorGUILayout.PropertyField(criticalChanceProp);
+            abilityDrawer.Draw(AbilityCritDamage.GetGradeCount(criticalDamageProp.floatValue));
+            EditorGUILayout.PropertyField(criticalDamageProp);
+            abilityDrawer.Draw(PenetrationArmor.GetGradeCount(armorPenetrationProp.intValue));
+            EditorGUILayout.PropertyField(armorPenetrationProp);
         }
         GUILayout.EndVertical();
 
@@ -765,6 +805,17 @@ public class SpArrItemDataEditor : Editor {
     SerializedProperty conditionMaxStackProp;
     SerializedProperty conditionCostIncProp;
 
+    AbilityDrawer drawer = null;
+    SerializedProperty additionalSpeedProp     = null;
+    SerializedProperty arrowDamageProp         = null;
+    SerializedProperty projectileDamageProp    = null;
+    SerializedProperty spellDamageProp         = null;
+    //SerializedProperty elementalActivationProp = null;
+    SerializedProperty damageIncProp           = null;
+    SerializedProperty criticalChanceProp      = null;
+    SerializedProperty criticalDamageProp      = null;
+    SerializedProperty armorPenetrationProp    = null;
+
     private void OnEnable() {
         sobject        = new SerializedObject(target);
 
@@ -793,6 +844,17 @@ public class SpArrItemDataEditor : Editor {
         conditionMaxCostProp  = sobject.FindProperty(nameof(ItemDt_SpArr.MaxCost));
         conditionMaxStackProp = sobject.FindProperty(nameof(ItemDt_SpArr.MaxStackCount));
         conditionCostIncProp  = sobject.FindProperty(nameof(ItemDt_SpArr.CostIncrease));
+
+        drawer = new AbilityDrawer();
+        additionalSpeedProp     = sobject.FindProperty(nameof(ItemDt_SpArr.AdditionalSpeed));
+        arrowDamageProp         = sobject.FindProperty(nameof(ItemDt_SpArr.ArrowDamageInc));
+        projectileDamageProp    = sobject.FindProperty(nameof(ItemDt_SpArr.ProjectileDamageInc));
+        spellDamageProp         = sobject.FindProperty(nameof(ItemDt_SpArr.SpellDamageInc));
+        //elementalActivationProp = sobject.FindProperty(nameof(ItemDt_SpArr.ElementalActivation));
+        damageIncProp           = sobject.FindProperty(nameof(ItemDt_SpArr.BaseDamageInc));
+        criticalChanceProp      = sobject.FindProperty(nameof(ItemDt_SpArr.CriticalChanceInc));
+        criticalDamageProp      = sobject.FindProperty(nameof(ItemDt_SpArr.CriticalDamageMultiplierInc));
+        armorPenetrationProp    = sobject.FindProperty(nameof(ItemDt_SpArr.ArmorPenetrationInc));
     }
 
     public override void OnInspectorGUI() {
@@ -846,31 +908,37 @@ public class SpArrItemDataEditor : Editor {
         EditorGUI.indentLevel = 1;
         isAbilityTapFoldout = EditorGUILayout.Foldout(isAbilityTapFoldout, "Ability Sliders", true);
         EditorGUI.indentLevel = tempIndent;
-        if (isAbilityTapFoldout == true) {
-            //#region ABILITY_SPEED
-            //var speed = speedProp.floatValue;
-            //if (speed <= 18) DrawStar(0);
-            //else if (speed <= 20) DrawStar(1);
-            //else if (speed <= 22) DrawStar(2);
-            //else if (speed <= 24) DrawStar(3);
-            //else if (speed <= 26) DrawStar(4);
-            //else if (speed <= 28) DrawStar(5);
-            //else DrawStar(0);
-            ////Draw Proeprty
-            //EditorGUILayout.PropertyField(speedProp);
-            //#endregion
-            //#region ABILITY_INC_DAMAGE
-            //var damage = incDamageProp.floatValue;
-            //if (damage <= 1f) DrawStar(0);
-            //else if (damage <= 1.1f) DrawStar(1);
-            //else if (damage <= 1.2f) DrawStar(2);
-            //else if (damage <= 1.3f) DrawStar(3);
-            //else if (damage <= 1.4f) DrawStar(4);
-            //else if (damage <= 1.5f) DrawStar(5);
-            //else DrawStar(0);
-            ////Draw Property
-            //EditorGUILayout.PropertyField(incDamageProp);
-            //#endregion
+        isAbilityTapFoldout = true;
+        if (isAbilityTapFoldout) {
+            var logoStyles = new GUIStyle();
+            logoStyles.fontSize = 16;
+            logoStyles.fontStyle = FontStyle.BoldAndItalic;
+            logoStyles.normal.textColor = new Color(1f, 1f, 1f);
+            //Inherence Ability Fields
+            GUILayout.Space(10f);
+            GUILayout.Label("Inherence Abilities", logoStyles);
+            drawer.Draw(AbilitySpeed.GetGradeCount(additionalSpeedProp.floatValue));
+            EditorGUILayout.PropertyField(additionalSpeedProp);
+            drawer.Draw(IncArrowDamageRate.GetGradeCount(arrowDamageProp.floatValue));
+            EditorGUILayout.PropertyField(arrowDamageProp);
+            drawer.Draw(IncProjectileDamage.GetGradeCount(projectileDamageProp.intValue));
+            EditorGUILayout.PropertyField(projectileDamageProp);
+            drawer.Draw(IncSpellDamage.GetGradeCount(spellDamageProp.intValue));
+            EditorGUILayout.PropertyField(spellDamageProp);
+            //drawer.Draw(ElementalActivation.GetGradeCount(elementalActivationProp.intValue));
+            //EditorGUILayout.PropertyField(elementalActivationProp);
+
+            //public ability fields
+            GUILayout.Space(10f);
+            GUILayout.Label("Public Abilities", logoStyles);
+            drawer.Draw(AbilityDamage.GetGradeCount(damageIncProp.intValue));
+            EditorGUILayout.PropertyField(damageIncProp);
+            drawer.Draw(AbilityCritChance.GetGradeCount(criticalChanceProp.intValue));
+            EditorGUILayout.PropertyField(criticalChanceProp);
+            drawer.Draw(AbilityCritDamage.GetGradeCount(criticalDamageProp.floatValue));
+            EditorGUILayout.PropertyField(criticalDamageProp);
+            drawer.Draw(PenetrationArmor.GetGradeCount(armorPenetrationProp.intValue));
+            EditorGUILayout.PropertyField(armorPenetrationProp);
         }
         GUILayout.EndVertical();
         #endregion

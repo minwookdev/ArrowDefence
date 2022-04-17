@@ -9,12 +9,18 @@
         public ArrowSkillData ArrowSkillFst;
         public ArrowSkillData ArrowSkillSec;
 
-        //Inherence Ability
-        [RangeEx(0f, 16f, 1.6f)] public float additionalSpeed = 0f;
-        [RangeEx(0f, 1f, 0.1f)]  public float arrowDamageIncRate = 0f;
-        [RangeEx(0, 50, 5)]      public short projectileDamageInc = 0;
-        [RangeEx(0, 150, 15)]    public short spellDamageInc = 0;
-        [RangeEx(0, 30, 3)]      public short elementalActivation = 0;
+        //Arr Inherence Ability
+        [RangeEx(0f, 16f, 1.6f)] public float AdditionalSpeed = 0f;
+        [RangeEx(0f, 1f, 0.1f)]  public float ArrowDamageInc = 0f;
+        [RangeEx(0, 50, 5)]      public short ProjectileDamageInc = 0;
+        [RangeEx(0, 150, 15)]    public short SpellDamageInc = 0;
+        //[RangeEx(0, 30, 3)]      public short ElementalActivation = 0;
+
+        //Additional Ability
+        [RangeEx(0, 500, 50)]      public short BaseDamageInc = 0;
+        [RangeEx(0, 30, 3)]        public byte CriticalChanceInc = 0;
+        [RangeEx(0f, 1.5f, 0.15f)] public float CriticalDamageMultiplierInc = 0f;
+        [RangeEx(0, 150, 15)]      public short ArmorPenetrationInc = 0;
 
         public ACEffector2D[] effects;
 
@@ -41,46 +47,72 @@
 
         void InitAbility() {
             System.Collections.Generic.List<Ability> tempAbility = new System.Collections.Generic.List<Ability>();
+            //=============================================== << ARROW INHERENCE ABILITY >> ===============================================
             //1. Add Ability Increase Arrow Speed.
-            if (additionalSpeed > 0f) {
-                if(additionalSpeed > AbilitySpeed.MaxValue) {
+            if (AdditionalSpeed > 0f) {
+                if(AdditionalSpeed > AbilitySpeed.MaxValue) {
                     throw new System.Exception();
                 }
-                tempAbility.Add(new AbilitySpeed(additionalSpeed));
+                tempAbility.Add(new AbilitySpeed(AdditionalSpeed));
             }
-
             //2. Add Ability Damage Increase.
-            if (arrowDamageIncRate > 0f) {
-                if(arrowDamageIncRate > IncArrowDamageRate.MaxValue) {
+            if (ArrowDamageInc > 0f) {
+                if(ArrowDamageInc > IncArrowDamageRate.MaxValue) {
                     throw new System.Exception();
                 }
-                tempAbility.Add(new IncArrowDamageRate(arrowDamageIncRate));
+                tempAbility.Add(new IncArrowDamageRate(ArrowDamageInc));
             }
-
             //3. projectiel Damage Increase
-            if (projectileDamageInc > 0) {
-                if (projectileDamageInc > IncProjectileDamage.MaxValue) {
+            if (ProjectileDamageInc > 0) {
+                if (ProjectileDamageInc > IncProjectileDamage.MaxValue) {
                     throw new System.Exception();
                 }
-                tempAbility.Add(new IncProjectileDamage(projectileDamageInc));
+                tempAbility.Add(new IncProjectileDamage(ProjectileDamageInc));
             }
-
             //4. Add Spell Damage Increase
-            if (spellDamageInc > 0) {
-                if (spellDamageInc > IncSpellDamage.MaxValue) {
+            if (SpellDamageInc > 0) {
+                if (SpellDamageInc > IncSpellDamage.MaxValue) {
                     throw new System.Exception();
                 }
-                tempAbility.Add(new IncSpellDamage(spellDamageInc));
+                tempAbility.Add(new IncSpellDamage(SpellDamageInc));
             }
-
-            //5. Elemental Activation
-            if (elementalActivation > 0) {
-                if(elementalActivation > ElementalActivation.MaxValue) {
+            //5. Elemental Activation -> to Bow
+            //if (ElementalActivation > 0) {
+            //    if(ElementalActivation > ActionCat.ElementalActivation.MaxValue) {
+            //        throw new System.Exception();
+            //    }
+            //    tempAbility.Add(new ElementalActivation(ElementalActivation));
+            //}
+            //=================================================== << PUBLIC ABILITY >> ====================================================
+            //6. Base Damage Increase
+            if (BaseDamageInc > 0) {
+                if (BaseDamageInc > AbilityDamage.MaxValue) {
                     throw new System.Exception();
                 }
-                tempAbility.Add(new ElementalActivation(elementalActivation));
+                tempAbility.Add(new AbilityDamage(BaseDamageInc));
             }
-
+            //7. Crtitical Chance Increase
+            if (CriticalChanceInc > 0) {
+                if(CriticalChanceInc > AbilityCritChance.MaxValue) {
+                    throw new System.Exception();
+                }
+                tempAbility.Add(new AbilityCritChance(CriticalChanceInc));
+            }
+            //8. Critical Damage Multiplier Increase
+            if (CriticalDamageMultiplierInc > 0f) {
+                if (CriticalDamageMultiplierInc > AbilityCritDamage.MaxValue) {
+                    throw new System.Exception();
+                }
+                tempAbility.Add(new AbilityCritDamage(CriticalDamageMultiplierInc));
+            }
+            //9. Armor Penetration Increase
+            if (ArmorPenetrationInc > 0) {
+                if (ArmorPenetrationInc > PenetrationArmor.MaxValue) {
+                    throw new System.Exception();
+                }
+                tempAbility.Add(new PenetrationArmor(ArmorPenetrationInc));
+            }
+            //================================================ << ASSIGNMENT ABILITY >> ===================================================
             if (tempAbility.Count > 4) { //Assignment Abilities Data
                 throw new System.Exception("Arrow Ability Max Length is less than 5.");
             }

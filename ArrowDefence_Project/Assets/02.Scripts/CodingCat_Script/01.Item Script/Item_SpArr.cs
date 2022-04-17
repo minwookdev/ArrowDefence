@@ -7,6 +7,7 @@
         private ASInfo[] skillInfos    = null;
         private SpArrCondition condition = null;
         private float specialArrDefaultSpeed = 12f;
+        private float additionalSpeed = 0f;
 
         //NON_SAVED VALUES
         private ArrowSkillSet tempSkillSet = null;
@@ -30,7 +31,7 @@
         }
         #endregion
         protected override Ability[] GetNewAbilities(Ability[] abilities) {
-            return new Ability[0]; 
+            throw new System.NotImplementedException();
         }
 
         public bool TryGetSkillSet(out ArrowSkillSet skillset) {
@@ -45,7 +46,7 @@
 
         public void Init(PlayerAbilitySlot ability, int poolQuatity) {
             if(spArrowPref.TryGetComponent<AD_Arrow>(out AD_Arrow arrow)) {
-                arrow.SetSpeed(specialArrDefaultSpeed);
+                arrow.SetSpeed(specialArrDefaultSpeed + additionalSpeed);
             }
             else {
                 throw new System.Exception("Not Added Component in Arrow Prefab");
@@ -67,6 +68,7 @@
             if (entity.ArrowSkillTrd != null) tempList.Add(new ASInfo(entity.ArrowSkillTrd));
             skillInfos = tempList.ToArray();
             condition = new SpArrCondition(entity.ChargeType, entity.MaxCost, entity.MaxStackCount, entity.CostIncrease);
+            additionalSpeed = (IsExistAbility(ABILITY_TYPE.ARROWSPEED, out Ability speedIncrease)) ? speedIncrease.GetValueToSingle() : 0f;
         }
         #region ES3
         public Item_SpArr() { }

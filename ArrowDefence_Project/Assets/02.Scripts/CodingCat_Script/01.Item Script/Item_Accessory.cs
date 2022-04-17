@@ -14,6 +14,12 @@
         public Item_Accessory(ItemData_Equip_Accessory entity) : base(entity) {
             this.EquipType     = EQUIP_ITEMTYPE.ARTIFACT;
             this.specialEffect = GetNewEffect(entity.SPEffectAsset);
+
+            //assignment new temp abilities
+            this.abilities = new Ability[] { };
+            if (entity.abilityDatas != null) {
+                this.abilities = GetNewAbilities(entity.abilityDatas);
+            }
         }
 
         public Item_Accessory(Item_Accessory origin) : base(origin) {

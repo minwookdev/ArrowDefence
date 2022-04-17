@@ -42,12 +42,15 @@
 
             this.MainArrowObject = entity.MainArrowObj;
             this.LessArrowObject = entity.LessArrowObj;
-            this.speed           = entity.additionalSpeed;
 
             this.arrowSkillInfoFst = (entity.ArrowSkillFst != null) ? new ASInfo(entity.ArrowSkillFst) : null;
             this.arrowSkillInfoSec = (entity.ArrowSkillSec != null) ? new ASInfo(entity.ArrowSkillSec) : null;
             this.abilities         = GetNewAbilities(entity.abilityDatas);
             this.effects           = entity.effects;
+
+            //assignment arrow speed value
+            this.speed = (IsExistAbility(ABILITY_TYPE.ARROWSPEED, out Ability speedIncrease)) ?
+                GameGlobal.DefaultArrowSpeed + speedIncrease.GetValueToSingle() : GameGlobal.DefaultArrowSpeed;
         }
 
         /// <summary>

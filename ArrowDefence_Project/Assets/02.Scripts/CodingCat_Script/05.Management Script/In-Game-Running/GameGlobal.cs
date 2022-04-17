@@ -16,6 +16,9 @@
 
         public static readonly string EMPTYSTR = "";
 
+        //ARROW
+        public static readonly float DefaultArrowSpeed = 18f;
+
         /// <summary>
         /// int 배열에서 무작위 "index"를 반환합니다.
         /// </summary>

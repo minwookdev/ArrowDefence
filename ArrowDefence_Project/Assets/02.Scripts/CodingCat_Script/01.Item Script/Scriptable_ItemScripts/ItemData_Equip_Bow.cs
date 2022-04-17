@@ -23,6 +23,8 @@
         public short ArmorPenetration = 0;
         [RangeEx(0, 5, 1, "ADDITIONAL ARROW")]
         public byte AdditionalArrowFire = 0;
+        [RangeEx(0, 30, 3, "ELEMENTAL ACTIVATION INC")]
+        public short ElementalActivation = 0;
 
         //PROPERTY
         public AD_BowSkill SkillFst {

@@ -50,6 +50,17 @@
 
         public EQUIP_ITEMTYPE GetEquipType() => EquipType;
 
+        public bool IsExistAbility(ABILITY_TYPE type, out Ability findAbility) {
+            foreach (var ability in abilities) {
+                if (ability.AbilityType == type) {
+                    findAbility = ability;
+                    return true;
+                }
+            }
+            findAbility = null;
+            return false;
+        }
+
         //public abstract void Setup();
     }
 }

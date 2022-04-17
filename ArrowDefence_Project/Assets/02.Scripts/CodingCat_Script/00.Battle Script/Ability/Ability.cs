@@ -15,6 +15,9 @@
         protected static float GetUnitValue(float maxvalue) {
             return (float)maxvalue / 10;
         }
+        public virtual byte GetValueToByte() => throw new System.NotImplementedException();
+
+        public virtual short GetValueToInt16() => throw new System.NotImplementedException();
     }
     #region ABILITY-BOW
     //=======================================================================================================================================================
@@ -29,6 +32,10 @@
         }
 
         public override float GetValueToSingle() {
+            return increaseValue;
+        }
+
+        public override short GetValueToInt16() {
             return increaseValue;
         }
 
@@ -107,6 +114,10 @@
             return increaseValue;
         }
 
+        public override byte GetValueToByte() {
+            return increaseValue;
+        }
+
         public override byte GetGrade() { //0~30 [3]
             return System.Convert.ToByte(UnityEngine.Mathf.CeilToInt((float)increaseValue / GetUnitValue(MaxValue)));
         }
@@ -182,6 +193,10 @@
             return increaseValue;
         }
 
+        public override short GetValueToInt16() {
+            return increaseValue;
+        }
+
         public override byte GetGrade() { //0~150 [15]
             return System.Convert.ToByte(UnityEngine.Mathf.CeilToInt((float)increaseValue / GetUnitValue(MaxValue)));
         }
@@ -216,6 +231,10 @@
         }
 
         public override float GetValueToSingle() {
+            return increaseValue;
+        }
+
+        public override byte GetValueToByte() {
             return increaseValue;
         }
 
@@ -334,6 +353,10 @@
             return increaseValue;
         }
 
+        public override short GetValueToInt16() {
+            return increaseValue;
+        }
+
         public override byte GetGrade() {
             return System.Convert.ToByte(UnityEngine.Mathf.CeilToInt((float)increaseValue / GetUnitValue(MaxValue)));
         }
@@ -372,6 +395,10 @@
         }
 
         public override float GetValueToSingle() {
+            return increaseValue;
+        }
+
+        public override short GetValueToInt16() {
             return increaseValue;
         }
 
@@ -425,6 +452,10 @@
         }
 
         public override float GetValueToSingle() {
+            return increaseValue;
+        }
+
+        public override short GetValueToInt16() {
             return increaseValue;
         }
 

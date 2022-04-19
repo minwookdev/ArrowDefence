@@ -6430,11 +6430,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4458392277396723951}
+  - component: {fileID: 4763879044800921213}
   - component: {fileID: 4458392277396723944}
   - component: {fileID: 4458392277396723945}
   - component: {fileID: 4458392277396723946}
   - component: {fileID: 5010576720272100161}
-  - component: {fileID: 4763879044800921213}
   m_Layer: 5
   m_Name: spell_trigger_type_cooldown
   m_TagString: Untagged
@@ -7530,6 +7530,10 @@ MonoBehaviour:
     type: 3}
   killTypeSlotPref: {fileID: 3048252280272328110, guid: 6e10ca916b782284fb32ecab29e543ca,
     type: 3}
+  triggerTypeSlotPref: {fileID: 0}
+  buffTypeSlotPref: {fileID: 0}
+  debuffTypeSlotPref: {fileID: 0}
+  switchTypeSlotPref: {fileID: 0}
   slots: []
   notify:
     notifyRectTr: {fileID: 1154066256200203599}
@@ -11464,11 +11468,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4458392278246622621}
+  - component: {fileID: 4811941344961915674}
   - component: {fileID: 4458392278246622610}
   - component: {fileID: 4458392278246622611}
   - component: {fileID: 4458392278246622620}
   - component: {fileID: 5883367192100530893}
-  - component: {fileID: 4811941344961915674}
   m_Layer: 5
   m_Name: spell_trigger_type_charging_a
   m_TagString: Untagged
@@ -11585,11 +11589,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4458392278263985985}
+  - component: {fileID: 3571697539144327895}
   - component: {fileID: 4458392278263985990}
   - component: {fileID: 4458392278263985991}
   - component: {fileID: 4458392278263985984}
   - component: {fileID: 2995305005836315122}
-  - component: {fileID: 3571697539144327895}
   m_Layer: 5
   m_Name: spell_trigger_type_charging_b
   m_TagString: Untagged
@@ -14236,11 +14240,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4458392278603306744}
+  - component: {fileID: 1863444848838127265}
   - component: {fileID: 4458392278603306749}
   - component: {fileID: 4458392278603306750}
   - component: {fileID: 4458392278603306751}
   - component: {fileID: 4539015225594871915}
-  - component: {fileID: 1863444848838127265}
   m_Layer: 5
   m_Name: spell_trigger_type_on/off
   m_TagString: Untagged

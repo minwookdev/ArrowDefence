@@ -459,7 +459,7 @@ GameObject:
   - component: {fileID: 3624782767628164747}
   - component: {fileID: 3048252280272328110}
   m_Layer: 5
-  m_Name: spell_trigger_type_charging_b
+  m_Name: spell_trigger_type_trigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

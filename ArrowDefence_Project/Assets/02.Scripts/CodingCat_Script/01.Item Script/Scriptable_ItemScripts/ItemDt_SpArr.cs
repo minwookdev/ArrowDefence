@@ -10,15 +10,14 @@
 
         private void OnEnable() {
             CheckCondition();
-        }
-
-        public ItemDt_SpArr() : base() {
-            
+            InitAbility();
         }
 
         void CheckCondition() {
             if (ChargeType == CHARGETYPE.NONE) CatLog.WLog($"Special Arrow ({NameTerms}), Not Setting Charge Type.");
             if (MaxStackCount <= 0)            CatLog.WLog($"Special Arrow ({NameTerms}), Not Setting MaxStackCount.");
         }
+
+        public ItemDt_SpArr() : base() { }
     }
 }

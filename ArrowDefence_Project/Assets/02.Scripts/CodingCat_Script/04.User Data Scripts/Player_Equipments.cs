@@ -164,6 +164,10 @@
             return EquippedArrow_s;
         }
 
+        /// <summary>
+        /// Null 체크 해야댐.
+        /// </summary>
+        /// <returns></returns>
         public Item_Accessory[] GetAccessories()
         {
             Item_Accessory[] accessories = { this.EquippedAccessory_f,

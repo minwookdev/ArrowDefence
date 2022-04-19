@@ -87,6 +87,14 @@
                         else {
                             CatLog.ELog("Ability Type Not Matched.");
                         } break;
+                    case ABILITY_TYPE.ELEMENTALACTIVATION:
+                        var elementalActivation = abilities[i] as ElementalActivation;
+                        if (elementalActivation != null) {
+                            tempList.Add(new ElementalActivation(elementalActivation.Value));
+                        }
+                        else {
+                            CatLog.ELog("Ability Type Not Matched.");
+                        } break;
                     default: throw new System.NotImplementedException();
                 }
             } 

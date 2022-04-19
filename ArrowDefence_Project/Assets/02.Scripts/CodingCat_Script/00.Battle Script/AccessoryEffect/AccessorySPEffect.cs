@@ -13,6 +13,7 @@
         protected Sprite iconSprite;
         protected string nameTerms;
         protected string descTerms;
+        protected ArtifactCondition condition = null;
         #region PROPERTY
         public string ID { get => id; }
         public ACSP_TYPE SpEffectType { get => effectType; }
@@ -37,12 +38,12 @@
                 return loc;
             }
         }
-        public string NameTerms {
+        public string TermsName {
             get {
                 return nameTerms;
             }
         }
-        public string DescTerms {
+        public string TermsDesc {
             get {
                 return descTerms;
             }
@@ -63,6 +64,16 @@
             this.iconSprite = entity.SkillIconSprite;
             this.nameTerms  = entity.NameTerms;
             this.descTerms  = entity.DescTerms;
+
+            //assignment artifact condition
+            switch (entity.ConditionType) {
+                case ARTCONDITION.NONE:    break;
+                case ARTCONDITION.TRIGGER: condition = new ArtCondition_Trigger(entity.MaxStack, entity.MaxCost, entity.CoolDownTime, entity.IncreaseCostCount); break;
+                case ARTCONDITION.BUFF:    condition = new ArtCondition_Buff(entity.MaxCost, entity.CoolDownTime); break;
+                case ARTCONDITION.DEBUFF:  condition = new ArtCondition_Debuff(entity.MaxStack, entity.MaxCost, entity.CoolDownTime); break;
+                case ARTCONDITION.PASSIVE: break;
+                default: throw new System.NotImplementedException();
+            }
         }
         #region ES3
         public AccessorySPEffect() { }
@@ -154,6 +165,28 @@
 
             CatLog.Log("슬로우 타임 종료");
             GameManager.Instance.TimeToDefault();
+        }
+    }
+    //=================================================================================================================================================
+    //=================================================================== << CURE >> ==================================================================
+    public class Acsp_Cure : AccessorySPEffect {
+        public override string GetDescByTerms() {
+            throw new System.NotImplementedException();
+        }
+
+        public override void Init() {
+            throw new System.NotImplementedException();
+        }
+    }
+    //=================================================================================================================================================
+    //=============================================================== << CURSED SLOW >> ===============================================================
+    public class Acsp_CursedSlow : AccessorySPEffect {
+        public override string GetDescByTerms() {
+            throw new System.NotImplementedException();
+        }
+
+        public override void Init() {
+            throw new System.NotImplementedException();
         }
     }
     //=================================================================================================================================================

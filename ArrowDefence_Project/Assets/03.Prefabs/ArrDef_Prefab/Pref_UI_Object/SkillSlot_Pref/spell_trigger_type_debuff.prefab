@@ -315,7 +315,7 @@ GameObject:
   - component: {fileID: 4525376780796255004}
   - component: {fileID: -5931304111486543157}
   m_Layer: 5
-  m_Name: spell_trigger_type_charging_a
+  m_Name: spell_trigger_type_debuff
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

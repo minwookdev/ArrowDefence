@@ -45,7 +45,7 @@
             }
         }
 
-        void InitAbility() {
+        protected void InitAbility() {
             System.Collections.Generic.List<Ability> tempAbility = new System.Collections.Generic.List<Ability>();
             //=============================================== << ARROW INHERENCE ABILITY >> ===============================================
             //1. Add Ability Increase Arrow Speed.

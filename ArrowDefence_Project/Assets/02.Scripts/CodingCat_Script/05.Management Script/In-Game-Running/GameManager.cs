@@ -74,10 +74,11 @@
 #region PLAYER_DATA
 
         public void InitEquips(Transform bowInitPos, Transform bowParent, int mainArrPoolQuantity, int subArrPoolQuantity, 
-                               out UI.ArrSSData[] arrSlotData, out UI.ACSData[] acspSlotData, UI.SwapSlots swapSlot) {
+                               out UI.ArrSSData[] arrSlotData, out UI.ACSData[] acspSlotData, UI.SwapSlots swapSlot, out AccessorySPEffect[] artifactEffects) {
             CCPlayerData.equipments.InitEquipments(bowInitPos, bowParent, mainArrPoolQuantity, subArrPoolQuantity, swapSlot);
             arrSlotData   = GetArrSwapSlotData();
             acspSlotData  = GetAccessorySlotData();
+            artifactEffects = GetArtifactEffects();
         }
 
         public void SetBowPullingStop(bool isStop) {
@@ -148,6 +149,23 @@
             return list.ToArray();
         }
 
+        AccessorySPEffect[] GetArtifactEffects() {
+            var effectTempList = new System.Collections.Generic.List<AccessorySPEffect>();
+            var artifacts = CCPlayerData.equipments.GetAccessories();
+            for (int i = 0; i < artifacts.Length; i++) {
+                var effect = (artifacts[i] != null && artifacts[i].IsExistEffect) ? artifacts[i].SPEffectOrNull : null;
+                if (effect != null) {
+                    switch (effect.SpEffectType) {
+                        case ACSP_TYPE.SPEFFECT_NONE:     break;
+                        case ACSP_TYPE.SPEFFECT_AIMSIGHT: break;
+                        case ACSP_TYPE.SPEEFECT_SLOWTIME: effectTempList.Add(effect); break;
+                        default: throw new System.NotImplementedException();
+                    }
+                }
+            }
+            return effectTempList.ToArray();
+        }
+
         public AD_BowController GetControllerInstOrNull() {
             if (AD_BowController.instance != null)
                 return AD_BowController.instance;
@@ -211,10 +229,6 @@
 
         public void ReleaseEquipments() {
             CCPlayerData.equipments.ReleaseEquipments();
-        }
-
-        public GlobalAbility GetGlobalAbility() {
-            return CCPlayerData.ability.GlobalAbilityField;
         }
 
         public AD_item[] GetBluePrints(BLUEPRINTTYPE type) {
@@ -285,6 +299,10 @@
 
         public bool TryReceipt(int slotNumber, out ItemData resultItemRef, out int resultItemAmount) {
             return CCPlayerData.infos.CraftingInfos[slotNumber].TryReceipt(out resultItemRef, out resultItemAmount);
+        }
+
+        public GlobalAbility GetGoAbility() {
+            return CCPlayerData.ability.GlobalAbilityField;
         }
 
 #endregion

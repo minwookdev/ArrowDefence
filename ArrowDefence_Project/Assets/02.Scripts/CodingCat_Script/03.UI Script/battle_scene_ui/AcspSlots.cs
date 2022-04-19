@@ -25,11 +25,21 @@
         [SerializeField] AccessorySkillSlot hitTypeSlotPref  = null;
         [SerializeField] AccessorySkillSlot killTypeSlotPref = null;
 
+        [Header("SPELL SLOT PREFAB")]
+        [SerializeField] AccessorySkillSlot triggerTypeSlotPref = null;
+        [SerializeField] AccessorySkillSlot buffTypeSlotPref    = null;
+        [SerializeField] AccessorySkillSlot debuffTypeSlotPref  = null;
+        [SerializeField] AccessorySkillSlot switchTypeSlotPref  = null;
+
         [Header("SLOTS")] [Tooltip("Do Not Modify this Field")]
         [SerializeField] [ReadOnly] AccessorySkillSlot[] slots = null;
 
         [Header("NOTIFY")]
         [SerializeField] SlotNotify notify = null;
+
+        public void InitSlots(AccessorySPEffect[] effects) {
+
+        }
 
         public void InitSlots(ACSData[] array) {
             var list = new System.Collections.Generic.List<AccessorySkillSlot>();

@@ -11,6 +11,12 @@
             }
         }
 
+        public bool IsExistEffect {
+            get {
+                return (specialEffect != null);
+            }
+        }
+
         public Item_Accessory(ItemData_Equip_Accessory entity) : base(entity) {
             this.EquipType     = EQUIP_ITEMTYPE.ARTIFACT;
             this.specialEffect = GetNewEffect(entity.SPEffectAsset);
@@ -36,11 +42,26 @@
             if (specialEffect != null) specialEffect.Init();
         }
 
-        AccessorySPEffect GetNewEffect(AccessorySkillData data) {
-            switch (data) {
-                case SkillDataAimSight newData: return new Acsp_AimSight(newData);
-                case SkillDataSlowTime newData: return new Acsp_SlowTime(newData);
-                case null:                      return null;
+        AccessorySPEffect GetNewEffect(AccessorySkillData entity) {
+            switch (entity.EffectType) {
+                case ACSP_TYPE.SPEFFECT_NONE:     throw new System.Exception();
+                //=============================================================================================================
+                case ACSP_TYPE.SPEFFECT_AIMSIGHT: 
+                    if (entity is SkillDataAimSight aimsight) {
+                        return new Acsp_AimSight(aimsight);
+                    }
+                    else {
+                        throw new System.Exception("Type <-> Class Not Match !");
+                    }
+                //=============================================================================================================
+                case ACSP_TYPE.SPEEFECT_SLOWTIME:
+                    if (entity is SkillDataSlowTime slowtime) {
+                        return new Acsp_SlowTime(slowtime);
+                    }
+                    else {
+                        throw new System.Exception("Type <-> Class Not Match !");
+                    }
+                //=============================================================================================================
                 default: throw new System.NotImplementedException();
             }
         }

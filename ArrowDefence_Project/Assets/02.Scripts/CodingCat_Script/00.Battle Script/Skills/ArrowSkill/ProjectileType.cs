@@ -179,10 +179,10 @@
         }
 
         public override void OnHit(Vector2 point, ref DamageStruct damage) {
-            if (Random.Range(0f, 100f) < activationProbability + ability.ElementalActivationInc) {
+            if (Random.Range(0f, 100f) < activationProbability + GameManager.Instance.GetGoAbility().ElementalActivation) {
                 var fire = CCPooler.SpawnFromPool<ElementalFirePref>(poolTags[0], point, Quaternion.identity);
                 if (fire) {
-                    fire.Shot(damage, ability.GetProjectileDamage(projectileDamage)); //
+                    fire.Shot(damage, ability.GetSpellDamage(projectileDamage)); //
                 }
             }
         }

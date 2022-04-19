@@ -14,16 +14,15 @@
                 }
             }
 
-            public void CheckQuantity()
-            {
-                if(QuantityRange.Length <= 0) QuantityRange = new int[] { 1 };
-                if(ItemAsset.Item_Type == ITEMTYPE.ITEM_EQUIPMENT)
-                {
-                    if (QuantityRange.Length != 1)
-                        QuantityRange = new int[] { 1 };
+            public void CheckQuantity(string tableName) {
+                if (QuantityRange.Length <= 0) {
+                    CatLog.WLog($"Quantity Range is Not Set. TableName: {tableName}");
+                }
 
-                    if (QuantityRange[0] != 1)
-                        QuantityRange[0] = 1;
+                if (ItemAsset.Item_Type == ITEMTYPE.ITEM_EQUIPMENT) {
+                    if (QuantityRange.Length != 1 || QuantityRange[0] != 1) {
+                        CatLog.WLog($"Equipment Item Drop Quantity is Always 1, TableName: {tableName}, ItemName: {ItemAsset.NameByTerms}");
+                    }
                 }
             }
         }
@@ -48,45 +47,17 @@
                                               ((DropTableArray == null ? 0 : DropTableArray.Length));
         }
 
-        private void OnEnable() {
-            if (DropTableArray == null) return;
-
-            //OnCheckTotalChanceValue();
-            CalcTotalChance();
-            OnCheckQuantityArray();
-        }
-
-        private void OnCheckTotalChanceValue()
-        {
-            float totalChance = 0f;
-
-            if (DropTableArray.Length != 0)
-            {
-                for (int i = 0; i < DropTableArray.Length; i++)
-                {
-                    totalChance += DropTableArray[i].DropChance;
-                }
-
-                if (totalChance != 100) CatLog.WLog($"DropList : {this.name}, Total Item Chance is not match \n" +
-                                                    $"TotalChance : {totalChance}%");
-            }
-            else CatLog.WLog($"DropList : {this.name} is Not have a Item Data's");
-        }
-
-        void CalcTotalChance() {
-            float totalChance = 0f;
-            if(DropTableArray.Length != 0) {
-                for (int i = 0; i < DropTableArray.Length; i++) {
-                    totalChance += DropTableArray[i].DropChance;
-                }
+        private void Awake() {
+            if (DropTableArray == null || DropTableArray.Length <= 0) {
+                return;
             }
 
-            CatLog.Log(StringColor.YELLOW, $"DROP TABLE : {this.name}, TOTAL DROP CHANCE : {totalChance}%");
+            CheckTable();
         }
 
-        private void OnCheckQuantityArray() {
+        private void CheckTable() {
             foreach (var item in DropTableArray) {
-                item.CheckQuantity();
+                item.CheckQuantity(this.name);
             }
         }
 

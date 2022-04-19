@@ -133,7 +133,7 @@
         #endregion
 
         public void Initialize(UI.SwapSlots slot) {
-            addIncCost = GameManager.Instance.GetGlobalAbility().IncreaseSpArrCost;
+            addIncCost = GameManager.Instance.GetGoAbility().IncreaseSpArrCost;
             switch (chargeType) {
                 case CHARGETYPE.KILL: InitTypeKill(); break;
                 case CHARGETYPE.TIME: InitTypeAtck(); break;

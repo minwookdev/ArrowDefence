@@ -103,6 +103,14 @@
                 tempAbility.Add(new AdditionalFire(AdditionalArrowFire));
             }
 
+            //7. Add Elemental Activation
+            if (ElementalActivation > 0) {
+                if (ElementalActivation > ActionCat.ElementalActivation.MaxValue) {
+                    throw new System.Exception($"Item: {name}, Elemetnal Activation Value is RangeOver !");
+                }
+                tempAbility.Add(new ActionCat.ElementalActivation(ElementalActivation));
+            }
+
             //Final. if the tempAbility Length is Bigger than 1, Init the Ability Array.
             if(tempAbility.Count > 4) {
                 throw new System.Exception("Bow Ability Length Over, this is less than 5.");

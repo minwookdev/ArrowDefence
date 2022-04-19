@@ -8,7 +8,6 @@
                 return abilityType;
             }
         }
-        public abstract float GetValueToSingle();
         public abstract byte GetGrade();
         public abstract string GetName();
         public abstract bool Upgrade();
@@ -16,8 +15,8 @@
             return (float)maxvalue / 10;
         }
         public virtual byte GetValueToByte() => throw new System.NotImplementedException();
-
         public virtual short GetValueToInt16() => throw new System.NotImplementedException();
+        public virtual float GetValueToSingle() => throw new System.NotImplementedException();
     }
     #region ABILITY-BOW
     //=======================================================================================================================================================
@@ -29,10 +28,6 @@
             get {
                 return increaseValue;
             }
-        }
-
-        public override float GetValueToSingle() {
-            return increaseValue;
         }
 
         public override short GetValueToInt16() {
@@ -110,9 +105,6 @@
                 return increaseValue;
             }
         }
-        public override float GetValueToSingle() {
-            return increaseValue;
-        }
 
         public override byte GetValueToByte() {
             return increaseValue;
@@ -189,10 +181,6 @@
             }
         }
 
-        public override float GetValueToSingle() {
-            return increaseValue;
-        }
-
         public override short GetValueToInt16() {
             return increaseValue;
         }
@@ -228,10 +216,6 @@
             get {
                 return increaseValue;
             }
-        }
-
-        public override float GetValueToSingle() {
-            return increaseValue;
         }
 
         public override byte GetValueToByte() {
@@ -349,10 +333,6 @@
             }
         }
 
-        public override float GetValueToSingle() {
-            return increaseValue;
-        }
-
         public override short GetValueToInt16() {
             return increaseValue;
         }
@@ -392,10 +372,6 @@
             get {
                 return increaseValue;
             }
-        }
-
-        public override float GetValueToSingle() {
-            return increaseValue;
         }
 
         public override short GetValueToInt16() {
@@ -448,11 +424,7 @@
         }
 
         public override string GetName() {
-            throw new System.NotImplementedException();
-        }
-
-        public override float GetValueToSingle() {
-            return increaseValue;
+            return I2.Loc.ScriptLocalization.ABILITY.ELEMENTAL_ACTIVATION;        
         }
 
         public override short GetValueToInt16() {
@@ -464,7 +436,7 @@
         }
 
         public ElementalActivation(short value) {
-            abilityType    = ABILITY_TYPE.ELEMENTALACTIVATION;
+            abilityType   = ABILITY_TYPE.ELEMENTALACTIVATION;
             increaseValue = value;
         }
         public ElementalActivation() { }

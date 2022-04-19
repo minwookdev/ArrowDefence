@@ -2,14 +2,63 @@
 using UnityEditor;
 using ActionCat;
 
-public class ACSkillData_Editor {
+public class ArtifactSkillEditor : Editor {
+    protected SerializedProperty conditionTypeProp = null;
+    protected SerializedProperty maxStackProp = null;
+    protected SerializedProperty maxCostProp = null;
+    protected SerializedProperty increaseCostProp = null;
+    protected SerializedProperty cooldownTimeProp = null;
 
+    protected void InitConditionProps(SerializedObject serializedobject) {
+        conditionTypeProp = serializedobject.FindProperty(nameof(AccessorySkillData.ConditionType));
+        maxStackProp      = serializedobject.FindProperty(nameof(AccessorySkillData.MaxStack));
+        maxCostProp       = serializedobject.FindProperty(nameof(AccessorySkillData.MaxCost));
+        increaseCostProp  = serializedobject.FindProperty(nameof(AccessorySkillData.IncreaseCostCount));
+        cooldownTimeProp  = serializedobject.FindProperty(nameof(AccessorySkillData.CoolDownTime));
+    }
+
+    protected void DrawConditionProps() {
+        EditorGUILayout.PropertyField(conditionTypeProp);
+        switch (conditionTypeProp.enumValueIndex) {
+            case 1: //TYPE:: TRIGGER
+                EditorGUILayout.PropertyField(maxStackProp,     new GUIContent("Max Stack"));
+                EditorGUILayout.PropertyField(maxCostProp,      new GUIContent("Max Cost"));
+                EditorGUILayout.PropertyField(increaseCostProp, new GUIContent("Increase Cost"));
+                EditorGUILayout.PropertyField(cooldownTimeProp, new GUIContent("Cool Down Time"));
+                break;
+            case 2: //TYPE:: BUFF   
+                EditorGUI.BeginDisabledGroup(true);
+                EditorGUILayout.PropertyField(maxStackProp,     new GUIContent("Max Stack"));
+                if (maxStackProp.intValue != 1) {
+                    maxStackProp.intValue = 1;
+                    CatLog.WLog("MaxStack Value Changed.");
+                }
+                EditorGUI.EndDisabledGroup();
+                EditorGUILayout.PropertyField(maxCostProp,      new GUIContent("Stacking Time"));
+                if (increaseCostProp.floatValue > 0f) {
+                    increaseCostProp.floatValue = 0f;
+                    CatLog.WLog("Changed Increase Cost Count Value.");
+                }
+                EditorGUILayout.PropertyField(cooldownTimeProp, new GUIContent("Cool Down Time"));
+                break;
+            case 3: //TYPE:: DEBUFF   
+                EditorGUILayout.PropertyField(maxStackProp, new GUIContent("Max Stack"));
+                EditorGUILayout.PropertyField(maxCostProp,  new GUIContent("Stacking Time"));
+                if (increaseCostProp.floatValue > 0f) {
+                    increaseCostProp.floatValue = 0f;
+                    CatLog.WLog("Changed Increase Cost Count Value.");
+                }
+                EditorGUILayout.PropertyField(cooldownTimeProp, new GUIContent("Cool Down Time"));
+                break;
+            default:  break;
+        }
+    }
 }
 
 #region EDITOR_ACSP
 
 [CustomEditor(typeof(SkillDataAimSight))]
-public class AimSightDataEditor : Editor {
+public class AimSightDataEditor : ArtifactSkillEditor {
     SerializedObject sobject;
 
     SerializedProperty idProp;
@@ -110,7 +159,7 @@ public class AimSightDataEditor : Editor {
 }
 
 [CustomEditor(typeof(SkillDataSlowTime))]
-public class SlowTimeDataEditor : Editor {
+public class SlowTimeDataEditor : ArtifactSkillEditor {
     SerializedObject sobject;
 
     SerializedProperty idProp;
@@ -124,6 +173,7 @@ public class SlowTimeDataEditor : Editor {
     SerializedProperty ratioProp;
     SerializedProperty durationProp;
     SerializedProperty cooldownProp;
+    GUIStyle logoStyle = null;
 
     public void OnEnable() {
         sobject = new SerializedObject(target);
@@ -141,6 +191,12 @@ public class SlowTimeDataEditor : Editor {
 
         nameTermsProp = sobject.FindProperty(nameof(SkillDataSlowTime.NameTerms));
         descTermsProp = sobject.FindProperty(nameof(SkillDataSlowTime.DescTerms));
+
+        InitConditionProps(sobject);
+        logoStyle = new GUIStyle();
+        logoStyle.fontSize = 16;
+        logoStyle.fontStyle = FontStyle.BoldAndItalic;
+        logoStyle.normal.textColor = new Color(1f, 1f, 1f);
     }
 
     public override void OnInspectorGUI() {
@@ -200,6 +256,17 @@ public class SlowTimeDataEditor : Editor {
 
         EditorGUILayout.PropertyField(cooldownProp);
 
+        GUILayout.EndVertical();
+
+        #endregion
+
+        #region CONDITION
+        GUILayout.BeginHorizontal();
+        GUILayout.Space(10f);
+        GUILayout.Label("Condition", logoStyle);
+        GUILayout.EndHorizontal();
+        GUILayout.BeginVertical("GroupBox");
+        DrawConditionProps();
         GUILayout.EndVertical();
 
         #endregion

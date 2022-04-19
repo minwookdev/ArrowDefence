@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bb150c1ba29bbff4db2a5c801d6437ee, type: 3}
-  m_Name: 5004-cure_t2
+  m_Name: 5012-artifact-pocketwatch_t1
   m_EditorClassIdentifier: 
   Item_Type: 2
   Item_Grade: 2
-  Item_Id: 5004
+  Item_Id: 5012
   DefaultAmount: 1
-  Item_Sprite: {fileID: 21300000, guid: 3de0a5c20801a44d4a6acea442bc2bd4, type: 3}
-  NameTerms: ItemName/Artifact/ART_CURE_T2
+  Item_Sprite: {fileID: 21300000, guid: 6267ab80dec535e4181e9adbb66cd63a, type: 3}
+  NameTerms: ItemName/Artifact/ARTIFACT_WATCH_1T
   DescTerms: 
   Equip_Type: 2
   MaxNumberOfEffect: 0
   RFEffectAssets: []
-  SPEffectAsset: {fileID: 0}
+  SPEffectAsset: {fileID: 11400000, guid: 597a0e75f434a8f47b672c37b07eaec0, type: 2}

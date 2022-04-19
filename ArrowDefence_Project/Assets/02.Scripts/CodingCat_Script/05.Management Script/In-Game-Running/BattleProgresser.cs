@@ -218,10 +218,11 @@
             yield return new WaitUntil(() => CCPooler.IsInitialized == true);
 
             //==================================================== << PLAYER >> ====================================================
-            GameManager.Instance.InitEquips(BowInitPosition, ParentTransform, 1, 1, out ArrSSData[] arrSlotArray, out ACSData[] acspSlotArray, sceneRoute.SlotArrSwap);
+            GameManager.Instance.InitEquips(BowInitPosition, ParentTransform, 1, 1, out ArrSSData[] arrSlotArray, out ACSData[] acspSlotArray, sceneRoute.SlotArrSwap, out AccessorySPEffect[] artifactEffects);
 
             sceneRoute.SlotArrSwap.InitSlots(arrSlotArray);     //Init ArrowSwap Slot
             sceneRoute.SlotAcSkill.InitSlots(acspSlotArray);    //Init AcspSkill Slot
+            sceneRoute.SlotAcSkill.InitSlots(artifactEffects);  //Init New Artifact Effect Slots !
             //======================================================================================================================
 
             //================================================ << BATTLE STATE >> ==================================================

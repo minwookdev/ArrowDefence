@@ -201,6 +201,10 @@
             return UnityEngine.Random.Range(0, 100 + 1);
         }
 
+        public static bool IsCritical(float chance, short criticalResistance = 0) {
+            return (RandomEx.RangeInt(0, 99) < chance - criticalResistance);
+        }
+
         public static int GetItemDropRollChance() {
             return UnityEngine.Random.Range(1, 100 + 1);
         }

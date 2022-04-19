@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb150c1ba29bbff4db2a5c801d6437ee, type: 3}
+  m_Name: 5014-artifact-pocketwatch_t3
+  m_EditorClassIdentifier: 
+  Item_Type: 2
+  Item_Grade: 4
+  Item_Id: 5014
+  DefaultAmount: 1
+  Item_Sprite: {fileID: 21300000, guid: 6267ab80dec535e4181e9adbb66cd63a, type: 3}
+  NameTerms: ItemName/Artifact/ARTIFACT_WATCH_3T
+  DescTerms: 
+  Equip_Type: 2
+  MaxNumberOfEffect: 0
+  RFEffectAssets: []
+  SPEffectAsset: {fileID: 11400000, guid: 942476dd61c9eb145a1c9afcbd4c9279, type: 2}

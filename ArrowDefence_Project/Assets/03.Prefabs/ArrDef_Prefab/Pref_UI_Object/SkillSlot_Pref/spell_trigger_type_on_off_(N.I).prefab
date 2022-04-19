@@ -89,7 +89,7 @@ GameObject:
   - component: {fileID: 1695120358175350440}
   - component: {fileID: -5717357629920497566}
   m_Layer: 5
-  m_Name: spell_trigger_type_on_off
+  m_Name: spell_trigger_type_on_off_(N
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

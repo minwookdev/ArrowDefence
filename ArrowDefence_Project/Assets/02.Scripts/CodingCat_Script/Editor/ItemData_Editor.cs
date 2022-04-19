@@ -763,7 +763,7 @@ public class AccessItemData_Editor : Editor {
             CatLog.Log($"<color=green>{item.NameByTerms} : Apply the Modified Value</color>");
 
             //item.SetAccessoryEffect();
-            item.OnEnable(); //Accessory Special Effect & Reinforcement Effect 할당을 위해 OnEnable 호출
+            //item.OnEnable(); //Accessory Special Effect & Reinforcement Effect 할당을 위해 OnEnable 호출
             //changeChecker = false;
         }
 

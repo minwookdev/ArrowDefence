@@ -371,7 +371,7 @@ GameObject:
   - component: {fileID: 1095247157912791361}
   - component: {fileID: 623343130007428221}
   m_Layer: 5
-  m_Name: spell_trigger_type_cooldown
+  m_Name: spell_trigger_type_buff
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

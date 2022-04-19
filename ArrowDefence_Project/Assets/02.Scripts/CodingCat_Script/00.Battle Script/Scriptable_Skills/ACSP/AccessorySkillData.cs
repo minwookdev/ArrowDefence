@@ -13,6 +13,13 @@
         [TermsPopup] public string NameTerms;
         [TermsPopup] public string DescTerms;
 
+        //Condition
+        public ARTCONDITION ConditionType = ARTCONDITION.NONE;
+        public int MaxStack = 0;
+        public float MaxCost = 0f;
+        public float IncreaseCostCount = 0f;
+        public float CoolDownTime = 0f;
+
         public string NameByTerms {
             get {
                 LocalizedString loc = NameTerms;

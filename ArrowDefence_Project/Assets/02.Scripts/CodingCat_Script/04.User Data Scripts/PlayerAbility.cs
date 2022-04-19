@@ -6,7 +6,7 @@
         public short Damage { get; private set; }
         public short ArmorPene { get; private set; }
         public byte CritChance { get; private set; }
-        public float CritMulti { get; private set; }
+        public float CritMulti { get; private set; } // <--- 글로벌 어빌리리티로 뺄 수도
 
         public DamageStruct(PlayerAbilitySlot ability, bool isCharged) {
             Damage     = (isCharged) ? System.Convert.ToInt16(ability.BaseDamage * Data.CCPlayerData.ability.GlobalAbilityField.ChargedShotMultiplier) : System.Convert.ToInt16(ability.BaseDamage);
@@ -24,7 +24,7 @@
         }
 
         public float GetFinalCalcDamageOut(short monsterArmorating, byte monsterCritResist, out bool isCritical) {
-            isCritical = (GameGlobal.GetCritChance() < CritChance - monsterCritResist) ? true : false;                                //   out critical result.
+            isCritical = GameGlobal.IsCritical(CritChance, monsterCritResist);                                                        //   out critical result.
             var globalAbility = Data.CCPlayerData.ability.GlobalAbilityField;                                                         //   get Global Ability
             float finCalcDamage = UnityEngine.Random.Range(Damage * globalAbility.MinDamagePer, Damage * globalAbility.MaxDamagePer); // * Min ~ * Max per
             finCalcDamage = (isCritical) ? finCalcDamage * CritMulti : finCalcDamage;                                                 // * Calc Critical result
@@ -36,14 +36,14 @@
         public float GetFinalCalcDamage(short monsterArmorating, byte monsterCritResist) {
             var globalAbility = Data.CCPlayerData.ability.GlobalAbilityField;                                                              //   get Global Ability
             float finCalcDamage = UnityEngine.Random.Range(Damage * globalAbility.MinDamagePer, Damage * globalAbility.MaxDamagePer);      // * Min ~ * Max
-            finCalcDamage = (GameGlobal.GetCritChance() < CritChance - monsterCritResist) ? finCalcDamage * CritMulti : finCalcDamage;     // * Calc Critical
+            finCalcDamage = GameGlobal.IsCritical(CritChance, monsterCritResist) ? finCalcDamage * CritMulti : finCalcDamage;              // * Calc Critical
             finCalcDamage = (monsterArmorating - ArmorPene > 0f) ? finCalcDamage - (monsterArmorating - ArmorPene) : finCalcDamage;        //   Calc Armor Penetrating
             finCalcDamage = (finCalcDamage < 1f) ? 1f : UnityEngine.Mathf.Round(finCalcDamage);                                            //   Damage Rounding Calc.
             return finCalcDamage;
         }
 
         /// <summary>
-        /// [ Critiacal - X ] [ Min~Max - Choose ] [ Calculate Defence - X ]
+        /// [ Critiacal - F ] [ Min~Max - SELECT ] [ Calculate Defence - F ]
         /// </summary>
         /// <param name="isUseMinMaxDamagePer"></param>
         /// <returns></returns>
@@ -55,20 +55,27 @@
             return finCalcDamage;
         }
 
+        /// <summary>
+        /// [ Critiacal - T ] [ Min~Max - T ] [ Calculate Defence - T ]
+        /// </summary>
+        /// <returns></returns>
+        public float GetProjectileDamage() {
+            throw new System.NotImplementedException();
+        }
+
         public void SetDamage(short damage) {
             Damage = damage;
         }
     }
 
-    public class PlayerAbilitySlot {
-        public float BaseDamage { private set; get; } = 0f;
-        public float ArrowDamageIncRate { private set; get; } = 0f;
-        public short ArmorPenetRate { private set; get; } = 0;
-        public byte CritChance { private set; get; } = 0;
+    public class PlayerAbilitySlot {                            //Default Value Field
+        public float BaseDamage { private set; get; }           = 0f;
+        public float ArrowDamageIncRate { private set; get; }   = 1f;
+        public short ArmorPenetRate { private set; get; }       = 0;
+        public byte CritChance { private set; get; }            = 0;
         public float CritDamageMultiplier { private set; get; } = 1.5f;
-        public float ElementalActivationInc { private set; get; } = 0f;
-        public short ProjectileDamageInc { private set; get; } = 0;
-        public short SpellDamageInc { private set; get; } = 0;
+        public short ProjectileDamageInc { private set; get; }  = 0;
+        public short SpellDamageInc { private set; get; }       = 0;
 
         /// <summary>
         /// Clone Class Constructor
@@ -80,17 +87,16 @@
             CritDamageMultiplier   = origin.CritDamageMultiplier;
             ArmorPenetRate         = origin.ArmorPenetRate;
             ArrowDamageIncRate     = origin.ArrowDamageIncRate;
-            ElementalActivationInc = origin.ElementalActivationInc;
             ProjectileDamageInc    = origin.ProjectileDamageInc;
             SpellDamageInc         = origin.SpellDamageInc;
         }
 
-        public short GetProjectileDamage(short projectileDamage) { //Function For Get Projectile Damage
-            return System.Convert.ToInt16(projectileDamage * ArrowDamageIncRate);
+        public short GetProjectileDamage(short projectileDamageCount) {
+            return (short)(projectileDamageCount + ProjectileDamageInc);
         }
 
-        public short GetProjectileDamage_New(short projectileDamage) {
-            return (short)(projectileDamage + ProjectileDamageInc);
+        public short GetSpellDamage(short spellDamageCount) {
+            return (short)(spellDamageCount + SpellDamageInc);
         }
 
         /// <summary>
@@ -106,7 +112,6 @@
                         case ABILITY_TYPE.CRITICALCHANCE:      CritChance             += ability.GetValueToByte();   break;
                         case ABILITY_TYPE.CRITICALDAMAGE:      CritDamageMultiplier   += ability.GetValueToSingle(); break;
                         case ABILITY_TYPE.ARMORPENETRATE:      ArmorPenetRate         += ability.GetValueToInt16();  break;
-                        case ABILITY_TYPE.ELEMENTALACTIVATION: ElementalActivationInc += ability.GetValueToInt16();  break;
                     }
                 }
             }
@@ -147,7 +152,6 @@
                         case ABILITY_TYPE.CRITICALCHANCE:      CritChance             += ability.GetValueToByte();   break;
                         case ABILITY_TYPE.CRITICALDAMAGE:      CritDamageMultiplier   += ability.GetValueToSingle(); break;
                         case ABILITY_TYPE.ARMORPENETRATE:      ArmorPenetRate         += ability.GetValueToInt16();  break;
-                        case ABILITY_TYPE.ELEMENTALACTIVATION: ElementalActivationInc += ability.GetValueToInt16();  break;
                     }
                 }
             }
@@ -176,18 +180,20 @@
         }
     }
 
-    public class GlobalAbility { // [Default Global Ability Values]
+    public class GlobalAbility {                                 // [Default Global Ability Values]
         public float IncreaseDropRate { private set; get; }      = .0f;
-        public float ChargedShotMultiplier { private set; get; } = 1.2f;
-        public float MinDamagePer { private set; get; }          = 0.9f; // 90~
-        public float MaxDamagePer { private set; get; }          = 1.1f; // ~110
+        public float ChargedShotMultiplier { private set; get; } = 1.25f;
+        public float MinDamagePer { private set; get; }          = 0.9f; // 90 % ~
+        public float MaxDamagePer { private set; get; }          = 1.1f; // ~ 110 %
         public float IncreaseSpArrCost { private set; get; }     = 0f;
         public byte AdditionalArrowFire { private set; get; }    = 0;
+        public short ElementalActivation { private set; get; }   = 0;
 
         public GlobalAbility(Item_Bow bow, Item_SpArr specialArr, Ability[] artifacts) {
             if (bow != null) {
                 ChargedShotMultiplier = bow.IsExistAbility(ABILITY_TYPE.CHARGEDAMAGE, out Ability chargedShotMutliplier) ? ChargedShotMultiplier + chargedShotMutliplier.GetValueToSingle() : ChargedShotMultiplier;
                 AdditionalArrowFire   = bow.IsExistAbility(ABILITY_TYPE.ADDITIONALFIRE, out Ability additionalFire) ? (byte)(AdditionalArrowFire + additionalFire.GetValueToByte()) : AdditionalArrowFire;
+                ElementalActivation   = bow.IsExistAbility(ABILITY_TYPE.ELEMENTALACTIVATION, out Ability elementalActivationAbility) ? (short)(ElementalActivation + elementalActivationAbility.GetValueToInt16()) : ElementalActivation;
             }
         }
     }
@@ -200,12 +206,6 @@
         PlayerAbilitySlot mainSlotAbility = null;
         PlayerAbilitySlot subSlotAbility  = null;
         PlayerAbilitySlot specialSlotAbility = null;
-
-        //Bow Ability Properties
-        float tempDamage;
-        float tempCritDmgMultiplier;
-        float tempChargedDmgMultiplier;
-        byte tempCritChance;
 
         #region PROPERTY
         public PlayerAbilitySlot GetAbilityMain {

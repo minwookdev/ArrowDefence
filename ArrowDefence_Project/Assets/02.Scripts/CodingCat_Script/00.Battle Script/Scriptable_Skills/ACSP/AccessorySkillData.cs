@@ -8,7 +8,7 @@
         public ACSP_TYPE EffectType;
         public SKILL_LEVEL SkillLevel;
         public Sprite SkillIconSprite;
-        protected AccessorySPEffect SkillData;
+        protected AccessorySPEffect SkillData; // <-- not using this..
 
         [TermsPopup] public string NameTerms;
         [TermsPopup] public string DescTerms;
@@ -37,6 +37,10 @@
         public AccessorySPEffect Skill() {
             if (SkillData != null) return SkillData;
             else                   return null;
+        }
+
+        protected AccessorySkillData(ACSP_TYPE type) {
+            EffectType = type;
         }
     }
 }

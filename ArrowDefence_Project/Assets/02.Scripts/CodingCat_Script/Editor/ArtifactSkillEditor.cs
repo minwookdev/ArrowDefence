@@ -3,6 +3,15 @@ using UnityEditor;
 using ActionCat;
 
 public class ArtifactSkillEditor : Editor {
+    protected SerializedProperty entityIdProp = null;
+    protected SerializedProperty entityTypeProp = null;
+    protected SerializedProperty entityLevelProp = null;
+    protected SerializedProperty entitySpriteProp = null;
+   
+    protected SerializedProperty entityNameTermsProp = null;
+    protected SerializedProperty entityDescTermsProp = null;
+
+
     protected SerializedProperty conditionTypeProp = null;
     protected SerializedProperty maxStackProp = null;
     protected SerializedProperty maxCostProp = null;
@@ -29,13 +38,17 @@ public class ArtifactSkillEditor : Editor {
             case 2: //TYPE:: BUFF   
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUILayout.PropertyField(maxStackProp,     new GUIContent("Max Stack"));
-                if (maxStackProp.intValue != 1) {
+                if (maxStackProp.intValue != 1) { //Buff형의 경우 1스택 고정
                     maxStackProp.intValue = 1;
                     CatLog.WLog("MaxStack Value Changed.");
                 }
                 EditorGUI.EndDisabledGroup();
-                EditorGUILayout.PropertyField(maxCostProp,      new GUIContent("Stacking Time"));
-                if (increaseCostProp.floatValue > 0f) {
+                //EditorGUILayout.PropertyField(maxCostProp,      new GUIContent("Stacking Time"));
+                if (maxCostProp.floatValue != 0f) {
+                    maxCostProp.floatValue = 0f;
+                    CatLog.WLog("Changed Max Cost Count Value.");
+                }
+                if (increaseCostProp.floatValue != 0f) {
                     increaseCostProp.floatValue = 0f;
                     CatLog.WLog("Changed Increase Cost Count Value.");
                 }
@@ -44,7 +57,7 @@ public class ArtifactSkillEditor : Editor {
             case 3: //TYPE:: DEBUFF   
                 EditorGUILayout.PropertyField(maxStackProp, new GUIContent("Max Stack"));
                 EditorGUILayout.PropertyField(maxCostProp,  new GUIContent("Stacking Time"));
-                if (increaseCostProp.floatValue > 0f) {
+                if (increaseCostProp.floatValue != 0f) {
                     increaseCostProp.floatValue = 0f;
                     CatLog.WLog("Changed Increase Cost Count Value.");
                 }
@@ -52,6 +65,26 @@ public class ArtifactSkillEditor : Editor {
                 break;
             default:  break;
         }
+    }
+
+    protected void InitDefaultProps(SerializedObject sobject) {
+        entityIdProp        = sobject.FindProperty(nameof(AccessorySkillData.SkillId));
+        entityTypeProp      = sobject.FindProperty(nameof(AccessorySkillData.EffectType));
+        entityLevelProp     = sobject.FindProperty(nameof(AccessorySkillData.SkillLevel));
+        entitySpriteProp    = sobject.FindProperty(nameof(AccessorySkillData.SkillIconSprite));
+        entityNameTermsProp = sobject.FindProperty(nameof(AccessorySkillData.NameTerms));
+        entityDescTermsProp = sobject.FindProperty(nameof(AccessorySkillData.DescTerms));
+    }
+
+    protected void DrawDefaultProps() {
+        EditorGUILayout.PropertyField(entityIdProp);
+        EditorGUILayout.PropertyField(entityNameTermsProp);
+        EditorGUILayout.PropertyField(entityDescTermsProp);
+        EditorGUI.BeginDisabledGroup(true);
+        EditorGUILayout.PropertyField(entityTypeProp);
+        EditorGUI.EndDisabledGroup();
+        EditorGUILayout.PropertyField(entityLevelProp);
+        EditorGUILayout.PropertyField(entitySpriteProp);
     }
 }
 
@@ -74,6 +107,8 @@ public class AimSightDataEditor : ArtifactSkillEditor {
 
     SerializedProperty aimsightPrefProp;
 
+    GUIStyle logoStyle = null;
+
     public void OnEnable() {
         sobject = new SerializedObject(target);
 
@@ -89,6 +124,12 @@ public class AimSightDataEditor : ArtifactSkillEditor {
         descTermsProp = sobject.FindProperty(nameof(SkillDataAimSight.DescTerms));
 
         aimsightPrefProp = sobject.FindProperty(nameof(SkillDataAimSight.AimSightPref));
+
+        InitConditionProps(sobject);
+        logoStyle = new GUIStyle();
+        logoStyle.fontSize = 16;
+        logoStyle.fontStyle = FontStyle.BoldAndItalic;
+        logoStyle.normal.textColor = new Color(1f, 1f, 1f);
     }
 
     public override void OnInspectorGUI() {
@@ -152,6 +193,16 @@ public class AimSightDataEditor : ArtifactSkillEditor {
         GUILayout.EndVertical();
         #endregion
 
+        #region CONDITION
+        GUILayout.BeginHorizontal();
+        GUILayout.Space(10f);
+        GUILayout.Label("Condition", logoStyle);
+        GUILayout.EndHorizontal();
+        GUILayout.BeginVertical("GroupBox");
+        DrawConditionProps();
+        GUILayout.EndVertical();
+        #endregion
+
         EditorGUILayout.EndVertical();
 
         sobject.ApplyModifiedProperties();
@@ -172,7 +223,6 @@ public class SlowTimeDataEditor : ArtifactSkillEditor {
 
     SerializedProperty ratioProp;
     SerializedProperty durationProp;
-    SerializedProperty cooldownProp;
     GUIStyle logoStyle = null;
 
     public void OnEnable() {
@@ -187,7 +237,6 @@ public class SlowTimeDataEditor : ArtifactSkillEditor {
         //Slow Time Property
         ratioProp = sobject.FindProperty("TimeSlowRatio");
         durationProp = sobject.FindProperty("Duration");
-        cooldownProp = sobject.FindProperty("CoolDown");
 
         nameTermsProp = sobject.FindProperty(nameof(SkillDataSlowTime.NameTerms));
         descTermsProp = sobject.FindProperty(nameof(SkillDataSlowTime.DescTerms));
@@ -219,13 +268,6 @@ public class SlowTimeDataEditor : ArtifactSkillEditor {
         //ID Field
         EditorGUILayout.PropertyField(idProp);
 
-        //Name Field
-        //EditorGUILayout.PropertyField(nameProp);
-        //
-        ////Description Field
-        //GUILayout.Label("Description");
-        //descProp.stringValue = EditorGUILayout.TextArea(descProp.stringValue, GUILayout.Height(50f));
-
         //NAME, DESCRIPTION TERMS PROP
         EditorGUILayout.PropertyField(nameTermsProp);
         EditorGUILayout.PropertyField(descTermsProp);
@@ -254,8 +296,6 @@ public class SlowTimeDataEditor : ArtifactSkillEditor {
 
         EditorGUILayout.PropertyField(durationProp);
 
-        EditorGUILayout.PropertyField(cooldownProp);
-
         GUILayout.EndVertical();
 
         #endregion
@@ -276,6 +316,115 @@ public class SlowTimeDataEditor : ArtifactSkillEditor {
         sobject.ApplyModifiedProperties();
     }
 }
+
+[CustomEditor(typeof(SkillEntity_Cure))]
+public class CureEntityEditor : ArtifactSkillEditor {
+    SerializedObject serialObject = null;
+    SerializedProperty healAmountProp = null;
+    SerializedProperty healNumberProp = null;
+    SerializedProperty repeatTimeProp = null;
+    //SerializedProperty radiusProp = null;
+
+    public void OnEnable() {
+        serialObject = new SerializedObject(target);
+        //Init Entity Default Field
+        InitDefaultProps(serialObject);
+        healAmountProp = serialObject.FindProperty(nameof(SkillEntity_Cure.HealAmount));
+        healNumberProp = serialObject.FindProperty(nameof(SkillEntity_Cure.HealRepeatTime));
+        repeatTimeProp = serialObject.FindProperty(nameof(SkillEntity_Cure.RepeatIntervalTime));
+        //radiusProp     = serialObject.FindProperty(nameof(SkillEntity_Cure.RangeRadius));
+        InitConditionProps(serialObject);
+    }
+
+    public override void OnInspectorGUI() {
+        EditorGUI.BeginDisabledGroup(true);
+        EditorGUILayout.ObjectField("Script", MonoScript.FromScriptableObject((SkillEntity_Cure)target), typeof(SkillEntity_Cure), false);
+        EditorGUI.EndDisabledGroup();
+        serialObject.Update();
+        GUILayout.Space(5f);
+        GUILayout.BeginVertical("HelpBox");
+
+        #region DEFAULT_FIELD
+        GUILayout.Label("Default Entity Field", EditorStyles.boldLabel);
+        GUILayout.BeginVertical("GroupBox");
+        DrawDefaultProps();
+        GUILayout.EndVertical();
+        #endregion
+
+        #region CURE_FIELD
+        GUILayout.Label("Cure Entity Field", EditorStyles.boldLabel);
+        GUILayout.BeginVertical("GroupBox");
+        EditorGUILayout.PropertyField(healAmountProp);
+        EditorGUILayout.PropertyField(healNumberProp);
+        EditorGUILayout.PropertyField(repeatTimeProp);
+        //EditorGUILayout.PropertyField(radiusProp);
+        GUILayout.EndVertical();
+        #endregion
+
+        #region CONDITION
+        GUILayout.Label("Condition", EditorStyles.boldLabel);
+        GUILayout.BeginVertical("GroupBox");
+        DrawConditionProps();
+        GUILayout.EndVertical();
+        #endregion
+
+        GUILayout.EndVertical();
+        serialObject.ApplyModifiedProperties();
+    }
+}
+
+[CustomEditor(typeof(SkillEntity_CurseSlow))]
+public class CurseSlowEntityEditor : ArtifactSkillEditor {
+    SerializedObject serialObject = null;
+    SerializedProperty radiusProp = null;
+    SerializedProperty slowRatioProp = null;
+    SerializedProperty durationProp = null;
+    public void OnEnable() {
+        serialObject = new SerializedObject(target);
+        //Init Default Properties
+        InitDefaultProps(serialObject);
+        radiusProp    = serialObject.FindProperty(nameof(SkillEntity_CurseSlow.RangeRadius));
+        slowRatioProp = serialObject.FindProperty(nameof(SkillEntity_CurseSlow.SlowRatio));
+        durationProp  = serialObject.FindProperty(nameof(SkillEntity_CurseSlow.Duration));
+        InitConditionProps(serialObject);
+    }
+
+    public override void OnInspectorGUI() {
+        EditorGUI.BeginDisabledGroup(true);
+        EditorGUILayout.ObjectField("Script", MonoScript.FromScriptableObject((SkillEntity_CurseSlow)target), typeof(SkillEntity_CurseSlow), false);
+        EditorGUI.EndDisabledGroup();
+        serialObject.Update();
+        GUILayout.Space(5f);
+        GUILayout.BeginVertical("HelpBox");
+
+        #region DEFAULT_FIELD
+        GUILayout.Label("Default Entity Field", EditorStyles.boldLabel);
+        GUILayout.BeginVertical("GroupBox");
+        DrawDefaultProps();
+        GUILayout.EndVertical();
+        #endregion
+
+        #region CURSE_SLOW
+        GUILayout.Label("Curse Slow Entity Field", EditorStyles.boldLabel);
+        GUILayout.BeginVertical("GroupBox");
+        EditorGUILayout.PropertyField(radiusProp);
+        EditorGUILayout.PropertyField(slowRatioProp);
+        EditorGUILayout.PropertyField(durationProp);
+        GUILayout.EndVertical();
+        #endregion
+
+        #region CONDITION
+        GUILayout.Label("Condition", EditorStyles.boldLabel);
+        GUILayout.BeginVertical("GroupBox");
+        DrawConditionProps();
+        GUILayout.EndVertical();
+        #endregion
+
+        GUILayout.EndVertical();
+        serialObject.ApplyModifiedProperties();
+    }
+}
+
 
 #endregion
 
@@ -373,8 +522,7 @@ public static class CreateAcspDataAsset
     [MenuItem("ActionCat/Scriptable Object/Accessory Skill Asset/Aim Sight")]
     public static void CreateAimSightAsset()
     {
-        string assetCreatePath = 
-            "Assets/05. Scriptable_Object/SkillAsset/AccessorySkillAsset/AimSight_(skillLevel).asset";
+        string assetCreatePath = "Assets/05.SO/SO.Skill/AccessorySkillAsset/AimSight_(skillLevel).asset";
         var asset = ScriptableObject.CreateInstance<SkillDataAimSight>();
         AssetDatabase.CreateAsset(asset, assetCreatePath);
         AssetDatabase.SaveAssets();
@@ -387,8 +535,7 @@ public static class CreateAcspDataAsset
     [MenuItem("ActionCat/Scriptable Object/Accessory Skill Asset/Slow Time")]
     public static void CreateSlowTimeAsset()
     {
-        string assetCreatePath =
-             "Assets/05. Scriptable_Object/SkillAsset/AccessorySkillAsset/SlowTime_(skillLevel).asset";
+        string assetCreatePath = "Assets/05.SO/SO.Skill/AccessorySkillAsset/SlowTime_(skillLevel).asset";
         var asset = ScriptableObject.CreateInstance<SkillDataSlowTime>();
         AssetDatabase.CreateAsset(asset, assetCreatePath);
         AssetDatabase.SaveAssets();
@@ -401,9 +548,33 @@ public static class CreateAcspDataAsset
     [MenuItem("ActionCat/Scriptable Object/RFEF/DamageUP")]
     public static void CreateRFEFDamageUp()
     {
-        string assetPath = "Assets/05. Scriptable_Object/SkillAsset/AccessorySkillAsset/RFEF/DamageUP.asset";
+        string assetPath = "Assets/05.SO/SO.Skill/AccessorySkillAsset/RFEF/DamageUP.asset";
         var asset = ScriptableObject.CreateInstance<RFDataDamageUp>();
         AssetDatabase.CreateAsset(asset, assetPath);
+        AssetDatabase.SaveAssets();
+        AssetDatabase.Refresh();
+
+        EditorUtility.FocusProjectWindow();
+        Selection.activeObject = asset;
+    }
+
+    [MenuItem("ActionCat/Scriptable Object/Accessory Skill Asset/Cure")]
+    public static void CreateCureEntity() {
+        string assetCreatePath = "Assets/05.SO/SO.Skill/AccessorySkillAsset/0000-Cure-t0.asset";
+        var asset = ScriptableObject.CreateInstance<SkillEntity_Cure>();
+        AssetDatabase.CreateAsset(asset, assetCreatePath);
+        AssetDatabase.SaveAssets();
+        AssetDatabase.Refresh();
+
+        EditorUtility.FocusProjectWindow();
+        Selection.activeObject = asset;
+    }
+
+    [MenuItem("ActionCat/Scriptable Object/Accessory Skill Asset/Curse_Slow")]
+    public static void CreateCurseEntity() {
+        string assetCreatePath = "Assets/05.SO/SO.Skill/AccessorySkillAsset/0000-Curse_Slow-t0.asset";
+        var asset = ScriptableObject.CreateInstance<SkillEntity_CurseSlow>();
+        AssetDatabase.CreateAsset(asset, assetCreatePath);
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
 

@@ -9,6 +9,7 @@
         [SerializeField] RectTransform slotGroupTr = null;
         [SerializeField] CanvasGroup canvasGroup   = null;
         [SerializeField] GameObject blockPanel     = null;
+        [SerializeField] TouchPosDetector touchPosDetector = null;
 
         [Header("SLIDER")]
         [SerializeField] [RangeEx(1f, 5f, 1f)]   float maxOpenedTime = 3f;
@@ -19,71 +20,57 @@
         float openPosX;
         float closePosX;
 
-        [Header("SLOT PREF")]
-        [SerializeField] AccessorySkillSlot cooldownSlotPref = null;
-        [SerializeField] AccessorySkillSlot chargingSlotPref = null;
-        [SerializeField] AccessorySkillSlot hitTypeSlotPref  = null;
-        [SerializeField] AccessorySkillSlot killTypeSlotPref = null;
-
-        [Header("SPELL SLOT PREFAB")]
-        [SerializeField] AccessorySkillSlot triggerTypeSlotPref = null;
-        [SerializeField] AccessorySkillSlot buffTypeSlotPref    = null;
-        [SerializeField] AccessorySkillSlot debuffTypeSlotPref  = null;
-        [SerializeField] AccessorySkillSlot switchTypeSlotPref  = null;
+        [Header("SPELL SLOT PREFAB")] // Condition에 따른 발동슬롯 분류
+        [SerializeField] ArtifactSlot_Trigger triggerTypeSlotPref = null;
+        [SerializeField] ArtifactSlot_Buff buffTypeSlotPref       = null;
+        [SerializeField] ArtifactSlot_Debuff debuffTypeSlotPref   = null; /*
+        [SerializeField] AccessorySkillSlot switchTypeSlotPref    = null; <--- NotImplemented*/
 
         [Header("SLOTS")] [Tooltip("Do Not Modify this Field")]
-        [SerializeField] [ReadOnly] AccessorySkillSlot[] slots = null;
+        [SerializeField] [ReadOnly] AccessorySkillSlot[] enabledSlots = null;
 
         [Header("NOTIFY")]
         [SerializeField] SlotNotify notify = null;
 
         public void InitSlots(AccessorySPEffect[] effects) {
-
-        }
-
-        public void InitSlots(ACSData[] array) {
-            var list = new System.Collections.Generic.List<AccessorySkillSlot>();
-            for (int i = 0; i < array.Length; i++) {
-                switch (array[i].ActiveType) {
-                    case ACSPACTIVETYPE.COOLDOWN:  list.Add(Instantiate<AccessorySkillSlot>(cooldownSlotPref, slotGroupTr).InitSlot(array[i], PlayNotify)); break;
-                    case ACSPACTIVETYPE.CHARGING:  list.Add(Instantiate<AccessorySkillSlot>(chargingSlotPref, slotGroupTr).InitSlot(array[i]));             break;
-                    case ACSPACTIVETYPE.KILLCOUNT: list.Add(Instantiate<AccessorySkillSlot>(killTypeSlotPref, slotGroupTr).InitSlot(array[i]));             break;
-                    case ACSPACTIVETYPE.HITCOUNT:  list.Add(Instantiate<AccessorySkillSlot>(hitTypeSlotPref, slotGroupTr).InitSlot(array[i]));              break;
-                    default: throw new System.NotImplementedException("This SlotType is Not Implemented.");
+            var tempSlotList = new System.Collections.Generic.List<AccessorySkillSlot>();
+            for (int i = 0; i < effects.Length; i++) {
+                switch (effects[i].Condition.ConditionType) {
+                    case ARTCONDITION.TRIGGER: tempSlotList.Add(Instantiate<ArtifactSlot_Trigger>(triggerTypeSlotPref, slotGroupTr).Init(effects[i]));       break;
+                    case ARTCONDITION.BUFF:    tempSlotList.Add(Instantiate<ArtifactSlot_Buff>(buffTypeSlotPref, slotGroupTr).Init(effects[i], PlayNotify)); break;
+                    case ARTCONDITION.DEBUFF:  tempSlotList.Add(Instantiate<ArtifactSlot_Debuff>(debuffTypeSlotPref, slotGroupTr).Init(effects[i]));         break;
+                    default: throw new System.NotImplementedException();
                 }
             }
 
-            //Add Slots Array in Instantiated Slot Prefab.
-            slots = list.ToArray();
-
-            if(slots.Length == 0) {
+            enabledSlots = tempSlotList.ToArray();
+            if (enabledSlots.Length <= 0) { //활성화된 발동슬롯이 없다면 Disable
                 gameObject.SetActive(false);
                 return;
             }
             else {
-                var entry = new EventTrigger.Entry();
-                entry.eventID = EventTriggerType.PointerDown;
-                entry.callback.AddListener(eventdata => TimerReset());
-
-                //Init Slot Notify System
+                //Effect Activation Notify System Init
                 notify.Init();
 
-                foreach (var slot in slots) {
-                    if(slot.TryGetComponent<EventTrigger>(out EventTrigger eventTrigger)) {
-                        eventTrigger.triggers.Add(entry);
+                //활성화 된 슬롯과 패널의 트리거 메서드 추가
+                var slotOpenEntry = new EventTrigger.Entry();
+                slotOpenEntry.eventID = EventTriggerType.PointerDown;
+                slotOpenEntry.callback.AddListener(eventData => TimerReset());
+
+                foreach (var slot in enabledSlots) {
+                    if (slot.TryGetComponent<EventTrigger>(out EventTrigger eventTrigger)) {
+                        eventTrigger.triggers.Add(slotOpenEntry);
                     }
                     else {
-                        CatLog.WLog($"Accessory Special Skill Slot : {slot.name} is Not have EventTrigger Component.");
-                        continue;
+                        CatLog.ELog($"Accessory Special Skill Slot : {slot.name} is Not have EventTrigger Component.");
                     }
                 }
 
-
-                if(blockPanel.TryGetComponent<EventTrigger>(out EventTrigger panelEventTrigger)) {
-                    panelEventTrigger.triggers.Add(entry);
+                if (blockPanel.TryGetComponent<EventTrigger>(out EventTrigger backPanelEventTrigger)) {
+                    backPanelEventTrigger.triggers.Add(slotOpenEntry);
                 }
                 else {
-                    CatLog.WLog("ACSP SLOTS : BlockPanel EventTrigger Component is Null");
+                    CatLog.WLog("Backpanel EventTrigger is Null.");
                 }
             }
         }
@@ -138,6 +125,10 @@
             }
 
             notify.Play();
+        }
+
+        void OpenTouchPosDetector(float radius, ITouchPosReceiver receiver) {
+            touchPosDetector.OpenDetector(radius, receiver);
         }
     }
 

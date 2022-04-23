@@ -74,10 +74,9 @@
 #region PLAYER_DATA
 
         public void InitEquips(Transform bowInitPos, Transform bowParent, int mainArrPoolQuantity, int subArrPoolQuantity, 
-                               out UI.ArrSSData[] arrSlotData, out UI.ACSData[] acspSlotData, UI.SwapSlots swapSlot, out AccessorySPEffect[] artifactEffects) {
+                               out UI.ArrSSData[] arrSlotData, out AccessorySPEffect[] artifactEffects, UI.SwapSlots swapSlot) {
             CCPlayerData.equipments.InitEquipments(bowInitPos, bowParent, mainArrPoolQuantity, subArrPoolQuantity, swapSlot);
-            arrSlotData   = GetArrSwapSlotData();
-            acspSlotData  = GetAccessorySlotData();
+            arrSlotData     = GetArrSwapSlotData();
             artifactEffects = GetArtifactEffects();
         }
 
@@ -120,35 +119,10 @@
             return slotDataList.ToArray();
         }
 
-        UI.ACSData[] GetAccessorySlotData() {
-            var list = new System.Collections.Generic.List<UI.ACSData>();
-            var accessories = CCPlayerData.equipments.GetAccessories();
-            for (int i = 0; i < accessories.Length; i++) {
-                if (accessories[i] == null) continue;
-                var speffect = accessories[i].SPEffectOrNull;
-                if (speffect != null) {
-                    switch (speffect.SpEffectType) {
-                        case ACSP_TYPE.SPEFFECT_NONE:     break; //This is Not Activate Type Skill
-                        case ACSP_TYPE.SPEFFECT_AIMSIGHT: break; //This is Not Activate Type Skill
-                        case ACSP_TYPE.SPEEFECT_SLOWTIME:
-                            var slowTime = speffect as Acsp_SlowTime;
-                            if (slowTime != null) {
-                                list.Add(new UI.ACSData(ACSPACTIVETYPE.COOLDOWN, accessories[i].GetSprite, 
-                                                                                 slowTime.ActiveSkill, 
-                                                                                 slowTime.OnStop, 
-                                                                                 slowTime.Cooldown));
-                            }
-                            break;
-                        default: CatLog.WLog("this Special Effect Type is Not Implemented."); break;
-                    }
-                    continue;
-                }
-                else continue;
-            }
-
-            return list.ToArray();
-        }
-
+        /// <summary>
+        /// 발동형 스킬만 골라서 반환
+        /// </summary>
+        /// <returns></returns>
         AccessorySPEffect[] GetArtifactEffects() {
             var effectTempList = new System.Collections.Generic.List<AccessorySPEffect>();
             var artifacts = CCPlayerData.equipments.GetAccessories();

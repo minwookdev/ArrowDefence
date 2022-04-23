@@ -9,19 +9,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2339c71ea1653fa4f963baca721b691c, type: 3}
-  m_Name: 0110-artifact-slowtime_t3
+  m_Script: {fileID: 11500000, guid: 80becc9577f1e984bb7f34104e6f96d9, type: 3}
+  m_Name: 0114-Cure-t0
   m_EditorClassIdentifier: 
-  SkillId: 0110
-  EffectType: 2
-  SkillLevel: 2
-  SkillIconSprite: {fileID: 21300000, guid: 519176dd0e4c5e24ba1e98d53a2717b8, type: 3}
+  SkillId: 
+  EffectType: 3
+  SkillLevel: 0
+  SkillIconSprite: {fileID: 0}
   NameTerms: 
   DescTerms: 
-  ConditionType: 2
-  MaxStack: 1
+  ConditionType: 0
+  MaxStack: 0
   MaxCost: 0
   IncreaseCostCount: 0
-  CoolDownTime: 10
-  TimeSlowRatio: 0.7
-  Duration: 12
+  CoolDownTime: 0
+  HealAmount: 0
+  HealNumber: 0
+  RepeatTime: 5
+  RepeatRadius: 1

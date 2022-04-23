@@ -9,6 +9,7 @@ TagManager:
   - BattleScene_MainCanvas
   - Monster
   - ArrDef_Route_UI
+  - uiCam
   layers:
   - Default
   - TransparentFX

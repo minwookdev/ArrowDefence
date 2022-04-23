@@ -309,11 +309,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5960462813511267404}
+  - component: {fileID: 4336498690895501723}
   - component: {fileID: 5960462813511267395}
   - component: {fileID: 5960462813511267394}
   - component: {fileID: 5960462813511267405}
   - component: {fileID: 4525376780796255004}
-  - component: {fileID: -5931304111486543157}
   m_Layer: 5
   m_Name: spell_trigger_type_debuff
   m_TagString: Untagged
@@ -342,6 +342,23 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &4336498690895501723
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5960462813511267407}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99ea360a493ab584687c60050fd0db8b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skillIcon: {fileID: 0}
+  eventTrigger: {fileID: 0}
+  coolDownMask: {fileID: 0}
+  coolDownTmp: {fileID: 0}
+  activationsImages: []
 --- !u!222 &5960462813511267395
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -435,22 +452,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Delegates: []
---- !u!114 &-5931304111486543157
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5960462813511267407}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e4723cd52164963449433b48749a643c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  skillIcon: {fileID: 0}
-  coolDownMask: {fileID: 0}
-  activationsImages: []
-  coolDownTmp: {fileID: 0}
 --- !u!1 &5960462813552624628
 GameObject:
   m_ObjectHideFlags: 0

@@ -152,7 +152,8 @@
 
         //전투 진행 이벤트 핸들러 : 수치관련 이벤트
         public delegate void ValueEventHandler(float value);
-        public static ValueEventHandler OnDecPlayerHealth;
+        public static ValueEventHandler OnDecPlayerHealth = null;
+        public static ValueEventHandler OnIncPlayerHealth = null;
         public static ValueEventHandler OnIncClearGauge;  // <- Not Used.
         public static ValueEventHandler OnItemDrop;
 
@@ -206,7 +207,8 @@
             //Add Numerical Events to Delegate < 게임 진행 수치관련 이벤트 >
             currentPlayerHealth = MaxPlayerHealth; // <- 임시 플레이어 체력 할당 <플레이어 데이터에서 받아올 것>
             OnDecPlayerHealth  += DecreaseHealthGauge;
-            //OnIncClearGauge    += IncreaseClearGauge;
+            OnIncPlayerHealth  += IncreaseHealthGauge;
+            //OnIncClearGauge  += IncreaseClearGauge;
             //======================================================================================================================
 
             //================================================= << BATTLE DATA >> ==================================================
@@ -218,10 +220,9 @@
             yield return new WaitUntil(() => CCPooler.IsInitialized == true);
 
             //==================================================== << PLAYER >> ====================================================
-            GameManager.Instance.InitEquips(BowInitPosition, ParentTransform, 1, 1, out ArrSSData[] arrSlotArray, out ACSData[] acspSlotArray, sceneRoute.SlotArrSwap, out AccessorySPEffect[] artifactEffects);
+            GameManager.Instance.InitEquips(BowInitPosition, ParentTransform, 1, 1, out ArrSSData[] arrSlotArray, out AccessorySPEffect[] artifactEffects, sceneRoute.SlotArrSwap);
 
             sceneRoute.SlotArrSwap.InitSlots(arrSlotArray);     //Init ArrowSwap Slot
-            sceneRoute.SlotAcSkill.InitSlots(acspSlotArray);    //Init AcspSkill Slot
             sceneRoute.SlotAcSkill.InitSlots(artifactEffects);  //Init New Artifact Effect Slots !
             //======================================================================================================================
 
@@ -314,6 +315,20 @@
                
             float dest = currentPlayerHealth / MaxPlayerHealth;
             sceneRoute.PlayerSliderDec(dest);
+        }
+
+        public void IncreaseHealthGauge(float value) {
+            tempPlayerHealth = currentPlayerHealth;
+            tempPlayerHealth += value;
+            if (tempPlayerHealth > MaxPlayerHealth) {
+                currentPlayerHealth = MaxPlayerHealth;
+            }
+            else {
+                currentPlayerHealth = tempPlayerHealth;
+            }
+
+            float sliderDest = currentPlayerHealth / MaxPlayerHealth;
+            sceneRoute.PlayerSliderDec(sliderDest);
         }
 
         void KillAllMonsters() {

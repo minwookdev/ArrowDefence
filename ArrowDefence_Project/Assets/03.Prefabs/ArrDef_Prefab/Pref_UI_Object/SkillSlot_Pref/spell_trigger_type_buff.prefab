@@ -317,7 +317,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -30, y: -30}
+  m_SizeDelta: {x: -10, y: -10}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8603381215358021096
 CanvasRenderer:
@@ -365,11 +365,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8603381215424117487}
+  - component: {fileID: 504220561706911113}
   - component: {fileID: 8603381215424117480}
   - component: {fileID: 8603381215424117481}
   - component: {fileID: 8603381215424117482}
   - component: {fileID: 1095247157912791361}
-  - component: {fileID: 623343130007428221}
   m_Layer: 5
   m_Name: spell_trigger_type_buff
   m_TagString: Untagged
@@ -400,6 +400,23 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &504220561706911113
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8603381215424117483}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03b2d2b3f2e8b6747af0e3753afd24d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skillIcon: {fileID: 8603381215358021097}
+  eventTrigger: {fileID: 1095247157912791361}
+  coolDownMask: {fileID: 0}
+  coolDownTmp: {fileID: 0}
+  activationsImages: []
 --- !u!222 &8603381215424117480
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -493,19 +510,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Delegates: []
---- !u!114 &623343130007428221
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8603381215424117483}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e4723cd52164963449433b48749a643c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  skillIcon: {fileID: 8603381215358021097}
-  coolDownMask: {fileID: 8603381215169809002}
-  activationsImages: []
-  coolDownTmp: {fileID: 8603381213480372690}

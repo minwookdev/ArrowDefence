@@ -48,14 +48,25 @@
                 return descTerms;
             }
         }
+        public ArtifactCondition Condition {
+            get {
+                return condition;
+            }
+        }
         #endregion
+        public bool IsPrepared {
+            get; private set;
+        } = false;
 
         public virtual string GetNameByTerms() {
             I2.Loc.LocalizedString loc = nameTerms;
             return loc;
         }
 
-        public abstract string GetDescByTerms();
+        public virtual string GetDescByTerms() {
+            I2.Loc.LocalizedString loc = descTerms;
+            return loc;
+        }
 
         protected AccessorySPEffect(AccessorySkillData entity) {
             this.id         = entity.SkillId;
@@ -67,11 +78,11 @@
 
             //assignment artifact condition
             switch (entity.ConditionType) {
-                case ARTCONDITION.NONE:    break;
+                case ARTCONDITION.NONE:    condition = new ArtCondition_Empty(); break;
                 case ARTCONDITION.TRIGGER: condition = new ArtCondition_Trigger(entity.MaxStack, entity.MaxCost, entity.CoolDownTime, entity.IncreaseCostCount); break;
-                case ARTCONDITION.BUFF:    condition = new ArtCondition_Buff(entity.MaxCost, entity.CoolDownTime); break;
+                case ARTCONDITION.BUFF:    condition = new ArtCondition_Buff(entity.CoolDownTime); break;
                 case ARTCONDITION.DEBUFF:  condition = new ArtCondition_Debuff(entity.MaxStack, entity.MaxCost, entity.CoolDownTime); break;
-                case ARTCONDITION.PASSIVE: break;
+                case ARTCONDITION.PASSIVE: condition = new ArtCondition_Empty(); break;
                 default: throw new System.NotImplementedException();
             }
         }
@@ -80,23 +91,27 @@
         #endregion
 
         /// <summary>
-        /// 특수효과 슬롯에 이벤트로 할당될 함수.
-        /// </summary>
-        public abstract void Init();
-
-        /// <summary>
         /// 특수효과 발동 중 배틀 종료처리 되었을 때 효과 중지처리.
         /// </summary>
         public virtual void OnStop() { return; }
+
+        public abstract void OnActive();
+
+        public abstract void Init();
+
+        /// <summary>
+        /// 무한 루프 주의. return float: 지속시간/간격, activatingCount: 발동횟수
+        /// </summary>
+        /// <param name="activatingCount"></param>
+        /// <returns></returns>
+        public virtual float GetDuration(out int activatingCount) {
+            throw new System.NotImplementedException();
+        }
     }
     //=================================================================================================================================================
     //================================================================ << AIM SIGHT >> ================================================================
     public class Acsp_AimSight : AccessorySPEffect, IToString {
         private GameObject aimSightPref;
-
-        public override string GetDescByTerms() {
-            throw new System.NotImplementedException();
-        }
 
         public override void Init() {
             var controller = GameGlobal.GetControllerByTag().GetComponent<AD_BowController>();
@@ -108,6 +123,10 @@
         }
 
         public override string ToString() => "Aim Sight";
+
+        public override void OnActive() {
+            throw new System.NotImplementedException();
+        }
 
         /// <summary>
         /// Constructor using Skill Data Scriptableobject. (Main)
@@ -125,54 +144,63 @@
     public class Acsp_SlowTime : AccessorySPEffect, IToString {
         float timeSlowRatio;
         float duration;
-        float cooldown;
-
-        public float Cooldown { get => cooldown; }
-
-        public override string GetDescByTerms() {
-            throw new System.NotImplementedException();
-        }
-
-        public override void Init() {
-            return;
-        }
 
         public override string ToString() => "Slow Time";
 
-        public Acsp_SlowTime(SkillDataSlowTime entity) : base(entity) {
-            this.timeSlowRatio = entity.TimeSlowRatio;
-            this.duration      = entity.Duration;
-            this.cooldown      = entity.CoolDown;
+        public override void OnActive() {
+            GameManager.Instance.TimeScaleSet(StNum.floatOne - timeSlowRatio);
         }
-        #region ES3
-        public Acsp_SlowTime() : base() { }
-        #endregion
 
-        public float ActiveSkill(MonoBehaviour mono) {
-            //mono.StartCoroutine(SlowTimeCo());
-
-            GameManager.Instance.TimeScaleSet(timeSlowRatio);
+        public override float GetDuration(out int activatingCount) {
+            activatingCount = 1;
             return duration;
         }
+
         public override void OnStop() {
             GameManager.Instance.TimeToDefault();
         }
 
-        System.Collections.IEnumerator SlowTimeCo() { // <- Not Use this type
-            GameManager.Instance.TimeScaleSet(timeSlowRatio);
-
-            yield return new WaitForSecondsRealtime(duration);
-
-            CatLog.Log("슬로우 타임 종료");
-            GameManager.Instance.TimeToDefault();
+        public override void Init() {
+            throw new System.NotImplementedException();
         }
+
+        public Acsp_SlowTime(SkillDataSlowTime entity) : base(entity) {
+            this.timeSlowRatio = entity.TimeSlowRatio;
+            this.duration      = entity.Duration;
+        }
+        #region ES3
+        public Acsp_SlowTime() : base() { }
+        #endregion
     }
     //=================================================================================================================================================
     //=================================================================== << CURE >> ==================================================================
     public class Acsp_Cure : AccessorySPEffect {
-        public override string GetDescByTerms() {
-            throw new System.NotImplementedException();
+        float healAmount = 0f;
+        int healRepeatTime = 0;
+        float repeatIntervalTime = 0f;
+
+        public override void OnActive() {
+            BattleProgresser.OnIncPlayerHealth(healAmount);
         }
+
+        public override void OnStop() {
+            CatLog.Log("OnStop Artifact Cure Effect.");
+            return;
+        }
+
+        public override float GetDuration(out int activatingCount) {
+            activatingCount = healRepeatTime;
+            return repeatIntervalTime;
+        }
+
+        public Acsp_Cure(SkillEntity_Cure entity) : base(entity) {
+            this.healAmount         = entity.HealAmount;
+            this.healRepeatTime     = entity.HealRepeatTime;
+            this.repeatIntervalTime = entity.RepeatIntervalTime;
+        }
+        #region ES3
+        public Acsp_Cure() { }
+        #endregion
 
         public override void Init() {
             throw new System.NotImplementedException();
@@ -181,13 +209,25 @@
     //=================================================================================================================================================
     //=============================================================== << CURSED SLOW >> ===============================================================
     public class Acsp_CursedSlow : AccessorySPEffect {
-        public override string GetDescByTerms() {
-            throw new System.NotImplementedException();
-        }
+        float radius = 0f;
+        float slowRatio = 0f;
+        float duration = 0f;
 
         public override void Init() {
             throw new System.NotImplementedException();
         }
+
+        public override void OnActive() {
+            throw new System.NotImplementedException();
+        }
+        public Acsp_CursedSlow(SkillEntity_CurseSlow entity) : base(entity) {
+            this.radius    = entity.RangeRadius;
+            this.slowRatio = entity.SlowRatio;
+            this.duration  = entity.Duration;
+        }
+        #region ES3
+        public Acsp_CursedSlow() { }
+        #endregion
     }
     //=================================================================================================================================================
 }

@@ -10,9 +10,7 @@
 
         public GameObject AimSightPref = null;
 
-        public SkillDataAimSight() {
-            this.EffectType = ACSP_TYPE.SPEFFECT_AIMSIGHT;
-        }
+        public SkillDataAimSight() : base(ACSP_TYPE.SPEFFECT_AIMSIGHT) { }
 
         private void OnEnable() {
             SkillData = new Acsp_AimSight(this);

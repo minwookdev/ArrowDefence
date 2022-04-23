@@ -533,11 +533,12 @@
     /// 정의. 구현된 Accessory Special Effect Type
     /// 전투 중, 독자적인 효과 부여 (중첩 불가)
     /// </summary>
-    public enum ACSP_TYPE
-    {
+    public enum ACSP_TYPE {
         SPEFFECT_NONE,
         SPEFFECT_AIMSIGHT,
-        SPEEFECT_SLOWTIME
+        SPEEFECT_SLOWTIME,
+        CURE,
+        CURSE_SLOW,
     }
     /// <summary>
     /// 정의. 구현된 ReinForcement Effect Type 

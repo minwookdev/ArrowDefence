@@ -6,6 +6,7 @@
         BUFF     = 2,
         DEBUFF   = 3,
         PASSIVE  = 4,
+        SWITCH   = 5,
     }
 
     [System.Serializable]
@@ -15,11 +16,33 @@
         protected int currentStack   = 0;
         protected float maxCost      = 0f;
         protected float currentCost  = 0f;
-        protected float cooldownTime = 0f;
+        protected float maxCoolDownTime = 0f;
+
+        public ARTCONDITION ConditionType {
+            get {
+                return conditionType;
+            }
+        }
+        public float MaxStack {
+            get => maxStack;
+        }
+        public float MaxCost {
+            get => maxCost;
+        }
+        public float CoolDown {
+            get => maxCoolDownTime;
+        }
+        public float CurrentCoolDownTime {
+            get; protected set;
+        }
 
         public abstract void IncreaseCurrentCost();
 
         protected abstract void IncreaseStack();
+
+        public virtual void DecreaseCoolTime() {
+            throw new System.NotImplementedException();
+        }
 
         public abstract void Clear();
 
@@ -27,7 +50,7 @@
             conditionType = type;
             maxStack      = maxstack;
             maxCost       = maxcost;
-            cooldownTime  = cooltime;
+            maxCoolDownTime  = cooltime;
         }
         protected ArtifactCondition() { }
     }
@@ -56,7 +79,7 @@
     public sealed class ArtCondition_Buff : ArtifactCondition { 
         //MaxCost = 1스택 모이는데 걸리는 시간
 
-        public ArtCondition_Buff(float maxCost, float cooldownTime) : base(1, maxCost, cooldownTime, ARTCONDITION.BUFF) { }
+        public ArtCondition_Buff(float cooldownTime) : base(1, 0, cooldownTime, ARTCONDITION.BUFF) { }
         public ArtCondition_Buff() { }
 
         public override void Clear() {
@@ -75,6 +98,24 @@
     public sealed class ArtCondition_Debuff : ArtifactCondition {
         public ArtCondition_Debuff(int maxStack, float maxCost, float cooldownTime) : base(maxStack, maxCost, cooldownTime, ARTCONDITION.DEBUFF) { }
         public ArtCondition_Debuff() { }
+
+        public override void Clear() {
+            throw new System.NotImplementedException();
+        }
+
+        public override void IncreaseCurrentCost() {
+            throw new System.NotImplementedException();
+        }
+
+        protected override void IncreaseStack() {
+            throw new System.NotImplementedException();
+        }
+    }
+
+    public sealed class ArtCondition_Empty : ArtifactCondition {
+        public ArtCondition_Empty() : base(0, 0f, 0f, ARTCONDITION.NONE) {
+
+        }
 
         public override void Clear() {
             throw new System.NotImplementedException();

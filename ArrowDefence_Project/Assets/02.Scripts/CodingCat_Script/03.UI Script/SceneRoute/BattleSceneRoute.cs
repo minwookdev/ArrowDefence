@@ -86,7 +86,7 @@
         void Start() {
             #region LIMIT_LINE_MAKER
             if (isOnDisableLine == true) {
-                topLeftPoint = Camera.main.ScreenToWorldPoint(new Vector3(0f, Screen.height));
+                topLeftPoint     = Camera.main.ScreenToWorldPoint(new Vector3(0f, Screen.height));
                 bottomRightPoint = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, 0f));
 
                 limitPoints[0] = new Vector3(topLeftPoint.x - offset.x, topLeftPoint.y + offset.y, screenZpos);

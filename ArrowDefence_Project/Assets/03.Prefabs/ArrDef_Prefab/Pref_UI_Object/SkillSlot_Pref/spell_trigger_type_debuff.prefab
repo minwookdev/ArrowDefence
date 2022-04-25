@@ -86,7 +86,7 @@ GameObject:
   - component: {fileID: 5960462812453219526}
   - component: {fileID: 5960462812453219521}
   m_Layer: 5
-  m_Name: img_cooldown_p2
+  m_Name: image_stack_p1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -108,8 +108,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 38.8, y: 0}
-  m_SizeDelta: {x: 100, y: 64.2}
+  m_AnchoredPosition: {x: 38.6, y: 0}
+  m_SizeDelta: {x: 23.2, y: 62.7}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5960462812453219526
 CanvasRenderer:
@@ -132,7 +132,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.7741216, b: 0.3254717, a: 1}
+  m_Color: {r: 1, g: 0.78431374, b: 0.33333334, a: 1}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -143,7 +143,7 @@ MonoBehaviour:
   m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 1
-  m_FillAmount: 1
+  m_FillAmount: 0
   m_FillClockwise: 1
   m_FillOrigin: 1
   m_UseSpriteMesh: 0
@@ -238,7 +238,7 @@ GameObject:
   - component: {fileID: 5960462812742223650}
   - component: {fileID: 5960462812742223661}
   m_Layer: 5
-  m_Name: img_cooldown_p3
+  m_Name: image_stack_p2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -260,8 +260,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -38.4}
-  m_SizeDelta: {x: 62.4, y: 100}
+  m_AnchoredPosition: {x: 0, y: -38.7}
+  m_SizeDelta: {x: 62.6, y: 20.1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5960462812742223650
 CanvasRenderer:
@@ -284,7 +284,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.7741216, b: 0.3254717, a: 1}
+  m_Color: {r: 1, g: 0.78431374, b: 0.33333334, a: 1}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -295,7 +295,7 @@ MonoBehaviour:
   m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 0
-  m_FillAmount: 0.323
+  m_FillAmount: 0
   m_FillClockwise: 1
   m_FillOrigin: 1
   m_UseSpriteMesh: 0
@@ -354,11 +354,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99ea360a493ab584687c60050fd0db8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skillIcon: {fileID: 0}
-  eventTrigger: {fileID: 0}
-  coolDownMask: {fileID: 0}
-  coolDownTmp: {fileID: 0}
-  activationsImages: []
+  skillIcon: {fileID: 5960462812376142970}
+  eventTrigger: {fileID: 4525376780796255004}
+  activeableBars:
+  - {fileID: 5960462813552624618}
+  - {fileID: 5960462812453219521}
+  - {fileID: 5960462812742223661}
+  - {fileID: 5960462814050928089}
+  maxStackCount: 0
+  currentStackCount: 0
+  maxCost: 0
+  currentCost: 0
 --- !u!222 &5960462813511267395
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -464,7 +470,7 @@ GameObject:
   - component: {fileID: 5960462813552624619}
   - component: {fileID: 5960462813552624618}
   m_Layer: 5
-  m_Name: img_cooldown_p1
+  m_Name: image_stack_p0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -486,8 +492,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 39.1}
-  m_SizeDelta: {x: 62, y: 92}
+  m_AnchoredPosition: {x: 0, y: 38.7}
+  m_SizeDelta: {x: 62.5, y: 22.7}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5960462813552624619
 CanvasRenderer:
@@ -510,7 +516,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.7741216, b: 0.3254717, a: 1}
+  m_Color: {r: 1, g: 0.78431374, b: 0.33333334, a: 1}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -538,7 +544,7 @@ GameObject:
   - component: {fileID: 5960462814050928094}
   - component: {fileID: 5960462814050928089}
   m_Layer: 5
-  m_Name: img_cooldown_p4
+  m_Name: image_stack_p3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -560,8 +566,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -38.6, y: 0}
-  m_SizeDelta: {x: 100, y: 61.8}
+  m_AnchoredPosition: {x: -38.7, y: 0}
+  m_SizeDelta: {x: 22.2, y: 62.7}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5960462814050928094
 CanvasRenderer:
@@ -584,7 +590,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.7741216, b: 0.3254717, a: 1}
+  m_Color: {r: 1, g: 0.78431374, b: 0.33333334, a: 1}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:

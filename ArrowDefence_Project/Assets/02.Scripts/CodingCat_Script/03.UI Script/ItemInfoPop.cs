@@ -18,8 +18,18 @@
         public GameObject SlotGO;
         public TextMeshProUGUI TmpSkillName;
         public TextMeshProUGUI TmpSkillDesc;
-        public Image[] ImgSkillGradeStar = new Image[3];
+        [SerializeField] Image[] imagesGrade = null;
         public Image ImgIcon;
+
+        private Sprite enableSprite = null;
+        private Sprite disableSprite = null;
+        private Sprite halfSprite = null;
+
+        public void Init(params Sprite[] sprites) {
+            enableSprite  = sprites[0];
+            disableSprite = sprites[1];
+            halfSprite    = sprites[2];
+        }
 
         public bool isActiveSlotGO() {
             if (SlotGO.activeSelf) return true;
@@ -43,24 +53,18 @@
         }
 
         void SetGradeStar(SKILL_LEVEL level) {
-            switch (level)
-            {
+            switch (level) {
                 case SKILL_LEVEL.LEVEL_LOW:    EnableStar(1); break;
                 case SKILL_LEVEL.LEVEL_MEDIUM: EnableStar(2); break;
                 case SKILL_LEVEL.LEVEL_HIGH:   EnableStar(3); break;
                 case SKILL_LEVEL.LEVEL_UNIQUE: EnableStar(3); break;
-                default: EnableStar(0); break;
+                default: throw new System.NotImplementedException();
             }
         }
 
         void EnableStar(byte count) {
-            for (int i = 0; i < ImgSkillGradeStar.Length; i++) {
-                if(i < count) {
-                    ImgSkillGradeStar[i].gameObject.SetActive(true);
-                }
-                else {
-                    ImgSkillGradeStar[i].gameObject.SetActive(false);
-                }
+            for (int i = 0; i < imagesGrade.Length; i++) {
+                imagesGrade[i].sprite = (i < count) ? enableSprite : disableSprite;
             }
         }
 
@@ -86,47 +90,68 @@
         public class Slots {
             [SerializeField] GameObject parent = null;
             [SerializeField] TextMeshProUGUI abilityName = null;
-            [SerializeField] GameObject[] enableStars = null;
+            [SerializeField] Image[] imageStars = null;
+
+            Sprite enableStar  = null;
+            Sprite disableStar = null;
+            Sprite halfStar    = null;
+
+            bool isInitialized = false;
+
+            public void Init(Sprite[] sprites) {
+                enableStar = sprites[0];
+                disableStar = sprites[1];
+                halfStar = sprites[2];
+            }
 
             public void EnableSlot(Ability ability) {
                 //Set Grade Star
-                int tempLength = 0;
-                for (int i = 0; i < ability.GetGrade(); i++) {
-                    enableStars[i].SetActive(true);
-                    tempLength++;
+                //int tempLength = 0;
+                //for (int i = 0; i < ability.GetGrade(); i++) {
+                //    enableStars[i].SetActive(true);
+                //    tempLength++;
+                //}
+                //
+                ////Disable remaining star
+                //if(tempLength < enableStars.Length) {
+                //    for (int i = tempLength; i < enableStars.Length; i++) {
+                //        enableStars[i].SetActive(false);
+                //    }
+                //}
+
+                float calcGradeCount = (float)ability.GetGrade() / 2;
+                var isHalf = !(calcGradeCount % 1 == 0f);
+                byte lastEnableIndex = 0;
+                for (int i = 0; i < imageStars.Length; i++) {
+                    bool enable = (i < calcGradeCount);
+                    imageStars[i].sprite = (enable) ? enableStar : disableStar;
+                    lastEnableIndex = (enable) ? (byte)i : lastEnableIndex;
+                }
+                if (isHalf) {
+                    imageStars[lastEnableIndex].sprite = halfStar;
                 }
 
-                //Disable remaining star
-                if(tempLength < enableStars.Length) {
-                    for (int i = tempLength; i < enableStars.Length; i++) {
-                        enableStars[i].SetActive(false);
-                    }
-                }
                 //Set Ability Name
-                abilityName.text = ability.GetName();
+                abilityName.text = ability.GetNameByTerms();
                 //Active Parent GameObject
                 parent.SetActive(true);
             }
 
             public void DisableSlot() {
-                foreach (var star in enableStars) {
-                    star.SetActive(false);
+                foreach (var image in imageStars) {
+                    image.sprite = disableStar;
                 }
-                abilityName.text = "";
+                abilityName.text = "ABILITY NAME";
                 parent.SetActive(false);
-            }
-
-            public bool IsActiveSlot() {
-                return parent.activeSelf;
             }
         }
 
         [SerializeField] Slots[] abilitySlots = null;
 
-        public void EnableSlot() {
-            //foreach (var slot in slots) {
-            //    slot.gameObject.SetActive(true);
-            //}
+        public void Init(Sprite[] sprites) {
+            foreach (var slot in  abilitySlots) {
+                slot.Init(sprites);
+            }
         }
 
         public void EnableSlots(Ability[] abilities) {
@@ -209,6 +234,13 @@
             AD_item itemAddress;
 
             [SerializeField] [ReadOnly] bool isPreviewOpenMode = false;
+
+            public void Init(Sprite[] sprites) {
+                abilitySlots.Init(sprites);
+                foreach (var slot in SkillSlots) {
+                    slot.Init(sprites);
+                }
+            }
 
             void FixDescriptionRectSize(string itemDesc) {
                 var rectTransform = tmp_ItemDesc.gameObject.GetComponent<RectTransform>();
@@ -415,8 +447,8 @@
                 var skills = address.SkillInfosOrNull;   //Get Skill Array Size : 2
                 for (int i = 0; i < skills.Length; i++) {
                     if(skills[i] != null) {
-                        SkillSlots[i].ActiveSlot(skills[i].NameByTerms, 
-                                                 skills[i].DescByTerms,
+                        SkillSlots[i].ActiveSlot(skills[i].GetNameByTerms(), 
+                                                 skills[i].GetDescByTerms(),
                                                  skills[i].SkillLevel,
                                                  skills[i].IconSprite);
                     }
@@ -476,8 +508,8 @@
                 //Enable Skill-Slots (Artifact Special Skill Max : Only 1)
                 var spEffect = address.SPEffectOrNull;
                 if(spEffect != null) {
-                    SkillSlots[0].ActiveSlot(spEffect.NameByTerms, 
-                                             spEffect.DescByTerms, 
+                    SkillSlots[0].ActiveSlot(spEffect.GetNameByTerms(), 
+                                             spEffect.GetDescByTerms(), 
                                              spEffect.Level, 
                                              spEffect.IconSprite);
                 }
@@ -544,8 +576,8 @@
                     if (i == 2) {
                         CatLog.WLog("Need More Skill Slots. Slot Index Over !"); break;
                     }
-                    SkillSlots[i].ActiveSlot(skills[i].NameByTerms, 
-                                             skills[i].DescByTerms, 
+                    SkillSlots[i].ActiveSlot(skills[i].GetNameByTerms(), 
+                                             skills[i].GetDescByTerms(), 
                                              skills[i].SkillLevel, 
                                              skills[i].IconSprite);
                     slotsLength--;
@@ -739,6 +771,7 @@
 
         [Header("INFO")]
         [SerializeField] ItemPopupIntegrated itemPopup; //통합 아이템 팝업
+        [SerializeField] Sprite[] gradeStarSprites = null;
 
         [Header("SLOT FRAME")]
         public Sprite[] Frames;
@@ -753,6 +786,10 @@
             index[3] Equipment Item (Two-Skill)
             index[4] Accessory Item ()
         */
+
+        private void Awake() {
+            itemPopup.Init(gradeStarSprites);
+        }
 
         #region OPEN_ITEM_INFO
 

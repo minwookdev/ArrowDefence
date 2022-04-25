@@ -9,7 +9,7 @@
             }
         }
         public abstract byte GetGrade();
-        public abstract string GetName();
+        public abstract string GetNameByTerms();
         public abstract bool Upgrade();
         protected static float GetUnitValue(float maxvalue) {
             return (float)maxvalue / 10;
@@ -34,7 +34,7 @@
             return increaseValue;
         }
 
-        public override string GetName() {
+        public override string GetNameByTerms() {
             return I2.Loc.ScriptLocalization.ABILITY.DAMAGE;
         }
 
@@ -76,7 +76,7 @@
             return System.Convert.ToByte(UnityEngine.Mathf.CeilToInt((float)increaseValue / GetUnitValue(MaxValue)));
         }
 
-        public override string GetName() {
+        public override string GetNameByTerms() {
             return I2.Loc.ScriptLocalization.ABILITY.CHARGEDSHOT_DMG;
         }
 
@@ -114,7 +114,7 @@
             return System.Convert.ToByte(UnityEngine.Mathf.CeilToInt((float)increaseValue / GetUnitValue(MaxValue)));
         }
 
-        public override string GetName() {
+        public override string GetNameByTerms() {
             return I2.Loc.ScriptLocalization.ABILITY.CRIT_CHANCE;
         }
 
@@ -150,7 +150,7 @@
             return System.Convert.ToByte(UnityEngine.Mathf.CeilToInt((float)increaseValue / GetUnitValue(MaxValue)));
         }
 
-        public override string GetName() {
+        public override string GetNameByTerms() {
             return I2.Loc.ScriptLocalization.ABILITY.CRIT_DAMAGE;
         }
 
@@ -189,7 +189,7 @@
             return System.Convert.ToByte(UnityEngine.Mathf.CeilToInt((float)increaseValue / GetUnitValue(MaxValue)));
         }
 
-        public override string GetName() {
+        public override string GetNameByTerms() {
             return I2.Loc.ScriptLocalization.ABILITY.ARMOR_PENETRATION;
         }
 
@@ -226,7 +226,7 @@
             return System.Convert.ToByte(UnityEngine.Mathf.CeilToInt((float)increaseValue / GetUnitValue(MaxValue)));
         }
 
-        public override string GetName() {
+        public override string GetNameByTerms() {
             return I2.Loc.ScriptLocalization.ABILITY.ADDITIONAL_FIRE;
         }
 
@@ -263,7 +263,7 @@
             return System.Convert.ToByte(UnityEngine.Mathf.CeilToInt((float)increaseValue / GetUnitValue(MaxValue)));
         }
 
-        public override string GetName() {
+        public override string GetNameByTerms() {
             return I2.Loc.ScriptLocalization.ABILITY.ARROWSPEED;
         }
 
@@ -295,14 +295,21 @@
         }
 
         public override float GetValueToSingle() {
-            return increaseRate + StNum.floatOne;
+            return increaseRate + StNum.floatOne; // <--- 여기가 잘못됐나?
         }
 
         public override byte GetGrade() {
+            var tempNumber = System.Convert.ToByte(UnityEngine.Mathf.CeilToInt((float)increaseRate / GetUnitValue(MaxValue)));
+            CatLog.Log("Result Grade: " + tempNumber.ToString() + '\n' + // ---> 11
+                       "Unit Value: " + GetUnitValue(MaxValue) + '\n' + 
+                       "Raw Value: " + (float)(increaseRate / GetUnitValue(MaxValue)) + '\n' + 
+                       "Increase Rate Value: " + increaseRate.ToString()); 
             return System.Convert.ToByte(UnityEngine.Mathf.CeilToInt((float)increaseRate / GetUnitValue(MaxValue)));
+            foo
+                //GetGrade에서 11을 뱉고있는게 이상하다
         }
 
-        public override string GetName() {
+        public override string GetNameByTerms() {
             return I2.Loc.ScriptLocalization.ABILITY.INC_DAMAGE_RATE;
         }
 
@@ -341,7 +348,7 @@
             return System.Convert.ToByte(UnityEngine.Mathf.CeilToInt((float)increaseValue / GetUnitValue(MaxValue)));
         }
 
-        public override string GetName() {
+        public override string GetNameByTerms() {
             return I2.Loc.ScriptLocalization.ABILITY.PROJECTILE_DAMAGE;
         }
 
@@ -386,7 +393,7 @@
             return UnityEngine.Mathf.CeilToInt((float)number / GetUnitValue(MaxValue));
         }
 
-        public override string GetName() {
+        public override string GetNameByTerms() {
             return I2.Loc.ScriptLocalization.ABILITY.SPELL_DAMAGE;
         }
 
@@ -423,7 +430,7 @@
             return UnityEngine.Mathf.CeilToInt((float)number / GetUnitValue(MaxValue));
         }
 
-        public override string GetName() {
+        public override string GetNameByTerms() {
             return I2.Loc.ScriptLocalization.ABILITY.ELEMENTAL_ACTIVATION;        
         }
 

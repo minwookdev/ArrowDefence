@@ -31,7 +31,7 @@
         }
         #endregion
         protected override Ability[] GetNewAbilities(Ability[] abilities) {
-            throw new System.NotImplementedException();
+            return new Ability[0] { };
         }
 
         public bool TryGetSkillSet(out ArrowSkillSet skillset) {

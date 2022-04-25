@@ -277,7 +277,7 @@ MonoBehaviour:
   m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
-  m_FillAmount: 0.616
+  m_FillAmount: 0.632
   m_FillClockwise: 0
   m_FillOrigin: 2
   m_UseSpriteMesh: 0
@@ -414,9 +414,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skillIcon: {fileID: 8603381215358021097}
   eventTrigger: {fileID: 1095247157912791361}
-  coolDownMask: {fileID: 0}
-  coolDownTmp: {fileID: 0}
-  activationsImages: []
+  coolDownMaskImage: {fileID: 8603381215169809002}
+  coolDownTmp: {fileID: 8603381213480372690}
+  maxCoolDown: 0
+  currentCoolDownTime: 0
+  effectDuration: 0
 --- !u!222 &8603381215424117480
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -509,4 +511,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Delegates: []
+  m_Delegates:
+  - eventID: 4
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 504220561706911113}
+          m_MethodName: BE_ACTIVE
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2

@@ -16,5 +16,9 @@
         //Skill Callback
         protected Action notifyPlayAction = null;             //SKill Prepared Notify
         protected Coroutine effectActivationCoroutine = null; //Skill Effect Coroutine
+
+        public void IconSpriteOverride(Sprite sprite) {
+            skillIcon.sprite = sprite;
+        }
     }
 }

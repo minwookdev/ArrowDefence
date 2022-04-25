@@ -23,7 +23,7 @@
                 return conditionType;
             }
         }
-        public float MaxStack {
+        public int MaxStack {
             get => maxStack;
         }
         public float MaxCost {

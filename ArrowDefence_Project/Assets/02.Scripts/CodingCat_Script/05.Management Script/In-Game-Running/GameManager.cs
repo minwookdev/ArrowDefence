@@ -74,10 +74,10 @@
 #region PLAYER_DATA
 
         public void InitEquips(Transform bowInitPos, Transform bowParent, int mainArrPoolQuantity, int subArrPoolQuantity, 
-                               out UI.ArrSSData[] arrSlotData, out AccessorySPEffect[] artifactEffects, UI.SwapSlots swapSlot) {
+                               out UI.ArrSSData[] arrSlotData, out AccessorySPEffect[] artifactEffects, UI.SwapSlots swapSlot, out Sprite[] artifactIcons) {
             CCPlayerData.equipments.InitEquipments(bowInitPos, bowParent, mainArrPoolQuantity, subArrPoolQuantity, swapSlot);
             arrSlotData     = GetArrSwapSlotData();
-            artifactEffects = GetArtifactEffects();
+            artifactEffects = GetArtifactEffects(out artifactIcons);
         }
 
         public void SetBowPullingStop(bool isStop) {
@@ -123,20 +123,26 @@
         /// 발동형 스킬만 골라서 반환
         /// </summary>
         /// <returns></returns>
-        AccessorySPEffect[] GetArtifactEffects() {
+        AccessorySPEffect[] GetArtifactEffects(out Sprite[] sprites) {
             var effectTempList = new System.Collections.Generic.List<AccessorySPEffect>();
+            var tempSpriteList = new System.Collections.Generic.List<Sprite>();
             var artifacts = CCPlayerData.equipments.GetAccessories();
             for (int i = 0; i < artifacts.Length; i++) {
                 var effect = (artifacts[i] != null && artifacts[i].IsExistEffect) ? artifacts[i].SPEffectOrNull : null;
                 if (effect != null) {
                     switch (effect.SpEffectType) {
-                        case ACSP_TYPE.SPEFFECT_NONE:     break;
-                        case ACSP_TYPE.SPEFFECT_AIMSIGHT: break;
-                        case ACSP_TYPE.SPEEFECT_SLOWTIME: effectTempList.Add(effect); break;
+                        //UI가 필요한 Artifact는 effectList에 담아줄 것
+                        case ACSP_TYPE.SPEFFECT_NONE:                                                                             break;
+                        case ACSP_TYPE.SPEFFECT_AIMSIGHT:                                                                         break; // PASSIVE
+                        case ACSP_TYPE.SPEEFECT_SLOWTIME: effectTempList.Add(effect); tempSpriteList.Add(artifacts[i].GetSprite); break; // BUFF
+                        case ACSP_TYPE.CURE:              effectTempList.Add(effect); tempSpriteList.Add(artifacts[i].GetSprite); break; // BUFF
+                        case ACSP_TYPE.CURSE_SLOW:        effectTempList.Add(effect); tempSpriteList.Add(artifacts[i].GetSprite); break; // DEBUFF
                         default: throw new System.NotImplementedException();
                     }
                 }
             }
+
+            sprites = tempSpriteList.ToArray();
             return effectTempList.ToArray();
         }
 

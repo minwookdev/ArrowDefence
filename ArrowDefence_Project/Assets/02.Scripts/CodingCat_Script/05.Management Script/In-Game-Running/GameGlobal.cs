@@ -493,6 +493,22 @@
         }
     }
 
+    public static class StrEx {
+        public static string GetColor(this string str, StringColor color) {
+            string colorString = "";
+            switch (color) {
+                case StringColor.YELLOW: colorString = "<color=yellow>"; break;
+                case StringColor.BLUE:   colorString = "<color=blue>";   break;
+                case StringColor.RED:    colorString = "<color=red>";    break;
+                case StringColor.GREEN:  colorString = "<color=green>";  break;
+                case StringColor.WHITE:  colorString = "<color=white>";  break;
+                case StringColor.BLACK:  colorString = "<color=black>";  break;
+                default: throw new System.NotImplementedException();
+            }
+            return string.Format("{1}{0}{2}", str, colorString, "</color>");
+        }
+    }
+
     #region ENUMS_BATTLE
 
     /// <summary>

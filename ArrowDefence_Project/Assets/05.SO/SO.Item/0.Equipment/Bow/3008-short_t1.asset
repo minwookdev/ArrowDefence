@@ -24,9 +24,10 @@ MonoBehaviour:
     type: 3}
   SkillAsset_f: {fileID: 11400000, guid: 97062504f2a4e58418b96af3a5af4888, type: 2}
   SkillAsset_s: {fileID: 0}
-  BaseDamage: 0
-  CriticalHitChance: 0
-  CriticalDamageMultiplier: 0
-  FullChargedMultiplier: 0
+  BaseDamage: 50
+  CriticalHitChance: 9
+  CriticalDamageMultiplier: 0.15
+  FullChargedMultiplier: 0.125
   ArmorPenetration: 0
   AdditionalArrowFire: 0
+  ElementalActivation: 0

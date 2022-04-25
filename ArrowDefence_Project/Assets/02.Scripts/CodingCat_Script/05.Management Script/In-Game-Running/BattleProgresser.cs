@@ -193,6 +193,10 @@
                 GameManager.Instance.InitialDroplist(this.DropListAsset);
                 OnItemDrop += OnItemDropRoll;
             }
+            else {
+                CatLog.WLog("DropTable Scriptable Object is Not Set this Stage.");
+                OnItemDrop += Foo; //init empty method for block errors
+            }
             //======================================================================================================================
 
             //================================================ << COMBO SYSTEM >> ==================================================
@@ -220,10 +224,10 @@
             yield return new WaitUntil(() => CCPooler.IsInitialized == true);
 
             //==================================================== << PLAYER >> ====================================================
-            GameManager.Instance.InitEquips(BowInitPosition, ParentTransform, 1, 1, out ArrSSData[] arrSlotArray, out AccessorySPEffect[] artifactEffects, sceneRoute.SlotArrSwap);
+            GameManager.Instance.InitEquips(BowInitPosition, ParentTransform, 1, 1, out ArrSSData[] arrSlotArray, out AccessorySPEffect[] artifactEffects, sceneRoute.SlotArrSwap, out Sprite[] artifactSprites);
 
-            sceneRoute.SlotArrSwap.InitSlots(arrSlotArray);     //Init ArrowSwap Slot
-            sceneRoute.SlotAcSkill.InitSlots(artifactEffects);  //Init New Artifact Effect Slots !
+            sceneRoute.SlotArrSwap.InitSlots(arrSlotArray);                      //Init ArrowSwap Slot
+            sceneRoute.SlotAcSkill.InitSlots(artifactEffects, artifactSprites);  //Init New Artifact Effect Slots !
             //======================================================================================================================
 
             //================================================ << BATTLE STATE >> ==================================================
@@ -367,6 +371,8 @@
                 AddDropList(GameManager.Instance.OnItemDrop());
             }
         }
+
+        private void Foo(float temp) { }
 
         private void AddDropList(DropItem item) {
             switch (item.ItemAsset.Item_Type) {

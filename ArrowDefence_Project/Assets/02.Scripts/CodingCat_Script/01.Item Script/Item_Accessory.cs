@@ -22,7 +22,7 @@
             this.specialEffect = GetNewEffect(entity.SPEffectAsset);
 
             //assignment new temp abilities
-            this.abilities = new Ability[] { };
+            this.abilities = new Ability[0] { };
             if (entity.abilityDatas != null) {
                 this.abilities = GetNewAbilities(entity.abilityDatas);
             }
@@ -31,6 +31,7 @@
         public Item_Accessory(Item_Accessory origin) : base(origin) {
             this.EquipType     = origin.EquipType;
             this.specialEffect = origin.specialEffect;
+            this.abilities     = origin.abilities;
         }
 
         /// <summary>
@@ -57,6 +58,22 @@
                 case ACSP_TYPE.SPEEFECT_SLOWTIME:
                     if (entity is SkillDataSlowTime slowtime) {
                         return new Acsp_SlowTime(slowtime);
+                    }
+                    else {
+                        throw new System.Exception("Type <-> Class Not Match !");
+                    }
+                //=============================================================================================================
+                case ACSP_TYPE.CURE:
+                    if (entity is SkillEntity_Cure cure) {
+                        return new Acsp_Cure(cure);
+                    }
+                    else {
+                        throw new System.Exception("Type <-> Class Not Match !");
+                    }
+                //=============================================================================================================
+                case ACSP_TYPE.CURSE_SLOW: 
+                    if (entity is SkillEntity_CurseSlow curseSlow) {
+                        return new Acsp_CursedSlow(curseSlow);
                     }
                     else {
                         throw new System.Exception("Type <-> Class Not Match !");

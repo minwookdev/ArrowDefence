@@ -32,15 +32,20 @@
         [Header("NOTIFY")]
         [SerializeField] SlotNotify notify = null;
 
-        public void InitSlots(AccessorySPEffect[] effects) {
+        public void InitSlots(AccessorySPEffect[] effects, Sprite[] iconSprites) {
             var tempSlotList = new System.Collections.Generic.List<AccessorySkillSlot>();
             for (int i = 0; i < effects.Length; i++) {
+                AccessorySkillSlot artifactSlot = null;
                 switch (effects[i].Condition.ConditionType) {
-                    case ARTCONDITION.TRIGGER: tempSlotList.Add(Instantiate<ArtifactSlot_Trigger>(triggerTypeSlotPref, slotGroupTr).Init(effects[i]));       break;
-                    case ARTCONDITION.BUFF:    tempSlotList.Add(Instantiate<ArtifactSlot_Buff>(buffTypeSlotPref, slotGroupTr).Init(effects[i], PlayNotify)); break;
-                    case ARTCONDITION.DEBUFF:  tempSlotList.Add(Instantiate<ArtifactSlot_Debuff>(debuffTypeSlotPref, slotGroupTr).Init(effects[i]));         break;
-                    default: throw new System.NotImplementedException();
+                    case ARTCONDITION.TRIGGER: artifactSlot = Instantiate<ArtifactSlot_Trigger>(triggerTypeSlotPref, slotGroupTr).Init(effects[i]);           break;
+                    case ARTCONDITION.BUFF:    artifactSlot = Instantiate<ArtifactSlot_Buff>(buffTypeSlotPref, slotGroupTr).Init(effects[i], PlayNotify);     break;
+                    case ARTCONDITION.DEBUFF:  artifactSlot = Instantiate<ArtifactSlot_Debuff>(debuffTypeSlotPref, slotGroupTr).Init(effects[i], PlayNotify); break; 
+                    default:  throw new System.NotImplementedException();
                 }
+
+                //Artifact Slot Icon override ---> Connect Artifact Item Icon Sprite
+                artifactSlot.IconSpriteOverride(iconSprites[i]);
+                tempSlotList.Add(artifactSlot);
             }
 
             enabledSlots = tempSlotList.ToArray();

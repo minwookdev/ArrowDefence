@@ -1362,6 +1362,58 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 753628327}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &816602172
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 816602173}
+  - component: {fileID: 816602174}
+  m_Layer: 5
+  m_Name: detector_world_position
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &816602173
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 816602172}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 831443328}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 150, y: 150}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!58 &816602174
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 816602172}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 75
 --- !u!1 &831443324
 GameObject:
   m_ObjectHideFlags: 0
@@ -1372,6 +1424,7 @@ GameObject:
   m_Component:
   - component: {fileID: 831443328}
   - component: {fileID: 831443327}
+  - component: {fileID: 831443329}
   - component: {fileID: 831443326}
   - component: {fileID: 831443325}
   m_Layer: 5
@@ -1432,9 +1485,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rectTr: {fileID: 831443328}
   detectorRectTr: {fileID: 1272355019}
+  worldPosDetectorRectTr: {fileID: 816602173}
   uiCam: {fileID: 1850263725031234282}
+  mainCam: {fileID: 0}
   radius: 0
   detectorScaleTime: 0.3
+  canvasGroup: {fileID: 831443329}
 --- !u!224 &831443328
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1447,6 +1503,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1272355019}
+  - {fileID: 816602173}
   m_Father: {fileID: 4458392277081655495}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1455,6 +1512,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!225 &831443329
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 831443324}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1001 &1008509525
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1808,11 +1877,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1272355019}
-  - component: {fileID: 1272355022}
   - component: {fileID: 1272355021}
   - component: {fileID: 1272355020}
   m_Layer: 5
-  m_Name: detection_collider
+  m_Name: detector_ui_position
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1874,22 +1942,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!58 &1272355022
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1272355018}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 50
 --- !u!1001 &1390290892
 PrefabInstance:
   m_ObjectHideFlags: 0

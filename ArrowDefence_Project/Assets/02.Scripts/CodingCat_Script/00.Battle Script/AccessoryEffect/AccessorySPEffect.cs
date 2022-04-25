@@ -107,10 +107,24 @@
         public virtual float GetDuration(out int activatingCount) {
             throw new System.NotImplementedException();
         }
+
+        /// <summary>
+        /// ### Artifact Grade 선적용
+        /// </summary>
+        /// <returns></returns>
+        protected string GetGradeString() {
+            switch (this.level) {
+                case SKILL_LEVEL.LEVEL_LOW:    return  " [1T]";
+                case SKILL_LEVEL.LEVEL_MEDIUM: return  " [2T]";
+                case SKILL_LEVEL.LEVEL_HIGH:   return  " [3T]";
+                case SKILL_LEVEL.LEVEL_UNIQUE: return  " [U]";
+                default: throw new System.NotImplementedException();
+            }
+        }
     }
     //=================================================================================================================================================
     //================================================================ << AIM SIGHT >> ================================================================
-    public class Acsp_AimSight : AccessorySPEffect, IToString {
+    public class Acsp_AimSight : AccessorySPEffect {
         private GameObject aimSightPref;
 
         public override void Init() {
@@ -121,8 +135,6 @@
                 aimsighter.Initialize(controller);
             }
         }
-
-        public override string ToString() => "Aim Sight";
 
         public override void OnActive() {
             throw new System.NotImplementedException();
@@ -141,11 +153,9 @@
     }
     //=================================================================================================================================================
     //================================================================ << SLOW TIME >> ================================================================
-    public class Acsp_SlowTime : AccessorySPEffect, IToString {
+    public class Acsp_SlowTime : AccessorySPEffect {
         float timeSlowRatio;
         float duration;
-
-        public override string ToString() => "Slow Time";
 
         public override void OnActive() {
             GameManager.Instance.TimeScaleSet(StNum.floatOne - timeSlowRatio);
@@ -161,7 +171,12 @@
         }
 
         public override void Init() {
-            throw new System.NotImplementedException();
+            return;
+        }
+
+        public override string GetDescByTerms() {
+            I2.Loc.LocalizedString loc = descTerms;
+            return string.Format(loc, (timeSlowRatio * 100f).ToString().GetColor(StringColor.GREEN), duration.ToString().GetColor(StringColor.GREEN));
         }
 
         public Acsp_SlowTime(SkillDataSlowTime entity) : base(entity) {
@@ -193,6 +208,11 @@
             return repeatIntervalTime;
         }
 
+        public override string GetDescByTerms() {
+            I2.Loc.LocalizedString loc = descTerms;
+            return string.Format(loc, (healAmount * healRepeatTime).ToString().GetColor(StringColor.GREEN), healRepeatTime.ToString().GetColor(StringColor.GREEN));
+        }
+
         public Acsp_Cure(SkillEntity_Cure entity) : base(entity) {
             this.healAmount         = entity.HealAmount;
             this.healRepeatTime     = entity.HealRepeatTime;
@@ -203,7 +223,7 @@
         #endregion
 
         public override void Init() {
-            throw new System.NotImplementedException();
+            return;
         }
     }
     //=================================================================================================================================================
@@ -214,11 +234,16 @@
         float duration = 0f;
 
         public override void Init() {
-            throw new System.NotImplementedException();
+            return;
         }
 
         public override void OnActive() {
             throw new System.NotImplementedException();
+        }
+
+        public override string GetDescByTerms() {
+            I2.Loc.LocalizedString loc = descTerms;
+            return string.Format(loc, (slowRatio * 100).ToString().GetColor(StringColor.GREEN));
         }
         public Acsp_CursedSlow(SkillEntity_CurseSlow entity) : base(entity) {
             this.radius    = entity.RangeRadius;

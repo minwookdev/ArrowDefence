@@ -81,6 +81,10 @@
                 case SplitArrow newskill:     return new SplitArrow(newskill);
                 case ElementalFire newskill:  return new ElementalFire(newskill);
                 case Explosion newskill:      return new Explosion(newskill);
+                //===================================== [ BUFF ] =======================================
+                case ElementalAmplification newskill: return new ElementalAmplification(newskill);
+                //===================================== [ EMPTY ] ======================================
+                case EmptyTypeArrowSkill newskill:    return new EmptyTypeArrowSkill(newskill);
                 //======================================================================================
                 default: throw new System.NotImplementedException("this type is Not Implemented !");
             }
@@ -93,7 +97,7 @@
 
         public string GetDescByTerms() {
             I2.Loc.LocalizedString loc = descTerms;
-            return skillData.GetDescription(loc);
+            return skillData.GetDesc(loc);
         }
 
         public void Release() {

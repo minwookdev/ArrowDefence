@@ -25,6 +25,7 @@
 
         //Game Event Delegate
         public delegate void GameEventHandler();
+        GameEventHandler OnStateInBattle;
         GameEventHandler OnStateEndBattle;
         GameEventHandler OnStateGameOver;
 
@@ -487,7 +488,7 @@
             GameState = targetState; //Change Current GameState
             switch (GameState) {     //Activate Event
                 case GAMESTATE.STATE_BEFOREBATTLE: break;   //No Event.
-                case GAMESTATE.STATE_INBATTLE:     break;   //No Event.
+                case GAMESTATE.STATE_INBATTLE:     OnStateInBattle();  break;
                 case GAMESTATE.STATE_BOSSBATTLE:   break;   //No Event.
                 case GAMESTATE.STATE_ENDBATTLE:    OnStateEndBattle(); break;
                 case GAMESTATE.STATE_GAMEOVER:     OnStateGameOver();  break;
@@ -502,10 +503,15 @@
             OnStateGameOver += new GameEventHandler(action);
         }
 
+        public void AddListnerInBattle(System.Action action) {
+            OnStateInBattle += new GameEventHandler(action);
+        }
+
         public void ReleaseAllEventsWithNoneState() {
             //Release Battle State
             OnStateEndBattle = null;
             OnStateGameOver  = null;
+            OnStateInBattle   = null;
 
             //Restore GameState to NONE
             ChangeGameState(GAMESTATE.STATE_NONE);
@@ -517,6 +523,10 @@
 
         public GameEventHandler EventGameOver() {
             return this.OnStateGameOver;
+        }
+
+        public GameEventHandler EventInBattle() {
+            return this.OnStateInBattle;
         }
 
 #endregion

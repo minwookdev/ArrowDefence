@@ -27,7 +27,7 @@
                     case ARROWSKILL_ACTIVETYPE.ATTACK:  InitHit(skillInfoFst.SkillData);                 break;
                     case ARROWSKILL_ACTIVETYPE.AIR:     InitAir(skillInfoFst.SkillData);                 break;
                     case ARROWSKILL_ACTIVETYPE.ADDPROJ: InitProjectile(skillInfoFst.SkillData, ability); break;
-                    default: break;
+                    default: throw new System.NotImplementedException();
                 }
             }
             //Seconds Arrow SkillData Init
@@ -36,7 +36,7 @@
                     case ARROWSKILL_ACTIVETYPE.ATTACK:  InitHit(skillInfoSec.SkillData);                 break;
                     case ARROWSKILL_ACTIVETYPE.AIR:     InitAir(skillInfoSec.SkillData);                 break;
                     case ARROWSKILL_ACTIVETYPE.ADDPROJ: InitProjectile(skillInfoSec.SkillData, ability); break;
-                    default: break;
+                    default: throw new System.NotImplementedException();
                 }
             }
 
@@ -59,7 +59,8 @@
                     case ARROWSKILL_ACTIVETYPE.ATTACK:  InitHit(array[i].SkillData); break;
                     case ARROWSKILL_ACTIVETYPE.AIR:     InitAir(array[i].SkillData); break;
                     case ARROWSKILL_ACTIVETYPE.ADDPROJ: InitProjectile(array[i].SkillData, ability); break;
-                    case ARROWSKILL_ACTIVETYPE.BUFF:                                 break;
+                    case ARROWSKILL_ACTIVETYPE.BUFF:  break;
+                    case ARROWSKILL_ACTIVETYPE.EMPTY: break;
                     default: throw new System.NotImplementedException();
                 }
             }
@@ -77,7 +78,7 @@
             }
 
             if(activeType == ARROWSKILL_ACTIVETYPE.NONE) {
-                throw new System.Exception("Not Found ActiveType.");
+                throw new System.Exception("Not Found Special Arrow Active Type.");
             }
             CatLog.Log($"Initialized ActiveType: {activeType.ToString()}");
         }

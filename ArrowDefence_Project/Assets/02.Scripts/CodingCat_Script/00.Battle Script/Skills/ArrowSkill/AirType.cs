@@ -25,7 +25,7 @@
         //Update Interval [Static] [Recomended = 0.1f]
         float searchInterval = .1f;  //Find Target Update Interval
 
-        public override string GetDescription(string localizedString) {
+        public override string GetDesc(string localizedString) {
             throw new System.NotImplementedException();
         }
 

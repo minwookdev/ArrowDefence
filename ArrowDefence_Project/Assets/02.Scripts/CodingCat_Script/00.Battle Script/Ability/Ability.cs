@@ -295,7 +295,8 @@
         }
 
         public override float GetValueToSingle() {
-            return increaseRate + StNum.floatOne; // <--- 여기가 잘못됐나?
+            //return increaseRate + StNum.floatOne; // <--- 굳이 +1f 보정해줄 필요없을 것 같아서 increase value 만 뱉도록 수정
+            return increaseRate;
         }
 
         public override byte GetGrade() {
@@ -305,7 +306,6 @@
                        "Raw Value: " + (float)(increaseRate / GetUnitValue(MaxValue)) + '\n' + 
                        "Increase Rate Value: " + increaseRate.ToString()); 
             return System.Convert.ToByte(UnityEngine.Mathf.CeilToInt((float)increaseRate / GetUnitValue(MaxValue)));
-            foo
                 //GetGrade에서 11을 뱉고있는게 이상하다
         }
 

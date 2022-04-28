@@ -12,6 +12,11 @@
         public float InitMoveSpeed  = 0.5f;
         public float AttackInterval = 2f;
 
+        [Header("ACTION")]
+        [SerializeField] [ReadOnly] float currentActionSpeed = 1f;
+        private float actionSpeed = 1f;
+        Coroutine actionSpeedCo = null;
+
         //Animator Parameters
         int animState = Animator.StringToHash("state");
         int atkState  = Animator.StringToHash("attack");
@@ -23,6 +28,34 @@
         float attackTimer    = 0f;
         float attackInterval = 0f;
         bool isFindWall      = false;
+
+        void Foo(float duration, float ratio) {
+            //애니메이션 speed 조절하는 테스트 라인
+            //1f가 default value 란다 얘야
+            anim.speed = 0.5f;
+
+            if (actionSpeedCo != null) {
+                StopCoroutine(actionSpeedCo);
+            }
+            actionSpeedCo = StartCoroutine(ChangeActionSpeed(ratio, duration));
+
+            //bool값을 하나 둬서 현재 속도가 변한경우나 업데이트 한번 해줘서 값받아와야 하는 상황을 인지하게 해줘야 하는지 한번 생각해보기 !
+        }
+
+        /// <summary>
+        /// Change MoveSpeed & Animation Speed
+        /// </summary>
+        /// <param name="ratio">0f~1f</param>
+        /// <param name="duration">지속시간</param>
+        /// <returns></returns>
+        System.Collections.IEnumerator ChangeActionSpeed(float ratio, float duration) {
+            var tempRatio = StNum.floatOne - ratio;
+            this.currentActionSpeed = tempRatio;
+            this.anim.speed         = tempRatio;
+            yield return new WaitForSeconds(duration);
+            this.currentActionSpeed = actionSpeed;
+            this.anim.speed         = actionSpeed;
+        }
 
         void ComponentInit() {
             if(anim == null) {
@@ -100,7 +133,7 @@
 
         void WalkStart() {
             anim.SetInteger(animState, 1);
-            rigidBody.velocity = Vector2.down * moveSpeed;
+            rigidBody.velocity = Vector2.down * (moveSpeed * currentActionSpeed);
         }
 
         void WalkUpdate() {

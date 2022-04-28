@@ -1433,7 +1433,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &831443325
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7192,7 +7192,7 @@ MonoBehaviour:
   canvasGroup: {fileID: 4458392277677199597}
   blockPanel: {fileID: 4458392277266009587}
   touchPosDetector: {fileID: 831443327}
-  maxOpenedTime: 3
+  maxOpenedTime: 5
   fadeSpeed: 1
   isOpen: 1
   isUseUnscaledTime: 1

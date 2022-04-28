@@ -188,12 +188,31 @@
         public float IncreaseSpArrCost { private set; get; }     = 0f;
         public byte AdditionalArrowFire { private set; get; }    = 0;
         public short ElementalActivation { private set; get; }   = 0;
+        public float ElementalDamageAmplification { private set; get; } = 1f; // <-- 아직 적용안되고 있음
+        public float PhysicalDamageAmplification { private set; get; }  = 1f; // <-- 아직 적용안되고 있음
 
         public GlobalAbility(Item_Bow bow, Item_SpArr specialArr, Ability[] artifacts) {
             if (bow != null) {
                 ChargedShotMultiplier = bow.IsExistAbility(ABILITY_TYPE.CHARGEDAMAGE, out Ability chargedShotMutliplier) ? ChargedShotMultiplier + chargedShotMutliplier.GetValueToSingle() : ChargedShotMultiplier;
                 AdditionalArrowFire   = bow.IsExistAbility(ABILITY_TYPE.ADDITIONALFIRE, out Ability additionalFire) ? (byte)(AdditionalArrowFire + additionalFire.GetValueToByte()) : AdditionalArrowFire;
                 ElementalActivation   = bow.IsExistAbility(ABILITY_TYPE.ELEMENTALACTIVATION, out Ability elementalActivationAbility) ? (short)(ElementalActivation + elementalActivationAbility.GetValueToInt16()) : ElementalActivation;
+            }
+
+            if (specialArr != null) {
+                var skills = specialArr.GetSkillInfos;
+                foreach (var skill in skills) {
+                    if(skill.SkillType == ARROWSKILL.BUFF) {
+                        var buffTypeSkill = skill.SkillData as BuffTypeArrowSkill;
+                        if (buffTypeSkill == null) {
+                            throw new System.Exception();
+                        }
+                        switch (buffTypeSkill.BuffType) {
+                            case ARROWBUFFTYPE.ELEMENTALAMPLIFICATION: ElementalDamageAmplification = buffTypeSkill.GetValue(); break;
+                            //case ARROWBUFFTYPE.PHYSICALAMPLIFICATION:  PhysicalDamageAmplification  = buffTypeSkill.GetValue(); break;
+                            default: throw new System.NotImplementedException();
+                        }
+                    }
+                }
             }
         }
     }

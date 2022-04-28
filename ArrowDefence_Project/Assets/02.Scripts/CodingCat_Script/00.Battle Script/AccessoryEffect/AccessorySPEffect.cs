@@ -68,6 +68,10 @@
             return loc;
         }
 
+        public virtual float GetRange() {
+            throw new System.NotImplementedException();
+        }
+
         protected AccessorySPEffect(AccessorySkillData entity) {
             this.id         = entity.SkillId;
             this.effectType = entity.EffectType;
@@ -91,25 +95,7 @@
         #endregion
 
         /// <summary>
-        /// 특수효과 발동 중 배틀 종료처리 되었을 때 효과 중지처리.
-        /// </summary>
-        public virtual void OnStop() { return; }
-
-        public abstract void OnActive();
-
-        public abstract void Init();
-
-        /// <summary>
-        /// 무한 루프 주의. return float: 지속시간/간격, activatingCount: 발동횟수
-        /// </summary>
-        /// <param name="activatingCount"></param>
-        /// <returns></returns>
-        public virtual float GetDuration(out int activatingCount) {
-            throw new System.NotImplementedException();
-        }
-
-        /// <summary>
-        /// ### Artifact Grade 선적용
+        /// ARTIFACT SKILL에 만들어놓기는 했는데, SKILL에서는 등급을 string으로 표현할 필요가 없음. 아이템 등급에 적용해주면 좋을 듯
         /// </summary>
         /// <returns></returns>
         protected string GetGradeString() {
@@ -121,6 +107,31 @@
                 default: throw new System.NotImplementedException();
             }
         }
+        //=========================================================== << PASSIVE >> ==========================================================
+        public abstract void Init();
+        //============================================================ << BUFF >> ============================================================
+        public abstract void OnActive();
+
+        /// <summary>
+        /// 특수효과 발동 중 배틀 종료처리 되었을 때 효과 중지처리.
+        /// </summary>
+        public virtual void OnStop() { return; }
+
+        /// <summary>
+        /// 무한 루프 주의. return float: 지속시간/간격, activatingCount: 발동횟수
+        /// </summary>
+        /// <param name="activatingCount"></param>
+        /// <returns></returns>
+        public virtual float GetDuration(out int activatingCount) {
+            throw new System.NotImplementedException();
+        }
+
+        //=========================================================== << DE-BUFF >> ==========================================================
+        public virtual void ActiveDebuff(Vector2 position) {
+            throw new System.NotImplementedException();
+        }
+
+        //=========================================================== << TRIGGER >> ==========================================================
     }
     //=================================================================================================================================================
     //================================================================ << AIM SIGHT >> ================================================================
@@ -233,18 +244,19 @@
         float slowRatio = 0f;
         float duration = 0f;
 
-        public override void Init() {
-            return;
-        }
-
-        public override void OnActive() {
-            throw new System.NotImplementedException();
+        public override float GetRange() {
+            return radius;
         }
 
         public override string GetDescByTerms() {
             I2.Loc.LocalizedString loc = descTerms;
             return string.Format(loc, (slowRatio * 100).ToString().GetColor(StringColor.GREEN));
         }
+
+        public override void ActiveDebuff(Vector2 position) {
+            base.ActiveDebuff(position);
+        }
+
         public Acsp_CursedSlow(SkillEntity_CurseSlow entity) : base(entity) {
             this.radius    = entity.RangeRadius;
             this.slowRatio = entity.SlowRatio;
@@ -252,6 +264,15 @@
         }
         #region ES3
         public Acsp_CursedSlow() { }
+        #endregion
+        #region NOTUSED
+        public override void Init() {
+            return;
+        }
+
+        public override void OnActive() {
+            throw new System.NotImplementedException();
+        }
         #endregion
     }
     //=================================================================================================================================================

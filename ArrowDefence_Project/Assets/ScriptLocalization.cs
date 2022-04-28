@@ -19,6 +19,13 @@ namespace I2.Loc
 			public static string ARMOR_PENETRATION 		{ get{ return LocalizationManager.GetTranslation ("ABILITY/ARMOR_PENETRATION"); } }
 			public static string ELEMENTAL_ACTIVATION 		{ get{ return LocalizationManager.GetTranslation ("ABILITY/ELEMENTAL_ACTIVATION"); } }
 		}
+
+		public static class Common
+		{
+			public static string RANGE_LARGE 		{ get{ return LocalizationManager.GetTranslation ("Common/RANGE_LARGE"); } }
+			public static string RANGE_MEDIUM 		{ get{ return LocalizationManager.GetTranslation ("Common/RANGE_MEDIUM"); } }
+			public static string RANGE_SMALL 		{ get{ return LocalizationManager.GetTranslation ("Common/RANGE_SMALL"); } }
+		}
 	}
 
     public static class ScriptTerms
@@ -37,6 +44,13 @@ namespace I2.Loc
 		    public const string ADDITIONAL_FIRE = "ABILITY/ADDITIONAL_FIRE";
 		    public const string ARMOR_PENETRATION = "ABILITY/ARMOR_PENETRATION";
 		    public const string ELEMENTAL_ACTIVATION = "ABILITY/ELEMENTAL_ACTIVATION";
+		}
+
+		public static class Common
+		{
+		    public const string RANGE_LARGE = "Common/RANGE_LARGE";
+		    public const string RANGE_MEDIUM = "Common/RANGE_MEDIUM";
+		    public const string RANGE_SMALL = "Common/RANGE_SMALL";
 		}
 	}
 }

@@ -37,9 +37,15 @@
             for (int i = 0; i < effects.Length; i++) {
                 AccessorySkillSlot artifactSlot = null;
                 switch (effects[i].Condition.ConditionType) {
-                    case ARTCONDITION.TRIGGER: artifactSlot = Instantiate<ArtifactSlot_Trigger>(triggerTypeSlotPref, slotGroupTr).Init(effects[i]);           break;
-                    case ARTCONDITION.BUFF:    artifactSlot = Instantiate<ArtifactSlot_Buff>(buffTypeSlotPref, slotGroupTr).Init(effects[i], PlayNotify);     break;
-                    case ARTCONDITION.DEBUFF:  artifactSlot = Instantiate<ArtifactSlot_Debuff>(debuffTypeSlotPref, slotGroupTr).Init(effects[i], PlayNotify); break; 
+                    case ARTCONDITION.TRIGGER: 
+                        artifactSlot = Instantiate<ArtifactSlot_Trigger>(triggerTypeSlotPref, slotGroupTr).Init(effects[i]);           
+                        break;
+                    case ARTCONDITION.BUFF:    
+                        artifactSlot = Instantiate<ArtifactSlot_Buff>(buffTypeSlotPref, slotGroupTr).Init(effects[i], PlayNotify);    
+                        break;
+                    case ARTCONDITION.DEBUFF:  
+                        artifactSlot = Instantiate<ArtifactSlot_Debuff>(debuffTypeSlotPref, slotGroupTr).Init(effects[i], PlayNotify, OpenTouchPosDetector); 
+                        break; 
                     default:  throw new System.NotImplementedException();
                 }
 
@@ -78,6 +84,8 @@
                     CatLog.WLog("Backpanel EventTrigger is Null.");
                 }
             }
+
+            blockPanel.SetActive(false);
         }
 
         void Start() {

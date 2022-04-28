@@ -95,7 +95,7 @@
 
             //Update CoolDown Timer
             if (isPreparedActive == false) {
-                currentCoolDownTime -= Time.deltaTime;
+                currentCoolDownTime -= Time.unscaledDeltaTime;
                 if (currentCoolDownTime <= 0f) {
                     isPreparedActive = true;
                     notifyPlayAction();

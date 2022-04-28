@@ -79,7 +79,7 @@
                     case ABILITY_TYPE.ARROWDAMAGEINC:
                         var damageIncrease = abilities[i] as IncArrowDamageRate;
                         if (damageIncrease != null) {
-                            tempList.Add(new IncArrowDamageRate(damageIncrease.GetValueToSingle()));
+                            tempList.Add(new IncArrowDamageRate(damageIncrease.Value));
                         }
                         else {
                             CatLog.ELog("New Ability Type Not Matched !");
@@ -87,7 +87,7 @@
                     case ABILITY_TYPE.ARROWSPEED:
                         var speed = abilities[i] as AbilitySpeed;
                         if (speed != null) {
-                            tempList.Add(new AbilitySpeed(speed.GetValueToSingle()));
+                            tempList.Add(new AbilitySpeed(speed.Value));
                         }
                         else {
                             CatLog.ELog("New Ability Type Not Matched !");

@@ -71,7 +71,7 @@
     //=========================================================================================================================================================
     //================================================================= [ SPLIT ARROW ] =======================================================================
     public class SplitArrow : ProjectileType {
-        public override string GetDescription(string localizedString) {
+        public override string GetDesc(string localizedString) {
             throw new System.NotImplementedException();
         }
 
@@ -112,7 +112,7 @@
         //Not Saved
         private float intervalAngle;
 
-        public override string GetDescription(string localizedString) {
+        public override string GetDesc(string localizedString) {
             throw new System.NotImplementedException();
         }
 
@@ -168,7 +168,7 @@
     //=========================================================================================================================================================
     //=============================================================== [ ELEMENTAL - FIRE ] ====================================================================
     public class ElementalFire : ProjectileType {
-        public override string GetDescription(string localizedString) {
+        public override string GetDesc(string localizedString) {
             throw new System.NotImplementedException();
         }
 
@@ -227,8 +227,15 @@
 
         public override int DefaultSpawnSize() => 3;
 
-        public override string GetDescription(string localizedString) {
-            throw new System.NotImplementedException();
+        public override string GetDesc(string localizedString) {
+            string rangeString = "";
+            switch (skillLevel) {
+                case 1: rangeString = I2.Loc.ScriptLocalization.Common.RANGE_SMALL;  break;
+                case 2: rangeString = I2.Loc.ScriptLocalization.Common.RANGE_MEDIUM; break;
+                case 3: rangeString = I2.Loc.ScriptLocalization.Common.RANGE_LARGE;  break;
+                default: throw new System.Exception();
+            }
+            return string.Format(localizedString, rangeString.GetColor(StringColor.GREEN), projectileDamage.ToString().GetColor(StringColor.GREEN));
         }
 
         protected override string[] GetUniqueTags() {

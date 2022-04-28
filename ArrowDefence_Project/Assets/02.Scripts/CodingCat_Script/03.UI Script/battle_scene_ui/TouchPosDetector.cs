@@ -52,6 +52,8 @@
 
         private void OnEnable() {
             detectorRectTr.localScale = Vector3.zero;
+            canvasGroup.DOFade(1f, 0.4f)
+                       .From(0f);
         }
 
         public void OpenDetector(float radius, ITouchPosReceiver receiver) {
@@ -96,6 +98,11 @@
         private void Update() {
             detectorRectTr.anchoredPosition = touchPosition;
             worldPosDetectorRectTr.position = ToWorldPos(detectorWorldPos); // <--- Update World Position Detector
+
+            // World Position Detector 까지 같이 놔둔 이유는 
+            // 화면안에서 터치하고 중인 UI Canvas상의 좌표가 아닌 월드좌표에서 터치하고있는 곳의 좌표를 움직여주고 있는데
+            // 이 오브젝트는 콜라이더를 하나 가지고 있다. 이 콜라이더를 사용해 충돌중인 몬스터 객체들의 스프라이트 데이터를
+            // 조작해주어, 범위안의 객체들의 강조효과나 설명등을 넣을 수 있게 사용할 수 있도록 하나 만들어 둠
         }
 
         Vector2 PointerDataToRelativePosition(PointerEventData eventData) {

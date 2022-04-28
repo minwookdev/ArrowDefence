@@ -27,7 +27,7 @@
         /// </summary>
         public abstract void Clear();
 
-        public abstract string GetDescription(string localizedString);
+        public abstract string GetDesc(string localizedString);
     }
 
     public abstract class AttackActiveTypeAS : ArrowSkill {
@@ -106,7 +106,7 @@
         int currentChainCount         = 0;  // Current Chain Count
         string[] effectPoolTags;
 
-        public override string GetDescription(string localizedString) {
+        public override string GetDesc(string localizedString) {
             return string.Format(localizedString, maxChainCount);
         }
 
@@ -283,7 +283,7 @@
         float tempRadius = 5f;
         Collider2D[] tempArray = null;
 
-        public override string GetDescription(string localizedString) {
+        public override string GetDesc(string localizedString) {
             throw new System.NotImplementedException();
         }
 

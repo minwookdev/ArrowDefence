@@ -17,6 +17,7 @@
         public float AttackDamage = 5f;
         public short Armorating = 0;
         public byte CriticalResist = 0;
+        [SerializeField] [ReadOnly] float currentActionSpeed = 1.0f;
 
         [Header("SIMPLE HIT COLOR")]
         public bool isActiveHitColor = false;

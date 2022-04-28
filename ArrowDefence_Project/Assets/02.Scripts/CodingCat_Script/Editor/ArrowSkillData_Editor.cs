@@ -363,6 +363,52 @@ public class ExplosionEditor : ArrowSkillData_Editor {
     }
 }
 
+[CustomEditor(typeof(SkillEntity_Empty))]
+public class EmptyArrowSkillEditor : ArrowSkillData_Editor {
+    SerializedProperty valuesProp = null;
+    private void OnEnable() {
+        base.InitSerializedObject();
+        valuesProp = sobject.FindProperty(nameof(SkillEntity_Empty.Values));  
+    }
+
+    public override void OnInspectorGUI() {
+        DrawMonoScript();
+        DrawDefaultSkillData();
+
+        GUILayout.Label("Properties");
+        GUILayout.BeginVertical("GroupBox");
+        EditorGUILayout.PropertyField(valuesProp);
+        GUILayout.EndVertical();
+
+        GUILayout.EndVertical();
+        sobject.ApplyModifiedProperties();
+    }
+}
+
+[CustomEditor(typeof(SkillEntity_ElementalAmp))]
+public class ElementalAmplificationEditor : ArrowSkillData_Editor {
+    SerializedProperty valueProp = null;
+    private void OnEnable() {
+        base.InitSerializedObject();
+        valueProp = sobject.FindProperty(nameof(SkillEntity_ElementalAmp.ElementalAmplificationValue));
+    }
+
+    public override void OnInspectorGUI() {
+        DrawMonoScript();
+        DrawDefaultSkillData();
+
+        #region ELEMENTAL_AMPLIFICATION
+        GUILayout.Label("Elemental Amplification");
+        GUILayout.BeginVertical("GroupBox");
+        EditorGUILayout.PropertyField(valueProp);
+        GUILayout.EndVertical();
+        #endregion
+
+        GUILayout.EndVertical();
+        sobject.ApplyModifiedProperties();
+    }
+}
+
 public class CreateArrowSkillDataAsset {  
     [MenuItem("ActionCat/Scriptable Object/Arrow Skill Asset/Rebound Arrow")]
     public static void CreateReboundArrowAsset()
@@ -444,6 +490,30 @@ public class CreateArrowSkillDataAsset {
     public static void CreateExplosionAsset() {
         string assetCreatePath = "Assets/05.SO/SO.Skill/ArrowSkillAsset/Special_Explosion_default.asset";
         var asset = ScriptableObject.CreateInstance<Dt_Explosion>();
+        AssetDatabase.CreateAsset(asset, assetCreatePath);
+        AssetDatabase.SaveAssets();
+        AssetDatabase.Refresh();
+
+        EditorUtility.FocusProjectWindow();
+        Selection.activeObject = asset;
+    }
+
+    [MenuItem("ActionCat/Scriptable Object/Arrow Skill Asset/Empty")]
+    public static void CreateEmptyTypeArrowSkillAsset() {
+        string assetCreatePath = "Assets/05.SO/SO.Skill/ArrowSkillAsset/0000-empty-t0.asset";
+        var asset = ScriptableObject.CreateInstance<SkillEntity_Empty>();
+        AssetDatabase.CreateAsset(asset, assetCreatePath);
+        AssetDatabase.SaveAssets();
+        AssetDatabase.Refresh();
+
+        EditorUtility.FocusProjectWindow();
+        Selection.activeObject = asset;
+    }
+
+    [MenuItem("ActionCat/Scriptable Object/Arrow Skill Asset/Special/Elemental Amplification")]
+    public static void CreateElementalAmplificationSkillAsset() {
+        string assetCreatePath = "Assets/05.SO/SO.Skill/ArrowSkillAsset/0000-Elemental_Amplification-t0.asset";
+        var asset = ScriptableObject.CreateInstance<SkillEntity_ElementalAmp>();
         AssetDatabase.CreateAsset(asset, assetCreatePath);
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();

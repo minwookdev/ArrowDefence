@@ -240,6 +240,9 @@
                 foreach (var slot in SkillSlots) {
                     slot.Init(sprites);
                 }
+
+                //Disable All Skill Slots
+                SkillSlots.Foreach(slot => slot.DisableSlot());
             }
 
             void FixDescriptionRectSize(string itemDesc) {
@@ -381,16 +384,13 @@
                 abilitySlots.EnableSlots(address.AbilitiesOrNull);
 
                 //Enable Skill Slots
-                var skills = address.GetSkillsOrNull();
+                var skills = address.GetSkillsOrNull(); //Get Skill Array Size: 0 ~ 3
+                if (skills.Length - SkillSlots.Length > 0) {
+                    CatLog.ELog($"Item Info Popup의 Skill Holder가 부족합니다.");
+                }
                 for (int i = 0; i < skills.Length; i++) {
-                    if(skills[i] != null) {
-                        SkillSlots[i].ActiveSlot(skills[i].GetNameByTerms(), 
-                                                 skills[i].GetDescByTerms(),
-                                                 skills[i].Level, 
-                                                 skills[i].IconSprite);
-                    }
-                    else {
-                        SkillSlots[i].DisableSlot();
+                    if (skills[i] != null) {
+                        SkillSlots[i].ActiveSlot(skills[i].GetNameByTerms(), skills[i].GetDescByTerms(), skills[i].Level, skills[i].IconSprite);
                     }
                 }
 
@@ -444,16 +444,13 @@
                 abilitySlots.EnableSlots(address.AbilitiesOrNull);
 
                 //Enable Skill Slots
-                var skills = address.SkillInfosOrNull;   //Get Skill Array Size : 2
+                var skills = address.SkillInfosOrNull;   //Get Skill Array Size : 0 ~ 3
+                if (skills.Length - SkillSlots.Length > 0) {
+                    CatLog.ELog($"Item Info Popup의 Skill Holder가 부족합니다.");
+                }
                 for (int i = 0; i < skills.Length; i++) {
-                    if(skills[i] != null) {
-                        SkillSlots[i].ActiveSlot(skills[i].GetNameByTerms(), 
-                                                 skills[i].GetDescByTerms(),
-                                                 skills[i].SkillLevel,
-                                                 skills[i].IconSprite);
-                    }
-                    else {
-                        SkillSlots[i].DisableSlot();
+                    if (skills[i] != null) {
+                        SkillSlots[i].ActiveSlot(skills[i].GetNameByTerms(), skills[i].GetDescByTerms(), skills[i].SkillLevel, skills[i].IconSprite);
                     }
                 }
 
@@ -506,16 +503,12 @@
                 abilitySlots.EnableSlots(address.AbilitiesOrNull);
 
                 //Enable Skill-Slots (Artifact Special Skill Max : Only 1)
+                // 유물 스킬의 최대 길이가 1이라서 이런식을 해놨는데, 나중에 스킬 배열의 길이가 늘어나면 수정들어가야 된다.
                 var spEffect = address.SPEffectOrNull;
-                if(spEffect != null) {
-                    SkillSlots[0].ActiveSlot(spEffect.GetNameByTerms(), 
-                                             spEffect.GetDescByTerms(), 
-                                             spEffect.Level, 
-                                             spEffect.IconSprite);
+                if (spEffect != null) {
+                    SkillSlots[0].ActiveSlot(spEffect.GetNameByTerms(), spEffect.GetDescByTerms(), spEffect.Level, spEffect.IconSprite);
                 }
-                else {
-                    SkillSlots[0].DisableSlot();
-                }   SkillSlots[1].DisableSlot(); //Secondary Slot is Always Disable.
+
 
                 rectTrBtnGroup.gameObject.SetActive(enablebuttons);
                 isPreviewOpenMode = isPreview;
@@ -573,7 +566,7 @@
                 var skills      = address.GetSkillInfos;                    // Set Equipment Item Skill Data
                 var slotsLength = SkillSlots.Length;
                 for (int i = 0; i < skills.Length; i++) {
-                    if (i == 2) {
+                    if (i == 3) {
                         CatLog.WLog("Need More Skill Slots. Slot Index Over !"); break;
                     }
                     SkillSlots[i].ActiveSlot(skills[i].GetNameByTerms(), 

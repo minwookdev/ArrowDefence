@@ -17,7 +17,6 @@
         public float AttackDamage = 5f;
         public short Armorating = 0;
         public byte CriticalResist = 0;
-        [SerializeField] [ReadOnly] float currentActionSpeed = 1.0f;
 
         [Header("SIMPLE HIT COLOR")]
         public bool isActiveHitColor = false;
@@ -87,6 +86,14 @@
             }
         }
 
+        #region STATE_CONTROL
+
+        public void ValActionSpeed(float ratio, float duration) {
+            monsterState.ValActionSpeed(ratio, duration);
+        }
+
+        #endregion
+
         #region MESSAGE
 
         public void OnStageClear() => DisableRequest();
@@ -121,7 +128,6 @@
             //Monster is Death ?
             if(currentHealthPoint <= 0 && isDeath == false) {
                 monsterState.StateChanger(STATETYPE.DEATH);
-
                 //=================================[ MONSTER DEATH EVENT ]================================
                 BattleProgresser.OnMonsterDeath();
                 BattleProgresser.OnItemDrop(ItemDropCorrection);
@@ -152,7 +158,6 @@
             //Monster is Death ?
             if(currentHealthPoint <= 0 && isDeath == false) {
                 monsterState.StateChanger(STATETYPE.DEATH);
-
                 //=================================[ MONSTER DEATH EVENT ]================================
                 BattleProgresser.OnMonsterDeath();
                 BattleProgresser.OnItemDrop(ItemDropCorrection);

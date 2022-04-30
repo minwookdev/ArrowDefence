@@ -22,4 +22,4 @@ MonoBehaviour:
   Equip_Type: 2
   MaxNumberOfEffect: 0
   RFEffectAssets: []
-  SPEffectAsset: {fileID: 0}
+  SPEffectAsset: {fileID: 11400000, guid: d612026a1a5d82340b1fd69359916206, type: 2}

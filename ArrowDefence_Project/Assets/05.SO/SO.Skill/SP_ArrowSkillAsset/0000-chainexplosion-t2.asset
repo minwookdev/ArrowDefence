@@ -21,6 +21,7 @@ MonoBehaviour:
   ActiveType: 8
   effects: []
   NameTerms: SkillName/SNAME_ARR_CHAINEX
-  DescTerms: SkillDesc/SDESC_ARROW_CHAINEX
+  DescTerms: SkillDesc/SKILL_SPECIAL_EXPLOSION_CHAIN
   Values:
   - 1
+  - 100

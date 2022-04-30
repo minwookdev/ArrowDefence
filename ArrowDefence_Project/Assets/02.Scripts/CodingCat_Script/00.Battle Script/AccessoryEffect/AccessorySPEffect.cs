@@ -127,7 +127,7 @@
         }
 
         //=========================================================== << DE-BUFF >> ==========================================================
-        public virtual void ActiveDebuff(Vector2 position) {
+        public virtual void ActiveDebuff(MonsterStatus[] position) {
             throw new System.NotImplementedException();
         }
 
@@ -253,8 +253,27 @@
             return string.Format(loc, (slowRatio * 100).ToString().GetColor(StringColor.GREEN));
         }
 
-        public override void ActiveDebuff(Vector2 position) {
-            base.ActiveDebuff(position);
+        public override void ActiveDebuff(MonsterStatus[] statusArray) {
+            //base.ActiveDebuff(position);
+            //전달받은 position에 Physics2D로 콜라이더 뿌려서 해당 반경의 몬스터 객체들 거두고 
+            //걔네들한테 MonsterState 컴포넌트 배열로 잡아서 다 디버프 효과 뿌려주면 될듯?
+            //CatLog.Log("Artifact SP Effect: Cursed Slow까지 잘 전달됨");
+
+            //var isTargetExist = GameGlobal.TryGetOverlapCircleAll2D(out Collider2D[] targets, position, radius, AD_Data.LAYER_MONSTER);
+            //if (isTargetExist) {
+            //    foreach (var target in targets) {
+            //        if (target.TryGetComponent<MonsterState>(out MonsterState state)) {
+            //            state.ValActionSpeed(slowRatio, duration);
+            //        }
+            //        else {
+            //            CatLog.WLog($"The Target Can't Exsist MonsterState Component, but this target is Monster. Name: {target.name}");
+            //        }
+            //    }
+            //}
+
+            foreach (var status in statusArray) {
+                status.ValActionSpeed(slowRatio, duration);
+            }
         }
 
         public Acsp_CursedSlow(SkillEntity_CurseSlow entity) : base(entity) {

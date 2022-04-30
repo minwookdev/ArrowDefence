@@ -1371,6 +1371,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 816602173}
+  - component: {fileID: 816602175}
   - component: {fileID: 816602174}
   m_Layer: 5
   m_Name: detector_world_position
@@ -1414,6 +1415,21 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 75
+--- !u!114 &816602175
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 816602172}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b083795308a08a14cb9dd8319de49bf1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rectTr: {fileID: 816602173}
+  coll: {fileID: 816602174}
+  collisionList: []
 --- !u!1 &831443324
 GameObject:
   m_ObjectHideFlags: 0
@@ -1483,6 +1499,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f26a0aab71358747af5929f19a13e38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  worldDetector: {fileID: 816602175}
   rectTr: {fileID: 831443328}
   detectorRectTr: {fileID: 1272355019}
   worldPosDetectorRectTr: {fileID: 816602173}

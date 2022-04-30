@@ -12,11 +12,6 @@
         public float InitMoveSpeed  = 0.5f;
         public float AttackInterval = 2f;
 
-        [Header("ACTION")]
-        [SerializeField] [ReadOnly] float currentActionSpeed = 1f;
-        private float actionSpeed = 1f;
-        Coroutine actionSpeedCo = null;
-
         //Animator Parameters
         int animState = Animator.StringToHash("state");
         int atkState  = Animator.StringToHash("attack");
@@ -29,6 +24,8 @@
         float attackInterval = 0f;
         bool isFindWall      = false;
 
+        Coroutine actionSpeedCo = null;
+
         void Foo(float duration, float ratio) {
             //애니메이션 speed 조절하는 테스트 라인
             //1f가 default value 란다 얘야
@@ -40,21 +37,67 @@
             actionSpeedCo = StartCoroutine(ChangeActionSpeed(ratio, duration));
 
             //bool값을 하나 둬서 현재 속도가 변한경우나 업데이트 한번 해줘서 값받아와야 하는 상황을 인지하게 해줘야 하는지 한번 생각해보기 !
+            //현재 velocity값 받아와서 0 이상일 경우 ratio만큼 줄어들게 하면 어떨까
+        }
+
+        public override void ValActionSpeed(float ratio, float duration) {
+            if (this.currentState == STATETYPE.DEATH) { //Death State에서는 받지 않음
+                return;
+            }
+
+            if (actionSpeedCo != null) {
+                StopCoroutine(actionSpeedCo);
+            }
+            actionSpeedCo = StartCoroutine(ChangeActionSpeed(ratio, duration));
         }
 
         /// <summary>
         /// Change MoveSpeed & Animation Speed
         /// </summary>
-        /// <param name="ratio">0f~1f</param>
+        /// <param name="ratio">0f~1f, 값이 높게 들어올수록 많이 느려짐</param>
         /// <param name="duration">지속시간</param>
         /// <returns></returns>
         System.Collections.IEnumerator ChangeActionSpeed(float ratio, float duration) {
             var tempRatio = StNum.floatOne - ratio;
             this.currentActionSpeed = tempRatio;
             this.anim.speed         = tempRatio;
+            //--> 현재 상태에 따른 속도 업데이트 여기서 해줌. 속도가 없는 상태라면 해줄필요 X
+            switch (currentState) { // 현재 State에 따른 Speed값 업데이트
+                case STATETYPE.IDLE:                                                                         break;
+                case STATETYPE.MOVE:   rigidBody.velocity = Vector2.down * (moveSpeed * currentActionSpeed); break; // Move State Update.
+                case STATETYPE.ATTACK:                                                                       break;
+                case STATETYPE.DEATH:                                                                        break;
+                default: throw new System.NotImplementedException();
+            }
             yield return new WaitForSeconds(duration);
-            this.currentActionSpeed = actionSpeed;
-            this.anim.speed         = actionSpeed;
+            this.currentActionSpeed = defaultActionSpeed;
+            this.anim.speed         = defaultActionSpeed;
+            switch (currentState) { // 중지 처리 후 Speed값 업데이트
+                case STATETYPE.IDLE:                                                                         break;
+                case STATETYPE.MOVE:   rigidBody.velocity = Vector2.down * (moveSpeed * currentActionSpeed); break; // Move State Update.
+                case STATETYPE.ATTACK:                                                                       break;
+                case STATETYPE.DEATH:                                                                        break;
+                default: throw new System.NotImplementedException();
+            }
+
+            //받던중에 죽으면 이 코루틴을 해제시켜줘야 함, 죽을때도 느리게 죽는 현상이 일어난다 -> 진행중
+        }
+
+        public override void BreakState() {
+            if (this.actionSpeedCo != null) {
+                StopCoroutine(this.actionSpeedCo);
+            }
+
+            this.currentActionSpeed = defaultActionSpeed;
+            this.anim.speed         = defaultActionSpeed;
+
+            switch (currentState) {
+                case STATETYPE.IDLE:                                                                         break;
+                case STATETYPE.MOVE:   rigidBody.velocity = Vector2.down * (moveSpeed * currentActionSpeed); break;
+                case STATETYPE.ATTACK:                                                                       break;
+                case STATETYPE.DEATH:                                                                        break;
+                default: throw new System.NotImplementedException();
+            }
         }
 
         void ComponentInit() {
@@ -78,6 +121,8 @@
         }
 
         private void OnEnable() {
+            this.currentActionSpeed = this.defaultActionSpeed;
+            this.anim.speed         = this.defaultActionSpeed;
             ChangeState(STATETYPE.IDLE);
         }
 
@@ -176,6 +221,7 @@
         void DeathStart() {
             anim.SetInteger(animState, 3);
             coll.enabled = false;
+            BreakState();
         }
 
         void DeathExit() {

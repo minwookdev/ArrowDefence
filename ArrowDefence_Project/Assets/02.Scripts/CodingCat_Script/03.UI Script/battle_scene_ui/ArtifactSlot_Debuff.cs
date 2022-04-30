@@ -25,6 +25,7 @@
         [SerializeField] [ReadOnly] bool isRunning    = false;
         [SerializeField] [ReadOnly] bool isActiveable = false;
         System.Action<float, ITouchPosReceiver> requestWorldPosition = null;
+        System.Collections.Generic.List<MonsterStatus> monsterStatusList = null;
 
         public ArtifactSlot_Debuff Init(AccessorySPEffect effect, System.Action notify, System.Action<float, ITouchPosReceiver> request) {
             artifactEffect   = effect;
@@ -44,14 +45,17 @@
             }
 
             for (int i = 0; i < imagesStackBar.Length; i++) {
-                imagesStackBar[i].color = (maxStackCount - 1 >= i) ? enableColor : disableColor;
-                imagesStackBar[i].fillAmount = 0f;
+                bool enable = (maxStackCount - 1 >= i);
+                imagesStackBar[i].color      = enable ? enableColor : disableColor;
+                imagesStackBar[i].fillAmount = enable ? 0f : 1f;
             }
 
             SlotStop();
             GameManager.Instance.AddListnerInBattle(SlotRunning); // <-- Cost Increase Start trigger
             GameManager.Instance.AddListnerEndBattle(SlotStop);   // <-- Cost Stop Trigger
             GameManager.Instance.AddListnerGameOver(SlotStop);    // <-- Cost Stop Trigger
+
+            monsterStatusList = new System.Collections.Generic.List<MonsterStatus>();
             return this;
         }
 
@@ -108,15 +112,31 @@
             imageCooldownMask.fillAmount = currentCoolDownTime / maxCoolDownTime;
         }
 
+        //BE_ACTIVE에서 1f까지는 잘그리는데, 그리고 다음 인덱스로 넘어갈 때, 바로 넘어가지는게 아니라 현재 인덱스에 남아있던 UpdateStackCount가 한번 또 돌아서
+        //그게 그려져서 어중간하게 그려졌던게 남아서 그런듯, 발동 직후에 isRunning잠시 false로 바꿔놓고 모든게 준비가 되면 다시 true로 돌려놓는식으로 진행하자
+
         void UpdateStackCount() {
+            if(currentStackCount >= maxStackCount) {
+                //Over Index 방지를 위한 return
+                return;
+            }
+
             //stack ui update. 쌓여있는 StackCount에 맞는 인덱스 넘버 Bar 업데이트 해줌
             imagesStackBar[currentStackCount].fillAmount = currentCost / maxCost;
         }
 
         void ITouchPosReceiver.SendWorldPos(Vector2 position) {
-            //artifactEffect에 position전달하고, effect발동 로직 처리
-            //artifactEffect.ActiveDebuff(position);
-            return;
+            throw new System.NotImplementedException();
+        }
+
+        void ITouchPosReceiver.SendColliders(Collider2D[] colliders) {
+            colliders.Foreach((coll) => {
+                if (coll.TryGetComponent<MonsterStatus>(out MonsterStatus status)) {
+                    monsterStatusList.Add(status);
+                }
+            });
+            artifactEffect.ActiveDebuff(monsterStatusList.ToArray());
+            monsterStatusList.Clear();
         }
 
         public void BE_ACTIVE() {
@@ -126,14 +146,16 @@
                 return;
             }
 
+            isRunning = false;                                // Re-Draw 방지
             currentStackCount--;                              // Reduce Current Stack Count
             currentCoolDownTime = maxCoolDownTime;            // CoolDown Time Init
-            for (int i = 0; i < imagesStackBar.Length; i++) { // Re-Draw Stack Bar's
+            for (int i = 0; i < maxStackCount; i++) {         // Re-Draw Stack Bar's
                 imagesStackBar[i].fillAmount = (i < currentStackCount) ? 1f : 0f;
             }
 
             //Call Touch Position Detector
-            requestWorldPosition(findRadius, this); 
+            requestWorldPosition(findRadius, this);
+            isRunning = true;
         }
     }
 }

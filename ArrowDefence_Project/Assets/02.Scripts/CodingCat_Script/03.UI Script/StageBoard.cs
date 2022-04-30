@@ -166,7 +166,7 @@
         #endregion
 
         public void BE_BATTLE_SELECT() {
-            MainSceneRoute.OpenBattlePopup(stageType);
+            MainSceneRoute.Inst.OpenBattlePopup(stageType);
         }
 
         #region CHALLENGE_INFO

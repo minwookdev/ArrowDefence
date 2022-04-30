@@ -22,7 +22,7 @@ MonoBehaviour:
     description.'
   SkillLevel: 3
   SkillType: 7
-  IconSprite: {fileID: 21300000, guid: 39095539338ff0749ba8ef1f5cf281db, type: 3}
+  IconSprite: {fileID: 21300000, guid: 0dc30d68de4dfae4bab6c423fcdc2dfb, type: 3}
   ActiveType: 7
   effects:
   - {fileID: 3086668923814295945, guid: 03aa6f9b130cd46458c57df1f6f06038, type: 3}

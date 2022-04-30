@@ -24,7 +24,7 @@ MonoBehaviour:
     type: 3}
   LessArrowObj: {fileID: 0}
   ArrowSkillFst: {fileID: 11400000, guid: 4d48b87208ff738469349b9b04e5d54c, type: 2}
-  ArrowSkillSec: {fileID: 11400000, guid: 4f8c2e4461cf139459ddf12563c8438c, type: 2}
+  ArrowSkillSec: {fileID: 11400000, guid: f387dc0d562eb5348aef0670faff3e09, type: 2}
   AdditionalSpeed: 0
   ArrowDamageInc: 0
   ProjectileDamageInc: 0
@@ -34,7 +34,7 @@ MonoBehaviour:
   CriticalDamageMultiplierInc: 0
   ArmorPenetrationInc: 0
   effects: []
-  ArrowSkillTrd: {fileID: 11400000, guid: f387dc0d562eb5348aef0670faff3e09, type: 2}
+  ArrowSkillTrd: {fileID: 11400000, guid: 4f8c2e4461cf139459ddf12563c8438c, type: 2}
   ChargeType: 1
   MaxCost: 20
   MaxStackCount: 3

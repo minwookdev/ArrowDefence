@@ -285,6 +285,7 @@
             //OnIncClearGauge   -= IncreaseClearGauge;
             OnItemDrop        -= OnItemDropRoll;
             OnDecPlayerHealth -= DecreaseHealthGauge;
+            OnIncPlayerHealth -= IncreaseHealthGauge;
 
             //몬스터 관련 이벤트 헤제
             OnMonsterHit   -= ComboOccurs;

@@ -3,12 +3,18 @@
     using System;
 
     public class MonsterState : MonoBehaviour {
-        STATETYPE currentState = STATETYPE.IDLE;
-        protected float totalSpeed = 1f;
+        [Header("MONSTER STATE")]
+        [SerializeField] [ReadOnly] protected STATETYPE currentState = STATETYPE.IDLE;
+        [SerializeField] [ReadOnly] protected float defaultActionSpeed = 1f;
+        [SerializeField] [ReadOnly] protected float currentActionSpeed = 1f;
 
         void NotImplementedState() {
             throw new NotImplementedException("This State is Not Implemented.");
         }
+
+        public virtual void BreakState() => throw new NotImplementedException();
+
+        public virtual void ValActionSpeed(float ratio, float duration) => throw new NotImplementedException();
 
         public void StateChanger(STATETYPE target) {
             ChangeState(target);

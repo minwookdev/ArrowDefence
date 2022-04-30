@@ -61,6 +61,9 @@
             }
         }
 
+        //어디서 지워버리는 듯?
+        //droptable_dungeon_entrance_0
+
 #if UNITY_EDITOR
         [UnityEditor.MenuItem("ActionCat/Scriptable Object/ItemDropList Asset")]
         public static void CreateItemDropListAssetInstance() {

@@ -6,6 +6,9 @@ using ActionCat.Interface;
 
 public class MainSceneRoute : MonoBehaviour {
     static MainSceneRoute _inst;
+    public static MainSceneRoute Inst {
+        get => _inst;
+    }
     [Header("CANVAS")]
     [SerializeField] RectTransform mainUICanvas = null;
 
@@ -160,8 +163,8 @@ public class MainSceneRoute : MonoBehaviour {
                .OnComplete(() => SceneLoader.Instance.LoadScene(AD_Data.SCENE_TITLE));
     }
 
-    public static void OpenBattlePopup(STAGETYPE type) {
-        _inst.battlePop.EnablePopup(type);
+    public void OpenBattlePopup(STAGETYPE type) {
+        battlePop.EnablePopup(type);
     }
 
     #endregion

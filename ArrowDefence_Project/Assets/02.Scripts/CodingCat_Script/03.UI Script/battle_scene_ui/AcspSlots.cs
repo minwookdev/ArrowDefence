@@ -13,9 +13,9 @@
 
         [Header("SLIDER")]
         [SerializeField] [RangeEx(1f, 5f, 1f)]   float maxOpenedTime = 3f;
-        [SerializeField] [RangeEx(.1f, 3f, .1f)] float fadeSpeed     = 1f;
+        [SerializeField] [RangeEx(.1f, 3f, .1f)] float fadeTime     = 1f;
         [SerializeField] [ReadOnly] bool isOpen = true;
-        [SerializeField] [ReadOnly] bool isUseUnscaledTime = true; // <-- 일시정지 로직이랑 논리 충돌하니까 지금은 켜지말 것
+        [SerializeField] bool isUseUnscaledTime = true; // <-- 일시정지 로직이랑 논리 충돌하니까 지금은 켜지말 것
         float currOpenedTime = 0f;
         float openPosX;
         float closePosX;
@@ -111,13 +111,20 @@
             }
         }
 
+        void OnDisable() {
+            canvasGroup.DOKill(complete:true);
+            if (notify.IsPlaying()) {
+                notify.Stop();
+            }
+        }
+
         void ShowPanel() {
-            canvasGroup.DOFade(StNum.floatOne, fadeSpeed).OnStart(() => blockPanel.SetActive(false));
+            canvasGroup.DOFade(StNum.floatOne, fadeTime).OnStart(() => blockPanel.SetActive(false));
             isOpen = true;
         }
 
         void HidePanel() {
-            canvasGroup.DOFade(StNum.floatZero, fadeSpeed).OnStart(() => blockPanel.SetActive(true));
+            canvasGroup.DOFade(StNum.floatZero, fadeTime).OnStart(() => blockPanel.SetActive(true));
             isOpen = false;
         }
 

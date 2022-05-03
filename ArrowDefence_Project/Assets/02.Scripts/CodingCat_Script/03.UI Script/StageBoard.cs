@@ -87,8 +87,8 @@
             }
 
             byte enableSlotCount = 0;
-            var DropsTable  = dropTable.DropTableArray;
-            var rewardTable = dropTable.RewardTableArray;
+            var DropsTable  = dropTable.GetDropTable;
+            var rewardTable = dropTable.GetRewardTable;
             //초회 클리어 보상 슬롯 활성화, 클리어 기록이 없는 스테이지 한정
             if (!isClearedStage) { 
                 foreach (var reward in rewardTable) {

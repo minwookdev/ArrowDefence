@@ -300,13 +300,7 @@
         }
 
         public override byte GetGrade() {
-            var tempNumber = System.Convert.ToByte(UnityEngine.Mathf.CeilToInt((float)increaseRate / GetUnitValue(MaxValue)));
-            CatLog.Log("Result Grade: " + tempNumber.ToString() + '\n' + // ---> 11
-                       "Unit Value: " + GetUnitValue(MaxValue) + '\n' + 
-                       "Raw Value: " + (float)(increaseRate / GetUnitValue(MaxValue)) + '\n' + 
-                       "Increase Rate Value: " + increaseRate.ToString()); 
             return System.Convert.ToByte(UnityEngine.Mathf.CeilToInt((float)increaseRate / GetUnitValue(MaxValue)));
-                //GetGrade에서 11을 뱉고있는게 이상하다
         }
 
         public override string GetNameByTerms() {

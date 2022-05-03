@@ -49,8 +49,6 @@
             //}
 
             StartCoroutine(WaitLoadScene(waitRealTime));
-
-            //이 코루틴이 종료될 때 까지 canvasGroup을 잡고있는건가??
         }
 
         public string GetCurrentSceneName() {

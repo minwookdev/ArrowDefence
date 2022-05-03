@@ -7209,8 +7209,8 @@ MonoBehaviour:
   canvasGroup: {fileID: 4458392277677199597}
   blockPanel: {fileID: 4458392277266009587}
   touchPosDetector: {fileID: 831443327}
-  maxOpenedTime: 5
-  fadeSpeed: 1
+  maxOpenedTime: 3
+  fadeTime: 1
   isOpen: 1
   isUseUnscaledTime: 0
   triggerTypeSlotPref: {fileID: 5940595014341069724, guid: 6e10ca916b782284fb32ecab29e543ca,
@@ -9189,8 +9189,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4458392278094258586}
-  - component: {fileID: 4458392278094258584}
   - component: {fileID: 4458392278094258585}
+  - component: {fileID: 4458392278094258584}
   - component: {fileID: 4458392278094258590}
   - component: {fileID: 4458392278094258591}
   m_Layer: 5

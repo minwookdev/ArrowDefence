@@ -12,7 +12,7 @@
         [Header("SLOT OPTIONS")]
         [SerializeField] [RangeEx(1f, 5f, 1f)] float slotOpenDuration = 1f;
         [SerializeField] [RangeEx(0.1f, 2f, 0.1f)] float slotMovingTime = 1f;
-        [SerializeField] [ReadOnly] bool isUseUnscaledTime = false; // <-- 일시정지 로직이랑 논리 충돌하니까 지금은 켜지말 것
+        [SerializeField] bool isUseUnscaledTime = false; // <-- 일시정지 로직이랑 논리 충돌하니까 지금은 켜지말 것
         float currOpenedTime = 0f;
         bool isOpen = true;
         float openPosX;
@@ -59,6 +59,13 @@
                     isOpen = true;
                     TweenOpen();
                 }
+            }
+        }
+
+        private void OnDisable() {
+            slotGroupTr.DOKill(complete:true);
+            if (notify.IsPlaying()) {
+                notify.Stop();
             }
         }
 

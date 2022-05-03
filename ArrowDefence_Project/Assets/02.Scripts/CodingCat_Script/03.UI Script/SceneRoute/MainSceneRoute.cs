@@ -68,17 +68,17 @@ public class MainSceneRoute : MonoBehaviour {
         //string translate = localString;
         //CatLog.Log(translate);
         //CatLog.Log(_stringWithTermPopup);
-        I2.Loc.LocalizedString localString = _stringWithTermPopup;
-        CatLog.Log(localString);
-        string tempString = string.Format(formatString, "<color=green>", "</color>"); //<- Skill Description은 이런식? 으로 각각의 스킬 클래스 안에서 사용해주면 어떰?
-        CatLog.Log(tempString);
+        //I2.Loc.LocalizedString localString = _stringWithTermPopup;
+        //CatLog.Log(localString);
+        //string tempString = string.Format(formatString, "<color=green>", "</color>"); //<- Skill Description은 이런식? 으로 각각의 스킬 클래스 안에서 사용해주면 어떰?
+        //CatLog.Log(tempString);
 
         //bool settingsExam = false;
         //ES3.Save<bool>("TestKey", settingsExam, )
         CatLog.Log($"data path: {Application.streamingAssetsPath}");
 
-        float tempValue = (float)0.125f / 0.125f;
-        CatLog.Log($"Calculate Grade: {Mathf.CeilToInt(tempValue)}");
+        //float tempValue = (float)0.125f / 0.125f;
+        //CatLog.Log($"Calculate Grade: {Mathf.CeilToInt(tempValue)}");
     }
 
     private void Update() {

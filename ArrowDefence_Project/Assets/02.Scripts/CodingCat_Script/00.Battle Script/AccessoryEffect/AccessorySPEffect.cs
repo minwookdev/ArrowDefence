@@ -170,7 +170,6 @@
 
         public override void OnActive() {
             GameManager.Instance.TimeScaleSet(StNum.floatOne - timeSlowRatio);
-            CatLog.Log("SLOWTIME 발동.");
         }
 
         public override float GetDuration(out int activatingCount) {

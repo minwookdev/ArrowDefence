@@ -42,6 +42,12 @@
             }
         }
 
+        public DropTable[] GetDropTable {
+            get {
+                return (DropTableArray != null) ? DropTableArray : new DropTable[0] { };
+            }
+        }
+
         public int GetTotalTableSize(bool includeRewardTableSize) {
             return (includeRewardTableSize) ? ((DropTableArray == null ? 0 : DropTableArray.Length) + (RewardTableArray == null ? 0 : RewardTableArray.Length)) :
                                               ((DropTableArray == null ? 0 : DropTableArray.Length));

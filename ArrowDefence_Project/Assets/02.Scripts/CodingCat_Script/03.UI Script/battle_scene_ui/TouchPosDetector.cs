@@ -8,6 +8,11 @@
         void SendColliders(Collider2D[] colliders);
     }
 
+    // World Position Detector 까지 같이 놔둔 이유는 
+    // 화면안에서 터치하고 중인 UI Canvas상의 좌표가 아닌 월드좌표에서 터치하고있는 곳의 좌표를 움직여주고 있는데
+    // 이 오브젝트는 콜라이더를 하나 가지고 있다. 이 콜라이더를 사용해 충돌중인 몬스터 객체들의 스프라이트 데이터를
+    // 조작해주어, 범위안의 객체들의 강조효과나 설명등을 넣을 수 있게 사용할 수 있도록 하나 만들어 둠
+
     public class TouchPosDetector : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, IDragHandler {
         [Header("RECT TRANSFORM")]
         [SerializeField] TouchWorldPosDetector worldDetector = null;
@@ -113,15 +118,12 @@
             //detectorRectTr.anchoredPosition = touchPosition;
             //worldPosDetectorRectTr.position = ToWorldPos(detectorWorldPos); // <--- Update World Position Detector
 
-            // World Position Detector 까지 같이 놔둔 이유는 
-            // 화면안에서 터치하고 중인 UI Canvas상의 좌표가 아닌 월드좌표에서 터치하고있는 곳의 좌표를 움직여주고 있는데
-            // 이 오브젝트는 콜라이더를 하나 가지고 있다. 이 콜라이더를 사용해 충돌중인 몬스터 객체들의 스프라이트 데이터를
-            // 조작해주어, 범위안의 객체들의 강조효과나 설명등을 넣을 수 있게 사용할 수 있도록 하나 만들어 둠
-
             if (!isTouchEnded) { //Touch가 종료되기 전까지 RectPosition 업데이트
                 detectorRectTr.anchoredPosition = touchPosition;
                 worldPosDetectorRectTr.position = ToWorldPos(detectorWorldPos);
             }
+
+
         }
 
         Vector2 PointerDataToRelativePosition(PointerEventData eventData) {
@@ -131,6 +133,10 @@
 
         Vector2 ToWorldPos(Vector3 eventDataPosition) {
             return mainCam.ScreenToWorldPoint(eventDataPosition);
+        }
+
+        System.Collections.IEnumerator CheckEnd() {
+            yield return
         }
     }
 }

@@ -493,6 +493,7 @@
                 case GAMESTATE.STATE_ENDBATTLE:    OnStateEndBattle(); break;
                 case GAMESTATE.STATE_GAMEOVER:     OnStateGameOver();  break;
                 case GAMESTATE.STATE_PAUSE:        OnStatePause();     break;
+                case GAMESTATE.STATE_NONE:                             break; // No Event.
                 default: throw new System.NotImplementedException();
             }
         }

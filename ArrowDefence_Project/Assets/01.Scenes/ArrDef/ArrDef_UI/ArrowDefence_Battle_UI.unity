@@ -5434,7 +5434,7 @@ GameObject:
   - component: {fileID: 4458392277233448503}
   - component: {fileID: 4458392277233448496}
   m_Layer: 5
-  m_Name: btn_giveup
+  m_Name: btn_exit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6674,7 +6674,7 @@ GameObject:
   - component: {fileID: 4458392277463934366}
   - component: {fileID: 4458392277463934355}
   m_Layer: 5
-  m_Name: btn_giveup
+  m_Name: btn_exit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7212,7 +7212,7 @@ MonoBehaviour:
   maxOpenedTime: 5
   fadeSpeed: 1
   isOpen: 1
-  isUseUnscaledTime: 1
+  isUseUnscaledTime: 0
   triggerTypeSlotPref: {fileID: 5940595014341069724, guid: 6e10ca916b782284fb32ecab29e543ca,
     type: 3}
   buffTypeSlotPref: {fileID: 504220561706911113, guid: 77b99c919336ebe42a4ba1065eb14415,
@@ -11024,8 +11024,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4458392278334258604}
-  - component: {fileID: 4458392278334258595}
   - component: {fileID: 4458392278334258606}
+  - component: {fileID: 4458392278334258595}
   m_Layer: 5
   m_Name: panel_pause
   m_TagString: Untagged
@@ -12607,6 +12607,17 @@ MonoBehaviour:
         m_Calls:
         - m_Target: {fileID: 4458392278334258606}
           m_MethodName: ButtonResume
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+        - m_Target: {fileID: 1658476449}
+          m_MethodName: ExitPause
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}

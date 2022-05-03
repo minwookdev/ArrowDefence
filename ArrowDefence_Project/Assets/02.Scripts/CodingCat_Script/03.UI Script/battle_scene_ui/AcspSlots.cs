@@ -15,7 +15,7 @@
         [SerializeField] [RangeEx(1f, 5f, 1f)]   float maxOpenedTime = 3f;
         [SerializeField] [RangeEx(.1f, 3f, .1f)] float fadeSpeed     = 1f;
         [SerializeField] [ReadOnly] bool isOpen = true;
-        [SerializeField] bool isUseUnscaledTime = true;
+        [SerializeField] [ReadOnly] bool isUseUnscaledTime = true; // <-- 일시정지 로직이랑 논리 충돌하니까 지금은 켜지말 것
         float currOpenedTime = 0f;
         float openPosX;
         float closePosX;
@@ -46,7 +46,7 @@
                     case ARTCONDITION.DEBUFF:  
                         artifactSlot = Instantiate<ArtifactSlot_Debuff>(debuffTypeSlotPref, slotGroupTr).Init(effects[i], PlayNotify, OpenTouchPosDetector); 
                         break; 
-                    default:  throw new System.NotImplementedException();
+                    default: throw new System.NotImplementedException();
                 }
 
                 //Artifact Slot Icon override ---> Connect Artifact Item Icon Sprite

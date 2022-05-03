@@ -51,6 +51,7 @@
         private Vector2 bottomRightPoint;
         private Vector3[] limitPoints = new Vector3[5];
         private Vector2 offset = new Vector2(2f, 3f);
+        private BattleProgresser progresser = null;
 
         #region PROPERTY
         public SwapSlots SlotArrSwap {
@@ -75,6 +76,14 @@
                     throw new System.Exception("Route: AutoButton Component is Null.");
                 }
                 return buttonAuto;
+            }
+        }
+        public BattleProgresser SetProgresser {
+            set {
+                if (value == null) {
+                    throw new System.Exception("this field is Not Except Null.");
+                }
+                this.progresser = value;
             }
         }
         #endregion
@@ -144,7 +153,17 @@
         }
 
         #region Ref_Btn
-        public void ButtonPause() => panelPause.OpenPanel();
+        public void ButtonPause() {
+            if (progresser.IsEnteringPause == false) {
+                CatLog.WLog("Cannot Entering Pause Mode, in this GameState.");
+                return;
+            }
+            progresser.EnteringPauseMode();
+            panelPause.OpenPanel();
+        }
+        public void ExitPause() {
+            progresser.ExitPauseMode();
+        }
         #endregion
 
         #region MODULE:PANEL

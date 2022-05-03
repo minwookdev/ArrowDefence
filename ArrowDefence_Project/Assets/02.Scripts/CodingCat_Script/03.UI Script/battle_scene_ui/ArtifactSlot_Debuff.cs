@@ -51,9 +51,10 @@
             }
 
             SlotStop();
-            GameManager.Instance.AddListnerInBattle(SlotRunning); // <-- Cost Increase Start trigger
-            GameManager.Instance.AddListnerEndBattle(SlotStop);   // <-- Cost Stop Trigger
-            GameManager.Instance.AddListnerGameOver(SlotStop);    // <-- Cost Stop Trigger
+            GameManager.Instance.AddListnerInBattle(SlotRunning); // <-- Cost Increase Start Trigger
+            GameManager.Instance.AddListnerEndBattle(SlotStop);   // <-- Cost Increase Stop Trigger
+            GameManager.Instance.AddListnerGameOver(SlotStop);    // <-- Cost Increase Stop Trigger
+            GameManager.Instance.AddListnerPause(SlotStop);       // <-- Cost Increase Stop Trigger
 
             monsterStatusList = new System.Collections.Generic.List<MonsterStatus>();
             return this;
@@ -82,10 +83,6 @@
         }
 
         void UpdateCost() {
-            if (!isRunning) {
-                return;
-            }
-
             //Stack이 Max에 도달한 상태에서는 Cost 쌓이지 않음
             if (currentStackCount >= maxStackCount) {
                 return;
@@ -95,6 +92,7 @@
             if (currentCost > maxCost) {
                 currentCost = 0f;
                 currentStackCount++;
+                notifyPlayAction();
             }
         }
 
@@ -111,9 +109,6 @@
             tmpCoolDownTime.text = (currentCoolDownTime > 0f && currentCoolDownTime < maxCoolDownTime) ? Mathf.CeilToInt(currentCoolDownTime).ToString() : "";
             imageCooldownMask.fillAmount = currentCoolDownTime / maxCoolDownTime;
         }
-
-        //BE_ACTIVE에서 1f까지는 잘그리는데, 그리고 다음 인덱스로 넘어갈 때, 바로 넘어가지는게 아니라 현재 인덱스에 남아있던 UpdateStackCount가 한번 또 돌아서
-        //그게 그려져서 어중간하게 그려졌던게 남아서 그런듯, 발동 직후에 isRunning잠시 false로 바꿔놓고 모든게 준비가 되면 다시 true로 돌려놓는식으로 진행하자
 
         void UpdateStackCount() {
             if(currentStackCount >= maxStackCount) {

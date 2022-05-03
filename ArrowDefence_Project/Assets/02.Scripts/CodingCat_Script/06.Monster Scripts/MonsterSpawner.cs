@@ -289,6 +289,7 @@
                 case GAMESTATE.STATE_BOSSBATTLE: ChangeSpawnState(SPAWNSTATE.BREAK); break;
                 case GAMESTATE.STATE_ENDBATTLE:  ChangeSpawnState(SPAWNSTATE.BREAK); break;
                 case GAMESTATE.STATE_GAMEOVER:   ChangeSpawnState(SPAWNSTATE.BREAK); break;
+                case GAMESTATE.STATE_PAUSE:      ChangeSpawnState(SPAWNSTATE.BREAK); break;
                 default: break;
             }
         }
@@ -382,6 +383,8 @@
             if(spawnCoroutine != null) {
                 StopCoroutine(spawnCoroutine);
             }
+
+            //각종 spawn 변수들 초기화?
         }
 
         #endregion

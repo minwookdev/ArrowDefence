@@ -52,7 +52,7 @@
                                   .Append(detectorRectTr.DOScale(Vector2.zero, 0.1f))
                                   .Append(canvasGroup.DOFade(StNum.floatZero, 0.1f))
                                   .OnComplete(() => this.gameObject.SetActive(false))
-                                  .SetUpdate(false)
+                                  .SetUpdate(true)
                                   .SetAutoKill(false)
                                   .Pause();
         }

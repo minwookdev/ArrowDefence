@@ -49,6 +49,7 @@
         [SerializeField] CanvasGroup fadePanel = null;
         [SerializeField] [ReadOnly]
         float defaultFadeTime = 1.0f;
+        float safetyTime = 1.2f;
 
         /// <summary>
         /// Editor로 Button 또는 EventTrigger로 캐싱사용 하려면 래핑해서 사용.
@@ -62,7 +63,7 @@
                      })
                      .OnComplete(() => {
                          Games.UI.ItemTooltip.Inst.ReleaseParent();
-                         SceneLoader.Instance.ReloadScene(1f);
+                         SceneLoader.Instance.ReloadScene(safetyTime);
                      });
         }
 
@@ -78,8 +79,7 @@
                 })
                 .OnComplete(() => {
                     Games.UI.ItemTooltip.Inst.ReleaseParent();
-                    SceneLoader.Instance.LoadScene(AD_Data.SCENE_MAIN, 1f);
-                    
+                    SceneLoader.Instance.LoadScene(AD_Data.SCENE_MAIN, safetyTime);
                 });
         }
 

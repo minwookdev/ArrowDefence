@@ -105,6 +105,7 @@
         [Header("STAGE INFO")]
         [SerializeField] STAGETYPE stageType;
         [ReadOnly] public GAMESTATE tempGameState;
+        GAMESTATE previousState = GAMESTATE.STATE_NONE;
         [SerializeField] [ReadOnly]
         string stageKey = "";
 
@@ -162,6 +163,21 @@
         public static BattleEventHandler OnMonsterHit;
         public static BattleEventHandler OnMonsterDeath;
 
+        public bool IsEnteringPause {
+            get {
+                switch (tempGameState) {
+                    case GAMESTATE.STATE_NONE:         return false;
+                    case GAMESTATE.STATE_BEFOREBATTLE: return false;
+                    case GAMESTATE.STATE_INBATTLE:     return true;
+                    case GAMESTATE.STATE_BOSSBATTLE:   return true;
+                    case GAMESTATE.STATE_ENDBATTLE:    return false;
+                    case GAMESTATE.STATE_GAMEOVER:     return false;
+                    case GAMESTATE.STATE_PAUSE:        return false;
+                    default: throw new System.NotImplementedException();
+                }
+            }
+        }
+
         void Cover(bool isOpen) {
             var tempColor = ImageCover.color;
             tempColor.a   = (isOpen == true) ? StNum.floatZero : StNum.floatOne;
@@ -186,6 +202,7 @@
             //================================================== << COMPONENTS >> ==================================================
             monsterSpawner = GetComponent<MonsterSpawner>();
             sceneRoute  = FindObjectOfType<BattleSceneRoute>(); // SceneRoute Object is Moved other Scene.
+            sceneRoute.SetProgresser = this;
             //======================================================================================================================
 
             //================================================ << ITEM DROP LIST >> ================================================
@@ -276,6 +293,9 @@
                 case GAMESTATE.STATE_BOSSBATTLE   : OnUpdateBossBattle();   break;
                 case GAMESTATE.STATE_ENDBATTLE    : OnUpdateEndBattle();    break;
                 case GAMESTATE.STATE_GAMEOVER     : OnUpdateGameOver();     break;
+                case GAMESTATE.STATE_PAUSE        :                         break;
+                case GAMESTATE.STATE_NONE         :                         break;
+                default: throw new System.NotImplementedException();
             }
         }
 
@@ -504,6 +524,21 @@
         void SetGameState(GAMESTATE state) {
             GameManager.Instance.ChangeGameState(state);
             tempGameState = state;
+        }
+
+        #endregion
+
+        #region PAUSE
+
+        public void EnteringPauseMode() {
+            //위에서 게임이 시작되는 상태거나, 종료된 상태였을경우 PAUSE모드에 진입되지 않도록 조건줌. IN-BATTLE중이거나, BOSS-BATTLE 상태임
+            previousState = tempGameState;
+            SetGameState(GAMESTATE.STATE_PAUSE);
+        }
+
+        public void ExitPauseMode() {
+            SetGameState(previousState);
+            previousState = GAMESTATE.STATE_NONE;
         }
 
         #endregion

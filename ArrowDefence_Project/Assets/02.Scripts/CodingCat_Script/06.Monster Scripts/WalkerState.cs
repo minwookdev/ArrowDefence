@@ -26,20 +26,11 @@
 
         Coroutine actionSpeedCo = null;
 
-        void Foo(float duration, float ratio) {
-            //애니메이션 speed 조절하는 테스트 라인
-            //1f가 default value 란다 얘야
-            anim.speed = 0.5f;
-
-            if (actionSpeedCo != null) {
-                StopCoroutine(actionSpeedCo);
-            }
-            actionSpeedCo = StartCoroutine(ChangeActionSpeed(ratio, duration));
-
-            //bool값을 하나 둬서 현재 속도가 변한경우나 업데이트 한번 해줘서 값받아와야 하는 상황을 인지하게 해줘야 하는지 한번 생각해보기 !
-            //현재 velocity값 받아와서 0 이상일 경우 ratio만큼 줄어들게 하면 어떨까
-        }
-
+        /// <summary>
+        /// ActionSpeed 값 변경과 State 업데이트
+        /// </summary>
+        /// <param name="ratio"></param>
+        /// <param name="duration"></param>
         public override void ValActionSpeed(float ratio, float duration) {
             if (this.currentState == STATETYPE.DEATH) { //Death State에서는 받지 않음
                 return;
@@ -60,29 +51,30 @@
         System.Collections.IEnumerator ChangeActionSpeed(float ratio, float duration) {
             var tempRatio = StNum.floatOne - ratio;
             this.currentActionSpeed = tempRatio;
-            this.anim.speed         = tempRatio;
+            this.anim.speed         = tempRatio;    //animator speed 변경하는 라인, 1f가 default란다 얘야
             //--> 현재 상태에 따른 속도 업데이트 여기서 해줌. 속도가 없는 상태라면 해줄필요 X
             switch (currentState) { // 현재 State에 따른 Speed값 업데이트
-                case STATETYPE.IDLE:                                                                         break;
-                case STATETYPE.MOVE:   rigidBody.velocity = Vector2.down * (moveSpeed * currentActionSpeed); break; // Move State Update.
-                case STATETYPE.ATTACK:                                                                       break;
-                case STATETYPE.DEATH:                                                                        break;
+                case STATETYPE.IDLE:           break;
+                case STATETYPE.MOVE:   Move(); break; // Move State Update.
+                case STATETYPE.ATTACK:         break;
+                case STATETYPE.DEATH:          break;
                 default: throw new System.NotImplementedException();
             }
             yield return new WaitForSeconds(duration);
             this.currentActionSpeed = defaultActionSpeed;
             this.anim.speed         = defaultActionSpeed;
             switch (currentState) { // 중지 처리 후 Speed값 업데이트
-                case STATETYPE.IDLE:                                                                         break;
-                case STATETYPE.MOVE:   rigidBody.velocity = Vector2.down * (moveSpeed * currentActionSpeed); break; // Move State Update.
-                case STATETYPE.ATTACK:                                                                       break;
-                case STATETYPE.DEATH:                                                                        break;
+                case STATETYPE.IDLE:           break;
+                case STATETYPE.MOVE:   Move(); break; // Move State Update.
+                case STATETYPE.ATTACK:         break;
+                case STATETYPE.DEATH:          break;
                 default: throw new System.NotImplementedException();
             }
-
-            //받던중에 죽으면 이 코루틴을 해제시켜줘야 함, 죽을때도 느리게 죽는 현상이 일어난다 -> 진행중
         }
 
+        /// <summary>
+        /// GameObject Disable 등등 상황에서 ActionSpeed 및 Animator.speed 초기화
+        /// </summary>
         public override void BreakState() {
             if (this.actionSpeedCo != null) {
                 StopCoroutine(this.actionSpeedCo);
@@ -178,7 +170,7 @@
 
         void WalkStart() {
             anim.SetInteger(animState, 1);
-            rigidBody.velocity = Vector2.down * (moveSpeed * currentActionSpeed);
+            Move();
         }
 
         void WalkUpdate() {
@@ -235,5 +227,9 @@
             anim.SetTrigger(hitParams);
         }
         #endregion
+
+        protected void Move() {
+            rigidBody.velocity = Vector2.down * (moveSpeed * currentActionSpeed);
+        }
     }
 }

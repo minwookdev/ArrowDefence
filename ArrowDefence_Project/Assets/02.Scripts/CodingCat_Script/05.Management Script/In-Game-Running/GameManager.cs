@@ -22,12 +22,12 @@
         public GAMESTATE GameState { get; private set; } = GAMESTATE.STATE_NONE;
         public bool IsDevMode { get; private set; }
 
-
         //Game Event Delegate
         public delegate void GameEventHandler();
         GameEventHandler OnStateInBattle;
         GameEventHandler OnStateEndBattle;
         GameEventHandler OnStateGameOver;
+        GameEventHandler OnStatePause;
 
         public void Initialize() {
             if (isManagerInitialized == true) return;
@@ -487,31 +487,34 @@
         public void ChangeGameState(GAMESTATE targetState) {
             GameState = targetState; //Change Current GameState
             switch (GameState) {     //Activate Event
-                case GAMESTATE.STATE_BEFOREBATTLE: break;   //No Event.
+                case GAMESTATE.STATE_BEFOREBATTLE:                     break; // No Event.
                 case GAMESTATE.STATE_INBATTLE:     OnStateInBattle();  break;
-                case GAMESTATE.STATE_BOSSBATTLE:   break;   //No Event.
+                case GAMESTATE.STATE_BOSSBATTLE:                       break; // No Event.
                 case GAMESTATE.STATE_ENDBATTLE:    OnStateEndBattle(); break;
                 case GAMESTATE.STATE_GAMEOVER:     OnStateGameOver();  break;
+                case GAMESTATE.STATE_PAUSE:        OnStatePause();     break;
+                default: throw new System.NotImplementedException();
             }
         }
 
-        public void AddListnerEndBattle(System.Action action) {
-            OnStateEndBattle += new GameEventHandler(action);
-        }
+        public void AddListnerEndBattle(System.Action action) => OnStateEndBattle += new GameEventHandler(action);
 
-        public void AddListnerGameOver(System.Action action) {
-            OnStateGameOver += new GameEventHandler(action);
-        }
+        public void AddListnerGameOver(System.Action action) => OnStateGameOver += new GameEventHandler(action);
 
-        public void AddListnerInBattle(System.Action action) {
-            OnStateInBattle += new GameEventHandler(action);
-        }
+        public void AddListnerInBattle(System.Action action) => OnStateInBattle += new GameEventHandler(action);
+
+        public void AddListnerPause(System.Action pauseAction) => OnStatePause += new GameEventHandler(pauseAction);
 
         public void ReleaseAllEventsWithNoneState() {
             //Release Battle State
             OnStateEndBattle = null;
             OnStateGameOver  = null;
-            OnStateInBattle   = null;
+            OnStateInBattle  = null;
+
+            //Release Pause Battle Delegates
+            foreach (System.Delegate findDelegate in OnStatePause.GetInvocationList()) {
+                OnStatePause -= (GameEventHandler)findDelegate;
+            }
 
             //Restore GameState to NONE
             ChangeGameState(GAMESTATE.STATE_NONE);
@@ -527,6 +530,10 @@
 
         public GameEventHandler EventInBattle() {
             return this.OnStateInBattle;
+        }
+
+        public GameEventHandler EventPause() {
+            return this.OnStatePause;
         }
 
 #endregion

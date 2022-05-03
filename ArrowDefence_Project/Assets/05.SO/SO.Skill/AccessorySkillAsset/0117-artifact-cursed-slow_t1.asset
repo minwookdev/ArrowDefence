@@ -23,6 +23,6 @@ MonoBehaviour:
   MaxCost: 8
   IncreaseCostCount: 0
   CoolDownTime: 0
-  RangeRadius: 75
+  RangeRadius: 100
   SlowRatio: 0.3
   Duration: 8

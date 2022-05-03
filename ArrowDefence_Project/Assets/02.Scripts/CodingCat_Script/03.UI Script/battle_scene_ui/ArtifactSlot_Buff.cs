@@ -14,6 +14,11 @@
         [SerializeField] [ReadOnly] float currentCoolDownTime = 0f;
         [SerializeField] [ReadOnly] float effectDuration = 0f;
 
+        /// <summary>
+        /// GameState가 PauseMode에 들어갔을 때, 버프가 종료되는 것을 방지. Duration동안 대기. (임시방편)
+        /// </summary>
+        WaitUntil waitPauseEnd = null;
+
         public bool InBattleState {
             get {
                 return (GameManager.Instance.GameState == GAMESTATE.STATE_INBATTLE || GameManager.Instance.GameState == GAMESTATE.STATE_BOSSBATTLE);
@@ -36,6 +41,9 @@
             //게임종료 및 게임오버 시 효과 발동 중지처리
             GameManager.Instance.AddListnerEndBattle(ForceQuitEffect);
             GameManager.Instance.AddListnerGameOver(ForceQuitEffect);
+
+            //Assignment new Wait Pause Ended
+            waitPauseEnd = new WaitUntil(() => GameManager.Instance.GameState != GAMESTATE.STATE_PAUSE);
             return this;
         }
 
@@ -68,7 +76,8 @@
                 artifactEffect.OnActive();
                 effectDuration = duration;
                 while (effectDuration > 0f) {
-                    yield return null;
+                    yield return waitPauseEnd;  //yield return null 해줄필요 없음. 그 역활도 같이 함
+                    //yield return null;
                     effectDuration -= Time.unscaledDeltaTime;
                 }
                 activatingCount--;

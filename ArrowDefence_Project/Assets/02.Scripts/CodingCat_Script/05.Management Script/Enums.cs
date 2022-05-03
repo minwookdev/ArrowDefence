@@ -77,6 +77,7 @@
         STATE_BOSSBATTLE,
         STATE_ENDBATTLE,
         STATE_GAMEOVER,
+        STATE_PAUSE,
     }
 
     #endregion

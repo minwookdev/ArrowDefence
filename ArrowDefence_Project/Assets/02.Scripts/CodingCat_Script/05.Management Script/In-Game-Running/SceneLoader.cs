@@ -35,23 +35,22 @@
         public void LoadScene(string sceneName, float waitRealTime = 0f) {
             NextScene = sceneName;
             SceneChangeCallback?.Invoke();
-            if (waitRealTime <= 0f) {
-                SceneManager.LoadScene(loadingScene);
-            }
-            else {
-                StartCoroutine(WaitLoadScene(waitRealTime));
-            }
+            StartCoroutine(WaitLoadScene(waitRealTime));
         }
 
         public void ReloadScene(float waitRealTime = 0f) {
             NextScene = SceneManager.GetSceneAt(0).name;
             SceneChangeCallback?.Invoke();
-            if(waitRealTime <= 0f) {
-                SceneManager.LoadScene(loadingScene);
-            }
-            else {
-                StartCoroutine(WaitLoadScene(waitRealTime));
-            }
+            //if(waitRealTime <= 0f) {
+            //    SceneManager.LoadScene(loadingScene);
+            //}
+            //else {
+            //    StartCoroutine(WaitLoadScene(waitRealTime));
+            //}
+
+            StartCoroutine(WaitLoadScene(waitRealTime));
+
+            //이 코루틴이 종료될 때 까지 canvasGroup을 잡고있는건가??
         }
 
         public string GetCurrentSceneName() {

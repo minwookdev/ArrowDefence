@@ -12,7 +12,7 @@
         [Header("SLOT OPTIONS")]
         [SerializeField] [RangeEx(1f, 5f, 1f)] float slotOpenDuration = 1f;
         [SerializeField] [RangeEx(0.1f, 2f, 0.1f)] float slotMovingTime = 1f;
-        [SerializeField] bool isUseUnscaledTime = false;
+        [SerializeField] [ReadOnly] bool isUseUnscaledTime = false; // <-- 일시정지 로직이랑 논리 충돌하니까 지금은 켜지말 것
         float currOpenedTime = 0f;
         bool isOpen = true;
         float openPosX;
@@ -181,7 +181,7 @@
         Vector3 fadeOutScale = new Vector3(1.2f, 1.2f, 1f);
         Sequence notifySequence = null;
 
-        public void Init(byte repeat = 2, float intervalTime = 0.5f, bool isDefaultTimeScale = false) {
+        public void Init(byte repeat = 2, float intervalTime = 0.3f, bool isDefaultTimeScale = true) {
             repeatCount = repeat;
             interval    = intervalTime;
             notifySequence = DOTween.Sequence();

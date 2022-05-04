@@ -32,6 +32,12 @@
             return collisionList.ToArray();
         }
 
+        public Collider2D[] GetCollidersWithLength(out int length) {
+            var array = collisionList.ToArray();
+            length = array.Length;
+            return array;
+        }
+
         public void SetRadius(float radius) {
             coll.radius = radius;
         }

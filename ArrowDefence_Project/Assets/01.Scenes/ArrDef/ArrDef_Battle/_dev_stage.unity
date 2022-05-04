@@ -8366,6 +8366,11 @@ PrefabInstance:
         type: 2}
     - target: {fileID: 3204541759480302795, guid: 75155828b9866ee4dbb6eb1c6d7a0a62,
         type: 3}
+      propertyPath: maxBattleTime
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 3204541759480302795, guid: 75155828b9866ee4dbb6eb1c6d7a0a62,
+        type: 3}
       propertyPath: BowInitPosition
       value: 
       objectReference: {fileID: 377625007}

@@ -453,6 +453,15 @@
         }
 
         #endregion
+
+        public static bool TrySendColliders(this ITouchPosReceiver receiver, Collider2D[] colliders) {
+            if (receiver != null) {
+                receiver.SendColliders(colliders);
+                return true;
+            }
+
+            return false;
+        }
     }
 
     public static class StNum {

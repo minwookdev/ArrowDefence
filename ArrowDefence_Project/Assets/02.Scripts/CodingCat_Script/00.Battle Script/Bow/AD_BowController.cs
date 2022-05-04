@@ -141,6 +141,8 @@
             //============================================================== << CALLBACK GAMEOVER >> ==============================================================
             //게임오버 이벤트에 Burn Effect 추가. Resurrection 구현 시 추가적인 로직 구현 필요.
             GameManager.Instance.AddListnerGameOver(() => {
+                //stop auto-mode if the Running
+                OnAutoModeStop();
                 //Active Burn Fade Effect.
                 bowSprite.Effect(BOWEFFECTYPE.FADE, false);
                 //Bow Rope Material Alpha Change.
@@ -152,7 +154,7 @@
             });
             //=====================================================================================================================================================
             //================================================================ << CALLBACK CLEAR >> ===============================================================
-            GameManager.Instance.AddListnerEndBattle(() => ClearAutoStop());
+            GameManager.Instance.AddListnerEndBattle(OnAutoModeStop);
             //=====================================================================================================================================================
 
             //Init-Bow Skill and Current Slot Damage Struct.
@@ -174,7 +176,7 @@
 
         private void Update() {
             //===============================================<< AUTO MODE UPDATE >>==============================================
-            if(isAutoRunning) { //Enabled AutoMode : AutoMode Update
+            if (isAutoRunning) { //Enabled AutoMode : AutoMode Update
                 AutoModeUpdate(); 
                 return;
             }

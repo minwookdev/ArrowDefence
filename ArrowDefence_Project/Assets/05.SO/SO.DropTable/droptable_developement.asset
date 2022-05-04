@@ -20,6 +20,6 @@ MonoBehaviour:
     DropChance: 600
     QuantityRange: 0400000008000000
   - ItemAsset: {fileID: 11400000, guid: f8b55570f728f0340aad9eecc52166a5, type: 2}
-    DropChance: 10
+    DropChance: 100
     QuantityRange: 01000000
   RewardTableArray: []

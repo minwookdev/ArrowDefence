@@ -35,23 +35,35 @@
         #region SWITCH
 
         public void AutoSwitch(bool isDebug = false) {
+            if (GameManager.Instance.IsGameStateEnd) {
+                CatLog.WLog("this gameState Not Enable AutoMode.");
+                return;
+            }
+
             if (isAutoRunning == false) {
                 //is starting auto mode
                 AutoStateChange(AUTOSTATE.WAIT);
                 isAutoExitWait = false;
                 isAutoRunning  = true;
 
-                if (isDebug) CatLog.Log(StringColor.BLUE, "Start AutoMode !");
+                if (isDebug) {
+                    CatLog.Log(StringColor.BLUE, "Start AutoMode !");
+                }
             }
             else {
                 //is stoping auto mode
                 isAutoExitWait = true;
 
-                if (isDebug) CatLog.Log(StringColor.YELLOW, "Stop AutoMode !");
+                if (isDebug) {
+                    CatLog.Log(StringColor.YELLOW, "Stop AutoMode !");
+                }
             }
         }
 
-        void ClearAutoStop() {
+        void OnAutoModeStop() {
+            if (!isAutoRunning) {
+                return;
+            }
             isAutoExitWait = true;
         }
 
@@ -61,10 +73,10 @@
 
         void AutoModeUpdate() {
             //if gamestate is paused, stop update automode
-            if(IsPullingStop == true) {
-                return;
-            }
-
+            //Clear, GameOver State에서 AutoMode를 None State로 바꿔주지 않기 때문에 주석처리 해둠
+            //if (IsPullingStop == true) { 
+            //    return;
+            //}
             switch (autoState) {
                 case AUTOSTATE.NONE: StateNone(STATEFLOW.UPDATE); break;
                 case AUTOSTATE.WAIT: StateWait(STATEFLOW.UPDATE); break;
@@ -82,6 +94,7 @@
                 case AUTOSTATE.FIND: StateFind(STATEFLOW.EXIT); break;
                 case AUTOSTATE.TRAC: StateTrac(STATEFLOW.EXIT); break;
                 case AUTOSTATE.SHOT: StateShot(STATEFLOW.EXIT); break;
+                default: throw new System.NotImplementedException();
             }
 
             //State Change
@@ -93,12 +106,13 @@
                 case AUTOSTATE.FIND: StateFind(STATEFLOW.ENTER); break;
                 case AUTOSTATE.TRAC: StateTrac(STATEFLOW.ENTER); break;
                 case AUTOSTATE.SHOT: StateShot(STATEFLOW.ENTER); break;
+                default: throw new System.NotImplementedException();
             }
         }
 
         void StateNone(STATEFLOW flow) {
             switch (flow) {
-                case STATEFLOW.ENTER:  NoneEnter(); break; //-> is AutoMode Udpate Exit.
+                case STATEFLOW.ENTER:  NoneEnter(); break; //-> is AutoMode Update Exit.
                 case STATEFLOW.UPDATE:              break;
                 case STATEFLOW.EXIT:                break;
             }
@@ -159,20 +173,22 @@
             //clear exitwait
             isAutoExitWait = false;
 
-            //Stop AutoMode Update
+            //Stop AutoMode State Update
             isAutoRunning = false;
+            //CatLog.Break();
         }
         //################################################################################################################################################
         //############################################################### << STATE WAIT >> ###############################################################
         void WaitUpdate() {
             //AutoExiter(); // <- Wait State is Exitable AutoMode
-            if(isAutoExitWait == true) {
+            if (isAutoExitWait == true) {
                 AutoStateChange(AUTOSTATE.NONE);
+                return;
             }
 
             //Start Auto Mode
             if (isAutoExitWait == false && GameManager.Instance.GameState == GAMESTATE.STATE_INBATTLE) {
-                autoState = AUTOSTATE.FIND;
+                AutoStateChange(AUTOSTATE.FIND);
             }
         }
         //################################################################################################################################################
@@ -184,8 +200,9 @@
 
         void FindUpdate() {
             //AutoExiter(); // <- Find State is Exitable AutoMode
-            if(isAutoExitWait == true) {
+            if (isAutoExitWait == true) {
                 AutoStateChange(AUTOSTATE.NONE);
+                return;
             }
 
             currFindTime += Time.unscaledDeltaTime;
@@ -224,8 +241,9 @@
 
         void TracUpdate() {
             //==========================================<< TARGET CHECK & EXIT CHECK >>=========================================
-            if(isAutoExitWait == true) {
+            if (isAutoExitWait == true) {
                 AutoStateChange(AUTOSTATE.NONE);
+                return;
             }
             //====================================================<< PULLING >>=================================================
             if (arrowTr != null) { //auto Pulling the Bow 
@@ -243,13 +261,13 @@
             }
             //==================================================================================================================
 
-//#################################################################### << TARGET FOUND >> ##################################################################
+//#################################################################### << TARGET NOT FOUND >> ##################################################################
             if (targetTr == null || target.IsAlive() == false) { //Target Monster Disable Check
                 //EnterStateFind();
                 AutoStateChange(AUTOSTATE.FIND);
             }
             else {
-//################################################################# << TARGET NOT FOUND >> #################################################################
+//###################################################################### << TARGET FOUND >> ####################################################################
             //=====================================================<< ROTATE >>=================================================
                 //auto rotate to Monster Position
                 direction = targetTr.position - bowTr.position;

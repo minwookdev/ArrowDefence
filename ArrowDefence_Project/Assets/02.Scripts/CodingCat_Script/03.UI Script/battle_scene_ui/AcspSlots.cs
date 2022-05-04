@@ -102,8 +102,7 @@
                 }
             }
             else {
-                if (isUseUnscaledTime == true) currOpenedTime -= Time.unscaledDeltaTime;
-                else                           currOpenedTime -= Time.deltaTime;
+                currOpenedTime -= (isUseUnscaledTime) ? Time.unscaledDeltaTime : Time.deltaTime;
 
                 if(isOpen == false) {
                     ShowPanel();
@@ -119,12 +118,12 @@
         }
 
         void ShowPanel() {
-            canvasGroup.DOFade(StNum.floatOne, fadeTime).OnStart(() => blockPanel.SetActive(false));
+            canvasGroup.DOFade(StNum.floatOne, fadeTime).OnStart(() => blockPanel.SetActive(false)).SetUpdate(true);
             isOpen = true;
         }
 
         void HidePanel() {
-            canvasGroup.DOFade(StNum.floatZero, fadeTime).OnStart(() => blockPanel.SetActive(true));
+            canvasGroup.DOFade(StNum.floatZero, fadeTime).OnStart(() => blockPanel.SetActive(true)).SetUpdate(true);
             isOpen = false;
         }
 

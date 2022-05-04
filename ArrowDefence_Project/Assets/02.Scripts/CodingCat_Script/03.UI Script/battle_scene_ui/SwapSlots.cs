@@ -52,8 +52,7 @@
                 }
             }
             else {
-                if (isUseUnscaledTime) currOpenedTime -= Time.unscaledDeltaTime;
-                else                   currOpenedTime -= Time.deltaTime;
+                currOpenedTime -= (isUseUnscaledTime) ? Time.unscaledDeltaTime : Time.deltaTime;
 
                 if(isOpen == false) {
                     isOpen = true;
@@ -81,11 +80,11 @@
         }
 
         void TweenOpen() {
-            slotGroupTr.DOLocalMoveX(openPosX, slotMovingTime);
+            slotGroupTr.DOLocalMoveX(openPosX, slotMovingTime).SetUpdate(true);
         }
 
         void TweenClose() {
-            slotGroupTr.DOLocalMoveX(closePosX, slotMovingTime);
+            slotGroupTr.DOLocalMoveX(closePosX, slotMovingTime).SetUpdate(true);
         }
 
         #region INITALIZE

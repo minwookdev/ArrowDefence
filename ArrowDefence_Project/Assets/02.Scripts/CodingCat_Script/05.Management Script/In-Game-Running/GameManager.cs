@@ -29,6 +29,17 @@
         GameEventHandler OnStateGameOver;
         GameEventHandler OnStatePause;
 
+        public bool IsGameStateEnd {
+            get {
+                if (this.GameState == GAMESTATE.STATE_GAMEOVER || this.GameState == GAMESTATE.STATE_ENDBATTLE) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            }
+        }
+
         public void Initialize() {
             if (isManagerInitialized == true) return;
 #if UNITY_EDITOR
@@ -493,7 +504,7 @@
                 case GAMESTATE.STATE_ENDBATTLE:    OnStateEndBattle(); break;
                 case GAMESTATE.STATE_GAMEOVER:     OnStateGameOver();  break;
                 case GAMESTATE.STATE_PAUSE:        OnStatePause();     break;
-                case GAMESTATE.STATE_NONE:                             break; // No Event.
+                case GAMESTATE.STATE_NONE:                             break; // No Event. Entering Battle Scene Or Destroy Battle Scene
                 default: throw new System.NotImplementedException();
             }
         }

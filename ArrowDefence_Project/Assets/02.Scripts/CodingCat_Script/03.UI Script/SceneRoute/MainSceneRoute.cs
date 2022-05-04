@@ -79,6 +79,15 @@ public class MainSceneRoute : MonoBehaviour {
 
         //float tempValue = (float)0.125f / 0.125f;
         //CatLog.Log($"Calculate Grade: {Mathf.CeilToInt(tempValue)}");
+
+        //string tempString = "This is Temp String"; // ---> 허용되지 않음
+        //CatLog.Log(tempString);
+        //tempString.Clear();
+        //CatLog.Log(tempString);
+        //string tempStringOne = "";
+        //string tempStringTwo = "NotNull";
+        //CatLog.Log($"TempStringOne is Empty?: {(tempStringOne.IsStringEmpty())}");
+        //CatLog.Log($"TempStringTwo is Empty?: {(tempStringTwo.IsStringEmpty())}");
     }
 
     private void Update() {

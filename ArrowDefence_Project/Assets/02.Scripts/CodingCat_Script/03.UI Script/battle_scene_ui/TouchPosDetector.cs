@@ -35,6 +35,7 @@
         Vector2 detectorWorldPos = Vector2.zero;
         ITouchPosReceiver receiver = null; // <-- Detect result 수신자
         Sequence quitSequence = null;
+        Coroutine gameStateCheckCo = null;
         bool isTouchEnded = false;
 
         public bool IsTouching {
@@ -64,8 +65,12 @@
 
         private void OnEnable() {
             isTouchEnded = false;
+            detectorRectTr.anchoredPosition = Vector2.zero;
             detectorRectTr.localScale = Vector3.zero;
             canvasGroup.DOFade(1f, 0.2f).From(0f);
+
+            //Start Coroutine GameState Ended
+            CheckStart();
         }
 
         public void OpenDetector(float radius, ITouchPosReceiver receiver) {
@@ -104,13 +109,17 @@
 
             if (!isTouchEnded) {
                 isTouchEnded = true;
-                if (receiver != null) { //Send World Position and Release Receiver Address
-                    //receiver.SendWorldPos(ToWorldPos(eventData.position)); // <--- World Position를 보낼 때
-                    receiver.SendColliders(worldDetector.GetColliders());    // <--- World Detector에 잡힌 Collider들을 보낼 때
-                    receiver = null;
-                }
+                CheckStop();
+                //if (receiver != null) { //Send World Position and Release Receiver Address
+                //    //receiver.SendWorldPos(ToWorldPos(eventData.position)); // <--- World Position를 보낼 때
+                //    receiver.SendColliders(worldDetector.GetColliders());    // <--- World Detector에 잡힌 Collider들을 보낼 때
+                //    receiver = null;
+                //}
+
+                receiver.TrySendColliders(worldDetector.GetCollidersWithLength(out int length));
+                receiver = null;
                 quitSequence.Restart();
-                CatLog.Log($"Get Colldiers Count: {worldDetector.GetColliders().Length}");
+                CatLog.Log($"Get Colldiers Count: {length}");
             }
         }
 
@@ -122,8 +131,6 @@
                 detectorRectTr.anchoredPosition = touchPosition;
                 worldPosDetectorRectTr.position = ToWorldPos(detectorWorldPos);
             }
-
-
         }
 
         Vector2 PointerDataToRelativePosition(PointerEventData eventData) {
@@ -135,8 +142,26 @@
             return mainCam.ScreenToWorldPoint(eventDataPosition);
         }
 
-        System.Collections.IEnumerator CheckEnd() {
-            yield return
+        void CheckStart() {
+            gameStateCheckCo = StartCoroutine(CheckGameStateEnd());
+        }
+
+        void CheckStop() {
+            //if (gameStateCheckCo != null) {
+            //    StopCoroutine(gameStateCheckCo);
+            //} --> 체크할 필요 없음. 무조건 Enable에서 시작하니까
+            StopCoroutine(gameStateCheckCo);
+        }
+
+        /// <summary>
+        /// Detector가 활성화 중 Game Clear, Game Over 감지
+        /// </summary>
+        /// <returns></returns>
+        System.Collections.IEnumerator CheckGameStateEnd() {
+            yield return new WaitUntil(() => GameManager.Instance.IsGameStateEnd == true);
+            isTouchEnded = true;
+            receiver     = null;
+            quitSequence.Restart();
         }
     }
 }

@@ -223,7 +223,7 @@
                 case 1: yield return StartCoroutine(SpawnPlatoon()); break;
                 case 2: yield return StartCoroutine(SpawnCompany()); break;
             }
-            //현재 난이도에 따라서 많은 group을 spawn할 확률 증가..
+            //현재 난이도에 따라서 많은 group을 spawn할 확률 증가
         }
 
         IEnumerator SpawnSquad() {
@@ -307,9 +307,9 @@
 
         void UpdateState() {
             switch (spawnerState) {
-                case SPAWNSTATE.BREAK: STATE_SPAWN(STATEFLOW.UPDATE); break;
-                case SPAWNSTATE.SPAWN: STATE_BREAK(STATEFLOW.UPDATE); break;
-                case SPAWNSTATE.NONE:  break; //SPANER NOT STARTED
+                case SPAWNSTATE.NONE:                                 break; //SPANER NOT STARTED
+                case SPAWNSTATE.BREAK: STATE_BREAK(STATEFLOW.UPDATE); break;
+                case SPAWNSTATE.SPAWN: STATE_SPAWN(STATEFLOW.UPDATE); break;
                 default: throw new System.NotImplementedException();
             }
         }

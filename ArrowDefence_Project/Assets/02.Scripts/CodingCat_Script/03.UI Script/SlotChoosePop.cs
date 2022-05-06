@@ -36,13 +36,13 @@
                 if (objectRightPanel.activeSelf)
                     objectRightPanel.SetActive(false);
 
-                if (playerEquips.IsEquippedArrowMain())
+                if (playerEquips.IsEquippedArrMain)
                 {
                     arrowSlot0.gameObject.SetActive(true);
                     arrowSlot0.EnableSlot(playerEquips.GetMainArrow());
                 }
 
-                if(playerEquips.IsEquippedArrowSub())
+                if(playerEquips.IsEquippedArrSub)
                 {
                     arrowSlot1.gameObject.SetActive(true);
                     arrowSlot1.EnableSlot(playerEquips.GetSubArrow());
@@ -119,8 +119,8 @@
         {
             switch (num)
             {
-                case 0: CCPlayerData.equipments.Equip_ArrowItem(item); break;
-                case 1: CCPlayerData.equipments.Equip_SubArrow(item);  break;
+                case 0: CCPlayerData.equipments.EquipItem_MainArr(item); break;
+                case 1: CCPlayerData.equipments.EquipItem_SubArr(item);  break;
                 default: CatLog.Log("Worng Slot Number's, Check Slot Button"); break;
             }
         }
@@ -129,9 +129,9 @@
         {
             switch (num)
             {
-                case 0: CCPlayerData.equipments.Equip_Accessory(item, 0); break;
-                case 1: CCPlayerData.equipments.Equip_Accessory(item, 1); break;
-                case 2: CCPlayerData.equipments.Equip_Accessory(item, 2); break;
+                case 0: CCPlayerData.equipments.EquipItem_Artifact(item, 0);  break;
+                case 1: CCPlayerData.equipments.EquipItem_Artifact(item, 1);  break;
+                case 2: CCPlayerData.equipments.EquipItem_Artifact(item, 2);  break;
                 default: CatLog.Log("Wrong Slot Number's Check Slot Button"); break;
             }
         }

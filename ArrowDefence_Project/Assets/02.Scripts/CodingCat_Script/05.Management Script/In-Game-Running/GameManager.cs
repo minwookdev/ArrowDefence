@@ -100,15 +100,15 @@
         }
 
         public ARROWTYPE GetFirstArrType() {
-            if (CCPlayerData.equipments.IsEquippedArrowMain())     return ARROWTYPE.ARROW_MAIN;
-            else if (CCPlayerData.equipments.IsEquippedArrowSub()) return ARROWTYPE.ARROW_SUB;
+            if (CCPlayerData.equipments.IsEquippedArrMain)     return ARROWTYPE.ARROW_MAIN;
+            else if (CCPlayerData.equipments.IsEquippedArrSub) return ARROWTYPE.ARROW_SUB;
             else throw new System.Exception("There are no Arrow Equipped.");
         }
 
         public void InitArrowSlotData(out bool slot_m, out bool slot_s, 
                                       out Sprite arrowIconSprite_m, out Sprite arrowIconSprite_s) {
-            slot_m = (CCPlayerData.equipments.IsEquippedArrowMain()) ? true : false;
-            slot_s = (CCPlayerData.equipments.IsEquippedArrowSub())  ? true : false;
+            slot_m = (CCPlayerData.equipments.IsEquippedArrMain) ? true : false;
+            slot_s = (CCPlayerData.equipments.IsEquippedArrSub)  ? true : false;
 
             if (slot_m) arrowIconSprite_m = CCPlayerData.equipments.GetMainArrow().GetSprite;
             else        arrowIconSprite_m = null;
@@ -119,10 +119,10 @@
         UI.ArrSSData[] GetArrSwapSlotData() {
             var equipment     = CCPlayerData.equipments;
             var slotDataList  = new System.Collections.Generic.List<UI.ArrSSData>();
-            bool isEquippedMainArr = equipment.IsEquippedArrowMain();
+            bool isEquippedMainArr = equipment.IsEquippedArrMain;
             if (isEquippedMainArr) slotDataList.Add(new UI.ArrSSData(isEquippedMainArr, equipment.GetMainArrow().GetSprite, GetControllerInstOrNull().Swap));
             else                   slotDataList.Add(new UI.ArrSSData(isEquippedMainArr));
-            bool isEquippedSubArr = equipment.IsEquippedArrowSub();
+            bool isEquippedSubArr = equipment.IsEquippedArrSub;
             if (isEquippedSubArr)  slotDataList.Add(new UI.ArrSSData(isEquippedSubArr, equipment.GetSubArrow().GetSprite, GetControllerInstOrNull().Swap));
             else                   slotDataList.Add(new UI.ArrSSData(isEquippedSubArr));
             bool isEquippedSpArr = equipment.IsEquippedSpArr;

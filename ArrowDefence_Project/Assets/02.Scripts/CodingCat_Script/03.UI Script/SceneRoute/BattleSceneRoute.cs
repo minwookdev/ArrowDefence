@@ -2,6 +2,7 @@
     using System.Collections.Generic;
     using UnityEngine;
     using UnityEngine.UI;
+    using UnityEngine.EventSystems;
     using DG.Tweening;
     using TMPro;
 
@@ -37,7 +38,7 @@
         float fadeOutTime = 1.0f;
 
         [Header("OPTIONS")]
-        [SerializeField] bool isOnDisableLine;
+        [SerializeField] bool isDrawDisableLine;
         [SerializeField] bool isOnFPS = false;
         [SerializeField] Material DefaultLineMat;
         float LineWidth = 0.1f;
@@ -94,7 +95,7 @@
 
         void Start() {
             #region LIMIT_LINE_MAKER
-            if (isOnDisableLine == true) {
+            if (isDrawDisableLine == true) {
                 topLeftPoint     = Camera.main.ScreenToWorldPoint(new Vector3(0f, Screen.height));
                 bottomRightPoint = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, 0f));
 
@@ -229,4 +230,31 @@
 
         #endregion
     }
+
+#if UNITY_EDITOR
+    [UnityEditor.CustomEditor(typeof(BattleSceneRoute))]
+    class BattleSceneRouteEditor : UnityEditor.Editor {
+        public override void OnInspectorGUI() {
+            base.OnInspectorGUI();
+            GUILayout.Space(10f);
+            if (GUILayout.Button("CREATE TEMP EVENTSYSTEM")) {
+                //Condition 1. Editor가 Play상태.
+                //Condition 2. Scene에 EventSystem이 없음.
+                if (UnityEditor.EditorApplication.isPlaying == false) {
+                    CatLog.WLog("this function is only Running Editor.Play Mode !");
+                    return;
+                }
+
+                var existEventSystem = FindObjectOfType<UnityEngine.EventSystems.EventSystem>();
+                if (existEventSystem == null) {
+                    var newEventSystem = new GameObject("EventSystem[TEMP]", typeof(EventSystem), typeof(StandaloneInputModule));
+                    newEventSystem.transform.position = Vector3.zero;
+                }
+                else {
+                    CatLog.WLog("It can only be Created if the EventSystem does not Exist in this Scene.");
+                }
+            }
+        }
+    }
+#endif
 }

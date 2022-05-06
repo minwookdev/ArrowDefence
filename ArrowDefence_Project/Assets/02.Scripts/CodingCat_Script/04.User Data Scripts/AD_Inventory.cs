@@ -179,13 +179,12 @@
 
         #region ONLY_USING_PLAYER_EQUIPMENT
 
-        public void ToInven(Item_Bow newItem) => invenList.Add(new Item_Bow(newItem));
-
-        public void ToInven(Item_Arrow item) => invenList.Add(new Item_Arrow(item));
-
-        public void ToInven(Item_Accessory item) => invenList.Add(new Item_Accessory(item));
-
         public void ToInven(Item_SpArr item) => invenList.Add(item);
+
+        public void EquipToInventory(Item_Equipment item) {
+            CatLog.Log($"Equipped Item to Inventory, Name: {item.GetNameByTerms}");
+            invenList.Add(item);
+        }
 
         #endregion
 
@@ -374,6 +373,16 @@
 
             return result.ToArray();
         }
+
+        #endregion
+
+        #region CLONE
+
+        public void CloneItem(Item_Bow newItem) => invenList.Add(new Item_Bow(newItem));
+
+        public void CloneItem(Item_Arrow item) => invenList.Add(new Item_Arrow(item));
+
+        public void CloneItem(Item_Accessory item) => invenList.Add(new Item_Accessory(item));
 
         #endregion
     }

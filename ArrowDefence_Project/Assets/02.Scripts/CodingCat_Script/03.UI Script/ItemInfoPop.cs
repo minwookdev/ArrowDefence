@@ -5,14 +5,6 @@
     using TMPro;
     using ActionCat.Data;
 
-    public enum Popup_Type { 
-        None             = 0,
-        Popup_NormalItem = 1,
-        Popup_BowItem    = 2,
-        Popup_ArrowItem  = 3,
-        Popup_Accessory  = 4
-    }
-
     [System.Serializable]
     public class SkillSlot {
         public GameObject SlotGO;
@@ -617,12 +609,13 @@
             }
 
             /// <summary>
-            /// 사용금지
+            /// !! Not Use this Method. (Not Implemented Method//)
             /// </summary>
             /// <param name="entity"></param>
             /// <param name="frame"></param>
             public void OpenEntityInfo(ItemData entity, Sprite frame) {
-                SetDefaultItemInfo(entity, frame);
+                throw new System.NotImplementedException();
+                //SetDefaultItemInfo(entity, frame);
             }
 
             void DisablePopup() {
@@ -681,12 +674,12 @@
             }
 
             void EventEntryEquipBow(Item_Bow item) {
-                CCPlayerData.equipments.Equip_BowItem(item); 
+                CCPlayerData.equipments.EquipItem_Bow(item); 
                 Close();
             }
 
             void EventEntryReleaseBow() {
-                CCPlayerData.equipments.Release_BowItem(); 
+                CCPlayerData.equipments.ReleaseItem_Bow(); 
                 Close();
             }
 
@@ -696,9 +689,12 @@
             }
 
             void EventEntryReleaseArrow(Item_Arrow item) {
-                if (ReferenceEquals(CCPlayerData.equipments.GetMainArrow(), item) == true)
-                    CCPlayerData.equipments.Release_ArrowItem();
-                else CCPlayerData.equipments.Release_SubArrow();
+                if (ReferenceEquals(CCPlayerData.equipments.GetMainArrow(), item) == true) {
+                    CCPlayerData.equipments.ReleaseItem_MainArr();
+                }
+                else {
+                    CCPlayerData.equipments.ReleaseItem_SubArr();
+                }
                 Close();
             }
 
@@ -708,7 +704,7 @@
             }
 
             void EventEntryReleaseArtifact(byte idx) {
-                CCPlayerData.equipments.Release_Accessory(idx);
+                CCPlayerData.equipments.ReleaseItem_Artifact(idx);
                 Close();
             }
 
@@ -807,24 +803,8 @@
         }
 
         /// <summary>
-        /// 업그레이드 가능 아이템 팝업
-        /// </summary>
-        /// <param name="equipItem"></param>
-        public void OpenPopup_Upgradeable(Item_Equipment equipItem) {
-            var frame = Frames[(int)equipItem.GetGrade];
-            switch (equipItem) {
-                case Item_Bow       equipment: itemPopup.EnablePopup(equipment, frame, true, true); break;
-                case Item_SpArr     equipment: itemPopup.EnablePopup(equipment, frame, true, true); break;
-                case Item_Arrow     equipment: itemPopup.EnablePopup(equipment, frame, true, true); break;
-                case Item_Accessory equipment: itemPopup.EnablePopup(equipment, frame, true, true); break;
-                default: throw new System.NotImplementedException();
-            }
-
-            btn_Select.SetActive(true);
-        }
-
-        /// <summary>
         /// CRAFTING PANEL의 완성품 프리뷰 기능
+        /// [MainScene.Route의 InfoPopup을 사용] 
         /// </summary>
         /// <param name="item"></param>
         public void OpenPreview_Crafting(AD_item item, bool disableAmountText = false) {
@@ -860,7 +840,26 @@
         }
 
         /// <summary>
+        /// 업그레이드 가능 아이템 팝업 
+        /// [UpgradeFunction의 독자적인 InfoPopup을 사용]
+        /// </summary>
+        /// <param name="equipItem"></param>
+        public void OpenPopup_Upgradeable(Item_Equipment equipItem) {
+            var frame = Frames[(int)equipItem.GetGrade];
+            switch (equipItem) {
+                case Item_Bow       equipment: itemPopup.EnablePopup(equipment, frame, true, true); break;
+                case Item_SpArr     equipment: itemPopup.EnablePopup(equipment, frame, true, true); break;
+                case Item_Arrow     equipment: itemPopup.EnablePopup(equipment, frame, true, true); break;
+                case Item_Accessory equipment: itemPopup.EnablePopup(equipment, frame, true, true); break;
+                default: throw new System.NotImplementedException();
+            }
+
+            btn_Select.SetActive(true);
+        }
+
+        /// <summary>
         /// UPGRADE PANEL의 완성품 프리뷰 기능
+        /// [UpgradeFunction의 독자적인 InfoPopup을 사용]
         /// </summary>
         /// <param name="previewItem"></param>
         /// <param name="enableSelectButton"></param>

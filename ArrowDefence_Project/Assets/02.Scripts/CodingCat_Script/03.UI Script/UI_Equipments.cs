@@ -52,7 +52,7 @@
             var equipment = CCPlayerData.equipments;
 
             //Equipment Item : Bow
-            if(equipment.IsEquippedBow()) {
+            if(equipment.IsEquippedBow) {
                 var item = equipment.GetBowItem();
 
                 //Init-Bow Slot
@@ -69,7 +69,7 @@
             }
 
             //Equipment Item : Arrow (Main)
-            if(equipment.IsEquippedArrowMain())
+            if(equipment.IsEquippedArrMain)
             {
                 ArrowItem_Slot0.gameObject.SetActive(true);
                 ArrowItem_Slot0.EnableSlot(CCPlayerData.equipments.GetMainArrow());
@@ -80,7 +80,7 @@
             }
 
             //Equipment Item : Arrow (Sub)
-            if(equipment.IsEquippedArrowSub())
+            if(equipment.IsEquippedArrSub)
             {
                 ArrowItem_Slot1.gameObject.SetActive(true);
                 ArrowItem_Slot1.EnableSlot(CCPlayerData.equipments.GetSubArrow());

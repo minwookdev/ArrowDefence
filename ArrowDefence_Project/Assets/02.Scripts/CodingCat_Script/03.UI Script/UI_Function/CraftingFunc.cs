@@ -47,7 +47,7 @@
         [Header("DEBUG")]
         AD_item itemRefSelected = null;
         CraftingRecipeSO recipe = null;
-        [SerializeField] [ReadOnly] int selectedSlotNumber = 0;
+        [SerializeField] [ReadOnly] int selectedSlotNumber = -1;
 
         //New ItemGet Popup Tween Class
         TweenGetItemPopup itemGetPopupTween = null;
@@ -175,9 +175,10 @@
 
         void RefreshCraftingSlot() {
             slots.ForEach(slot => slot.DisableSlot());
+            selectedSlotNumber = -1;
 
             var craftingSlotCount = GameManager.Instance.GetCraftingInfoSize();
-            if(craftingSlotCount <= 0) { //유저의 제작슬롯이 없으면 로드하지 않음
+            if (craftingSlotCount <= 0) { //유저의 제작슬롯이 없으면 로드하지 않음
                 return;
             }
 
@@ -200,12 +201,12 @@
                 var newSlot = GameObject.Instantiate<CraftingSlot>(slotPrefab, slotParentRectTr);
                 newSlot.gameObject.name = "crafting_slot_pref";
                 newSlot.AddListnerToSelectButton(unityAction);
-                newSlot.AddListnerToReceiptButton(ReceiptResult);
+                //newSlot.AddListnerToReceiptButton(ReceiptResult);
                 slots.Add(newSlot);
             }
         }
 
-        void ReceiptResult(ItemData item, int amount) {
+        public void ReceiptResult(ItemData item, int amount) {
             //Reuslt Popup Slot Set, Popup Positioning
             resultItemSlot.EnableSlot(item, amount);
 

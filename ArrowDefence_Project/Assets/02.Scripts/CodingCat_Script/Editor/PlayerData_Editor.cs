@@ -76,17 +76,17 @@ public class PlayerData_Editor : EditorWindow
         EditorGUILayout.LabelField("Equipment Data Field", EditorStyles.boldLabel);
 
         //Equipped Bow
-        if (CCPlayerData.equipments.IsEquippedBow())
+        if (CCPlayerData.equipments.IsEquippedBow)
             EditorGUILayout.LabelField("Equipped Bow Item : ", CCPlayerData.equipments.GetBowItem().GetTermsName);
         else
             EditorGUILayout.LabelField("Euqippped Bow Item : ", "NULL");
         //Equipped Arrow (Main)
-        if (CCPlayerData.equipments.IsEquippedArrowMain())
+        if (CCPlayerData.equipments.IsEquippedArrMain)
             EditorGUILayout.LabelField("Equipped Main Arrow Item : ", CCPlayerData.equipments.GetMainArrow().GetTermsName);
         else
             EditorGUILayout.LabelField("Equipped Main Arrow Item : ", "NULL");
         //Equipped Arrow (Sub)
-        if (CCPlayerData.equipments.IsEquippedArrowSub())
+        if (CCPlayerData.equipments.IsEquippedArrSub)
             EditorGUILayout.LabelField("Equipped Sub Arrow Item : ", CCPlayerData.equipments.GetSubArrow().GetTermsName);
         else 
             EditorGUILayout.LabelField("Equipped Sub Arrow Item : ", "NULL");
@@ -97,17 +97,17 @@ public class PlayerData_Editor : EditorWindow
         var accessories = CCPlayerData.equipments.GetAccessories();
 
         //Equipped Accessory (f)
-        if (CCPlayerData.equipments.IsEquippedAccessory(0))
+        if (CCPlayerData.equipments.IsEquippedArtifact(0))
             EditorGUILayout.LabelField("Equipped Accessory [0] : ", accessories[0].GetTermsName);
         else
             EditorGUILayout.LabelField("Equipped Accessory [0] : ", "NULL");
         //Equipped Accessory (s)
-        if (CCPlayerData.equipments.IsEquippedAccessory(1))
+        if (CCPlayerData.equipments.IsEquippedArtifact(1))
             EditorGUILayout.LabelField("Equipped Accessory [1] : ", accessories[1].GetTermsName);
         else
             EditorGUILayout.LabelField("Equipped Accessory [1] : ", "NULL");
         //Equipped Accessory (t)
-        if (CCPlayerData.equipments.IsEquippedAccessory(2))
+        if (CCPlayerData.equipments.IsEquippedArtifact(2))
             EditorGUILayout.LabelField("Equipped Accessory [2] : ", accessories[2].GetTermsName);
         else
             EditorGUILayout.LabelField("Equipped Accessory [2] : ", "NULL");

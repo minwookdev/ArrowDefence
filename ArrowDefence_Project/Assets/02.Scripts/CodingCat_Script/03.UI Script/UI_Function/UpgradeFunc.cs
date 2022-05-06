@@ -227,8 +227,8 @@
             if(selectedItemRef != null) {
                 selectedItemRef = null;
             }
-
-            previewCache = null;
+            
+            previewCache = null; //Clear Preview Item Cache
 
             //Clear Selected Data
             ClearSelected();
@@ -261,6 +261,15 @@
             selectedItemSlot.EnableSlot(targetRecipe.KeyItem);
             previewItemSlot.EnableSlot(targetRecipe.Result);
             selectedRecipe = targetRecipe;
+            //assignment new preview cache
+            switch (selectedRecipe.Result) {
+                case ItemData_Equip_Bow resultEntity:       previewCache = new Item_Bow(resultEntity);       break;
+                case ItemDt_SpArr resultEntity:             previewCache = new Item_SpArr(resultEntity);     break;
+                case ItemData_Equip_Arrow resultEntity:     previewCache = new Item_Arrow(resultEntity);     break;
+                case ItemData_Equip_Accessory resultEntity: previewCache = new Item_Accessory(resultEntity); break;
+                case null: CatLog.WLog("this Recipe is Not Assignment Result Item Entity");  previewCache = null; break;
+                default:   CatLog.WLog("this Result Item Entity Type is Not Implemented !"); previewCache = null; break;
+            }
             UpdateProbText(); //Update Probablity Text
         }
 
@@ -271,18 +280,20 @@
                     return false;
                 }
 
-                if(selectedRecipe.Result == null) {
-                    log = "Upgrade Result Item is Not Assignment.";
+                if (selectedRecipe.Result == null) {
+                    log = "this Recipe is Not Assignment Result Item Entity.";
                     return false;
                 }
 
-                //매번 previewCache새로 할당하지 않는 방법으로 개선
-                switch (selectedRecipe.Result) {
-                    case ItemData_Equip_Bow equipmentEntity:       previewCache = new Item_Bow(equipmentEntity);       break;
-                    case ItemData_Equip_Accessory equipmentEntity: previewCache = new Item_Accessory(equipmentEntity); break;
-                    case ItemData_Equip_Arrow equipmentEntity:     previewCache = new Item_Arrow(equipmentEntity);     break;
-                    default: log = "Not Supported Equipment Type"; return false;
-                }
+                ///매번 previewCache새로 할당하지 않는 방법으로 개선 --> Upgrade Item을 선택한 상태라면 Preview Cache도 할당된 상태로 로직 변경
+                ///switch (selectedRecipe.Result) {
+                ///    case ItemData_Equip_Bow equipmentEntity:       previewCache = new Item_Bow(equipmentEntity);       break;
+                ///    case ItemData_Equip_Accessory equipmentEntity: previewCache = new Item_Accessory(equipmentEntity); break;
+                ///    case ItemData_Equip_Arrow equipmentEntity:     previewCache = new Item_Arrow(equipmentEntity);     break;
+                ///    default: log = "Not Supported Equipment Type"; return false;
+                ///}
+                log = "The Preview item was not assigned for some reason.";
+                return false;
             }
 
             infoPopup.OpenPreview_Upgrade(previewCache, true);

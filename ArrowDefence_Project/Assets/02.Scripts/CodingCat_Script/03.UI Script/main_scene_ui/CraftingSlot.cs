@@ -30,11 +30,11 @@
         [SerializeField] Image imageAdBtn = null;
         [SerializeField] TextMeshProUGUI textAdBtn = null;
         Color tempColor;
-        Color enableColor = new Color(1f, 1f, 1f, 1f);
+        Color enableColor  = new Color(1f, 1f, 1f, 1f);
         Color disableColor = new Color(.35f, .35f, .35f, 1f);
 
-        CraftingFunc craftingParent = null; //action너무 많아지니까 걍 부모 받아서 사용..으음 근데 하나 더 추가되도 실질적으로 가지고있게 되는 Action은 두개다..
-        System.Action<ItemData, int> receiptAction = null;
+        CraftingFunc craftingParent = null; //너무 많은 System.Action을 정리하고, Parent를 가지고있도록 변경
+        //System.Action<ItemData, int> receiptAction = null;
         //System.Action quickButtonAction = null;
 
         int craftSlotNumber = -1;
@@ -67,7 +67,7 @@
             selectBluePrintTrigger.triggers.Add(entry);
         }
 
-        public void AddListnerToReceiptButton(System.Action<ItemData, int> action) => receiptAction = action;
+        //public void AddListnerToReceiptButton(System.Action<ItemData, int> action) => receiptAction = action;
 
         public void EnableSlot(Data.CraftingInfo craftinginfo, int slotNumber, CraftingFunc parent) {
             craftingParent = parent;
@@ -125,7 +125,8 @@
                 throw new System.Exception();
             }
 
-            receiptAction(resultItem, itemAmount);
+            //receiptAction(resultItem, itemAmount);
+            craftingParent.ReceiptResult(resultItem, itemAmount);
         }
 
         public void BE_QUICK() {

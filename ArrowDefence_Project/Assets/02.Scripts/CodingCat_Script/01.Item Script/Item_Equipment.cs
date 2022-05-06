@@ -23,6 +23,10 @@
             this.Item_Type = ITEMTYPE.ITEM_EQUIPMENT;
         }
 
+        /// <summary>
+        /// Equipment Item Clone Constructor
+        /// </summary>
+        /// <param name="origin"></param>
         protected Item_Equipment(Item_Equipment origin) : base(origin.termsName, origin.termsDesc) {
             this.Item_Id     = origin.Item_Id;
             this.Item_Amount = 1;
@@ -31,6 +35,10 @@
             this.Item_Grade  = origin.Item_Grade;
         }
 
+        /// <summary>
+        /// Constructor for Item Entity
+        /// </summary>
+        /// <param name="entity"></param>
         protected Item_Equipment(ItemData_Equip entity) : base(entity.NameTerms, entity.DescTerms) {
             this.Item_Id     = entity.Item_Id;
             this.Item_Amount = 1;
@@ -60,7 +68,5 @@
             findAbility = null;
             return false;
         }
-
-        //public abstract void Setup();
     }
 }

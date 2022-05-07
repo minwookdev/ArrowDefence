@@ -148,7 +148,7 @@
 
         #region INITIALIZE
         void InitTypeKill() {
-            BattleProgresser.OnMonsterDeath += CostIncByKill;
+            BattleProgresser.OnMonsterDeathByAttack += CostIncByKill;
         }
 
         void InitTypeAtck() {
@@ -216,7 +216,7 @@
 
             switch (chargeType) {
                 case CHARGETYPE.NONE:                                                   break;
-                case CHARGETYPE.KILL: BattleProgresser.OnMonsterDeath -= CostIncByKill; break;
+                case CHARGETYPE.KILL: BattleProgresser.OnMonsterDeathByAttack -= CostIncByKill; break;
                 case CHARGETYPE.TIME:                                                   break;
                 case CHARGETYPE.ATCK: BattleProgresser.OnMonsterHit   -= CostIncByAtck; break;
                 default: break;

@@ -240,12 +240,12 @@
         }
 
         void TracUpdate() {
-            //==========================================<< TARGET CHECK & EXIT CHECK >>=========================================
+            //========================================== << TARGET CHECK & EXIT CHECK >> =========================================
             if (isAutoExitWait == true) {
                 AutoStateChange(AUTOSTATE.NONE);
                 return;
             }
-            //====================================================<< PULLING >>=================================================
+            //==================================================== << PULLING >> =================================================
             if (arrowTr != null) { //auto Pulling the Bow 
                 arrowPos = arrowTr.position;
                 arrowPos = Vector3.MoveTowards(arrowPos, ClampPointBottom.position, Time.unscaledDeltaTime * ArrowPullingSpeed);
@@ -278,12 +278,17 @@
             //=====================================================<< SHOT >>===================================================
                 if (currShotTime > autoShotTime) {
                     //발사 조건 체크 : (몬스터의 위치와 활 위치간의 각도) - 현재 활 각도 : 몬스터 위치 각도와 현재 활이 조준하고있는 각도의 차이
-                    float angle = GameGlobal.AngleBetweenVec2(bowTr.position, targetTr.position) - bowTr.eulerAngles.z;
-                    float range = 3f; //-> Change Global Variables
+                    float angle = GameGlobal.AngleBetweenVec2(bowTr.position, targetTr.position) - bowTr.eulerAngles.z; //여기에 이거를 bowTr.rotation.z 로 치환하면 어떨까??
+                    float accuracy = 3f; //-> Change Global Variables
 
                     //bool isAngleFrontMonster = (angle >= -range && angle <= range); // -3 ~ 3
-                    bool isAngleFrontMonster = GameGlobal.IsRange(angle, range);      // -3 ~ 3
+                    bool isAngleFrontMonster = GameGlobal.IsRange(angle, accuracy);      // -3 ~ 3
                     bool isMaxPullingArrow   = (Vector2.Distance(arrowPos, ClampPointBottom.position) < 0.5f);
+
+                    // Debuggning
+                    //CatLog.Log($"IsAngleFrontMonster: {isAngleFrontMonster}, IsMaxPullingArrow: {isMaxPullingArrow}");
+                    CatLog.Log($"target is Alive: {target.IsAlive()}");
+                    CatLog.Log($"Angle Between Vector2: {GameGlobal.AngleBetweenVec2(bowTr.position, targetTr.position)}, Bow Transform EulerAngles Z: {bowTr.eulerAngles.z}, Calc Angle: {angle}");
 
                     if (isAngleFrontMonster == true && isMaxPullingArrow == true) {
                         //Shot Arrow

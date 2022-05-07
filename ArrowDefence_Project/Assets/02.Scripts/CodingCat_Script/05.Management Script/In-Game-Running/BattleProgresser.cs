@@ -146,10 +146,10 @@
         float currentComboTime = 0f;
 
         [Header("DEBUG")]
-        public bool IsQuickGameClear     = false;
-        public bool IsQuickGameOver      = false;
-        public bool IsQuickAutoButton    = false;
-        public bool IsDebugMonsterLogics = false;
+        public bool IsQuickGameClear  = false;
+        public bool IsQuickGameOver   = false;
+        public bool IsQuickAutoButton = false;
+        public bool IsForceStopSpawn  = false;
 
         //전투 진행 이벤트 핸들러 : 수치관련 이벤트
         public delegate void ValueEventHandler(float value);
@@ -161,7 +161,7 @@
         //전투 진행 이벤트 핸들러 : 몬스터관련 이벤트
         public delegate void BattleEventHandler();
         public static BattleEventHandler OnMonsterHit;
-        public static BattleEventHandler OnMonsterDeath;
+        public static BattleEventHandler OnMonsterDeathByAttack;
 
         public bool IsEnteringPause {
             get {
@@ -223,7 +223,7 @@
             //================================================== << DELEGATE >> ====================================================
             //Add Monster Method to Delegate   < 몬스터 관련 이벤트 >
             OnMonsterHit   += ComboOccurs;       //Increase Combo Count
-            OnMonsterDeath += IncreaseKillCount; //Increase Killed Count
+            OnMonsterDeathByAttack += IncreaseKillCount; //Increase Killed Count
 
             //Add Numerical Events to Delegate < 게임 진행 수치관련 이벤트 >
             currentPlayerHealth = MaxPlayerHealth; // <- 임시 플레이어 체력 할당 <플레이어 데이터에서 받아올 것>
@@ -309,7 +309,7 @@
 
             //몬스터 관련 이벤트 헤제
             OnMonsterHit   -= ComboOccurs;
-            OnMonsterDeath -= IncreaseKillCount;
+            OnMonsterDeathByAttack -= IncreaseKillCount;
 
             //Clear 처리 후, Main Scene으로 넘어가는 경우가 아닌 ApplicationQuit 되어 버리는 경우
             //GameManager가 먼저 지워질 수 있다.
@@ -438,8 +438,10 @@
                     //GameState Set Clear Game
                     SetGameState(GAMESTATE.STATE_ENDBATTLE);
                 }
-                else if (IsDebugMonsterLogics) { //Debug 2. Monster Logic Testing
+                else if (IsForceStopSpawn) { //Debug 2. Monster Logic Testing
                     CatLog.WLog(StringColor.YELLOW, "DEBUGGING MODE TRUE : MONSTER LOGIC TEST.");
+                    monsterSpawner.IsForceBreak = true;
+                    SetGameState(GAMESTATE.STATE_INBATTLE);
                 }
                 else if (IsQuickGameOver) {      //Debug 3. Go GameOver State
                     CatLog.WLog(StringColor.YELLOW, "DEBUGGING MODE TRUE : GAME OVER.");

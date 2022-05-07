@@ -14,7 +14,7 @@
         [Header("MONSTER DATA")]
         [SerializeField] [Tooltip("[0: Normal] [1: Freq] [2: Elite] [3: EMPTY] [4: EMPTY]")] GameObject[] groundMobPrefabs = null;
         [SerializeField] [Tooltip("[0: Normal] [1: Freq] [2: Elite] [3. EMPTY] [4: EMPTY]")] GameObject[] flyingMobPrefabs = null;
-        [SerializeField] [ReadOnly] [Tooltip("DO NOT MODIFY THIS FIELD")] List<SpawnMonster> groundMosnterList = null;
+        [SerializeField] [ReadOnly] [Tooltip("DO NOT MODIFY THIS FIELD")] List<SpawnMonster> groundMonsterList = null;
         [SerializeField] bool isStaticGroupSpawn = false;
 
         [Header("SPAWN TIMER")]
@@ -22,9 +22,17 @@
         [SerializeField] [ReadOnly] int currentSpawnStack  = 0;
 
         [Header("DEBUG")]
-        [SerializeField] bool isCheckAliveMonster = false;
+        [SerializeField] bool isAliveMonsterCheck = false;
         [SerializeField] float checkerInterval = 2f;
         private float checkerCount = 2f;
+        [SerializeField] [ReadOnly] [Tooltip("(Enable/Disable) in Progresser")] bool isForceBreak = false;
+        public bool IsForceBreak {
+            get => isForceBreak;
+            set => isForceBreak = value;
+        }
+        [SerializeField] bool isCustomSpawn = false;
+        Vector2 customSpawnWorldPosition = Vector2.zero;
+        string customSpawnString = null;
 
         private Coroutine spawnCoroutine = null;
         private WaitForSeconds groupSpawnInterval = new WaitForSeconds(1.75f);
@@ -90,10 +98,10 @@
             InitializeMonsters(out string[] tagsArray);
             float[] spawnChances = GetGroundUnitSpawnChances();
 
-            groundMosnterList = new List<SpawnMonster>();
+            groundMonsterList = new List<SpawnMonster>();
             for (int i = 0; i < tagsArray.Length; i++) {
-                if (!string.IsNullOrEmpty(tagsArray[i])) groundMosnterList.Add(new SpawnMonster(tagsArray[i], spawnChances[i]));
-                else                                     groundMosnterList.Add(new SpawnMonster(tagsArray[i], 0f));
+                if (!string.IsNullOrEmpty(tagsArray[i])) groundMonsterList.Add(new SpawnMonster(tagsArray[i], spawnChances[i]));
+                else                                     groundMonsterList.Add(new SpawnMonster(tagsArray[i], 0f));
             }
             totalSpawnChance = GetTotalSpawnChance();
             formationChances = GetGroupSpawnChances();
@@ -103,26 +111,64 @@
 
         private void Update() {
             UpdateState();
+            CustomSpawn();
+        }
+
+        private void CustomSpawn() {
+            if (!isCustomSpawn) {
+                return;
+            }
+
+            if (Input.GetKeyDown(KeyCode.Alpha1)) {
+                if (groundMonsterList.Count < 1) {
+                    return;
+                }
+                customSpawnWorldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                customSpawnString = groundMonsterList[0].SpawnString;
+                CCPooler.SpawnFromPool(customSpawnString, customSpawnWorldPosition, Quaternion.identity);
+            }
+            else if (Input.GetKeyDown(KeyCode.Alpha2)) {
+                if (groundMonsterList.Count < 2) {
+                    return;
+                }
+                customSpawnWorldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                customSpawnString = groundMonsterList[1].SpawnString;
+                CCPooler.SpawnFromPool(customSpawnString, customSpawnWorldPosition, Quaternion.identity);
+            }
+            else if (Input.GetKeyDown(KeyCode.Alpha3)) {
+                if (groundMonsterList.Count < 3) {
+                    return;
+                }
+                customSpawnWorldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                customSpawnString = groundMonsterList[2].SpawnString;
+                CCPooler.SpawnFromPool(customSpawnString, customSpawnWorldPosition, Quaternion.identity);
+            }
+            else if (Input.GetKeyDown(KeyCode.Alpha4)) {
+                return;
+            }
+            else if (Input.GetKeyDown(KeyCode.Alpha5)) {
+                return;
+            }
         }
 
         #region GETTER || SETTER
 
         string GetRandomMonsterTag() {
             float randomPoint = Random.value * totalSpawnChance;
-            for (int i = 0; i < groundMosnterList.Count; i++) {
-                if(randomPoint < groundMosnterList[i].SpawnChance) {
-                    return groundMosnterList[i].SpawnString;
+            for (int i = 0; i < groundMonsterList.Count; i++) {
+                if(randomPoint < groundMonsterList[i].SpawnChance) {
+                    return groundMonsterList[i].SpawnString;
                 }
                 else {
-                    randomPoint -= groundMosnterList[i].SpawnChance;
+                    randomPoint -= groundMonsterList[i].SpawnChance;
                 }
             }
 
             //if the Random.value is One, Not return String..
             //Return Last Index Element
-            for (int i = groundMosnterList.Count; i >= 0; --i) {
-                if(!groundMosnterList[i].IsEmpty()) {
-                    return groundMosnterList[i].SpawnString;
+            for (int i = groundMonsterList.Count; i >= 0; --i) {
+                if(!groundMonsterList[i].IsEmpty()) {
+                    return groundMonsterList[i].SpawnString;
                 }
             }
 
@@ -143,7 +189,7 @@
 
         float GetTotalSpawnChance() {
             float totalChance = 0f;
-            foreach (var element in groundMosnterList) {
+            foreach (var element in groundMonsterList) {
                 totalChance += element.SpawnChance;
             }
             return totalChance;
@@ -274,7 +320,7 @@
         #endregion
 
         void CheckAliveMosnters() {
-            if (isCheckAliveMonster == false) return;
+            if (isAliveMonsterCheck == false) return;
 
             checkerCount -= Time.unscaledDeltaTime;
             if(checkerCount <= 0f) {
@@ -299,6 +345,7 @@
         void StartSpawnState(SPAWNSTATE state) {
             spawnerState = state;
             switch (spawnerState) {
+                case SPAWNSTATE.NONE:  STATE_NONE(STATEFLOW.ENTER);  break;
                 case SPAWNSTATE.BREAK: STATE_BREAK(STATEFLOW.ENTER); break;
                 case SPAWNSTATE.SPAWN: STATE_SPAWN(STATEFLOW.ENTER); break;
                 default: break;
@@ -307,7 +354,7 @@
 
         void UpdateState() {
             switch (spawnerState) {
-                case SPAWNSTATE.NONE:                                 break; //SPANER NOT STARTED
+                case SPAWNSTATE.NONE:  STATE_NONE(STATEFLOW.UPDATE);  break; //SPAWN NOT START
                 case SPAWNSTATE.BREAK: STATE_BREAK(STATEFLOW.UPDATE); break;
                 case SPAWNSTATE.SPAWN: STATE_SPAWN(STATEFLOW.UPDATE); break;
                 default: throw new System.NotImplementedException();
@@ -316,6 +363,7 @@
 
         void ChangeSpawnState(SPAWNSTATE state) {
             switch (spawnerState) {
+                case SPAWNSTATE.NONE:  STATE_NONE(STATEFLOW.EXIT);  break;
                 case SPAWNSTATE.BREAK: STATE_BREAK(STATEFLOW.EXIT); break;
                 case SPAWNSTATE.SPAWN: STATE_SPAWN(STATEFLOW.EXIT); break;
                 default: throw new System.NotImplementedException();
@@ -324,6 +372,7 @@
             spawnerState = state;
 
             switch (spawnerState) {
+                case SPAWNSTATE.NONE:  STATE_NONE(STATEFLOW.ENTER);  break;
                 case SPAWNSTATE.BREAK: STATE_BREAK(STATEFLOW.ENTER); break;
                 case SPAWNSTATE.SPAWN: STATE_SPAWN(STATEFLOW.ENTER); break;
                 default: throw new System.NotImplementedException();
@@ -346,20 +395,36 @@
             }
         }
 
+        void STATE_NONE(STATEFLOW flow) {
+            switch (flow) {
+                case STATEFLOW.ENTER:  break;
+                case STATEFLOW.UPDATE: break;
+                case STATEFLOW.EXIT:   break;
+                default: throw new System.NotImplementedException();
+            }
+        }
+
         #endregion
 
         #region STATE
 
         void BREAK_UPDATE() {
-            switch (GameManager.Instance.GameState) { //Wait GameState to In-Battle
-                case GAMESTATE.STATE_INBATTLE:     ChangeSpawnState(SPAWNSTATE.SPAWN); break;
-                default:                                                               break;
+            if (isForceBreak) {
+                ChangeSpawnState(SPAWNSTATE.NONE);
             }
+            else if (GameManager.Instance.GameState == GAMESTATE.STATE_INBATTLE) {
+                ChangeSpawnState(SPAWNSTATE.SPAWN);
+            }
+
+            //switch (GameManager.Instance.GameState) { //Wait GameState to In-Battle
+            //    case GAMESTATE.STATE_INBATTLE:     ChangeSpawnState(SPAWNSTATE.SPAWN); break;
+            //    default:                                                               break;
+            //}
         }
 
         void SPAWN_UPDATE() {
             CheckEndBattle(); //Check Battle-End
-            if (isCheckAliveMonster == true) {
+            if (isAliveMonsterCheck == true) {
                 CheckAliveMosnters();
             }
 

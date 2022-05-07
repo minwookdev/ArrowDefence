@@ -69,8 +69,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3204541759480302799}
-  - component: {fileID: 3204541759480302796}
   - component: {fileID: 3204541759480302795}
+  - component: {fileID: 3204541759480302796}
   m_Layer: 0
   m_Name: SceneRouteObj
   m_TagString: Untagged
@@ -99,28 +99,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3204541759480302796
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3204541759480302800}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6867096f57d1d2143ac618c6f55644af, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  stageDifficulty: 1
-  spawnerState: 0
-  spawnPointsTr: []
-  groundMobPrefabs: []
-  flyingMobPrefabs: []
-  isStaticGroupSpawn: 0
-  currentSpawnTime: 0
-  currentSpawnStack: 0
-  isCheckAliveMonster: 0
-  checkerInterval: 2
 --- !u!114 &3204541759480302795
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -153,6 +131,29 @@ MonoBehaviour:
   IsQuickGameOver: 0
   IsQuickAutoButton: 0
   IsDebugMonsterLogics: 0
+--- !u!114 &3204541759480302796
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3204541759480302800}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6867096f57d1d2143ac618c6f55644af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stageDifficulty: 1
+  spawnerState: 0
+  spawnPointsTr: []
+  groundMobPrefabs: []
+  flyingMobPrefabs: []
+  isStaticGroupSpawn: 0
+  currentSpawnTime: 0
+  currentSpawnStack: 0
+  isCheckAliveMonster: 0
+  isForceBreak: 0
+  checkerInterval: 2
 --- !u!1 &4723142322974213577
 GameObject:
   m_ObjectHideFlags: 0

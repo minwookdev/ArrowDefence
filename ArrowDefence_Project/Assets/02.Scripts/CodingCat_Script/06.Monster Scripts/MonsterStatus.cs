@@ -26,7 +26,7 @@
         float currentHealthPoint = 0f;
         float currentManaPoint   = 0f;
         float damageCount   = 0f;
-        bool isDeath = false;
+        [SerializeField] bool isDeath = false;
 
         //Simple Hit Color Change
         float fadeTime = 0.5f;
@@ -73,6 +73,7 @@
         void OnTriggerEnter2D(Collider2D collider) {
             if(collider.gameObject.layer == LayerMask.NameToLayer(AD_Data.LAYER_DISABLELINE)) {
                 BattleProgresser.OnDecPlayerHealth(10f);
+                isDeath = true;
                 DisableRequest();
             }
         }
@@ -129,11 +130,10 @@
             if(currentHealthPoint <= 0 && isDeath == false) {
                 monsterState.StateChanger(STATETYPE.DEATH);
                 //=================================[ MONSTER DEATH EVENT ]================================
-                BattleProgresser.OnMonsterDeath();
+                BattleProgresser.OnMonsterDeathByAttack();
                 BattleProgresser.OnItemDrop(ItemDropCorrection);
                 //BattleProgresser.OnIncreaseClearGauge(GaugeIncreaseValue);
                 //========================================================================================
-
                 isDeath = true;
             }
         }
@@ -159,11 +159,10 @@
             if(currentHealthPoint <= 0 && isDeath == false) {
                 monsterState.StateChanger(STATETYPE.DEATH);
                 //=================================[ MONSTER DEATH EVENT ]================================
-                BattleProgresser.OnMonsterDeath();
+                BattleProgresser.OnMonsterDeathByAttack();
                 BattleProgresser.OnItemDrop(ItemDropCorrection);
                 //BattleProgresser.OnIncreaseClearGauge(GaugeIncreaseValue);
                 //========================================================================================
-
                 isDeath = true;
             }
 
@@ -190,7 +189,7 @@
             if(currentHealthPoint <= 0 && isDeath == false) {
                 monsterState.StateChanger(STATETYPE.DEATH);
                 //=================================[ MONSTER DEATH EVENT ]================================
-                BattleProgresser.OnMonsterDeath();
+                BattleProgresser.OnMonsterDeathByAttack();
                 BattleProgresser.OnItemDrop(ItemDropCorrection);
                 //========================================================================================
                 isDeath = true;
@@ -226,7 +225,9 @@
         //    }
         //}
 
-        public bool IsAlive() => (isDeath == false || currentHealthPoint > 0) ? true : false;
+        public bool IsAlive() {
+            return (isDeath || currentHealthPoint <= 0f) ? false : true; 
+        }
 
         /// <summary>
         /// Animation Event 

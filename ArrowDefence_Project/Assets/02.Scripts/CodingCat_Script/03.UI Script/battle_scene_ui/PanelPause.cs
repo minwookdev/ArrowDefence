@@ -6,6 +6,7 @@
         [Header("COMPONENT")]
         //[SerializeField] RectTransform pausePanelTr   = null;
         [SerializeField] CanvasGroup panelCanvasGroup = null;
+        [SerializeField] BattleSceneRoute route = null;
 
         [Header("PAUSE PANEL")]
         [SerializeField] [RangeEx(0.5f, 2f, 0.5f)]
@@ -31,7 +32,7 @@
         #region Ref_Btn
 
         public void ButtonResume() {
-            battleButtons.Resume(this, panelCanvasGroup, openFadeTime);
+            battleButtons.Resume(this, panelCanvasGroup, openFadeTime, route.ExitPause);
         }
 
         public void ButtonRestart() {

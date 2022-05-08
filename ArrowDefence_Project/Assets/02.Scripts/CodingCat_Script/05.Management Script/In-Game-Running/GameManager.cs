@@ -498,13 +498,13 @@
         public void ChangeGameState(GAMESTATE targetState) {
             GameState = targetState; //Change Current GameState
             switch (GameState) {     //Activate Event
-                case GAMESTATE.STATE_BEFOREBATTLE:                     break; // No Event.
-                case GAMESTATE.STATE_INBATTLE:     OnStateInBattle();  break;
-                case GAMESTATE.STATE_BOSSBATTLE:                       break; // No Event.
-                case GAMESTATE.STATE_ENDBATTLE:    OnStateEndBattle(); break;
-                case GAMESTATE.STATE_GAMEOVER:     OnStateGameOver();  break;
-                case GAMESTATE.STATE_PAUSE:        OnStatePause();     break;
-                case GAMESTATE.STATE_NONE:                             break; // No Event. Entering Battle Scene Or Destroy Battle Scene
+                case GAMESTATE.STATE_BEFOREBATTLE:                             break; // No Event.
+                case GAMESTATE.STATE_INBATTLE:     OnStateInBattle?.Invoke();  break;
+                case GAMESTATE.STATE_BOSSBATTLE:                               break; // No Event.
+                case GAMESTATE.STATE_ENDBATTLE:    OnStateEndBattle?.Invoke(); break;
+                case GAMESTATE.STATE_GAMEOVER:     OnStateGameOver?.Invoke();  break;
+                case GAMESTATE.STATE_PAUSE:        OnStatePause?.Invoke();     break;
+                case GAMESTATE.STATE_NONE:                                     break; // No Event. Entering Battle Scene Or Destroy Battle Scene
                 default: throw new System.NotImplementedException();
             }
         }

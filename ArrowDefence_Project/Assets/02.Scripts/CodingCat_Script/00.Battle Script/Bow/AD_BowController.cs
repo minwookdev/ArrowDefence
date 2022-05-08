@@ -152,9 +152,16 @@
                     arrowComponent.SpriteAlpha(false);
                 }
             });
-            //=====================================================================================================================================================
             //================================================================ << CALLBACK CLEAR >> ===============================================================
             GameManager.Instance.AddListnerEndBattle(OnAutoModeStop);
+            //================================================================ << CALLBACK PAUSE >> ===============================================================
+            GameManager.Instance.AddListnerPause(() => {
+                if (isAutoRunning) {
+                    if (autoState == AUTOSTATE.FIND || autoState == AUTOSTATE.TRAC || autoState == AUTOSTATE.SHOT) {
+                        AutoStateChange(AUTOSTATE.WAIT);
+                    }
+                }
+            });
             //=====================================================================================================================================================
 
             //Init-Bow Skill and Current Slot Damage Struct.

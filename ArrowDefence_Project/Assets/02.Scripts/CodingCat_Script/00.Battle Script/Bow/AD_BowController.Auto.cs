@@ -279,6 +279,7 @@
                 if (currShotTime > autoShotTime) {
                     //발사 조건 체크 : (몬스터의 위치와 활 위치간의 각도) - 현재 활 각도 : 몬스터 위치 각도와 현재 활이 조준하고있는 각도의 차이
                     float angle = GameGlobal.AngleBetweenVec2(bowTr.position, targetTr.position) - bowTr.eulerAngles.z; //여기에 이거를 bowTr.rotation.z 로 치환하면 어떨까??
+                    //float angle = GameGlobal.AngleBetweenVec2(bowTr.position, targetTr.position) - bowTr.rotation.z;
                     float accuracy = 3f; //-> Change Global Variables
 
                     //bool isAngleFrontMonster = (angle >= -range && angle <= range); // -3 ~ 3
@@ -287,8 +288,10 @@
 
                     // Debuggning
                     //CatLog.Log($"IsAngleFrontMonster: {isAngleFrontMonster}, IsMaxPullingArrow: {isMaxPullingArrow}");
-                    CatLog.Log($"target is Alive: {target.IsAlive()}");
-                    CatLog.Log($"Angle Between Vector2: {GameGlobal.AngleBetweenVec2(bowTr.position, targetTr.position)}, Bow Transform EulerAngles Z: {bowTr.eulerAngles.z}, Calc Angle: {angle}");
+                    //CatLog.Log($"target is Alive: {target.IsAlive()}");
+                    //CatLog.Log($"Angle Between Vector2: {GameGlobal.AngleBetweenVec2(bowTr.position, targetTr.position)}, Bow Transform EulerAngles Z: {bowTr.eulerAngles.z}, Calc Angle: {angle}");
+                    float bowEulerAnglesZ = (bowTr.eulerAngles.z > 180f) ? (bowTr.eulerAngles.z - 360f) : bowTr.eulerAngles.z;
+                    CatLog.Log($"Between Angle: {GameGlobal.AngleBetweenVec2(bowTr.position, targetTr.position)}, Bow Angle: {bowEulerAnglesZ}, Calculate Angle: {GameGlobal.AngleBetweenVec2(bowTr.position, targetTr.position) - bowEulerAnglesZ}");
 
                     if (isAngleFrontMonster == true && isMaxPullingArrow == true) {
                         //Shot Arrow

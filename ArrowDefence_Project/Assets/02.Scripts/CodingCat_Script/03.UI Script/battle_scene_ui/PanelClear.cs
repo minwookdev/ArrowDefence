@@ -87,13 +87,14 @@
         /// Only Use PausePanel Scirpts
         /// </summary>
         /// <param name="panel"></param>
-        public void Resume(PanelPause panel, CanvasGroup canvasGroup, float fadeTime) {
+        public void Resume(PanelPause panel, CanvasGroup canvasGroup, float fadeTime, System.Action completeCallback = null) {
             canvasGroup.DOFade(StNum.floatZero, fadeTime)
                 .SetUpdate(true)
                 .OnStart(() => canvasGroup.blocksRaycasts = false)
                 .OnComplete(() => {
                     GameManager.Instance.ResumeBattle();
                     panel.gameObject.SetActive(false);
+                    completeCallback?.Invoke();
                 });
         }
 

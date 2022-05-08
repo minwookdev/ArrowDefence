@@ -279,7 +279,6 @@
             return Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         }
 
-
         /// <summary>
         /// Number is Included Range [include min, max]
         /// </summary>

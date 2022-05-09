@@ -33,7 +33,7 @@
             skillIcon.sprite = (artifactEffect.IconSprite != null) ? artifactEffect.IconSprite : skillIcon.sprite;
 
             maxCoolDown         = artifactEffect.Condition.CoolDown;
-            currentCoolDownTime = (artifactEffect.IsPrepared) ? 0f : maxCoolDown;
+            currentCoolDownTime = (artifactEffect.IsStartingPrepared) ? 0f : maxCoolDown;
 
             coolDownMaskImage.fillAmount = 1f;
             coolDownTmp.text = "";

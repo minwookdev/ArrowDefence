@@ -54,7 +54,7 @@
             }
         }
         #endregion
-        public bool IsPrepared {
+        public bool IsStartingPrepared {
             get; private set;
         } = false;
 

@@ -4,32 +4,32 @@ using UnityEngine;
 namespace ES3Types
 {
 	[UnityEngine.Scripting.Preserve]
-	[ES3PropertiesAttribute("incDamageRate", "abilityType")]
-	public class ES3UserType_AbilityIncDamageRate : ES3ObjectType
+	[ES3PropertiesAttribute("increaseValue", "abilityType")]
+	public class ES3UserType_IncSpellDamage : ES3ObjectType
 	{
 		public static ES3Type Instance = null;
 
-		public ES3UserType_AbilityIncDamageRate() : base(typeof(ActionCat.IncArrowDamageRate)){ Instance = this; priority = 1; }
+		public ES3UserType_IncSpellDamage() : base(typeof(ActionCat.IncSpellDamage)){ Instance = this; priority = 1; }
 
 
 		protected override void WriteObject(object obj, ES3Writer writer)
 		{
-			var instance = (ActionCat.IncArrowDamageRate)obj;
+			var instance = (ActionCat.IncSpellDamage)obj;
 			
-			writer.WritePrivateField("incDamageRate", instance);
+			writer.WritePrivateField("increaseValue", instance);
 			writer.WritePrivateField("abilityType", instance);
 		}
 
 		protected override void ReadObject<T>(ES3Reader reader, object obj)
 		{
-			var instance = (ActionCat.IncArrowDamageRate)obj;
+			var instance = (ActionCat.IncSpellDamage)obj;
 			foreach(string propertyName in reader.Properties)
 			{
 				switch(propertyName)
 				{
 					
-					case "incDamageRate":
-					reader.SetPrivateField("incDamageRate", reader.Read<System.Single>(), instance);
+					case "increaseValue":
+					reader.SetPrivateField("increaseValue", reader.Read<System.Int16>(), instance);
 					break;
 					case "abilityType":
 					reader.SetPrivateField("abilityType", reader.Read<ActionCat.ABILITY_TYPE>(), instance);
@@ -43,18 +43,18 @@ namespace ES3Types
 
 		protected override object ReadObject<T>(ES3Reader reader)
 		{
-			var instance = new ActionCat.IncArrowDamageRate();
+			var instance = new ActionCat.IncSpellDamage();
 			ReadObject<T>(reader, instance);
 			return instance;
 		}
 	}
 
 
-	public class ES3UserType_AbilityIncDamageRateArray : ES3ArrayType
+	public class ES3UserType_IncSpellDamageArray : ES3ArrayType
 	{
 		public static ES3Type Instance;
 
-		public ES3UserType_AbilityIncDamageRateArray() : base(typeof(ActionCat.IncArrowDamageRate[]), ES3UserType_AbilityIncDamageRate.Instance)
+		public ES3UserType_IncSpellDamageArray() : base(typeof(ActionCat.IncSpellDamage[]), ES3UserType_IncSpellDamage.Instance)
 		{
 			Instance = this;
 		}

@@ -4,7 +4,7 @@ using UnityEngine;
 namespace ES3Types
 {
 	[UnityEngine.Scripting.Preserve]
-	[ES3PropertiesAttribute("spArrowPref", "skillInfos", "condition", "specialArrDefaultSpeed", "EquipType", "abilities", "Item_Id", "Item_Amount", "Item_Sprite", "Item_Type", "Item_Grade", "termsName", "termsDesc")]
+	[ES3PropertiesAttribute("spArrowPref", "skillInfos", "condition", "additionalSpeed", "EquipType", "abilities", "Item_Id", "Item_Amount", "Item_Sprite", "Item_Type", "Item_Grade", "termsName", "termsDesc")]
 	public class ES3UserType_Item_SpArr : ES3ObjectType
 	{
 		public static ES3Type Instance = null;
@@ -19,7 +19,7 @@ namespace ES3Types
 			writer.WritePrivateFieldByRef("spArrowPref", instance);
 			writer.WritePrivateField("skillInfos", instance);
 			writer.WritePrivateField("condition", instance);
-			writer.WritePrivateField("specialArrDefaultSpeed", instance);
+			writer.WritePrivateField("additionalSpeed", instance);
 			writer.WritePrivateField("EquipType", instance);
 			writer.WritePrivateField("abilities", instance);
 			writer.WritePrivateField("Item_Id", instance);
@@ -48,8 +48,8 @@ namespace ES3Types
 					case "condition":
 					reader.SetPrivateField("condition", reader.Read<ActionCat.SpArrCondition>(), instance);
 					break;
-					case "specialArrDefaultSpeed":
-					reader.SetPrivateField("specialArrDefaultSpeed", reader.Read<System.Single>(), instance);
+					case "additionalSpeed":
+					reader.SetPrivateField("additionalSpeed", reader.Read<System.Single>(), instance);
 					break;
 					case "EquipType":
 					reader.SetPrivateField("EquipType", reader.Read<ActionCat.EQUIP_ITEMTYPE>(), instance);

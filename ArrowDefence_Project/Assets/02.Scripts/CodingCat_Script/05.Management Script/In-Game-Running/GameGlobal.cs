@@ -286,7 +286,7 @@
         /// <param name="range">-range ~ range</param>
         /// <returns></returns>
         public static bool IsRange(float number, float range) {
-            return (number >= -range && number <= range);
+            return (number >= (number - range) && number <= (number + range));
         }
 
         public static T RandIndex<T>(this T[] array) {

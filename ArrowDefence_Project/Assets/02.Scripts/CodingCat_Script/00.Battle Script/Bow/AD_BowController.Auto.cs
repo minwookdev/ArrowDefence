@@ -32,6 +32,12 @@
         [SerializeField] [ReadOnly]
         bool isDebug = false;
 
+        public float CompareAngle {
+            get {
+                return (bowTr.eulerAngles.z > 180f) ? bowTr.eulerAngles.z - 360f : bowTr.eulerAngles.z;
+            }
+        }
+
         #region SWITCH
 
         public void AutoSwitch(bool isDebug = false) {
@@ -47,7 +53,7 @@
                 isAutoRunning  = true;
 
                 if (isDebug) {
-                    CatLog.Log(StringColor.BLUE, "Start AutoMode !");
+                    CatLog.Log(StringColor.GREEN, "Start AutoMode !");
                 }
             }
             else {
@@ -278,24 +284,28 @@
             //=====================================================<< SHOT >>===================================================
                 if (currShotTime > autoShotTime) {
                     //발사 조건 체크 : (몬스터의 위치와 활 위치간의 각도) - 현재 활 각도 : 몬스터 위치 각도와 현재 활이 조준하고있는 각도의 차이
-                    float angle = GameGlobal.AngleBetweenVec2(bowTr.position, targetTr.position) - bowTr.eulerAngles.z; //여기에 이거를 bowTr.rotation.z 로 치환하면 어떨까??
-                    //float angle = GameGlobal.AngleBetweenVec2(bowTr.position, targetTr.position) - bowTr.rotation.z;
-                    float accuracy = 3f; //-> Change Global Variables
+                    //float angle = GameGlobal.AngleBetweenVec2(bowTr.position, targetTr.position) - bowTr.eulerAngles.z; //여기에 이거를 bowTr.rotation.z 로 치환하면 어떨까??
+                    float conditionAngle = GameGlobal.AngleBetweenVec2(bowTr.position, targetTr.position) - CompareAngle;
+                    float accuracy = 3f; //-> Change Global Variables, Accuracy 값이 낮아질 수록 더욱 정확하게 잡음 [1최소] [2~3권장]
 
-                    //bool isAngleFrontMonster = (angle >= -range && angle <= range); // -3 ~ 3
-                    bool isAngleFrontMonster = GameGlobal.IsRange(angle, accuracy);      // -3 ~ 3
+                    //bool isAngleFrontMonster = (angle >= -range && angle <= range);        // -3 ~ 3
+                    bool isAngleFrontMonster = GameGlobal.IsRange(conditionAngle, accuracy); // -3 ~ 3
                     bool isMaxPullingArrow   = (Vector2.Distance(arrowPos, ClampPointBottom.position) < 0.5f);
 
                     // Debuggning
                     //CatLog.Log($"IsAngleFrontMonster: {isAngleFrontMonster}, IsMaxPullingArrow: {isMaxPullingArrow}");
                     //CatLog.Log($"target is Alive: {target.IsAlive()}");
                     //CatLog.Log($"Angle Between Vector2: {GameGlobal.AngleBetweenVec2(bowTr.position, targetTr.position)}, Bow Transform EulerAngles Z: {bowTr.eulerAngles.z}, Calc Angle: {angle}");
-                    float bowEulerAnglesZ = (bowTr.eulerAngles.z > 180f) ? (bowTr.eulerAngles.z - 360f) : bowTr.eulerAngles.z;
-                    CatLog.Log($"Between Angle: {GameGlobal.AngleBetweenVec2(bowTr.position, targetTr.position)}, Bow Angle: {bowEulerAnglesZ}, Calculate Angle: {GameGlobal.AngleBetweenVec2(bowTr.position, targetTr.position) - bowEulerAnglesZ}");
+                    //float bowEulerAnglesZ = (bowTr.eulerAngles.z > 180f) ? (bowTr.eulerAngles.z - 360f) : bowTr.eulerAngles.z;
+                    //CatLog.Log($"Between Angle: {GameGlobal.AngleBetweenVec2(bowTr.position, targetTr.position)}, Bow Angle: {CompareAngle}, Calculate Angle: {conditionAngle}");
+
+                    // 개선안
+                    // 여기 안에서 쓰이는 로컬변수들 멤버변수로 따로 관리하면 isAngleFrontMonster, isMaxPullingArrow 조건에 맞지않았을때, currentShotTime을 초기화 시켜주지 않아도
+                    // 부담없이 기다릴 수 있도록 바꿔줄 수 있겠다. -> 의미없이 한번 더 돌아야하는 경우 최소화 할 수 있다.
 
                     if (isAngleFrontMonster == true && isMaxPullingArrow == true) {
                         //Shot Arrow
-                        CatLog.Log(StringColor.GREEN, "Is Ready to Shot !");
+                        //CatLog.Log(StringColor.GREEN, "Is Ready to Shot !");
                         AutoStateChange(AUTOSTATE.SHOT);
                     }
                     else {
@@ -313,7 +323,7 @@
         void TrackExit() {
             currShotTime = 0f;
             isBowPulling = false;
-            CatLog.Log(StringColor.YELLOW, "Exit Tracking State !");
+            //CatLog.Log(StringColor.YELLOW, "Exit Tracking State !");
         }
         //################################################################################################################################################
         //############################################################### << STATE SHOT >> ###############################################################

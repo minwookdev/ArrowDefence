@@ -4,19 +4,21 @@ using UnityEngine;
 namespace ES3Types
 {
 	[UnityEngine.Scripting.Preserve]
-	[ES3PropertiesAttribute("aimSightPref", "id", "name", "desc", "effectType", "level", "iconSprite", "nameTerms", "descTerms", "condition", "<IsStartingPrepared>k__BackingField")]
-	public class ES3UserType_Acsp_AimSight : ES3ObjectType
+	[ES3PropertiesAttribute("radius", "slowRatio", "duration", "id", "name", "desc", "effectType", "level", "iconSprite", "nameTerms", "descTerms", "condition", "<IsStartingPrepared>k__BackingField")]
+	public class ES3UserType_Acsp_CursedSlow : ES3ObjectType
 	{
 		public static ES3Type Instance = null;
 
-		public ES3UserType_Acsp_AimSight() : base(typeof(ActionCat.Acsp_AimSight)){ Instance = this; priority = 1; }
+		public ES3UserType_Acsp_CursedSlow() : base(typeof(ActionCat.Acsp_CursedSlow)){ Instance = this; priority = 1; }
 
 
 		protected override void WriteObject(object obj, ES3Writer writer)
 		{
-			var instance = (ActionCat.Acsp_AimSight)obj;
+			var instance = (ActionCat.Acsp_CursedSlow)obj;
 			
-			writer.WritePrivateFieldByRef("aimSightPref", instance);
+			writer.WritePrivateField("radius", instance);
+			writer.WritePrivateField("slowRatio", instance);
+			writer.WritePrivateField("duration", instance);
 			writer.WritePrivateField("id", instance);
 			writer.WritePrivateField("name", instance);
 			writer.WritePrivateField("desc", instance);
@@ -31,14 +33,20 @@ namespace ES3Types
 
 		protected override void ReadObject<T>(ES3Reader reader, object obj)
 		{
-			var instance = (ActionCat.Acsp_AimSight)obj;
+			var instance = (ActionCat.Acsp_CursedSlow)obj;
 			foreach(string propertyName in reader.Properties)
 			{
 				switch(propertyName)
 				{
 					
-					case "aimSightPref":
-					reader.SetPrivateField("aimSightPref", reader.Read<UnityEngine.GameObject>(), instance);
+					case "radius":
+					reader.SetPrivateField("radius", reader.Read<System.Single>(), instance);
+					break;
+					case "slowRatio":
+					reader.SetPrivateField("slowRatio", reader.Read<System.Single>(), instance);
+					break;
+					case "duration":
+					reader.SetPrivateField("duration", reader.Read<System.Single>(), instance);
 					break;
 					case "id":
 					reader.SetPrivateField("id", reader.Read<System.String>(), instance);
@@ -79,18 +87,18 @@ namespace ES3Types
 
 		protected override object ReadObject<T>(ES3Reader reader)
 		{
-			var instance = new ActionCat.Acsp_AimSight();
+			var instance = new ActionCat.Acsp_CursedSlow();
 			ReadObject<T>(reader, instance);
 			return instance;
 		}
 	}
 
 
-	public class ES3UserType_Acsp_AimSightArray : ES3ArrayType
+	public class ES3UserType_Acsp_CursedSlowArray : ES3ArrayType
 	{
 		public static ES3Type Instance;
 
-		public ES3UserType_Acsp_AimSightArray() : base(typeof(ActionCat.Acsp_AimSight[]), ES3UserType_Acsp_AimSight.Instance)
+		public ES3UserType_Acsp_CursedSlowArray() : base(typeof(ActionCat.Acsp_CursedSlow[]), ES3UserType_Acsp_CursedSlow.Instance)
 		{
 			Instance = this;
 		}

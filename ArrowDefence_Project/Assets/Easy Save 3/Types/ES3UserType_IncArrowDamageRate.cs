@@ -4,32 +4,32 @@ using UnityEngine;
 namespace ES3Types
 {
 	[UnityEngine.Scripting.Preserve]
-	[ES3PropertiesAttribute("increaseValue", "abilityType")]
-	public class ES3UserType_AbilityChargedDamage : ES3ObjectType
+	[ES3PropertiesAttribute("increaseRate", "abilityType")]
+	public class ES3UserType_IncArrowDamageRate : ES3ObjectType
 	{
 		public static ES3Type Instance = null;
 
-		public ES3UserType_AbilityChargedDamage() : base(typeof(ActionCat.AbilityChargedDamage)){ Instance = this; priority = 1; }
+		public ES3UserType_IncArrowDamageRate() : base(typeof(ActionCat.IncArrowDamageRate)){ Instance = this; priority = 1; }
 
 
 		protected override void WriteObject(object obj, ES3Writer writer)
 		{
-			var instance = (ActionCat.AbilityChargedDamage)obj;
+			var instance = (ActionCat.IncArrowDamageRate)obj;
 			
-			writer.WritePrivateField("increaseValue", instance);
+			writer.WritePrivateField("increaseRate", instance);
 			writer.WritePrivateField("abilityType", instance);
 		}
 
 		protected override void ReadObject<T>(ES3Reader reader, object obj)
 		{
-			var instance = (ActionCat.AbilityChargedDamage)obj;
+			var instance = (ActionCat.IncArrowDamageRate)obj;
 			foreach(string propertyName in reader.Properties)
 			{
 				switch(propertyName)
 				{
 					
-					case "increaseValue":
-					reader.SetPrivateField("increaseValue", reader.Read<System.Single>(), instance);
+					case "increaseRate":
+					reader.SetPrivateField("increaseRate", reader.Read<System.Single>(), instance);
 					break;
 					case "abilityType":
 					reader.SetPrivateField("abilityType", reader.Read<ActionCat.ABILITY_TYPE>(), instance);
@@ -43,18 +43,18 @@ namespace ES3Types
 
 		protected override object ReadObject<T>(ES3Reader reader)
 		{
-			var instance = new ActionCat.AbilityChargedDamage();
+			var instance = new ActionCat.IncArrowDamageRate();
 			ReadObject<T>(reader, instance);
 			return instance;
 		}
 	}
 
 
-	public class ES3UserType_AbilityChargedDamageArray : ES3ArrayType
+	public class ES3UserType_IncArrowDamageRateArray : ES3ArrayType
 	{
 		public static ES3Type Instance;
 
-		public ES3UserType_AbilityChargedDamageArray() : base(typeof(ActionCat.AbilityChargedDamage[]), ES3UserType_AbilityChargedDamage.Instance)
+		public ES3UserType_IncArrowDamageRateArray() : base(typeof(ActionCat.IncArrowDamageRate[]), ES3UserType_IncArrowDamageRate.Instance)
 		{
 			Instance = this;
 		}

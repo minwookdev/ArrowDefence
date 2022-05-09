@@ -4,7 +4,7 @@ using UnityEngine;
 namespace ES3Types
 {
 	[UnityEngine.Scripting.Preserve]
-	[ES3PropertiesAttribute("critHitChance", "abilityType")]
+	[ES3PropertiesAttribute("increaseValue", "abilityType")]
 	public class ES3UserType_AbilityCritChance : ES3ObjectType
 	{
 		public static ES3Type Instance = null;
@@ -16,7 +16,7 @@ namespace ES3Types
 		{
 			var instance = (ActionCat.AbilityCritChance)obj;
 			
-			writer.WritePrivateField("critHitChance", instance);
+			writer.WritePrivateField("increaseValue", instance);
 			writer.WritePrivateField("abilityType", instance);
 		}
 
@@ -28,8 +28,8 @@ namespace ES3Types
 				switch(propertyName)
 				{
 					
-					case "critHitChance":
-					reader.SetPrivateField("critHitChance", reader.Read<System.Byte>(), instance);
+					case "increaseValue":
+					reader.SetPrivateField("increaseValue", reader.Read<System.Byte>(), instance);
 					break;
 					case "abilityType":
 					reader.SetPrivateField("abilityType", reader.Read<ActionCat.ABILITY_TYPE>(), instance);

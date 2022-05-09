@@ -4,7 +4,7 @@ using UnityEngine;
 namespace ES3Types
 {
 	[UnityEngine.Scripting.Preserve]
-	[ES3PropertiesAttribute("timeSlowRatio", "duration", "cooldown", "id", "name", "desc", "effectType", "level", "iconSprite", "nameTerms", "descTerms")]
+	[ES3PropertiesAttribute("timeSlowRatio", "duration", "id", "name", "desc", "effectType", "level", "iconSprite", "nameTerms", "descTerms", "condition", "<IsStartingPrepared>k__BackingField")]
 	public class ES3UserType_Acsp_SlowTime : ES3ObjectType
 	{
 		public static ES3Type Instance = null;
@@ -18,7 +18,6 @@ namespace ES3Types
 			
 			writer.WritePrivateField("timeSlowRatio", instance);
 			writer.WritePrivateField("duration", instance);
-			writer.WritePrivateField("cooldown", instance);
 			writer.WritePrivateField("id", instance);
 			writer.WritePrivateField("name", instance);
 			writer.WritePrivateField("desc", instance);
@@ -27,6 +26,8 @@ namespace ES3Types
 			writer.WritePrivateFieldByRef("iconSprite", instance);
 			writer.WritePrivateField("nameTerms", instance);
 			writer.WritePrivateField("descTerms", instance);
+			writer.WritePrivateField("condition", instance);
+			writer.WritePrivateField("<IsStartingPrepared>k__BackingField", instance);
 		}
 
 		protected override void ReadObject<T>(ES3Reader reader, object obj)
@@ -42,9 +43,6 @@ namespace ES3Types
 					break;
 					case "duration":
 					reader.SetPrivateField("duration", reader.Read<System.Single>(), instance);
-					break;
-					case "cooldown":
-					reader.SetPrivateField("cooldown", reader.Read<System.Single>(), instance);
 					break;
 					case "id":
 					reader.SetPrivateField("id", reader.Read<System.String>(), instance);
@@ -69,6 +67,12 @@ namespace ES3Types
 					break;
 					case "descTerms":
 					reader.SetPrivateField("descTerms", reader.Read<System.String>(), instance);
+					break;
+					case "condition":
+					reader.SetPrivateField("condition", reader.Read<ActionCat.ArtifactCondition>(), instance);
+					break;
+					case "<IsStartingPrepared>k__BackingField":
+					reader.SetPrivateField("<IsStartingPrepared>k__BackingField", reader.Read<System.Boolean>(), instance);
 					break;
 					default:
 						reader.Skip();

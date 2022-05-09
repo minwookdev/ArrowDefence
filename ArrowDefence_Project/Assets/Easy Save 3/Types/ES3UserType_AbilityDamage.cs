@@ -4,7 +4,7 @@ using UnityEngine;
 namespace ES3Types
 {
 	[UnityEngine.Scripting.Preserve]
-	[ES3PropertiesAttribute("damageCount", "abilityType")]
+	[ES3PropertiesAttribute("increaseValue", "abilityType")]
 	public class ES3UserType_AbilityDamage : ES3ObjectType
 	{
 		public static ES3Type Instance = null;
@@ -16,7 +16,7 @@ namespace ES3Types
 		{
 			var instance = (ActionCat.AbilityDamage)obj;
 			
-			writer.WritePrivateField("damageCount", instance);
+			writer.WritePrivateField("increaseValue", instance);
 			writer.WritePrivateField("abilityType", instance);
 		}
 
@@ -28,8 +28,8 @@ namespace ES3Types
 				switch(propertyName)
 				{
 					
-					case "damageCount":
-					reader.SetPrivateField("damageCount", reader.Read<System.Int16>(), instance);
+					case "increaseValue":
+					reader.SetPrivateField("increaseValue", reader.Read<System.Int16>(), instance);
 					break;
 					case "abilityType":
 					reader.SetPrivateField("abilityType", reader.Read<ActionCat.ABILITY_TYPE>(), instance);

@@ -22,7 +22,7 @@ MonoBehaviour:
   MaxStack: 1
   MaxCost: 0
   IncreaseCostCount: 0
-  CoolDownTime: 3
+  CoolDownTime: 21
   HealAmount: 12
   HealRepeatTime: 8
   RepeatIntervalTime: 1

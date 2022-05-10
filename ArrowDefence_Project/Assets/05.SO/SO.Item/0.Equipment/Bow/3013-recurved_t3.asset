@@ -22,11 +22,12 @@ MonoBehaviour:
   Equip_Type: 0
   BowGameObject: {fileID: 5063279129060135535, guid: 757a4754cd126084ba8d4e697409ed45,
     type: 3}
-  SkillAsset_f: {fileID: 11400000, guid: 5f97212c1121e174eb6db1568bb8c986, type: 2}
+  SkillAsset_f: {fileID: 11400000, guid: fc05af65163bdfe42a8b4d70895800ec, type: 2}
   SkillAsset_s: {fileID: 0}
-  BaseDamage: 0
-  CriticalHitChance: 0
+  BaseDamage: 200
+  CriticalHitChance: 6
   CriticalDamageMultiplier: 0
-  FullChargedMultiplier: 0
+  FullChargedMultiplier: 0.5
   ArmorPenetration: 0
   AdditionalArrowFire: 0
+  ElementalActivation: 12

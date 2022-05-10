@@ -53,7 +53,12 @@
             IsDevMode    = false;
 #endif
             fixedDeltaTime = Time.fixedDeltaTime;
+            CCPlayerData.LoadSettingsJson();
             isManagerInitialized  = true;
+        }
+
+        public void OnDestroy() {
+            CCPlayerData.SaveSettingsJson();
         }
 
         #region SCREEN
@@ -286,7 +291,7 @@
         }
 
         public void CheckSaveData() {
-            CCPlayerData.CheckSaveData();
+            CCPlayerData.CreateNewFile();
         }
 
         public bool TryReceipt(int slotNumber, out ItemData resultItemRef, out int resultItemAmount) {
@@ -473,12 +478,12 @@
 
         public void SaveUserData()
         {
-            CCPlayerData.SaveUserData();
+            CCPlayerData.SaveUserDataJson();
         }
 
         public void LoadUserData()
         {
-            CCPlayerData.LoadUserData();
+            CCPlayerData.LoadUserDataJson();
         }
 
         public void AutoLoadUserData() {

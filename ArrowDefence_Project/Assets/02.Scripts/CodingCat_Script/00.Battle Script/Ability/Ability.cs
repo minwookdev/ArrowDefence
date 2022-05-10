@@ -351,7 +351,7 @@
         }
 
         public static int GetGradeCount(float number) {
-            return UnityEngine.Mathf.CeilToInt((float)number / MaxValue);
+            return UnityEngine.Mathf.CeilToInt((float)number / GetUnitValue(MaxValue));
         }
 
         public IncProjectileDamage(short value) {

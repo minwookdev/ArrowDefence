@@ -2,14 +2,6 @@
     using UnityEngine;
 
     public class Skill_Empty : AD_BowSkill {
-        public override string GetNameByTerms() {
-            throw new System.NotImplementedException();
-        }
-
-        public override string GetDescByTerms() {
-            throw new System.NotImplementedException();
-        }
-
         /// <summary>
         /// Constructor using Skill Data Scriptableobject. (Main)
         /// </summary>

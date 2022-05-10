@@ -3,8 +3,7 @@ using ES3Editor;
 using UnityEditor;
 using UnityEngine;
 
-public static class ItemData_Editor
-{
+public static class ItemData_Editor {
     public const string DefaultItemInfoText = "Default Item Info";
     public const string ItemTypeText        = "Item Type";
     public const string ItemGradeText       = "Item Grade";

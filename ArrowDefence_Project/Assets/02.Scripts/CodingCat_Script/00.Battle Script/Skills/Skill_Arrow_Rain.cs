@@ -17,7 +17,7 @@
         }
 
         public override string GetDescByTerms() {
-            throw new System.NotImplementedException();
+            return string.Format(DescByTerms, arrowCount.ToString().GetColor(StringColor.YELLOW));
         }
 
 

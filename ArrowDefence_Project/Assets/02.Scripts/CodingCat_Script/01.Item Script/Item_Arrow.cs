@@ -76,6 +76,7 @@
             var tempList = new System.Collections.Generic.List<Ability>();
             for (int i = 0; i < abilities.Length; i++) {
                 switch (abilities[i].AbilityType) {
+                    //======================================================================= <<< INHERENCE ABILITY >>> =======================================================================
                     case ABILITY_TYPE.ARROWDAMAGEINC:
                         var damageIncrease = abilities[i] as IncArrowDamageRate;
                         if (damageIncrease != null) {
@@ -92,6 +93,20 @@
                         else {
                             CatLog.ELog("New Ability Type Not Matched !");
                         } break;
+                    case ABILITY_TYPE.PROJECTILEDAMAGE: 
+                        break;
+                    case ABILITY_TYPE.SPELLDAMAGE: 
+                        break;
+                    //========================================================================= <<< PUBLIC ABILITY >>> ========================================================================
+                    case ABILITY_TYPE.DAMAGE: 
+                        break;
+                    case ABILITY_TYPE.CRITICALCHANCE: 
+                        break;
+                    case ABILITY_TYPE.CRITICALDAMAGE: 
+                        break;
+                    case ABILITY_TYPE.ARMORPENETRATE: 
+                        break;
+                    //========================================================================== <<< OTHER ABILITY >>> ========================================================================
                     default: throw new System.NotImplementedException();
                 }
             }

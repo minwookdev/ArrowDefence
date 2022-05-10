@@ -13,7 +13,7 @@
 
         public override string GetDescByTerms() {
             I2.Loc.LocalizedString loc = termsDesc;
-            return string.Format(loc, arrowCount);
+            return string.Format(loc, arrowCount.ToString().GetColor(StringColor.YELLOW));
         }
 
         /// <summary>

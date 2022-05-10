@@ -104,8 +104,14 @@
         private AD_BowSkill GetNewSkill(BowSkillData data) {
             if (data == null) return null;
             switch (data.SkillType) {
-                case BOWSKILL_TYPE.SKILL_EMPTY: 
-                    throw new System.NotImplementedException();
+                case BOWSKILL_TYPE.SKILL_EMPTY:
+                    var empty = data as SkillData_Empty;
+                    if (empty != null) {
+                        return new Skill_Empty(empty);
+                    }
+                    else {
+                        throw new System.Exception("This Bow Skill Type Not Matched.");
+                    }
                 case BOWSKILL_TYPE.SKILL_SPREAD_SHOT:
                     var spreadShot = data as SkillDataSpreadShot;
                     if (spreadShot != null) {
@@ -129,7 +135,7 @@
                     }
                     else {
                         throw new System.Exception("This Bow Skill Type Not Matched.");
-                    } 
+                    }
                 default: throw new System.NotImplementedException();
             }
         }

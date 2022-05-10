@@ -26,11 +26,11 @@ MonoBehaviour:
     type: 3}
   ArrowSkillFst: {fileID: 0}
   ArrowSkillSec: {fileID: 0}
-  AdditionalSpeed: 0
+  AdditionalSpeed: 1.6
   ArrowDamageInc: 0.1
   ProjectileDamageInc: 0
   SpellDamageInc: 0
-  BaseDamageInc: 0
+  BaseDamageInc: 50
   CriticalChanceInc: 0
   CriticalDamageMultiplierInc: 0
   ArmorPenetrationInc: 0

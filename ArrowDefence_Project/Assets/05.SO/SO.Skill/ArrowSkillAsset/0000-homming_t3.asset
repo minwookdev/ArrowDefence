@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d21f967665e3084e81561aa8d8d3fc2, type: 3}
+  m_Name: 0000-homming_t3
+  m_EditorClassIdentifier: 
+  SkillId: 
+  SkillName: Seeking
+  SkillDesc: When fired, it flies towards nearby enemies.
+  SkillLevel: 2
+  SkillType: 2
+  IconSprite: {fileID: 21300000, guid: 54bac695f3849e7468504e3c1aae52af, type: 3}
+  ActiveType: 6
+  effects: []
+  NameTerms: 
+  DescTerms: 
+  TargetSearchInterval: 0.1
+  ScanRadius: 5
+  HomingSpeed: 6
+  HomingRotateSpeed: 800

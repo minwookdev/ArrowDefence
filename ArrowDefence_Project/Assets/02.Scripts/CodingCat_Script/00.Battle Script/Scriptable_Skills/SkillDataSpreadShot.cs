@@ -8,8 +8,7 @@
     /// </summary>
     public class SkillDataSpreadShot : BowSkillData
     {
-        [Range(1, 255)]
-        public byte ArrowShotCount;
+        [RangeEx(1, 255, 1)] public byte ArrowShotCount;
         public float SpreadAngle;
 
         public SkillDataSpreadShot()

@@ -25,11 +25,17 @@
             return stageSettings.TryGetValue(key, out setting);
         }
 
+        public static GameSettings defaultSettings {
+            get {
+                return new GameSettings() {
+                    stageSettings = new Dictionary<string, StageSetting>(),
+                    PullingType   = PULLINGTYPE.FREE_TOUCH
+                };
+            }
+        }
         public GameSettings() { }
         ~GameSettings() { }
     }
-
-
 }
 
 namespace ActionCat.Data.StageData {

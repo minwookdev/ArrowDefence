@@ -106,12 +106,12 @@
         }
 
         public void Button_SaveData() {
-            CCPlayerData.SaveUserData();
+            CCPlayerData.SaveUserDataJson();
             Notify.Inst.Show("SAVE USER DATA");
         }
 
         public void Button_LoadData() {
-            CCPlayerData.LoadUserData();
+            CCPlayerData.LoadUserDataJson();
             Notify.Inst.Show("LOAD USER DATA");
         }
 

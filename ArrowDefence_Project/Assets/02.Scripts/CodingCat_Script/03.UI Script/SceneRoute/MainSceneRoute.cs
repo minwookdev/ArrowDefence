@@ -51,8 +51,6 @@ public class MainSceneRoute : MonoBehaviour {
     }
 
     private void Start() {
-        GameManager.Instance.Initialize();
-
         //Init Notify
         Notify.Inst.Init(mainUICanvas);
 
@@ -75,7 +73,15 @@ public class MainSceneRoute : MonoBehaviour {
 
         //bool settingsExam = false;
         //ES3.Save<bool>("TestKey", settingsExam, )
-        CatLog.Log($"data path: {Application.streamingAssetsPath}");
+        CatLog.Log($"Streaming Asset Path: {Application.streamingAssetsPath}");
+        CatLog.Log($"Presistent Data Path: {Application.persistentDataPath}");
+        CatLog.Log($"Data Path: {Application.dataPath}"); // -> Recommended
+        CatLog.Log($"ES3 Settings FilePath: {ES3Settings.defaultSettings.FullPath}");
+
+        //1. Application.dataPath의 경로로 잡고 진행,문제가 생기면 경로는 Presistent data path로 변경
+        //2. 해당경로에 파일이 존재하는지 확인하고 없으면 GameSettings파일을 생성하도록 작성.
+        //3. 게임이 시작되면 Player's Data와는 다르게 이 작업부터 시행해줌. PlayerData와는 다르게 관리하도록.
+        //4. 의의는 각각의 다른 기기에서 유저세이브를 불러왔을 때, 기기에 저장된 GameSettings의 json은 온라인에 올리지 않고, PlayerData만 왔다갔다 하게끔 되는 것.
 
         //float tempValue = (float)0.125f / 0.125f;
         //CatLog.Log($"Calculate Grade: {Mathf.CeilToInt(tempValue)}");

@@ -82,6 +82,18 @@ public class ArrowSkillData_Editor : Editor
         GUILayout.EndVertical();
         #endregion
     }
+
+    protected void EditMultiple(string nameTermString, string descTermString) {
+        var allSelectedScripts = targets;
+        EditorGUI.BeginChangeCheck();
+        if (EditorGUI.EndChangeCheck()) {
+            foreach (var script in allSelectedScripts) {
+                ((ArrowSkillData)script).NameTerms = nameTermString;
+                ((ArrowSkillData)script).DescTerms = descTermString;
+                SceneView.RepaintAll();
+            }
+        }
+    }
 }
 
 [CustomEditor(typeof(DataRebound))]
@@ -154,7 +166,7 @@ public class ReboundArrowDataEditor : ArrowSkillData_Editor
     }
 }
 
-[CustomEditor(typeof(DataHoming))]
+[CustomEditor(typeof(DataHoming)), CanEditMultipleObjects]
 public class HomingArrowDataEditor : ArrowSkillData_Editor
 {
     SerializedProperty intervalProp;
@@ -198,6 +210,9 @@ public class HomingArrowDataEditor : ArrowSkillData_Editor
 
         //End HelpBox
         EditorGUILayout.EndVertical();
+
+        //Edit Multiple Object
+        EditMultiple(nameTermsProp.stringValue, descTermsProp.stringValue);
 
         //Save Property
         sobject.ApplyModifiedProperties();

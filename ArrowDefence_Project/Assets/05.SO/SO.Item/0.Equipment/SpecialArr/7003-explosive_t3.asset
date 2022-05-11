@@ -36,6 +36,6 @@ MonoBehaviour:
   effects: []
   ArrowSkillTrd: {fileID: 11400000, guid: 9c95dbacf0964c0409cc446f37c37b69, type: 2}
   ChargeType: 1
-  MaxCost: 20
+  MaxCost: 100
   MaxStackCount: 3
   CostIncrease: 10

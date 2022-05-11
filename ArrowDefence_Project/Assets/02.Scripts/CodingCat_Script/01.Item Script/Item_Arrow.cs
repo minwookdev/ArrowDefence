@@ -74,40 +74,75 @@
 
         protected override Ability[] GetNewAbilities(Ability[] abilities) {
             var tempList = new System.Collections.Generic.List<Ability>();
+            string log = "";
             for (int i = 0; i < abilities.Length; i++) {
+                Ability newAbility = null;  //New Ability Assignment 시험적용
                 switch (abilities[i].AbilityType) {
                     //======================================================================= <<< INHERENCE ABILITY >>> =======================================================================
-                    case ABILITY_TYPE.ARROWDAMAGEINC:
-                        var damageIncrease = abilities[i] as IncArrowDamageRate;
-                        if (damageIncrease != null) {
-                            tempList.Add(new IncArrowDamageRate(damageIncrease.Value));
+                    case ABILITY_TYPE.ARROWDAMAGEINC: // ★★ 구형로직
+                        var incArrDamage = abilities[i] as IncArrowDamageRate;
+                        if (incArrDamage != null) {
+                            tempList.Add(new IncArrowDamageRate(incArrDamage.Value));
+                            continue;
                         }
                         else {
-                            CatLog.ELog("New Ability Type Not Matched !");
-                        } break;
-                    case ABILITY_TYPE.ARROWSPEED:
+                            log = $"TypeEnum: {nameof(ABILITY_TYPE.ARROWDAMAGEINC)}, Class: {nameof(IncArrowDamageRate)}";
+                        }
+                        break; 
+                    case ABILITY_TYPE.ARROWSPEED:     // ★★ 구형로직
                         var speed = abilities[i] as AbilitySpeed;
                         if (speed != null) {
                             tempList.Add(new AbilitySpeed(speed.Value));
+                            continue;
                         }
                         else {
-                            CatLog.ELog("New Ability Type Not Matched !");
-                        } break;
-                    case ABILITY_TYPE.PROJECTILEDAMAGE: 
+                            log = $"TypeEnum: {(nameof(ABILITY_TYPE.ARROWSPEED))}, Class: {nameof(AbilitySpeed)}";
+                        }
                         break;
-                    case ABILITY_TYPE.SPELLDAMAGE: 
+                    case ABILITY_TYPE.PROJECTILEDAMAGE:
+                        var incProjectileDamage = abilities[i] as IncProjectileDamage;
+                        newAbility = (incProjectileDamage != null) ? new IncProjectileDamage(incProjectileDamage.Value) : null;
+                        log = (newAbility != null) ? "" : $"TypeEnum: {(nameof(ABILITY_TYPE.PROJECTILEDAMAGE))}, Class: {(nameof(IncProjectileDamage))}";
+                        break;
+                    case ABILITY_TYPE.SPELLDAMAGE:
+                        var incSpellDamage = abilities[i] as IncSpellDamage;
+                        newAbility = (incSpellDamage != null) ? new IncSpellDamage(incSpellDamage.Value) : null;
+                        log = (newAbility != null) ? "" : $"TypeEnum: {(nameof(ABILITY_TYPE.SPELLDAMAGE))}, Class: {nameof(IncSpellDamage)}";
                         break;
                     //========================================================================= <<< PUBLIC ABILITY >>> ========================================================================
-                    case ABILITY_TYPE.DAMAGE: 
+                    case ABILITY_TYPE.DAMAGE:
+                        var abilityDamage = abilities[i] as AbilityDamage;
+                        newAbility = (abilityDamage != null) ? new AbilityDamage(abilityDamage.Value) : null;
+                        log = (newAbility != null) ? "" : $"TypeEnum: {(nameof(ABILITY_TYPE.DAMAGE))}, Class: {nameof(AbilityDamage)}";
                         break;
-                    case ABILITY_TYPE.CRITICALCHANCE: 
+                    case ABILITY_TYPE.CRITICALCHANCE:
+                        var abilityCritChance = abilities[i] as AbilityCritChance;
+                        newAbility = (abilityCritChance != null) ? new AbilityCritChance(abilityCritChance.Value) : null;
+                        log = (newAbility != null) ? "" : $"TypeEnum : {nameof(ABILITY_TYPE.CRITICALCHANCE)}, Class: {nameof(AbilityCritChance)}";
                         break;
-                    case ABILITY_TYPE.CRITICALDAMAGE: 
+                    case ABILITY_TYPE.CRITICALDAMAGE:
+                        var abilityCritDamage = abilities[i] as AbilityCritDamage;
+                        newAbility = (abilityCritDamage != null) ? new AbilityCritDamage(abilityCritDamage.Value) : null;
+                        log = (newAbility != null) ? "" : $"TypeEnum: {nameof(ABILITY_TYPE.CRITICALDAMAGE)}, Class: {nameof(AbilityCritDamage)}";
                         break;
-                    case ABILITY_TYPE.ARMORPENETRATE: 
+                    case ABILITY_TYPE.ARMORPENETRATE:
+                        var abilityPenetration = abilities[i] as PenetrationArmor;
+                        newAbility = (abilityPenetration != null) ? new PenetrationArmor(abilityPenetration.Value) : null;
+                        log = (newAbility != null) ? "" : $"TypeEnum: {nameof(ABILITY_TYPE.ARMORPENETRATE)}, Class: {nameof(PenetrationArmor)}";
                         break;
                     //========================================================================== <<< OTHER ABILITY >>> ========================================================================
-                    default: throw new System.NotImplementedException();
+                    default: throw new System.NotImplementedException(); // 허용안함 
+                }
+
+                //
+                if (newAbility != null) {
+                    //Type이 매치되어 새로운 어빌리티 class가 할당된 상태
+                    tempList.Add(newAbility);
+                }
+                else { 
+                    //Ability Type과 class가 Match되지 않아서 NewAbility에 새롭게 할당되지 않았음
+                    CatLog.ELog($"Arrow Ability Type Not Matched !. Exception Message: \n" + log);
+                    continue;
                 }
             }
             return tempList.ToArray();

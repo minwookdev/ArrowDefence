@@ -193,7 +193,7 @@
                 default: throw new System.NotImplementedException("Wrong Sorting Number.");
             }
 
-            CatLog.Log(StringColor.YELLOW ,$"Inventory: Update UI Inventory, Player's Item Counts:{inventoryList.Count}");
+            CatLog.Log(StringColor.YELLOW ,$"Inventory Interface Update, Load Item Counts: {inventoryList.Count}");
 
             //if (inventoryList.Count <= 0) return; //Inventory 아무것도 없으면 return 하는 로직 추가
 
@@ -215,7 +215,7 @@
 
         private void ClearUIinventory() {
             slotList.FindAll(x => x.gameObject.activeSelf == true).ForEach(x => x.DisableSlot());
-            CatLog.Log(StringColor.YELLOW, "Inventory: Clear All Slots.");
+            //CatLog.Log(StringColor.YELLOW, "Inventory: Clear All Slots.");
         }
 
         #region BUTTON_METHOD

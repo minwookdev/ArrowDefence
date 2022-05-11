@@ -250,7 +250,7 @@
 
         public override string GetDescByTerms() {
             I2.Loc.LocalizedString loc = descTerms;
-            return string.Format(loc, (slowRatio * 100).ToString().GetColor(StringColor.GREEN));
+            return string.Format(loc, (slowRatio * 100).ToString().GetColor(StringColor.GREEN), duration.ToString().GetColor(StringColor.YELLOW));
         }
 
         public override void ActiveDebuff(MonsterStatus[] statusArray) {

@@ -20,8 +20,8 @@ MonoBehaviour:
   IconSprite: {fileID: 21300000, guid: 54bac695f3849e7468504e3c1aae52af, type: 3}
   ActiveType: 6
   effects: []
-  NameTerms: 
-  DescTerms: 
+  NameTerms: SkillName/SNAME_ARR_HOMING
+  DescTerms: SkillDesc/SDESC_ARR_HOMING
   TargetSearchInterval: 0.1
   ScanRadius: 5
   HomingSpeed: 6

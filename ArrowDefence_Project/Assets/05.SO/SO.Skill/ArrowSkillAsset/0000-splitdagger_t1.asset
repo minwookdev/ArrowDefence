@@ -25,8 +25,8 @@ MonoBehaviour:
   IconSprite: {fileID: 21300000, guid: 33d2e28416d37144b8a32c7e4a52a6e7, type: 3}
   ActiveType: 7
   effects: []
-  NameTerms: 
-  DescTerms: 
+  NameTerms: SkillName/SNAME_ARR_SPLITDAGGER
+  DescTerms: SkillDesc/SDESC_ARR_SPLITDAGGER
   projectileCount: 3
   daggerPref: {fileID: 5571855133762799641, guid: 3dd77a12e171ca14a9cba99f127e58e3,
     type: 3}

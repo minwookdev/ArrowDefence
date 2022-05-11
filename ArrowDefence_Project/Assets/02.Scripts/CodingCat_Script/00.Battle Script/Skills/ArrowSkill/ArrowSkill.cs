@@ -30,6 +30,9 @@
         public abstract string GetDesc(string localizedString);
     }
 
+    //================================================================================================================================================================
+    //================================================================ << ATTACK TYPE ARROW SKILL  >> ================================================================
+
     public abstract class AttackActiveTypeAS : ArrowSkill {
         protected GameObject lastHitTarget = null;
         protected ACEffector2D[] effects   = null;
@@ -107,7 +110,7 @@
         string[] effectPoolTags;
 
         public override string GetDesc(string localizedString) {
-            return string.Format(localizedString, maxChainCount);
+            return string.Format(localizedString, maxChainCount.ToString().GetColor(StringColor.YELLOW));
         }
 
         public override bool OnHit(Collider2D target, ref DamageStruct damage, Vector3 contact, Vector2 direction) {
@@ -284,7 +287,7 @@
         Collider2D[] tempArray = null;
 
         public override string GetDesc(string localizedString) {
-            throw new System.NotImplementedException();
+            return string.Format(localizedString, maxChainCount.ToString().GetColor(StringColor.YELLOW));
         }
 
         ///관통 횟수에 따른 데미지 감소효과 구현
@@ -372,14 +375,14 @@
             throw new System.NotImplementedException();
         }
 
-        public PiercingArrow(PiercingArrow origin)
-        {
+        public PiercingArrow(PiercingArrow origin) {
             maxChainCount = origin.maxChainCount;
+            effects       = origin.effects;
         }
 
-        public PiercingArrow(DataPiercing data)
-        {
+        public PiercingArrow(DataPiercing data) {
             maxChainCount = data.MaxChainCount;
+            effects       = data.effects;
         }
 
         /// <summary>

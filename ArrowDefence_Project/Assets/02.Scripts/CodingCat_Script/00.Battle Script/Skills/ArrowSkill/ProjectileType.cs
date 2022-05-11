@@ -113,7 +113,7 @@
         private float intervalAngle;
 
         public override string GetDesc(string localizedString) {
-            throw new System.NotImplementedException();
+            return string.Format(localizedString, projectileCount.ToString().GetColor(StringColor.YELLOW), projectileDamage.ToString().GetColor(StringColor.GREEN));
         }
 
         protected override string[] GetUniqueTags() {
@@ -168,11 +168,11 @@
     //=========================================================================================================================================================
     //=============================================================== [ ELEMENTAL - FIRE ] ====================================================================
     public class ElementalFire : ProjectileType {
-        public override string GetDesc(string localizedString) {
-            throw new System.NotImplementedException();
-        }
-
         private float activationProbability;
+
+        public override string GetDesc(string localizedString) {
+            return string.Format(localizedString, activationProbability.ToString().GetColor(StringColor.YELLOW), projectileDamage.ToString().GetColor(StringColor.RED));
+        }
 
         protected override string[] GetUniqueTags() {
             return new string[1] { "elemental_fire" };

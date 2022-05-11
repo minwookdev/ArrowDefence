@@ -26,7 +26,7 @@
         float searchInterval = .1f;  //Find Target Update Interval
 
         public override string GetDesc(string localizedString) {
-            throw new System.NotImplementedException();
+            return localizedString;
         }
 
         //Call Every Frames

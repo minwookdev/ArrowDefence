@@ -20,7 +20,7 @@ MonoBehaviour:
   NameTerms: ItemName/Bow/ITEM_BOW_RECURVE_3T
   DescTerms: 
   Equip_Type: 0
-  BowGameObject: {fileID: 5063279129060135535, guid: 757a4754cd126084ba8d4e697409ed45,
+  BowGameObject: {fileID: 7438080295175813248, guid: 91c357be7e9d1724c8d73dd1d0536a99,
     type: 3}
   SkillAsset_f: {fileID: 11400000, guid: fc05af65163bdfe42a8b4d70895800ec, type: 2}
   SkillAsset_s: {fileID: 0}

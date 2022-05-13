@@ -11,7 +11,7 @@
         static readonly string KEY_INFOS     = "KEY_INFOS";
         static readonly string KEY_SETTINGS  = "KEY_SETTINGS";
 
-        public static bool IsExistsDefaultFile = false;
+        //public static bool IsExistsDefaultFile = false;
 
         public static string PersistentDataPath {
             get {
@@ -32,15 +32,31 @@
             }
         }
 
-        public static void CreateNewFile() {
-            if (IsExistsDefaultFile) return;
+        #region DEBUGGING
 
-            //세이브 데이터를 불러오지 못한 경우 EX)세이브 데이터 없음. 
-            //게임진행에 필요한 최소의 조건 충족 EX)기초 아이템 지급.
-            infos.AddCraftSlot(3); //초기에 3개 오픈
+        public static void Debug_CreateNewUserData() {
+            infos.AddCraftSlot(3);
             infos.OpenSlot(0, 1, 2);
+        }
 
-            IsExistsDefaultFile = true;
+        public static void Debug_LoadUserJson() {
+            inventory  = (ES3.KeyExists(KEY_INVENTORY)) ? ES3.Load<AD_Inventory>(KEY_INVENTORY)      : throw new System.Exception("INVENTORY KEY NOT EXISTS.");
+            equipments = (ES3.KeyExists(KEY_EQUIPMENT)) ? ES3.Load<Player_Equipments>(KEY_EQUIPMENT) : throw new System.Exception("EQUIPMENT KEY NOT EXISTS.");
+            infos      = (ES3.KeyExists(KEY_INFOS))     ? ES3.Load<PlayerInfo>(KEY_INFOS)            : throw new System.Exception("INFO KEY NOT EXISTS.");
+        }
+
+        public static void Debug_SaveUserjson() {
+            ES3.Save(KEY_INVENTORY, inventory);
+            ES3.Save(KEY_EQUIPMENT, equipments);
+            ES3.Save(KEY_INFOS, infos);
+        }
+
+        #endregion
+
+        public static void CreateNewUserData() {
+            infos.AddCraftSlot(3); //초기 할당 슬롯
+            infos.OpenSlot(0);     //초기 오픈 슬롯
+            //게임 처음에 지금하는 활이랑 화살도 여기서 inventory에 add 해주기
         }
 
         public static void SaveUserDataJson() {
@@ -57,52 +73,54 @@
             }
         }
 
-        public static void LoadUserDataJson() {
-            if (!ES3.FileExists()) {
+        public static bool LoadUserDataJson(out byte log) {
+            if (!ES3.FileExists()) { //UserSave Json 존재하지 않는경우. 'Log=1' (세이브파일 없음)
                 CatLog.WLog("User Data File is Not Exsist.");
-                IsExistsDefaultFile = false;
-                return;
+                log = 1;
+                return false;   
             }
 
-            try {
+            try { //이 로직 테스트한번 진행해보기. throw new Exception 났을 때, catch에서 어떻게잡는지 한번 보기
                 inventory  = (ES3.KeyExists(KEY_INVENTORY)) ? ES3.Load<AD_Inventory>(KEY_INVENTORY)      : throw new System.Exception("INVENTORY KEY NOT EXISTS.");
                 equipments = (ES3.KeyExists(KEY_EQUIPMENT)) ? ES3.Load<Player_Equipments>(KEY_EQUIPMENT) : throw new System.Exception("EQUIPMENT KEY NOT EXISTS.");
                 infos      = (ES3.KeyExists(KEY_INFOS))     ? ES3.Load<PlayerInfo>(KEY_INFOS)            : throw new System.Exception("INFO KEY NOT EXISTS.");
-                IsExistsDefaultFile = true; //ES3 로드 성공 !
-                CatLog.Log(StringColor.GREEN, "User Data Json Loaded Successfully !");
             }
             catch (System.Exception ex) {
-                IsExistsDefaultFile = false;
+                log = 255;
                 CatLog.ELog("Failed to Load UserData Json: \n" + ex.Message);
+                return false;
             }
+
+            CatLog.Log(StringColor.GREEN, "User Data Json Loaded Successfully !"); //ES3 로드 성공 !
+            log = 0;
+            return true;
         }
 
-        public static void TEST_CREATE_TEMP_CRAFTING_SLOT() {
-            infos.AddCraftSlot(3);
-            infos.OpenSlot(0);
-            infos.OpenSlot(1);
-            infos.OpenSlot(2);
-        }
-
-        public static void LoadSettingsJson() {
+        public static bool LoadSettingsJson(out string log) {
             try {
                 var isExistsFile = ES3.FileExists(CCPlayerData.SettingsJsonFilePath, ES3Settings.defaultSettings);
-                if (!isExistsFile) {
+                if (!isExistsFile) { //SettingsJson이 존재하지 않는경우, 새로운 SettingsJson을 생성하고 저장
                     settings = GameSettings.defaultSettings;
                     ES3.Save<GameSettings>(KEY_SETTINGS, settings, CCPlayerData.SettingsJsonFilePath, ES3Settings.defaultSettings);
                     CatLog.WLog("Settings Json Not Exists in DataPath. Create New Settings Json.");
                 }
 
+                //SettingsJson이 존재하지만 저장될 때와는 다른 KEY를 사용하여 저장된 경우, 새로운 Json을 생성함.
                 if (ES3.KeyExists(KEY_SETTINGS, CCPlayerData.SettingsJsonFilePath, ES3Settings.defaultSettings) == false) {
-                    throw new System.Exception("The json file exists, but the key does not exist.");
+                    ES3.DeleteFile(CCPlayerData.SettingsJsonFilePath);  //Different Key를 가진 Settings Json제거
+                    ES3.Save<GameSettings>(KEY_SETTINGS, settings, CCPlayerData.SettingsJsonFilePath, ES3Settings.defaultSettings);
+                    CatLog.WLog("the SettingsJson file Exists, but it is a file Saved using a different key. \n" + "Remove the Existing Json and Create a new Json.");
                 }
 
                 settings = ES3.Load<GameSettings>(KEY_SETTINGS, CCPlayerData.SettingsJsonFilePath, ES3Settings.defaultSettings);
-                CatLog.Log(StringColor.GREEN, "Settings Json Load Completed !");
             }
             catch (System.Exception ex) {
-                CatLog.ELog("Failed to Load Settings Json. Exception: \n" + ex.Message);
+                log = ex.Message;
+                return false;
             }
+
+            log = "Settings Json Load Completed !";
+            return true;
         }
 
         public static void SaveSettingsJson() {

@@ -76,7 +76,7 @@
 
         private void Start() {
             //Get Temp Crafting Slot
-            GameManager.Instance.CheckSaveData();
+            //GameManager.Instance.CheckSaveData();
 
             craftingFunction.Start(BE_CT_OPENSELECTPANEL, 5, 10, craftingRecipeTable);
             upgradeFunction.Start(upgradeRecipeTable);

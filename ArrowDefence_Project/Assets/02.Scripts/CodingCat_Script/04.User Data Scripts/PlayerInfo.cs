@@ -80,7 +80,7 @@
             craftingInfoList.ForEach(slot => slot.Update());
         }
 
-        #region CONSTRUCTOR [for ES3]
+        #region CONSTRUCTOR
         public PlayerInfo() { }
         ~PlayerInfo() { }
         #endregion

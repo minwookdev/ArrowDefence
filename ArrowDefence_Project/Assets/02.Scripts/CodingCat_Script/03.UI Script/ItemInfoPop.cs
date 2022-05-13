@@ -808,6 +808,7 @@
         /// </summary>
         /// <param name="item"></param>
         public void OpenPreview_Crafting(AD_item item, bool disableAmountText = false) {
+            gameObject.SetActive(true);
             var frame = Frames[(int)item.GetGrade];
             switch (item.GetItemType) {
                 case ITEMTYPE.ITEM_MATERIAL:   
@@ -832,10 +833,6 @@
                     }
                     break;
                 default: throw new System.NotImplementedException();
-            }
-
-            if (!gameObject.activeSelf) {
-                gameObject.SetActive(true);
             }
         }
 

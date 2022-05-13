@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Item_Type: 0
   Item_Grade: 1
-  Item_Id: 2302
-  Item_Amount: 1
-  Item_Name: Short Bow BluePrint
-  Item_Desc: BluePrint For Making T1 Short Bow
+  Item_Id: 
+  DefaultAmount: 0
   Item_Sprite: {fileID: 21300000, guid: 45416616bc8602546a401071acab39ac, type: 3}
+  NameTerms: 
+  DescTerms: 

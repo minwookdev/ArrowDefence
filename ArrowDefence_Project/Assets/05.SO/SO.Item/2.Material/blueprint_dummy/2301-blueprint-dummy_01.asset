@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Item_Type: 0
   Item_Grade: 2
-  Item_Id: 2301
-  Item_Amount: 1
-  Item_Name: Hunting Bow BluePrint
-  Item_Desc: BluePrint For Making T1 Hunting Bow
+  Item_Id: 
+  DefaultAmount: 0
   Item_Sprite: {fileID: 21300000, guid: d311a576f660771438a5f296f88a670e, type: 3}
+  NameTerms: 
+  DescTerms: 

@@ -50,14 +50,17 @@
         private void OnValidate() {
             if(RecipeArray != null) {
                 foreach (var recipe in RecipeArray) {
-                    if (recipe.Result.Item.Item_Type == ITEMTYPE.ITEM_EQUIPMENT) {
-                        if (recipe.Result.Count > 1) {
-                            CatLog.ELog("Equipment Type Result Item Amount Over 1, Check this");
+                    if(recipe.Result.Item != null) {
+                        if (recipe.Result.Item.Item_Type == ITEMTYPE.ITEM_EQUIPMENT) {
+                            if (recipe.Result.Count > 1) {
+                                CatLog.ELog("Equipment Type Result Item Amount Over 1, Check this");
+                            }
                         }
                     }
-
-                    if(recipe.Mats.Length > 5) {
-                        CatLog.ELog($"Material Array Size Always Less than 6, BluePrint: {recipe.BluePrint.NameByTerms}");
+                    if(recipe.Mats != null) {
+                        if (recipe.Mats.Length > 5) {
+                            CatLog.ELog($"Material Array Size Always Less than 6, BluePrint: {recipe.BluePrint.NameByTerms}");
+                        }
                     }
                 }
             }

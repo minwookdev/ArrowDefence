@@ -13,7 +13,7 @@
         public Image DevPanel;
 
         [Header("PLAYER DATA")]
-        public AD_PlayerData playerData;
+        public TITable playerData;
 
         [Header("Ads")]
         [SerializeField] Image ImgInterstitialAds = null;
@@ -106,12 +106,12 @@
         }
 
         public void Button_SaveData() {
-            CCPlayerData.SaveUserDataJson();
+            CCPlayerData.Debug_SaveUserjson();
             Notify.Inst.Show("SAVE USER DATA");
         }
 
         public void Button_LoadData() {
-            CCPlayerData.LoadUserDataJson();
+            CCPlayerData.Debug_LoadUserJson();
             Notify.Inst.Show("LOAD USER DATA");
         }
 

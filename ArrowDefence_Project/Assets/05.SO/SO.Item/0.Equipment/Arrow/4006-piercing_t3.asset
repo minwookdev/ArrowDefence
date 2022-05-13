@@ -17,7 +17,7 @@ MonoBehaviour:
   Item_Id: 4006
   DefaultAmount: 1
   Item_Sprite: {fileID: 21300000, guid: e6d58d2d283f8d847b62e0d05c8887d6, type: 3}
-  NameTerms: ItemName/Arrow/ARROW_STEEL_3T
+  NameTerms: ItemName/Arrow/ITEM_ARROW_PIERCING_3T
   DescTerms: 
   Equip_Type: 1
   MainArrowObj: {fileID: 2957477139567338875, guid: 5637d9e201f1b7c4687bcc28bc690ee4,

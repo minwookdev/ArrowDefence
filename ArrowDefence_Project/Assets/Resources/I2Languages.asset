@@ -350,9 +350,9 @@ MonoBehaviour:
       TermType: 0
       Description: 
       Languages:
-      - Fire Spell Staff [1T]
-      - "\uD654\uC5FC \uC8FC\uBB38 \uC2A4\uD0DC\uD504 [1T]"
-      - "\u706B\u708E\u6CE8\u6587\u30B9\u30BF\u30C3\u30D5 [1T]"
+      - Fire Spell Arrow [1T]
+      - "\uD654\uC5FC \uB9C8\uBC95 \uD654\uC0B4 [1T]"
+      - "\u706B\u306E\u546A\u6587\u306E\u77E2[1T]"
       - 
       Flags: 00000000
       Languages_Touch: []
@@ -360,9 +360,9 @@ MonoBehaviour:
       TermType: 0
       Description: 
       Languages:
-      - Fire Spell Staff [2T]
-      - "\uD654\uC5FC \uC8FC\uBB38 \uC2A4\uD0DC\uD504 [2T]"
-      - "\u706B\u708E\u6CE8\u6587\u30B9\u30BF\u30C3\u30D5 [2T]"
+      - Fire Spell Arrow [2T]
+      - "\uD654\uC5FC \uB9C8\uBC95 \uD654\uC0B4 [2T]"
+      - "\u706B\u306E\u546A\u6587\u306E\u77E2[2T]"
       - 
       Flags: 00000000
       Languages_Touch: []
@@ -370,9 +370,9 @@ MonoBehaviour:
       TermType: 0
       Description: 
       Languages:
-      - Fire Spell Staff [3T]
-      - "\uD654\uC5FC \uC8FC\uBB38 \uC2A4\uD0DC\uD504 [3T]"
-      - "\u706B\u708E\u6CE8\u6587\u30B9\u30BF\u30C3\u30D5 [3T]"
+      - Fire Spell Arrow [3T]
+      - "\uD654\uC5FC \uB9C8\uBC95 \uD654\uC0B4 [3T]"
+      - "\u706B\u306E\u546A\u6587\u306E\u77E2[3T]"
       - 
       Flags: 00000000
       Languages_Touch: []
@@ -380,9 +380,9 @@ MonoBehaviour:
       TermType: 0
       Description: 
       Languages:
-      - Stalker Arrow
-      - "\uCD94\uC801\uC790 \uD654\uC0B4"
-      - "\u30B9\u30C8\u30FC\u30AB\u30FC\u30A2\u30ED\u30FC"
+      - Stalker Arrow [1T]
+      - "\uCD94\uC801\uC790 \uD654\uC0B4 [1T]"
+      - "\u30B9\u30C8\u30FC\u30AB\u30FC\u30A2\u30ED\u30FC[1T]"
       - 
       Flags: 00000000
       Languages_Touch: []
@@ -390,8 +390,8 @@ MonoBehaviour:
       TermType: 0
       Description: 
       Languages:
-      - Stalker Arrow [2Tier]
-      - "\uCD94\uC801\uC790 \uD654\uC0B4 [2\uD2F0\uC5B4]"
+      - Stalker Arrow [2T]
+      - "\uCD94\uC801\uC790 \uD654\uC0B4 [2T]"
       - "\u30B9\u30C8\u30FC\u30AB\u30FC\u30A2\u30ED\u30FC[2T]"
       - 
       Flags: 00000000
@@ -400,9 +400,9 @@ MonoBehaviour:
       TermType: 0
       Description: 
       Languages:
-      - Stalker Arrow [3Tier]
-      - "\uC2A4\uD1A0\uCEE4 \uD654\uC0B4 [3\uD2F0\uC5B4]"
-      - "\u30B9\u30C8\u30FC\u30AB\u30FC\u30A2\u30ED\u30FC[3\u30C6\u30A3\u30A2]"
+      - Stalker Arrow [3T]
+      - "\uCD94\uC801\uC790 \uD654\uC0B4 [3T]"
+      - "\u30B9\u30C8\u30FC\u30AB\u30FC\u30A2\u30ED\u30FC[3T]"
       - 
       Flags: 00000000
       Languages_Touch: []
@@ -440,9 +440,9 @@ MonoBehaviour:
       TermType: 0
       Description: 
       Languages:
-      - Explosion Arrow
-      - "\uD3ED\uBC1C \uD654\uC0B4"
-      - "\u7206\u767A\u306E\u77E2"
+      - Explosive Arrow [1T]
+      - "\uD3ED\uBC1C \uD654\uC0B4 [1T]"
+      - "\u7206\u767A\u306E\u77E2[1T]"
       - 
       Flags: 00000000
       Languages_Touch: []
@@ -450,9 +450,9 @@ MonoBehaviour:
       TermType: 0
       Description: 
       Languages:
-      - Explosion Arrow (2Tier)
-      - "\uD3ED\uBC1C \uD654\uC0B4 (2\uD2F0\uC5B4)"
-      - "\u7206\u767A\u306E\u77E2\uFF082\u5C64\uFF09"
+      - Explosive Arrow [2T]
+      - "\uD3ED\uBC1C \uD654\uC0B4 [2T]"
+      - "\u7206\u767A\u306E\u77E2[2T]"
       - 
       Flags: 00000000
       Languages_Touch: []
@@ -460,9 +460,9 @@ MonoBehaviour:
       TermType: 0
       Description: 
       Languages:
-      - Explosion Arrow (3Tier)
-      - "\uD3ED\uBC1C \uD654\uC0B4 (3\uD2F0\uC5B4)"
-      - "\u7206\u767A\u306E\u77E2\uFF083\u5C64\uFF09"
+      - Explosive Arrow [3T]
+      - "\uD3ED\uBC1C \uD654\uC0B4 [3T]"
+      - "\u7206\u767A\u306E\u77E2[3T]"
       - 
       Flags: 00000000
       Languages_Touch: []
@@ -470,9 +470,9 @@ MonoBehaviour:
       TermType: 0
       Description: 
       Languages:
-      - Red Sight
-      - "\uB808\uB4DC \uC0AC\uC774\uD2B8"
-      - "\u8D64\u3044\u5149\u666F"
+      - Jewel Of Sight [1T]
+      - "\uC2DC\uC57C\uC758 \uBCF4\uC11D [1T]"
+      - "\u8996\u754C\u306E\u5B9D\u77F3[1T]"
       - 
       Flags: 00000000
       Languages_Touch: []
@@ -480,9 +480,9 @@ MonoBehaviour:
       TermType: 0
       Description: 
       Languages:
-      - Red Sight [2Tier]
-      - "\uB808\uB4DC \uC0AC\uC774\uD2B8 [2\uD2F0\uC5B4]"
-      - "\u30EC\u30C3\u30C9\u30B5\u30A4\u30C8[2\u30C6\u30A3\u30A2]"
+      - Jewel Of Sight [2T]
+      - "\uC2DC\uC57C\uC758 \uBCF4\uC11D [2T]"
+      - "\u8996\u754C\u306E\u5B9D\u77F3[2T]"
       - 
       Flags: 00000000
       Languages_Touch: []
@@ -490,9 +490,9 @@ MonoBehaviour:
       TermType: 0
       Description: 
       Languages:
-      - Red Sight [3Tier]
-      - "\uB808\uB4DC \uC0AC\uC774\uD2B8 [3\uD2F0\uC5B4]"
-      - "\u30EC\u30C3\u30C9\u30B5\u30A4\u30C8[3\u30C6\u30A3\u30A2]"
+      - Jewel Of Sight [3T]
+      - "\uC2DC\uC57C\uC758 \uBCF4\uC11D [3T]"
+      - "\u8996\u754C\u306E\u5B9D\u77F3[3T]"
       - 
       Flags: 00000000
       Languages_Touch: []
@@ -530,9 +530,9 @@ MonoBehaviour:
       TermType: 0
       Description: 
       Languages:
-      - Emergency Repair Kit [1T]
-      - "\uAE34\uAE09 \uC218\uB9AC \uD0A4\uD2B8 [1T]"
-      - "\u7DCA\u6025\u4FEE\u7406\u30AD\u30C3\u30C8 [1T]"
+      - Repair Kit [1T]
+      - "\uC218\uB9AC \uD0A4\uD2B8 [1T]"
+      - "\u4FEE\u7406\u30AD\u30C3\u30C8[1T]"
       - 
       Flags: 00000000
       Languages_Touch: []
@@ -540,9 +540,9 @@ MonoBehaviour:
       TermType: 0
       Description: 
       Languages:
-      - Emergency Repair Kit [2T]
-      - "\uAE34\uAE09 \uC218\uB9AC \uD0A4\uD2B8 [2T]"
-      - "\u7DCA\u6025\u4FEE\u7406\u30AD\u30C3\u30C8 [2T]"
+      - Repair Kit [2T]
+      - "\uC218\uB9AC \uD0A4\uD2B8 [2T]"
+      - "\u4FEE\u7406\u30AD\u30C3\u30C8[2T]"
       - 
       Flags: 00000000
       Languages_Touch: []
@@ -550,9 +550,9 @@ MonoBehaviour:
       TermType: 0
       Description: 
       Languages:
-      - Emergency Repair Kit [3T]
-      - "\uAE34\uAE09 \uC218\uB9AC \uD0A4\uD2B8 [3T]"
-      - "\u7DCA\u6025\u4FEE\u7406\u30AD\u30C3\u30C8 [3T]"
+      - Repair Kit [3T]
+      - "\uC218\uB9AC \uD0A4\uD2B8 [3T]"
+      - "\u4FEE\u7406\u30AD\u30C3\u30C8[3T]"
       - 
       Flags: 00000000
       Languages_Touch: []
@@ -560,9 +560,9 @@ MonoBehaviour:
       TermType: 0
       Description: 
       Languages:
-      - Cursed Series:Slow [1T]
-      - "\uC800\uC8FC\uBC1B\uC740 \uC2DC\uB9AC\uC988:\uB290\uB9BC [1T]"
-      - "\u546A\u308F\u308C\u305F\u30B7\u30EA\u30FC\u30BA\uFF1A\u9045\u3044[1T]"
+      - Slow Curse [1T]
+      - "\uAC10\uC18D\uC800\uC8FC [1T]"
+      - "\u6E1B\u901F\u546A\u3044 [1T]"
       - 
       Flags: 00000000
       Languages_Touch: []
@@ -570,9 +570,9 @@ MonoBehaviour:
       TermType: 0
       Description: 
       Languages:
-      - Cursed Series:Slow [2T]
-      - "\uC800\uC8FC\uBC1B\uC740 \uC2DC\uB9AC\uC988:\uCC9C\uCC9C\uD788 [2T]"
-      - "\u546A\u308F\u308C\u305F\u30B7\u30EA\u30FC\u30BA\uFF1A\u9045\u3044[2T]"
+      - Slow Curse [2T]
+      - "\uAC10\uC18D\uC800\uC8FC [2T]"
+      - "\u6E1B\u901F\u546A\u3044 [2T]"
       - 
       Flags: 00000000
       Languages_Touch: []
@@ -580,9 +580,9 @@ MonoBehaviour:
       TermType: 0
       Description: 
       Languages:
-      - Cursed Series:Slow [3T]
-      - "\uC800\uC8FC\uBC1B\uC740 \uC2DC\uB9AC\uC988:\uCC9C\uCC9C\uD788 [3T]"
-      - "\u546A\u308F\u308C\u305F\u30B7\u30EA\u30FC\u30BA\uFF1A\u9045\u3044[3T]"
+      - Slow Curse [3T]
+      - "\uAC10\uC18D\uC800\uC8FC [3T]"
+      - "\u6E1B\u901F\u546A\u3044 [3T]"
       - 
       Flags: 00000000
       Languages_Touch: []
@@ -590,9 +590,9 @@ MonoBehaviour:
       TermType: 0
       Description: 
       Languages:
-      - Fire Spell Arrow [T1] Blueprint
-      - "\uD654\uC5FC \uC8FC\uBB38 \uD654\uC0B4 [T1] \uB3C4\uBA74"
-      - "\u706B\u306E\u546A\u6587\u306E\u77E2[T1]\u9752\u5199\u771F"
+      - Fire Spell Arrow Blueprint
+      - "\uD654\uC5FC \uC8FC\uBB38 \uD654\uC0B4 \uC124\uACC4\uB3C4"
+      - "\u706B\u306E\u546A\u6587\u306E\u77E2\u306E\u9752\u5199\u771F"
       - 
       Flags: 00000000
       Languages_Touch: []
@@ -600,9 +600,9 @@ MonoBehaviour:
       TermType: 0
       Description: 
       Languages:
-      - Piercing Arrow [T1] Blueprint
-      - "\uAFF0\uB6AB\uB294 \uD654\uC0B4 [T1] \uC124\uACC4\uB3C4"
-      - "\u30D4\u30A2\u30B9\u77E2\u5370[T1]\u8A2D\u8A08\u56F3"
+      - Piercing Arrow Blueprint
+      - "\uAFF0\uB6AB\uB294 \uD654\uC0B4 \uC124\uACC4\uB3C4"
+      - "\u30D4\u30A2\u30B9\u77E2\u5370\u306E\u9752\u5199\u771F"
       - 
       Flags: 00000000
       Languages_Touch: []
@@ -610,9 +610,9 @@ MonoBehaviour:
       TermType: 0
       Description: 
       Languages:
-      - Stalker Arrow [T1] Blueprint
-      - "\uCD94\uC801\uC790 \uD654\uC0B4 [T1] \uC124\uACC4\uB3C4"
-      - "\u30C8\u30EC\u30FC\u30B5\u30FC\u306E\u77E2[T1]\u8A2D\u8A08\u56F3"
+      - Stalker Arrow Blueprint
+      - "\uCD94\uC801\uC790 \uD654\uC0B4 \uC124\uACC4\uB3C4"
+      - "\u30B9\u30C8\u30FC\u30AB\u30FC\u30A2\u30ED\u30FC\u306E\u9752\u5199\u771F"
       - 
       Flags: 00000000
       Languages_Touch: []
@@ -620,9 +620,9 @@ MonoBehaviour:
       TermType: 0
       Description: 
       Languages:
-      - Emergency Repair Kit [1T] Blueprint
-      - "\uAE34\uAE09 \uC218\uB9AC \uD0A4\uD2B8 [1T] \uB3C4\uBA74"
-      - "\u7DCA\u6025\u4FEE\u7406\u30AD\u30C3\u30C8[1T]\u56F3\u9762"
+      - Repair Kit Blueprint
+      - "\uC218\uB9AC \uD0A4\uD2B8 \uB3C4\uBA74"
+      - "\u4FEE\u7406\u30AD\u30C3\u30C8\u306E\u9752\u5199\u771F"
       - 
       Flags: 00000000
       Languages_Touch: []
@@ -630,9 +630,9 @@ MonoBehaviour:
       TermType: 0
       Description: 
       Languages:
-      - Cursed Series:Slow [1T] Blueprint
-      - "\uC800\uC8FC\uBC1B\uC740 \uC2DC\uB9AC\uC988:\uB290\uB9B0 [1T] \uC124\uACC4\uB3C4"
-      - "\u546A\u308F\u308C\u305F\u30B7\u30EA\u30FC\u30BA\uFF1A\u9045\u3044[1T]\u9752\u5199\u771F"
+      - Slow Curse BluePrint
+      - "\uAC10\uC18D \uC800\uC8FC \uC124\uACC4\uB3C4"
+      - "\u9045\u3044\u546A\u3044\u306E\u9752\u5199\u771F"
       - 
       Flags: 00000000
       Languages_Touch: []
@@ -640,9 +640,9 @@ MonoBehaviour:
       TermType: 0
       Description: 
       Languages:
-      - Recurve Bow [T1] Blueprint
-      - "\uB9AC\uCEE4\uBE0C \uBCF4\uC6B0 [T1] \uC124\uACC4\uB3C4"
-      - "\u30EA\u30AB\u30FC\u30D6\u30DC\u30A6[T1]\u56F3\u9762"
+      - Recurve Bow Blueprint
+      - "\uB9AC\uCEE4\uBE0C \uBCF4\uC6B0 \uC124\uACC4\uB3C4"
+      - "\u5F8C\u308D\u306B\u53CD\u3089\u3059\u5F13\u306E\u9752\u5199\u771F"
       - 
       Flags: 00000000
       Languages_Touch: []
@@ -650,9 +650,9 @@ MonoBehaviour:
       TermType: 0
       Description: 
       Languages:
-      - Short Bow [T0] Blueprint
-      - "\uB2E8\uAD81 [T0] \uC124\uACC4\uB3C4"
-      - "\u30B7\u30E7\u30FC\u30C8\u30DC\u30A6[T0]\u8A2D\u8A08\u56F3"
+      - Shortbow Blueprint
+      - "\uB2E8\uAD81 \uC124\uACC4\uB3C4"
+      - "\u4E39\u5BAE \u8A2D\u8A08\u56F3"
       - 
       Flags: 00000000
       Languages_Touch: []
@@ -660,9 +660,9 @@ MonoBehaviour:
       TermType: 0
       Description: 
       Languages:
-      - Explosion Arrow [T1] Blueprint
-      - "\uD3ED\uBC1C \uD654\uC0B4 [T1] \uB3C4\uBA74"
-      - "\u7206\u767A\u306E\u77E2[T1]\u306E\u9752\u5199\u771F"
+      - Explosive Arrow Blueprint
+      - "\uD3ED\uBC1C \uD654\uC0B4 \uB3C4\uBA74"
+      - "\u7206\u767A\u77E2 \u56F3\u9762"
       - 
       Flags: 00000000
       Languages_Touch: []
@@ -856,7 +856,7 @@ MonoBehaviour:
       - 
       Flags: 00000000
       Languages_Touch: []
-    - Term: ItemName/ITEM_ARROW_CELESTIAL
+    - Term: ItemName/Arrow/ITEM_ARROW_CELESTIAL
       TermType: 0
       Description: 
       Languages:
@@ -866,7 +866,7 @@ MonoBehaviour:
       - 
       Flags: 00000000
       Languages_Touch: []
-    - Term: ItemName/ITEM_ARROW_GRIFFON
+    - Term: ItemName/Arrow/ITEM_ARROW_GRIFFON
       TermType: 0
       Description: 
       Languages:
@@ -876,17 +876,7 @@ MonoBehaviour:
       - 
       Flags: 00000000
       Languages_Touch: []
-    - Term: ItemName/ITEM_ARROW_PIERCING
-      TermType: 0
-      Description: 
-      Languages:
-      - Piercing Arrow
-      - "\uAFF0\uB6AB\uB294 \uD654\uC0B4"
-      - "\u7A81\u304D\u523A\u3059\u77E2"
-      - 
-      Flags: 00000000
-      Languages_Touch: []
-    - Term: ItemName/ITEM_ARROW_POSEIDON
+    - Term: ItemName/Arrow/ITEM_ARROW_POSEIDON
       TermType: 0
       Description: 
       Languages:
@@ -896,7 +886,7 @@ MonoBehaviour:
       - 
       Flags: 00000000
       Languages_Touch: []
-    - Term: ItemName/ITEM_ARROW_SIGN
+    - Term: ItemName/Arrow/ITEM_ARROW_SIGN
       TermType: 0
       Description: 
       Languages:
@@ -906,17 +896,7 @@ MonoBehaviour:
       - 
       Flags: 00000000
       Languages_Touch: []
-    - Term: ItemName/ITEM_ARROW_STALKER
-      TermType: 0
-      Description: 
-      Languages:
-      - Tracker Arrow
-      - "\uCD94\uC801\uC790 \uD654\uC0B4"
-      - "\u30C8\u30EC\u30FC\u30B5\u30FC\u306E\u77E2"
-      - 
-      Flags: 00000000
-      Languages_Touch: []
-    - Term: ItemName/ITEM_ARROW_STEEL
+    - Term: ItemName/Arrow/ITEM_ARROW_STEEL
       TermType: 0
       Description: 
       Languages:
@@ -926,7 +906,7 @@ MonoBehaviour:
       - 
       Flags: 00000000
       Languages_Touch: []
-    - Term: ItemName/ITEM_ARROW_THUNDER
+    - Term: ItemName/Arrow/ITEM_ARROW_THUNDER
       TermType: 0
       Description: 
       Languages:
@@ -1923,6 +1903,36 @@ MonoBehaviour:
       - Temporary
       - "\uC784\uC2DC"
       - "\u4E00\u6642\u7684"
+      - 
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: ItemName/Arrow/ITEM_ARROW_PIERCING_1T
+      TermType: 0
+      Description: 
+      Languages:
+      - Piercing Arrow [1T]
+      - "\uAFF0\uB6AB\uB294 \uD654\uC0B4 [1T]"
+      - "\u7A81\u304D\u523A\u3059\u77E2 [1T]"
+      - 
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: ItemName/Arrow/ITEM_ARROW_PIERCING_2T
+      TermType: 0
+      Description: 
+      Languages:
+      - Piercing Arrow [2T]
+      - "\uAFF0\uB6AB\uB294 \uD654\uC0B4 [2T]"
+      - "\u30D4\u30A2\u30B9\u30A2\u30ED\u30FC[2T]"
+      - 
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: ItemName/Arrow/ITEM_ARROW_PIERCING_3T
+      TermType: 0
+      Description: 
+      Languages:
+      - Piercing Arrow [3T]
+      - "\uAFF0\uB6AB\uB294 \uD654\uC0B4 [3T]"
+      - "\u30D4\u30A2\u30B9\u30A2\u30ED\u30FC[3T]"
       - 
       Flags: 00000000
       Languages_Touch: []

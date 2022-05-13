@@ -45,6 +45,7 @@
 #if UNITY_EDITOR
             PlayPlatform = GAMEPLATFORM.PLATFORM_EDITOR;
             IsDevMode    = true;
+            CCPlayerData.Debug_CreateNewUserData();
 #elif UNITY_STANDALONE
             PlayPlatform = GAMEPLATFORM.PLATFORM_STANDALONE;
             IsDevMode    = false;
@@ -53,8 +54,9 @@
             IsDevMode    = false;
 #endif
             fixedDeltaTime = Time.fixedDeltaTime;
-            CCPlayerData.LoadSettingsJson();
-            isManagerInitialized  = true;
+            CCPlayerData.LoadSettingsJson(out string log);
+            CatLog.WLog(log);
+            isManagerInitialized = true;
         }
 
         public void OnDestroy() {
@@ -290,10 +292,6 @@
             CCPlayerData.infos.CraftingStart(index, recipe);
         }
 
-        public void CheckSaveData() {
-            CCPlayerData.CreateNewFile();
-        }
-
         public bool TryReceipt(int slotNumber, out ItemData resultItemRef, out int resultItemAmount) {
             return CCPlayerData.infos.CraftingInfos[slotNumber].TryReceipt(out resultItemRef, out resultItemAmount);
         }
@@ -475,26 +473,35 @@
 #endregion
 
 #region SAVE_LOAD
-
-        public void SaveUserData()
-        {
-            CCPlayerData.SaveUserDataJson();
-        }
-
-        public void LoadUserData()
-        {
-            CCPlayerData.LoadUserDataJson();
-        }
-
         public void AutoLoadUserData() {
+            throw new System.Exception();
             if (isLoadedUserData == false)
-                LoadUserData();
+                LoadUserSaveFile();
             isLoadedUserData = true;
         }
 
-#endregion
+        public void LoadUserSaveFile() {
+            bool isSuccessLoadJson = CCPlayerData.LoadUserDataJson(out byte log);
+            if (!isSuccessLoadJson) {
+                if (log == 1) { //세이브 파일이 존재하지 않는 경우, 새로운 세이브파일 생성
+                    CCPlayerData.CreateNewUserData();
+                    CCPlayerData.SaveUserDataJson();
 
-#region STATE_EVENT_HANDLER
+                    //일단 무조건 새로운 파일을 생성하도록 해놨는데, 일단 생성하기 전에 User Popup띄우고 
+                    //새로운 파일을 생성하겠냐고 의사팝업 띄워준 다음에 진행되도록 만들어주기
+                }
+                
+                //또 다른 에러. 에러의 종류에 따라 에러팝업이 뜨고, 어떻게 조치할 지 User에게 선택 제시, 또는 안내.
+            }
+        }
+
+        public void SaveUserSaveFile() {
+            CCPlayerData.SaveUserDataJson();
+        }
+
+        #endregion
+
+        #region STATE_EVENT_HANDLER
 
         /// <summary>
         /// Change Current Game State

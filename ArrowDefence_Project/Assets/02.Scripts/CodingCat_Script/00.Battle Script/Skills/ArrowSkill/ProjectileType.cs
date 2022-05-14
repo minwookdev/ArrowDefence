@@ -4,10 +4,11 @@
     using ActionCat.Interface;
     //==================================================================== [ PARENT ] =========================================================================
     public abstract class ProjectileType : ArrowSkill {
+        // [ Saved-Variables ] 
         protected ProjectilePref projectilePref = null;
         protected short projectileDamage;
 
-        //NON-SAVED
+        // [ Non-Saved-Variables ]
         protected PlayerAbilitySlot ability = null;
         protected string[] poolTags = null;
 
@@ -106,10 +107,10 @@
     //=========================================================================================================================================================
     //================================================================= [ SPLIT DAGGER ] ======================================================================
     public class SplitDagger : ProjectileType {
-        //SAVED
+        // [ Saved-Variables ]
         private int projectileCount;
 
-        //Not Saved
+        // [ Non-Saved-Variables ] 
         private float intervalAngle;
 
         public override string GetDesc(string localizedString) {
@@ -168,6 +169,7 @@
     //=========================================================================================================================================================
     //=============================================================== [ ELEMENTAL - FIRE ] ====================================================================
     public class ElementalFire : ProjectileType {
+        // [ Saved-Variables ]
         private float activationProbability;
 
         public override string GetDesc(string localizedString) {
@@ -218,6 +220,7 @@
     //=========================================================================================================================================================
     //================================================================== [ EXPLOSION ] ========================================================================
     public class Explosion : ProjectileType {
+        // [ Saved-Variables ] 
         ACEffector2D effectShockWave;
         ProjectilePref addExplosionPref;
         private byte skillLevel;

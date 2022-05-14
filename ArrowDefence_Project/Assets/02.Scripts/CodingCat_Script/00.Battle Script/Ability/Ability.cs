@@ -1,7 +1,7 @@
 ﻿namespace ActionCat {
     //==================================================================== << PARENT >> =====================================================================
     public abstract class Ability {
-        //Type은 따로 저장하지는 않는데, Save Data Load해서 확인해보기.
+        // [ Saved-Variables ]
         protected ABILITY_TYPE abilityType = ABILITY_TYPE.NONE;
         public ABILITY_TYPE AbilityType {
             get {
@@ -22,8 +22,11 @@
     //=======================================================================================================================================================
     //================================================================== << BASE DAMAGE >> ==================================================================
     public class AbilityDamage : Ability {
-        public const short MaxValue = 500;
+        // [ Saved-Variables ]
         private short increaseValue;
+
+        // [Const]
+        public const short MaxValue = 500;
         public short Value {
             get {
                 return increaseValue;
@@ -60,8 +63,11 @@
     //=======================================================================================================================================================
     //================================================================ << CHARGED DAMAGE >> =================================================================
     public class AbilityChargedDamage : Ability {
-        public const float MaxValue  = 1.25f;
+        // [ Saved-Variables ]
         float increaseValue;
+
+        // [Const]
+        public const float MaxValue  = 1.25f;
         public float Value {
             get {
                 return increaseValue;
@@ -98,8 +104,11 @@
     //=======================================================================================================================================================
     //=============================================================== << CRITICAL CHANCE >> =================================================================
     public class AbilityCritChance : Ability {
-        public const byte MaxValue = 30;
+        // [ Saved-Variables ]
         byte increaseValue;
+
+        // [Const]
+        public const byte MaxValue = 30;
         public byte Value {
             get {
                 return increaseValue;
@@ -135,8 +144,11 @@
     //=======================================================================================================================================================
     //=============================================================== << CRITICAL DAMAGE >> =================================================================
     public class AbilityCritDamage : Ability {
-        public const float MaxValue  = 1.5f;
+        // [ Saved-Variables ]
         float increaseValue;
+
+        // [Const]
+        public const float MaxValue  = 1.5f;
         public float Value {
             get {
                 return increaseValue;
@@ -173,7 +185,10 @@
     //=======================================================================================================================================================
     //================================================================= << ARMOR BREAK >> ===================================================================
     public class PenetrationArmor : Ability {
+        // [ Saved-Variables ]
         private short increaseValue = 0;
+
+        // [Const]
         public const short MaxValue = 150;
         public short Value {
             get {
@@ -210,7 +225,10 @@
     //============================================================== << ADDITIONAL ARROW >> =================================================================
     //=======================================================================================================================================================
     public class AdditionalFire : Ability {
+        // [ Saved-Variables ]
         private byte increaseValue = 0;
+
+        // [Const]
         public const byte MaxValue = 5;
         public byte Value {
             get {
@@ -247,8 +265,11 @@
     //=======================================================================================================================================================
     //================================================================= << ARROW SPEED >> ===================================================================
     public class AbilitySpeed : Ability {
-        public const float MaxValue = 16;
+        // [Saved-Variables]
         float increaseValue = 0f;
+
+        // [Const]
+        public const float MaxValue = 16;
         public float Value {
             get {
                 return increaseValue;
@@ -286,8 +307,11 @@
     //=======================================================================================================================================================
     //============================================================= << DAMAGE INCREASE RATE >> ==============================================================
     public class IncArrowDamageRate : Ability {
-        public const float MaxValue = 1f;
+        // [ Saved-Variables ]
         float increaseRate = 0f;
+
+        // [Const]
+        public const float MaxValue = 1f;
         public float Value {
             get {
                 return increaseRate;
@@ -326,7 +350,10 @@
     //=======================================================================================================================================================
     //=============================================================== << PROJECTILE DAMAGE >> ===============================================================
     public class IncProjectileDamage : Ability {
+        // [Const]
         public const short MaxValue = 50;
+
+        // [ Saved-Variables ]
         short increaseValue = 0; // 10~50
         public short Value {
             get {
@@ -367,7 +394,10 @@
     //=======================================================================================================================================================
     //================================================================= << SPELL DAMAGE >> ==================================================================
     public class IncSpellDamage : Ability {
+        // [Const]
         public const short MaxValue = 150;
+
+        // [ Saved-Variables ]
         short increaseValue = 0; // 0~150
         public short Value {
             get {
@@ -408,7 +438,10 @@
     //=======================================================================================================================================================
     //============================================================ << ELEMENTAL ACTIVATION >> ===============================================================
     public class ElementalActivation : Ability {
+        // [Const]
         public const short MaxValue = 30;
+
+        // [ Saved-Variables ]
         short increaseValue = 0;
         public short Value {
             get {

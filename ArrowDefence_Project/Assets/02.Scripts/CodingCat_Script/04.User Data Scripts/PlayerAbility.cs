@@ -178,6 +178,9 @@
             //Calc BaseDamage -> '증가율' 로 적용되는 옵션들은 요렇게 처리되도록 구현
             BaseDamage = BaseDamage * ArrowDamageIncRate;
         }
+
+        //여기서 바로 DamageStruct를 밷어내개 할 수 있을까
+        //Projectile SetDamage좀 더 직관적으로 할 수 있도록 만들기
     }
 
     public class GlobalAbility {                                 // [Default Global Ability Values]

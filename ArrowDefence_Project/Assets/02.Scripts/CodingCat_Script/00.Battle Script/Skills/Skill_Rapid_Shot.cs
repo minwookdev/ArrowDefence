@@ -3,11 +3,12 @@
     using UnityEngine;
 
     public class Skill_Rapid_Shot : AD_BowSkill {
+        // [ Saved-Variables ]
         private byte arrowCount;
         private float shotDelay;
         ACEffector2D muzzleEffect = null;
-
-        //Not Saved
+        
+        // [ Non-Saved-Variables ]
         string effectPoolTag = "";
         WaitForSeconds rapidShotWait = new WaitForSeconds(0.2f);
 

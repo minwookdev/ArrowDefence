@@ -4,9 +4,11 @@
     using UnityEngine;
 
     public class Skill_Arrow_Rain : AD_BowSkill {
+        // [ Saved-Variables ]
         private byte arrowCount;
         private float shotDelay;
 
+        // [ Non-Saved-variables ] 
         //Debug Options
         private bool isActiveDebugLine = false;
         private bool isDrawLine = false;

@@ -2,11 +2,11 @@
     using UnityEngine;
 
     public abstract class AD_BowSkill {
+        //Saved-Variables
         protected string id;
         protected Sprite iconSprite;
         protected SKILL_LEVEL level;
         protected BOWSKILL_TYPE skillType;
-
         protected string termsName;
         protected string termsDesc;
 

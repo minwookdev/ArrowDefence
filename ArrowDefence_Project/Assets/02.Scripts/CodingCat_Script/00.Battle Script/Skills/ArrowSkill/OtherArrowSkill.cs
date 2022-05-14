@@ -4,6 +4,7 @@
     //======================================================================================================================================================
     //======================================================================================================================================================
     public class EmptyTypeArrowSkill : ArrowSkill {
+        // [ Saved-Variables ] 
         float[] values;
 
         public override void Clear() {
@@ -29,7 +30,9 @@
     //======================================================================================================================================================
     //======================================================================================================================================================
     public abstract class BuffTypeArrowSkill : ArrowSkill {
+        // [ Saved-Variables ]
         public ARROWBUFFTYPE BuffType { get; private set; }
+
         public abstract float GetValue();
         protected BuffTypeArrowSkill(ARROWBUFFTYPE type) {
             BuffType = type;
@@ -38,6 +41,7 @@
     }
 
     public class ElementalAmplification : BuffTypeArrowSkill {
+        // [ Saved-Variables ]
         private float value = 1f;
 
         public override float GetValue() => value;
@@ -66,7 +70,9 @@
     }
 
     public class PhysicalAmplification : BuffTypeArrowSkill {
+        // [ Saved-Variables ]
         private float value = 1f;
+
         public override float GetValue() => value;
         public override string GetDesc(string localizedString) {
             return string.Format(localizedString, value.ToString());

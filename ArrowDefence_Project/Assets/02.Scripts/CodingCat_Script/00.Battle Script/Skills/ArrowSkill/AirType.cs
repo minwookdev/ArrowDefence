@@ -10,17 +10,17 @@
     }
 
     public class HomingArrow : AirType {
-        //Temp Variables 
+        // [ Saved-Variables ]
+        float scanRadius = 3f;    //Detection Range
+        float speed = 6f;         //Target Chasing Speed Value
+        float rotateSpeed = 800f; //Target Chasing Rotate Speed Value
+
+        // [ Non-Saved-Variables ]
         List<Collider2D> colliderList = null;
         Transform targetTr = null;    //temp Target Transform
         bool isFindTarget = false;    //is Find a Target?
         bool isFixDirection = false;  //Non-Target Direction
         float currentSearchTime = 0f; //Current Target Search Time
-
-        //Saving Variables
-        float scanRadius = 3f;    //Detection Range
-        float speed = 6f;         //Target Chasing Speed Value
-        float rotateSpeed = 800f; //Target Chasing Rotate Speed Value
 
         //Update Interval [Static] [Recomended = 0.1f]
         float searchInterval = .1f;  //Find Target Update Interval

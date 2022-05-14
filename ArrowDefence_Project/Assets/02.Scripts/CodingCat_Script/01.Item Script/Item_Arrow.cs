@@ -281,6 +281,11 @@
             mainArrow.PowerFactor = speed;
             lessArrow.PowerFactor = speed;
 
+            //Set Arrow Prefabs Speed
+            //bool isExistsSpeedAbility = IsExistAbility(ABILITY_TYPE.ARROWSPEED, out Ability incSpeed);
+            //mainArrow.PowerFactor = (isExistsSpeedAbility) ? speed + incSpeed.GetValueToSingle() : speed;
+            //lessArrow.PowerFactor = (isExistsSpeedAbility) ? speed + incSpeed.GetValueToSingle() : speed;
+
             //Create Pools of Arrow Object
             CCPooler.AddPoolList(mainArrowObjTag, poolQuantity, MainArrowObject, isTracking: false);
             CCPooler.AddPoolList(lessArrowObjTag, poolQuantity, LessArrowObject, isTracking: false);

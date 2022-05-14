@@ -3,6 +3,7 @@
     using ActionCat.Interface;
 
     public class Skill_Multiple_Shot : AD_BowSkill, IToString {
+        // [ Saved-Variables ]
         private byte arrowCount;
         private float spreadAngle;
 

@@ -4,6 +4,7 @@
     using UnityEngine;
 
     public abstract class ArrowSkill {
+        // [ Non-Saved-Variables ]
         protected Transform arrowTr;
         protected Rigidbody2D rBody;
         protected IArrowObject arrow;
@@ -34,8 +35,12 @@
     //================================================================ << ATTACK TYPE ARROW SKILL  >> ================================================================
 
     public abstract class AttackActiveTypeAS : ArrowSkill {
-        protected GameObject lastHitTarget = null;
+        // [ Saved-Variables ]
         protected ACEffector2D[] effects   = null;
+
+        // [ Non-Saved-Variables ]
+        protected GameObject lastHitTarget = null;
+
         #region PROPERTY
         public int EffectsLength {
             get {
@@ -100,11 +105,11 @@
     }
 
     public class ReboundArrow : AttackActiveTypeAS {
-        //Save Variables
+        // [ Saved-Variables ]
         int maxChainCount = 2;  // Max Chain Count
         float scanRange   = 5f; // Monster Detect Range
 
-        //Temp Variables
+        // [ Non-Saved-Variables ]
         List<Collider2D> tempCollList = null;
         int currentChainCount         = 0;  // Current Chain Count
         string[] effectPoolTags;
@@ -277,10 +282,10 @@
     }
 
     public class PiercingArrow : AttackActiveTypeAS {
-        //SAVE VARIABLES
+        // [ Saved-Variables ]
         public byte maxChainCount;
 
-        //TEMP VARIABLES
+        // [ Non-Saved-Variables ]
         byte currentChainCount = 0;
         bool isResult = false;
         float tempRadius = 5f;

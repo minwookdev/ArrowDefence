@@ -8,6 +8,12 @@
 
         public string NextScene { get; private set; }
 
+        public string GetCurrentSceneName {
+            get {
+                return SceneManager.GetActiveScene().name;
+            }
+        }
+
         /// <summary>
         /// Set the Scene to be Loaded and load the LoadingScene
         /// </summary>
@@ -49,10 +55,6 @@
             //}
 
             StartCoroutine(WaitLoadScene(waitRealTime));
-        }
-
-        public string GetCurrentSceneName() {
-            return SceneManager.GetActiveScene().name;
         }
 
         System.Collections.IEnumerator WaitLoadScene(float waitRealTime) {

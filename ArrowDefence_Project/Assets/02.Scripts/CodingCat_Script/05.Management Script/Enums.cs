@@ -6,7 +6,8 @@
         NOML = 2,
         HARD = 3,
         WARF = 4,
-        HELL = 5
+        HELL = 5,
+        TITL = 6,
     }
 
     #endregion

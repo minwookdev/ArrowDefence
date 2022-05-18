@@ -79,9 +79,14 @@
 
         private IEnumerator Start() {
             //Get Platoon Spawn Position Array: Single Number
-            if (spawnPointsTr == null || spawnPointsTr.Length < 7) {
-                throw new System.Exception("Spawn Transform Arrays Not Completely Caching.");
+            bool isTitleScene = string.Equals(SceneLoader.Instance.GetCurrentSceneName, AD_Data.SCENE_TITLE);
+            if (spawnPointsTr == null || (!isTitleScene) ? spawnPointsTr.Length < 7 : spawnPointsTr.Length <= 0) {
+                throw new System.Exception("Not Completely Caching SpawnPoints Transform Array.");
             }
+            //if (spawnPointsTr == null || spawnPointsTr.Length < 7) {
+            //    throw new System.Exception("Spawn Transform Arrays Not Completely Caching.");
+            //}
+
             var tempList = new List<int>();
             for (int i = 0; i < spawnPointsTr.Length; i++) {
                 if (i % 2 == 1) {
@@ -112,6 +117,12 @@
         private void Update() {
             UpdateState();
             CustomSpawn();
+        }
+
+        private void OnDisable() {
+            if (spawnCoroutine != null) {
+                StopCoroutine(spawnCoroutine);
+            }
         }
 
         private void CustomSpawn() {
@@ -180,6 +191,7 @@
                 case STAGEDIFF.NONE: return new float[3] { 100f, 35f, 15f };
                 case STAGEDIFF.EASY: return new float[3] { 100f, 30f, 10f };
                 case STAGEDIFF.NOML: return new float[3] { 100f, 35f, 15f };
+                case STAGEDIFF.TITL:
                 case STAGEDIFF.HARD: return new float[3] { 100f, 40f, 20f };
                 case STAGEDIFF.WARF: return new float[3] { 100f, 50f, 25f };
                 case STAGEDIFF.HELL: return new float[3] { 100f, 60f, 30f };
@@ -203,6 +215,7 @@
                 case STAGEDIFF.HARD: return RandomEx.RangeFloat(2f, 2.5f);
                 case STAGEDIFF.WARF: return RandomEx.RangeFloat(1.75f, 2.25f);
                 case STAGEDIFF.HELL: return RandomEx.RangeFloat(1.5f, 2f);
+                case STAGEDIFF.TITL: return RandomEx.RangeFloat(3f, 4f);
                 default: throw new System.NotImplementedException();
             }
         }
@@ -215,6 +228,7 @@
                 case STAGEDIFF.HARD: return RandomEx.RangeInt(2, 3);
                 case STAGEDIFF.WARF: return RandomEx.RangeInt(2, 3);
                 case STAGEDIFF.HELL: return RandomEx.RangeInt(1, 2);
+                case STAGEDIFF.TITL: return int.MaxValue;
                 default: throw new System.NotImplementedException();
             }
         }
@@ -224,6 +238,7 @@
                 case STAGEDIFF.NONE: return new short[3] { 100, 40, 20 };
                 case STAGEDIFF.EASY: return new short[3] { 100, 30, 10 };
                 case STAGEDIFF.NOML: return new short[3] { 100, 40, 20 };
+                case STAGEDIFF.TITL:
                 case STAGEDIFF.HARD: return new short[3] { 100, 50, 30 };
                 case STAGEDIFF.WARF: return new short[3] { 100, 60, 40 };
                 case STAGEDIFF.HELL: return new short[3] { 100, 70, 50 };
@@ -336,6 +351,7 @@
                 case GAMESTATE.STATE_ENDBATTLE:  ChangeSpawnState(SPAWNSTATE.BREAK); break;
                 case GAMESTATE.STATE_GAMEOVER:   ChangeSpawnState(SPAWNSTATE.BREAK); break;
                 case GAMESTATE.STATE_PAUSE:      ChangeSpawnState(SPAWNSTATE.BREAK); break;
+                case GAMESTATE.STATE_NONE:       ChangeSpawnState(SPAWNSTATE.NONE);  break;
                 default: break;
             }
         }

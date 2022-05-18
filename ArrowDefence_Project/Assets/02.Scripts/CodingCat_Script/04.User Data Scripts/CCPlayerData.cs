@@ -34,11 +34,6 @@
 
         #region DEBUGGING
 
-        public static void Debug_CreateNewUserData() {
-            infos.AddCraftSlot(3);
-            infos.OpenSlot(0, 1, 2);
-        }
-
         public static void Debug_LoadUserJson() {
             inventory  = (ES3.KeyExists(KEY_INVENTORY)) ? ES3.Load<AD_Inventory>(KEY_INVENTORY)      : throw new System.Exception("INVENTORY KEY NOT EXISTS.");
             equipments = (ES3.KeyExists(KEY_EQUIPMENT)) ? ES3.Load<Player_Equipments>(KEY_EQUIPMENT) : throw new System.Exception("EQUIPMENT KEY NOT EXISTS.");
@@ -53,15 +48,21 @@
 
         #endregion
 
-        public static void CreateNewUserData() {
+        public static void SupplyInitItem() {
+#if UNITY_EDITOR
+            infos.AddCraftSlot(3);   //초기 할당 슬롯
+            infos.OpenSlot(0, 1, 2); //초기 오픈 슬롯
+#elif UNITY_ANDRIOD
             infos.AddCraftSlot(3); //초기 할당 슬롯
             infos.OpenSlot(0);     //초기 오픈 슬롯
-            //게임 처음에 지금하는 활이랑 화살도 여기서 inventory에 add 해주기
+#else
+            infos.AddCraftSlot(3); //초기 할당 슬롯
+            infos.OpenSlot(0);     //초기 오픈 슬롯
+#endif
         }
 
-        public static void SaveUserDataJson() {
+        public static bool SaveUserDataJson() {
             //ES3.Save<AD_Inventory>(inventoryKey, inventory);
-
             try {
                 ES3.Save(KEY_INVENTORY, inventory);
                 ES3.Save(KEY_EQUIPMENT, equipments);
@@ -70,10 +71,14 @@
             }
             catch (System.Exception ex) {
                 CatLog.ELog("Failed Save UserData json. Exception: \n" + ex.Message);
+                return false;
             }
+
+            return true;
         }
 
         public static bool LoadUserDataJson(out byte log) {
+            log = 0;
             if (!ES3.FileExists()) { //UserSave Json 존재하지 않는경우. 'Log=1' (세이브파일 없음)
                 CatLog.WLog("User Data File is Not Exsist.");
                 log = 1;
@@ -81,18 +86,36 @@
             }
 
             try { //이 로직 테스트한번 진행해보기. throw new Exception 났을 때, catch에서 어떻게잡는지 한번 보기
-                inventory  = (ES3.KeyExists(KEY_INVENTORY)) ? ES3.Load<AD_Inventory>(KEY_INVENTORY)      : throw new System.Exception("INVENTORY KEY NOT EXISTS.");
-                equipments = (ES3.KeyExists(KEY_EQUIPMENT)) ? ES3.Load<Player_Equipments>(KEY_EQUIPMENT) : throw new System.Exception("EQUIPMENT KEY NOT EXISTS.");
-                infos      = (ES3.KeyExists(KEY_INFOS))     ? ES3.Load<PlayerInfo>(KEY_INFOS)            : throw new System.Exception("INFO KEY NOT EXISTS.");
+                //inventory  = (ES3.KeyExists(KEY_INVENTORY)) ? ES3.Load<AD_Inventory>(KEY_INVENTORY)      : throw new System.Exception("INVENTORY KEY NOT EXISTS.");
+                //equipments = (ES3.KeyExists(KEY_EQUIPMENT)) ? ES3.Load<Player_Equipments>(KEY_EQUIPMENT) : throw new System.Exception("EQUIPMENT KEY NOT EXISTS.");
+                //infos      = (ES3.KeyExists(KEY_INFOS))     ? ES3.Load<PlayerInfo>(KEY_INFOS)            : throw new System.Exception("INFO KEY NOT EXISTS.");
+
+                //KEY Verification
+                if (!ES3.KeyExists(KEY_INVENTORY)) {
+                    log = 2;
+                    throw new System.Exception("KEY ERROR: Inventory Key Not Exist.");
+                }
+                if (!ES3.KeyExists(KEY_EQUIPMENT)) {
+                    log = 3;
+                    throw new System.Exception("KEY ERROR: Equipment Key Not Exist.");
+                }
+                if (!ES3.KeyExists(KEY_INFOS)) {
+                    log = 4;
+                    throw new System.Exception("KEY ERROR: Information Key Not Exist.");
+                }
+
+                //Load Json
+                inventory  = ES3.Load<AD_Inventory>(KEY_INVENTORY);
+                equipments = ES3.Load<Player_Equipments>(KEY_EQUIPMENT);
+                infos      = ES3.Load<PlayerInfo>(KEY_INFOS);
             }
-            catch (System.Exception ex) {
-                log = 255;
+            catch (System.Exception ex) { 
                 CatLog.ELog("Failed to Load UserData Json: \n" + ex.Message);
+                log = (log == 0) ? (byte)255 : log;
                 return false;
             }
 
             CatLog.Log(StringColor.GREEN, "User Data Json Loaded Successfully !"); //ES3 로드 성공 !
-            log = 0;
             return true;
         }
 

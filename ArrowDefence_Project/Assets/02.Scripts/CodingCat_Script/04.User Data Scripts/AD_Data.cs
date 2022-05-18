@@ -6,7 +6,7 @@ public static class AD_Data {
     /// Scene Name String Data
     /// </summary>
     //SCENE STRING
-    public static readonly string SCENE_TITLE         = "ArrowDefence_Title";
+    public static readonly string SCENE_TITLE         = "ArrowDefence_TItle";
     public static readonly string SCENE_MAIN          = "ArrowDefence_Main";
     public static readonly string SCENE_LOADING       = "ArrowDefence_Loading";
 

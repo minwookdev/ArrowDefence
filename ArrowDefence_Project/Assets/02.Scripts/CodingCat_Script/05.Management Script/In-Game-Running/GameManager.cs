@@ -45,7 +45,7 @@
 #if UNITY_EDITOR
             PlayPlatform = GAMEPLATFORM.PLATFORM_EDITOR;
             IsDevMode    = true;
-            CCPlayerData.Debug_CreateNewUserData();
+            CCPlayerData.SupplyInitItem();
 #elif UNITY_STANDALONE
             PlayPlatform = GAMEPLATFORM.PLATFORM_STANDALONE;
             IsDevMode    = false;
@@ -475,28 +475,37 @@
 #region SAVE_LOAD
         public void AutoLoadUserData() {
             throw new System.Exception();
-            if (isLoadedUserData == false)
-                LoadUserSaveFile();
+            if (isLoadedUserData == false) {
+                LoadUserJsonFile(out string log, out bool recommendCreateNewJson);
+            }
             isLoadedUserData = true;
         }
 
-        public void LoadUserSaveFile() {
-            bool isSuccessLoadJson = CCPlayerData.LoadUserDataJson(out byte log);
+        public bool LoadUserJsonFile(out string log, out bool recommendCreateNewJson) {
+            bool isSuccessLoadJson = CCPlayerData.LoadUserDataJson(out byte logCode);
             if (!isSuccessLoadJson) {
-                if (log == 1) { //세이브 파일이 존재하지 않는 경우, 새로운 세이브파일 생성
-                    CCPlayerData.CreateNewUserData();
-                    CCPlayerData.SaveUserDataJson();
-
-                    //일단 무조건 새로운 파일을 생성하도록 해놨는데, 일단 생성하기 전에 User Popup띄우고 
-                    //새로운 파일을 생성하겠냐고 의사팝업 띄워준 다음에 진행되도록 만들어주기
+                switch (logCode) {
+                    case 1:  log = $"UserData Json Not Exist. [CODE: {logCode}]"; recommendCreateNewJson = true;  return false;
+                    case 2:  log = $"Inventory Key Error. [CODE: {logCode}]";     recommendCreateNewJson = false; return false;
+                    case 3:  log = $"Equipment Key Error. [CODE: {logCode}]";     recommendCreateNewJson = false; return false;
+                    case 4:  log = $"Information Key Error. [CODE: {logCode}]";   recommendCreateNewJson = false; return false;
+                    default: log = $"Unknown Error. [CODE: {logCode}]";           recommendCreateNewJson = false; return false;
                 }
-                
                 //또 다른 에러. 에러의 종류에 따라 에러팝업이 뜨고, 어떻게 조치할 지 User에게 선택 제시, 또는 안내.
+            }
+            else {
+                log = "NO LOG";
+                recommendCreateNewJson = false;
+                return true;
             }
         }
 
-        public void SaveUserSaveFile() {
-            CCPlayerData.SaveUserDataJson();
+        public bool SaveUserJsonFile() {
+            return CCPlayerData.SaveUserDataJson();
+        }
+
+        public void SupplyInitItem() {
+            CCPlayerData.SupplyInitItem();
         }
 
         #endregion

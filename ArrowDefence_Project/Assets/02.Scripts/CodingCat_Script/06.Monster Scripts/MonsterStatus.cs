@@ -72,7 +72,9 @@
 
         void OnTriggerEnter2D(Collider2D collider) {
             if(collider.gameObject.layer == LayerMask.NameToLayer(AD_Data.LAYER_DISABLELINE)) {
-                BattleProgresser.OnDecPlayerHealth(10f);
+                //BattleProgresser.OnDecPlayerHealth(10f);
+                BattleProgresser.OnDecPlayerHealth?.Invoke(10f);
+                
                 isDeath = true;
                 DisableRequest();
             }

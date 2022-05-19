@@ -36,6 +36,8 @@ public class TitleSceneRoute : MonoBehaviour {
 
     [Header("CUTOUT")]
     [SerializeField] RectTransform cutoutRect = null;
+    [SerializeField] Image cutoutImage = null;
+    Material cutoutImageMaterial = null;
     Vector2 cutoutSizeDelta = new Vector2(3000f, 3000f);
 
     Sequence titleSeq = null;
@@ -56,6 +58,11 @@ public class TitleSceneRoute : MonoBehaviour {
             image.color = tempColor;
             image.raycastTarget = false;
         }
+        
+        //Set Material
+        //cutoutImageMaterial = Instantiate<Material>(new Material(cutoutImage.material));
+        //cutoutImageMaterial.SetInt("_StencilComp", (int)CompareFunction.NotEqual);
+        //cutoutImage.material = cutoutImageMaterial;
 
         //CutOut 활성화는 Awake에서 해줌. 깜빡보일 수 있어서.
         cutoutRect.gameObject.SetActive(true);
@@ -64,6 +71,9 @@ public class TitleSceneRoute : MonoBehaviour {
 
     private void Start() {
         GameManager.Instance.ChangeGameState(GAMESTATE.STATE_INBATTLE);
+        //var cutoutMaskComponent = cutoutRect.GetComponentInChildren<CutoutMaskUI>();
+        //cutoutMaskComponent.enabled = false; //구현된 CutoutMaskUI Script가 Scene이 변경되면, 다시 작동하지 않는 문제가 있어서 임시방편으로 작성.
+        //cutoutMaskComponent.enabled = true;
         cutoutRect.DOSizeDelta(cutoutSizeDelta, 1f).From(Vector2.zero).SetDelay(.5f);
         Invoke(nameof(BE_SKIP), maxWaitTime);
     }
@@ -177,12 +187,12 @@ public class TitleSceneRoute : MonoBehaviour {
         }
 
         //불러오기 성공 ! - 뻥대기
-        yield return new WaitForSeconds(RandomEx.RangeFloat(2f, 3f));
+        yield return new WaitForSeconds(RandomEx.RangeFloat(3f, 4f));
         writter.Switch(false);
         //GameManager.Instance.ChangeGameState(GAMESTATE.STATE_NONE); //Break MonsterSpawn <-- OnDestroy에서 해주고있음
 
         // writter 종료하고, 씬 넘기기 처리
-        yield return cutoutRect.DOSizeDelta(Vector2.zero, StNum.floatOne).SetDelay(.3f).WaitForCompletion();
+        yield return cutoutRect.DOSizeDelta(Vector2.zero, StNum.floatOne).SetDelay(1.5f).WaitForCompletion();
         SceneLoader.Instance.LoadScene(AD_Data.SCENE_MAIN);
     }
 

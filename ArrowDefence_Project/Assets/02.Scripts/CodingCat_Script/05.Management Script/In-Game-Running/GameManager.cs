@@ -545,8 +545,10 @@
             OnStateInBattle  = null;
 
             //Release Pause Battle Delegates
-            foreach (System.Delegate findDelegate in OnStatePause.GetInvocationList()) {
-                OnStatePause -= (GameEventHandler)findDelegate;
+            if(OnStatePause != null) {
+                foreach (System.Delegate findDelegate in OnStatePause.GetInvocationList()) {
+                    OnStatePause -= (GameEventHandler)findDelegate;
+                }
             }
 
             //Restore GameState to NONE

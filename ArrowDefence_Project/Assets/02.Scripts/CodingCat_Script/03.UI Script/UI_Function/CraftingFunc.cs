@@ -185,7 +185,7 @@
             var craftingSlots = GameManager.Instance.GetCraftingInfos();
             int needSlotCount = craftingSlots.Length - slots.Count;
             if (needSlotCount > 0) {
-                CatLog.ELog("Must Allocate More Crafting Slots.");
+                CatLog.ELog($"Must Allocate More Crafting Slots, Current User Crafting Slot Count: {craftingSlots}");
                 //깔려있는 Crafting Slot이 부족할 때 ERROR 출력
                 //CRAFTING SLOT은 EVENT와 엮여있어서 현재로직으로는 INIT당시의 생성된 이후, 추가적으로 생성하기 힘듦.
                 //추가적인 슬롯 생성이 필요한 시점에 CRAFTING SLOT에 매개변수로 들어가는 UNITY ACTON를 개선하면 가능하다.

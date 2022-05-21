@@ -184,11 +184,14 @@
 
             var craftingSlots = GameManager.Instance.GetCraftingInfos();
             int needSlotCount = craftingSlots.Length - slots.Count;
-            if (needSlotCount > 0) {
-                CatLog.ELog($"Must Allocate More Crafting Slots, Current User Crafting Slot Count: {craftingSlots}");
+            if (needSlotCount > 0) {    //Init되어있는 CraftingSlot Prefab이 부족할 상황
+                throw new System.Exception($"Must Allocate More Crafting Slots, Current User Crafting Slot Count: {craftingSlots.Length}");
                 //깔려있는 Crafting Slot이 부족할 때 ERROR 출력
                 //CRAFTING SLOT은 EVENT와 엮여있어서 현재로직으로는 INIT당시의 생성된 이후, 추가적으로 생성하기 힘듦.
                 //추가적인 슬롯 생성이 필요한 시점에 CRAFTING SLOT에 매개변수로 들어가는 UNITY ACTON를 개선하면 가능하다.
+                //for (int i = 0; i < needSlotCount; i++) {
+                //    slots.Add(GameObject.Instantiate<CraftingSlot>(slotPrefab, slotParentRectTr));
+                //}
             }
 
             for (int i = 0; i < craftingSlots.Length; i++) {
@@ -287,6 +290,13 @@
             if(type == loadBluePrintType) {
                 CatLog.Log("Same Type of Current Loaded.");
                 return; //열려있는 Type과 동일하면 return
+            }
+
+            //선택된 SLOT이 있는 상황
+            if (bpSelectedSlot != null) {
+                bpSelectedSlot.DeSelected();
+                bpSelectedSlot  = null;
+                itemRefSelected = null;
             }
 
             bpSlotList.ForEach((slot) => { //모든 설계도 슬롯 비-활성화

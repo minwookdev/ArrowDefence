@@ -153,6 +153,10 @@
             Notify.Inst.Show($"Pulling Type: {CCPlayerData.settings.PullingType.ToString()}");
         }
 
+        public void BE_UNLOCK() {
+            CCPlayerData.Unlock();
+        }
+
         #endregion
 
         //뒤집힌 그래픽에 대한 EventTrigger를 정상적으로 실행하지 않는 현상에 대한 기록할 것.

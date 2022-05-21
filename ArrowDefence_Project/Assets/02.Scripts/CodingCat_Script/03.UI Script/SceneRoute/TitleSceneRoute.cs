@@ -24,9 +24,8 @@ public class TitleSceneRoute : MonoBehaviour {
 
     [Header("INTRO")]
     [SerializeField] GameObject skipPanel = null;
-    [SerializeField] [RangeEx(0.1f, 5f, 0.1f)] float maxWaitTime = 3f;
+    [SerializeField] [RangeEx(0.1f, 10f, 0.1f)] float maxWaitTime = 3f;
     [SerializeField] [ReadOnly] float currentWaitTime = 0f;
-    //[SerializeField] [ReadOnly] bool isOpenMenu = false;
 
     [Header("TITLE ELEMENTE")]
     [SerializeField] RectTransform titleRect = null;
@@ -36,9 +35,15 @@ public class TitleSceneRoute : MonoBehaviour {
 
     [Header("CUTOUT")]
     [SerializeField] RectTransform cutoutRect = null;
-    [SerializeField] Image cutoutImage = null;
-    Material cutoutImageMaterial = null;
     Vector2 cutoutSizeDelta = new Vector2(3000f, 3000f);
+
+    [Header("CAMERA MOVEMENT")]
+    [SerializeField] Transform camTargetTr = null;
+    [SerializeField] [RangeEx(0.1f, 3f, 0.1f)] float randomDistX = 1f;
+    [SerializeField] [RangeEx(0.1f, 3f, 0.1f)] float randomDistY = 1f;
+    [SerializeField] [RangeEx(0.1f, 5f, .1f)]  float camMoveSpeed = 0.5f;
+    [SerializeField] bool isCamMovementActive = true;
+    Coroutine cameraMovementCo = null;
 
     Sequence titleSeq = null;
 
@@ -58,14 +63,17 @@ public class TitleSceneRoute : MonoBehaviour {
             image.color = tempColor;
             image.raycastTarget = false;
         }
-        
+
         //Set Material
         //cutoutImageMaterial = Instantiate<Material>(new Material(cutoutImage.material));
         //cutoutImageMaterial.SetInt("_StencilComp", (int)CompareFunction.NotEqual);
         //cutoutImage.material = cutoutImageMaterial;
 
+
         //CutOut 활성화는 Awake에서 해줌. 깜빡보일 수 있어서.
-        cutoutRect.gameObject.SetActive(true);
+        //cutoutRect.gameObject.SetActive(true);
+        //cutoutImage.enabled = false;
+        //cutoutImage.enabled = true;
         cutoutRect.sizeDelta = Vector2.zero;
     }
 
@@ -74,6 +82,7 @@ public class TitleSceneRoute : MonoBehaviour {
         //var cutoutMaskComponent = cutoutRect.GetComponentInChildren<CutoutMaskUI>();
         //cutoutMaskComponent.enabled = false; //구현된 CutoutMaskUI Script가 Scene이 변경되면, 다시 작동하지 않는 문제가 있어서 임시방편으로 작성.
         //cutoutMaskComponent.enabled = true;
+
         cutoutRect.DOSizeDelta(cutoutSizeDelta, 1f).From(Vector2.zero).SetDelay(.5f);
         Invoke(nameof(BE_SKIP), maxWaitTime);
     }
@@ -128,6 +137,9 @@ public class TitleSceneRoute : MonoBehaviour {
         startButtonCanvasGroup.DOFade(StNum.floatOne, 0.7f).SetLoops(-1, LoopType.Yoyo).SetDelay(tweenDelay).OnStart(() => startButtonCanvasGroup.blocksRaycasts = true);
 
         StartCoroutine(EnableBlurCo());
+
+        //Camera Movement
+        cameraMovementCo = (isCamMovementActive) ? StartCoroutine(CameraMovement()) : null;
     }
 
     #endregion
@@ -189,6 +201,9 @@ public class TitleSceneRoute : MonoBehaviour {
         //불러오기 성공 ! - 뻥대기
         yield return new WaitForSeconds(RandomEx.RangeFloat(3f, 4f));
         writter.Switch(false);
+        if (isCamMovementActive) {  //Disable CameraMovement Coroutine.
+            StopCoroutine(cameraMovementCo);
+        }
         //GameManager.Instance.ChangeGameState(GAMESTATE.STATE_NONE); //Break MonsterSpawn <-- OnDestroy에서 해주고있음
 
         // writter 종료하고, 씬 넘기기 처리
@@ -196,8 +211,30 @@ public class TitleSceneRoute : MonoBehaviour {
         SceneLoader.Instance.LoadScene(AD_Data.SCENE_MAIN);
     }
 
+    System.Collections.IEnumerator CameraMovement() {
+        //
+        Vector2 basicPosition = camTargetTr.position;
+        float camMoveTime = 2f;
+        //float checkDist = 0.1f;
+
+        while (true) {
+            var randomPos = new Vector2(RandomEx.RangeFloat(basicPosition.x - randomDistX, basicPosition.x + randomDistX), RandomEx.RangeFloat(basicPosition.y - randomDistY, basicPosition.y + randomDistY));
+            float timeElapsed = camMoveTime;
+
+            //CatLog.Log($"Random Position X: {randomPos.x}, Y: {randomPos.y}");
+
+            while (timeElapsed > 0f) { //Distance Check는 혹시몰라서 넣어놓은 것.
+                camTargetTr.position = Vector2.MoveTowards(camTargetTr.position, randomPos, camMoveSpeed);                      //항시 동일한 속도
+                //camTargetTr.position = Vector2.MoveTowards(camTargetTr.position, randomPos, camMoveSpeed * Time.deltaTime);   //느리게~빨라짐
+                timeElapsed -= Time.deltaTime;
+                yield return null;
+            }
+        }
+    }
+
     private void RestoreProfile() {
-        //실험해보고 필요하면 구현해주기
+        //테스트 결과 Scene을 다시로드하면 코드상으로 수정한 Profile의 내용이 초기화 되는것을 확인.
+        //Restore Profile은 필요하지 않다.
     }
 }
 

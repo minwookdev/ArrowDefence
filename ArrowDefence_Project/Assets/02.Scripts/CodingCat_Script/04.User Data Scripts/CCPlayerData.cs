@@ -46,6 +46,11 @@
             ES3.Save(KEY_INFOS, infos);
         }
 
+        public static void Unlock() {
+            infos.AddCraftSlot(3);
+            infos.OpenSlot(0, 1, 2);
+        }
+
         #endregion
 
         public static void SupplyInitItem() {

@@ -45,7 +45,7 @@
 #if UNITY_EDITOR
             PlayPlatform = GAMEPLATFORM.PLATFORM_EDITOR;
             IsDevMode    = true;
-            CCPlayerData.SupplyInitItem();
+            //CCPlayerData.SupplyInitItem();
 #elif UNITY_STANDALONE
             PlayPlatform = GAMEPLATFORM.PLATFORM_STANDALONE;
             IsDevMode    = false;

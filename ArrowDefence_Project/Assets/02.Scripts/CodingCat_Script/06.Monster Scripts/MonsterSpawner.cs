@@ -215,7 +215,7 @@
                 case STAGEDIFF.HARD: return RandomEx.RangeFloat(2f, 2.5f);
                 case STAGEDIFF.WARF: return RandomEx.RangeFloat(1.75f, 2.25f);
                 case STAGEDIFF.HELL: return RandomEx.RangeFloat(1.5f, 2f);
-                case STAGEDIFF.TITL: return RandomEx.RangeFloat(3f, 4f);
+                case STAGEDIFF.TITL: return RandomEx.RangeFloat(1f, 2f);
                 default: throw new System.NotImplementedException();
             }
         }

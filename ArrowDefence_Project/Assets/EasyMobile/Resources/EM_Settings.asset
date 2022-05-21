@@ -173,35 +173,6 @@ MonoBehaviour:
         customParams:
           keys: []
           values: []
-    mMoPub:
-      mEnable: 0
-      mReportAppOpen: 0
-      mITuneAppID: 
-      mEnableLocationPassing: 0
-      mUseAdvancedSetting: 0
-      mAllowLegitimateInterest: 0
-      mLogLevel: 70
-      mMediatedNetworks: []
-      mAutoRequestConsent: 0
-      mForceGdprApplicable: 0
-      mDefaultBannerId:
-        mIosId: 
-        mAndroidId: 
-      mDefaultInterstitialAdId:
-        mIosId: 
-        mAndroidId: 
-      mDefaultRewardedAdId:
-        mIosId: 
-        mAndroidId: 
-      mCustomBannerIds:
-        keys: []
-        values: []
-      mCustomInterstitialAdIds:
-        keys: []
-        values: []
-      mCustomRewardedAdIds:
-        keys: []
-        values: []
     mTapjoy:
       mEnable: 0
       mAutoReconnect: 1
@@ -242,6 +213,7 @@ MonoBehaviour:
         keys: []
         values: []
       mEnableTestMode: 1
+      mUseUnityAd4Client: 0
     mVungleAds:
       mEnable: 0
       mAppId:
@@ -410,8 +382,8 @@ MonoBehaviour:
   mRuntimeAutoInitialization: 1
   mIsAdModuleEnable: 1
   mIsIAPModuleEnable: 0
-  mIsGameServiceModuleEnable: 0
+  mIsGameServiceModuleEnable: 1
   mIsNotificationModuleEnable: 0
   mIsSharingModuleEnable: 0
   mActiveModuleIndex: 1
-  mIsSelectingModule: 1
+  mIsSelectingModule: 0

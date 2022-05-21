@@ -178,7 +178,7 @@ PlayerSettings:
     Standalone: com.Company.ProductName
   buildNumber: {}
   AndroidBundleVersionCode: 1
-  AndroidMinSdkVersion: 29
+  AndroidMinSdkVersion: 26
   AndroidTargetSdkVersion: 30
   AndroidPreferredInstallLocation: 1
   aotOptions: 
@@ -682,8 +682,8 @@ PlayerSettings:
   webGLWasmStreaming: 0
   scriptingDefineSymbols:
     1: Mobile_Android;Mobile_Apple;PC_Windows;PC_Mac;ENABLE_LOG;UNITY_POST_PROCESSING_STACK_V2;EASY_MOBILE;EASY_MOBILE_PRO;EM_ADMOB;TextMeshPro
-    4: EASY_MOBILE;EASY_MOBILE_PRO;EM_ADMOB;TextMeshPro
-    7: Mobile_Android;Mobile_Apple;PC_Windows;PC_Mac;ENABLE_LOG;UNITY_POST_PROCESSING_STACK_V2;EASY_MOBILE;EASY_MOBILE_PRO;EM_ADMOB;TextMeshPro
+    4: EASY_MOBILE;EASY_MOBILE_PRO;EM_ADMOB;TextMeshPro;NO_GPGS
+    7: ING_STACK_V2;EASY_MOBILE;EASY_MOBILE_PRO;EM_ADMOB;TextMeshPro;EM_GPGS;EM_GPGS_v2TACK_V2;EASY_MOBILE;EASY_MOBILE_PRO;EM_ADMOB;TextMeshPro;EM_GPGS;EM_GPGS_v2;UNITY_POST_PROCESSING_STACK_V2;Mobile_Android;Mobile_Apple;PC_Windows;PC_Mac;ENABLE_LOG
     13: UNITY_POST_PROCESSING_STACK_V2;EASY_MOBILE;EASY_MOBILE_PRO;EM_ADMOB;TextMeshPro
     14: UNITY_POST_PROCESSING_STACK_V2;EASY_MOBILE;EASY_MOBILE_PRO;EM_ADMOB;TextMeshPro
     19: UNITY_POST_PROCESSING_STACK_V2;EASY_MOBILE;EASY_MOBILE_PRO;EM_ADMOB;TextMeshPro

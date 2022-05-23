@@ -13,7 +13,7 @@
         private float fixedDeltaTime;
         private float totalDropChances;
         private float restoreTimeScale;
-        private bool isLoadedUserData     = false;
+        //private bool isLoadedUserData     = false;
         private bool isManagerInitialized = false;
         private ItemDropList.DropTable[] dropListArray;
 
@@ -475,10 +475,11 @@
 #region SAVE_LOAD
         public void AutoLoadUserData() {
             throw new System.Exception();
-            if (isLoadedUserData == false) {
-                LoadUserJsonFile(out string log, out bool recommendCreateNewJson);
-            }
-            isLoadedUserData = true;
+            ///Original Codes
+            ///if (isLoadedUserData == false) {
+            ///    LoadUserJsonFile(out string log, out bool recommendCreateNewJson);
+            ///}
+            ///isLoadedUserData = true;
         }
 
         public bool LoadUserJsonFile(out string log, out bool recommendCreateNewJson) {

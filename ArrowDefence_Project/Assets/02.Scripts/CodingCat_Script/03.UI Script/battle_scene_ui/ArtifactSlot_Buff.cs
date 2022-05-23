@@ -122,7 +122,7 @@
                 effectActivationCoroutine = StartCoroutine(ActiveEffectCoroutine());
             }
             else {
-                Notify.Inst.Show("Artifact Not Prepared !");
+                Notify.Inst.Message("Artifact Not Prepared !");
             }
         }
     }

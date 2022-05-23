@@ -126,9 +126,9 @@
             }
             else {
                 switch (exceptionNumnber) {
-                    case 0:  Notify.Inst.Show("Please Select Upgradeable Item.");  break;
-                    case 1:  Notify.Inst.Show("Insufficient material.");           break;
-                    default: Notify.Inst.Show("Not Reported Error, Failed Check"); break;
+                    case 0:  Notify.Inst.Message("Please Select Upgradeable Item.");  break;
+                    case 1:  Notify.Inst.Message("Insufficient material.");           break;
+                    default: Notify.Inst.Message("Not Reported Error, Failed Check"); break;
                 }
                 CatLog.Log("업그레이드 조건 불충족.");
             }
@@ -145,7 +145,7 @@
                 }
                 else {
                     //업그레이드 실패 (확률에 의한 실패)
-                    Notify.Inst.Show("You Failed Upgrade...", StringColor.RED);
+                    Notify.Inst.Message("You Failed Upgrade...", StringColor.RED);
                     upgradeFunction.CloseOpenedPopup(); //팝업닫고, 새로고침
                     upgradeFunction.OpenPanel(UpgradeFunc.PANELTYPE.MAIN, mainAnchoredPos, true); //clear panel
                 }
@@ -179,7 +179,7 @@
         public void BE_UG_PREVIEW() {
             bool success = upgradeFunction.TryOpenPreview(mainAnchoredPos, out string log);
             if (!success) {
-                Notify.Inst.Show(log);
+                Notify.Inst.Message(log);
             }
         }
 
@@ -260,7 +260,7 @@
         public void BE_CT_OPENITEMINFO() {
             bool isSuccess = craftingFunction.OpenItemInfo(out string log);
             if (!isSuccess) {
-                Notify.Inst.Show(log);
+                Notify.Inst.Message(log);
             }
         }
 

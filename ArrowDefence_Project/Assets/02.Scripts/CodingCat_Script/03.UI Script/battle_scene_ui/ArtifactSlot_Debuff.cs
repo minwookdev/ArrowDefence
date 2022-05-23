@@ -137,7 +137,7 @@
         public void BE_ACTIVE() {
             bool result = (isActiveable && currentStackCount > 0 && currentCoolDownTime <= 0f);
             if (!result) {
-                Notify.Inst.Show("Artifact Not Prepared !");
+                Notify.Inst.Message("Artifact Not Prepared !");
                 return;
             }
 

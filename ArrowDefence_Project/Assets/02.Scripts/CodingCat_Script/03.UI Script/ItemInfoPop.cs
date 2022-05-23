@@ -88,8 +88,6 @@
             Sprite disableStar = null;
             Sprite halfStar    = null;
 
-            bool isInitialized = false;
-
             public void Init(Sprite[] sprites) {
                 enableStar = sprites[0];
                 disableStar = sprites[1];

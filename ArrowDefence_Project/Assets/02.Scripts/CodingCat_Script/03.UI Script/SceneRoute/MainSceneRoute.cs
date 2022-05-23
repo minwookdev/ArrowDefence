@@ -31,7 +31,6 @@ public class MainSceneRoute : MonoBehaviour {
     [Header("I2")]
     [I2.Loc.TermsPopup]
     public string _stringWithTermPopup;
-    string formatString = "{0}Log{1}";
 
     private void Awake() {
         _inst = this;
@@ -103,6 +102,21 @@ public class MainSceneRoute : MonoBehaviour {
                 slot.Update();
                 CatLog.Log("Increase All Crafting Timer.");
             }
+        }
+
+        if (Input.GetKeyDown(KeyCode.X)) {
+            Notify.Inst.Message("This is Test Message.");
+        }
+        if (Input.GetKeyDown(KeyCode.C)) {
+            Notify.Inst.Message("This is Test Message. \n" +
+                                "This is Test Message. \n" +
+                                "This is Test Message.");
+        }
+        if (Input.GetKeyDown(KeyCode.V)) {
+            Notify.Inst.Message("This is Test Message. \n" +
+                                "This is Test Message. \n" +
+                                "This is Test Message. \n" +
+                                "This is Test Message. "); // Notify Text Size Test !
         }
     }
 

@@ -334,17 +334,17 @@
 
         public bool Ads() {
             if (selectedRecipe == null || selectedItemRef == null) {
-                Notify.Inst.Show("First, Select an Item to Upgrade.");
+                Notify.Inst.Message("First, Select an Item to Upgrade.");
                 return false;
             }
 
             if (IsAdsApplied) {
-                Notify.Inst.Show("The Chance Increase is already in Effect.");
+                Notify.Inst.Message("The Chance Increase is already in Effect.");
                 return false;
             }
 
             if (!isReadyAds) {
-                Notify.Inst.Show("Please try again in a few Seconds.");
+                Notify.Inst.Message("Please try again in a few Seconds.");
                 return false;
             }
 
@@ -503,7 +503,7 @@
 
         public bool TryReleaseSelectedSlot() {
             if (selectedSlot == null) {
-                Notify.Inst.Show("Please Select an Item to Upgrade.");
+                Notify.Inst.Message("Please Select an Item to Upgrade.");
                 return false;
             }
 
@@ -585,8 +585,8 @@
 
             if (!isFindAllMaterialItems || !isFindSelectedItem) {
                 //Close Confirm Popup & Upgrade Main Panel
-                if (!isFindAllMaterialItems)  Notify.Inst.Show("Not Enough Upgrade Requirement");
-                else if (!isFindSelectedItem) Notify.Inst.Show("Not Assignment Selected Item in Inventory");
+                if (!isFindAllMaterialItems)  Notify.Inst.Message("Not Enough Upgrade Requirement");
+                else if (!isFindSelectedItem) Notify.Inst.Message("Not Assignment Selected Item in Inventory");
 
                 isSuccessUpgrade = null;
                 return false;

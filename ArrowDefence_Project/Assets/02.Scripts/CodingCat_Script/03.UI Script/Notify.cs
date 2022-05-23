@@ -43,17 +43,30 @@
 
         [Header("COMPONENT")]
         [SerializeField] RectTransform notifyRectTr = null;
+        [SerializeField] RectTransform notifyBackRectTr = null;
+        [SerializeField] UnityEngine.UI.Image imageNotifyBack = null;
+        [SerializeField] CanvasGroup notifyCanvasGroup = null;
         [SerializeField] TextMeshProUGUI notifyText = null;
         Sequence notifySeq = null;
 
-        [Header("NOTIFY")]
+        [Header("NOTIFY OPTIONS")]
         [SerializeField] [RangeEx(1f, 5f)] float messageDuration = 1f;
+        [SerializeField] Color backGroundDefaultColor;
+        [SerializeField] Color backGroundHideColor;
 
         [Header("NOTIFY LIST")]
         [SerializeField] GameObject prefMessage;
-        bool isInit = false;
 
+        bool isInit = false;
         string endColor = "</color>";
+        float defaultBackGroundSpacing = 70f;
+        float defaultMargins = 15f;
+
+        public float GetBackRectHeight {
+            get {
+                return notifyText.rectTransform.rect.height + (defaultMargins * 2f);
+            }
+        }
 
         public void Init(RectTransform parentCanvas) {
             if(isInit == true) {
@@ -64,33 +77,64 @@
                 throw new System.Exception("Notify Component is Not Assignmnet.");
             }
 
+            //Get CavnasGroup Component
+            if (notifyCanvasGroup == null) {
+                notifyCanvasGroup = GetComponent<CanvasGroup>();
+            } 
+
             //Change Parent
             notifyRectTr.SetParent(parentCanvas);
             notifyRectTr.RectResizer(Vector2.zero, Vector2.zero, Vector3.one);
 
-            notifyText.AlphaZero();
+            //notifyText.AlphaZero();
 
             //assignment new Sequence
             notifySeq = DOTween.Sequence()
-                               .Append(notifyText.DOFade(StNum.floatZero, messageDuration))
+                               .Pause()
+                               .Append(notifyCanvasGroup.DOFade(StNum.floatZero, messageDuration).From(StNum.floatOne))
                                .Join(notifyText.rectTransform.DOShakePosition(1f, 5f, 15, 90, false, true))
                                .SetAutoKill(false)
-                               .SetUpdate(false)
-                               .Pause();
+                               .SetUpdate(false);
+
+            notifyCanvasGroup.alpha = StNum.floatZero;
             isInit = true;
         }
 
-        public void Show(string text, StringColor color = StringColor.WHITE) {
-            if(!isInit) {
+        public void Message(string text, StringColor color = StringColor.WHITE, bool isDrawBG = true) {
+            if(!isInit) {   // Check Initialized. 
                 throw new System.Exception("Notify is Not Initialized or missing component");
             }
 
+            //Set Notify Message Strings
             notifyText.AlphaOne();
             notifyText.text = string.Format("{1}{0}{2}", text, GetColor(color), endColor);
+
+            //notifyText.CalculateLayoutInputHorizontal();
+            //notifyText.CalculateLayoutInputVertical();
+            //notifyText.rectTransform.ForceUpdateRectTransforms();
+
+            notifyText.ForceMeshUpdate(true, true);   //변경된 TextMeshPro에 대해서 바로 적용되지 않아서 강제로 업데이트 호출해줌.
+            var lines = notifyText.textInfo.lineCount;
+            float calcHeight = (defaultBackGroundSpacing * lines) + (defaultMargins * 2f);
+
+            //Set BackGround SizeDelta
+            //float notifyTextRectHeightSize = notifyRectTr.sizeDelta.y;
+            //CatLog.Log($"Notify Text String Size Delta Height: {notifyText.rectTransform.rect.height}");
+            //CatLog.Log($"BackGround Rect Size Delta Height: {notifyBackRectTr.rect.height}");
+            //notifyBackRectTr.sizeDelta = new Vector2(notifyBackRectTr.sizeDelta.x, notifyTextRectHeightSize);
+            //notifyBackRectTr.rect.height = notifyRectTr.rect.height + (defaultMargins * 2f);
+            //Rect newBackGroundRect = notifyBackRectTr.rect;
+            //newBackGroundRect.height = notifyText.rectTransform.rect.height + (defaultMargins * 2f);
+            //notifyBackRectTr.rect = newBackGroundRect;
+
+            notifyBackRectTr.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, calcHeight);
+            imageNotifyBack.color = (isDrawBG) ? backGroundDefaultColor : backGroundHideColor;
+
+            //Fin. Play Notify Sequence. 
             notifySeq.Restart();
         }
 
-        public void Hide() {
+        public void ForceHide() {
             
         }
 

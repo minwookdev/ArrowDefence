@@ -107,12 +107,12 @@
 
         public void Button_SaveData() {
             CCPlayerData.Debug_SaveUserjson();
-            Notify.Inst.Show("SAVE USER DATA");
+            Notify.Inst.Message("SAVE USER DATA");
         }
 
         public void Button_LoadData() {
             CCPlayerData.Debug_LoadUserJson();
-            Notify.Inst.Show("LOAD USER DATA");
+            Notify.Inst.Message("LOAD USER DATA");
         }
 
         public void Button_Additems() {
@@ -124,7 +124,7 @@
             var itemList = playerData.GetItemData();
 
             if (itemList.Count <= 0) {
-                Notify.Inst.Show("Temp ItemData is Empty.");
+                Notify.Inst.Message("Temp ItemData is Empty.");
                 return;
             }
 
@@ -133,13 +133,13 @@
             }
 
             CatLog.Log($"{itemList.Count} 개의 아이템이 전달.");
-            Notify.Inst.Show($"Send {itemList.Count} Items in Inventory.");
+            Notify.Inst.Message($"Send {itemList.Count} Items in Inventory.");
         }
 
         public void Button_ClearInventory() {
             CCPlayerData.inventory.Clear();
             CCPlayerData.equipments.Clear();
-            Notify.Inst.Show("Clear All Item in Inventory.");
+            Notify.Inst.Message("Clear All Item in Inventory.");
 
         }
 
@@ -150,11 +150,12 @@
                 default: break;
             }
 
-            Notify.Inst.Show($"Pulling Type: {CCPlayerData.settings.PullingType.ToString()}");
+            Notify.Inst.Message($"Pulling Type: {CCPlayerData.settings.PullingType.ToString()}");
         }
 
         public void BE_UNLOCK() {
             CCPlayerData.Unlock();
+            Notify.Inst.Message("Unlock User's Function.");
         }
 
         #endregion

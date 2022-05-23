@@ -25,7 +25,6 @@ public class TitleSceneRoute : MonoBehaviour {
     [Header("INTRO")]
     [SerializeField] GameObject skipPanel = null;
     [SerializeField] [RangeEx(0.1f, 10f, 0.1f)] float maxWaitTime = 3f;
-    [SerializeField] [ReadOnly] float currentWaitTime = 0f;
 
     [Header("TITLE ELEMENTE")]
     [SerializeField] RectTransform titleRect = null;
@@ -85,6 +84,10 @@ public class TitleSceneRoute : MonoBehaviour {
 
         cutoutRect.DOSizeDelta(cutoutSizeDelta, 1f).From(Vector2.zero).SetDelay(.5f);
         Invoke(nameof(BE_SKIP), maxWaitTime);
+
+        //Init UI Element Parent -> 아무 UI요소의 root Parent로 가져오면된다, 따로 캐싱하지 않음.
+        CatLog.Log($"Error Panel Root Parent Name: {errorPanel.transform.root.GetComponent<RectTransform>().name}");
+        Notify.Inst.Init(errorPanel.transform.root.GetComponent<RectTransform>());
     }
 
     private void OnDestroy() {

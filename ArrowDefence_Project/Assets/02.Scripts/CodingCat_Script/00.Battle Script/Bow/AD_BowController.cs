@@ -622,7 +622,7 @@
 
             if (type == ARROWTYPE.ARROW_SPECIAL) {
                 if(ability.Condition.IsReadyToLoad == false) {
-                    Notify.Inst.Show("Special Arrow Not Prepared.");
+                    Notify.Inst.Message("Special Arrow Not Prepared.");
                     return;
                 }
             }

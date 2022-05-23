@@ -444,7 +444,7 @@
 
         public bool TryOpenConfirm() {
             if(!IsCraftable(out string resultItemName)) {
-                Notify.Inst.Show(resultItemName);
+                Notify.Inst.Message(resultItemName);
                 return false;
             }
 

@@ -131,7 +131,7 @@
 
         public void BE_QUICK() {
             if (!isReadyAds) { //광고가 준비되지 않음
-                Notify.Inst.Show("Please try again in a few Seconds.");
+                Notify.Inst.Message("Please try again in a few Seconds.");
                 return;
             }
 
@@ -142,7 +142,7 @@
             }
 
             if (!craftingInfo.IsSkipable) {
-                Notify.Inst.Show("This Crafting is non-skipable.");
+                Notify.Inst.Message("This Crafting is non-skipable.");
                 return;
             }
 

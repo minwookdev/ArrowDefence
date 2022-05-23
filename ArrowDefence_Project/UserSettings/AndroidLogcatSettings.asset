@@ -3,93 +3,51 @@
     "m_SelectedPackage": {
         "deviceId": "R3CMC06BR0T",
         "name": "com.ActionCat.ArrowDefence",
-        "processId": 26911,
+        "processId": 10117,
         "exited": false
     },
     "m_SelectedPriority": 0,
     "m_KnownPackagesForSerialization": [
         {
             "deviceId": "R3CMC06BR0T",
-            "name": "com.CodingCatGames.ArrowDefenceTEMP",
-            "processId": 24758,
-            "exited": true
-        },
-        {
-            "deviceId": "R3CMC06BR0T",
-            "name": "com.CodingCatGames.ArrowDefenceTEMP",
-            "processId": 25130,
-            "exited": true
-        },
-        {
-            "deviceId": "R3CMC06BR0T",
-            "name": "com.CodingCatGames.ArrowDefenceTEMP",
-            "processId": 31610,
-            "exited": true
-        },
-        {
-            "deviceId": "R3CMC06BR0T",
-            "name": "com.ActionCat.ArrowDefence",
-            "processId": 3927,
-            "exited": true
-        },
-        {
-            "deviceId": "R3CMC06BR0T",
-            "name": "com.sec.android.app.launcher",
-            "processId": 1737,
-            "exited": false
-        },
-        {
-            "deviceId": "R3CMC06BR0T",
-            "name": "com.ActionCat.ArrowDefence",
-            "processId": 10047,
-            "exited": true
-        },
-        {
-            "deviceId": "R3CMC06BR0T",
-            "name": "com.ActionCat.ArrowDefence",
-            "processId": 11009,
-            "exited": false
-        },
-        {
-            "deviceId": "R3CMC06BR0T",
-            "name": "com.ActionCat.ArrowDefence",
-            "processId": 25728,
-            "exited": false
-        },
-        {
-            "deviceId": "R3CMC06BR0T",
-            "name": "com.ActionCat.ArrowDefence",
-            "processId": 25745,
-            "exited": false
-        },
-        {
-            "deviceId": "R3CMC06BR0T",
-            "name": "com.ActionCat.ArrowDefence",
-            "processId": 17026,
-            "exited": false
-        },
-        {
-            "deviceId": "R3CMC06BR0T",
             "name": "com.ActionCat.ArrowDefence",
             "processId": 16499,
-            "exited": false
+            "exited": true
         },
         {
             "deviceId": "R3CMC06BR0T",
             "name": "com.ActionCat.ArrowDefence",
             "processId": 11599,
-            "exited": false
+            "exited": true
         },
         {
             "deviceId": "R3CMC06BR0T",
             "name": "com.ActionCat.ArrowDefence",
             "processId": 24493,
-            "exited": false
+            "exited": true
         },
         {
             "deviceId": "R3CMC06BR0T",
             "name": "com.ActionCat.ArrowDefence",
             "processId": 26911,
+            "exited": true
+        },
+        {
+            "deviceId": "R3CMC06BR0T",
+            "name": "com.sec.android.app.launcher",
+            "processId": 2000,
+            "exited": false
+        },
+        {
+            "deviceId": "R3CMC06BR0T",
+            "name": "com.ActionCat.ArrowDefence",
+            "processId": 19308,
+            "exited": true
+        },
+        {
+            "deviceId": "R3CMC06BR0T",
+            "name": "com.ActionCat.ArrowDefence",
+            "processId": 10117,
             "exited": false
         }
     ],

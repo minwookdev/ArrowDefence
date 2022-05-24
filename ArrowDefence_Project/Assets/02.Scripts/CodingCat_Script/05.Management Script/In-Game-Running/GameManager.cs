@@ -20,7 +20,7 @@
         //PROPERTIES
         public GAMEPLATFORM PlayPlatform { get; private set; }
         public GAMESTATE GameState { get; private set; } = GAMESTATE.STATE_NONE;
-        public bool IsDevMode { get; private set; }
+        public bool IsDevMode { get; private set; } = false;
 
         //Game Event Delegate
         public delegate void GameEventHandler();
@@ -45,11 +45,10 @@
 #if UNITY_EDITOR
             PlayPlatform = GAMEPLATFORM.PLATFORM_EDITOR;
             IsDevMode    = true;
-            //CCPlayerData.SupplyInitItem();
 #elif UNITY_STANDALONE
             PlayPlatform = GAMEPLATFORM.PLATFORM_STANDALONE;
             IsDevMode    = false;
-#elif UNITY_ANDRIOD
+#elif UNITY_ANDROID
             PlayPlatform = GAMEPLATFORM.PLATFORM_MOBILE;
             IsDevMode    = false;
 #endif
@@ -298,6 +297,37 @@
 
         public GlobalAbility GetGoAbility() {
             return CCPlayerData.ability.GlobalAbilityField;
+        }
+
+        public int[] GetPlayerCurrencies {
+            get {
+                return new int[2] { CCPlayerData.infos.Gold, CCPlayerData.infos.Stone };
+            }
+        }
+
+        public string[] GetPlayerCurrenciesToString {
+            get {
+                return new string[2] {
+                    CCPlayerData.infos.Gold.ToString("#,##0"),
+                    CCPlayerData.infos.Stone.ToString("#,##0")
+                };
+            }
+        }
+
+        public int PlayerGold {
+            get {
+                return CCPlayerData.infos.Gold;
+            }
+        }
+
+        public int PlayerStone {
+            get {
+                return CCPlayerData.infos.Stone;
+            }
+        }
+
+        public bool TryDeleteSaveJson(out string message) {
+            return CCPlayerData.TryDeleteJson(out message);
         }
 
 #endregion

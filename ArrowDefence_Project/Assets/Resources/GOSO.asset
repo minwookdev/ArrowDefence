@@ -15,3 +15,6 @@ MonoBehaviour:
   POOLTAG_RAPIDSHOT_EFFECT: Eff_Rapid_Muzzle_0
   POOLTAG_MUZZLE: Eff_Muzzle_0
   SORTINGLAYER_EFFECT: 
+  supplyItems:
+  - {fileID: 11400000, guid: 7587c4bee74573e49a959676141e9625, type: 2}
+  - {fileID: 11400000, guid: e503007e901a880448a5186432880cf4, type: 2}

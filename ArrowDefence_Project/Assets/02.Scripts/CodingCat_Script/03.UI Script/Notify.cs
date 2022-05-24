@@ -91,7 +91,7 @@
             //assignment new Sequence
             notifySeq = DOTween.Sequence()
                                .Pause()
-                               .Append(notifyCanvasGroup.DOFade(StNum.floatZero, messageDuration).From(StNum.floatOne))
+                               .Append(notifyCanvasGroup.DOFade(StNum.floatZero, messageDuration).From(StNum.floatOne).SetEase(Ease.InExpo))
                                .Join(notifyText.rectTransform.DOShakePosition(1f, 5f, 15, 90, false, true))
                                .SetAutoKill(false)
                                .SetUpdate(false);

@@ -25,11 +25,12 @@
 
         [Header("SETTINGS")]
         [SerializeField] SettingsInfo settingsInfo = null;
-        [SerializeField] [ReadOnly]
-        bool isAchieveAll = false;
+        [SerializeField] [ReadOnly] bool isAchieveAll = false;
 
         [Header("DEBUG")]
+        [SerializeField] RectTransform lockPanelRectTr = null;
         [SerializeField] bool isDebug = false;
+        [SerializeField] bool isLockOnBuild = false;
 
         void Start() {
             // Update Challenge Panel
@@ -40,7 +41,11 @@
         }
 
         void OnEnable() {
-            
+#if UNITY_ANDROID
+            if (isLockOnBuild) {
+                lockPanelRectTr.gameObject.SetActive(true);
+            }
+#endif
         }
 
         void UpdateSettingsPanel(bool isOpenPanel) {

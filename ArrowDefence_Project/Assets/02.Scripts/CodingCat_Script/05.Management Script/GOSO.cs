@@ -17,6 +17,9 @@
         [Header("SORTING ORDER")]
         public string SORTINGLAYER_EFFECT = "";
 
+        [Header("ITEM")]
+        public ItemData[] supplyItems;
+
         public static GOSO Inst {
             get {
                 if(_inst != null) {

@@ -145,6 +145,11 @@ public class TitleSceneRoute : MonoBehaviour {
         cameraMovementCo = (isCamMovementActive) ? StartCoroutine(CameraMovement()) : null;
     }
 
+    public void BE_REMOVE_JSON() {
+        GameManager.Instance.TryDeleteSaveJson(out string message);
+        Notify.Inst.Message(message);
+    }
+
     #endregion
 
     System.Collections.IEnumerator EnableBlurCo() {

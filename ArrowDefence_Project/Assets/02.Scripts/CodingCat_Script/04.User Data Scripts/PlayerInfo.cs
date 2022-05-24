@@ -1,8 +1,17 @@
 ﻿namespace ActionCat.Data {
     using System.Collections.Generic;
     public class PlayerInfo {
+        // < Crafting || Stage >
         Dictionary<string, StageInfo> stageInfo = new Dictionary<string, StageInfo>();
         List<CraftingInfo> craftingInfoList = new List<CraftingInfo>();
+
+        // < Currency >
+        int gold  = 0;
+        int stone = 0;
+
+        const int MaxGoldAmount  = 99999999;
+        const int MaxStoneAmount = 999999;
+        const int MinCurrency    = 0;
 
         public CraftingInfo[] CraftingInfos {
             get {
@@ -15,8 +24,19 @@
                 if(craftingInfoList == null) {
                     return 0;
                 }
-
                 return craftingInfoList.Count;
+            }
+        }
+
+        public int Gold {
+            get {
+                return gold;
+            }
+        }
+
+        public int Stone {
+            get {
+                return stone;
             }
         }
 
@@ -79,6 +99,26 @@
         public void UpdateCraftingInfo() {
             craftingInfoList.ForEach(slot => slot.Update());
         }
+
+        #region CURRENCY
+
+        public void IncGold(int amount) {
+            gold = (gold + amount <= MaxGoldAmount) ? gold + amount : MaxGoldAmount;
+        }
+
+        public void IncStone(int amount) {
+            stone = (stone + amount <= MaxStoneAmount) ? stone + amount : MaxStoneAmount;
+        }
+
+        public bool TryDecGold(int amount) {
+            throw new System.NotImplementedException();
+        }
+
+        public bool TryDecStone(int amount) {
+            throw new System.NotImplementedException();
+        }
+
+        #endregion
 
         #region CONSTRUCTOR
         public PlayerInfo() { }

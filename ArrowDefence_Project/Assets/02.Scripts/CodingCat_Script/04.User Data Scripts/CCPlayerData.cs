@@ -57,13 +57,23 @@
 #if UNITY_EDITOR
             infos.AddCraftSlot(3);   //초기 할당 슬롯
             infos.OpenSlot(0, 1, 2); //초기 오픈 슬롯
+            infos.IncGold(1500);     //초기 골드 지급
+            infos.IncStone(10);      //초기 부활석 지급
 #elif UNITY_ANDRIOD
-            infos.AddCraftSlot(3); //초기 할당 슬롯
-            infos.OpenSlot(0);     //초기 오픈 슬롯
+            infos.AddCraftSlot(3);   //초기 할당 슬롯
+            infos.OpenSlot(0);       //초기 오픈 슬롯
+            infos.IncGold(1500);     //초기 골드 지급
+            infos.IncStone(10);      //초기 부활석 지급
 #else
-            infos.AddCraftSlot(3); //초기 할당 슬롯
-            infos.OpenSlot(0);     //초기 오픈 슬롯
+            infos.AddCraftSlot(3);   //초기 할당 슬롯
+            infos.OpenSlot(0);       //초기 오픈 슬롯
+            infos.IncGold(1500);     //초기 골드 지급
+            infos.IncStone(10);      //초기 부활석 지급
 #endif
+            var items = GOSO.Inst.supplyItems;
+            foreach (var item in items) {   //초기보급 장비 지급
+                CCPlayerData.inventory.AddItem(item, item.DefaultAmount);
+            }
         }
 
         public static bool SaveUserDataJson() {
@@ -157,6 +167,22 @@
             }
             catch (System.Exception ex) {
                 CatLog.ELog("Failed to Save Settings Json. Exception: \n" + ex.Message);
+            }
+        }
+
+        public static bool TryDeleteJson(out string message) {
+            try {
+                if (ES3.FileExists() == false) {    //default ES3 Json File
+                    throw new System.Exception("No Exists Save Json File");
+                }
+
+                ES3.DeleteFile();
+                message = "Save Json File Delete Success !";
+                return true;
+            }
+            catch (System.Exception ex) {
+                message = ex.Message;
+                return false;
             }
         }
     }

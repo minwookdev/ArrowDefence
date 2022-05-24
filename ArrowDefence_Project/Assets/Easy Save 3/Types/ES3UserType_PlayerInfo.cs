@@ -4,7 +4,7 @@ using UnityEngine;
 namespace ES3Types
 {
 	[UnityEngine.Scripting.Preserve]
-	[ES3PropertiesAttribute("stageInfo", "craftingInfoList")]
+	[ES3PropertiesAttribute("stageInfo", "craftingInfoList", "gold", "stone")]
 	public class ES3UserType_PlayerInfo : ES3ObjectType
 	{
 		public static ES3Type Instance = null;
@@ -18,6 +18,8 @@ namespace ES3Types
 			
 			writer.WritePrivateField("stageInfo", instance);
 			writer.WritePrivateField("craftingInfoList", instance);
+			writer.WritePrivateField("gold", instance);
+			writer.WritePrivateField("stone", instance);
 		}
 
 		protected override void ReadObject<T>(ES3Reader reader, object obj)
@@ -29,10 +31,16 @@ namespace ES3Types
 				{
 					
 					case "stageInfo":
-					reader.SetPrivateField("stageInfo", reader.Read<System.Collections.Generic.Dictionary<System.String, ActionCat.Data.StageInfo>>(), instance);
+					instance = (ActionCat.Data.PlayerInfo)reader.SetPrivateField("stageInfo", reader.Read<System.Collections.Generic.Dictionary<System.String, ActionCat.Data.StageInfo>>(), instance);
 					break;
 					case "craftingInfoList":
-					reader.SetPrivateField("craftingInfoList", reader.Read<System.Collections.Generic.List<ActionCat.Data.CraftingInfo>>(), instance);
+					instance = (ActionCat.Data.PlayerInfo)reader.SetPrivateField("craftingInfoList", reader.Read<System.Collections.Generic.List<ActionCat.Data.CraftingInfo>>(), instance);
+					break;
+					case "gold":
+					instance = (ActionCat.Data.PlayerInfo)reader.SetPrivateField("gold", reader.Read<System.Int32>(), instance);
+					break;
+					case "stone":
+					instance = (ActionCat.Data.PlayerInfo)reader.SetPrivateField("stone", reader.Read<System.Int32>(), instance);
 					break;
 					default:
 						reader.Skip();

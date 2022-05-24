@@ -17,9 +17,10 @@ public class MainSceneRoute : MonoBehaviour {
     [SerializeField] GameObject[] panels = null;
     IMainMenu[] menus = new IMainMenu[] { };
 
-    [Header("POPUP")]
+    [Header("MODULE")]
     public BattlePopup battlePop;
     public ItemInfoPop itemInfoPop;
+    [SerializeField] SettingsPanel settings = null;
 
     [Header("FADE")]
     public CanvasGroup ImgFade = null;
@@ -27,6 +28,10 @@ public class MainSceneRoute : MonoBehaviour {
 
     [Header("SAVE & LOAD")]
     public bool isAutoLoad;
+
+    [Header("Currency")]
+    [SerializeField] TMPro.TextMeshProUGUI textGold  = null;
+    [SerializeField] TMPro.TextMeshProUGUI textStone = null;
 
     [Header("I2")]
     [I2.Loc.TermsPopup]
@@ -60,6 +65,8 @@ public class MainSceneRoute : MonoBehaviour {
         if (isAutoLoad) {
             ActionCat.GameManager.Instance.AutoLoadUserData();
         }
+
+        UpdatePlayerCurrency();
 
         //I2.Loc.LocalizedString localString = "ABILITY_DAMAGE";
         //string translate = localString;
@@ -182,14 +189,8 @@ public class MainSceneRoute : MonoBehaviour {
         go.SetActive(false);
     }
 
-    public void BE_LOAD_TITLE() {
-        //Go to Title Scene
-        ImgFade.DOFade(1f, FadeTime)
-               .OnStart(() => {
-                   ImgFade.blocksRaycasts = false;
-                   ImgFade.gameObject.SetActive(true);
-               })
-               .OnComplete(() => SceneLoader.Instance.LoadScene(AD_Data.SCENE_TITLE));
+    public void BE_SETTINGS() {
+        settings.OpenPanel();
     }
 
     public void OpenBattlePopup(STAGETYPE type) {
@@ -254,7 +255,13 @@ public class MainSceneRoute : MonoBehaviour {
     }
 
     //======================================================================================================================================
-    //======================================================================================================================================
+    //============================================================= [ CURRENCY ] ===========================================================
+
+    public static void UpdatePlayerCurrency() {
+        var currencyInfos = GameManager.Instance.GetPlayerCurrenciesToString;
+        _inst.textGold.text  = currencyInfos[0];
+        _inst.textStone.text = currencyInfos[1];
+    }
 
     enum PANELTYPE {
         NONE,

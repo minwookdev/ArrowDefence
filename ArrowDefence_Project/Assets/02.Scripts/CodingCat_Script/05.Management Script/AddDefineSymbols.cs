@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEditor;
 #endif
 
-#if UNITY_EDITOR
+#if NOT_COMPILED //UNITY_EDITOR
 /// <summary>
 /// Adds the given define symbols to PlayerSettings define symbols.
 /// Just add your own define symbols to the Symbols property at the below.
@@ -22,13 +22,7 @@ public class AddDefineSymbols : Editor
     /// <summary>
     /// Symbols that will be added to the editor
     /// </summary>
-    public static readonly string[] Symbols = new string[] {
-Mobile_AOS,
-Mobile_IOS,
-PC_WinOS,
-PC_MacOS,
-Enable_Log
-};
+    public static readonly string[] Symbols = new string[] { Mobile_AOS, Mobile_IOS, PC_WinOS, PC_MacOS, Enable_Log };
 
     /// <summary>
     /// Add define symbols as soon as Unity gets done compiling.

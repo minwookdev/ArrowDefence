@@ -9,8 +9,8 @@
         [SerializeField] Rigidbody2D       rigidBody;
 
         [Header("MOVEMENT")]
-        public float InitMoveSpeed  = 0.5f;
-        public float AttackInterval = 2f;
+        [SerializeField] [ReadOnly] float InitMoveSpeed      = 0f;
+        [SerializeField] [ReadOnly] float InitAttackInterval = 0f;
 
         //Animator Parameters
         int animState = Animator.StringToHash("state");
@@ -25,6 +25,21 @@
         bool isFindWall      = false;
 
         Coroutine actionSpeedCo = null;
+
+        protected override void SetStateValue() {
+            //TryGet Status Entity
+            var statusEntity = GetComponent<MonsterStatus>().StatusEntity;
+            if (statusEntity == null) {
+                CatLog.WLog("Status Entity is Null.");
+                return;
+            }
+            //Get Value
+            InitMoveSpeed      = statusEntity.MoveSpeed;
+            InitAttackInterval = statusEntity.AttackInterval;
+            //Set Value
+            moveSpeed          = InitMoveSpeed;
+            attackInterval     = InitAttackInterval;
+        }
 
         /// <summary>
         /// ActionSpeed 값 변경과 State 업데이트
@@ -108,8 +123,7 @@
 
         private void Start() {
             ComponentInit();
-            moveSpeed      = InitMoveSpeed;
-            attackInterval = AttackInterval;
+            SetStateValue();
         }
 
         private void OnEnable() {

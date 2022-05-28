@@ -14,7 +14,7 @@
         #endregion
 
         public override void Init() {
-            throw new System.NotImplementedException();
+            throw new System.NotImplementedException("EMPTY TYPE SKILL은 BattleStage에서 Init되면 안댐.");
         }
 
         public override void BowSpecialSkill(Transform bowTr, AD_BowController controller, ref DamageStruct damage, Vector3 initPos, ARROWTYPE type) {

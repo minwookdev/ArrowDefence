@@ -1,17 +1,16 @@
 ﻿namespace ActionCat.Data {
     public static class CCPlayerData {
-        public static AD_Inventory      inventory  = new AD_Inventory();
+        public static AD_Inventory      inventory  = new AD_Inventory();        //※※※여기서 할당해주는 부분들에 대해서 전부 지워주거나, Load에서 새로 할당되는 부분들에 대한 생성자 분리.
         public static Player_Equipments equipments = new Player_Equipments();
         public static PlayerAbility     ability    = new PlayerAbility();
         public static PlayerInfo        infos      = new PlayerInfo();
         public static GameSettings      settings   = new GameSettings();
 
+        //DO NOT CHANGE THIS FIELD.
         static readonly string KEY_INVENTORY = "KEY_INVENTORY";
         static readonly string KEY_EQUIPMENT = "KEY_EQUIPMENT";
         static readonly string KEY_INFOS     = "KEY_INFOS";
         static readonly string KEY_SETTINGS  = "KEY_SETTINGS";
-
-        //public static bool IsExistsDefaultFile = false;
 
         public static string PersistentDataPath {
             get {
@@ -100,29 +99,17 @@
                 return false;   
             }
 
-            try { //이 로직 테스트한번 진행해보기. throw new Exception 났을 때, catch에서 어떻게잡는지 한번 보기
-                //inventory  = (ES3.KeyExists(KEY_INVENTORY)) ? ES3.Load<AD_Inventory>(KEY_INVENTORY)      : throw new System.Exception("INVENTORY KEY NOT EXISTS.");
-                //equipments = (ES3.KeyExists(KEY_EQUIPMENT)) ? ES3.Load<Player_Equipments>(KEY_EQUIPMENT) : throw new System.Exception("EQUIPMENT KEY NOT EXISTS.");
-                //infos      = (ES3.KeyExists(KEY_INFOS))     ? ES3.Load<PlayerInfo>(KEY_INFOS)            : throw new System.Exception("INFO KEY NOT EXISTS.");
+            try { 
+                //Check Key Exists. /여기서 Key가 존재하지않을 때 새로 할당되는 생성자들에 대한 분리권장.
+                if (!ES3.KeyExists(KEY_INVENTORY)) { inventory  = new AD_Inventory();      ES3.Save<AD_Inventory>(KEY_INVENTORY, inventory);       CatLog.WLog("Inventory Key Not Exists, Initialize New Inventory Data."); }
+                if (!ES3.KeyExists(KEY_EQUIPMENT)) { equipments = new Player_Equipments(); ES3.Save<Player_Equipments>(KEY_EQUIPMENT, equipments); CatLog.WLog("Equipment Key Not Exists, Initialize New Equipment Data."); }
+                if (!ES3.KeyExists(KEY_INFOS))     { infos      = new PlayerInfo();        ES3.Save<PlayerInfo>(KEY_INFOS, infos);                 CatLog.WLog("Info Key Not Exist, Initialize New Infos Data."); }
 
-                //KEY Verification
-                if (!ES3.KeyExists(KEY_INVENTORY)) {
-                    log = 2;
-                    throw new System.Exception("KEY ERROR: Inventory Key Not Exist.");
-                }
-                if (!ES3.KeyExists(KEY_EQUIPMENT)) {
-                    log = 3;
-                    throw new System.Exception("KEY ERROR: Equipment Key Not Exist.");
-                }
-                if (!ES3.KeyExists(KEY_INFOS)) {
-                    log = 4;
-                    throw new System.Exception("KEY ERROR: Information Key Not Exist.");
-                }
-
-                //Load Json
+                //Load Json Data.
                 inventory  = ES3.Load<AD_Inventory>(KEY_INVENTORY);
                 equipments = ES3.Load<Player_Equipments>(KEY_EQUIPMENT);
                 infos      = ES3.Load<PlayerInfo>(KEY_INFOS);
+
             }
             catch (System.Exception ex) { 
                 CatLog.ELog("Failed to Load UserData Json: \n" + ex.Message);
@@ -184,6 +171,18 @@
                 message = ex.Message;
                 return false;
             }
+        }
+
+        public static void Clear() {
+            inventory  = null;
+            equipments = null;
+            infos      = null;
+        }
+
+        public static void Initialize() {
+            inventory  = new AD_Inventory();
+            equipments = new Player_Equipments();
+            infos      = new PlayerInfo();
         }
     }
 }

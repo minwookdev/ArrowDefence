@@ -79,9 +79,12 @@
 
         public ItemData ItemAsset { get => itemAsset; }
 
-        public DropItem(int quantityValue, ItemData asset)
-        {
-            this.quantity = quantityValue; this.itemAsset = asset;
+        public bool IsReward {
+            get; private set;
+        } = false;
+
+        public DropItem(int quantityValue, ItemData asset, bool isRewardDrop = false) {
+            this.quantity = quantityValue; this.itemAsset = asset; IsReward = isRewardDrop;
         }
 
         public void SetAmount(int value) => quantity = value;
@@ -117,10 +120,9 @@
 
         [Header("WAITING")]
         [SerializeField] Image ImageCover = null;
-        [SerializeField] [RangeEx(0.5f, 5f, 0.5f)] float StartBattleDelay = 3f;
-        [SerializeField] [RangeEx(0.5f, 5f, 0.5f)] float EndBattleDelay   = 2f;
+        [SerializeField] [RangeEx(0.5f, 5f, 0.5f)] float StartBattleWait = 3f;
+        [SerializeField] [RangeEx(0.5f, 5f, 0.5f)] float ResultPanelOpenWait = 2f;
         private float currentStartDelayTime;
-        private float currentEndDelayTime;
         private bool IsOpenedResult = false;
         private bool isInitialized  = false;
 
@@ -136,7 +138,7 @@
         [Header("DROPS")]
         [SerializeField] ItemDropList DropListAsset = null;
         [SerializeField]
-        [RangeEx(0f, 50f, 10f)]
+        [RangeEx(0f, 70f, 5f)]
         private int dropCorrection = 30;
         [SerializeField] List<DropItem> dropItemList = new List<DropItem>();
 
@@ -191,6 +193,12 @@
             Cover(false);
             GameManager.Instance.Initialize();
             AdsManager.Instance.InitRuntimeMgr();
+
+            //Find ES3 Manager.
+            var es3RefMgr = FindObjectOfType<ES3ReferenceMgr>();
+            if (es3RefMgr == null) {
+                CatLog.ELog("ES3ReferenceMgr does Not Exist in This Scene. follow this ↓ \n 'Assets > Easy Save 3 > Add Manager to Scene'", true);
+            }
         }
 
         IEnumerator Start() {
@@ -268,15 +276,18 @@
             //================================================== << AUTO MODE >> ===================================================
             var autoButton = sceneRoute.ButtonAuto;
             autoButton.Disable();
-            bool isOnStageSetting  = GameManager.Instance.TryGetStageSetting(stageKey, out Data.StageData.StageSetting setting);
-            bool isUseableAutoMode = GameManager.Instance.TryGetStageData(stageKey, out StageInfo info);
-            if (isOnStageSetting == true && isUseableAutoMode == true) {
+            bool isExistSettings  = GameManager.Instance.TryGetStageSetting(stageKey, out Data.StageData.StageSetting setting);
+            bool isExistStageData = GameManager.Instance.TryGetStageData(stageKey, out StageInfo info);
+            if (isExistSettings == true && isExistStageData == true) {
+                CatLog.Log($"isOnAutoMode: {setting.isOnAutoMode}, UseableAutoMode: {info.IsUseableAuto}");
                 if(setting.isOnAutoMode && info.IsUseableAuto) {
                     autoButton.Init(GameManager.Instance.AutoSwitch, IsQuickAutoButton);
                 }
             }
             else if (IsQuickAutoButton == true) {
+#if UNITY_EDITOR
                 autoButton.Init(GameManager.Instance.AutoSwitch, IsQuickAutoButton);
+#endif
             }
 
             //======================================================================================================================
@@ -429,7 +440,7 @@
             if (isInitialized == false) return;
 
             currentStartDelayTime += Time.deltaTime;
-            if(currentStartDelayTime >= StartBattleDelay) {
+            if(currentStartDelayTime >= StartBattleWait) {
                 if (IsQuickGameClear) {        //Debug 1. Stage Clear, Get All Item's in DropList Asset
                     CatLog.WLog(StringColor.YELLOW, "DEBUGGING MODE TRUE : ALL DROP ITEM LIST.");
                     foreach (var item in DropListAsset.DropTableArray) {
@@ -463,12 +474,18 @@
             //======================================================= << GAME CLEAR >> ====================================================
             if(currentBattleTime <= 0f) {
                 SetGameState(GAMESTATE.STATE_ENDBATTLE);
+                if (IsOpenedResult) {
+                    CatLog.ELog("IsOpenedPanel 변수가 초기화되지 않아 결과패널이 열리지않습니다.", true);
+                }
             }
             //=============================================================================================================================
 
             //======================================================== << GAME OVER >> ====================================================
             if(currentPlayerHealth <= 0f) {
                 SetGameState(GAMESTATE.STATE_GAMEOVER);
+                if (IsOpenedResult) {
+                    CatLog.ELog("IsOpenedPanel 변수가 초기화되지 않아 결과패널이 열리지않습니다.", true);
+                }
             }
             //=============================================================================================================================
 
@@ -485,38 +502,43 @@
         }
 
         private void OnUpdateEndBattle() {
-            if (IsOpenedResult == false) //waiting time.
-                currentEndDelayTime += Time.deltaTime;
-            
-            if (currentEndDelayTime >= EndBattleDelay) {
+            //Start:Result Panel Open Coroutine
+            if (!IsOpenedResult) {
                 IsOpenedResult = true;
-
-                //Add Items in Player Inventory
-                DropItemsAddInventory();
-
-                //Update User Information
-                UpdateUserInfo();
-
-                //Open Clear Result Panel
-                //battleSceneUI.OnEnableResultPanel(dropItemList);
-                sceneRoute.OpenClearPanel(dropItemList.ToArray());
-                currentEndDelayTime = 0f;
+                StartCoroutine(OpenResultPanelCo(ResultPanelOpenWait));
             }
         }
 
         void OnUpdateGameOver() {
-            if(IsOpenedResult == false) { //waiting time.
-                currentEndDelayTime += Time.unscaledDeltaTime;
-            }
-
-            if(currentEndDelayTime >= EndBattleDelay) {
+            //Start:GameOver Panel Open Coroutine
+            if (!IsOpenedResult) {
                 IsOpenedResult = true;
-
-                //Open GameOver Panel
-                //battleSceneUI.OnEnableGameOverPanel();
-                sceneRoute.OpenGameOverPanel();
-                currentEndDelayTime = 0f;
+                StartCoroutine(OpenGameOverPanelCo(ResultPanelOpenWait));
             }
+        }
+
+        IEnumerator OpenResultPanelCo(float delayTime) {
+            float timeElapsed = 0f;
+            while (timeElapsed < delayTime) {
+                timeElapsed += Time.unscaledDeltaTime;
+                yield return null;
+            }
+
+            DropItemsAddInventory();
+            UpdateUserInfo();
+            GameManager.Instance.SaveUserJsonFile();
+            sceneRoute.OpenClearPanel(dropItemList.ToArray());
+        }
+
+        IEnumerator OpenGameOverPanelCo(float delayTime) {
+            float timeElapsed = 0f;
+            while (timeElapsed < delayTime) {
+                timeElapsed += Time.unscaledDeltaTime;
+                yield return null;
+            }
+
+            GameManager.Instance.SaveUserJsonFile();
+            sceneRoute.OpenGameOverPanel();
         }
 
         #endregion
@@ -547,15 +569,20 @@
 
         #region STAGE_INFO
 
-        void UpdateUserInfo() {
+        void UpdateUserInfo() {    //호출하는 즉시 해당 스테이지에 대한 데이터 저장됨 ↓
             var isValueExistence = GameManager.Instance.UpdateStageData(stageKey, in battleData);
             if (!isValueExistence) { //기존에 이 스테이지에 대한 플레이 데이터가 없었을 경우, 초회 클리어 아이템 지급
                 var rewards = DropListAsset.GetRewardTable;
                 for (int i = 0; i < rewards.Length; i++) {
+                    //Player Inventroy의 Reward Item 추가.
                     var rewardItemAmount = rewards[i].DefaultQuantity;
                     CCPlayerData.inventory.AddItem(rewards[i].ItemAsset, rewardItemAmount);
+
+                    //DropList의 Reward Item 추가.
+                    AddDropList(new DropItem(rewardItemAmount, rewards[i].ItemAsset, true));
                     CatLog.Log($"초회클리어 보상 아이템 획득: {rewards[i].ItemAsset.NameByTerms}, 수량: {rewardItemAmount}");
                 }
+
             }
             GameManager.Instance.UpdateCraftingInfo();
         }

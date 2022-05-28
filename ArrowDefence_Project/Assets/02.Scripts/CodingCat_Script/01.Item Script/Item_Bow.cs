@@ -151,8 +151,7 @@
             return null;
         }
 
-        public AD_BowSkill[] GetSkillsOrNull()
-        {
+        public AD_BowSkill[] GetSkillsOrNull() {
             //AD_BowSkill[] skills = new AD_BowSkill[2] { this.bowSkill_Fst, 
             //                                            this.bowSkill_Sec};
 

@@ -14,6 +14,36 @@
 
         #region CONSTRUCTOR
 
+        private ArrowSkillSet() {
+
+        }
+
+        public static ArrowSkillSet GetNewSkillSet(ASInfo fstInfo, ASInfo secInfo, string tag, PlayerAbilitySlot ability) {
+            var set = new ArrowSkillSet();
+            set.arrowPoolTag = tag;
+            //First SkillData Initialize
+            if (fstInfo != null) {
+                switch (fstInfo.ActiveType) {
+                    case ARROWSKILL_ACTIVETYPE.ATTACK:  set.InitHit(fstInfo.SkillData, tag);            break;
+                    case ARROWSKILL_ACTIVETYPE.AIR:     set.InitAir(fstInfo.SkillData);                 break;
+                    case ARROWSKILL_ACTIVETYPE.ADDPROJ: set.InitProjectile(fstInfo.SkillData, ability); break;
+                    default: throw new System.NotImplementedException();
+                }
+            }
+            if (secInfo != null) {
+                switch (secInfo.ActiveType) {
+                    case ARROWSKILL_ACTIVETYPE.ATTACK:  set.InitHit(secInfo.SkillData, tag);            break;
+                    case ARROWSKILL_ACTIVETYPE.AIR:     set.InitAir(secInfo.SkillData);                 break;
+                    case ARROWSKILL_ACTIVETYPE.ADDPROJ: set.InitProjectile(secInfo.SkillData, ability); break;
+                    default: throw new System.NotImplementedException();
+                }
+            }
+
+            set.activeType = set.InitArrowSkillActiveType(0);
+            CatLog.Log($"Arrow SkillSets Active Type : {set.activeType.ToString()}");
+            return (set.activeType != ARROWSKILL_ACTIVETYPE.EMPTY) ? set : null;
+        }
+
         /// <summary>
         /// Constructor I. Arrow Item Class에서 Origin Arrow Skill Sets Class 생성.
         /// </summary>
@@ -24,18 +54,22 @@
             //First Arrow SkillData Init
             if(skillInfoFst != null) {
                 switch (skillInfoFst.ActiveType) {
-                    case ARROWSKILL_ACTIVETYPE.ATTACK:  InitHit(skillInfoFst.SkillData);                 break;
+                    case ARROWSKILL_ACTIVETYPE.ATTACK:  InitHit(skillInfoFst.SkillData, tag);            break;
                     case ARROWSKILL_ACTIVETYPE.AIR:     InitAir(skillInfoFst.SkillData);                 break;
                     case ARROWSKILL_ACTIVETYPE.ADDPROJ: InitProjectile(skillInfoFst.SkillData, ability); break;
+                    //case ARROWSKILL_ACTIVETYPE.EMPTY:   break; //Active Event가 존재하지않는 타입은 받지않음. <ArrowItemClass로 이관.>
+                    //case ARROWSKILL_ACTIVETYPE.BUFF:    break; //Active Event가 존재하지않는 타입은 받지않음. <ArrowItemClass로 이관.>
                     default: throw new System.NotImplementedException();
                 }
             }
             //Seconds Arrow SkillData Init
             if(skillInfoSec != null) {
                 switch (skillInfoSec.ActiveType) {
-                    case ARROWSKILL_ACTIVETYPE.ATTACK:  InitHit(skillInfoSec.SkillData);                 break;
+                    case ARROWSKILL_ACTIVETYPE.ATTACK:  InitHit(skillInfoSec.SkillData, tag);            break;
                     case ARROWSKILL_ACTIVETYPE.AIR:     InitAir(skillInfoSec.SkillData);                 break;
                     case ARROWSKILL_ACTIVETYPE.ADDPROJ: InitProjectile(skillInfoSec.SkillData, ability); break;
+                    //case ARROWSKILL_ACTIVETYPE.EMPTY: break; //Active Event가 존재하지않는 타입은 받지않음. <ArrowItemClass로 이관.>
+                    //case ARROWSKILL_ACTIVETYPE.BUFF:  break; //Active Event가 존재하지않는 타입은 받지않음. <ArrowItemClass로 이관.>
                     default: throw new System.NotImplementedException();
                 }
             }
@@ -56,8 +90,8 @@
 
             for (int i = 0; i < array.Length; i++) {
                 switch (array[i].ActiveType) {
-                    case ARROWSKILL_ACTIVETYPE.ATTACK:  InitHit(array[i].SkillData); break;
-                    case ARROWSKILL_ACTIVETYPE.AIR:     InitAir(array[i].SkillData); break;
+                    case ARROWSKILL_ACTIVETYPE.ATTACK:  InitHit(array[i].SkillData, tag);            break;
+                    case ARROWSKILL_ACTIVETYPE.AIR:     InitAir(array[i].SkillData);                 break;
                     case ARROWSKILL_ACTIVETYPE.ADDPROJ: InitProjectile(array[i].SkillData, ability); break;
                     case ARROWSKILL_ACTIVETYPE.BUFF:  break;
                     case ARROWSKILL_ACTIVETYPE.EMPTY: break;
@@ -96,8 +130,8 @@
             // Clone-Hit Type Skill
             if(origin.hitSkill != null) {
                 switch (origin.hitSkill) {
-                    case ReboundArrow rebound:   hitSkill = new ReboundArrow(rebound, arrowPoolTag); break;
-                    case PiercingArrow piercing: hitSkill = new PiercingArrow(piercing);             break;
+                    case ReboundArrow rebound:   hitSkill = new ReboundArrow(rebound);   break;
+                    case PiercingArrow piercing: hitSkill = new PiercingArrow(piercing); break;
                     default: throw new System.NotImplementedException("this type is Not Implemented.");
                 }
             }
@@ -126,7 +160,7 @@
 
         #region INIT
 
-        void InitHit(ArrowSkill skillData) {
+        void InitHit(ArrowSkill skillData, string arrowTag) {
             if(hitSkill != null) {
                 CatLog.ELog($"Error : 중복된 ActiveType의 ArrowSkill {skillData}이(가) 할당되었습니다. [ATTACK]"); 
                 return;
@@ -134,6 +168,7 @@
 
             if(skillData is AttackActiveTypeAS hitTypeSkill) {
                 hitSkill = hitTypeSkill;
+                hitSkill.EffectToPool(arrowTag);
             }
             else {
                 CatLog.WLog($"잘못된 Item의 ActiveType: {skillData}는(은) HitType이 아닙니다. (ActiveType을 확인)");

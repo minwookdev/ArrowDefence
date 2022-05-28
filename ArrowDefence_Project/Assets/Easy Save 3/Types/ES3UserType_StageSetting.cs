@@ -4,7 +4,7 @@ using UnityEngine;
 namespace ES3Types
 {
 	[UnityEngine.Scripting.Preserve]
-	[ES3PropertiesAttribute("<isOnAutoMode>k__BackingField", "<isOnSpawnMutant>k__BackingField")]
+	[ES3PropertiesAttribute("<isOnAutoMode>k__BackingField", "<isOnEliteSpawn>k__BackingField")]
 	public class ES3UserType_StageSetting : ES3ObjectType
 	{
 		public static ES3Type Instance = null;
@@ -17,7 +17,7 @@ namespace ES3Types
 			var instance = (ActionCat.Data.StageData.StageSetting)obj;
 			
 			writer.WritePrivateField("<isOnAutoMode>k__BackingField", instance);
-			writer.WritePrivateField("<isOnSpawnMutant>k__BackingField", instance);
+			writer.WritePrivateField("<isOnEliteSpawn>k__BackingField", instance);
 		}
 
 		protected override void ReadObject<T>(ES3Reader reader, object obj)
@@ -29,10 +29,10 @@ namespace ES3Types
 				{
 					
 					case "<isOnAutoMode>k__BackingField":
-					reader.SetPrivateField("<isOnAutoMode>k__BackingField", reader.Read<System.Boolean>(), instance);
+					instance = (ActionCat.Data.StageData.StageSetting)reader.SetPrivateField("<isOnAutoMode>k__BackingField", reader.Read<System.Boolean>(), instance);
 					break;
-					case "<isOnSpawnMutant>k__BackingField":
-					reader.SetPrivateField("<isOnSpawnMutant>k__BackingField", reader.Read<System.Boolean>(), instance);
+					case "<isOnEliteSpawn>k__BackingField":
+					instance = (ActionCat.Data.StageData.StageSetting)reader.SetPrivateField("<isOnEliteSpawn>k__BackingField", reader.Read<System.Boolean>(), instance);
 					break;
 					default:
 						reader.Skip();

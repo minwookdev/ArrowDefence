@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 1513067888068708603}
   - component: {fileID: 1513067888068708602}
   m_Layer: 11
-  m_Name: Skeleton_robbery
+  m_Name: skeleton_robbery
   m_TagString: Monster
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -51,15 +51,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   monsterState: {fileID: 6569283258810144969}
   sprite: {fileID: 8199350597534063019}
+  statusEntity: {fileID: 11400000, guid: c9732c5d5513b4643a19de011bb60818, type: 2}
   MaxMonsterHP: 220
   MaxMonsterMP: 50
-  ItemDropCorrection: 5
-  GaugeIncreaseValue: 10
-  AttackDamage: 5
+  InitAttackDamage: 5
   Armorating: 0
   CriticalResist: 0
+  ItemDropCorrection: 5
+  GaugeIncreaseValue: 10
   isActiveHitColor: 0
   HitColor: {r: 1, g: 0.25943398, b: 0.25943398, a: 1}
+  isDeath: 0
 --- !u!114 &6569283258810144969
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -72,11 +74,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6f5778865860b24db9d1216f4b7128b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentState: 0
+  defaultActionSpeed: 1
+  currentActionSpeed: 1
   coll: {fileID: 1513067888068708603}
   anim: {fileID: 3440074192806410621}
   rigidBody: {fileID: 1513067888068708602}
   InitMoveSpeed: 0.7
-  AttackInterval: 1.8
+  InitAttackInterval: 2
 --- !u!95 &3440074192806410621
 Animator:
   serializedVersion: 3

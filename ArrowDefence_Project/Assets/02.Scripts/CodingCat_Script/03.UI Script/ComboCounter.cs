@@ -22,6 +22,10 @@
             canvasGroup.alpha = 0f;
         }
 
+        private void OnDisable() {
+            TweenKill();
+        }
+
         public void InitComboCounter(float maxTime, bool isUnscaledTime) {
             this.isUnscaledTime = isUnscaledTime;
             comboHoldTime = maxTime;

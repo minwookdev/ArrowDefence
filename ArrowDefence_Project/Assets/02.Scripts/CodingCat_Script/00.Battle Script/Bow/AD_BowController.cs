@@ -647,7 +647,6 @@
         void ChargeClear() {
             isChargeShotReady = false;
             chargingTime      = 0f;
-            CatLog.Log("Charge Clear !");
         }
 
         void ChargeIncrease() {
@@ -656,7 +655,6 @@
                 if(isChargeShotReady == false) {
                     bowSprite.Effect(BOWEFFECTYPE.CHARGED);
                     isChargeShotReady = true;
-                    CatLog.Log("Charge Complete !");
                 }
             }
         }

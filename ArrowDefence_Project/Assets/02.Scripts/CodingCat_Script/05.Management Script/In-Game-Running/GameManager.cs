@@ -171,31 +171,6 @@
                 return null;
         }
 
-        public ArrowSkillSet GetArrSkillSetsOrNull(string tag) { // <- Delete this..
-            if (tag == AD_Data.POOLTAG_MAINARROW || tag == AD_Data.POOLTAG_MAINARROW_LESS) {
-                var skillSets = CCPlayerData.equipments.GetMainArrow().ArrowSkillSets;
-                if (skillSets != null) {
-                    //Is Have Skill Data In Arrow
-                    var arrowSkillSets = new ArrowSkillSet(skillSets);
-                    return arrowSkillSets;
-                }
-                else //Empty Skill Data
-                    return null;
-            }
-            else if (tag == AD_Data.POOLTAG_SUBARROW || tag == AD_Data.POOLTAG_SUBARROW_LESS) {
-                var skillSets = CCPlayerData.equipments.GetSubArrow().ArrowSkillSets;
-                if (skillSets != null) {
-                    //Is Have Skill Data In Arrow
-                    var arrowSkillSets = new ArrowSkillSet(skillSets);
-                    return arrowSkillSets;
-                }
-                else //Empty Skill Data
-                    return null;
-            }
-            else //WrongTag 
-                return null;
-        }
-
         public bool TryGetSkillSet(string tag, out ArrowSkillSet skillset) {
             ArrowSkillSet temp = null;
             var equipments = CCPlayerData.equipments;
@@ -328,6 +303,10 @@
 
         public bool TryDeleteSaveJson(out string message) {
             return CCPlayerData.TryDeleteJson(out message);
+        }
+
+        public void InitPlayerData() {
+            CCPlayerData.Initialize();
         }
 
 #endregion

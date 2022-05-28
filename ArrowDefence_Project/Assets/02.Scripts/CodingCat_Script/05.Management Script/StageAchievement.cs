@@ -53,7 +53,7 @@
             if (info.IsChallengeAchieve(data => data.IsStageCleared == true, out bool achievefirst)) {
                 byteList.Add(0);
             }
-            if (info.IsChallengeAchieve(data => data.KilledCount >= 30, out bool achieveseconds)) {
+            if (info.IsChallengeAchieve(data => data.KilledCount >= 20, out bool achieveseconds)) {
                 byteList.Add(1);
             }
             if (info.IsChallengeAchieve(data => data.IsUsedResurrect == false, out bool achievethird)) {

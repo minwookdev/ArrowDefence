@@ -40,6 +40,7 @@
 
         // [ Non-Saved-Variables ]
         protected GameObject lastHitTarget = null;
+        protected string[] effectPoolTags  = null;
 
         #region PROPERTY
         public int EffectsLength {
@@ -68,7 +69,7 @@
         public ACEffector2D[] Effects {
             get {
                 if(effects == null) {
-                    throw new System.Exception("the EffectArray is Not Assignment.");
+                    return new ACEffector2D[0] { };
                 }
 
                 return effects;
@@ -101,7 +102,41 @@
             else return;
         }
 
-        public abstract void EffectPlay();
+        protected virtual void EffectPlay(Vector2 contactPosition, bool isRotateRandom) {
+            var effect = CCPooler.SpawnFromPool<ACEffector2D>(effectPoolTags.RandIndex<string>(), contactPosition, Quaternion.identity);
+            if (effect) {
+                effect.PlayOnce(isRotateRandom);
+            }
+            else {
+                CatLog.WLog("Effect Pool Object Not Exists.");
+            }
+        }
+
+        public virtual void EffectToPool(string arrowTag) {
+            if (this.effects == null || this.effects.Length <= 0) {
+                CatLog.WLog("ATK Skill is Not Assignment Hit Effect.");
+                return;
+            }
+
+            List<string> tempEffectTags = new List<string>();
+            string tempEffectPoolTag = string.Empty;
+            for (int i = 0; i < effects.Length; i++) {
+                tempEffectPoolTag = $"{arrowTag}{AD_Data.POOLTAG_HITSKILL_EFFECT}{i}";
+                CCPooler.AddPoolList(tempEffectPoolTag, 10, effects[i].gameObject, false);
+                tempEffectTags.Add(tempEffectPoolTag);
+            }
+            effectPoolTags = tempEffectTags.ToArray();
+            CatLog.Log($"EffectPoolTags Length: {effectPoolTags.Length}");
+        }
+
+        protected AttackActiveTypeAS(string[] originPoolTags) {
+            if(originPoolTags != null) {
+                this.effectPoolTags = originPoolTags;
+            }
+        }
+        #region ES3
+        public AttackActiveTypeAS() { }
+        #endregion
     }
 
     public class ReboundArrow : AttackActiveTypeAS {
@@ -112,7 +147,6 @@
         // [ Non-Saved-Variables ]
         List<Collider2D> tempCollList = null;
         int currentChainCount         = 0;  // Current Chain Count
-        string[] effectPoolTags;
 
         public override string GetDesc(string localizedString) {
             return string.Format(localizedString, maxChainCount.ToString().GetColor(StringColor.YELLOW));
@@ -239,30 +273,27 @@
         /// call when arrow disable
         /// </summary>
         public override void Clear() {
-            lastHitTarget     = null;
+            lastHitTarget = null;
+            tempCollList  = null;
             currentChainCount = 0;
         }
 
-        public override void EffectPlay() {
-            CCPooler.SpawnFromPool<ACEffector2D>(effectPoolTags.RandIndex<string>(), Vector3.zero, Quaternion.identity);
+        public override void EffectToPool(string arrowPoolTag) {
+            throw new System.NotImplementedException();
+        }
+
+        protected override void EffectPlay(Vector2 contactPosition, bool isRandomRotate) {
+            throw new System.NotImplementedException();
         }
 
         /// <summary>
         /// Copy Class Constructor
         /// </summary>
         /// <param name="origin"></param>
-        public ReboundArrow(ReboundArrow origin, string tag= "") {
+        public ReboundArrow(ReboundArrow origin) : base(origin.effectPoolTags) {
             maxChainCount = origin.maxChainCount;
             scanRange     = origin.scanRange;
             effects       = origin.effects;
-
-            if(tag != null || tag != "") {
-                List<string> effectPoolTagList = new List<string>();
-                for (int i = 0; i < effects.Length; i++) {
-                    effectPoolTagList.Add($"{tag}{AD_Data.POOLTAG_HITEFFECT}{i}");
-                }
-                effectPoolTags = effectPoolTagList.ToArray();
-            }
         }
 
         /// <summary>
@@ -304,24 +335,18 @@
         /// <returns></returns>
         public override bool OnHit(Collider2D target, ref DamageStruct damage, Vector3 contactpoint, Vector2 direction) {
             //================================================[ ON HIT TARGET & INC CHAIN ]=======================================================
-            if (lastHitTarget == target.gameObject) {    //Ignore Duplicate Target
-                return false;
-            }
-            else {
-                if(currentChainCount >= maxChainCount) { // Max Chain Count : Try OnHit
-                    return target.GetComponent<IDamageable>().TryOnHit(ref damage, contactpoint, direction);
+            isResult = target.GetComponent<IDamageable>().TryOnHit(ref damage, contactpoint, direction);
+            if (isResult) { //:몬스터 객체에 충돌
+                if (currentChainCount >= maxChainCount) {
+                    return isResult; //:true
                 }
-
-                //Try On Hit
-                isResult = target.GetComponent<IDamageable>().TryOnHit(ref damage, contactpoint, direction);
-                if(isResult) {
-                    //Success OnHit
+                else {
                     currentChainCount++;
-                    lastHitTarget = target.gameObject;
+                    EffectPlay(contactpoint, true);
+                    return false; // 재충돌 가능한 상태이기때문에, false 처리.
                 }
-
-                return isResult;
-            } 
+            }
+            return false; 
             //====================================================================================================================================
         }
 
@@ -332,55 +357,30 @@
         /// <param name="targetTr"></param>
         /// <returns></returns>
         public override bool OnHit(Collider2D target, out Transform targetTr, ref DamageStruct damage, Vector3 contactpoint, Vector2 direction) {
-            //================================================[ IGNORE DUPLICATE TARGET ]=========================================================
-            if (lastHitTarget == target.gameObject) {
-                targetTr = null; 
-                return false;
-            }
-            else {
-            //=================================================[ ARRIVAL MAX CHAINCOUNT ]=========================================================
-                if(currentChainCount >= maxChainCount) {
+            isResult = target.GetComponent<IDamageable>().TryOnHit(ref damage, contactpoint, direction);
+            if (isResult) {
+                if (currentChainCount >= maxChainCount) {
                     targetTr = null;
-                    return target.GetComponent<IDamageable>().TryOnHit(ref damage, contactpoint, direction);
+                    return isResult; //:true
                 }
-
-            //========================================================[ TRY ON HIT ]==============================================================
-                isResult = target.GetComponent<IDamageable>().TryOnHit(ref damage, contactpoint, direction);
-                if(isResult == false) { //Failed Target OnHit
-                    targetTr = null;
-                    return isResult;
+                else {
+                    currentChainCount++;
+                    EffectPlay(contactpoint, true);
                 }
-
-                //Success Target OnHit
-                currentChainCount++;
-                lastHitTarget = target.gameObject;
-            //====================================================================================================================================
             }
-
-            //==================================================[ FIND TARGET TRANSFORM ]=========================================================
             tempArray = GameGlobal.OverlapCircleAll2D(arrowTr, tempRadius, AD_Data.LAYER_MONSTER, collider => collider.gameObject == target);
-            if(tempArray.Length <= 0) {
-                //Not Found a Target.
-                targetTr = null;
-            }
-            else {
-                //Find the Target. (Random Target Sending)
-                targetTr = tempArray[Random.Range(0, tempArray.Length)].transform;
-            }
-            //====================================================================================================================================
-
-            return isResult;
+            targetTr  = (tempArray.Length <= 0) ? null : tempArray.RandIndex().transform;
+            return false;
         }
 
         public override void Clear() {
             currentChainCount = 0;
+            isResult          = false;
+            tempArray         = null;
+            lastHitTarget     = null;
         }
 
-        public override void EffectPlay() {
-            throw new System.NotImplementedException();
-        }
-
-        public PiercingArrow(PiercingArrow origin) {
+        public PiercingArrow(PiercingArrow origin) : base(origin.effectPoolTags) {
             maxChainCount = origin.maxChainCount;
             effects       = origin.effects;
         }
@@ -393,7 +393,7 @@
         /// <summary>
         /// Public Empty Constructor for ES3
         /// </summary>
-        public PiercingArrow() { }
+        public PiercingArrow() : base() { }
     }
 
 }

@@ -12,6 +12,8 @@
             throw new NotImplementedException("This State is Not Implemented.");
         }
 
+        protected virtual void SetStateValue() => throw new System.NotImplementedException();
+
         public virtual void BreakState() => throw new NotImplementedException();
 
         public virtual void ValActionSpeed(float ratio, float duration) => throw new NotImplementedException();

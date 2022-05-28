@@ -68,6 +68,17 @@
             this.effects           = origin.effects;
         }
 
+        /// <summary>
+        /// 현 Arrow Item Class의 First, Seconds Skill이 Battle Stage에서 Init되어야하는 Type의 Skill인지 확인하고,
+        /// BattleStage에서 사용되는 Skill이면 매개변수로 들어온 Index에 따른 skill class를 반환하거나, null반환.
+        /// </summary>
+        /// <param name="index"> 0 == first arrow skill, 0 != seconds arrow skill </param>
+        /// <returns></returns>
+        ASInfo GetBattleStageInitSkill(byte index) {
+            var skill = (index == 0) ? arrowSkillInfoFst : arrowSkillInfoSec;
+            return (skill != null && skill.ActiveType != ARROWSKILL_ACTIVETYPE.EMPTY && skill.ActiveType != ARROWSKILL_ACTIVETYPE.BUFF) ? skill : null;
+        }
+
         #region ES3
         public Item_Arrow() : base() { }
         #endregion
@@ -147,7 +158,6 @@
             }
             return tempList.ToArray();
         }
-
 
         public override object GetItem() => this;
 
@@ -268,12 +278,8 @@
             }
 
             // Init ArrSkillSets
-            if(arrowSkillInfoFst == null && arrowSkillInfoSec == null) {
-                arrowSkillSets = null;
-            }
-            else {
-                arrowSkillSets = new ArrowSkillSet(arrowSkillInfoFst, arrowSkillInfoSec, mainArrowObjTag, ability);
-            }
+            //arrowSkillSets = new ArrowSkillSet(GetBattleStageInitSkill(0), GetBattleStageInitSkill(1), mainArrowObjTag, ability);
+            arrowSkillSets = ArrowSkillSet.GetNewSkillSet(GetBattleStageInitSkill(0), GetBattleStageInitSkill(1), mainArrowObjTag, ability);
 
             mainArrow.SetEffectInfo(effectPoolTags.ToArray());
             lessArrow.SetEffectInfo(effectPoolTags.ToArray());

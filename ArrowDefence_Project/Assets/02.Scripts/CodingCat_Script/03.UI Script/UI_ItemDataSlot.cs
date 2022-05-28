@@ -37,10 +37,12 @@
         [SerializeField] private RectTransform tooltipParent;
 
         [Header("REWARDED TAG")]
-        [SerializeField] private RectTransform rectTrRewardTag = null;
+        [SerializeField] private RectTransform rectTrRewardTag   = null;
+        [SerializeField] private RectTransform[] rewardTagsRectTr = null;
 
         //Fields
         bool isPressed = false;
+        bool isRewardedSlot = false;
         Vector3 normalScale;
         ItemData itemDataAddress = null;
         AD_item tempItem = null;
@@ -73,7 +75,7 @@
         /// <param name="data"></param>
         /// <param name="stack"></param>
         /// <param name="rootParent">Root Parent Transform for Tooltip</param>
-        public void SetSlot(ItemData data, int stack, RectTransform rootParent) {
+        public void SetSlot(ItemData data, int stack, RectTransform rootParent, bool isReward) {
             itemDataAddress = data;
             ItemImg.sprite  = data.Item_Sprite;
 
@@ -86,6 +88,11 @@
 
             //Get Parent Canvas (to use tooltip)
             tooltipParent = rootParent;
+
+            rewardTagsRectTr.Foreach((tag) => {
+                tag.gameObject.SetActive(isReward);
+            });
+            isRewardedSlot = isReward;
 
             if(gameObject.activeSelf == false) {
                 gameObject.SetActive(true);
@@ -148,7 +155,7 @@
         void IPointerClickHandler.OnPointerClick(PointerEventData eventData) {
             isPressed = false;
             if (slotEvent != SLOTEVENT.ITEMINFO) { //Expose ItemData Type Tooltip
-                Games.UI.ItemTooltip.Inst.Expose(slotRectTr.position, tooltipParent, itemDataAddress, ItemFrame.sprite, ItemStackTmp.text);
+                Games.UI.ItemTooltip.Inst.Expose(slotRectTr.position, tooltipParent, itemDataAddress, ItemFrame.sprite, ItemStackTmp.text, isRewardedSlot);
             }
             else {
                 MainSceneRoute.OpenInfo_DropListItem_Preview(tempItem);

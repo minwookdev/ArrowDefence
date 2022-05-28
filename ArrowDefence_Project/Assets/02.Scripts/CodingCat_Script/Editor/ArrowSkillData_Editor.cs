@@ -232,15 +232,12 @@ public class PiercingArrowDataEditor : ArrowSkillData_Editor
 {
     SerializedProperty maxChainCountProp;
 
-    public void OnEnable()
-    {
+    public void OnEnable() {
         base.InitSerializedObject();
-
         maxChainCountProp = sobject.FindProperty("MaxChainCount");
     }
 
-    public override void OnInspectorGUI()
-    { 
+    public override void OnInspectorGUI() { 
         //base.OnInspectorGUI
         //Draw Disable MonoScript
         DrawMonoScript();
@@ -256,6 +253,10 @@ public class PiercingArrowDataEditor : ArrowSkillData_Editor
 
         EditorGUILayout.EndVertical();
         #endregion
+
+        EditorGUILayout.BeginVertical("GroupBox");
+        EditorGUILayout.PropertyField(effectProp);
+        EditorGUILayout.EndVertical();
 
         GUILayout.EndVertical();
 

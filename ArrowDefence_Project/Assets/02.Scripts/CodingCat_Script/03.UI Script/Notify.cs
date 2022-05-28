@@ -73,10 +73,6 @@
                 CatLog.WLog("Notify Manager is Already Initialized this Scene."); return;
             }
 
-            if(notifyRectTr == null || notifyText == null) {
-                throw new System.Exception("Notify Component is Not Assignmnet.");
-            }
-
             //Get CavnasGroup Component
             if (notifyCanvasGroup == null) {
                 notifyCanvasGroup = GetComponent<CanvasGroup>();
@@ -108,14 +104,13 @@
             //Set Notify Message Strings
             notifyText.AlphaOne();
             notifyText.text = string.Format("{1}{0}{2}", text, GetColor(color), endColor);
+            notifyText.ForceMeshUpdate(true, true);   //변경된 TextMeshPro에 대해서 바로 적용되지 않아서 강제로 업데이트 호출해줌.
+            var lines = notifyText.textInfo.lineCount;
+            float calcHeight = (defaultBackGroundSpacing * lines) + (defaultMargins * 2f);
 
             //notifyText.CalculateLayoutInputHorizontal();
             //notifyText.CalculateLayoutInputVertical();
             //notifyText.rectTransform.ForceUpdateRectTransforms();
-
-            notifyText.ForceMeshUpdate(true, true);   //변경된 TextMeshPro에 대해서 바로 적용되지 않아서 강제로 업데이트 호출해줌.
-            var lines = notifyText.textInfo.lineCount;
-            float calcHeight = (defaultBackGroundSpacing * lines) + (defaultMargins * 2f);
 
             //Set BackGround SizeDelta
             //float notifyTextRectHeightSize = notifyRectTr.sizeDelta.y;
@@ -139,6 +134,9 @@
         }
 
         private void Awake() {
+            if (notifyRectTr == null || notifyText == null) {
+                throw new System.Exception("Notify Component is Not Assignment !");
+            }
             SceneLoader.SceneChangeCallback += OnReset;
             //SceneManager.sceneLoaded += OnReset;
             //SceneManager.activeSceneChanged
@@ -150,7 +148,7 @@
         /// <param name="scene"></param>
         /// <param name="loadSceneMode"></param>
         public void OnReset() {
-            if(notifyRectTr.parent != null) {
+            if (notifyRectTr.parent != null) {
                 notifyRectTr.SetParent(null);
             }
 

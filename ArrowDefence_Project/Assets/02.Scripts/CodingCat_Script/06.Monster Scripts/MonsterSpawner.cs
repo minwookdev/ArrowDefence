@@ -94,7 +94,7 @@
                 }
             }
             spawnTrOddNumbers = tempList.ToArray();
-            currentSpawnTime  = GetRandomInterval();
+            currentSpawnTime  = RandomEx.RangeFloat(0f, StNum.floatOne); //첫 스폰은 값을 빠르게 줌
             currentSpawnStack = GetRandomStack();
 
             //Waiting Object Pooler for Add Object in Pooler
@@ -210,11 +210,11 @@
         float GetRandomInterval() {
             switch (stageDifficulty) {
                 case STAGEDIFF.NONE: return RandomEx.RangeFloat(2f, 2.5f);
-                case STAGEDIFF.EASY: return RandomEx.RangeFloat(2.5f, 3.5f);
-                case STAGEDIFF.NOML: return RandomEx.RangeFloat(2.5f, 3f);
-                case STAGEDIFF.HARD: return RandomEx.RangeFloat(2f, 2.5f);
-                case STAGEDIFF.WARF: return RandomEx.RangeFloat(1.75f, 2.25f);
-                case STAGEDIFF.HELL: return RandomEx.RangeFloat(1.5f, 2f);
+                case STAGEDIFF.EASY: return RandomEx.RangeFloat(3.5f, 4.5f);
+                case STAGEDIFF.NOML: return RandomEx.RangeFloat(2.5f, 3.5f);
+                case STAGEDIFF.HARD: return RandomEx.RangeFloat(2f, 3.5f);
+                case STAGEDIFF.WARF: return RandomEx.RangeFloat(1.5f, 3f);
+                case STAGEDIFF.HELL: return RandomEx.RangeFloat(1f, 2.5f);
                 case STAGEDIFF.TITL: return RandomEx.RangeFloat(1f, 2f);
                 default: throw new System.NotImplementedException();
             }
@@ -223,11 +223,11 @@
         int GetRandomStack() {
             switch (stageDifficulty) {
                 case STAGEDIFF.NONE: return RandomEx.RangeInt(3, 4);
-                case STAGEDIFF.EASY: return RandomEx.RangeInt(4, 4);
-                case STAGEDIFF.NOML: return RandomEx.RangeInt(3, 4);
-                case STAGEDIFF.HARD: return RandomEx.RangeInt(2, 3);
-                case STAGEDIFF.WARF: return RandomEx.RangeInt(2, 3);
-                case STAGEDIFF.HELL: return RandomEx.RangeInt(1, 2);
+                case STAGEDIFF.EASY: return RandomEx.RangeInt(6, 9);
+                case STAGEDIFF.NOML: return RandomEx.RangeInt(4, 6);
+                case STAGEDIFF.HARD: return RandomEx.RangeInt(3, 5);
+                case STAGEDIFF.WARF: return RandomEx.RangeInt(2, 4);
+                case STAGEDIFF.HELL: return RandomEx.RangeInt(1, 3);
                 case STAGEDIFF.TITL: return int.MaxValue;
                 default: throw new System.NotImplementedException();
             }
@@ -236,12 +236,12 @@
         short[] GetGroupSpawnChances() {
             switch (stageDifficulty) {    // short{ [1. SQUAD] [2. PLATOON] [3. COMPANY] };
                 case STAGEDIFF.NONE: return new short[3] { 100, 40, 20 };
-                case STAGEDIFF.EASY: return new short[3] { 100, 30, 10 };
-                case STAGEDIFF.NOML: return new short[3] { 100, 40, 20 };
+                case STAGEDIFF.EASY: return new short[1] { 100 };  
+                case STAGEDIFF.NOML: return new short[2] { 100, 40 };
                 case STAGEDIFF.TITL:
-                case STAGEDIFF.HARD: return new short[3] { 100, 50, 30 };
-                case STAGEDIFF.WARF: return new short[3] { 100, 60, 40 };
-                case STAGEDIFF.HELL: return new short[3] { 100, 70, 50 };
+                case STAGEDIFF.HARD: return new short[3] { 100, 30, 20 };
+                case STAGEDIFF.WARF: return new short[3] { 100, 50, 30 };
+                case STAGEDIFF.HELL: return new short[3] { 100, 70, 40 };
                 default: throw new System.NotImplementedException();
             }
         }

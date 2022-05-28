@@ -64,8 +64,8 @@
 
         public System.Collections.IEnumerator AdditiveLoadUIScene() {
             float loadStartTime = UnityEngine.Time.time;
-            yield return SceneManager.LoadSceneAsync("ArrowDefence_Battle_UI", LoadSceneMode.Additive);
-            Scene targetScene = SceneManager.GetSceneByName("ArrowDefence_Battle_UI");
+            yield return SceneManager.LoadSceneAsync("ArrDef_Battle_UI", LoadSceneMode.Additive);
+            Scene targetScene = SceneManager.GetSceneByName("ArrDef_Battle_UI");
             SceneManager.SetActiveScene(targetScene);
             CatLog.Log($"UIScene LoadingTime : {UnityEngine.Time.time - loadStartTime}sec");
         }

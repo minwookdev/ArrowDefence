@@ -240,39 +240,16 @@
             }
 
             public void ToggleUpdateAutoMode() {
-                //if (toggleAutoShot.isOn == true) {
-                //    if(stageSetting == null) {
-                //        CatLog.WLog("Invalid Input."); return;
-                //    }
-                //
-                //    stageSetting.SetAutoMode(true);
-                //    CatLog.Log("Toggle AutoShot isOn True.");
-                //}
-                //else {
-                //    if(stageSetting == null) {
-                //        CatLog.WLog("Invalid Input."); return;
-                //    }
-                //
-                //    stageSetting.AutoModeSet
-                //    CatLog.Log("Toggle AutoShot isOn False.");
-                //}
-                //CatLog.Log($"{toggleAutoShot.isOn}");
-
                 if(stageSetting == null) {
                     throw new System.Exception("Stage Settings Data is Null.");
                 }
-
                 stageSetting.SetAutoMode(toggleAutoShot.isOn);
-
-                //if (toggleAutoShot.isOn == true) CatLog.Log("Toggle AutoShot isOn True");
-                //else                             CatLog.Log("Toggle AutoShot isOn False");
             }
 
             public void ToggleUpdateMutant() {
                 if(stageSetting == null) {
                     throw new System.Exception("Stage Settings Data is Null.");
                 }
-
                 stageSetting.SetMutant(toggleAutoShot.isOn);
             }
         }

@@ -34,8 +34,8 @@
 
         public void AddListnerToSkillDel(ref AD_BowController.BowSkillsDel bowskilldelegate) {
             var bowSkills = CCPlayerData.equipments.GetBowItem().GetSkillsOrNull();
-            for (int i = 0; i < bowSkills.Length; i++) {
-                if(bowSkills[i] != null) {
+            for (int i = 0; i < bowSkills.Length; i++) { //Null이 아니고, Empty Type가 아닌 경우에 Init처리
+                if (bowSkills[i] != null && bowSkills[i].Type != BOWSKILL_TYPE.SKILL_EMPTY) {
                     bowSkills[i].Init();
                     bowskilldelegate += bowSkills[i].BowSpecialSkill;
                     CatLog.Log($"Skill Slot {i} Init, Skill Name : {bowSkills[i].ToString()}");

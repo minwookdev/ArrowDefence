@@ -119,7 +119,7 @@
             if (arrow != null) {
                 foreach (var ability in arrow.AbilitiesOrNull) {
                     switch (ability.AbilityType) {
-                        case ABILITY_TYPE.DAMAGE:          BaseDamage           += ability.GetValueToSingle(); break;
+                        case ABILITY_TYPE.DAMAGE:          BaseDamage           += ability.GetValueToInt16(); break;
                         case ABILITY_TYPE.CRITICALCHANCE:  CritChance           += ability.GetValueToByte();   break;
                         case ABILITY_TYPE.CRITICALDAMAGE:  CritDamageMultiplier += ability.GetValueToSingle(); break;
                         case ABILITY_TYPE.ARMORPENETRATE:  ArmorPenetRate       += ability.GetValueToInt16();  break;
@@ -159,7 +159,7 @@
             if (arrow != null) {
                 foreach (var ability in arrow.AbilitiesOrNull) {
                     switch (ability.AbilityType) {
-                        case ABILITY_TYPE.DAMAGE:         BaseDamage           += ability.GetValueToSingle(); break;
+                        case ABILITY_TYPE.DAMAGE:         BaseDamage           += ability.GetValueToInt16(); break;
                         case ABILITY_TYPE.CRITICALCHANCE: CritChance           += ability.GetValueToByte();   break;
                         case ABILITY_TYPE.CRITICALDAMAGE: CritDamageMultiplier += ability.GetValueToSingle(); break;
                         case ABILITY_TYPE.ARMORPENETRATE: ArmorPenetRate       += ability.GetValueToInt16();  break;

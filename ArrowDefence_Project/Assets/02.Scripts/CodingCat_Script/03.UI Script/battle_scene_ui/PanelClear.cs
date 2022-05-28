@@ -28,7 +28,7 @@
 
             RectTransform rootCanvas = panelTr.root.GetComponent<RectTransform>();
             for (int i = 0; i < drops.Length; i++) {
-                existSlots[i].SetSlot(drops[i].ItemAsset, drops[i].Quantity, rootCanvas);
+                existSlots[i].SetSlot(drops[i].ItemAsset, drops[i].Quantity, rootCanvas, drops[i].IsReward);
             }
 
             gameObject.SetActive(true);
@@ -102,11 +102,11 @@
         /// Editor로 Button 또는 EventTrigger로 캐싱사용 하려면 래핑해서 사용.
         /// </summary>
         public void Resurrect() {
-            throw new System.NotImplementedException();
+            Notify.Inst.Message("Construction...");
         }
 
         public void Settings() {
-            throw new System.NotImplementedException();
+            Notify.Inst.Message("Construction...");
         }
     }
 }

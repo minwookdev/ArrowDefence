@@ -195,7 +195,7 @@ GameObject:
   - component: {fileID: 113046968082111217}
   - component: {fileID: 113046968082111216}
   m_Layer: 11
-  m_Name: Skeleton_mischief
+  m_Name: skeleton_mischief
   m_TagString: Monster
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -231,15 +231,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   monsterState: {fileID: 8114667805450639416}
   sprite: {fileID: 113046967444438011}
+  statusEntity: {fileID: 11400000, guid: e6a5e4838eb562b498d128a115f212d4, type: 2}
   MaxMonsterHP: 250
   MaxMonsterMP: 50
-  ItemDropCorrection: 5
-  GaugeIncreaseValue: 10
-  AttackDamage: 5
+  InitAttackDamage: 5
   Armorating: 0
   CriticalResist: 0
+  ItemDropCorrection: 5
+  GaugeIncreaseValue: 10
   isActiveHitColor: 0
   HitColor: {r: 1, g: 0.19339621, b: 0.19339621, a: 1}
+  isDeath: 0
 --- !u!114 &8114667805450639416
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -252,11 +254,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6f5778865860b24db9d1216f4b7128b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentState: 0
+  defaultActionSpeed: 1
+  currentActionSpeed: 1
   coll: {fileID: 113046968082111217}
   anim: {fileID: 5002192881396832249}
   rigidBody: {fileID: 113046968082111216}
   InitMoveSpeed: 0.5
-  AttackInterval: 2
+  InitAttackInterval: 2
 --- !u!95 &5002192881396832249
 Animator:
   serializedVersion: 3

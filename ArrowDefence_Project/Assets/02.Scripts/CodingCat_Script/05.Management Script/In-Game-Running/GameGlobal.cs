@@ -9,7 +9,7 @@
 
         //COMBO
         public static readonly short MaxComboCount = 9999;
-        public static readonly float ComboDuration = 1.5f;
+        public static readonly float ComboDuration = 2f;
 
         //BOW
         public static readonly float CHARGINGTIME = 1f;
@@ -370,6 +370,10 @@
         }
 
         public static void Foreach<T>(this T[] array, System.Action<T> action) {
+            if (array == null) {
+                throw new System.Exception("Array.Foreach는 Null을 허용하지 않습니다.");
+            }
+
             foreach (var item in array) {
                 action(item);
             }

@@ -15,26 +15,26 @@ MonoBehaviour:
   DropTableArray:
   - ItemAsset: {fileID: 11400000, guid: 651977433f75de345bc072a75944188e, type: 2}
     DropChance: 1500
-    QuantityRange: 070000000a000000
+    QuantityRange: 0400000007000000
   - ItemAsset: {fileID: 11400000, guid: 6727f1d234cbc2a428aa767cc63796f6, type: 2}
     DropChance: 800
-    QuantityRange: 050000000a000000
+    QuantityRange: 0500000007000000
   - ItemAsset: {fileID: 11400000, guid: aa2caf6c07b985543b396e9aace9189e, type: 2}
     DropChance: 100
     QuantityRange: 0100000003000000
   - ItemAsset: {fileID: 11400000, guid: 818c0b76c0b2795478faf92a00f6710d, type: 2}
-    DropChance: 30
+    DropChance: 40
     QuantityRange: 01000000
   - ItemAsset: {fileID: 11400000, guid: 6874779d24e7ee34eb2da329eddb9d38, type: 2}
-    DropChance: 50
+    DropChance: 60
     QuantityRange: 01000000
   - ItemAsset: {fileID: 11400000, guid: 34cd914cd38b20d48842315fd67f5505, type: 2}
-    DropChance: 50
+    DropChance: 60
     QuantityRange: 01000000
   - ItemAsset: {fileID: 11400000, guid: f7ba5598c698cd046b4948beace5c660, type: 2}
-    DropChance: 50
+    DropChance: 80
     QuantityRange: 01000000
   RewardTableArray:
   - ItemAsset: {fileID: 11400000, guid: 94d99da3690fb6442976ec1a61f554b6, type: 2}
-    DropChance: 0
+    DropChance: -1
     QuantityRange: 01000000

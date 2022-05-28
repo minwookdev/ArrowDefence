@@ -141,13 +141,14 @@ public class TitleSceneRoute : MonoBehaviour {
 
         StartCoroutine(EnableBlurCo());
 
-        //Camera Movement
-        cameraMovementCo = (isCamMovementActive) ? StartCoroutine(CameraMovement()) : null;
+        //Camera Movement >> Blur처리가 완료되고 나서 실행됨.
+        cameraMovementCo = (isCamMovementActive) ? StartCoroutine(CameraMovement(lerpDuration)) : null;
     }
 
     public void BE_REMOVE_JSON() {
         GameManager.Instance.TryDeleteSaveJson(out string message);
         Notify.Inst.Message(message);
+        ActionCat.Data.CCPlayerData.Clear();
     }
 
     #endregion
@@ -195,6 +196,7 @@ public class TitleSceneRoute : MonoBehaviour {
                 yield break;
             }
 
+            GameManager.Instance.InitPlayerData();      //Clear Exists PlayerData.
             GameManager.Instance.SupplyInitItem();      //Supply Initial Items and Slot.
             GameManager.Instance.SaveUserJsonFile();    //New UserSave Json Create.
             if (GameManager.Instance.LoadUserJsonFile(out string retryLog, out bool retryRecommend) == false) {
@@ -219,7 +221,8 @@ public class TitleSceneRoute : MonoBehaviour {
         SceneLoader.Instance.LoadScene(AD_Data.SCENE_MAIN);
     }
 
-    System.Collections.IEnumerator CameraMovement() {
+    System.Collections.IEnumerator CameraMovement(float delayTime = 0f) {
+        yield return new WaitForSeconds(delayTime);
         //
         Vector2 basicPosition = camTargetTr.position;
         float camMoveTime = 2f;

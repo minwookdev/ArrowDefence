@@ -54,6 +54,7 @@
         [SerializeField] Image itemSlotFrame = null;
         [SerializeField] Image itemSlotIcon = null;
         [SerializeField] TextMeshProUGUI itemAmountTmp = null;
+        [SerializeField] GameObject[] rewardTags = null;
 
         [Header("MONSTER SLOT PROPERTY")]
         [SerializeField] GameObject monsterSlot = null;
@@ -128,13 +129,13 @@
         /// <param name="data"></param>
         /// <param name="frame"></param>
         /// <param name="amount"></param>
-        public void Expose(Vector2 position, RectTransform targetCanvas, ItemData data, Sprite frame, string amount) {
+        public void Expose(Vector2 position, RectTransform targetCanvas, ItemData data, Sprite frame, string amount, bool isReward = false) {
             //Activate GameObject [Stay Alpha 0]
             if (gameObject.activeSelf == false) {
                 gameObject.SetActive(true);
             }
             //Enable Tooltip Coroutine Start
-            StartCoroutine(EnableItemTooltip(position, targetCanvas, data, frame, amount));
+            StartCoroutine(EnableItemTooltip(position, targetCanvas, data, frame, amount, isReward));
         }
 
         /// <summary>
@@ -146,7 +147,7 @@
         /// <param name="frame"></param>
         /// <param name="amount"></param>
         /// <returns></returns>
-        IEnumerator EnableItemTooltip(Vector2 position, RectTransform targetCanvas, ItemData data, Sprite frame, string amount) {
+        IEnumerator EnableItemTooltip(Vector2 position, RectTransform targetCanvas, ItemData data, Sprite frame, string amount, bool isOnRewardTag) {
             yield return coroutineWaitUntil; //Wait ItemTooltip Initialized..
 
             //Change parent to target Canvas if not Changed
@@ -166,6 +167,10 @@
 
             //Set temp ItemSlot Position.
             itemSlotRect.position = position;
+
+            rewardTags.Foreach((tag) => {
+                tag.SetActive(isOnRewardTag);
+            });
 
             //<Wait until Tooltip Rect Size Changed> <this line is removeable>
             yield return coroutineWaitEndFrame;

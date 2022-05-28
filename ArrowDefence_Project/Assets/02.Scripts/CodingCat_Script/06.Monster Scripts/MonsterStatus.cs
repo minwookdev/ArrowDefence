@@ -10,13 +10,14 @@
         [SerializeField] SpriteRenderer sprite;
 
         [Header("STATUS DATA")] //Scriptable Object 처리.
-        public float MaxMonsterHP = 100f;
-        public float MaxMonsterMP = 50f;
-        public float ItemDropCorrection = 5f;
-        public float GaugeIncreaseValue = 10f;
-        public float AttackDamage = 5f;
-        public short Armorating = 0;
-        public byte CriticalResist = 0;
+        [SerializeField] MonsterStatusEntity statusEntity = null;
+        [SerializeField] [ReadOnly] private float MaxMonsterHP       = 0f;
+        [SerializeField] [ReadOnly] private float MaxMonsterMP       = 0f;
+        [SerializeField] [ReadOnly] private float InitAttackDamage   = 0f;
+        [SerializeField] [ReadOnly] private short Armorating         = 0;
+        [SerializeField] [ReadOnly] private byte CriticalResist      = 0;
+        [SerializeField] [ReadOnly] private float ItemDropCorrection = 0f;
+        [SerializeField] [ReadOnly] private float GaugeIncreaseValue = 0f;
 
         [Header("SIMPLE HIT COLOR")]
         public bool isActiveHitColor = false;
@@ -25,7 +26,7 @@
         //Status value
         float currentHealthPoint = 0f;
         float currentManaPoint   = 0f;
-        float damageCount   = 0f;
+        float currentDamage      = 0f;
         [SerializeField] bool isDeath = false;
 
         //Simple Hit Color Change
@@ -38,10 +39,24 @@
             }
         }
 
+        public MonsterStatusEntity StatusEntity {
+            get => statusEntity;
+        }
+
+        private void Awake() {
+            MaxMonsterHP       = statusEntity.HealthPointAmount;
+            MaxMonsterMP       = statusEntity.ManaPointAmount;
+            InitAttackDamage   = statusEntity.DamageAmount;
+            Armorating         = statusEntity.Armorating;
+            CriticalResist     = statusEntity.CriticalResist;
+            ItemDropCorrection = statusEntity.ItemDropCorrection;
+            GaugeIncreaseValue = statusEntity.GaugeIncreaseAmount;
+        }
+
         private void Start() {
             InitComponent();
             startColor = sprite.color;
-            damageCount = AttackDamage;
+            currentDamage = InitAttackDamage;
         }
 
         private void OnEnable() {
@@ -242,7 +257,7 @@
         /// Animation Event
         /// </summary>
         public void OnDamageWall() {
-            BattleProgresser.OnDecPlayerHealth(damageCount);
+            BattleProgresser.OnDecPlayerHealth(currentDamage);
         }
 
         /// <summary>

@@ -6,9 +6,9 @@ public static class AD_Data {
     /// Scene Name String Data
     /// </summary>
     //SCENE STRING
-    public static readonly string SCENE_TITLE         = "ArrowDefence_TItle";
-    public static readonly string SCENE_MAIN          = "ArrowDefence_Main";
-    public static readonly string SCENE_LOADING       = "ArrowDefence_Loading";
+    public static readonly string SCENE_TITLE         = "ArrDef_Title";
+    public static readonly string SCENE_MAIN          = "ArrDef_Lobby";
+    public static readonly string SCENE_LOADING       = "ArrDef_Loading";
 
     //BATTLE SCENE STRING 
     public static readonly string SCENE_BATTLE_FOREST_EASY    = "Forest_Secluded_Easy";
@@ -48,6 +48,7 @@ public static class AD_Data {
     /// [MainArrowPoolTag] + [HitEffectPoolTag] + [Counts]
     /// </summary>
     public static readonly string POOLTAG_HITEFFECT = "_HitEffect_";
+    public static readonly string POOLTAG_HITSKILL_EFFECT = "_HitSkillEff_";
 
     /// <summary>
     /// [ArrowPoolTag] + [ProjectilePoolTag] + [Counts]

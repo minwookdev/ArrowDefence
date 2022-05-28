@@ -22,6 +22,12 @@
         Coroutine playerCo  = null;
         WaitUntil waitUntil = null;
 
+        [ContextMenu("LoadSortingOrderInfo")]
+        private void LoadSortingOrderInfo() {
+            sortingLayerName = particleRenderer.sortingLayerName;
+            sortingOrder     = particleRenderer.sortingOrder;
+        }
+
         void Awake() {
             waitUntil = new WaitUntil(() => particleSys.isStopped == true);
         }
@@ -107,13 +113,24 @@
         [CustomEditor(typeof(ACEffector2D))]
         class ACEffector2DEditor : Editor {
             ACEffector2D effector;
+            GUIStyle titleStyle = null;
+
             private void OnEnable() {
                 effector = target as ACEffector2D;
+
+                titleStyle = new GUIStyle();
+                titleStyle.fontSize = 18;
+                titleStyle.fontStyle = FontStyle.BoldAndItalic;
+                titleStyle.normal.textColor = new Color(1f, 1f, 1f);
             }
 
             public override void OnInspectorGUI() {
                 base.OnInspectorGUI();
-                GUILayout.Space(10f);
+                //GUILayout.Space(10f);
+
+                GUILayout.BeginVertical("GroupBox");
+                GUILayout.Label("Action Effector 2D Options", titleStyle);
+                GUILayout.Space(5f);
                 if(GUILayout.Button("Apply Effect Property")) {
                     if(effector == null) {
                         CatLog.ELog("ACEffector2D is Not Assignment.");
@@ -186,6 +203,7 @@
                         CatLog.ELog("ParticleSystem is Not Assignment.");
                     }
                 }
+                GUILayout.EndVertical();
             }
         }
 #endif

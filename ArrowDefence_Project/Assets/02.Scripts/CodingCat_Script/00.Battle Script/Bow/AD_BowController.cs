@@ -11,7 +11,7 @@
         [SerializeField] BowSprite bowSprite;
         [SerializeField] AD_BowAbility ability;
         [SerializeField] Transform bowTr = null;
-        private Touch screenTouch;
+        private Touch currentTouch;
         public Camera MainCam = null;
 
         [Header("CONTROLLER")]
@@ -21,7 +21,7 @@
         [Range(1f, 20f)] public float SmoothRotateSpeed = 12f;
         [Range(1f, 3f)]  public float ArrowPullingSpeed = 1f;
 
-        private int pointerId = 0;
+        private int touchIndex = 0;
         private bool isBowPulling   = false;     //활이 일정거리 이상 당겨져서 회전할 수 있는 상태
         private bool isBowPullBegan = false;     //Bow Pull State Variables
         private bool isTouched      = false;
@@ -141,7 +141,7 @@
             //============================================================== << CALLBACK GAMEOVER >> ==============================================================
             //게임오버 이벤트에 Burn Effect 추가. Resurrection 구현 시 추가적인 로직 구현 필요.
             GameManager.Instance.AddListnerGameOver(() => {
-                //stop auto-mode if the Running
+                //stop auto-mode if the Running, Stop Touch State
                 OnAutoModeStop();
                 //Active Burn Fade Effect.
                 bowSprite.Effect(BOWEFFECTYPE.FADE, false);
@@ -153,7 +153,9 @@
                 }
             });
             //================================================================ << CALLBACK CLEAR >> ===============================================================
-            GameManager.Instance.AddListnerEndBattle(OnAutoModeStop);
+            GameManager.Instance.AddListnerEndBattle(() => {
+                OnAutoModeStop();
+            });
             //================================================================ << CALLBACK PAUSE >> ===============================================================
             GameManager.Instance.AddListnerPause(() => {
                 if (isAutoRunning) {
@@ -176,7 +178,7 @@
             arrSwapWait = new WaitUntil(() => autoState == AUTOSTATE.WAIT || autoState == AUTOSTATE.FIND || autoState == AUTOSTATE.TRAC);
 
             //Hiding
-            if(pointerId == 0 || isTouched == false) {
+            if(touchIndex == 0 || isTouched == false) {
 
             }
         }
@@ -206,67 +208,45 @@
             if (isBowPullBegan == true) {         //Click Moved
                 BowMoved(Input.mousePosition);
             }
-            //===================================================================================================================
 #elif UNITY_ANDROID
+            //===================================================================================================================
             //==============================================<< MOBILE CONTROLLER >>==============================================
             //Touch Update : Only Mobile
-            if (Input.touchCount != 0) {
-                //Get Value On Screen Touch
-                //screenTouch = Input.GetTouch(0);
-
-                //New Touch Logic 
-                if(isTouched == false) { //Find Touch
+            //New Controller
+            if (!isTouched) {
+                if (Input.touchCount > 0 && GameManager.Instance.IsBattleState) {
                     for (int i = 0; i < Input.touchCount; i++) {
-                        if(EventSystem.current.IsPointerOverGameObject(i) == false) {
-                            screenTouch = Input.GetTouch(i);
-                            isTouched   = true; break;
+                        if (EventSystem.current.IsPointerOverGameObject(Input.GetTouch(i).fingerId) == false) {
+                            touchIndex = i;    // Finded Correct Touch Id
+                            isTouched  = true;  
+                            this.BowBegan(Input.GetTouch(touchIndex).position); //Touch ID를 찾음과 동시에 Bow Pull Bega 들어감
+                            break;
                         }
                     }
                 }
-
-                if(screenTouch.phase == TouchPhase.Began) {       //Touch Began       
-                    BowBegan(screenTouch.position); 
+            }
+            else {
+                currentTouch = Input.GetTouch(touchIndex);
+                //switch (currentTouch.phase) {
+                //    case TouchPhase.Began:      this.BowBegan(currentTouch.position);                            break;
+                //    case TouchPhase.Ended:      this.BowReleased(currentTouch.position); this.isTouched = false; break;
+                //    case TouchPhase.Moved:      break;
+                //    case TouchPhase.Stationary: break;
+                //    case TouchPhase.Canceled:   break;
+                //    default: break;
+                //}
+                if (currentTouch.phase == TouchPhase.Ended) {
+                    this.BowReleased(currentTouch.position);
+                    this.isTouched = false;
                 }
-                else if (screenTouch.phase == TouchPhase.Ended) { //Touch Ended
-                    BowReleased(screenTouch.position); isTouched = false;
-                }
-                if(isBowPullBegan == true) {                      //Touch Moved
-                    BowMoved(screenTouch.position);
+                if (isBowPullBegan) {
+                    this.BowMoved(currentTouch.position);
                 }
             }
             //===================================================================================================================
 #endif
-
-/**#if UNITY_ANDROID //Original Controller Update
-            if (Input.touchCount != 0) {
-                //Get Value On Screen Touch -> Area Designation Func Add
-                screenTouch = Input.GetTouch(0);
-
-                if (screenTouch.phase == TouchPhase.Began)        
-                    BowBegan(screenTouch.position);        //Touch Began
-                else if (screenTouch.phase == TouchPhase.Ended)
-                    BowReleased(screenTouch.position);     //Touch Ended
-
-                if (isBowPullBegan)
-                    BowMoved(screenTouch.position);        //Touch Moved
-            }
-#endif
-#if UNITY_EDITOR
-            if (Input.GetMouseButtonDown(0)) {      //Click Began
-                this.BowBegan(Input.mousePosition);
-            }
-            else if (Input.GetMouseButtonUp(0)) {   //Click Ended
-                this.BowReleased(Input.mousePosition);
-            }
-
-            if (isBowPullBegan) {                   //Click Moved
-                this.BowMoved(Input.mousePosition);
-            }
-#endif **/
-
             //================================================<< ARROW POSITION UPDATE >>============================================
             UpdateArrPos();
-            //=======================================================================================================================
             //=======================================================================================================================
         }
 
@@ -559,8 +539,10 @@
                 if (arrowTr != null) {
                     arrowTr.position = ClampPointTop.position;
                 }
-                    
-                isBowPullBegan = false; isBowPulling = false;
+
+                isTouched      = false;
+                isBowPullBegan = false; 
+                isBowPulling   = false;
                 DrawTouchPos.Instance.ReleaseTouchLine();
             }
         }

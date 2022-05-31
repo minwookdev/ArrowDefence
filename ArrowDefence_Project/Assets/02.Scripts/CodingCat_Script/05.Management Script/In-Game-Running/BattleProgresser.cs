@@ -265,6 +265,9 @@
                 GameManager.Instance.SetBowPullingStop(true); // Disable Bow Pullable
                 ComboClear();                                 // Clear Current Combo Count
             });
+            GameManager.Instance.AddListnerPause(() => {
+                GameManager.Instance.SetBowPullingStop(true);  // Disable Bow Pullable
+            });
 
             SetGameState(GAMESTATE.STATE_BEFOREBATTLE);       // Set Game State : Before Battle
             //======================================================================================================================
@@ -282,14 +285,17 @@
                 CatLog.Log($"isOnAutoMode: {setting.isOnAutoMode}, UseableAutoMode: {info.IsUseableAuto}");
                 if(setting.isOnAutoMode && info.IsUseableAuto) {
                     autoButton.Init(GameManager.Instance.AutoSwitch, IsQuickAutoButton);
+                    GameManager.Instance.AddListnerGameOver(autoButton.ForceStopAuto);
+                    GameManager.Instance.AddListnerEndBattle(autoButton.ForceStopAuto);
                 }
             }
             else if (IsQuickAutoButton == true) {
 #if UNITY_EDITOR
                 autoButton.Init(GameManager.Instance.AutoSwitch, IsQuickAutoButton);
+                GameManager.Instance.AddListnerGameOver(autoButton.ForceStopAuto);
+                GameManager.Instance.AddListnerEndBattle(autoButton.ForceStopAuto);
 #endif
             }
-
             //======================================================================================================================
 
             //================================================ << BATTLE READY >> ==================================================

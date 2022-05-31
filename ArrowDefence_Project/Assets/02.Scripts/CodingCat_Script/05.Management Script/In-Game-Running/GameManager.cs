@@ -40,6 +40,12 @@
             }
         }
 
+        public bool IsBattleState {
+            get {
+                return (this.GameState == GAMESTATE.STATE_INBATTLE || this.GameState == GAMESTATE.STATE_BOSSBATTLE);
+            }
+        }
+
         public void Initialize() {
             if (isManagerInitialized == true) return;
 #if UNITY_EDITOR

@@ -31,9 +31,25 @@ MonoBehaviour:
     assemblyNames:
     - Assembly-CSharp-firstpass
     - Assembly-CSharp
+    - Google.Play.Games
+    - Cinemachine
+    - Google.Play.AssetDelivery
+    - Google.Play.Common
+    - Google.Play.AppUpdate
+    - Google.Play.Core
+    - Google.Play.Integrity
+    - Hierarchy2.Runtime
+    - Google.Play.Review
+    - Google.Play.Instant
+    - Google.Android.AppBundle.Editor
+    - GoogleMobileAds.Editor
+    - Hierarchy2.Editor
+    - Google.Play.Instant.Editor
+    - Google.Play.Games.Editor
+    - Google.Play.Billing.Editor
     showAdvancedSettings: 1
   addMgrToSceneAutomatically: 0
-  autoUpdateReferences: 0
+  autoUpdateReferences: 1
   addAllPrefabsToManager: 1
   logDebugInfo: 0
   logWarnings: 1

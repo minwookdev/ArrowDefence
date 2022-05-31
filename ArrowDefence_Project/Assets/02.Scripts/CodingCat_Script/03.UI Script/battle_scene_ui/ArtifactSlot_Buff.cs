@@ -14,6 +14,12 @@
         [SerializeField] [ReadOnly] float currentCoolDownTime = 0f;
         [SerializeField] [ReadOnly] float effectDuration = 0f;
 
+        [Header("DOT")]
+        [SerializeField] RectTransform dotRectTr = null;
+        [SerializeField] RectTransform rotateTargetRectTr = null;
+        [SerializeField] [RangeEx(0f, 30f, 2f)] float rotateSpeed = 12f;
+        Coroutine dotRotationCo = null;
+
         /// <summary>
         /// GameState가 PauseMode에 들어갔을 때, 버프가 종료되는 것을 방지. Duration동안 대기. (임시방편)
         /// </summary>
@@ -41,6 +47,7 @@
             //게임종료 및 게임오버 시 효과 발동 중지처리
             GameManager.Instance.AddListnerEndBattle(ForceQuitEffect);
             GameManager.Instance.AddListnerGameOver(ForceQuitEffect);
+            dotRectTr.gameObject.SetActive(false);
 
             //Assignment new Wait Pause Ended
             waitPauseEnd = new WaitUntil(() => GameManager.Instance.GameState != GAMESTATE.STATE_PAUSE);
@@ -61,6 +68,11 @@
                 isPreparedActive = false;
                 coolDownTmp.text = "";
                 coolDownMaskImage.fillAmount = 1f;
+
+                //도트 회전 코루틴 강제종료
+                if (dotRotationCo != null) {
+                    StopCoroutine(dotRotationCo);
+                }
             }
         }
 
@@ -71,6 +83,7 @@
             var duration = artifactEffect.GetDuration(out int activatingCount);
             //effectDuration = duration;
             currentCoolDownTime = maxCoolDown;
+            dotRotationCo = StartCoroutine(DotRotation());
 
             while (activatingCount > 0) {
                 artifactEffect.OnActive();
@@ -124,6 +137,16 @@
             else {
                 Notify.Inst.Message("Artifact Not Prepared !");
             }
+        }
+
+        System.Collections.IEnumerator DotRotation() {
+            dotRectTr.gameObject.SetActive(true);
+            while (isEffectActivation) {
+                dotRectTr.RotateAround(rotateTargetRectTr.position, Vector3.back, rotateSpeed);
+                yield return waitPauseEnd;
+            }
+            //Hide Dot Rect GameObject
+            dotRectTr.gameObject.SetActive(false);
         }
     }
 }

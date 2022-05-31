@@ -3,40 +3,52 @@
     "m_SelectedPackage": {
         "deviceId": "R3CMC06BR0T",
         "name": "com.ActionCat.ArrowDefence",
-        "processId": 26911,
-        "exited": true
+        "processId": 8860,
+        "exited": false
     },
     "m_SelectedPriority": 0,
     "m_KnownPackagesForSerialization": [
         {
             "deviceId": "R3CMC06BR0T",
-            "name": "com.ActionCat.ArrowDefence",
-            "processId": 26911,
-            "exited": true
-        },
-        {
-            "deviceId": "R3CMC06BR0T",
             "name": "com.sec.android.app.launcher",
             "processId": 2000,
+            "exited": false
+        },
+        {
+            "deviceId": "R3CMC06BR0T",
+            "name": "com.ActionCat.ArrowDefence",
+            "processId": 30656,
             "exited": true
         },
         {
             "deviceId": "R3CMC06BR0T",
             "name": "com.ActionCat.ArrowDefence",
-            "processId": 19308,
+            "processId": 31136,
             "exited": true
         },
         {
             "deviceId": "R3CMC06BR0T",
             "name": "com.ActionCat.ArrowDefence",
-            "processId": 10117,
+            "processId": 31719,
             "exited": true
         },
         {
             "deviceId": "R3CMC06BR0T",
             "name": "com.ActionCat.ArrowDefence",
-            "processId": 12376,
+            "processId": 6903,
             "exited": true
+        },
+        {
+            "deviceId": "R3CMC06BR0T",
+            "name": "com.ActionCat.ArrowDefence",
+            "processId": 7743,
+            "exited": true
+        },
+        {
+            "deviceId": "R3CMC06BR0T",
+            "name": "com.ActionCat.ArrowDefence",
+            "processId": 8860,
+            "exited": false
         }
     ],
     "m_Tags": {

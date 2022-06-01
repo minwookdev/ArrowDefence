@@ -78,11 +78,9 @@
                 notifyCanvasGroup = GetComponent<CanvasGroup>();
             } 
 
-            //Change Parent
+            //Set UI Canvas Parent
             notifyRectTr.SetParent(parentCanvas);
             notifyRectTr.RectResizer(Vector2.zero, Vector2.zero, Vector3.one);
-
-            //notifyText.AlphaZero();
 
             //assignment new Sequence
             notifySeq = DOTween.Sequence()
@@ -113,15 +111,6 @@
             //notifyText.rectTransform.ForceUpdateRectTransforms();
 
             //Set BackGround SizeDelta
-            //float notifyTextRectHeightSize = notifyRectTr.sizeDelta.y;
-            //CatLog.Log($"Notify Text String Size Delta Height: {notifyText.rectTransform.rect.height}");
-            //CatLog.Log($"BackGround Rect Size Delta Height: {notifyBackRectTr.rect.height}");
-            //notifyBackRectTr.sizeDelta = new Vector2(notifyBackRectTr.sizeDelta.x, notifyTextRectHeightSize);
-            //notifyBackRectTr.rect.height = notifyRectTr.rect.height + (defaultMargins * 2f);
-            //Rect newBackGroundRect = notifyBackRectTr.rect;
-            //newBackGroundRect.height = notifyText.rectTransform.rect.height + (defaultMargins * 2f);
-            //notifyBackRectTr.rect = newBackGroundRect;
-
             notifyBackRectTr.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, calcHeight);
             imageNotifyBack.color = (isDrawBG) ? backGroundDefaultColor : backGroundHideColor;
 
@@ -138,8 +127,6 @@
                 throw new System.Exception("Notify Component is Not Assignment !");
             }
             SceneLoader.SceneChangeCallback += OnReset;
-            //SceneManager.sceneLoaded += OnReset;
-            //SceneManager.activeSceneChanged
         }
 
         /// <summary>

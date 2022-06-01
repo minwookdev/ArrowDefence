@@ -184,6 +184,7 @@
     }
 
     public class GlobalAbility {                                 // [Default Global Ability Values]
+        public float MaxPlayerHealth { private set; get; }       = 100f;
         public float IncreaseDropRate { private set; get; }      = .0f;
         public float ChargedShotMultiplier { private set; get; } = 1.25f;
         public float MinDamagePer { private set; get; }          = 0.9f; // 90 % ~

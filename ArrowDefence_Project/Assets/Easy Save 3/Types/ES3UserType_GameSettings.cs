@@ -4,7 +4,7 @@ using UnityEngine;
 namespace ES3Types
 {
 	[UnityEngine.Scripting.Preserve]
-	[ES3PropertiesAttribute("stageSettings", "<PullingType>k__BackingField")]
+	[ES3PropertiesAttribute("stageSettings", "bgmSoundValue", "seSoundValue", "<PullingType>k__BackingField")]
 	public class ES3UserType_GameSettings : ES3ObjectType
 	{
 		public static ES3Type Instance = null;
@@ -17,6 +17,8 @@ namespace ES3Types
 			var instance = (ActionCat.Data.GameSettings)obj;
 			
 			writer.WritePrivateField("stageSettings", instance);
+			writer.WritePrivateField("bgmSoundValue", instance);
+			writer.WritePrivateField("seSoundValue", instance);
 			writer.WritePrivateField("<PullingType>k__BackingField", instance);
 		}
 
@@ -29,10 +31,16 @@ namespace ES3Types
 				{
 					
 					case "stageSettings":
-					reader.SetPrivateField("stageSettings", reader.Read<System.Collections.Generic.Dictionary<System.String, ActionCat.Data.StageData.StageSetting>>(), instance);
+					instance = (ActionCat.Data.GameSettings)reader.SetPrivateField("stageSettings", reader.Read<System.Collections.Generic.Dictionary<System.String, ActionCat.Data.StageData.StageSetting>>(), instance);
+					break;
+					case "bgmSoundValue":
+					instance = (ActionCat.Data.GameSettings)reader.SetPrivateField("bgmSoundValue", reader.Read<System.Single>(), instance);
+					break;
+					case "seSoundValue":
+					instance = (ActionCat.Data.GameSettings)reader.SetPrivateField("seSoundValue", reader.Read<System.Single>(), instance);
 					break;
 					case "<PullingType>k__BackingField":
-					reader.SetPrivateField("<PullingType>k__BackingField", reader.Read<ActionCat.PULLINGTYPE>(), instance);
+					instance = (ActionCat.Data.GameSettings)reader.SetPrivateField("<PullingType>k__BackingField", reader.Read<ActionCat.PULLINGTYPE>(), instance);
 					break;
 					default:
 						reader.Skip();

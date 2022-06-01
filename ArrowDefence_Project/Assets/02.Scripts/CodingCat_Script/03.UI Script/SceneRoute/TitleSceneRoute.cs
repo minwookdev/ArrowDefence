@@ -15,6 +15,7 @@ public class TitleSceneRoute : MonoBehaviour {
     [SerializeField] TextWritter writter = null;
     [SerializeField] CreateFilePanel createFilePanel = null;
     [SerializeField] ErrorPanel errorPanel = null;
+    [SerializeField] SettingsPanel settingsPanel = null;
 
     [Header("DepthOfField")]
     [SerializeField] PostProcessVolume titleVolume = null;
@@ -29,12 +30,13 @@ public class TitleSceneRoute : MonoBehaviour {
     [Header("TITLE ELEMENTE")]
     [SerializeField] RectTransform titleRect = null;
     [SerializeField] CanvasGroup startButtonCanvasGroup = null;
-    [SerializeField] Button[] extraButtons = null;
+    [SerializeField] Image[] imagesButton = null;
     Vector3 titleTextScale = Vector3.zero;
+    Color tempColor = Color.clear;
 
     [Header("CUTOUT")]
     [SerializeField] RectTransform cutoutRect = null;
-    Vector2 cutoutSizeDelta = new Vector2(3000f, 3000f);
+    Vector2 cutoutSizeDelta = new Vector2(2000f, 2000f);
 
     [Header("CAMERA MOVEMENT")]
     [SerializeField] Transform camTargetTr = null;
@@ -50,43 +52,35 @@ public class TitleSceneRoute : MonoBehaviour {
         GameManager.Instance.Initialize();
         AdsManager.Instance.InitRuntimeMgr();
 
+        //Hide Title Text 
         titleTextScale = titleRect.localScale;
         titleRect.localScale = Vector3.zero;
+
+        //Hide Start Button
         startButtonCanvasGroup.alpha = 0f;
         startButtonCanvasGroup.blocksRaycasts = false;
-        Color tempColor = Color.clear;  //Clear All Buttons Color
-        foreach (var button in extraButtons) {
-            var image = button.GetComponent<Image>();
-            tempColor = image.color;
-            tempColor.a = 0f;
-            image.color = tempColor;
+
+        //Hide All Title Buttons
+        foreach (var image in imagesButton) {
+            this.tempColor = image.color;
+            this.tempColor.a = 0f;
+            image.color = this.tempColor;
             image.raycastTarget = false;
         }
 
-        //Set Material
-        //cutoutImageMaterial = Instantiate<Material>(new Material(cutoutImage.material));
-        //cutoutImageMaterial.SetInt("_StencilComp", (int)CompareFunction.NotEqual);
-        //cutoutImage.material = cutoutImageMaterial;
-
-
-        //CutOut 활성화는 Awake에서 해줌. 깜빡보일 수 있어서.
-        //cutoutRect.gameObject.SetActive(true);
-        //cutoutImage.enabled = false;
-        //cutoutImage.enabled = true;
+        //Fill Cutout Rect - Hide Screen
         cutoutRect.sizeDelta = Vector2.zero;
     }
 
     private void Start() {
+        //Start Monster Spawn
         GameManager.Instance.ChangeGameState(GAMESTATE.STATE_INBATTLE);
-        //var cutoutMaskComponent = cutoutRect.GetComponentInChildren<CutoutMaskUI>();
-        //cutoutMaskComponent.enabled = false; //구현된 CutoutMaskUI Script가 Scene이 변경되면, 다시 작동하지 않는 문제가 있어서 임시방편으로 작성.
-        //cutoutMaskComponent.enabled = true;
 
+        //Open Screen
         cutoutRect.DOSizeDelta(cutoutSizeDelta, 1f).From(Vector2.zero).SetDelay(.5f);
-        Invoke(nameof(BE_SKIP), maxWaitTime);
+        Invoke(nameof(BE_SKIP), maxWaitTime); //Invoke Method
 
-        //Init UI Element Parent -> 아무 UI요소의 root Parent로 가져오면된다, 따로 캐싱하지 않음.
-        CatLog.Log($"Error Panel Root Parent Name: {errorPanel.transform.root.GetComponent<RectTransform>().name}");
+        //에러패널 부모 가져와서 쓰고있는데, 아무 UI 패널의 부모가져와서 박아주면된다
         Notify.Inst.Init(errorPanel.transform.root.GetComponent<RectTransform>());
     }
 
@@ -98,8 +92,8 @@ public class TitleSceneRoute : MonoBehaviour {
 
     void RestoreButtons() {
         startButtonCanvasGroup.DOFade(StNum.floatOne, 0.7f).SetLoops(-1, LoopType.Yoyo).OnStart(() => startButtonCanvasGroup.blocksRaycasts = true);
-        foreach (var button in extraButtons) {
-            button.GetComponent<Image>().raycastTarget = true;
+        foreach (var image in imagesButton) {
+            image.raycastTarget = true;
         }
     }
 
@@ -107,8 +101,8 @@ public class TitleSceneRoute : MonoBehaviour {
         startButtonCanvasGroup.DOKill();
         startButtonCanvasGroup.alpha = 0f;
         startButtonCanvasGroup.blocksRaycasts = false;
-        foreach (var button in extraButtons) {
-            button.GetComponent<Image>().raycastTarget = false;
+        foreach (var image in imagesButton) {
+            image.raycastTarget = false;
         }
     }
 
@@ -130,9 +124,8 @@ public class TitleSceneRoute : MonoBehaviour {
         titleSeq = DOTween.Sequence().Append(titleRect.DOScale(titleTextScale, StNum.floatOne).From(Vector3.zero).SetEase(Ease.OutExpo))
                                      .Append(titleRect.DOShakeScale(0.7f).SetEase(Ease.OutQuad))
                                      .OnStart(() => {
-                                         foreach (var button in extraButtons) {
-                                             var buttonImage = button.GetComponent<Image>();
-                                             buttonImage.DOFade(StNum.floatOne, 0.3f).SetDelay(tweenDelay).OnStart(() => buttonImage.raycastTarget = true);
+                                         foreach (var image in imagesButton) {
+                                             image.DOFade(StNum.floatOne, 0.3f).SetDelay(tweenDelay).OnStart(() => image.raycastTarget = true);
                                          }
                                      })
                                      .SetDelay(tweenDelay);
@@ -150,6 +143,8 @@ public class TitleSceneRoute : MonoBehaviour {
         Notify.Inst.Message(message);
         ActionCat.Data.CCPlayerData.Clear();
     }
+
+    public void BE_OPEN_SETTINGS() => settingsPanel.OpenPanel();
 
     #endregion
 

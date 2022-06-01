@@ -143,16 +143,6 @@
 
         }
 
-        public void Button_PullingTypeChange() {
-            switch (CCPlayerData.settings.PullingType) {
-                case PULLINGTYPE.AROUND_BOW_TOUCH: CCPlayerData.settings.SetPullingType(PULLINGTYPE.FREE_TOUCH);       break;
-                case PULLINGTYPE.FREE_TOUCH:       CCPlayerData.settings.SetPullingType(PULLINGTYPE.AROUND_BOW_TOUCH); break;
-                default: break;
-            }
-
-            Notify.Inst.Message($"Pulling Type: {CCPlayerData.settings.PullingType.ToString()}");
-        }
-
         public void BE_UNLOCK() {
             CCPlayerData.Unlock();
             Notify.Inst.Message("Unlock User's Function.");

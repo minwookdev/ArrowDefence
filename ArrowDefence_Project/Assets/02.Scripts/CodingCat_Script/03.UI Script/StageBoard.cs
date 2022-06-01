@@ -48,6 +48,8 @@
 #endif
         }
 
+        private void OnDisable() => Data.CCPlayerData.SaveSettingsJson();
+
         void UpdateSettingsPanel(bool isOpenPanel) {
             //1. Settings Panel이 열렸는지 체크
             //2-1. 열렸으면 PlayerData.GameSettings에서 키가있는지 확인

@@ -13,7 +13,6 @@
         private float fixedDeltaTime;
         private float totalDropChances;
         private float restoreTimeScale;
-        //private bool isLoadedUserData     = false;
         private bool isManagerInitialized = false;
         private ItemDropList.DropTable[] dropListArray;
 
@@ -59,16 +58,11 @@
             IsDevMode    = false;
 #endif
             fixedDeltaTime = Time.fixedDeltaTime;
-            CCPlayerData.LoadSettingsJson(out string log);
-            CatLog.WLog(log);
+            LoadSettings();
             isManagerInitialized = true;
         }
 
-        public void OnDestroy() {
-            CCPlayerData.SaveSettingsJson();
-        }
-
-        #region SCREEN
+#region SCREEN
 
         /// <summary>
         /// Rect Set of Target Camera with a  9 : 16 Portrait Resolition
@@ -91,6 +85,14 @@
                 rect.x = (1f - scaleWidth) / 2f;
             }
             targetCam.rect = rect;
+        }
+
+#endregion
+
+#region SETTINGS
+
+        public void SetControlType(bool isChangeType) {
+            CCPlayerData.settings.SetPullType(isChangeType);
         }
 
 #endregion
@@ -524,9 +526,19 @@
             CCPlayerData.SupplyInitItem();
         }
 
-        #endregion
+        /// <summary>
+        /// Save Settings는 Data타고 CCPlayerData에 직접 요청하기 (rs. 불안정
+        /// </summary>
+        private void SaveSettings() => CCPlayerData.SaveSettingsJson();
 
-        #region STATE_EVENT_HANDLER
+        public void LoadSettings() {
+            CCPlayerData.LoadSettingsJson(out string log);
+            CatLog.WLog(log);
+        }
+
+#endregion
+
+#region STATE_EVENT_HANDLER
 
         /// <summary>
         /// Change Current Game State

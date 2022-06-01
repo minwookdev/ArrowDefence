@@ -129,7 +129,7 @@
         [Header("PLAYER")]
         public Transform ParentTransform;
         public Transform BowInitPosition;
-        public float MaxPlayerHealth = 200f;
+        [SerializeField] [ReadOnly] float MaxPlayerHealth = 200f;
         BattleData battleData;
         float currentPlayerHealth;
         float tempPlayerHealth = 0f;
@@ -234,6 +234,7 @@
             OnMonsterDeathByAttack += IncreaseKillCount; //Increase Killed Count
 
             //Add Numerical Events to Delegate < 게임 진행 수치관련 이벤트 >
+            MaxPlayerHealth     = GameManager.Instance.GetGoAbility().MaxPlayerHealth;
             currentPlayerHealth = MaxPlayerHealth; // <- 임시 플레이어 체력 할당 <플레이어 데이터에서 받아올 것>
             OnDecPlayerHealth  += DecreaseHealthGauge;
             OnIncPlayerHealth  += IncreaseHealthGauge;

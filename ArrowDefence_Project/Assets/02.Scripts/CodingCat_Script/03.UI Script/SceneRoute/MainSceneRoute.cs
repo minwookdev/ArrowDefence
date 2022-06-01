@@ -247,11 +247,10 @@ public class MainSceneRoute : MonoBehaviour {
 
         ImgFade.DOFade(0f, FadeTime)
                .OnStart(() => ImgFade.blocksRaycasts = false)
-               .OnComplete(() => 
-               {   ImgFade.blocksRaycasts = true;
+               .OnComplete(() => {  
+                   ImgFade.blocksRaycasts = true;
                    ImgFade.gameObject.SetActive(false);
                });
-
     }
 
     //======================================================================================================================================

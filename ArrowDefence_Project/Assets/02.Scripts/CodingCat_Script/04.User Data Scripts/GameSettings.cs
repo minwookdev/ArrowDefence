@@ -5,11 +5,32 @@
     public class GameSettings {
         //FIELD
         Dictionary<string, StageSetting> stageSettings = new Dictionary<string, StageSetting>();
+        private float bgmSoundValue = 1.0f;
+        private float seSoundValue  = 1.0f;
+        public PULLINGTYPE PullingType { 
+            get; private set; 
+        } = PULLINGTYPE.FREE_TOUCH;
 
         //PROPERTY
-        public PULLINGTYPE PullingType { get; private set; } = PULLINGTYPE.FREE_TOUCH;
-
-        public void SetPullingType(PULLINGTYPE pullType) => PullingType = pullType;
+        public bool GetPullTypeToBoolean {
+            get {
+                return (PullingType == PULLINGTYPE.FREE_TOUCH) ? true : false;
+            }
+        }
+        public float BgmSoundValue {
+            get => bgmSoundValue;
+            set {
+                bgmSoundValue = (value >= 0f && value <= 1f) ? value : bgmSoundValue;
+                CatLog.Log($"Current Bgm Sound Value: {bgmSoundValue}");
+            }
+        }
+        public float SeSoundValue {
+            get => seSoundValue;
+            set {
+                seSoundValue = (value >= 0f && value <= 1f) ? value : seSoundValue;
+                CatLog.Log($"Current Se Sound Value: {seSoundValue}");
+            }
+        }
 
         public StageSetting GetStageSetting(string key) {
             if(stageSettings.ContainsKey(key)) {
@@ -25,11 +46,22 @@
             return stageSettings.TryGetValue(key, out setting);
         }
 
+        /// <summary>
+        /// Bow Controller Type Change
+        /// </summary>
+        /// <param name="isChangeType"> false = Around Bow, true = Free Touch </param>
+        public void SetPullType(bool isChangeType) {
+            PullingType = (isChangeType) ? PULLINGTYPE.FREE_TOUCH : PULLINGTYPE.AROUND_BOW_TOUCH;
+            CatLog.Log($"Currnet Control Type: {PullingType}");
+        }
+
         public static GameSettings defaultSettings {
             get {
                 return new GameSettings() {
                     stageSettings = new Dictionary<string, StageSetting>(),
-                    PullingType   = PULLINGTYPE.FREE_TOUCH
+                    PullingType = PULLINGTYPE.FREE_TOUCH,
+                    bgmSoundValue = 1.0f,
+                    seSoundValue  = 1.0f
                 };
             }
         }

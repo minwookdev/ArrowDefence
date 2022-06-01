@@ -692,7 +692,7 @@ MonoBehaviour:
   effectDuration: 0
   dotRectTr: {fileID: 6407487478308283578}
   rotateTargetRectTr: {fileID: 944778046}
-  rotateSpeed: 12
+  rotateSpeed: 6
 --- !u!222 &8603381215424117480
 CanvasRenderer:
   m_ObjectHideFlags: 0

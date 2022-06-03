@@ -4,7 +4,7 @@
     public class Item_SpArr : Item_Equipment {
         //SAVED VALUES
         private GameObject spArrowPref = null;
-        private ASInfo[] skillInfos    = null;
+        private ASInfo[] skillInfos    = null;      //Skill이 존재하지 않더라도 Length = 0인 상태
         private SpArrCondition condition = null;
         private float specialArrDefaultSpeed = 12f;
         private float additionalSpeed = 0f;
@@ -51,10 +51,8 @@
             else {
                 throw new System.Exception("Not Added Component in Arrow Prefab");
             }
-
-            if (skillInfos.Length > 0) tempSkillSet = new ArrowSkillSet(skillInfos, AD_Data.POOLTAG_SPECIAL_ARROW, ability);
-            else                       tempSkillSet = null;
-
+            //Init New SpecialArrow SkillSet.
+            tempSkillSet = ArrowSkillSet.GetSpecialSkillSet(skillInfos, AD_Data.POOLTAG_SPECIAL_ARROW, ability);
             CCPooler.AddPoolList(AD_Data.POOLTAG_SPECIAL_ARROW, poolQuatity, spArrowPref, false);
         }
 

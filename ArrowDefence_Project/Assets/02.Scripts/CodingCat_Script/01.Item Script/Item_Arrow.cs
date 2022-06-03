@@ -23,6 +23,15 @@
                     return null;
             }
         }
+        public bool TryGetSkillSet(out ArrowSkillSet set) {
+            if (this.arrowSkillSets == null) {
+                set = null;
+                return false;
+            }
+
+            set = this.arrowSkillSets;
+            return true;
+        }
         
         public ASInfo[] SkillInfosOrNull {
             get {
@@ -279,7 +288,7 @@
 
             // Init ArrSkillSets
             //arrowSkillSets = new ArrowSkillSet(GetBattleStageInitSkill(0), GetBattleStageInitSkill(1), mainArrowObjTag, ability);
-            arrowSkillSets = ArrowSkillSet.GetNewSkillSet(GetBattleStageInitSkill(0), GetBattleStageInitSkill(1), mainArrowObjTag, ability);
+            arrowSkillSets = ArrowSkillSet.GetSkillSet(GetBattleStageInitSkill(0), GetBattleStageInitSkill(1), mainArrowObjTag, ability);
 
             mainArrow.SetEffectInfo(effectPoolTags.ToArray());
             lessArrow.SetEffectInfo(effectPoolTags.ToArray());

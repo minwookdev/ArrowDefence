@@ -202,8 +202,6 @@
         }
 
         IEnumerator Start() {
-            //================================================== << GAMEMANAGER >> =================================================
-            GameManager.Instance.Initialize();
             //================================================= << LOAD UI SCENE >> ================================================
             yield return StartCoroutine(SceneLoader.Instance.AdditiveLoadUIScene());
             Cover(true);
@@ -258,16 +256,14 @@
 
             //================================================ << BATTLE STATE >> ==================================================
             GameManager.Instance.AddListnerEndBattle(() => {  // < When Game Cleared >
-                GameManager.Instance.SetBowPullingStop(true); // Disable Bow Pullable
                 battleData.OnStageCleared(isUsedResurrect);   // Battle Data Update. <Stage Cleared>
                 KillAllMonsters();                            // Kill All Alive Monsters
             });
             GameManager.Instance.AddListnerGameOver(() => {   // < When Game Over >
-                GameManager.Instance.SetBowPullingStop(true); // Disable Bow Pullable
                 ComboClear();                                 // Clear Current Combo Count
             });
-            GameManager.Instance.AddListnerPause(() => {
-                GameManager.Instance.SetBowPullingStop(true);  // Disable Bow Pullable
+            GameManager.Instance.AddListnerPause(() => {      // < When Game Paused >
+
             });
 
             SetGameState(GAMESTATE.STATE_BEFOREBATTLE);       // Set Game State : Before Battle
@@ -302,6 +298,7 @@
             //================================================ << BATTLE READY >> ==================================================
             isInitialized = true;
             //======================================================================================================================
+            GameManager.Instance.SetSavingFeedback(sceneRoute.SavingFeedbackPanel);
         }
 
         private void Update() {

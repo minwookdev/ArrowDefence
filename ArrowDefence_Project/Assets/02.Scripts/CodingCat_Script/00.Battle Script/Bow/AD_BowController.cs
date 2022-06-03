@@ -35,7 +35,7 @@
         private Vector3 currentClickPosition;
         private Vector3 tempEulerAngle;
         //private AutoMachine autoMachine = null;
-        public bool IsPullingStop { get; set; }  //Pulling Stop boolean For Pause, Clear Battle Scene
+        public bool IsStopManualControl { get; set; }  //Pulling Stop boolean For Pause, Clear Battle Scene
 
         [Header("ARROW VARIABLES")] //Arrow Relation Variables
         [SerializeField] [ReadOnly] Transform ArrowParentTr;
@@ -143,6 +143,7 @@
             GameManager.Instance.AddListnerGameOver(() => {
                 //stop auto-mode if the Running, Stop Touch State
                 OnAutoModeStop();
+                IsStopManualControl = true;   //Bow Pulling Stop
                 //Active Burn Fade Effect.
                 bowSprite.Effect(BOWEFFECTYPE.FADE, false);
                 //Bow Rope Material Alpha Change.
@@ -155,9 +156,11 @@
             //================================================================ << CALLBACK CLEAR >> ===============================================================
             GameManager.Instance.AddListnerEndBattle(() => {
                 OnAutoModeStop();
+                IsStopManualControl = true;
             });
             //================================================================ << CALLBACK PAUSE >> ===============================================================
             GameManager.Instance.AddListnerPause(() => {
+                IsStopManualControl = true;
                 if (isAutoRunning) {
                     if (autoState == AUTOSTATE.FIND || autoState == AUTOSTATE.TRAC || autoState == AUTOSTATE.SHOT) {
                         AutoStateChange(AUTOSTATE.WAIT);
@@ -254,7 +257,7 @@
 
         private void BowBegan(Vector2 pos) {
             //Stop Pulling or Arrow Component is null return Pull Began.
-            if (IsPullingStop == true || arrowComponent == null) return;
+            if (IsStopManualControl == true || arrowComponent == null) return;
 
             switch (currentPullType) {
                 case PULLINGTYPE.AROUND_BOW_TOUCH: if (PullTypeTouchAround(pos) == false) return; break; //Type 0.-활 주변의 일정거리 터치 조준
@@ -471,7 +474,7 @@
             //}
 #endregion
             //Pull Stop while reloading Arrow.
-            IsPullingStop = true;
+            IsStopManualControl = true;
 
             //Release Bow Rope
             AD_BowRope.instance.CatchPointClear();
@@ -501,7 +504,7 @@
             Reload(reloadType);
 
             //Release Pulling Stop State
-            IsPullingStop = false;
+            IsStopManualControl = false;
         }
 
         bool PullTypeTouchAround(Vector2 touchPos) {
@@ -535,7 +538,7 @@
         /// 화살이 당겨진 상황에서 클리어, 일시정지 들어오면 당기고있는 상태 해제
         /// </summary>
         void CheckStopPulling() {
-            if (IsPullingStop == true) {
+            if (IsStopManualControl == true) {
                 if (arrowTr != null) {
                     arrowTr.position = ClampPointTop.position;
                 }

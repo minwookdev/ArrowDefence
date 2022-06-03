@@ -21,6 +21,7 @@ public class MainSceneRoute : MonoBehaviour {
     public BattlePopup battlePop;
     public ItemInfoPop itemInfoPop;
     [SerializeField] SettingsPanel settings = null;
+    [SerializeField] SavingFeedback savingPanel = null;
 
     [Header("FADE")]
     public CanvasGroup ImgFade = null;
@@ -51,6 +52,7 @@ public class MainSceneRoute : MonoBehaviour {
 
         //Try Initialize Manager Objects
         GameManager.Instance.Initialize();
+        GameManager.Instance.SetSavingFeedback(savingPanel);
         AdsManager.Instance.InitRuntimeMgr();
     }
 
@@ -100,6 +102,7 @@ public class MainSceneRoute : MonoBehaviour {
         //string tempStringTwo = "NotNull";
         //CatLog.Log($"TempStringOne is Empty?: {(tempStringOne.IsStringEmpty())}");
         //CatLog.Log($"TempStringTwo is Empty?: {(tempStringTwo.IsStringEmpty())}");
+        //savingPanel.Invoke(nameof(savingPanel.Play), 2f);
     }
 
     private void Update() {

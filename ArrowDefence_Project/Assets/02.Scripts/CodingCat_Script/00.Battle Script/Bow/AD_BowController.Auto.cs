@@ -286,7 +286,7 @@
                     //발사 조건 체크 : (몬스터의 위치와 활 위치간의 각도) - 현재 활 각도 : 몬스터 위치 각도와 현재 활이 조준하고있는 각도의 차이
                     //float angle = GameGlobal.AngleBetweenVec2(bowTr.position, targetTr.position) - bowTr.eulerAngles.z; //여기에 이거를 bowTr.rotation.z 로 치환하면 어떨까??
                     float conditionAngle = GameGlobal.AngleBetweenVec2(bowTr.position, targetTr.position) - CompareAngle;
-                    float accuracy = 3f; //-> Change Global Variables, Accuracy 값이 낮아질 수록 더욱 정확하게 잡음 [1최소] [2~3권장]
+                    float accuracy = 3f; //-> Change Global Variables, Accuracy 값이 낮아질 수록 더욱 정교하게 잡음 [1최소] [2~3권장]
 
                     //bool isAngleFrontMonster = (angle >= -range && angle <= range);        // -3 ~ 3
                     bool isAngleFrontMonster = GameGlobal.IsRange(conditionAngle, accuracy); // -3 ~ 3
@@ -379,9 +379,11 @@
             yield return arrSwapWait; //Wait Swapable State (WAIT) || (FIND) || (TRAC)
 
             AD_BowRope.instance.CatchPointClear();
-            if (arrowComponent != null)
+            if (arrowComponent != null) {
                 arrowComponent.DisableRequest();
-            arrowTr = null; arrowComponent = null;
+            }
+            arrowTr = null; 
+            arrowComponent = null;
             if (type == ARROWTYPE.ARROW_SPECIAL) {
                 previousType = arrowType;
             }
@@ -395,6 +397,7 @@
             }
 
             arrowComponent = arrowTr.GetComponent<AD_Arrow>().Reload(ClampPointBottom, ClampPointTop, initArrowRot);
+            AD_BowRope.instance.SetCatchPoint(arrowComponent.CatchTr);  //Re Set Catch Point
         }
 
         #endregion

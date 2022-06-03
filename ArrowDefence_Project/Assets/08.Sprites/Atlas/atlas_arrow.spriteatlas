@@ -1,0 +1,91 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!687078895 &4343727234628468602
+SpriteAtlas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: atlas_arrow
+  m_EditorData:
+    serializedVersion: 2
+    textureSettings:
+      serializedVersion: 2
+      anisoLevel: 1
+      compressionQuality: 50
+      maxTextureSize: 2048
+      textureCompression: 0
+      filterMode: 1
+      generateMipMaps: 0
+      readable: 0
+      crunchedCompression: 0
+      sRGB: 1
+    platformSettings:
+    - serializedVersion: 3
+      m_BuildTarget: Android
+      m_MaxTextureSize: 2048
+      m_ResizeAlgorithm: 0
+      m_TextureFormat: 47
+      m_TextureCompression: 1
+      m_CompressionQuality: 50
+      m_CrunchedCompression: 0
+      m_AllowsAlphaSplitting: 0
+      m_Overridden: 1
+      m_AndroidETC2FallbackOverride: 0
+      m_ForceMaximumCompressionQuality_BC6H_BC7: 0
+    packingSettings:
+      serializedVersion: 2
+      padding: 8
+      blockOffset: 1
+      allowAlphaSplitting: 0
+      enableRotation: 0
+      enableTightPacking: 0
+    variantMultiplier: 1
+    packables:
+    - {fileID: 102900000, guid: 5678539b54a7a194ca8a7aee5fd58f4f, type: 3}
+    bindAsDefault: 1
+  m_MasterAtlas: {fileID: 0}
+  m_PackedSprites:
+  - {fileID: 21300000, guid: 3fc06da2b237b694d97290ca44f4dd40, type: 3}
+  - {fileID: 21300000, guid: 0e1cea53edadc334fbe327db91589956, type: 3}
+  - {fileID: 21300000, guid: 87d9f984912c42c49bdf7a619c6d59b8, type: 3}
+  - {fileID: 21300000, guid: 60fec2f50945b0f48870657ef3bbf5d9, type: 3}
+  - {fileID: 21300000, guid: e45c72067a1e24547a161e5d8d1d7bac, type: 3}
+  - {fileID: 21300000, guid: 05d6b7466e0268b4b8930a5d312aeade, type: 3}
+  - {fileID: 21300000, guid: ed63cd081e4fed94c9c932b7010dfa5b, type: 3}
+  - {fileID: 21300000, guid: 0d6c8a18cba27c243ab0dc43afd9bbbd, type: 3}
+  - {fileID: 21300000, guid: b8c3431a3f3fdd642be31c7a08f96815, type: 3}
+  - {fileID: 21300000, guid: a6c09e2a84596c34daab13d4d81c3464, type: 3}
+  - {fileID: 21300000, guid: 58f2df8b597dade4998037c13bbf38ec, type: 3}
+  - {fileID: 21300000, guid: e442fdcc5a634d14daedef9c815a9baa, type: 3}
+  - {fileID: 21300000, guid: 6b4e2cfc100fea7438da8ce42740e187, type: 3}
+  - {fileID: 21300000, guid: 597738adf4e1c1542b4e8fea019cedbb, type: 3}
+  - {fileID: 21300000, guid: 729e251ee1690724398971805c2973af, type: 3}
+  - {fileID: 21300000, guid: 99f5953e2f96cb14eaa8a9549c2eccac, type: 3}
+  - {fileID: 21300000, guid: 429a53ee345a47840be8cd9ee7f3c172, type: 3}
+  - {fileID: 8196459378230238771, guid: c17d401f420abfa46b8fb0ed3d5ce230, type: 3}
+  - {fileID: 4012710621068745301, guid: c17d401f420abfa46b8fb0ed3d5ce230, type: 3}
+  - {fileID: 21300000, guid: 89630d1fc17a0c649a0e6f9205398609, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - Arrow_01
+  - staff_14
+  - Sprite_Arrow_05_Hunting
+  - Sprite_Arrow_06_Hunting_Enhanced
+  - Arrow_Blue_01
+  - staff_15
+  - Sprite_Arrow_04_Steel_Polished
+  - Sprite_Arrow_07_Hunting_Polished
+  - Dagger_06
+  - Arrow_26
+  - staff_50
+  - Sprite_Arrow_02_Steel
+  - Arrow_24
+  - Sprite_Arrow_01_Iron
+  - Sprite_Arrow_03_Steel_Hard
+  - Arrow_Green_01
+  - staff_13
+  - Arrow_Red_01_1
+  - Arrow_Red_01_0
+  - Arrow_25
+  m_Tag: atlas_arrow
+  m_IsVariant: 0

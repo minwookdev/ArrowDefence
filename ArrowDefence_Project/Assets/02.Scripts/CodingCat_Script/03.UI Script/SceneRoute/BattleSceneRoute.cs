@@ -12,6 +12,7 @@
         [SerializeField] PanelDeath panelDeath   = null;
         [SerializeField] PanelPause panelPause   = null;
         [SerializeField] ComboCounter panelCombo = null;
+        [SerializeField] SavingFeedback savingFeedbackPanel = null;
 
         [Header("MODULE : SLOTS")]
         [SerializeField] SwapSlots slotArrSwap = null;
@@ -85,6 +86,11 @@
                     throw new System.Exception("this field is Not Except Null.");
                 }
                 this.progresser = value;
+            }
+        }
+        public SavingFeedback SavingFeedbackPanel {
+            get {
+                return savingFeedbackPanel;
             }
         }
         #endregion

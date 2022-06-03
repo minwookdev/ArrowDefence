@@ -50,6 +50,8 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 90f4e1e0a6deb534480f292c1ae52d6a, type: 3}
   - {fileID: 21300000, guid: 0e7ada41adf06794488ac10d0857a5a3, type: 3}
   - {fileID: 21300000, guid: 2c1e2bd129b7e0246a9b3652d2b1aa35, type: 3}
+  - {fileID: 21300000, guid: 534d7013535ecf745807c1ec6334bc78, type: 3}
+  - {fileID: 21300000, guid: 4ff431131b4a03c4a99f7a33b94a92f2, type: 3}
   - {fileID: 21300000, guid: 8c71b714a185c5640b0d8f7358d87516, type: 3}
   - {fileID: 21300000, guid: 1175a954c97da374c8852f7aa5f31594, type: 3}
   - {fileID: 21300000, guid: 4b92bd6498813a945923cdf6a957f1b3, type: 3}
@@ -58,6 +60,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 672f62a5c22684c5fb717c024cae1904, type: 3}
   - {fileID: 21300000, guid: 36137de5f0ca9c347ad769899eaad5a3, type: 3}
   - {fileID: 21300000, guid: 183b3a27ec53b2240bca66b59d64a39c, type: 3}
+  - {fileID: 21300000, guid: e63bdb78d0d27ce47a47a31c8be46837, type: 3}
   - {fileID: 21300000, guid: 7ad6af39e79da1e47991a40aa6d2f438, type: 3}
   - {fileID: 21300000, guid: 7579005aa34e24a4a9dcfe8b40269180, type: 3}
   - {fileID: 21300000, guid: 2a5227aad59700f4c947b8fe7df967fd, type: 3}
@@ -76,6 +79,8 @@ SpriteAtlas:
   - Loot_35
   - Loot_112
   - Loot_86
+  - skeleton_captain
+  - skeleton_robbery
   - Loot_43
   - Loot_44
   - Res_58
@@ -84,6 +89,7 @@ SpriteAtlas:
   - equip_stone
   - Loot_16
   - Res_113
+  - skeleton_prankster
   - Quest_144
   - Quest_41
   - Res_124

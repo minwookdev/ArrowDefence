@@ -15,11 +15,17 @@
         private float restoreTimeScale;
         private bool isManagerInitialized = false;
         private ItemDropList.DropTable[] dropListArray;
+        private SavingFeedback savingFeedbackPanel = null;
 
         //PROPERTIES
         public GAMEPLATFORM PlayPlatform { get; private set; }
         public GAMESTATE GameState { get; private set; } = GAMESTATE.STATE_NONE;
         public bool IsDevMode { get; private set; } = false;
+        public Player_Equipments PlayerEquips {
+            get {
+                return CCPlayerData.equipments;
+            }
+        }
 
         //Game Event Delegate
         public delegate void GameEventHandler();
@@ -62,7 +68,38 @@
             isManagerInitialized = true;
         }
 
-#region SCREEN
+        public void SetSavingFeedback(SavingFeedback feedbackPanel) {
+            if (!feedbackPanel) {
+                CatLog.WLog("null인 SavingFeedback 인스턴스가 Set시도되었습니다.");
+                return;
+            }
+            if (this.savingFeedbackPanel) {
+                CatLog.WLog("GameManager의 SavingFeedback Panel이 덮어씌워졌습니다.");
+            }
+            this.savingFeedbackPanel = feedbackPanel;
+        }
+
+        private void ReleaseFeedbackPanel() {
+            if (this.savingFeedbackPanel) {
+                this.savingFeedbackPanel = null;
+            }
+        }
+
+        private void TryPlayFeedback() {
+            if (this.savingFeedbackPanel) {
+                this.savingFeedbackPanel.Play();
+            }
+        }
+
+        private void Start() {
+            SceneLoader.SceneChangeCallback += this.ReleaseFeedbackPanel;
+        }
+
+        private void OnDisable() {
+            SceneLoader.SceneChangeCallback -= this.ReleaseFeedbackPanel;
+        }
+
+        #region SCREEN
 
         /// <summary>
         /// Rect Set of Target Camera with a  9 : 16 Portrait Resolition
@@ -106,11 +143,10 @@
             artifactEffects = GetArtifactEffects(out artifactIcons);
         }
 
-        public void SetBowPullingStop(bool isStop) {
-            if (AD_BowController.instance != null)
-                AD_BowController.instance.IsPullingStop = isStop;
-            else
-                CatLog.WLog("Controller Not Found.");
+        public void SetBowManualControl(bool isStop) {
+            if (AD_BowController.instance != null) {
+                AD_BowController.instance.IsStopManualControl = isStop;
+            }
         }
 
         public ARROWTYPE GetFirstArrType() {
@@ -179,33 +215,37 @@
                 return null;
         }
 
-        public bool TryGetSkillSet(string tag, out ArrowSkillSet skillset) {
-            ArrowSkillSet temp = null;
-            var equipments = CCPlayerData.equipments;
-            if (tag == AD_Data.POOLTAG_MAINARROW || tag == AD_Data.POOLTAG_MAINARROW_LESS) {
-                temp = equipments.GetMainArrow().ArrowSkillSets;
+        public bool TryGetCloneSkillSet(string tag, out ArrowSkillSet cloneSet) {
+            if (tag.Equals(AD_Data.POOLTAG_MAINARROW) || tag.Equals(AD_Data.POOLTAG_MAINARROW_LESS)) {    
+                //TryGet Main Arrow Set.
+                if (PlayerEquips.GetMainArrow().TryGetSkillSet(out ArrowSkillSet originSet) == true) {
+                    cloneSet = originSet.GetClone();
+                    return true;
+                }
             }
-            else if (tag == AD_Data.POOLTAG_SUBARROW || tag == AD_Data.POOLTAG_SUBARROW_LESS) {
-                temp = equipments.GetSubArrow().ArrowSkillSets;
+            else if (tag.Equals(AD_Data.POOLTAG_SUBARROW) || tag.Equals(AD_Data.POOLTAG_SUBARROW_LESS)) { 
+                //TryGet Sub Arrow Set.
+                if (PlayerEquips.GetSubArrow().TryGetSkillSet(out ArrowSkillSet originSet) == true) {
+                    cloneSet = originSet.GetClone();
+                    return true;
+                }
             }
-            else if (tag == AD_Data.POOLTAG_SPECIAL_ARROW) {
-                if(equipments.GetSpArrow().TryGetSkillSet(out ArrowSkillSet tempskillset)) {
-                    temp = tempskillset;
+            else if (tag.Equals(AD_Data.POOLTAG_SPECIAL_ARROW)) {
+                //TryGet Special Arrow Set.
+                if (PlayerEquips.GetSpArrow().TryGetSkillSet(out ArrowSkillSet originSet) == true) {     
+                    cloneSet = originSet.GetClone();
+                    return true;
                 }
             }
             else {
-                CatLog.ELog($"Not Implemented this ArrowTag. (Tag: {tag})");
-                skillset = null;
+                CatLog.ELog($"Not Implemented this Arrow Tag. (Input Tag: {tag})");
+                cloneSet = null;
                 return false;
             }
 
-            if (temp == null) { //Arrow Skill is Empty
-                skillset = null;
-                return false;
-            }
-
-            skillset = new ArrowSkillSet(temp);
-            return true;
+            //Not Exist SkillSet. (return false)
+            cloneSet = null;
+            return false;
         }
 
         public void ReleaseEquipments() {
@@ -322,17 +362,17 @@
 #region BATTLE
 
         public void ResumeBattle() {
-            SetBowPullingStop(false);
+            SetBowManualControl(false);
             TimeToRestore();
         }
 
         public void PauseBattle() {
-            SetBowPullingStop(true);
+            SetBowManualControl(true);
             TimeToPause();
         }
 
         /// <summary>
-        /// Never Used this Method.
+        /// Never Use this Method.
         /// </summary>
         /// <param name="trigger"></param>
         public void PreventionPulling(UnityEngine.EventSystems.EventTrigger trigger) {
@@ -340,21 +380,29 @@
             PullingPreventionUp(trigger);
         }
 
+        /// <summary>
+        /// Never Use this Method.
+        /// </summary>
+        /// <param name="trigger"></param>
         void PullingPreventionDown(UnityEngine.EventSystems.EventTrigger trigger)
         {
             //Bow Controller Pulling Limit [Button Down Event]
             UnityEngine.EventSystems.EventTrigger.Entry m_slotEntryDown = new UnityEngine.EventSystems.EventTrigger.Entry();
             m_slotEntryDown.eventID = UnityEngine.EventSystems.EventTriggerType.PointerDown;
-            m_slotEntryDown.callback.AddListener((data) => SetBowPullingStop(true));
+            m_slotEntryDown.callback.AddListener((data) => SetBowManualControl(true));
             trigger.triggers.Add(m_slotEntryDown);
         }
 
+        /// <summary>
+        /// Never Use this Method.
+        /// </summary>
+        /// <param name="trigger"></param>
         void PullingPreventionUp(UnityEngine.EventSystems.EventTrigger trigger)
         {
             //Bow Controller Pulling Limit [Button Down Event]
             UnityEngine.EventSystems.EventTrigger.Entry m_slotEntryUp = new UnityEngine.EventSystems.EventTrigger.Entry();
             m_slotEntryUp.eventID = UnityEngine.EventSystems.EventTriggerType.PointerUp;
-            m_slotEntryUp.callback.AddListener((data) => SetBowPullingStop(false));
+            m_slotEntryUp.callback.AddListener((data) => SetBowManualControl(false));
             trigger.triggers.Add(m_slotEntryUp);
         }
 
@@ -519,6 +567,7 @@
         }
 
         public bool SaveUserJsonFile() {
+            this.TryPlayFeedback();
             return CCPlayerData.SaveUserDataJson();
         }
 

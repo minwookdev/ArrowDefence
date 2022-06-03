@@ -68,20 +68,11 @@
             rBody.gravityScale = 0f;
             arrowColl.enabled  = false;
 
-            //Init-Arrow Skill
-            //arrowSkillSets = GameManager.Instance.GetArrSkillSetsOrNull(gameObject.name);
-            //if(arrowSkillSets != null) {
-            //    isInitSkill = true;
-            //    arrowSkillSets.Init(arrowTr, rBody, this);
-            //}
-
-            if(GameManager.Instance.TryGetSkillSet(gameObject.name, out ArrowSkillSet skillset)) {
-                arrowSkillSets = skillset;
+            //Try GetClone SkillSet
+            isInitSkill = GameManager.Instance.TryGetCloneSkillSet(gameObject.name, out ArrowSkillSet cloneSet);
+            if (isInitSkill) {
+                arrowSkillSets = cloneSet;
                 arrowSkillSets.Init(arrowTr, rBody, this);
-                isInitSkill = true;
-            }
-            else {
-                isInitSkill = false;
             }
 
             //Init Collision Data Queue

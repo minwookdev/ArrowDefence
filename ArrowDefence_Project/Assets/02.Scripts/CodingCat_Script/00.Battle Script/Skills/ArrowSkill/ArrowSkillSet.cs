@@ -18,7 +18,15 @@
 
         }
 
-        public static ArrowSkillSet GetNewSkillSet(ASInfo fstInfo, ASInfo secInfo, string tag, PlayerAbilitySlot ability) {
+        /// <summary>
+        /// Constructor for Default Arrow Item
+        /// </summary>
+        /// <param name="fstInfo"></param>
+        /// <param name="secInfo"></param>
+        /// <param name="tag"></param>
+        /// <param name="ability"></param>
+        /// <returns></returns>
+        public static ArrowSkillSet GetSkillSet(ASInfo fstInfo, ASInfo secInfo, string tag, PlayerAbilitySlot ability) {
             var set = new ArrowSkillSet();
             set.arrowPoolTag = tag;
             //First SkillData Initialize
@@ -45,115 +53,85 @@
         }
 
         /// <summary>
-        /// Constructor I. Arrow Item Class에서 Origin Arrow Skill Sets Class 생성.
+        /// Constructor for Special Arrow Item
         /// </summary>
-        /// <param name="skillInfoFst"></param>
-        /// <param name="skillInfoSec"></param>
-        public ArrowSkillSet(ASInfo skillInfoFst, ASInfo skillInfoSec, string tag, PlayerAbilitySlot ability) {
-            arrowPoolTag = tag;
-            //First Arrow SkillData Init
-            if(skillInfoFst != null) {
-                switch (skillInfoFst.ActiveType) {
-                    case ARROWSKILL_ACTIVETYPE.ATTACK:  InitHit(skillInfoFst.SkillData, tag);            break;
-                    case ARROWSKILL_ACTIVETYPE.AIR:     InitAir(skillInfoFst.SkillData);                 break;
-                    case ARROWSKILL_ACTIVETYPE.ADDPROJ: InitProjectile(skillInfoFst.SkillData, ability); break;
-                    //case ARROWSKILL_ACTIVETYPE.EMPTY:   break; //Active Event가 존재하지않는 타입은 받지않음. <ArrowItemClass로 이관.>
-                    //case ARROWSKILL_ACTIVETYPE.BUFF:    break; //Active Event가 존재하지않는 타입은 받지않음. <ArrowItemClass로 이관.>
-                    default: throw new System.NotImplementedException();
-                }
-            }
-            //Seconds Arrow SkillData Init
-            if(skillInfoSec != null) {
-                switch (skillInfoSec.ActiveType) {
-                    case ARROWSKILL_ACTIVETYPE.ATTACK:  InitHit(skillInfoSec.SkillData, tag);            break;
-                    case ARROWSKILL_ACTIVETYPE.AIR:     InitAir(skillInfoSec.SkillData);                 break;
-                    case ARROWSKILL_ACTIVETYPE.ADDPROJ: InitProjectile(skillInfoSec.SkillData, ability); break;
-                    //case ARROWSKILL_ACTIVETYPE.EMPTY: break; //Active Event가 존재하지않는 타입은 받지않음. <ArrowItemClass로 이관.>
-                    //case ARROWSKILL_ACTIVETYPE.BUFF:  break; //Active Event가 존재하지않는 타입은 받지않음. <ArrowItemClass로 이관.>
-                    default: throw new System.NotImplementedException();
-                }
-            }
-
-            //Start SkillSets Activate Type Init
-            activeType = InitArrowSkillActiveType(0);
-            CatLog.Log($"Arrow SkillSets Active Type : {activeType.ToString()}");
-        }
-        
-        /// <summary>
-        /// Special Type Arrow Constructor
-        /// </summary>
-        /// <param name="array"></param>
+        /// <param name="skills"></param>
         /// <param name="tag"></param>
         /// <param name="ability"></param>
-        public ArrowSkillSet(ASInfo[] array, string tag, PlayerAbilitySlot ability) {
-            arrowPoolTag = tag;
+        /// <returns></returns>
+        public static ArrowSkillSet GetSpecialSkillSet(ASInfo[] skills, string tag, PlayerAbilitySlot ability) {
+            if (skills == null || skills.Length <= 0) {
+                CatLog.WLog("this SpecialArrow is Not Exist any Skills !.");
+                return null; //ASInfo가 존재하지 않으면 null반환
+            }
 
-            for (int i = 0; i < array.Length; i++) {
-                switch (array[i].ActiveType) {
-                    case ARROWSKILL_ACTIVETYPE.ATTACK:  InitHit(array[i].SkillData, tag);            break;
-                    case ARROWSKILL_ACTIVETYPE.AIR:     InitAir(array[i].SkillData);                 break;
-                    case ARROWSKILL_ACTIVETYPE.ADDPROJ: InitProjectile(array[i].SkillData, ability); break;
-                    case ARROWSKILL_ACTIVETYPE.BUFF:  break;
-                    case ARROWSKILL_ACTIVETYPE.EMPTY: break;
-                    default: throw new System.NotImplementedException();
+            //Create New ArrowSkillSet class
+            var set = new ArrowSkillSet() { arrowPoolTag = tag };
+            foreach (var skill in skills) {
+                switch (skill.ActiveType) {
+                    case ARROWSKILL_ACTIVETYPE.ATTACK:  set.InitHit(skill.SkillData, tag);            break;
+                    case ARROWSKILL_ACTIVETYPE.AIR:     set.InitAir(skill.SkillData);                 break;
+                    case ARROWSKILL_ACTIVETYPE.ADDPROJ: set.InitProjectile(skill.SkillData, ability); break;
+                    case ARROWSKILL_ACTIVETYPE.EMPTY: break; //Ignore
+                    case ARROWSKILL_ACTIVETYPE.BUFF:  break; //Ignore
+                    default: throw new System.NotImplementedException("This SkillType is Not Implemented !");
                 }
             }
 
             //Find Special Active Type
-            for (int i = 0; i < array.Length; i++) {
-                switch (array[i].SkillType) {
-                    case ARROWSKILL.EXPLOSION:    activeType = ARROWSKILL_ACTIVETYPE.SP_EXPLOSION;    break;
-                    case ARROWSKILL.WINDPIERCING: activeType = ARROWSKILL_ACTIVETYPE.SP_WINDPIERCING; break;
+            foreach (var skill in skills) {
+                switch (skill.SkillType) {
+                    case ARROWSKILL.EXPLOSION:    set.activeType = ARROWSKILL_ACTIVETYPE.SP_EXPLOSION;    break;
+                    case ARROWSKILL.WINDPIERCING: set.activeType = ARROWSKILL_ACTIVETYPE.SP_WINDPIERCING; break;
                 }
-
-                if(activeType != ARROWSKILL_ACTIVETYPE.NONE) {
+                //if find special activetype, break this loop
+                if (set.activeType != ARROWSKILL_ACTIVETYPE.NONE) {
                     break;
                 }
             }
-
-            if(activeType == ARROWSKILL_ACTIVETYPE.NONE) {
-                throw new System.Exception("Not Found Special Arrow Active Type.");
+            if (set.activeType == ARROWSKILL_ACTIVETYPE.NONE) {
+                //if not found special active type, throw exception.
+                throw new System.Exception("Not Found Special Arrow's Active Type !");
             }
-            CatLog.Log($"Initialized ActiveType: {activeType.ToString()}");
+
+            CatLog.Log($"Initialized Special ActiveType: {set.activeType.ToString()}");
+            return set;
         }
 
         /// <summary>
-        /// Constructor II. Copy origin ArrowSkillSets Class.
+        /// 각각의 Arrow Prefab에서 Item Class에서 Clone
         /// </summary>
-        /// <param name="origin"></param>
-        /// <param name="num"></param>
-        public ArrowSkillSet(ArrowSkillSet origin) {
-            // Clone-Active Type
-            activeType   = origin.activeType;
-            arrowPoolTag = origin.arrowPoolTag;
+        /// <returns></returns>
+        public ArrowSkillSet GetClone() {
+            //Clone ActiveType & Tag
+            var clone = new ArrowSkillSet();
+            clone.activeType   = this.activeType;
+            clone.arrowPoolTag = this.arrowPoolTag;
 
-            // Clone-Hit Type Skill
-            if(origin.hitSkill != null) {
-                switch (origin.hitSkill) {
-                    case ReboundArrow rebound:   hitSkill = new ReboundArrow(rebound);   break;
-                    case PiercingArrow piercing: hitSkill = new PiercingArrow(piercing); break;
-                    default: throw new System.NotImplementedException("this type is Not Implemented.");
-                }
+            //Clone Hit-Type Skill
+            switch (this.hitSkill) {
+                case null: break; //IGNORE EMPTY
+                case ReboundArrow hitskill:  clone.hitSkill = new ReboundArrow(hitskill);  break;
+                case PiercingArrow hitskill: clone.hitSkill = new PiercingArrow(hitskill); break;
+                default: throw new System.NotImplementedException("SkillSet Clone Error: This Type Not Implemented !");
+            }
+            //Clone Air-Type Skill
+            switch (this.airSkill) {
+                case null: break; //IGNORE EMPTY
+                case HomingArrow airskill: clone.airSkill = new HomingArrow(airskill); break;
+                default: throw new System.NotImplementedException("SkillSet Clone Error: this Type Not Implemented !");
+            }
+            //Clone Projecitle-Type Skill
+            switch (this.addProjSkill) {
+                case null: break; //IGNORE EMPTY
+                case SplitArrow projectile:    clone.addProjSkill = new SplitArrow(projectile);    break;
+                case SplitDagger projectile:   clone.addProjSkill = new SplitDagger(projectile);   break;
+                case ElementalFire projectile: clone.addProjSkill = new ElementalFire(projectile); break;
+                case Explosion projectile:     clone.addProjSkill = new Explosion(projectile);     break;
+                default: throw new System.NotImplementedException("SkillSet Clone Error: this Type Not Implemented !");
             }
 
-            // Clone-Air Type Skill
-            if(origin.airSkill != null) {
-                switch (origin.airSkill) {
-                    case HomingArrow homing: airSkill = new HomingArrow(homing); break;
-                    default: throw new System.NotImplementedException("this type is Not Implemented.");
-                }
-            }
-
-            // Clone-Additional Projectiles Typ Skil
-            if (origin.addProjSkill != null) {
-                switch (origin.addProjSkill) {
-                    case SplitArrow projectile:    addProjSkill = new SplitArrow(projectile);    break;
-                    case SplitDagger projectile:   addProjSkill = new SplitDagger(projectile);   break;
-                    case ElementalFire projectile: addProjSkill = new ElementalFire(projectile); break;
-                    case Explosion projectile:     addProjSkill = new Explosion(projectile);     break;
-                    default: throw new System.NotImplementedException("this type is Not Implemented.");
-                }
-            }
+            return clone;
         }
 
         #endregion

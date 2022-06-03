@@ -236,8 +236,7 @@
             return EquippedBow;
         }
 
-        public Item_Arrow GetMainArrow()
-        {
+        public Item_Arrow GetMainArrow() {
             return EquippedArrow_f;
         }
 

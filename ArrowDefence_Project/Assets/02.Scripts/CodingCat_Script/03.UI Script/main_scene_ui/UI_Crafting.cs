@@ -149,6 +149,9 @@
                     upgradeFunction.CloseOpenedPopup(); //팝업닫고, 새로고침
                     upgradeFunction.OpenPanel(UpgradeFunc.PANELTYPE.MAIN, mainAnchoredPos, true); //clear panel
                 }
+
+                //오류로 인한 실패가 아닌 어떤 결과로도 게임현황을 자동저장 처리함 !
+                GameManager.Instance.SaveUserJsonFile();
             }
             else { //오류로 인한 실패 (예외)
                 throw new System.Exception();

@@ -301,7 +301,7 @@
         }
 
         /// <summary>
-        /// Pool Instance List와 Pool Dictionary에 객체 등록. (부모객체를 지정하지 않음)
+        /// Pool Instance List와 Pool Dictionary에 객체 등록. (부모객체를 지정하지 않음. [CCPooler object가 parent로 자동지정됨])
         /// </summary>
         /// <param name="tag"></param>
         /// <param name="size"></param>
@@ -334,7 +334,7 @@
 
             var parentTr = new GameObject(pool.tag).transform;          //3. New Parent GameObject Created and Add Parent List.
             parentTr.SetParent(_inst.transform);
-            _inst.ParentList.Add(parentTr);
+            _inst.AddParnetList(parentTr, pool.tag);
 
             if(isTracking == true) {                                     //4. if Tracking Alive options ture, Add AliveDictionary this PoolObject. 
                 _inst.NewAliveTrackDic(pool.tag);
@@ -361,10 +361,8 @@
         public static void AddPoolList(string tag, int size, GameObject prefab, Transform parent, bool isTracking) {
             Pool pool = new Pool() { tag = tag, size = size, prefab = prefab };
             _inst.poolInstanceList.Add(pool);                             //1. Add PoolInstance List.
-
             _inst.poolDictionary.Add(pool.tag, new Stack<GameObject>());  //2. Add PoolDictaionary.
-
-            _inst.ParentList.Add(parent);                                 //3. Add Parent Transform to Parent List.
+            _inst.AddParnetList(parent, pool.tag);                        //3. Add Parent Transform to Parent List.
 
             if(isTracking == true) {                                      //4. if Tracking Alive options true, Add AliveDictionary this PoolObject
                 _inst.NewAliveTrackDic(pool.tag);
@@ -380,50 +378,20 @@
                 CatLog.ELog($"{pool.tag} : Method has been Duplicated.");
         }
 
-        /// <summary>
-        /// This Method is Experiment, Not Used Yet
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="tag"></param>
-        /// <param name="size"></param>
-        /// <param name="prefab"></param>
-        /// <param name="action"></param>
-        /// <param name="isTracking"></param>
-        public static void AddPoolListExtended<T>(string tag, int size, T prefab, Action<T> action, bool isTracking) where T : Component {
-            Transform tempParentTr = new GameObject($"{tag}_[NeverUse]").transform; //Create Temp GameObject Transform 
-            tempParentTr.SetParent(_inst.gameObject.transform);
-            var tempPrefab  = Instantiate<T>(prefab, Vector3.zero, Quaternion.identity, tempParentTr);
-            tempPrefab.name = "temp_";
-            action(tempPrefab);
-
-            Pool pool = new Pool() { tag = tag, prefab = tempPrefab.gameObject, size = size };
-            _inst.poolInstanceList.Add(pool);
-            _inst.poolDictionary.Add(pool.tag, new Stack<GameObject>());
-
-            var parentTr = new GameObject(pool.tag).transform;
-            parentTr.SetParent(_inst.transform);
-            _inst.ParentList.Add(parentTr);
-
-            if (isTracking == true) {
-                _inst.NewAliveTrackDic(pool.tag);
-            }
-
-            for (int i = 0; i < pool.size; i++) {
-                _inst.CreateNewObject(pool.tag, pool.prefab, parentTr);
-            }
-
-            //temp GameObject is Destory on Changed Scene
-            tempPrefab.gameObject.SetActive(false);
-
-            if(_inst.poolDictionary[pool.tag].Count <= 0) {
-                throw new System.Exception($"{pool.tag}: Omission Method, ReturnToPool()");
-            }
-            else if (_inst.poolDictionary[pool.tag].Count != pool.size) {
-                throw new System.Exception($"{pool.tag}: Pool Dictionary Count Not Matched.");
-            }
-        }
-
         #region PARENT
+
+        private void AddParnetList(Transform parent, string tag) {
+            if (string.Equals(parent.name, tag) == false) {
+                CatLog.WLog("Parent Object의 이름과 tag가 일치되지 않았습니다. Description: \n" +
+                            "이는 SpawnFromPool 메서드를 사용하여, 기존에 미리 생성된 object가 아닌 Instantiate되었을 때, \n" +
+                            "AddPoolList에서 등록된 부모를 검색하지 못하여 의도치 않은 동작으로 이어질 수 있습니다. \n" +
+                            "이러한 동작을 막기위해 해당 메서드에서 tag와 parent object의 name을 강제적으로 일치시킵니다. \n" +
+                            $"parent object name: {parent.name} input tag: {tag}");
+            }
+
+            parent.name = tag;
+            ParentList.Add(parent);
+        }
 
         private Transform FindParentOrNull(string tag) {
             return ParentList.Find(element => element.name == tag);

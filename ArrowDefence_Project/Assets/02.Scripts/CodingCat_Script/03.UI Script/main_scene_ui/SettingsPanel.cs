@@ -59,8 +59,9 @@
 
         public void BE_SAVE() {
             var saveResult = GameManager.Instance.SaveUserJsonFile();
-            string message = (saveResult) ? "Save Successed !" : "Save Failed !";
-            Notify.Inst.Message(message, (saveResult) ? StringColor.WHITE : StringColor.RED);
+            if (!saveResult) {
+                Notify.Inst.Message("Save Failed !", StringColor.RED);
+            }
         }
 
         public void SV_BGM() {

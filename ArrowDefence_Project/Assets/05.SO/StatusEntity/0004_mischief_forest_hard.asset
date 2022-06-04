@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1eb8b62273c8614a9198b7ddabd3435, type: 3}
   m_Name: 0004_mischief_forest_hard
   m_EditorClassIdentifier: 
-  HealthPointAmount: 550
+  HealthPointAmount: 500
   ManaPointAmount: 50
   DamageAmount: 5
-  Armorating: 0
+  Armorating: 5
   CriticalResist: 0
   MoveSpeed: 0.5
   AttackInterval: 2

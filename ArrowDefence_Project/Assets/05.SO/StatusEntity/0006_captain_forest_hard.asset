@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1eb8b62273c8614a9198b7ddabd3435, type: 3}
   m_Name: 0006_captain_forest_hard
   m_EditorClassIdentifier: 
-  HealthPointAmount: 800
+  HealthPointAmount: 600
   ManaPointAmount: 50
   DamageAmount: 5
-  Armorating: 25
+  Armorating: 10
   CriticalResist: 0
   MoveSpeed: 0.3
   AttackInterval: 2

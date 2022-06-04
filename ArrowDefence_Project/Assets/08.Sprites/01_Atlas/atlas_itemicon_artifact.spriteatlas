@@ -1,0 +1,75 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!687078895 &4343727234628468602
+SpriteAtlas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: atlas_itemicon_artifact
+  m_EditorData:
+    serializedVersion: 2
+    textureSettings:
+      serializedVersion: 2
+      anisoLevel: 1
+      compressionQuality: 50
+      maxTextureSize: 2048
+      textureCompression: 0
+      filterMode: 1
+      generateMipMaps: 0
+      readable: 0
+      crunchedCompression: 0
+      sRGB: 1
+    platformSettings:
+    - serializedVersion: 3
+      m_BuildTarget: Android
+      m_MaxTextureSize: 2048
+      m_ResizeAlgorithm: 0
+      m_TextureFormat: 47
+      m_TextureCompression: 1
+      m_CompressionQuality: 50
+      m_CrunchedCompression: 0
+      m_AllowsAlphaSplitting: 0
+      m_Overridden: 1
+      m_AndroidETC2FallbackOverride: 0
+      m_ForceMaximumCompressionQuality_BC6H_BC7: 0
+    packingSettings:
+      serializedVersion: 2
+      padding: 8
+      blockOffset: 1
+      allowAlphaSplitting: 0
+      enableRotation: 0
+      enableTightPacking: 0
+    variantMultiplier: 1
+    packables:
+    - {fileID: 102900000, guid: 3d308e63d224c7d4db956fb26504fd53, type: 3}
+    bindAsDefault: 1
+  m_MasterAtlas: {fileID: 0}
+  m_PackedSprites:
+  - {fileID: 21300000, guid: 6267ab80dec535e4181e9adbb66cd63a, type: 3}
+  - {fileID: 21300000, guid: 3de0a5c20801a44d4a6acea442bc2bd4, type: 3}
+  - {fileID: 21300000, guid: 82e3754413d7bd648860cf0370973878, type: 3}
+  - {fileID: 21300000, guid: dd800995aeab3473cb85c56260b53425, type: 3}
+  - {fileID: 21300000, guid: 46e65fc7b10978d458962519084c8f76, type: 3}
+  - {fileID: 21300000, guid: 5846e4684219e4f0888eac702223eb68, type: 3}
+  - {fileID: 21300000, guid: 6c59048aa0ecadd4ebb44683c578d2af, type: 3}
+  - {fileID: 21300000, guid: c4f7a03bbed215542acbf8a326472f76, type: 3}
+  - {fileID: 21300000, guid: e4ba42abb72b4496f934f1a517f64fea, type: 3}
+  - {fileID: 21300000, guid: ae3c1ddb478b60a4993f62214b82b61b, type: 3}
+  - {fileID: 21300000, guid: 4327a9fd0a2c04b4eac49bc776d59391, type: 3}
+  - {fileID: 21300000, guid: 4f7b6ffe7b0e2488c8e98abcd0a85dea, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - Loot_151
+  - icon_itemicon_hammer
+  - Book_5
+  - equip_ring_gold
+  - Book_7
+  - equip_ring_blue
+  - Book_16
+  - Book_15
+  - equip_posion_tooth
+  - Book_6
+  - Book_14
+  - equip_eye_blue
+  m_Tag: atlas_itemicon_artifact
+  m_IsVariant: 0

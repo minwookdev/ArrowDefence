@@ -1,0 +1,113 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!687078895 &4343727234628468602
+SpriteAtlas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: atlas_itemicon_arrow
+  m_EditorData:
+    serializedVersion: 2
+    textureSettings:
+      serializedVersion: 2
+      anisoLevel: 1
+      compressionQuality: 50
+      maxTextureSize: 2048
+      textureCompression: 0
+      filterMode: 1
+      generateMipMaps: 0
+      readable: 0
+      crunchedCompression: 0
+      sRGB: 1
+    platformSettings:
+    - serializedVersion: 3
+      m_BuildTarget: Android
+      m_MaxTextureSize: 2048
+      m_ResizeAlgorithm: 0
+      m_TextureFormat: 47
+      m_TextureCompression: 1
+      m_CompressionQuality: 50
+      m_CrunchedCompression: 0
+      m_AllowsAlphaSplitting: 0
+      m_Overridden: 1
+      m_AndroidETC2FallbackOverride: 0
+      m_ForceMaximumCompressionQuality_BC6H_BC7: 0
+    packingSettings:
+      serializedVersion: 2
+      padding: 4
+      blockOffset: 1
+      allowAlphaSplitting: 0
+      enableRotation: 0
+      enableTightPacking: 0
+    variantMultiplier: 1
+    packables:
+    - {fileID: 102900000, guid: 638b3bade2e3f4f459e638279bf7a969, type: 3}
+    bindAsDefault: 1
+  m_MasterAtlas: {fileID: 0}
+  m_PackedSprites:
+  - {fileID: 21300000, guid: 9d794a00b29294444b4fb55a59b0578a, type: 3}
+  - {fileID: 21300000, guid: c1a6b5805287f374792e5ec6eec8b103, type: 3}
+  - {fileID: 21300000, guid: 877c86c0a2a13a34aa6ffe896fdf4fdb, type: 3}
+  - {fileID: 21300000, guid: e1a8c62155f64c547a89e4643e3ab747, type: 3}
+  - {fileID: 21300000, guid: 59900c61594983548941992df6253781, type: 3}
+  - {fileID: 21300000, guid: ea7284a173f3a6548a13fc6b1b511696, type: 3}
+  - {fileID: 21300000, guid: 60ec44f1eb3e75647803ef749fcd9288, type: 3}
+  - {fileID: 21300000, guid: 517cc632afdf8524d9f19ed5aadda1e2, type: 3}
+  - {fileID: 21300000, guid: 79666142b8d7f7b41ad7dd970ca83688, type: 3}
+  - {fileID: 21300000, guid: fd4b546284b3a554d87e8e22b6d47fd4, type: 3}
+  - {fileID: 21300000, guid: 96e2a0c208d702544a05214aaa15f25c, type: 3}
+  - {fileID: 21300000, guid: f9d29cf3782559547a66462f4485343f, type: 3}
+  - {fileID: 21300000, guid: 854263d42d50a494d8151660c4c83217, type: 3}
+  - {fileID: 21300000, guid: a9cc77562b5989544a2abbe8626e6faf, type: 3}
+  - {fileID: 21300000, guid: 4b0eb0d640d1bf6409f924c0e9dd062f, type: 3}
+  - {fileID: 21300000, guid: dac9511771487694a8ff1d862fa75142, type: 3}
+  - {fileID: 21300000, guid: c18aa1575d643de47bf32b8173de1f88, type: 3}
+  - {fileID: 21300000, guid: 498d2e6762359124db397ef3642e5a4e, type: 3}
+  - {fileID: 21300000, guid: 00023a19f8d8ded49bdf02cf6c467e47, type: 3}
+  - {fileID: 21300000, guid: 4bb723a9accdd9d4e92da8888738f7bb, type: 3}
+  - {fileID: 21300000, guid: 414b0e9b93e80754d95c2ebff90e61f3, type: 3}
+  - {fileID: 21300000, guid: 7bd2e1ab1a6278549901cf43001dcb62, type: 3}
+  - {fileID: 21300000, guid: e126da0d21e061941b70fba652b656d5, type: 3}
+  - {fileID: 21300000, guid: e6d58d2d283f8d847b62e0d05c8887d6, type: 3}
+  - {fileID: 21300000, guid: be822ecd971b74646887cf176c8874b9, type: 3}
+  - {fileID: 21300000, guid: 51b2304ec514a2942a4066a17fb968f9, type: 3}
+  - {fileID: 21300000, guid: 6880ad7e2a25c0e42aea5157987aceca, type: 3}
+  - {fileID: 21300000, guid: 0c6aa8eeec7d3824cb437d1d137e4375, type: 3}
+  - {fileID: 21300000, guid: ca48921f72fd4564eb2bb53d07bc1e65, type: 3}
+  - {fileID: 21300000, guid: 66dd3c6fd362fc641b9258935d93df68, type: 3}
+  - {fileID: 21300000, guid: 39587eaf4f4656441a3b5403c5c27e6d, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - Arrow_16_Icon
+  - Arrow_14_Icon
+  - Arrow_30_Icon
+  - Arrow_10_Icon
+  - Arrow_37_Icon
+  - Arrow_18_Icon
+  - Arrow_29_Icon
+  - Arrow_19_Icon
+  - Arrow_39_Icon
+  - Arrow_13_Icon
+  - Arrow_5_7_Icon
+  - staff_14
+  - Arrow_27_Icon
+  - Arrow_34_Icon
+  - Arrow_35_Icon
+  - staff_15
+  - Arrow_24_Icon
+  - Arrow_17_Icon
+  - Arrow_15_Icon
+  - Arrow_28_Icon
+  - staff_13
+  - staff_50_icon
+  - Arrow_11_Icon
+  - Arrow_26_Icon
+  - Arrow_12_Icon
+  - Arrow_36_Icon
+  - Arrow_40_Icon
+  - Arrow_25_Icon
+  - Arrow_38_Icon
+  - Arrow_33_Icon
+  - Arrow_9_Icon
+  m_Tag: atlas_itemicon_arrow
+  m_IsVariant: 0

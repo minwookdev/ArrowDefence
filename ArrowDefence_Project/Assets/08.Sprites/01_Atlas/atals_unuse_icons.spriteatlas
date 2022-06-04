@@ -1,0 +1,139 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!687078895 &4343727234628468602
+SpriteAtlas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: atals_unuse_icons
+  m_EditorData:
+    serializedVersion: 2
+    textureSettings:
+      serializedVersion: 2
+      anisoLevel: 1
+      compressionQuality: 50
+      maxTextureSize: 2048
+      textureCompression: 0
+      filterMode: 1
+      generateMipMaps: 0
+      readable: 0
+      crunchedCompression: 0
+      sRGB: 1
+    platformSettings:
+    - serializedVersion: 3
+      m_BuildTarget: Android
+      m_MaxTextureSize: 2048
+      m_ResizeAlgorithm: 0
+      m_TextureFormat: 47
+      m_TextureCompression: 1
+      m_CompressionQuality: 50
+      m_CrunchedCompression: 0
+      m_AllowsAlphaSplitting: 0
+      m_Overridden: 1
+      m_AndroidETC2FallbackOverride: 0
+      m_ForceMaximumCompressionQuality_BC6H_BC7: 0
+    packingSettings:
+      serializedVersion: 2
+      padding: 8
+      blockOffset: 1
+      allowAlphaSplitting: 0
+      enableRotation: 0
+      enableTightPacking: 0
+    variantMultiplier: 1
+    packables:
+    - {fileID: 102900000, guid: 2b762b45b10065348b74dde1c9a14a25, type: 3}
+    bindAsDefault: 1
+  m_MasterAtlas: {fileID: 0}
+  m_PackedSprites:
+  - {fileID: 21300000, guid: f260ba702fde94584ae55b8a0a0aba71, type: 3}
+  - {fileID: 21300000, guid: 3fc94290871e74ad9b05c1549dae1423, type: 3}
+  - {fileID: 21300000, guid: 012a69316cd0ade458e9c4695200ca66, type: 3}
+  - {fileID: 21300000, guid: d1c81d916fa207545ad1006527264995, type: 3}
+  - {fileID: 21300000, guid: 464c8e919b3731244841a86f766d4ce4, type: 3}
+  - {fileID: 21300000, guid: c68c91a2d56f15247b384088c3285d50, type: 3}
+  - {fileID: 21300000, guid: 43bb49d225f57be4288d32e3d5757579, type: 3}
+  - {fileID: 21300000, guid: 5c1daaf2599975d42a1864588e2174bb, type: 3}
+  - {fileID: 21300000, guid: 7700eb032583e044bb660c2c74c32304, type: 3}
+  - {fileID: 21300000, guid: df274513b7ae94f499aada0e86216c4c, type: 3}
+  - {fileID: 21300000, guid: 8d1bd363a1cfc0c49a3bad2f75c41d1b, type: 3}
+  - {fileID: 21300000, guid: 90368d638c8bce94e984babcb4339d19, type: 3}
+  - {fileID: 21300000, guid: 7f433083ab3c91f49912e40d9e1b22e6, type: 3}
+  - {fileID: 21300000, guid: 7d6941948494f46b6ab536505c248e91, type: 3}
+  - {fileID: 21300000, guid: ac1c26a455deeaf4d9d513a40e1054d2, type: 3}
+  - {fileID: 21300000, guid: e36566b48f3fefa48bf6efacbf45a85d, type: 3}
+  - {fileID: 21300000, guid: e1ec4925824a4f843bcce6fd988d7109, type: 3}
+  - {fileID: 21300000, guid: 45416616bc8602546a401071acab39ac, type: 3}
+  - {fileID: 21300000, guid: d311a576f660771438a5f296f88a670e, type: 3}
+  - {fileID: 21300000, guid: 58a909b6a3cfdb44d9a2a72a43766159, type: 3}
+  - {fileID: 21300000, guid: a330341716ee64ffd8f92101938b00e8, type: 3}
+  - {fileID: 21300000, guid: 6da0e0270bfa64ea8bf78dcffb562c9a, type: 3}
+  - {fileID: 21300000, guid: e3291d27564cea744b13faceea237f18, type: 3}
+  - {fileID: 21300000, guid: 7a801e38ca8944cefabbae9b96e97e9d, type: 3}
+  - {fileID: 21300000, guid: 683aa978067882b4ba0a78debd59d232, type: 3}
+  - {fileID: 21300000, guid: 9e4b395943f40bc43b7e47f4aa3c346c, type: 3}
+  - {fileID: 21300000, guid: 5428229ac351288409eb848765d80f3c, type: 3}
+  - {fileID: 21300000, guid: 31a8393be45ead84bad08ba1d9d32864, type: 3}
+  - {fileID: 21300000, guid: 244a095b06ed2e44294092b554ba4a1b, type: 3}
+  - {fileID: 21300000, guid: 79b6da8b67c0d4130b619d38ee221bf2, type: 3}
+  - {fileID: 21300000, guid: 5ff1144c7f8c8944ab52b78b21e7aa53, type: 3}
+  - {fileID: 21300000, guid: c680554cf9a9e7c41aa8f6946c27c881, type: 3}
+  - {fileID: 21300000, guid: c656730dc393fb94d9b0e3943f0e9163, type: 3}
+  - {fileID: 21300000, guid: 726aa30de3000ce41a3627cfa0e1f34b, type: 3}
+  - {fileID: 21300000, guid: fc7ae15d701973c4a8b65abb66d884fd, type: 3}
+  - {fileID: 21300000, guid: 729182bda9c92374e94e06bbd7530ea8, type: 3}
+  - {fileID: 21300000, guid: b0f350ddcef5b0c42bbd756ced8e8ac9, type: 3}
+  - {fileID: 21300000, guid: b23dc4dd6305b834aaeefa93dbc1d5d4, type: 3}
+  - {fileID: 21300000, guid: 415bf3ed0fe604b39b622d949713cb24, type: 3}
+  - {fileID: 21300000, guid: 7565e53e877270748b420682abb562dd, type: 3}
+  - {fileID: 21300000, guid: 34e3a2aeb07c9734bb04890039324219, type: 3}
+  - {fileID: 21300000, guid: ea6c54ae6f217ce49b0f2c98a0ba12a3, type: 3}
+  - {fileID: 21300000, guid: 657e0b0f1412c4ec4a339d66a863db27, type: 3}
+  - {fileID: 21300000, guid: c50ca52f523442c4fb5e82c65fe9b9e5, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - equip_potion_blue_2
+  - icon_itemicon_potionblue
+  - Quest_55
+  - Res_165
+  - Res_24
+  - Loot_61
+  - Loot_50
+  - Loot_122
+  - Quest_52
+  - Loot_83
+  - Quest_35
+  - Res_164
+  - Res_161
+  - icon_itemicon_potionpurple
+  - Loot_114
+  - Loot_30
+  - Quest_118
+  - Quest_72
+  - Quest_75
+  - Quest_38
+  - common_item_star
+  - icon_itemicon_potiongreen
+  - Loot_109
+  - icon_itemicon_jewel2_red
+  - Quest_103
+  - Quest_39
+  - Quest_109
+  - Res_166
+  - Loot_92
+  - icon_itemicon_potionred
+  - Loot_31
+  - Res_151
+  - Quest_34
+  - Res_125
+  - Res_163
+  - Loot_157
+  - Quest_33
+  - Loot_45
+  - equip_axe_0
+  - Quest_53
+  - Quest_54
+  - Loot_113
+  - equip_potion_red_0
+  - Res_162
+  m_Tag: atals_unuse_icons
+  m_IsVariant: 0

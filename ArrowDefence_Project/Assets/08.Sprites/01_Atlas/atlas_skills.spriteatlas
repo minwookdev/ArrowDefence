@@ -1,0 +1,81 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!687078895 &4343727234628468602
+SpriteAtlas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: atlas_skills
+  m_EditorData:
+    serializedVersion: 2
+    textureSettings:
+      serializedVersion: 2
+      anisoLevel: 1
+      compressionQuality: 50
+      maxTextureSize: 2048
+      textureCompression: 0
+      filterMode: 1
+      generateMipMaps: 0
+      readable: 0
+      crunchedCompression: 0
+      sRGB: 1
+    platformSettings:
+    - serializedVersion: 3
+      m_BuildTarget: Android
+      m_MaxTextureSize: 2048
+      m_ResizeAlgorithm: 0
+      m_TextureFormat: 47
+      m_TextureCompression: 1
+      m_CompressionQuality: 50
+      m_CrunchedCompression: 0
+      m_AllowsAlphaSplitting: 0
+      m_Overridden: 1
+      m_AndroidETC2FallbackOverride: 0
+      m_ForceMaximumCompressionQuality_BC6H_BC7: 0
+    packingSettings:
+      serializedVersion: 2
+      padding: 4
+      blockOffset: 1
+      allowAlphaSplitting: 0
+      enableRotation: 0
+      enableTightPacking: 1
+    variantMultiplier: 1
+    packables:
+    - {fileID: 102900000, guid: 27376f0c4547e244a8c7f9311fa0bef0, type: 3}
+    bindAsDefault: 1
+  m_MasterAtlas: {fileID: 0}
+  m_PackedSprites:
+  - {fileID: 21300000, guid: 76788f2482cc6234aa71d1e22322dd47, type: 3}
+  - {fileID: 21300000, guid: 33d2e28416d37144b8a32c7e4a52a6e7, type: 3}
+  - {fileID: 21300000, guid: 857ff835fbf16984288b76daf03dd147, type: 3}
+  - {fileID: 21300000, guid: 54bac695f3849e7468504e3c1aae52af, type: 3}
+  - {fileID: 21300000, guid: 674a3d365c1fab1439aab1510b80cbec, type: 3}
+  - {fileID: 21300000, guid: 4b2dee36cb6654340bf97210a3592ed9, type: 3}
+  - {fileID: 21300000, guid: 0dc30d68de4dfae4bab6c423fcdc2dfb, type: 3}
+  - {fileID: 21300000, guid: d3178d098a3613f4f80cc5ff84a86932, type: 3}
+  - {fileID: 21300000, guid: dd2101390b04cbb44b7eacb0d361a795, type: 3}
+  - {fileID: 21300000, guid: 39095539338ff0749ba8ef1f5cf281db, type: 3}
+  - {fileID: 21300000, guid: c670bb2c0b2ac49419861ff2f20d7eb4, type: 3}
+  - {fileID: 21300000, guid: 8737d79d123e0d04f937e3c2d6c062f3, type: 3}
+  - {fileID: 21300000, guid: 519176dd0e4c5e24ba1e98d53a2717b8, type: 3}
+  - {fileID: 21300000, guid: a029fc7e9de73e1498ba9fa5b68279f7, type: 3}
+  - {fileID: 21300000, guid: f1c120afe6a54064e95c3a61085dcb4a, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - Engineerskill_28
+  - Assassinskill_42
+  - Warlock_35
+  - Mageskill_44
+  - Priestskill_23
+  - Archerskill_24
+  - Engineerskill_49
+  - Archerskill_39
+  - Engineerskill_47
+  - Warlock_01
+  - Engineerskill_41
+  - Paladinskill_23
+  - Paladinskill_50
+  - Archerskill_12
+  - Mageskill_19
+  m_Tag: atlas_skills
+  m_IsVariant: 0

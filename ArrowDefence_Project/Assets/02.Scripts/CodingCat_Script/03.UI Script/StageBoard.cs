@@ -4,6 +4,7 @@
     using UnityEngine;
     using UnityEngine.UI;
     using TMPro;
+    using I2.Loc;
 
     public class StageBoard : MonoBehaviour {
         [Header("STAGE")]
@@ -21,7 +22,10 @@
         List<UI_ItemDataSlot> dropListSlots = null;
 
         [Header("CHALLENGES")]
-        [SerializeField] ChallengeInfos challengeInfos = null;
+        [SerializeField] ChallengeInfos challengeInfos          = null;
+        [SerializeField] [TermsPopup] string[] challengeStrings = null;
+        [SerializeField] TextMeshProUGUI[] textChallenges       = null;
+        LocalizedString localString;
 
         [Header("SETTINGS")]
         [SerializeField] SettingsInfo settingsInfo = null;
@@ -32,12 +36,20 @@
         [SerializeField] bool isDebug = false;
         [SerializeField] bool isLockOnBuild = false;
 
+        [Header("OVERRIDE MATERIAL")]
+        [SerializeField] bool isOverrideMaterial       = false;
+        [SerializeField] Material fontMaterial         = null;
+        [SerializeField] TextMeshProUGUI[] targetTexts = null;
+
         void Start() {
             // Update Challenge Panel
             UpdateChallengeList(ref isAchieveAll, out bool isClearedStage);
             UpdateMonsterList();
             UpdateDropTableList(isClearedStage);
             UpdateSettingsPanel(isAchieveAll);
+
+            // Check Font Material Override
+            FontMaterialOverride();
         }
 
         void OnEnable() {
@@ -168,6 +180,12 @@
                     info.EnableAutoUse();
                 }
             }
+
+            //Set Challenge Text Components
+            for (int i = 0; i < textChallenges.Length; i++) {
+                localString = challengeStrings[i]; //Input Translater
+                textChallenges[i].text = localString.ToString();
+            }
         }
 
         #endregion
@@ -175,6 +193,21 @@
         public void BE_BATTLE_SELECT() {
             MainSceneRoute.Inst.OpenBattlePopup(stageType);
         }
+
+        #region MATERIAL_OVERRIDE
+
+        private void FontMaterialOverride() {
+            if (!isOverrideMaterial) {
+                return;
+            }
+
+            //Apply All Texts
+            foreach (var text in targetTexts) {
+                text.fontMaterial = fontMaterial;
+            }
+        }
+
+        #endregion
 
         #region CHALLENGE_INFO
 

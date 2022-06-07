@@ -48,9 +48,8 @@
             }
         }
 
-        public int GetTotalTableSize(bool includeRewardTableSize) {
-            return (includeRewardTableSize) ? ((DropTableArray == null ? 0 : DropTableArray.Length) + (RewardTableArray == null ? 0 : RewardTableArray.Length)) :
-                                              ((DropTableArray == null ? 0 : DropTableArray.Length));
+        public sbyte GetTotalTableSize(bool isClearedStage) {
+            return System.Convert.ToSByte((isClearedStage) ? (DropTableArray == null ? 0 : DropTableArray.Length) : ((DropTableArray == null ? 0 : DropTableArray.Length) + (RewardTableArray == null ? 0 : RewardTableArray.Length)));
         }
 
         private void Awake() {

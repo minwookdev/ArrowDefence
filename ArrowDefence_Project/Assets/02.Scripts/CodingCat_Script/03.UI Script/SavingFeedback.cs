@@ -12,6 +12,11 @@
 
         Sequence panelSequence = null;
 
+        [Header("OVERRIDE MATERIAL")]
+        [SerializeField] bool isOverrideTextMaterial = false;
+        [SerializeField] TMPro.TextMeshProUGUI tmp_message = null;
+        [SerializeField] Material outlineMaterial = null;
+
         private float openTime    = 1f;
         private float holdingTime = 1.5f;
         private float closingTime = 1f;
@@ -47,6 +52,10 @@
         private void Start() {
             if (gameObject.activeSelf) {
                 gameObject.SetActive(false);
+            }
+
+            if (isOverrideTextMaterial && string.Equals(I2.Loc.LocalizationManager.CurrentLanguage, "Korean")) {
+                tmp_message.fontMaterial = outlineMaterial;
             }
         }
 

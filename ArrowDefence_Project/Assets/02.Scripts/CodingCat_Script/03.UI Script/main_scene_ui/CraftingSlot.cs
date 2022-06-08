@@ -110,7 +110,8 @@
             buttonQuick.gameObject.SetActive(!craftinginfo.IsComplete);
             buttonReceipt.gameObject.SetActive(craftinginfo.IsComplete);
 
-            textState.text = (craftinginfo.IsComplete) ? "CRAFTING COMPLETE !" : "STAGE CLEAR REMAINING";
+            string remainingString = (craftinginfo.IsComplete) ? I2.Loc.ScriptLocalization.UI.craftingslot_remaining_complete : I2.Loc.ScriptLocalization.UI.craftingslot_remaining_inprogress;
+            textState.text = remainingString;
         }
 
         public void DisableSlot() {

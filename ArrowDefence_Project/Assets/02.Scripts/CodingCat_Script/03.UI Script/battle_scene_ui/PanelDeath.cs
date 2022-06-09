@@ -15,6 +15,7 @@
         [SerializeField] [TextArea(3, 5)]
         string stageTips = "";
         Sequence panelSeq = null;
+        [SerializeField] [I2.Loc.TermsPopup] string[] tipsTerms = null;
 
         [Header("BUTTON EVENT")]
         [SerializeField] BattleSceneButton battleButtons = null;
@@ -36,12 +37,15 @@
             buttonCanvasGroup.alpha = 0f;
             tmptips.text = "";
 
+            //Get Random Tips String
+            I2.Loc.LocalizedString localTipsString = tipsTerms.RandIndex<string>();
+
             panelTr.gameObject.SetActive(true);
             panelSeq = DOTween.Sequence()
                               .Append(logoTr.DOAnchorPos(saveLogoPos, 1f))
                               .Prepend(imagePanelBack.DOFade(saveBackPanelColor.a, .5f))
                               .Append(buttonCanvasGroup.DOFade(1f, 0.3f))
-                              .Insert(1f, tmptips.DOText(stageTips, 2f))
+                              .Insert(1f, tmptips.DOText(localTipsString, 2f))
                               .OnComplete(() => frontPanelTr.gameObject.SetActive(false));
             //Don't set SetAutoKill because no re-run is required.
         }

@@ -99,7 +99,7 @@
             SceneLoader.SceneChangeCallback -= this.ReleaseFeedbackPanel;
         }
 
-        #region SCREEN
+#region SCREEN
 
         /// <summary>
         /// Rect Set of Target Camera with a  9 : 16 Portrait Resolition
@@ -130,6 +130,18 @@
 
         public void SetControlType(bool isChangeType) {
             CCPlayerData.settings.SetPullType(isChangeType);
+        }
+
+        public PULLINGTYPE GetPlayerPullType() => CCPlayerData.settings.PullingType;
+
+        public bool IsControlTypeChanged() {
+            var controller = GetControllerInstOrNull();
+            if (controller == null) {
+                CatLog.WLog("Not Found Bow Controller this Scene.");
+                return false;
+            }
+
+            return (controller.ControlType != CCPlayerData.settings.PullingType);
         }
 
 #endregion
@@ -472,7 +484,6 @@
             bool isTimeDefault = (Time.timeScale == 1f) ? true : false;
             return isTimeDefault;
         }
-
 
 #endregion
 

@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1269165737}
   - component: {fileID: 1269165739}
+  - component: {fileID: 876529490389915791}
   - component: {fileID: 1269165738}
   m_Layer: 5
   m_Name: text_remove
@@ -45,6 +46,45 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1269165736}
   m_CullTransparentMesh: 0
+--- !u!114 &876529490389915791
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1269165736}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 344445a89b4f74a0e9a0a766903df87e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mTerm: 
+  mTermSecondary: 
+  PrimaryTermModifier: 0
+  SecondaryTermModifier: 0
+  TermPrefix: 
+  TermSuffix: 
+  LocalizeOnAwake: 1
+  IgnoreRTL: 0
+  MaxCharactersInRTL: 0
+  IgnoreNumbersInRTL: 1
+  CorrectAlignmentForRTL: 1
+  AddSpacesToJoinedLanguages: 0
+  AllowLocalizedParameters: 1
+  AllowParameters: 1
+  TranslatedObjects: []
+  LocalizeEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  AlwaysForceLocalize: 0
+  LocalizeCallBack:
+    Target: {fileID: 0}
+    MethodName: 
+  mGUI_ShowReferences: 0
+  mGUI_ShowTems: 1
+  mGUI_ShowCallback: 0
+  mLocalizeTarget: {fileID: 0}
+  mLocalizeTargetName: I2.Loc.LocalizeTarget_TextMeshPro_UGUI
 --- !u!114 &1269165738
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -391,6 +431,12 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.x
       value: 40
       objectReference: {fileID: 0}
+    - target: {fileID: 2392466691895030897, guid: e41c3dcd76f235e458d990d19e522b95,
+        type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: -4171563015097924827, guid: 27f54c9130c9748c9be53df11fa03382,
+        type: 2}
     - target: {fileID: 2392466691979787738, guid: e41c3dcd76f235e458d990d19e522b95,
         type: 3}
       propertyPath: m_IsActive

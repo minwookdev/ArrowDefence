@@ -32,6 +32,9 @@
         #region Ref_Btn
 
         public void ButtonResume() {
+            if (GameManager.Instance.IsControlTypeChanged()) {  //Settings Panel에서 Control Type를 바꿧으면 Controller에 업데이트를 요청
+                GameManager.Instance.GetControllerInstOrNull().ReloadControlType();
+            }
             battleButtons.Resume(this, panelCanvasGroup, openFadeTime, route.ExitPause);
         }
 
@@ -44,7 +47,7 @@
         }
 
         public void ButtonSettings() {
-
+            battleButtons.Settings();
         }
 
         #endregion

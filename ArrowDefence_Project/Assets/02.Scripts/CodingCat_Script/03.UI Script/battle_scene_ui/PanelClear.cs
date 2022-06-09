@@ -51,6 +51,9 @@
         float defaultFadeTime = 1.0f;
         float safetyTime = 1.2f;
 
+        [Header("SETTINGS")]
+        [SerializeField] SettingsPanel settingsPanel = null;
+
         /// <summary>
         /// Editor로 Button 또는 EventTrigger로 캐싱사용 하려면 래핑해서 사용.
         /// </summary>
@@ -106,7 +109,7 @@
         }
 
         public void Settings() {
-            Notify.Inst.Message("Construction...");
+            settingsPanel.OpenPanel();
         }
     }
 }

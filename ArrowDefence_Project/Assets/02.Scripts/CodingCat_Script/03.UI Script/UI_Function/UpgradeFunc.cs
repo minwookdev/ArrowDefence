@@ -598,6 +598,7 @@
                 return true;
             }
 
+            // ↓ ↓ ↓ 강화성공 로직
             //Upgrade Item 제거 (얘가 존재하는지 먼저 위에서 확인하고 여기서는 지워주기만 하도록 로직 수정해야함)
             if (GameManager.Instance.TryRemoveItem(selectedItemRef) == false) {
                 throw new System.Exception("Warning !, Item Upgrade Failed. Selected Item Not Found");

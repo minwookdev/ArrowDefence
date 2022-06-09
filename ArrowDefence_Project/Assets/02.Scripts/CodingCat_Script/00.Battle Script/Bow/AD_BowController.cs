@@ -81,6 +81,11 @@
         private ARROWTYPE arrowType;
         private ARROWTYPE previousType;
         private PULLINGTYPE currentPullType;
+        public PULLINGTYPE ControlType {
+            get {
+                return currentPullType;
+            }
+        }
 
         //Struct
         private DamageStruct damageStruct;
@@ -115,7 +120,7 @@
 
             //Initialize Main Camera Object
             MainCam = Camera.main;
-            currentPullType = Data.CCPlayerData.settings.PullingType;
+            currentPullType = GameManager.Instance.GetPlayerPullType();
 
             //Initialize variables For Arrow to be Loaded
             if(ClampPointTop == null || ClampPointBottom == null) {
@@ -653,6 +658,10 @@
         }
 
 #endregion
+
+        public void ReloadControlType() {
+            currentPullType = GameManager.Instance.GetPlayerPullType();
+        }
 
 #region NOT_USED
 

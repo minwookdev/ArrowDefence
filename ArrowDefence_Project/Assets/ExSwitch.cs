@@ -1,6 +1,7 @@
 ﻿namespace ActionCat {
     using UnityEngine;
     using UnityEngine.EventSystems;
+    using ActionCat.Audio;
 #if UNITY_EDITOR
     using UnityEditor;
 #endif
@@ -12,6 +13,9 @@
 
         [Header("SWITCH")]
         [SerializeField] private bool isOn = false;
+
+        [Header("SOUND")]
+        [SerializeField] ACSound sound = null;
 
         //ACTION
         System.Action<bool> switchAction = null;
@@ -41,6 +45,9 @@
         void IPointerClickHandler.OnPointerClick(PointerEventData eventData) {
             IsOn = (isOn) ? false : true;
             switchAction?.Invoke(isOn);
+            if (sound != null) {
+                sound.PlayOneShot();
+            }
         }
 
         public void AddListnerSwitch(System.Action<bool> action) {
@@ -74,6 +81,7 @@
             SerializedProperty isOnProp = null;
             SerializedProperty enableRectTrProp = null;
             SerializedProperty disableRectTrProp = null;
+            SerializedProperty soundProp = null;
 
             GUIStyle titleStyle = null;
             Color lineColor = new Color(0.6f, 0.6f, 0.6f, 0.6f);
@@ -83,6 +91,7 @@
                 enableRectTrProp  = serializedObject.FindProperty(nameof(ExSwitch.enableRectTr));
                 disableRectTrProp = serializedObject.FindProperty(nameof(ExSwitch.disableRectTr));
                 isOnProp = serializedObject.FindProperty(nameof(ExSwitch.isOn));
+                soundProp = serializedObject.FindProperty(nameof(ExSwitch.sound));
 
                 titleStyle = new GUIStyle();
                 titleStyle.fontStyle = FontStyle.BoldAndItalic;
@@ -97,6 +106,7 @@
                 DrawUILine(lineColor);
                 EditorGUILayout.PropertyField(enableRectTrProp);
                 EditorGUILayout.PropertyField(disableRectTrProp);
+                EditorGUILayout.PropertyField(soundProp);
 
                 EditorGUI.BeginChangeCheck();
                 EditorGUILayout.PropertyField(isOnProp);

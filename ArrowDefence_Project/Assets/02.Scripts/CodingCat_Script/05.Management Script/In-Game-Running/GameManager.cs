@@ -1,6 +1,7 @@
 ﻿namespace ActionCat {
     using UnityEngine;
     using ActionCat.Data;
+    using ActionCat.Audio;
 
     public class GameManager : Singleton<GameManager> {
         public enum GAMEPLATFORM { 
@@ -21,6 +22,9 @@
         public GAMEPLATFORM PlayPlatform { get; private set; }
         public GAMESTATE GameState { get; private set; } = GAMESTATE.STATE_NONE;
         public bool IsDevMode { get; private set; } = false;
+        public bool IsInitialized {
+            get => isManagerInitialized;
+        }
         public Player_Equipments PlayerEquips {
             get {
                 return CCPlayerData.equipments;

@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using ActionCat;
+using ActionCat.Audio;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.PostProcessing;
 
@@ -46,6 +47,9 @@ public class TitleSceneRoute : MonoBehaviour {
     [SerializeField] bool isCamMovementActive = true;
     Coroutine cameraMovementCo = null;
 
+    [Header("SOUND")]
+    [SerializeField] ACSound titleMusic = null;
+
     Sequence titleSeq = null;
 
     public void Awake() {
@@ -82,6 +86,9 @@ public class TitleSceneRoute : MonoBehaviour {
 
         //에러패널 부모 가져와서 쓰고있는데, 아무 UI 패널의 부모가져와서 박아주면된다
         Notify.Inst.Init(errorPanel.transform.root.GetComponent<RectTransform>());
+
+        //Play TitleScene Background Music
+        titleMusic.PlaySound(true, true);
     }
 
     private void OnDestroy() {
@@ -209,6 +216,7 @@ public class TitleSceneRoute : MonoBehaviour {
         if (isCamMovementActive) {  //Disable CameraMovement Coroutine.
             StopCoroutine(cameraMovementCo);
         }
+        titleMusic.StopSound(true);
         //GameManager.Instance.ChangeGameState(GAMESTATE.STATE_NONE); //Break MonsterSpawn <-- OnDestroy에서 해주고있음
 
         // writter 종료하고, 씬 넘기기 처리

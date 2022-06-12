@@ -4,7 +4,7 @@
 		"value" : {
 			"stageSettings" : {
 			},
-			"bgmSoundValue" : 1,
+			"bgmSoundValue" : 0.7071338,
 			"seSoundValue" : 1,
 			"<PullingType>k__BackingField" : 1
 		}

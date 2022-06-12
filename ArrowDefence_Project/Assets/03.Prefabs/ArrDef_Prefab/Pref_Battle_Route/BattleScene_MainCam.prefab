@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 6885781577537177159}
   - component: {fileID: 494749892619451735}
   - component: {fileID: 4284028698097784827}
+  - component: {fileID: 6344541134185801563}
   m_Layer: 14
   m_Name: BattleScene_MainCam
   m_TagString: MainCamera
@@ -153,3 +154,11 @@ MonoBehaviour:
   blendDistance: 0
   weight: 1
   priority: 0
+--- !u!81 &6344541134185801563
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6885781577537177157}
+  m_Enabled: 1

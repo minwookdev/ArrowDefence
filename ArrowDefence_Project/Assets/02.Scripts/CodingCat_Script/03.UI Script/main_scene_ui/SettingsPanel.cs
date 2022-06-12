@@ -72,6 +72,10 @@
             settings.SeSoundValue = seSlider.value;
         }
 
+        public void SU_BGM() => SoundManager.Instance.SetVolumeScale(Audio.SOUNDTYPE.BGM);
+
+        public void SU_SE()  => SoundManager.Instance.SetVolumeScale(Audio.SOUNDTYPE.SE);
+
         #endregion
     }
 }

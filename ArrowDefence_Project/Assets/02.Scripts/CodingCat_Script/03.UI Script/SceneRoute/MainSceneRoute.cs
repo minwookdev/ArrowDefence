@@ -3,6 +3,7 @@ using UnityEngine;
 using DG.Tweening;
 using ActionCat;
 using ActionCat.Interface;
+using ActionCat.Audio;
 
 public class MainSceneRoute : MonoBehaviour {
     static MainSceneRoute _inst;
@@ -38,6 +39,9 @@ public class MainSceneRoute : MonoBehaviour {
     [I2.Loc.TermsPopup]
     public string _stringWithTermPopup;
 
+    [Header("SOUND")]
+    [SerializeField] ACSound bgmSound = null;
+
     private void Awake() {
         _inst = this;
         for (int i = 0; i < panels.Length; i++) {
@@ -69,6 +73,7 @@ public class MainSceneRoute : MonoBehaviour {
         }
 
         UpdatePlayerCurrency();
+        bgmSound.PlaySoundWithDelayed(0.5f, true);
 
         //I2.Loc.LocalizedString localString = "ABILITY_DAMAGE";
         //string translate = localString;

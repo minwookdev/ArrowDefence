@@ -18,11 +18,14 @@
         [SerializeField] Sprite[] frameSprites = null;
         [SerializeField] GameObject selectedFrame = null;
 
-        [Space(10f)]
         [Header("DEBUG")]
         [SerializeField] bool isPressed  = false;
         [SerializeField] bool isSelected = false;
         ActionCat.UI.CraftingFunc crafting = null;
+
+        [Header("SOUND")]
+        [SerializeField] Audio.ACSound slotSound = null;
+        [SerializeField] [ReadOnly] bool isInitSound = false;
 
         Vector3 normalScale  = new Vector3(1f, 1f, 1f);
         Vector3 pressedScale = new Vector3(1.1f, 1.1f, 1f);
@@ -71,6 +74,9 @@
 
             itemReference = item;
 
+            //Check Slot Sound
+            isInitSound = (slotSound != null);
+
             if(gameObject.activeSelf == false) {
                 gameObject.SetActive(true);
             }
@@ -101,7 +107,10 @@
                 currentPressedTime = 0f;
             }
             ScaleTrigger();
-            CatLog.Log("Called Pointer Click !");
+
+            if (isInitSound) {
+                slotSound.PlayOneShot();
+            }
         }
 
         void IPointerDownHandler.OnPointerDown(PointerEventData eventData) {

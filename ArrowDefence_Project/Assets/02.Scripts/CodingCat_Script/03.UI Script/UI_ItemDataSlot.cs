@@ -3,6 +3,7 @@
     using UnityEngine;
     using UnityEngine.EventSystems;
     using UnityEngine.UI;
+    using ActionCat.Audio;
 
     internal enum SLOTEVENT {
         NONE,
@@ -40,6 +41,10 @@
         [SerializeField] private RectTransform rectTrRewardTag   = null;
         [SerializeField] private RectTransform[] rewardTagsRectTr = null;
 
+        [Header("SOUND")]
+        [SerializeField] private ACSound slotSound = null;
+        [SerializeField] [ReadOnly] bool isInitSound = false;
+
         //Fields
         bool isPressed = false;
         bool isRewardedSlot = false;
@@ -52,6 +57,9 @@
             normalScale = slotRectTr.localScale;
 
             isScrollRectParent = (scrollRect != null);
+
+            //Slot Sound Check
+            isInitSound = (slotSound != null);
         }
 
         private void Update() {
@@ -94,7 +102,7 @@
             });
             isRewardedSlot = isReward;
 
-            if(gameObject.activeSelf == false) {
+            if (gameObject.activeSelf == false) {
                 gameObject.SetActive(true);
             }
         }
@@ -159,6 +167,10 @@
             }
             else {
                 MainSceneRoute.OpenInfo_DropListItem_Preview(tempItem);
+            }
+
+            if (isInitSound) {
+                slotSound.PlayOneShot();
             }
         }
 

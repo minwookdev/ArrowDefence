@@ -61,17 +61,16 @@
             }
         }
 
-        public static bool IsActive {
+        /// <summary>
+        /// OnDestory에서 Instance를 비교하여 하면 Singleton을 다시 생성해버리는 로직오류를 방지.
+        /// </summary>
+        public static bool IsExist {
             get {
-                if(_instance == null) {
-                    return false;
-                }
-                return true;
+                return (_instance != null && _shuttingdown == false);
             }
         }
 
-        private void Awake()
-        {
+        private void Awake() {
 #if UNITY_EDITOR
             //InitMessage Output :: Unity Debug
             string initMsg = string.Format("{0} :: {1}", "Init Singleton Instance", "<color=yellow>" + this + "</color>");

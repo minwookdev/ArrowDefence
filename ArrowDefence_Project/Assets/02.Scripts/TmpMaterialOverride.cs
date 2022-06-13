@@ -20,8 +20,6 @@
                 OverrideMaterial();
                 this.enabled = false;
             }
-
-            CatLog.Log("영어일때는 들어오면 안댐.");
         }
 
         private void OnEnable() {

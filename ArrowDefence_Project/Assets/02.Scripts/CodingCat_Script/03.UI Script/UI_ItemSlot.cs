@@ -1,9 +1,9 @@
-﻿namespace ActionCat
-{
+﻿namespace ActionCat {
     using TMPro;
     using UnityEngine;
     using UnityEngine.EventSystems;
     using UnityEngine.UI;
+    using ActionCat.Audio;
 
     public class UI_ItemSlot : MonoBehaviour, IPointerClickHandler {
         [Header("COMPONENT")]
@@ -15,6 +15,15 @@
 
         [Header("OPTION")]
         [SerializeField] bool ignoreClick = false;
+
+        [Header("SOUND")]
+        [SerializeField] ACSound slotSound = null;
+        [SerializeField] [ReadOnly] bool isInitSound = false;
+
+        public void Start() {
+            //Check Slot Sound 
+            isInitSound = (slotSound != null);
+        }
 
         public void SetItemSprite(Sprite sprite) => ItemImg.sprite = sprite;
 
@@ -50,7 +59,7 @@
                 ItemStackTmp.text = notationNumber.ToString();
                 ItemStackTmp.gameObject.SetActive(true);
             }
-            
+
             gameObject.SetActive(true);
         }
 
@@ -68,11 +77,10 @@
                 return;
             }
 
+            if (isInitSound) {
+                slotSound.PlayOneShot();
+            }
             MainSceneRoute.OpenInfo_InventoryItem(ItemAddress);
         }
-
-        #region SLOT_SETTING_METHOD
-
-        #endregion
     }
 }

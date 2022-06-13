@@ -42,6 +42,7 @@
         [SerializeField] TextMeshProUGUI textResultMain = null;
         [SerializeField] TextMeshProUGUI textResultSub = null;
         [SerializeField] UnityEngine.UI.Image imageResultHorizontal = null;
+        [SerializeField] Audio.ACSound craftingCompletedSound = null;
 
         [Space(5f)]
         [Header("DEBUG")]
@@ -222,6 +223,9 @@
 
             //SaveUser Json File
             GameManager.Instance.SaveUserJsonFile();
+
+            //Crafting Completed Sound Play
+            craftingCompletedSound.PlayOneShot();
         }
 
         //============================================================ [ SELECTION ] ===========================================================

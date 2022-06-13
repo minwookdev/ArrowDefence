@@ -20,6 +20,8 @@
             get => soundType;
         }
 
+        #region LIFE_CYCLE
+
         private void Awake() {
             if (this.audioSource == null) {
                 audioSource = GetComponent<AudioSource>();
@@ -31,47 +33,18 @@
         private void Start() {
             SoundManager.Instance.AddSound(this);
             volumeScale = SoundManager.Instance.GetVolumeScale(soundType);
+            audioSource.volume = volumeScale;
         }
 
         private void OnDestroy() {
-            if (SoundManager.Instance != null) {
+            if (SoundManager.IsExist) {
                 SoundManager.Instance.RemoveSound(soundKey);
             }
         }
 
-        /// <summary>
-        /// Awake 에서 사용하는 것은 안전하지 않음.
-        /// </summary>
-        /// <param name="isLoop"></param>
-        public void PlaySound(bool isLoop = false, bool isFade = false) {
-            if (audioSource.clip == null) {
-                CatLog.WLog("ActionCat Sound: Audio Clip is Null.");
-                return;
-            }
+        #endregion
 
-            if (isFade) {
-                StartCoroutine(SoundFade(true, 2f));
-            }
-            else {
-                audioSource.volume = volumeScale;
-            }
-            
-            audioSource.loop = isLoop;
-            audioSource.Play();
-        }
-
-        public void PlayOneShot() {
-            audioSource.PlayOneShot(sound, volumeScale);
-        }
-
-        public void StopSound(bool isFade = false) {
-            if (isFade) {
-                StartCoroutine(SoundFade(false, 1f));
-                return;
-            }
-
-            audioSource.Stop();
-        }
+        #region OPTIONS
 
         public void SetVolumeScale(float volume) {
             volumeScale = volume;
@@ -82,21 +55,109 @@
             this.soundKey = string.Format("{0}_{1}", this.assignSoundKey, index.ToString());
         }
 
-        System.Collections.IEnumerator SoundFade(bool isOn, float fadeTime) { //분리하기
-            float progress  = 0f;
-            float fadeSpeed = 1 / fadeTime;
-            float destVolume  = (isOn) ? volumeScale : StNum.floatZero;
-            float startVolume = (isOn) ? StNum.floatZero : volumeScale;
-            while (progress < 1f) {
-                progress += Time.deltaTime * fadeSpeed;
-                audioSource.volume = Mathf.Lerp(startVolume, destVolume, progress);
-                yield return null;
+        #endregion
+
+        #region STOP_SOUND
+
+        public void StopSound() => audioSource.Stop();
+
+        public void StopSoundWithFadeIn(float fadeTime = 1f, bool isEndWithSoundStop = true) {
+            StartCoroutine(FadeInVolume(fadeTime, isEndWithSoundStop));
+        }
+
+        #endregion
+
+        #region PLAY
+
+        /// <summary>
+        /// Awake에서 사용하는 것은 안전하지 않음.
+        /// </summary>
+        /// <param name="isLoop"></param>
+        public void PlaySound(bool isLoop = false) {
+            if (audioSource.clip == null) {
+                if (sound == null) {
+                    CatLog.WLog("Action Sound: AudioClip is Null."); return;
+                }
+                audioSource.clip = sound;
             }
 
-            if(!isOn) {
+            audioSource.volume = volumeScale;
+            audioSource.loop   = isLoop;
+            audioSource.Play();
+        }
+
+        /// <summary>
+        /// Delay 시간동안 대기 후 사운드 출력 # delay 매개변수는 seconds 단위
+        /// </summary>
+        /// <param name="delay">Seconds</param>
+        /// <param name="isLoop"></param>
+        public void PlaySoundWithDelayed(float delay, bool isLoop = false) {
+            if (audioSource.clip == null) {
+                if (sound == null) {
+                    CatLog.WLog("Action Sound: AudioClip is Null."); return;
+                }
+                audioSource.clip = sound;
+            }
+
+            audioSource.loop = isLoop;
+            audioSource.volume = volumeScale;
+            audioSource.PlayDelayed(delay);
+        }
+
+        /// <summary>
+        /// Volume이 0에서 시작하고 점점 커짐. Sound FadeOut효과
+        /// </summary>
+        /// <param name="isLoop"></param>
+        public void PlaySoundWithFadeOut(float fadeTime = 1f, bool isLoop = false) {
+            if (audioSource.clip == null) {
+                if (sound == null) {
+                    CatLog.WLog("Action Sound: AudioClip is Null."); return;
+                }
+                audioSource.clip = sound;
+            }
+
+            StartCoroutine(FadeOutVolume(fadeTime));
+            audioSource.loop = isLoop;
+            audioSource.Play();
+        }
+
+        #endregion
+
+        #region PLAYONESHOT
+
+        public void PlayOneShot() {
+            audioSource.PlayOneShot(sound, volumeScale);
+        }
+
+        #endregion
+
+        #region COROUTINE
+
+        System.Collections.IEnumerator FadeOutVolume(float fadeTime) {
+            float progress    = 0f;
+            float fadeSpeed   = 1 / fadeTime;
+            while (progress < 1f) {
+                progress += Time.deltaTime * fadeSpeed;
+                audioSource.volume = Mathf.Lerp(StNum.floatZero, volumeScale, progress);
+                yield return null;
+            }
+        }
+
+        System.Collections.IEnumerator FadeInVolume(float fadeTime, bool isEndWithSoundStop = false) {
+            float progress    = 0f;
+            float fadeSpeed   = 1 / fadeTime;
+            while (progress < 1f) {
+                progress += Time.deltaTime * fadeSpeed;
+                audioSource.volume = Mathf.Lerp(volumeScale, StNum.floatZero, progress);
+                yield return null;
+            }
+            volumeScale = StNum.floatZero;
+            if (isEndWithSoundStop) {
                 audioSource.Stop();
             }
         }
+
+        #endregion
     }
 
     public enum SOUNDTYPE {

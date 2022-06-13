@@ -69,6 +69,7 @@
 #endif
             fixedDeltaTime = Time.fixedDeltaTime;
             LoadSettings();
+            SoundManager.Instance.SetVolumeScale();
             isManagerInitialized = true;
         }
 

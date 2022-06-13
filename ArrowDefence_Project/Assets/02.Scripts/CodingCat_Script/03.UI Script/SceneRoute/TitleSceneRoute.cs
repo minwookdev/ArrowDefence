@@ -88,7 +88,7 @@ public class TitleSceneRoute : MonoBehaviour {
         Notify.Inst.Init(errorPanel.transform.root.GetComponent<RectTransform>());
 
         //Play TitleScene Background Music
-        titleMusic.PlaySound(true, true);
+        titleMusic.PlaySoundWithFadeOut(1f, true);
     }
 
     private void OnDestroy() {
@@ -216,7 +216,7 @@ public class TitleSceneRoute : MonoBehaviour {
         if (isCamMovementActive) {  //Disable CameraMovement Coroutine.
             StopCoroutine(cameraMovementCo);
         }
-        titleMusic.StopSound(true);
+        titleMusic.StopSoundWithFadeIn(1f, true);
         //GameManager.Instance.ChangeGameState(GAMESTATE.STATE_NONE); //Break MonsterSpawn <-- OnDestroy에서 해주고있음
 
         // writter 종료하고, 씬 넘기기 처리

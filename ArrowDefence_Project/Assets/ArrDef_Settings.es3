@@ -2,10 +2,19 @@
 	"KEY_SETTINGS" : {
 		"__type" : "ActionCat.Data.GameSettings,Assembly-CSharp",
 		"value" : {
-			"stageSettings" : {
+			"stageSettings" : {"forest_secluded_e":{
+					"<isOnAutoMode>k__BackingField" : false,
+					"<isOnEliteSpawn>k__BackingField" : false
+				},"forest_secluded_n":{
+					"<isOnAutoMode>k__BackingField" : false,
+					"<isOnEliteSpawn>k__BackingField" : false
+				},"forest_secluded_h":{
+					"<isOnAutoMode>k__BackingField" : false,
+					"<isOnEliteSpawn>k__BackingField" : false
+				}
 			},
-			"bgmSoundValue" : 0.7071338,
-			"seSoundValue" : 1,
+			"bgmSoundValue" : 0.443277717,
+			"seSoundValue" : 0.8592767,
 			"<PullingType>k__BackingField" : 1
 		}
 	}

@@ -15,7 +15,7 @@ MonoBehaviour:
   mSource:
     UserAgreesToHaveItOnTheScene: 0
     UserAgreesToHaveItInsideThePluginsFolder: 0
-    GoogleLiveSyncIsUptoDate: 1
+    GoogleLiveSyncIsUptoDate: 0
     mTerms:
     - Term: ItemDesc/BluePrint/BP_ARROW
       TermType: 0
@@ -2243,9 +2243,9 @@ MonoBehaviour:
       TermType: 0
       Description: 
       Languages:
-      - Damage
-      - "\uD53C\uD574"
-      - "\u30C0\u30E1\u30FC\u30B8"
+      - "\rCLEAR THE REMAINING STAGES"
+      - "\uB0A8\uC740 \uC2A4\uD14C\uC774\uC9C0 \uD074\uB9AC\uC5B4 \uD69F\uC218"
+      - "\u6B8B\u3063\u305F\u30B9\u30C6\u30FC\u30B8\u30AF\u30EA\u30A2\u56DE\u6570"
       - 
       Flags: 00000000
       Languages_Touch: []

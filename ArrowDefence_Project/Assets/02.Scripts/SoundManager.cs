@@ -14,7 +14,7 @@
         [SerializeField] int[] numberCacheArray = null;
 
         [Header("OPTION")]
-        [SerializeField] [RangeEx(3, 10, 1)] int numberCacheStart = 3;
+        [SerializeField] [RangeEx(1, 10, 1)] int numberCacheStart = 3;
 
         #region UNITY_CYCLE
 
@@ -30,7 +30,7 @@
         }
 
         private void OnDestroy() {
-            if (SceneLoader.Instance != null) {
+            if (SceneLoader.IsExist) {
                 SceneLoader.SceneChangeCallback -= ClearNumberCache;
             }
         }
@@ -85,12 +85,25 @@
             soundDic.Remove(key);
         }
 
+        /// <summary>
+        /// Set Volume By Sound Type 
+        /// </summary>
+        /// <param name="type"></param>
         public void SetVolumeScale(SOUNDTYPE type) {
             float targetVolume = GetVolumeScale(type);
             foreach (var pair in soundDic) {
                 if (pair.Value.SoundType == type) {
                     pair.Value.SetVolumeScale(targetVolume);
                 }
+            }
+        }
+
+        /// <summary>
+        /// Set All Sounds Volume
+        /// </summary>
+        public void SetVolumeScale() {
+            foreach (var pair in soundDic) {
+                pair.Value.SetVolumeScale(GetVolumeScale(pair.Value.SoundType));
             }
         }
 

@@ -766,6 +766,10 @@
         [Header("ONLY UPGRADE INFO")] [Tooltip("Only Assign Upgrade Item Info Panel")]
         [SerializeField] GameObject btn_Select = null; //업그레이드 아이템 선택 패널에서만 할당해줌
 
+        [Header("SOUND")]
+        [SerializeField] Audio.ACSound enableSound = null;
+        bool isInitSound = false;
+
         /*
             index[0] Material Item, Consumable Item
             index[1] Equipment Item (Non-Skill)
@@ -783,11 +787,13 @@
         public void OpenPopup(Item_Material item) {
             gameObject.SetActive(true);
             itemPopup.EnablePopup(item, Frames[(int)item.GetGrade]);
+            enableSound.PlayOneShot();
         }
 
         public void OpenPopup(Item_Consumable item) {
             gameObject.SetActive(true);
             itemPopup.EnablePopup(item, Frames[(int)item.GetGrade]);
+            enableSound.PlayOneShot();
         }
 
         public void OpenPopup(Item_Equipment equipItem) {
@@ -798,6 +804,7 @@
                 case Item_Arrow     equipment: itemPopup.EnablePopup(equipment, Frames[(int)equipment.GetGrade]); break;
                 case Item_Accessory equipment: itemPopup.EnablePopup(equipment, Frames[(int)equipment.GetGrade]); break;
             }
+            enableSound.PlayOneShot();
         }
 
         /// <summary>
@@ -832,6 +839,7 @@
                     break;
                 default: throw new System.NotImplementedException();
             }
+            enableSound.PlayOneShot();
         }
 
         /// <summary>
@@ -850,6 +858,7 @@
             }
 
             btn_Select.SetActive(true);
+            enableSound.PlayOneShot();
         }
 
         /// <summary>
@@ -871,6 +880,7 @@
             if (!gameObject.activeSelf) {
                 gameObject.SetActive(true);
             }
+            enableSound.PlayOneShot();
         }
 
         /// <summary>

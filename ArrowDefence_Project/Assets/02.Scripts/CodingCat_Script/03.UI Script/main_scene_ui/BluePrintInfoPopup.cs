@@ -18,6 +18,9 @@
         [Header("REQUIREMENT SLOT")]
         [SerializeField] Crafting.CraftingRequirement[] matSlots = null;
 
+        [Header("SOUND")]
+        [SerializeField] Audio.ACSound openSound = null;
+
         AD_item previewCache = null;
 
         public void SetPopup(AD_item item, CraftingRecipe recipe) {
@@ -87,6 +90,9 @@
                     break;
                 default: throw new System.NotImplementedException();
             }
+
+            //Play Popup Open Sound
+            openSound.PlayOneShot();
         }
 
         public void BE_PREVIEW() {

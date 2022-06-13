@@ -44,6 +44,8 @@
         [SerializeField] TextMeshProUGUI resultMainText = null;
         [SerializeField] TextMeshProUGUI resultSubText = null;
         [SerializeField] UnityEngine.UI.Image resultHorizontalBar = null;
+        [SerializeField] Audio.ACSound successSound = null;
+        [SerializeField] Audio.ACSound failedSound  = null;
 
         [Header("ADS")]
         [SerializeField] UnityEngine.UI.Image[] imagesAd = null;
@@ -595,6 +597,7 @@
             //강화 시도 - 강화 실패확률에 따른 강화 실패 --> 재료 아이템만 소진되고 강화 종료, 광고효과 비활성화
             if (GameGlobal.TryUpgrade(selectedRecipe.FailedProb, ref IsAdsApplied) == false) {
                 isSuccessUpgrade = false;
+                failedSound.PlayOneShot();  //Play Failed Sound !
                 return true;
             }
 
@@ -606,6 +609,7 @@
 
             GameManager.Instance.AddItem(selectedRecipe.Result, selectedRecipe.Result.DefaultAmount);
             isSuccessUpgrade = true;
+            successSound.PlayOneShot();
             return true;
         }
 

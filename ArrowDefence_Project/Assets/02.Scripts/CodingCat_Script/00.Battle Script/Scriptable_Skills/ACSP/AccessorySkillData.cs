@@ -20,6 +20,9 @@
         public float IncreaseCostCount = 0f;
         public float CoolDownTime = 0f;
 
+        //Sound Effect
+        public AudioClip SoundEffect;
+
         public string NameByTerms {
             get {
                 LocalizedString loc = NameTerms;

@@ -20,6 +20,10 @@
         string GetMainTag();
 
         void PlayEffect(UnityEngine.Vector3 position);
+
+        void PlayOneShot(UnityEngine.AudioClip audioClip);
+
+        void PlayDefaultClip();
     }
 
     public interface IDamageable {

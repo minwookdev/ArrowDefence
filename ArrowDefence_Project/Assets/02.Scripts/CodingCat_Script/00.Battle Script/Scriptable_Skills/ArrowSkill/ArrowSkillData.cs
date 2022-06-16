@@ -14,6 +14,7 @@
         protected ArrowSkill skillData = null;
         public ARROWSKILL_ACTIVETYPE ActiveType;
         public ACEffector2D[] effects = null;
+        public AudioClip[] Sounds;
 
         [TermsPopup] public string NameTerms = null;
         [TermsPopup] public string DescTerms = null;

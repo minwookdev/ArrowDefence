@@ -27,6 +27,10 @@
         private bool isLaunched  = false;
         private bool isInitSkill = false;
 
+        [Header("SOUNDS COMPATIBILITY")]
+        [SerializeField] [ReadOnly] Audio.ACSound audioSource = null;
+        [SerializeField] AudioClip[] defaultHitSounds = null;
+
         //STURCT
         DamageStruct damageStruct;
 
@@ -86,6 +90,9 @@
             if(forceMagnitude <= 0f) {
                 CatLog.ELog("Is Not Set Arrow Speed Value.");
             }
+
+            //Get Sound Channel
+            this.audioSource = SoundManager.Instance.GetChannel(CHANNELTYPE.ARROW);
         }
 
         private void Update() {
@@ -234,6 +241,7 @@
                     if(collData.Collider.GetComponent<IDamageable>().TryOnHit(ref damageStruct, collData.CollisionPoint, collData.CollisionDirection)) {
                         //Hit Result True - Disable GameObject
                         PlayEffect(collData.CollisionPoint);
+                        audioSource.PlayOneShot(defaultHitSounds.RandIndex());
                         collisionQueue.Clear();
                         DisableRequest();
                     }
@@ -282,6 +290,14 @@
         string IArrowObject.GetMainTag() {
             return string.Format("{0}{1}", gameObject.name, AD_Data.POOLTAG_HITEFFECT);
         }
+
+        #endregion
+
+        #region SOUND
+
+        void IArrowObject.PlayOneShot(AudioClip audioClip) => this.audioSource.PlayOneShot(audioClip);
+
+        void IArrowObject.PlayDefaultClip() => audioSource.PlayOneShot(defaultHitSounds.RandIndex());
 
         #endregion
 

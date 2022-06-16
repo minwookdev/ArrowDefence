@@ -13,12 +13,35 @@
         [Header("SOUND")]
         [SerializeField] AudioClip sound              = null;
         [SerializeField] AudioClip[] sounds           = null;
+        public AudioClip[] Sounds {
+            get => sounds;
+        }
+
+        #region PROPERTY
         public string SoundKey {
             get => soundKey;
         }
         public SOUNDTYPE SoundType {
             get => soundType;
         }
+        private bool isReadyToPlay {
+            get {
+                if (this.audioSource.clip == null) {
+                    if (this.sound == null) {
+                        CatLog.WLog("ActionSound Component: audio clip is null. not to play Sound.");
+                        return false;
+                    }
+                    this.audioSource.clip = this.sound;
+                }
+                return true;
+            }
+        }
+        public AudioClip SetClip {
+            set {
+                this.audioSource.clip = value;
+            }
+        }
+        #endregion
 
         #region LIFE_CYCLE
 
@@ -26,14 +49,15 @@
             if (this.audioSource == null) {
                 audioSource = GetComponent<AudioSource>();
             }
-            audioSource.clip = sound;
-            soundKey  = assignSoundKey;
+
+            soundKey = assignSoundKey;              // Apply SoundKey
+            SoundManager.Instance.AddSound(this);   // AddSound Dictionary by SoundKey
+            audioSource.clip = (sound != null) ? sound : null;
         }
 
         private void Start() {
-            SoundManager.Instance.AddSound(this);
-            volumeScale = SoundManager.Instance.GetVolumeScale(soundType);
-            audioSource.volume = volumeScale;
+            volumeScale = SoundManager.Instance.GetVolumeScale(soundType); // Get Volume Variable
+            audioSource.volume = volumeScale;                              // Set Volume Variable
         }
 
         private void OnDestroy() {
@@ -74,15 +98,11 @@
         /// </summary>
         /// <param name="isLoop"></param>
         public void PlaySound(bool isLoop = false) {
-            if (audioSource.clip == null) {
-                if (sound == null) {
-                    CatLog.WLog("Action Sound: AudioClip is Null."); return;
-                }
-                audioSource.clip = sound;
+            if (isReadyToPlay == false) {
+                return;
             }
 
-            audioSource.volume = volumeScale;
-            audioSource.loop   = isLoop;
+            audioSource.loop = isLoop;
             audioSource.Play();
         }
 
@@ -92,15 +112,11 @@
         /// <param name="delay">Seconds</param>
         /// <param name="isLoop"></param>
         public void PlaySoundWithDelayed(float delay, bool isLoop = false) {
-            if (audioSource.clip == null) {
-                if (sound == null) {
-                    CatLog.WLog("Action Sound: AudioClip is Null."); return;
-                }
-                audioSource.clip = sound;
+            if (isReadyToPlay == false) {
+                return;
             }
 
             audioSource.loop = isLoop;
-            audioSource.volume = volumeScale;
             audioSource.PlayDelayed(delay);
         }
 
@@ -109,11 +125,8 @@
         /// </summary>
         /// <param name="isLoop"></param>
         public void PlaySoundWithFadeOut(float fadeTime = 1f, bool isLoop = false) {
-            if (audioSource.clip == null) {
-                if (sound == null) {
-                    CatLog.WLog("Action Sound: AudioClip is Null."); return;
-                }
-                audioSource.clip = sound;
+            if (isReadyToPlay == false) {
+                return;
             }
 
             StartCoroutine(FadeOutVolume(fadeTime));
@@ -128,6 +141,18 @@
         public void PlayOneShot() {
             audioSource.PlayOneShot(sound, volumeScale);
         }
+
+        /// <summary>
+        /// 사운드의 인덱스 넘버를 확실하게 알고있는 상태에서 사용할 것.
+        /// </summary>
+        /// <param name="idx"></param>
+        public void PlayOneShot(int idx) => audioSource.PlayOneShot(sounds[idx], volumeScale);
+
+        /// <summary>
+        /// 재생항 AudioClip을 지정
+        /// </summary>
+        /// <param name="audio"></param>
+        public void PlayOneShot(AudioClip audio) => audioSource.PlayOneShot(audio, volumeScale);
 
         #endregion
 

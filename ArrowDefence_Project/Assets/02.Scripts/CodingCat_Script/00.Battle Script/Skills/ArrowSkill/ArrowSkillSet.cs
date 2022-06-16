@@ -11,6 +11,7 @@
 
         //temp
         Transform tempTr;
+        System.Func<bool, bool> defaultHitSoundPlay = null;
 
         #region CONSTRUCTOR
 
@@ -263,16 +264,24 @@
         /// <param name="arrowTr"></param>
         /// <param name="rigidBody"></param>
         /// <param name="arrow"></param>
-        public void Init(Transform arrowTr, Rigidbody2D rigidBody, IArrowObject arrow)
-        {
-            if (addProjSkill != null)
+        public void Init(Transform arrowTr, Rigidbody2D rigidBody, IArrowObject arrow) {
+            if (addProjSkill != null) {
                 addProjSkill.Init(arrowTr, rigidBody, arrow);
-
-            if (hitSkill != null)
-                hitSkill.Init(arrowTr, rigidBody, arrow);
-
-            if (airSkill != null)
+            }
+            if (airSkill != null) {
                 airSkill.Init(arrowTr, rigidBody, arrow);
+            }
+            if (hitSkill != null) {
+                hitSkill.Init(arrowTr, rigidBody, arrow);
+            }
+            else {  //Hit Skill이 존재하지 않으면 SkillSet가 성립된 상황에서 Hit Sound를 재생할 방법이 없으므로, 본 클래스에서 함수 주소값 참조해서 가지고 있도록 Func구현
+                defaultHitSoundPlay = (isResult) => {
+                    if (isResult) {
+                        arrow.PlayDefaultClip();
+                    }
+                    return isResult;
+                };
+            }
         }
 
         #endregion
@@ -383,6 +392,19 @@
             ///targetTransform을 사용하여 효과를 실행시킬 수 있게된다.
         }
 
+        /// <summary>
+        /// Only Use Air Type Skill.
+        /// </summary>
+        /// <param name="collider"></param>
+        /// <param name="damage"></param>
+        /// <param name="contactPos"></param>
+        /// <param name="direction"></param>
+        /// <returns></returns>
+        bool HitDefault(Collider2D collider, ref DamageStruct damage, Vector3 contactPos, Vector2 direction) {
+            return defaultHitSoundPlay(collider.GetComponent<IDamageable>().TryOnHit(ref damage, contactPos, direction));
+            //return collider.GetComponent<IDamageable>().TryOnHit(ref damage, contactPos, direction);
+        }
+
         #endregion
 
         #region AIR-UPDATE
@@ -395,27 +417,11 @@
 
         #region CLEAR
 
-        void ClearHit() => hitSkill.Clear();
+        void ClearHit() => hitSkill.ClearOnDisable();
 
-        void ClearAir() => airSkill.Clear();
+        void ClearAir() => airSkill.ClearOnDisable();
 
-        void ClearAddProj() => addProjSkill.Clear();
-
-        #endregion
-
-        #region DEFAULT
-
-        /// <summary>
-        /// Only Use Air Type Skill.
-        /// </summary>
-        /// <param name="collider"></param>
-        /// <param name="damage"></param>
-        /// <param name="contactPos"></param>
-        /// <param name="direction"></param>
-        /// <returns></returns>
-        bool HitDefault(Collider2D collider, ref DamageStruct damage, Vector3 contactPos, Vector2 direction) {
-            return collider.GetComponent<IDamageable>().TryOnHit(ref damage, contactPos, direction);
-        }
+        void ClearAddProj() => addProjSkill.ClearOnDisable();
 
         #endregion
 

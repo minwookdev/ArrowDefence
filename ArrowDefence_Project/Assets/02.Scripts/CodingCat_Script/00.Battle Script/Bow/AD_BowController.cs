@@ -3,6 +3,7 @@
     using UnityEngine.UI;
     using UnityEngine.EventSystems;
     using System.Collections;
+    using ActionCat.Audio;
 
     public partial class AD_BowController : MonoBehaviour {
         public static AD_BowController instance;
@@ -13,6 +14,7 @@
         [SerializeField] Transform bowTr = null;
         private Touch currentTouch;
         public Camera MainCam = null;
+        [SerializeField] ControllerSound sound = null;
 
         [Header("CONTROLLER")]
         public float TouchRadius = 1f;
@@ -26,6 +28,7 @@
         private bool isBowPullBegan = false;     //Bow Pull State Variables
         private bool isTouched      = false;
         private bool isChargeShotReady  = false;
+        private bool isPlayedDrawSound  = false;
         private float maxBowAngle, minBowAngle;  //Min, Max BowAngle Variables
         private float bowAngle;                  //The Angle Variable (angle between Click point and Bow).
         private float maxChargingTime = 0f;
@@ -177,7 +180,7 @@
             //Init-Bow Skill and Current Slot Damage Struct.
             CatLog.Log(StringColor.YELLOW, $"Damage Struct SizeOf : {System.Runtime.InteropServices.Marshal.SizeOf(typeof(DamageStruct))}");
             CatLog.Log(StringColor.YELLOW, $"Damage Struct SizeOf : {System.Runtime.InteropServices.Marshal.SizeOf(damageStruct)}");
-            ability.AddListnerToSkillDel(ref BowSkillSet);
+            ability.AddListnerToSkillDel(ref BowSkillSet, this.sound.AudioSource);
 
             //Get Max Charging Timeif(
             maxChargingTime = GameGlobal.CHARGINGTIME;
@@ -185,8 +188,8 @@
             //AutoMode Variables Init
             arrSwapWait = new WaitUntil(() => autoState == AUTOSTATE.WAIT || autoState == AUTOSTATE.FIND || autoState == AUTOSTATE.TRAC);
 
-            //Hiding
-            if(touchIndex == 0 || isTouched == false) {
+            //Hiding Warning Log ---
+            if (touchIndex == 0 || isTouched == false) {
 
             }
         }
@@ -274,7 +277,7 @@
 
             //Clear Charging Data
             ChargeClear();
-
+            sound.PlaySelectedSound();
             isBowPullBegan = true;
         }
 
@@ -364,7 +367,7 @@
 
             isBowPulling = (distOfPoint > 1f) ? true : false;
 
-            if(isBowPulling) {
+            if (isBowPulling) {
                 //when pulling starts, correct the position once. [DISABLE]
                 //CorrectionArrPos(currentClickPosition);
 
@@ -501,8 +504,9 @@
             bowSprite.Effect(BOWEFFECTYPE.IMPACT);
             bowSprite.EffectMuzzleFlash(mainSlotTr.position, bowTr.eulerAngles.z - angleOffset);
 
-            //Active Camera Shake
+            //Active Camera Shake & Release Sound Play
             CineCam.Inst.ShakeCamera(8f, .1f);
+            sound.PlayReleasedSound();
 
             //Reload
             var reloadType = (arrowType == ARROWTYPE.ARROW_SPECIAL) ? previousType : arrowType;
@@ -589,6 +593,9 @@
 
                     //Increase Charged Power
                     ChargeIncrease();
+
+                    //Draw Sound Check
+                    DrawSoundCheck();
                 }
                 else {
                     if(arrowType != ARROWTYPE.ARROW_SPECIAL) {
@@ -600,6 +607,9 @@
 
                     //Clear Charged Power <Once>
                     ChargeCancel();
+
+                    //Clear Draw Sound Checker
+                    DrawSoundClear();
                 }
             }
         }
@@ -644,6 +654,7 @@
             if(chargingTime > maxChargingTime) {
                 if(isChargeShotReady == false) {
                     bowSprite.Effect(BOWEFFECTYPE.CHARGED);
+                    sound.PlayFullChargedSound();
                     isChargeShotReady = true;
                 }
             }
@@ -663,7 +674,25 @@
             currentPullType = GameManager.Instance.GetPlayerPullType();
         }
 
-#region NOT_USED
+        #region SOUND
+        //존나싫다진짜. 이딴식으로 짜는거
+        public void DrawSoundCheck() {
+            if (!isPlayedDrawSound) {
+                sound.PlayPullingSound();
+                isPlayedDrawSound = true;
+            }
+        }
+
+        public void DrawSoundClear() {
+            if (isPlayedDrawSound) {
+                isPlayedDrawSound = false;
+            }
+        }
+
+        public void PlayOneShot(AudioClip clip) => sound.AudioSource.PlayOneShot(clip);
+        #endregion
+
+        #region NOT_USED
 
         private IEnumerator ArrowReload()
         {

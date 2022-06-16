@@ -20,6 +20,13 @@
         [Header("BUTTON EVENT")]
         [SerializeField] BattleSceneButton battleButtons = null;
 
+        [Header("GAMEOVER")]
+        [SerializeField] Audio.ACSound soundEffect = null;
+
+        private void OnEnable() {
+            soundEffect.PlayOneShot();
+        }
+
         public void OpenPanel() {
             //Save BackPanel Image Color
             var tempBackPanelColor = imagePanelBack.color;

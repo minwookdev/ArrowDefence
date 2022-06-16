@@ -225,6 +225,9 @@
 
             [SerializeField] [ReadOnly] bool isPreviewOpenMode = false;
 
+            [Header("SOUND EFFECT")]
+            [SerializeField] Audio.ACSound soundEffect = null;
+
             public void Init(Sprite[] sprites) {
                 abilitySlots.Init(sprites);
                 foreach (var slot in SkillSlots) {
@@ -674,11 +677,13 @@
             void EventEntryEquipBow(Item_Bow item) {
                 CCPlayerData.equipments.EquipItem_Bow(item); 
                 Close();
+                soundEffect.PlayOneShot(0);
             }
 
             void EventEntryReleaseBow() {
                 CCPlayerData.equipments.ReleaseItem_Bow(); 
                 Close();
+                soundEffect.PlayOneShot(1);
             }
 
             void EventEntryEquipArrow(Item_Arrow item) {
@@ -694,6 +699,7 @@
                     CCPlayerData.equipments.ReleaseItem_SubArr();
                 }
                 Close();
+                soundEffect.PlayOneShot(1);
             }
 
             void EventEntryEquipArtifact(Item_Accessory item) {
@@ -704,16 +710,19 @@
             void EventEntryReleaseArtifact(byte idx) {
                 CCPlayerData.equipments.ReleaseItem_Artifact(idx);
                 Close();
+                soundEffect.PlayOneShot(1);
             }
 
             void EventEntryEquipSpArr(Item_SpArr item) {
                 CCPlayerData.equipments.Equip_SpArrow(item);
                 Close();
+                soundEffect.PlayOneShot(2);
             }
 
             void EventEntryReleaseSpArr() {
                 CCPlayerData.equipments.Release_SpArrow();
                 Close();
+                soundEffect.PlayOneShot(1);
             }
 
             #endregion

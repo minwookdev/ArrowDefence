@@ -21,6 +21,7 @@
         bool isFindTarget = false;    //is Find a Target?
         bool isFixDirection = false;  //Non-Target Direction
         float currentSearchTime = 0f; //Current Target Search Time
+        int targetFindSoundIndex;
 
         //Update Interval [Static] [Recomended = 0.1f]
         float searchInterval = .1f;  //Find Target Update Interval
@@ -76,12 +77,6 @@
             }
         }
 
-        public override void Clear() {
-            currentSearchTime = 0f;
-            targetTr = null;
-            isFindTarget = false;
-        }
-
         Transform SearchTarget(out bool isTargetFind) {
             //================================================[ START TARGET FIND ]==========================================================
             colliderList = new List<Collider2D>(Physics2D.OverlapCircleAll(arrowTr.position, scanRadius, 1 << LayerMask.NameToLayer(AD_Data.LAYER_MONSTER)));
@@ -93,6 +88,7 @@
             }
             //=================================================[ ONE TARGET FIND ]==========================================================
             else if (colliderList.Count == 1) {
+                PlayRandomSound();
                 isTargetFind = true;
                 return colliderList[0].transform;
             }
@@ -111,6 +107,7 @@
                     }
                 }
 
+                PlayRandomSound();
                 isTargetFind = true;
                 return optimalTargetTr;
             }
@@ -151,6 +148,23 @@
         public override void Init(Transform tr, Rigidbody2D rigid, IArrowObject arrowInter) {
             base.Init(tr, rigid, arrowInter);
             currentSearchTime = searchInterval;
+
+            if (this.sounds == null || this.sounds.Length <= 0) {
+                CatLog.ELog("Homing의 sound가 할당되지 않았습니다.");
+                return;
+            }
+
+            targetFindSoundIndex = 0;   //첫번째 인덱스를 잡음
+            if (this.sounds.Length > 1) {
+                CatLog.Log("현재 Homing은 1이상의 사운드를 지원하지않는 상태입니다.");
+            }
+        }
+
+        public override void ClearOnDisable() {
+            currentSearchTime = 0f;
+            targetFindSoundIndex = 0;
+            targetTr = null;
+            isFindTarget = false;
         }
 
         /// <summary>
@@ -158,9 +172,10 @@
         /// </summary>
         /// <param name="guidanceArrow"></param>
         public HomingArrow(HomingArrow origin) {
-            scanRadius = origin.scanRadius;
-            speed = origin.speed;
+            scanRadius  = origin.scanRadius;
+            speed       = origin.speed;
             rotateSpeed = origin.rotateSpeed;
+            sounds      = origin.sounds;
         }
 
         /// <summary>
@@ -168,9 +183,10 @@
         /// </summary>
         /// <param name="data"></param>
         public HomingArrow(DataHoming data) {
-            scanRadius = data.ScanRadius;
-            speed = data.HomingSpeed;
+            scanRadius  = data.ScanRadius;
+            speed       = data.HomingSpeed;
             rotateSpeed = data.HomingRotateSpeed;
+            sounds      = data.Sounds;
         }
 
         #region ES3

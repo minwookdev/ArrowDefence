@@ -4,6 +4,9 @@
     using UnityEngine;
 
     public abstract class ArrowSkill {
+        // [ SAVED-VARIABLES ]
+        protected AudioClip[] sounds;   //모든 Type의 ArrowSkill에서 Sound를 사용할 수 있도록 최상위 부모에 할당해둠
+
         // [ Non-Saved-Variables ]
         protected Transform arrowTr;
         protected Rigidbody2D rBody;
@@ -15,20 +18,38 @@
         /// <param name="tr">Arrow Transform</param>
         /// <param name="rigid">Arrow Rigid Body 2D</param>
         /// <param name="arrowInter">Interface Arrow Object</param>
-        public virtual void Init(Transform tr, Rigidbody2D rigid, IArrowObject arrowInter)
-        {
+        public virtual void Init(Transform tr, Rigidbody2D rigid, IArrowObject arrowInter) {
             arrowTr = tr;
             rBody   = rigid;
             arrow   = arrowInter;
         }
-        public virtual void Release() { }
 
         /// <summary>
-        /// Call When Arrow GameObject Disable
+        /// Battle Scene종료 시 호출. 원본 ArrowItem의 SkillClass에 정리되어야 할 변수가 있는 경우에 사용.
+        /// [각각의 Arrow Prefab 내부에서는 호출하지 않음]
         /// </summary>
-        public abstract void Clear();
+        public virtual void ClearOrigin() { }
+
+        /// <summary>
+        /// Arrow 오브젝트가 Disable되는 타이밍에 호출됨.
+        /// Prefab Disable 시, 정리되어야 할 변수가 있는 경우 사용.
+        /// [각각의 Arrow Prefab에서 호출됨]
+        /// </summary>
+        public abstract void ClearOnDisable();
 
         public abstract string GetDesc(string localizedString);
+
+        public virtual void PlayRandomSound() {
+            arrow.PlayOneShot(sounds.RandIndex());
+        }
+
+        /// <summary>
+        /// 재생하려는 사운드의 인덱스를 확실하게 알고있는 상태에서 사용
+        /// </summary>
+        /// <param name="soundIndex"></param>
+        public virtual void PlaySound2Index(int soundIndex) {
+            arrow.PlayOneShot(sounds[soundIndex]);
+        }
     }
 
     //================================================================================================================================================================
@@ -162,7 +183,12 @@
             else {
                 // Max Chain : Try On Hit and Disable
                 if (currentChainCount >= maxChainCount) { //Try OnHit
-                    return target.GetComponent<IDamageable>().TryOnHit(ref damage, contact, direction);
+                    var result = target.GetComponent<IDamageable>().TryOnHit(ref damage, contact, direction);
+                    if (result) {   //Hit에 성공한 경우만 사운드 출력
+                        //PlayRandomSound(); ReboundArrow는 현재 게임 내 구현되지 않는 상태이기 때문에 주석..
+                    }
+                    return result;
+                    //return target.GetComponent<IDamageable>().TryOnHit(ref damage, contact, direction);
                 }
 
                 // Not Max Chain : Try Activate Skill
@@ -170,6 +196,7 @@
                     currentChainCount++;
                     lastHitTarget = target.gameObject;
                     arrow.PlayEffect(contact);
+                    //PlayRandomSound(); ReboundArrow는 현재 게임 내 구현되지 않는 상태이기 때문에 주석..
                 }
                 else { //if Failed OnHit, Ignore
                     return false;
@@ -272,7 +299,7 @@
         /// <summary>
         /// call when arrow disable
         /// </summary>
-        public override void Clear() {
+        public override void ClearOnDisable() {
             lastHitTarget = null;
             tempCollList  = null;
             currentChainCount = 0;
@@ -294,6 +321,7 @@
             maxChainCount = origin.maxChainCount;
             scanRange     = origin.scanRange;
             effects       = origin.effects;
+            sounds        = origin.sounds;
         }
 
         /// <summary>
@@ -304,6 +332,7 @@
             scanRange     = item.ScanRadius;
             maxChainCount = item.MaxChainCount;
             effects       = item.effects;
+            sounds        = item.Sounds;
         }
 
         /// <summary>
@@ -337,6 +366,7 @@
             //================================================[ ON HIT TARGET & INC CHAIN ]=======================================================
             isResult = target.GetComponent<IDamageable>().TryOnHit(ref damage, contactpoint, direction);
             if (isResult) { //:몬스터 객체에 충돌
+                PlayRandomSound(); //Random Hit Sound Play
                 if (currentChainCount >= maxChainCount) {
                     return isResult; //:true
                 }
@@ -359,6 +389,7 @@
         public override bool OnHit(Collider2D target, out Transform targetTr, ref DamageStruct damage, Vector3 contactpoint, Vector2 direction) {
             isResult = target.GetComponent<IDamageable>().TryOnHit(ref damage, contactpoint, direction);
             if (isResult) {
+                PlayRandomSound();  //Random Hit Sound Play
                 if (currentChainCount >= maxChainCount) {
                     targetTr = null;
                     return isResult; //:true
@@ -373,7 +404,7 @@
             return false;
         }
 
-        public override void Clear() {
+        public override void ClearOnDisable() {
             currentChainCount = 0;
             isResult          = false;
             tempArray         = null;
@@ -383,11 +414,13 @@
         public PiercingArrow(PiercingArrow origin) : base(origin.effectPoolTags) {
             maxChainCount = origin.maxChainCount;
             effects       = origin.effects;
+            sounds        = origin.sounds;
         }
 
         public PiercingArrow(DataPiercing data) {
             maxChainCount = data.MaxChainCount;
             effects       = data.effects;
+            sounds        = data.Sounds;
         }
 
         /// <summary>

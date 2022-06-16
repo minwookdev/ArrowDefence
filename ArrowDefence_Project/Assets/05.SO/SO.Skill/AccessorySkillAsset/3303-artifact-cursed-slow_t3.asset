@@ -23,6 +23,7 @@ MonoBehaviour:
   MaxCost: 6
   IncreaseCostCount: 0
   CoolDownTime: 0
+  SoundEffect: {fileID: 8300000, guid: 84937e79b7ebc204ca3b903fac249d3b, type: 3}
   RangeRadius: 150
   SlowRatio: 0.8
   Duration: 16

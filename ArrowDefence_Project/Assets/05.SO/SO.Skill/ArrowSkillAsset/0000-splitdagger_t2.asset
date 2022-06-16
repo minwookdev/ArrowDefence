@@ -25,6 +25,10 @@ MonoBehaviour:
   IconSprite: {fileID: 21300000, guid: 33d2e28416d37144b8a32c7e4a52a6e7, type: 3}
   ActiveType: 7
   effects: []
+  Sounds:
+  - {fileID: 8300000, guid: 7942efd0a100147488d82d63addbc3a0, type: 3}
+  - {fileID: 8300000, guid: 271b2d5e789efbe4fa11c83f5869a3d6, type: 3}
+  - {fileID: 8300000, guid: f915dc9069a463947bff3bc48fd90b59, type: 3}
   NameTerms: SkillName/SNAME_ARR_SPLITDAGGER
   DescTerms: SkillDesc/SDESC_ARR_SPLITDAGGER
   projectileCount: 4

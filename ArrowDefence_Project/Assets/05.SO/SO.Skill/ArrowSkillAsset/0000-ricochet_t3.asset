@@ -25,6 +25,10 @@ MonoBehaviour:
   IconSprite: {fileID: 21300000, guid: 8737d79d123e0d04f937e3c2d6c062f3, type: 3}
   ActiveType: 4
   effects: []
+  Sounds:
+  - {fileID: 8300000, guid: 632660e84fa7bbc41b6875311645bf0c, type: 3}
+  - {fileID: 8300000, guid: 67567c7525a73a54cb39ace720b173d9, type: 3}
+  - {fileID: 8300000, guid: 4cb9d9b764785f440a22ec70e0056687, type: 3}
   NameTerms: SkillName/SNAME_ARR_RICOCHET
   DescTerms: SkillDesc/SDESC_ARR_RICOCHET
   ScanRadius: 6

@@ -14,6 +14,7 @@ public class ArrowSkillData_Editor : Editor
     protected SerializedProperty effectProp;
     protected SerializedProperty nameTermsProp = null;
     protected SerializedProperty descTermsProp = null;
+    protected SerializedProperty soundsProp    = null;
 
     protected void InitSerializedObject()
     {
@@ -27,6 +28,7 @@ public class ArrowSkillData_Editor : Editor
         spriteProp     = sobject.FindProperty("IconSprite");
         activeTypeProp = sobject.FindProperty("ActiveType");
         effectProp     = sobject.FindProperty(nameof(ArrowSkillData.effects));
+        soundsProp     = sobject.FindProperty(nameof(ArrowSkillData.Sounds));
     }
 
     public virtual void DrawMonoScript() {
@@ -150,6 +152,12 @@ public class ReboundArrowDataEditor : ArrowSkillData_Editor
         EditorGUILayout.EndVertical();
         #endregion
 
+        #region SOUND
+        GUILayout.BeginVertical("GroupBox");
+        EditorGUILayout.PropertyField(soundsProp);
+        GUILayout.EndVertical();
+        #endregion
+
         //End HelpBox
         EditorGUILayout.EndVertical();
 
@@ -208,6 +216,12 @@ public class HomingArrowDataEditor : ArrowSkillData_Editor
         EditorGUILayout.EndVertical();
         #endregion
 
+        #region SOUND
+        GUILayout.BeginVertical("GroupBox");
+        EditorGUILayout.PropertyField(soundsProp);
+        GUILayout.EndVertical();
+        #endregion
+
         //End HelpBox
         EditorGUILayout.EndVertical();
 
@@ -247,16 +261,18 @@ public class PiercingArrowDataEditor : ArrowSkillData_Editor
         #region PIERCING_ARROW_DATA
         GUILayout.Label("Piercing Arrow Info", EditorStyles.boldLabel);
         EditorGUILayout.BeginVertical("GroupBox");
-
         //Max Chain Count Property
         EditorGUILayout.PropertyField(maxChainCountProp);
-
         EditorGUILayout.EndVertical();
         #endregion
-
         EditorGUILayout.BeginVertical("GroupBox");
         EditorGUILayout.PropertyField(effectProp);
         EditorGUILayout.EndVertical();
+        #region SOUND
+        GUILayout.BeginVertical("GroupBox");
+        EditorGUILayout.PropertyField(soundsProp);
+        GUILayout.EndVertical();
+        #endregion
 
         GUILayout.EndVertical();
 
@@ -293,6 +309,11 @@ public class SpliDaggerEditor : ArrowSkillData_Editor {
         EditorGUILayout.PropertyField(daggerPrefProp);
         EditorGUILayout.EndVertical();
         #endregion
+        #region SOUND
+        GUILayout.BeginVertical("GroupBox");
+        EditorGUILayout.PropertyField(soundsProp);
+        GUILayout.EndVertical();
+        #endregion
         GUILayout.EndVertical();
         sobject.ApplyModifiedProperties();
     }
@@ -326,6 +347,11 @@ public class ElementalFireEditor : ArrowSkillData_Editor {
         EditorGUILayout.PropertyField(probabilityProp);
         EditorGUILayout.PropertyField(firePrefProp);
         EditorGUILayout.EndVertical();
+        #endregion
+        #region SOUND
+        GUILayout.BeginVertical("GroupBox");
+        EditorGUILayout.PropertyField(soundsProp);
+        GUILayout.EndVertical();
         #endregion
         GUILayout.EndVertical();
         sobject.ApplyModifiedProperties();
@@ -373,6 +399,11 @@ public class ExplosionEditor : ArrowSkillData_Editor {
         EditorGUILayout.PropertyField(effectProp, new GUIContent("ShockWave Effect"));
         EditorGUI.indentLevel = currentIndentLevel;
         EditorGUILayout.EndVertical();
+        #endregion
+        #region SOUND
+        GUILayout.BeginVertical("GroupBox");
+        EditorGUILayout.PropertyField(soundsProp);
+        GUILayout.EndVertical();
         #endregion
         GUILayout.EndVertical();
         sobject.ApplyModifiedProperties();

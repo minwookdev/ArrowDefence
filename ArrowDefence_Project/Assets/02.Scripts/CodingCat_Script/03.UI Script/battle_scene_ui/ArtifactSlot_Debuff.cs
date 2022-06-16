@@ -27,6 +27,9 @@
         System.Action<float, ITouchPosReceiver> requestWorldPosition = null;
         System.Collections.Generic.List<MonsterStatus> monsterStatusList = null;
 
+        [Header("SOUND")]
+        [SerializeField] Audio.ACSound audioSource = null;
+
         public ArtifactSlot_Debuff Init(AccessorySPEffect effect, System.Action notify, System.Action<float, ITouchPosReceiver> request) {
             artifactEffect   = effect;
             notifyPlayAction = notify;
@@ -57,6 +60,9 @@
             GameManager.Instance.AddListnerPause(SlotStop);       // <-- Cost Increase Stop Trigger
 
             monsterStatusList = new System.Collections.Generic.List<MonsterStatus>();
+
+            //Set AudioClip
+            audioSource.SetClip = effect.SoundEffect;
             return this;
         }
 
@@ -132,6 +138,8 @@
             });
             artifactEffect.ActiveDebuff(monsterStatusList.ToArray());
             monsterStatusList.Clear();
+
+            audioSource.PlaySound();
         }
 
         public void BE_ACTIVE() {

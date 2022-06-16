@@ -12,6 +12,10 @@
         [SerializeField] [ReadOnly] float InitMoveSpeed      = 0f;
         [SerializeField] [ReadOnly] float InitAttackInterval = 0f;
 
+        [Header("SOUND COMPATIBILITY")]
+        [SerializeField] MonsterAudio monsterAudio = null;
+        bool isExistSound = false; // 이렇게 체크해둔 이유는, Walker State는 Title Scene에서도 사용되기 때문에, Sound관련하여 예외적으로 처리하기 위함임
+
         //Animator Parameters
         int animState = Animator.StringToHash("state");
         int atkState  = Animator.StringToHash("attack");
@@ -23,6 +27,15 @@
         float attackTimer    = 0f;
         float attackInterval = 0f;
         bool isFindWall      = false;
+
+        //Breath Sound
+        float breathSoundIntervalTime = 1.5f;
+        float currentBreathSoundTime  = 0f;
+        bool isPlayBreathSound {
+            get {
+                return (RandomEx.RangeInt(1, 100) > 50);
+            }
+        }
 
         Coroutine actionSpeedCo = null;
 
@@ -124,6 +137,9 @@
         private void Start() {
             ComponentInit();
             SetStateValue();
+
+            //사운드를 가진 개체인지 체크
+            isExistSound = (monsterAudio != null);
         }
 
         private void OnEnable() {
@@ -191,10 +207,20 @@
             if (isFindWall == true) {
                 ChangeState(STATETYPE.ATTACK);
             }
+
+            //Breath Sound Player
+            currentBreathSoundTime += Time.deltaTime;
+            if (currentBreathSoundTime > breathSoundIntervalTime) {
+                if (isExistSound && isPlayBreathSound) {
+                    monsterAudio.PlayRandomBreathSound();
+                }
+                currentBreathSoundTime = 0f;
+            }
         }
 
         void WalkExit() {
             rigidBody.velocity = Vector2.zero;
+            currentBreathSoundTime = 0f;    //Clear Currnet BreathSound Timer
         }
 
         void IdleStart() {
@@ -217,6 +243,9 @@
             if (attackTimer >= attackInterval) {
                 anim.SetTrigger(atkState);
                 attackTimer = 0f;
+                if(isExistSound) {
+                    monsterAudio.PlayRandomAttackSound();
+                }
             }
         }
 
@@ -228,6 +257,9 @@
             anim.SetInteger(animState, 3);
             coll.enabled = false;
             BreakState();
+            if (isExistSound) {
+                monsterAudio.PlayRandomDeathSound();
+            }
         }
 
         void DeathExit() {
@@ -244,6 +276,11 @@
 
         protected void Move() {
             rigidBody.velocity = Vector2.down * (moveSpeed * currentActionSpeed);
+        }
+
+
+        public override void PlayHitSound() {
+            monsterAudio.PlayRandomHitSound();
         }
     }
 }

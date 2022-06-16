@@ -51,6 +51,11 @@ MonoBehaviour:
   rigidBody: {fileID: 9141913478002093568}
   coll: {fileID: 5850000821867291896}
   force: 35
+  audioSource: {fileID: 0}
+  daggerHitClips:
+  - {fileID: 8300000, guid: 053d1d01ba233ae4c93c58498a9b26d0, type: 3}
+  - {fileID: 8300000, guid: 54cf116a6231c114c95f14d70e794c36, type: 3}
+  - {fileID: 8300000, guid: 9789868013ac2754ea741aae2c879c53, type: 3}
 --- !u!70 &5850000821867291896
 CapsuleCollider2D:
   m_ObjectHideFlags: 0

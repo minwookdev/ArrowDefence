@@ -153,6 +153,8 @@
                 //========================================================================================
                 isDeath = true;
             }
+
+            monsterState.PlayHitSound();    //Play Default Hit Sound
         }
 
         public bool TryOnHit(ref DamageStruct damage, Vector3 point, Vector2 direction) {
@@ -183,6 +185,7 @@
                 isDeath = true;
             }
 
+            monsterState.PlayHitSound(); //Play Default Hit Sound
             return true;
         }
 
@@ -211,6 +214,8 @@
                 //========================================================================================
                 isDeath = true;
             }
+
+            monsterState.PlayHitSound(); //Play Default Hit Sound
         }
 
         //public void OnHitProjectile(ref DamageStruct damage, Vector3 contactPoint, Vector3 direction) {

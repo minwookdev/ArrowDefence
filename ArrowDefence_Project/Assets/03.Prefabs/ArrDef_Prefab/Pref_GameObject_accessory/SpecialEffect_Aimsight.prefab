@@ -57,6 +57,10 @@ MonoBehaviour:
   controller: {fileID: 0}
   rayDist: 15
   isOn: 0
+  drawStartClips:
+  - {fileID: 8300000, guid: a67a7e8b9d155cf4fb108dd423db9e7c, type: 3}
+  - {fileID: 8300000, guid: 46d9852d2207a5b47b16e9609d43682b, type: 3}
+  - {fileID: 8300000, guid: a0044ff06a397de41b36415525785563, type: 3}
 --- !u!120 &646264335223673217
 LineRenderer:
   m_ObjectHideFlags: 0

@@ -73,5 +73,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: 3d27bcadc32e0e84fbeec780810a2abe,
         type: 2}
-    m_RemovedComponents: []
+    - target: {fileID: 6248311072034098788, guid: 68262901257204045b42dd468ce0f65b,
+        type: 3}
+      propertyPath: monsterAudio
+      value: 
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 5429777803965054294, guid: 68262901257204045b42dd468ce0f65b, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 68262901257204045b42dd468ce0f65b, type: 3}

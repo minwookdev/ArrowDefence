@@ -41,7 +41,7 @@
         /// <summary>
         /// End Battle, Clear Variables
         /// </summary>
-        public override void Release() {
+        public override void ClearOrigin() {
             poolTags = null;
             ability  = null;
         }
@@ -56,7 +56,6 @@
         protected ProjectileType(string[] tags, PlayerAbilitySlot address) {
             poolTags = tags;
             ability  = address;
-
         }
 
         ///public virtual bool TryGetPrefab(out ProjectilePref pref) {
@@ -76,7 +75,7 @@
             throw new System.NotImplementedException();
         }
 
-        public override void Clear() {
+        public override void ClearOnDisable() {
             throw new System.NotImplementedException();
         }
 
@@ -134,12 +133,13 @@
                     dagger.Shot(damage, ability.GetProjectileDamage(projectileDamage));
                 }
             }
+            PlayRandomSound();  //PlaySound
         }
 
-        public override void Clear() { }
+        public override void ClearOnDisable() { }
 
-        public override void Release() {
-            base.Release();
+        public override void ClearOrigin() {
+            base.ClearOrigin();
             intervalAngle = 0f;
         }
 
@@ -151,6 +151,7 @@
             projectilePref   = data.daggerPref;
             projectileCount  = data.projectileCount;
             projectileDamage = data.ProjectileDamage;
+            sounds           = data.Sounds;
         }
         /// <summary>
         /// Constructor for Skill Clone
@@ -160,6 +161,7 @@
             projectilePref   = origin.projectilePref;
             projectileCount  = origin.projectileCount;
             projectileDamage = origin.projectileDamage;
+            sounds           = origin.sounds;
         }
         #region ES3
         public SplitDagger() { }
@@ -186,12 +188,13 @@
                 if (fire) {
                     fire.Shot(damage, ability.GetSpellDamage(projectileDamage)); //
                 }
+                PlayRandomSound();
             }
         }
-        public override void Clear() { }
+        public override void ClearOnDisable() { }
 
-        public override void Release() {
-            base.Release();
+        public override void ClearOrigin() {
+            base.ClearOrigin();
         }
 
         /// <summary>
@@ -202,6 +205,7 @@
             projectilePref        = data.firePref;
             activationProbability = data.ActivationProbability;
             projectileDamage      = data.ProjectileDamage;
+            sounds                = data.Sounds;
         }
         /// <summary>
         /// Constructor for Skill Clone
@@ -211,6 +215,7 @@
             projectilePref        = origin.projectilePref;
             activationProbability = origin.activationProbability;
             projectileDamage      = origin.projectileDamage;
+            sounds                = origin.sounds;
         }
         #region ES3
         public ElementalFire() { }
@@ -264,9 +269,11 @@
             if (effectShockWave) {
                 effectShockWave.PlayOnce();
             }
+            //Play SoundEffect
+            PlayRandomSound();
         }
 
-        public override void Clear() {
+        public override void ClearOnDisable() {
             throw new System.NotImplementedException();
         }
 
@@ -291,6 +298,8 @@
                 case SKILL_LEVEL.LEVEL_HIGH:   skillLevel = 2; break;
                 case SKILL_LEVEL.LEVEL_UNIQUE: skillLevel = 3; break;
             }
+            // Sounds
+            sounds = data.Sounds;
         }
 
         public Explosion(Explosion origin) : base(origin.poolTags, origin.ability) {
@@ -302,6 +311,7 @@
             addExplosionDamage = origin.addExplosionDamage;
             skillLevel         = origin.skillLevel;
             effectShockWave    = origin.effectShockWave;
+            sounds             = origin.sounds;
         }
         #region ES3
         public Explosion() { }

@@ -20,6 +20,9 @@
         private float lerpDuration = 1f;
         private float valueToLerp;
 
+        [Header("SOUND")]
+        [SerializeField] AudioClip[] drawStartClips = null;
+
         float lineEndAlpha   = 0.3f;
         float lineStartAlpha = 0.8f;
         float alphaChangeSpeed   = 0.8f;
@@ -69,6 +72,7 @@
             if (controller.IsStatePulling() == true) {
                 if(isOn == false) {
                     timeElapsed = 0f;
+                    controller.PlayOneShot(drawStartClips.RandIndex());
                     isOn = true;
                 }
 

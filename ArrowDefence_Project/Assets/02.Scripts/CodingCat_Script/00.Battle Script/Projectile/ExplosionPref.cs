@@ -4,7 +4,12 @@
     using ActionCat.Interface;
 
     public class ExplosionPref : ProjectilePref {
+        [Header("EFFECT")]
         [SerializeField] ACEffector2D effector = null;
+
+        [Header("SOUND")]
+        [SerializeField] [ReadOnly] Audio.ACSound audioSource = null;
+        [SerializeField] AudioClip[] addExplosionClips = null;
 
         byte skillLevel = 0;
         float explosionHitRadius = 0f;
@@ -24,6 +29,10 @@
             waitEffectStop  = new WaitUntil(() => effector.IsPlaying() == false);
             waitExplosionReady = new WaitUntil(() => isReady == true);
             CheckComponent();
+        }
+
+        private void Start() {
+            this.audioSource = SoundManager.Instance.GetChannel(CHANNELTYPE.PROJECTILE);
         }
 
         private void OnEnable() {
@@ -95,6 +104,12 @@
                 }
             }
 
+
+            if (targetColliderArray.Length > 0) { //Play AddExplosion Sound, if the Target Exist.
+                audioSource.PlayOneShot(addExplosionClips.RandIndex());
+            }
+
+            //Wait Next Explosion
             yield return StartCoroutine(AddExplosionPhaseEx(level));
         }
 
@@ -113,6 +128,10 @@
                 if (addExPref) {
                     addExPref.Shot(damageStruct, addExplosionDamage);
                 }
+            }
+
+            if (targetColliderArray.Length > 0) { //Play AddExplosion Sound, if the Target Exist.
+                audioSource.PlayOneShot(addExplosionClips.RandIndex());
             }
 
             yield break;

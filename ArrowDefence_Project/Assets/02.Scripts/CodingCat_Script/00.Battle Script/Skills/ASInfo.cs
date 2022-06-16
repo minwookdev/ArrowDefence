@@ -101,7 +101,7 @@
         }
 
         public void Release() {
-            skillData.Release();
+            skillData.ClearOrigin();
         }
 
         public ASInfo() { }

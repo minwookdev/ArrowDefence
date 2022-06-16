@@ -22,6 +22,9 @@
 
         private Item_Equipment itemAddress;
 
+        [Header("SOUND EFFECT")]
+        [SerializeField] private Audio.ACSound soundEffect = null;
+
         public void Setup(SLOTPANELTYPE type, Item_Equipment item)
         {
             if (this.gameObject.activeSelf == false)
@@ -115,25 +118,25 @@
             this.Button_Exit();
         }
 
-        private void ChooseSlot(int num, Item_Arrow item)
-        {
-            switch (num)
-            {
+        private void ChooseSlot(int num, Item_Arrow item) {
+            switch (num) {
                 case 0: CCPlayerData.equipments.EquipItem_MainArr(item); break;
                 case 1: CCPlayerData.equipments.EquipItem_SubArr(item);  break;
-                default: CatLog.Log("Worng Slot Number's, Check Slot Button"); break;
+                default: throw new System.NotImplementedException("잘못된 인덱스 넘버");
             }
+
+            soundEffect.PlayOneShot(2);
         }
 
-        private void ChooseSlot(int num, Item_Accessory item)
-        {
-            switch (num)
-            {
+        private void ChooseSlot(int num, Item_Accessory item) {
+            switch (num) {
                 case 0: CCPlayerData.equipments.EquipItem_Artifact(item, 0);  break;
                 case 1: CCPlayerData.equipments.EquipItem_Artifact(item, 1);  break;
                 case 2: CCPlayerData.equipments.EquipItem_Artifact(item, 2);  break;
-                default: CatLog.Log("Wrong Slot Number's Check Slot Button"); break;
+                default: throw new System.NotImplementedException("잘못된 인덱스 넘버");
             }
+
+            soundEffect.PlayOneShot(2);
         }
 
         #endregion

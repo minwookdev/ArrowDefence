@@ -47,6 +47,9 @@
         [Header("COMPONENT")]
         [SerializeField] RectTransform canvasRectTr = null;
 
+        [Header("SOUND EFFECT")]
+        [SerializeField] Audio.ACSound startSound = null;
+
         private float screenZpos = 0f;
         private LineRenderer arrowLimitLine;
         private Vector2 topLeftPoint;
@@ -235,6 +238,19 @@
         }
 
         #endregion
+
+        #region SOUND
+
+        public void PlayStartSound() {
+            if (startSound == null) {
+                CatLog.WLog("StartSound Component is Null.");
+                return;
+            }
+
+            startSound.PlayOneShot();
+        }
+
+        #endregion
     }
 
 #if UNITY_EDITOR
@@ -258,6 +274,22 @@
                 }
                 else {
                     CatLog.WLog("It can only be Created if the EventSystem does not Exist in this Scene.");
+                }
+            }
+
+            if (GUILayout.Button("CREATE TEMP AUDIOLISTNER")) {
+                if (UnityEditor.EditorApplication.isPlaying == false) {
+                    CatLog.WLog("this function is only Running Editor.Play Mode !");
+                    return;
+                }
+
+                var existAudioListner = FindObjectOfType<UnityEngine.AudioListener>();
+                if (existAudioListner == null) {
+                    var newAudioListner = new GameObject("AudioListner[TEMP]", typeof(AudioListener));
+                    newAudioListner.transform.position = Vector3.zero;
+                }
+                else {
+                    CatLog.WLog("AudioListner is Already Exists in This Scene.");
                 }
             }
         }

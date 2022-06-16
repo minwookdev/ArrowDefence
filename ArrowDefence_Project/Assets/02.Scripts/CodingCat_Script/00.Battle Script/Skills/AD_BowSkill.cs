@@ -9,6 +9,7 @@
         protected BOWSKILL_TYPE skillType;
         protected string termsName;
         protected string termsDesc;
+        protected AudioClip[] soundEffects;
 
         #region PROPERTY
         public string Id { get => id; }
@@ -51,15 +52,18 @@
         ~AD_BowSkill() { }
 
         protected AD_BowSkill(BowSkillData entity) {
-            this.id         = entity.SkillId;
-            this.level      = entity.SkillLevel;
-            this.skillType  = entity.SkillType;
-            this.iconSprite = entity.SkillIconSprite;
-            this.termsName  = entity.NameTerms;
-            this.termsDesc  = entity.DescTerms;
+            this.id           = entity.SkillId;
+            this.level        = entity.SkillLevel;
+            this.skillType    = entity.SkillType;
+            this.iconSprite   = entity.SkillIconSprite;
+            this.termsName    = entity.NameTerms;
+            this.termsDesc    = entity.DescTerms;
+            this.soundEffects = entity.SoundEffects;
         }
 
-        public abstract void Init();
+        public abstract void Init(Audio.ACSound audioSource);
+
+        public abstract void Release();
 
         public abstract void BowSpecialSkill(Transform bowTr, AD_BowController controller, ref DamageStruct damage, Vector3 initPos, ARROWTYPE type);
         

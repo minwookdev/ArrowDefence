@@ -20,6 +20,9 @@ MonoBehaviour:
   IconSprite: {fileID: 21300000, guid: 54bac695f3849e7468504e3c1aae52af, type: 3}
   ActiveType: 6
   effects: []
+  Sounds:
+  - {fileID: 8300000, guid: 87f22f1c7770ec4458528c38ec699acf, type: 3}
+  - {fileID: 8300000, guid: b5527a29b4725e64b9ecf0b251f5d1ac, type: 3}
   NameTerms: SkillName/SNAME_ARR_HOMING
   DescTerms: SkillDesc/SDESC_ARR_HOMING
   TargetSearchInterval: 0.1

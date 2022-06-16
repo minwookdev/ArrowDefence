@@ -23,6 +23,7 @@ MonoBehaviour:
   MaxCost: 0
   IncreaseCostCount: 0
   CoolDownTime: 27
+  SoundEffect: {fileID: 8300000, guid: 4772eea214dcd9746bcaeb204ee102ea, type: 3}
   HealAmount: 8
   HealRepeatTime: 5
   RepeatIntervalTime: 1.2

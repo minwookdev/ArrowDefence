@@ -26,6 +26,9 @@ MonoBehaviour:
   ActiveType: 7
   effects:
   - {fileID: 3086668923814295945, guid: 03aa6f9b130cd46458c57df1f6f06038, type: 3}
+  Sounds:
+  - {fileID: 8300000, guid: bd1734ead68548747a1555f3ee048101, type: 3}
+  - {fileID: 8300000, guid: 979272c97cc9a1e499ba857e56649b76, type: 3}
   NameTerms: SkillName/SNAME_EXPLOSIVE_CHARGED
   DescTerms: SkillDesc/SKILL_SPECIAL_EXPLOSIVE_CHARGE
   ExplosionDamage: 500

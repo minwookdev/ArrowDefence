@@ -29,7 +29,11 @@
         public Skill_Multiple_Shot() : base() { }
         #endregion
 
-        public override void Init() {
+        public override void Init(Audio.ACSound audioSource) {
+            
+        }
+
+        public override void Release() {
             
         }
 

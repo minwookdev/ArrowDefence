@@ -15,6 +15,7 @@
         protected string nameTerms;
         protected string descTerms;
         protected ArtifactCondition condition = null;
+        protected AudioClip soundEffect = null;
         #region PROPERTY
         public string ID { get => id; }
         public ACSP_TYPE SpEffectType { get => effectType; }
@@ -54,6 +55,9 @@
                 return condition;
             }
         }
+        public AudioClip SoundEffect {
+            get => soundEffect;
+        }
         #endregion
         public bool IsStartingPrepared {
             get; private set;
@@ -74,12 +78,13 @@
         }
 
         protected AccessorySPEffect(AccessorySkillData entity) {
-            this.id         = entity.SkillId;
-            this.effectType = entity.EffectType;
-            this.level      = entity.SkillLevel;
-            this.iconSprite = entity.SkillIconSprite;
-            this.nameTerms  = entity.NameTerms;
-            this.descTerms  = entity.DescTerms;
+            this.id          = entity.SkillId;
+            this.effectType  = entity.EffectType;
+            this.level       = entity.SkillLevel;
+            this.iconSprite  = entity.SkillIconSprite;
+            this.nameTerms   = entity.NameTerms;
+            this.descTerms   = entity.DescTerms;
+            this.soundEffect = entity.SoundEffect;
 
             //assignment artifact condition
             switch (entity.ConditionType) {

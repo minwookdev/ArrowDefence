@@ -440,6 +440,11 @@ MonoBehaviour:
   powerFactor: 18
   isLaunched: 0
   effectPoolTags: []
+  audioSource: {fileID: 0}
+  defaultHitSounds:
+  - {fileID: 8300000, guid: 22b4711f266b05645be0b90ae733758f, type: 3}
+  - {fileID: 8300000, guid: 8376566554f65ad4680f224c772197da, type: 3}
+  - {fileID: 8300000, guid: adffe983c7202fc49b27c91f7b43d64a, type: 3}
 --- !u!114 &2957477139567338879
 MonoBehaviour:
   m_ObjectHideFlags: 0

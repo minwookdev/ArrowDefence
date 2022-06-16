@@ -1,0 +1,28 @@
+﻿namespace ActionCat {
+    using UnityEngine;
+    using Audio;
+
+    public class MonsterAudio : MonoBehaviour {
+        [Header("SOUND")]
+        [SerializeField] [ReadOnly] ACSound audioSource = null;
+        [SerializeField] AudioClip[] breathClips = null;
+        [SerializeField] AudioClip[] attackClips = null;
+        [SerializeField] AudioClip[] deathClips  = null;
+        [SerializeField] AudioClip[] hitClips    = null;
+        [SerializeField] AudioClip blockClip = null;
+
+        private void Start() {
+            this.audioSource = SoundManager.Instance.GetChannel(CHANNELTYPE.MONSTER);
+        }
+
+        public void PlayRandomHitSound() => audioSource.PlayOneShot(hitClips.RandIndex());
+
+        public void PlayRandomDeathSound() => audioSource.PlayOneShot(deathClips.RandIndex());
+
+        public void PlayRandomAttackSound() => audioSource.PlayOneShot(attackClips.RandIndex());
+
+        public void PlayRandomBreathSound() => audioSource.PlayOneShot(breathClips.RandIndex());
+
+        public void PlayBlockSound() => audioSource.PlayOneShot(blockClip);
+    }
+}

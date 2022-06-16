@@ -23,5 +23,6 @@ MonoBehaviour:
   MaxCost: 0
   IncreaseCostCount: 0
   CoolDownTime: 12
+  SoundEffect: {fileID: 8300000, guid: 0c9ee157b9ba16b42bc8b9a828877386, type: 3}
   TimeSlowRatio: 0.5
   Duration: 8

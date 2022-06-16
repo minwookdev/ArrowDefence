@@ -11,6 +11,7 @@
         // [ Non-Saved-Variables ]
         string effectPoolTag = "";
         WaitForSeconds rapidShotWait = new WaitForSeconds(0.2f);
+        Audio.ACSound audioSource = null;
 
         public override string GetNameByTerms() {
             I2.Loc.LocalizedString loc = termsName;
@@ -37,10 +38,15 @@
         public Skill_Rapid_Shot() : base() { }
         #endregion
 
-        public override void Init() {
+        public override void Init(Audio.ACSound audioSource) {
             effectPoolTag = "Eff_Rapid_Muzzle_01";
             CCPooler.AddPoolList(effectPoolTag, 5, muzzleEffect.gameObject, false);
             CatLog.Log("RAPID SHOT INITIALIZE COMPLETE.");
+            this.audioSource = audioSource;
+        }
+
+        public override void Release() {
+            this.audioSource = null;
         }
 
         public override void BowSpecialSkill(Transform bowTr, AD_BowController controller, ref DamageStruct damage, Vector3 initPos, ARROWTYPE type) {
@@ -108,6 +114,9 @@
 
                 // RapidShot Muzzle Effect Active
                 CCPooler.SpawnFromPool<ACEffector2D>(effectPoolTag, effectPos, Quaternion.identity).PlayOnce(randomRotation.eulerAngles.z);
+
+                //Play Skill SoundEffect
+                audioSource.PlayOneShot(soundEffects.RandIndex());
             }
 
             #region LEGACY_CODE

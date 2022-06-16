@@ -22,6 +22,10 @@ MonoBehaviour:
   ActiveType: 4
   effects:
   - {fileID: 3899595160823913040, guid: 5b2189a0bf19c5c478fb8660a514cc46, type: 3}
+  Sounds:
+  - {fileID: 8300000, guid: 1b4c9050245e62d4ca858e9b5a9df312, type: 3}
+  - {fileID: 8300000, guid: b3a3d63505a047943bd42d8c7338e355, type: 3}
+  - {fileID: 8300000, guid: 17ca46bf925562c4a8152e7c284ae028, type: 3}
   NameTerms: SkillName/SNAME_ARR_PIERCING
   DescTerms: SkillDesc/SDESC_ARR_PIERCING
   MaxChainCount: 1

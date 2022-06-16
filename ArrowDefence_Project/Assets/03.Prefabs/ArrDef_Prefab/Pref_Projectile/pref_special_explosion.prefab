@@ -48,7 +48,11 @@ MonoBehaviour:
   finCalcDamage: 0
   tr: {fileID: 154765223882312340}
   effector: {fileID: 4042147609377273551}
-  coll: {fileID: 154765223882312342}
+  audioSource: {fileID: 0}
+  addExplosionClips:
+  - {fileID: 8300000, guid: 8c57f7311764cdf4c930919783a0314d, type: 3}
+  - {fileID: 8300000, guid: a7bc6c24b4d126142972e9b416cdceaa, type: 3}
+  - {fileID: 8300000, guid: e6469cf3a093022478deef0bad2eef00, type: 3}
 --- !u!58 &154765223882312342
 CircleCollider2D:
   m_ObjectHideFlags: 0

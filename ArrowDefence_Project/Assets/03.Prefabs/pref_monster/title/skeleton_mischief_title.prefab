@@ -73,5 +73,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: skeleton_mischief_title
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 8114667805450639416, guid: e769450a1b6c233448b3f6a6ac19c000,
+        type: 3}
+      propertyPath: monsterAudio
+      value: 
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 1578238413092933328, guid: e769450a1b6c233448b3f6a6ac19c000, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: e769450a1b6c233448b3f6a6ac19c000, type: 3}

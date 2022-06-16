@@ -18,6 +18,8 @@
 
         public virtual void ValActionSpeed(float ratio, float duration) => throw new NotImplementedException();
 
+        public virtual void PlayHitSound() => throw new System.NotImplementedException();
+
         public void StateChanger(STATETYPE target) {
             ChangeState(target);
         }

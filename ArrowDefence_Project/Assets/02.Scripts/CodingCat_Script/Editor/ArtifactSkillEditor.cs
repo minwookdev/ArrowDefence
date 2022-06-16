@@ -10,7 +10,7 @@ public class ArtifactSkillEditor : Editor {
    
     protected SerializedProperty entityNameTermsProp = null;
     protected SerializedProperty entityDescTermsProp = null;
-
+    protected SerializedProperty entityAudioClipProp = null;
 
     protected SerializedProperty conditionTypeProp = null;
     protected SerializedProperty maxStackProp = null;
@@ -74,6 +74,7 @@ public class ArtifactSkillEditor : Editor {
         entitySpriteProp    = sobject.FindProperty(nameof(AccessorySkillData.SkillIconSprite));
         entityNameTermsProp = sobject.FindProperty(nameof(AccessorySkillData.NameTerms));
         entityDescTermsProp = sobject.FindProperty(nameof(AccessorySkillData.DescTerms));
+        entityAudioClipProp = sobject.FindProperty(nameof(AccessorySkillData.SoundEffect));
     }
 
     protected void DrawDefaultProps() {
@@ -98,14 +99,14 @@ public class AimSightDataEditor : ArtifactSkillEditor {
     SerializedProperty typeProp;
     SerializedProperty levelProp;
     SerializedProperty spriteProp;
-
+    
     SerializedProperty nameTermsProp = null;
     SerializedProperty descTermsProp = null;
-
     SerializedProperty matProp;
     SerializedProperty lineWidthProp;
 
     SerializedProperty aimsightPrefProp;
+
 
     GUIStyle logoStyle = null;
 
@@ -122,7 +123,6 @@ public class AimSightDataEditor : ArtifactSkillEditor {
 
         nameTermsProp = sobject.FindProperty(nameof(SkillDataAimSight.NameTerms));
         descTermsProp = sobject.FindProperty(nameof(SkillDataAimSight.DescTerms));
-
         aimsightPrefProp = sobject.FindProperty(nameof(SkillDataAimSight.AimSightPref));
 
         InitConditionProps(sobject);
@@ -189,7 +189,6 @@ public class AimSightDataEditor : ArtifactSkillEditor {
         EditorGUILayout.PropertyField(lineWidthProp);
 
         EditorGUILayout.PropertyField(aimsightPrefProp, new GUIContent("AimSight Prefab"));
-
         GUILayout.EndVertical();
         #endregion
 
@@ -220,6 +219,7 @@ public class SlowTimeDataEditor : ArtifactSkillEditor {
 
     SerializedProperty nameTermsProp = null;
     SerializedProperty descTermsProp = null;
+    SerializedProperty audioClipProp = null;
 
     SerializedProperty ratioProp;
     SerializedProperty durationProp;
@@ -240,6 +240,7 @@ public class SlowTimeDataEditor : ArtifactSkillEditor {
 
         nameTermsProp = sobject.FindProperty(nameof(SkillDataSlowTime.NameTerms));
         descTermsProp = sobject.FindProperty(nameof(SkillDataSlowTime.DescTerms));
+        audioClipProp = sobject.FindProperty(nameof(SkillDataSlowTime.SoundEffect));
 
         InitConditionProps(sobject);
         logoStyle = new GUIStyle();
@@ -291,11 +292,9 @@ public class SlowTimeDataEditor : ArtifactSkillEditor {
 
         GUILayout.Label("Slow Time Info", EditorStyles.boldLabel);
         GUILayout.BeginVertical("GroupBox");
-
         EditorGUILayout.PropertyField(ratioProp);
-
         EditorGUILayout.PropertyField(durationProp);
-
+        EditorGUILayout.PropertyField(audioClipProp);
         GUILayout.EndVertical();
 
         #endregion
@@ -358,6 +357,7 @@ public class CureEntityEditor : ArtifactSkillEditor {
         EditorGUILayout.PropertyField(healNumberProp);
         EditorGUILayout.PropertyField(repeatTimeProp);
         //EditorGUILayout.PropertyField(radiusProp);
+        EditorGUILayout.PropertyField(entityAudioClipProp);
         GUILayout.EndVertical();
         #endregion
 
@@ -410,6 +410,7 @@ public class CurseSlowEntityEditor : ArtifactSkillEditor {
         EditorGUILayout.PropertyField(radiusProp);
         EditorGUILayout.PropertyField(slowRatioProp);
         EditorGUILayout.PropertyField(durationProp);
+        EditorGUILayout.PropertyField(entityAudioClipProp);
         GUILayout.EndVertical();
         #endregion
 

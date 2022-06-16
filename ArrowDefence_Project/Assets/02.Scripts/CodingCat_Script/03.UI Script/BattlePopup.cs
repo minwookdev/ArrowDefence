@@ -8,6 +8,9 @@ public class BattlePopup : MonoBehaviour {
     private string stageName = null;
     private string stageTag  = null;
 
+    [Header("SOUND EFFECT")]
+    [SerializeField] ActionCat.Audio.ACSound soundEffect = null;
+
     public void EnablePopup(STAGETYPE type) {
         switch (type) {
             case STAGETYPE.STAGE_DEV:         stageName = "DEV TEST STAGE";       stageTag = AD_Data.SCENE_BATTLE_DEV;            break;
@@ -22,6 +25,8 @@ public class BattlePopup : MonoBehaviour {
 
         textStageName.text = stageName;
         gameObject.SetActive(true);
+
+        soundEffect.PlayOneShot();
     }
 
     public void DisablePopup() {

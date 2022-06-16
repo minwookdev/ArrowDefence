@@ -13,6 +13,13 @@
         [Header("BUTTON EVENT")]
         [SerializeField] BattleSceneButton battleButtons = null;
 
+        [Header("SOUND EFFECT")]
+        [SerializeField] Audio.ACSound enableSound = null;
+
+        private void OnEnable() {
+            enableSound.PlayOneShot();
+        }
+
         public void OpenPanel(DropItem[] drops) {
             if (gameObject.activeSelf == true) return; //prevention duplicate active.
             CatLog.Log("Clear Game, Result Panel Udpated !");

@@ -243,6 +243,9 @@
 
             AD_BowRope.instance.SetCatchPoint(arrowComponent.CatchTr);
             isBowPulling = true;    //Pulling State isOn, used accessory
+
+            //Play Draw Sound
+            sound.PlayPullingSound();
         }
 
         void TracUpdate() {
@@ -341,8 +344,9 @@
             //Release Arrow Component and Transform
             arrowTr = null; arrowComponent = null;
 
-            //active effect
+            //active effect & Play Shot Release Sound
             bowSprite.Effect(BOWEFFECTYPE.IMPACT);
+            sound.PlayReleasedSound();
 
             //active camera shake
             CineCam.Inst.ShakeCamera(5f, .1f);

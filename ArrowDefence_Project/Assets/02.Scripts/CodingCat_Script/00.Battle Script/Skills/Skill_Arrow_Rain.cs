@@ -1,12 +1,14 @@
 ﻿namespace ActionCat {
     using System.Collections;
-    using UnityEditor;
     using UnityEngine;
 
     public class Skill_Arrow_Rain : AD_BowSkill {
         // [ Saved-Variables ]
         private byte arrowCount;
         private float shotDelay;
+
+        // [ Non-Saved Variables ]
+        private Audio.ACSound audioSource = null;
 
         public override string GetNameByTerms() {
             throw new System.NotImplementedException();
@@ -29,8 +31,12 @@
         public Skill_Arrow_Rain() : base() { }
         #endregion
 
-        public override void Init() {
-            
+        public override void Init(Audio.ACSound audioSource) {
+            this.audioSource = audioSource;
+        }
+
+        public override void Release() {
+            this.audioSource = null;
         }
 
         public override void BowSpecialSkill(Transform bowTr, AD_BowController controller, ref DamageStruct damage, Vector3 initPos, ARROWTYPE type) {
@@ -59,6 +65,9 @@
                 if (arrow) {
                     arrow.gameObject.transform.rotation = Quaternion.Euler(0f, 0f, CalculateAngle(arrow.transform.position, randomdest));
                     arrow.ShotToDirection(arrow.transform.up, damage); // * force.magnitude;
+
+                    //Sound Play
+                    audioSource.PlayOneShot(soundEffects.RandIndex());
                 }
             }
         }

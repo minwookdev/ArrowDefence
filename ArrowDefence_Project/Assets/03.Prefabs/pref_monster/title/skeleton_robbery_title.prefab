@@ -73,5 +73,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: skeleton_robbery_title
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 6569283258810144969, guid: d30dbadb9ea15b0448f87f59ceb3d4a2,
+        type: 3}
+      propertyPath: monsterAudio
+      value: 
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 333308762986995084, guid: d30dbadb9ea15b0448f87f59ceb3d4a2, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: d30dbadb9ea15b0448f87f59ceb3d4a2, type: 3}

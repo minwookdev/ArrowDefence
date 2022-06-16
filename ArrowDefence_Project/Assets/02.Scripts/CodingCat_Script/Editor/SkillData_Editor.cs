@@ -23,6 +23,8 @@ public class SpreadShot_DataEditor : Editor
     SerializedProperty nameTermsProp = null;
     SerializedProperty descTermsProp = null;
 
+    SerializedProperty soundsProp = null;
+
     public void OnEnable() {
         sobject = new SerializedObject(target);
 
@@ -36,6 +38,8 @@ public class SpreadShot_DataEditor : Editor
 
         nameTermsProp = sobject.FindProperty(nameof(SkillDataSpreadShot.NameTerms));
         descTermsProp = sobject.FindProperty(nameof(SkillDataSpreadShot.DescTerms));
+
+        soundsProp = sobject.FindProperty(nameof(SkillDataSpreadShot.SoundEffects));
     }
 
     public override void OnInspectorGUI() {
@@ -97,6 +101,12 @@ public class SpreadShot_DataEditor : Editor
         GUILayout.EndVertical();
         #endregion
 
+        #region SOUND
+        GUILayout.BeginVertical("GroupBox");
+        EditorGUILayout.PropertyField(soundsProp);
+        GUILayout.EndVertical();
+        #endregion
+
         GUILayout.EndVertical();
 
         //Save Property
@@ -121,6 +131,8 @@ public class RapidShot_DataEditor : Editor
     SerializedProperty nameTermsProp = null;
     SerializedProperty descTermsProp = null;
 
+    SerializedProperty soundsProp = null;
+
     public void OnEnable() {
         sobject = new SerializedObject(target);
 
@@ -135,6 +147,8 @@ public class RapidShot_DataEditor : Editor
 
         nameTermsProp = sobject.FindProperty(nameof(SkillDataSpreadShot.NameTerms));
         descTermsProp = sobject.FindProperty(nameof(SkillDataSpreadShot.DescTerms));
+
+        soundsProp = sobject.FindProperty(nameof(SkillDataRapidShot.SoundEffects));
     }
 
     public override void OnInspectorGUI() {
@@ -199,6 +213,12 @@ public class RapidShot_DataEditor : Editor
         GUILayout.EndVertical();
         #endregion
 
+        #region SOUND
+        GUILayout.BeginVertical("GroupBox");
+        EditorGUILayout.PropertyField(soundsProp);
+        GUILayout.EndVertical();
+        #endregion
+
         GUILayout.EndVertical();
 
         //Save Property
@@ -222,6 +242,8 @@ public class RainArrow_DataEditor : Editor
     SerializedProperty nameTermsProp = null;
     SerializedProperty descTermsProp = null;
 
+    SerializedProperty soundsProp = null;
+
     public void OnEnable() {
         sobject = new SerializedObject(target);
                    
@@ -235,6 +257,8 @@ public class RainArrow_DataEditor : Editor
 
         nameTermsProp = sobject.FindProperty(nameof(SkillDataSpreadShot.NameTerms));
         descTermsProp = sobject.FindProperty(nameof(SkillDataSpreadShot.DescTerms));
+
+        soundsProp = sobject.FindProperty(nameof(SkillDataArrowRain.SoundEffects));
     }
 
     public override void OnInspectorGUI() {
@@ -296,6 +320,12 @@ public class RainArrow_DataEditor : Editor
         GUILayout.EndVertical();
         #endregion
 
+        #region SOUND
+        GUILayout.BeginVertical("GroupBox");
+        EditorGUILayout.PropertyField(soundsProp);
+        GUILayout.EndVertical();
+        #endregion
+
         GUILayout.EndVertical();
 
         //Save Property
@@ -316,6 +346,8 @@ public class Empty_DataEditor : Editor
     SerializedProperty nameTermsProp = null;
     SerializedProperty descTermsProp = null;
 
+    SerializedProperty soundsProp = null;
+
     public void OnEnable()
     {
         sobject = new SerializedObject(target);
@@ -325,8 +357,10 @@ public class Empty_DataEditor : Editor
         levelProp  = sobject.FindProperty("SkillLevel");
         spriteProp = sobject.FindProperty("SkillIconSprite");
 
-        nameTermsProp = sobject.FindProperty(nameof(SkillDataSpreadShot.NameTerms));
+        nameTermsProp = sobject.FindProperty(nameof(SkillDataSpreadShot.NameTerms));    
         descTermsProp = sobject.FindProperty(nameof(SkillDataSpreadShot.DescTerms));
+
+        soundsProp = sobject.FindProperty(nameof(SkillData_Empty.SoundEffects));
     }
 
     public override void OnInspectorGUI()
@@ -376,8 +410,10 @@ public class Empty_DataEditor : Editor
         GUILayout.EndVertical();
         #endregion
 
-        #region ANOTHER_SKILL_DATA
-
+        #region SOUND
+        GUILayout.BeginVertical("GroupBox");
+        EditorGUILayout.PropertyField(soundsProp);
+        GUILayout.EndVertical();
         #endregion
 
         GUILayout.EndVertical();

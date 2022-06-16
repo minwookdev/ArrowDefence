@@ -19,10 +19,12 @@
 
         [Header("PRESSED SCALE")]
         [SerializeField] Vector3 pressedScale = new Vector3(0.85f, 0.85f, 1f);
-        [SerializeField] [ReadOnly] 
-        Vector3 initScale;
+        [SerializeField] [ReadOnly] Vector3 initScale;
         [SerializeField] [RangeEx(0.1f, 1.0f, 0.1f)]
         float scalingTime = 0.3f;
+
+        [Header("SOUND EFFECT")]
+        [SerializeField] Audio.ACSound soundEffect = null;
 
         public void Init(System.Action<bool> action, bool isDebug = false) {
             //Initialize Scale
@@ -59,6 +61,8 @@
                 currTouchId = eventData.pointerId;
                 buttonRect.DOScale(pressedScale, scalingTime); //Button Pressed Scale
                 isTouch     = true;
+                //Play SoundEffect
+                soundEffect.PlayOneShot(0);
             }
         }
 
@@ -68,6 +72,8 @@
                 if (isOnAuto) {
                     StartCoroutine(DotRotateCo());
                 }
+                //Play SoundEffect
+                soundEffect.PlayOneShot(1);
             }
         }
 

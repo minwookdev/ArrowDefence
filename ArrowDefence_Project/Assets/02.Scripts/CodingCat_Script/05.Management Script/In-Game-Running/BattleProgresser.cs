@@ -1,6 +1,7 @@
 ﻿namespace ActionCat {
     using ActionCat.Data;
     using ActionCat.UI;
+    using ActionCat.Audio;
     using System.Collections;
     using System.Collections.Generic;
     using UnityEngine;
@@ -147,6 +148,10 @@
         bool isComboActivating = false;
         float currentComboTime = 0f;
 
+        [Header("SOUND CHANNEL")]
+        [SerializeField] ACSound[] soundChannels    = null;
+        [SerializeField] ACSound musicAudioSource   = null;
+
         [Header("DEBUG")]
         public bool IsQuickGameClear  = false;
         public bool IsQuickGameOver   = false;
@@ -198,6 +203,11 @@
             var es3RefMgr = FindObjectOfType<ES3ReferenceMgr>();
             if (es3RefMgr == null) {
                 CatLog.ELog("ES3ReferenceMgr does Not Exist in This Scene. follow this ↓ \n 'Assets > Easy Save 3 > Add Manager to Scene'", true);
+            }
+
+            //Add Sound Channels
+            foreach (var channel in soundChannels) {
+                SoundManager.Instance.AddChannel(channel);
             }
         }
 
@@ -299,6 +309,7 @@
             isInitialized = true;
             //======================================================================================================================
             GameManager.Instance.SetSavingFeedback(sceneRoute.SavingFeedbackPanel);
+            musicAudioSource.PlaySoundWithDelayed(1f, true); //Play BGM
         }
 
         private void Update() {
@@ -355,6 +366,9 @@
                
             float dest = currentPlayerHealth / MaxPlayerHealth;
             sceneRoute.PlayerSliderDec(dest);
+
+            //Play Play-Hit Sound
+            soundChannels[2].PlayOneShot(0);
         }
 
         public void IncreaseHealthGauge(float value) {
@@ -522,6 +536,9 @@
         }
 
         IEnumerator OpenResultPanelCo(float delayTime) {
+            //Stop BGM
+            musicAudioSource.StopSoundWithFadeIn(1f, true);
+
             float timeElapsed = 0f;
             while (timeElapsed < delayTime) {
                 timeElapsed += Time.unscaledDeltaTime;
@@ -535,6 +552,9 @@
         }
 
         IEnumerator OpenGameOverPanelCo(float delayTime) {
+            //Stop BGM
+            musicAudioSource.StopSoundWithFadeIn(1f, true);
+
             float timeElapsed = 0f;
             while (timeElapsed < delayTime) {
                 timeElapsed += Time.unscaledDeltaTime;

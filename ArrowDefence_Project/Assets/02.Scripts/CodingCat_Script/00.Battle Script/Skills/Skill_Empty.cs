@@ -13,8 +13,12 @@
         public Skill_Empty() : base() { }
         #endregion
 
-        public override void Init() {
+        public override void Init(Audio.ACSound audioSource) {
             throw new System.NotImplementedException("EMPTY TYPE SKILL은 BattleStage에서 Init되면 안댐.");
+        }
+
+        public override void Release() {
+            throw new System.NotImplementedException();
         }
 
         public override void BowSpecialSkill(Transform bowTr, AD_BowController controller, ref DamageStruct damage, Vector3 initPos, ARROWTYPE type) {

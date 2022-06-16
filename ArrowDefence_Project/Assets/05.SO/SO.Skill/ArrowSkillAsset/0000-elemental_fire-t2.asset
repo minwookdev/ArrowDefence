@@ -25,6 +25,10 @@ MonoBehaviour:
   IconSprite: {fileID: 21300000, guid: f1c120afe6a54064e95c3a61085dcb4a, type: 3}
   ActiveType: 7
   effects: []
+  Sounds:
+  - {fileID: 8300000, guid: 8c57f7311764cdf4c930919783a0314d, type: 3}
+  - {fileID: 8300000, guid: a7bc6c24b4d126142972e9b416cdceaa, type: 3}
+  - {fileID: 8300000, guid: e6469cf3a093022478deef0bad2eef00, type: 3}
   NameTerms: SkillName/SNAME_ARR_ELEMENTAL_FIRE
   DescTerms: SkillDesc/SDESC_ARR_ELEMENTAL_FIRE
   ActivationProbability: 35

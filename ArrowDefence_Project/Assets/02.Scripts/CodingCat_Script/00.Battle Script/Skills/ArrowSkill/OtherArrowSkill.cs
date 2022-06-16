@@ -7,7 +7,7 @@
         // [ Saved-Variables ] 
         float[] values;
 
-        public override void Clear() {
+        public override void ClearOnDisable() {
             throw new System.NotImplementedException();
         }
         public override string GetDesc(string localizedString) {
@@ -49,7 +49,7 @@
             return string.Format(localizedString, ((value * 100) - 100).ToString().GetColor(StringColor.GREEN));
         }
         #region NOT-USED
-        public override void Clear() {
+        public override void ClearOnDisable() {
             throw new System.NotImplementedException();
         }
 
@@ -78,7 +78,7 @@
             return string.Format(localizedString, value.ToString());
         }
         #region NOT-USED
-        public override void Clear() {
+        public override void ClearOnDisable() {
             throw new System.NotImplementedException();
         }
 

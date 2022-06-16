@@ -16,6 +16,9 @@
         [Header("OPTION")]
         [SerializeField] [RangeEx(1, 10, 1)] int numberCacheStart = 3;
 
+        [Header("CHANNEL")]
+        [SerializeField] List<ACSound> channels = new List<ACSound>();
+
         #region UNITY_CYCLE
 
         private void Awake() {
@@ -38,13 +41,13 @@
         #endregion
 
         /// <summary>
-        /// Awake에서 사용하지 않는 것을 권장함.
+        /// Start 메서드에서 사용을 권장
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
         public float GetVolumeScale(SOUNDTYPE type) {
             if (!GameManager.Instance.IsInitialized) {
-                CatLog.WLog("Settings Data is Not Loaded Yet.");
+                CatLog.WLog("Settings Data가 로드되지 않았습니다. 기본값이 할당됩니다.");
                 return StNum.floatOne;
             }
 
@@ -55,6 +58,10 @@
             }
         }
 
+        /// <summary>
+        /// 관리되는 Sound Dictionary에 ACSound 컴포넌트를 추가
+        /// </summary>
+        /// <param name="source"></param>
         public void AddSound(ACSound source) {
             if (soundDic.ContainsKey(source.SoundKey)) {                                                   //이미 동일한 SoundKey가 존재하면 새로운 SoundKey를 부여
                 int loopCounts = (numberCacheDic.TryGetValue(source.SoundKey, out int value)) ? value : 1; //넘버캐시에 저장된 넘버가 있는지 확인. ※ 너무 많은 Sound객체의 Loop방지
@@ -76,6 +83,11 @@
             soundDic.Add(source.SoundKey, source);
         }
 
+        /// <summary>
+        /// Sound Dictionary에서 해당 요소를 제거. 
+        /// [Dictionary에 Add되었다면, 씬 종료시 반드시 호출]
+        /// </summary>
+        /// <param name="key"></param>
         public void RemoveSound(string key) {
             if (soundDic.ContainsKey(key) == false) {
                 CatLog.WLog($"this SoundKey is Not Exist In SoundDictionary. KEY: {key}");
@@ -109,6 +121,29 @@
 
         void ClearNumberCache() => numberCacheDic.Clear();
 
+        #region CHANNEL
+
+        public void AddChannel(ACSound audioSource) {
+            channels.Add(audioSource);
+        }
+
+        public void ClearChannels() {
+            channels.Clear();
+        }
+
+        public ACSound GetChannel(CHANNELTYPE type) {
+            switch (type) {
+                case CHANNELTYPE.ARROW:      return (channels[0] != null) ? channels[0] : throw new System.Exception("Failed to Get Channel !");
+                case CHANNELTYPE.PROJECTILE: return (channels[1] != null) ? channels[1] : throw new System.Exception("Failed to Get Channel !");
+                case CHANNELTYPE.PLAYER:     return (channels[2] != null) ? channels[2] : throw new System.Exception("Failed to Get Channel !");
+                case CHANNELTYPE.MONSTER:    return (channels[3] != null) ? channels[3] : throw new System.Exception("Failed to Get Channel !");
+                case CHANNELTYPE.NONE:  throw new System.NotImplementedException();
+                default:                throw new System.NotImplementedException();
+            }
+        }
+
+        #endregion
+
 #if UNITY_EDITOR
         [ContextMenu("Get Dictionary to List")]
         public void GetSoundList() {
@@ -125,5 +160,13 @@
             numberCacheArray = numberCacheDic.Values.ToArray();
         }
 #endif
+    }
+
+    public enum CHANNELTYPE {
+        NONE,
+        ARROW,
+        PROJECTILE,
+        PLAYER,
+        MONSTER
     }
 }

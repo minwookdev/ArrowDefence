@@ -10,6 +10,10 @@
         [SerializeField] [RangeEx(8f, 50f, 1f)] 
         float force = 10f;
 
+        [Header("SOUND")]
+        [SerializeField] [ReadOnly] Audio.ACSound audioSource = null;
+        [SerializeField] AudioClip[] daggerHitClips = null;
+
         private Vector3 tempEulerAngels;
         private float damageFloaterRange = 2f;
 
@@ -17,6 +21,8 @@
             CheckComponent();
             SetScreenBound();
             coll.enabled = false;
+
+            audioSource = SoundManager.Instance.GetChannel(CHANNELTYPE.PROJECTILE);
         }
 
         private void OnDisable() {
@@ -45,6 +51,7 @@
                     tempEulerAngels   = tr.localEulerAngles;
                     tempEulerAngels.z += (Random.Range(-damageFloaterRange, damageFloaterRange + GameGlobal.RandomRangeCorrection));
                     target.OnHit(ref damageStruct, contact, tempEulerAngels);
+                    audioSource.PlayOneShot(daggerHitClips.RandIndex());
                 }
             }
         }

@@ -14,9 +14,9 @@
         [SerializeField] SpriteRenderer arrowSprite    = null;
         [SerializeField] Transform arrowCatchTransform = null;
         [Tooltip("Only Use Special Arrow")]
-        [SerializeField] Transform headPivot = null;
-
-        [Header("COMPONENT OTHERS")]
+        [SerializeField] Transform headPivot           = null;                                              
+                                                                
+        [Header("COMPONENT OTHERS")]                            
         [ReadOnly] public Transform bottomClampTr = null;
         [ReadOnly] public Transform topClampTr    = null;
 
@@ -33,7 +33,11 @@
         private DamageStruct damageStruct;
         private Queue<CollisionData> collisionQueue = null;
 
-        //SKILLS
+        [Header("SOUNDS COMPATIBILITY")]
+        [SerializeField] [ReadOnly] Audio.ACSound audioSource = null;  //Prefab 자체에서 AudioSource 사용하지 않는 이유, 화살이 몬스터와 충돌할 때 내는 Sound를 재생함과 동시에   
+        [SerializeField] AudioClip[] defaultHitSounds = null;          //DisableObject가 실행되서 소멸하기 떄문에, PlayOneShot으로 조진다고 해도, Sound가 재생되지 않는 문제가 생겨   
+                                                                       //Channel(맵에 미리 배치된 ACSound)를 가져와서 사운드 재생을 대리.
+                                                               //SKILLS
         ArrowSkillSet arrowSkillSets = null;
         bool isInitSkill = false;
 
@@ -82,6 +86,9 @@
             if(powerFactor <= 0f) {
                 CatLog.ELog("Is Not Set Arrow Speed Value.");
             }
+
+            //Get AudioSource
+            audioSource = SoundManager.Instance.GetChannel(CHANNELTYPE.ARROW);
         }
 
         private void Update() {
@@ -279,6 +286,7 @@
                     if (collData.Collider.GetComponent<IDamageable>().TryOnHit(ref damageStruct, collData.CollisionPoint, collData.CollisionDirection)) {
                         PlayEffect(collData.CollisionPoint);
                         collisionQueue.Clear();
+                        audioSource.PlayOneShot(defaultHitSounds.RandIndex()); //Default Hit Sound Play
                         DisableRequest();
                     }
                     else {  //Hit Failed - Get Next Collision Queue
@@ -352,6 +360,10 @@
         }
 
         #endregion
+
+        void IArrowObject.PlayOneShot(AudioClip audioClip) => this.audioSource.PlayOneShot(audioClip);
+
+        void IArrowObject.PlayDefaultClip() => audioSource.PlayOneShot(defaultHitSounds.RandIndex());
 
         #region LEGACY
 

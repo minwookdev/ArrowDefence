@@ -57,6 +57,10 @@
         [Header("NOTIFY LIST")]
         [SerializeField] GameObject prefMessage;
 
+        [Header("SOUND EFFECT")]
+        [SerializeField] Audio.ACSound soundEffect = null;
+        private bool isInitSound = false;
+
         bool isInit = false;
         string endColor = "</color>";
         float defaultBackGroundSpacing = 70f;
@@ -91,6 +95,9 @@
                                .SetUpdate(false);
 
             notifyCanvasGroup.alpha = StNum.floatZero;
+
+            //Check Init Sound 
+            isInitSound = (soundEffect != null);
             isInit = true;
         }
 
@@ -116,6 +123,11 @@
 
             //Fin. Play Notify Sequence. 
             notifySeq.Restart();
+
+            //Play Notify Sound
+            if (isInitSound) {
+                soundEffect.PlayOneShot();
+            }
         }
 
         public void ForceHide() {

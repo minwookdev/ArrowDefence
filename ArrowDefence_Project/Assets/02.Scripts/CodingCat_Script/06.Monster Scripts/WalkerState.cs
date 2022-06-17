@@ -33,7 +33,7 @@
         float currentBreathSoundTime  = 0f;
         bool isPlayBreathSound {
             get {
-                return (RandomEx.RangeInt(1, 100) > 50);
+                return (RandomEx.RangeInt(1, 100) > 92);
             }
         }
 

@@ -14,7 +14,7 @@
                              "CCPooler의 모든 동작은 코드 컨트롤 합니다. \n" +
                              "Pooler를 사용하여 Instantiate되는 모든 오브젝트는 비활성화 시 \n" +
                              "IPoolObject.DisableRequest 메서드를 사용하여 비활성화를 요청합니다. \n" +
-                             "**인스펙터의 항목을 수정하지 않습니다**";
+                             "**인스펙터의 각 항목을 수정하지 않습니다**";
 
         public override void OnInspectorGUI()
         {
@@ -44,6 +44,12 @@
 
         [Header("PARENT LIST")]
         [SerializeField] private List<Transform> ParentList;
+        string differentParentNameWMessage = "Warning ! Different Name of Parnet and Pooling Object."                                       + "\n" +
+                                             "AddPoolList 메서드를 사용하여 등록한 Parent Name과 PoolObject의 tag(Name)가 일치되지 않았습니다." + "\n" +
+                                             "SpawnFromPool 메서드를 사용하여 새로운 GameObject객체를 Instantiate 하는 과정에서"                + "\n" +
+                                             "PoolObject의 Name으로 부모를 검색하지 못하여 의도치 않은 동작으로 이어질 수 있습니다."              + "\n" +
+                                             "이러한 동작을 막기위해 해당 메서드에서 tag와 parent의 name을 강제적으로 일치시킵니다."              + "\n" +
+                                             "parent object name: {0}, input tag: {1}";
 
         [Header("POOL OBJECTS")]
         [SerializeField] private List<Pool> poolInstanceList = new List<Pool>();
@@ -381,14 +387,11 @@
         #region PARENT
 
         private void AddParnetList(Transform parent, string tag) {
-            if (string.Equals(parent.name, tag) == false) {
-                CatLog.WLog("Parent Object의 이름과 tag가 일치되지 않았습니다. Description: \n" +
-                            "이는 SpawnFromPool 메서드를 사용하여, 기존에 미리 생성된 object가 아닌 Instantiate되었을 때, \n" +
-                            "AddPoolList에서 등록된 부모를 검색하지 못하여 의도치 않은 동작으로 이어질 수 있습니다. \n" +
-                            "이러한 동작을 막기위해 해당 메서드에서 tag와 parent object의 name을 강제적으로 일치시킵니다. \n" +
-                            $"parent object name: {parent.name} input tag: {tag}");
+            if (string.Equals(parent.name, tag) == false) { //부모객체와 이름 비교
+                CatLog.WLog(string.Format(differentParentNameWMessage, parent.name, tag));
             }
 
+            //이름 검색 실패를 방지하여 parent object의 이름을 고정
             parent.name = tag;
             ParentList.Add(parent);
         }

@@ -7,6 +7,8 @@
         Dictionary<string, StageSetting> stageSettings = new Dictionary<string, StageSetting>();
         private float bgmSoundValue = 1.0f;
         private float seSoundValue  = 1.0f;
+        private float bgmParamVolumeValue = 0f;
+        private float seParamVolumeValue  = 0f;
         public PULLINGTYPE PullingType { 
             get; private set; 
         } = PULLINGTYPE.FREE_TOUCH;
@@ -29,6 +31,20 @@
             set {
                 seSoundValue = (value >= 0f && value <= 1f) ? value : seSoundValue;
                 CatLog.Log($"Current Se Sound Value: {seSoundValue}");
+            }
+        }
+        public float BgmParamVolumeValue {
+            get => bgmParamVolumeValue;
+            set {
+                bgmParamVolumeValue = (value >= -80f && value <= 0f) ? value : bgmParamVolumeValue;
+                CatLog.Log($"Set BGM SoundFitch Value: {bgmParamVolumeValue}");
+            }
+        }
+        public float SeParamVolumeValue {
+            get => seParamVolumeValue;
+            set {
+                seParamVolumeValue = (value >= -80f && value <= 0f) ? value : seParamVolumeValue;
+                CatLog.Log($"Set SE SoundFitch Value: {seParamVolumeValue}");
             }
         }
 

@@ -51,19 +51,19 @@
             }
 
             soundKey = assignSoundKey;              // Apply SoundKey
-            SoundManager.Instance.AddSound(this);   // AddSound Dictionary by SoundKey
+            //SoundManager.Instance.AddSound(this);   // AddSound Dictionary by SoundKey
             audioSource.clip = (sound != null) ? sound : null;
         }
 
         private void Start() {
-            volumeScale = SoundManager.Instance.GetVolumeScale(soundType); // Get Volume Variable
-            audioSource.volume = volumeScale;                              // Set Volume Variable
+            //volumeScale = SoundManager.Instance.GetVolumeScale(soundType); // Get Volume Variable
+            //audioSource.volume = volumeScale;                              // Set Volume Variable
         }
 
         private void OnDestroy() {
-            if (SoundManager.IsExist) {
-                SoundManager.Instance.RemoveSound(soundKey);
-            }
+            //if (SoundManager.IsExist) {
+            //    SoundManager.Instance.RemoveSound(soundKey);
+            //}
         }
 
         #endregion
@@ -139,7 +139,7 @@
         #region PLAYONESHOT
 
         public void PlayOneShot() {
-            audioSource.PlayOneShot(sound, volumeScale);
+            audioSource.PlayOneShot(sound);
         }
 
         /// <summary>
@@ -153,6 +153,14 @@
         /// </summary>
         /// <param name="audio"></param>
         public void PlayOneShot(AudioClip audio) => audioSource.PlayOneShot(audio, volumeScale);
+
+        /// <summary>
+        /// 커스텀 볼륨값으로 사운드 재생
+        /// </summary>
+        /// <param name="volume"></param>
+        public void PlayOneShotWithVolume(float volume) {
+            audioSource.PlayOneShot(sound, volume);
+        }
 
         #endregion
 

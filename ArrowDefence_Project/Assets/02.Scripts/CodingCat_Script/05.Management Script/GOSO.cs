@@ -1,5 +1,6 @@
 ﻿namespace ActionCat {
     using UnityEngine;
+    using UnityEngine.Audio;
 #if UNITY_EDITOR
     using UnityEditor;
 #endif
@@ -19,6 +20,14 @@
 
         [Header("ITEM")]
         public ItemData[] supplyItems;
+
+        [Header("VOLUME")]
+        [SerializeField] private AudioMixer globalAudioMixer;
+        public string BgmVolumeParameter;
+        public string SeVolumeParameter;
+        public AudioMixer GlobalAudioMixer {
+            get => globalAudioMixer;
+        }
 
         public static GOSO Inst {
             get {

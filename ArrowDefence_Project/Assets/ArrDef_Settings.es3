@@ -13,8 +13,8 @@
 					"<isOnEliteSpawn>k__BackingField" : false
 				}
 			},
-			"bgmSoundValue" : 0.443277717,
-			"seSoundValue" : 0.8452045,
+			"bgmParamVolumeValue" : -13.0219822,
+			"seParamVolumeValue" : -4.50315,
 			"<PullingType>k__BackingField" : 1
 		}
 	}

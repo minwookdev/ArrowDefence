@@ -1,16 +1,22 @@
 ﻿namespace ActionCat {
     using UnityEngine;
-    using DG.Tweening;
     using UnityEngine.UI;
+    using UnityEngine.Audio;
+    using DG.Tweening;
 
     public class SettingsPanel : MonoBehaviour {
         [Header("REQUIREMENT")]
         [SerializeField] CanvasGroup fadeCanvasGroup = null;
-        [SerializeField] ExSwitch switchControlType = null;
-        [SerializeField] ExSwitch switchEmpty = null;
-        [SerializeField] Slider bgSlider = null;
-        [SerializeField] Slider seSlider = null;
-        ActionCat.Data.GameSettings settings = null;
+        [SerializeField] ExSwitch switchControlType  = null;
+        [SerializeField] ExSwitch switchEmpty        = null;
+        [SerializeField] Slider bgmSlider            = null;
+        [SerializeField] Slider seSlider             = null;
+        ActionCat.Data.GameSettings settings         = null;
+
+        [Header("AUDIO")]
+        [SerializeField] AudioMixer mixer    = null;
+        [SerializeField] string seParameter  = null;
+        [SerializeField] string bgmParameter = null;
 
         public void OpenPanel() => this.gameObject.SetActive(true);
 
@@ -21,22 +27,36 @@
             if (settings == null) {
                 throw new System.Exception("Player Settings class is Null !");
             }
+
+            bgmParameter = GOSO.Inst.BgmVolumeParameter;
+            seParameter  = GOSO.Inst.SeVolumeParameter;
         }
 
         private void OnEnable() {
             //SWITCH
             switchControlType.IsOn = settings.GetPullTypeToBoolean;
 
-            //SLIDER
-            bgSlider.value = settings.BgmSoundValue;
-            seSlider.value = settings.SeSoundValue;
+            //SLIDER: Settings의 변수 가져와서 Slider 세팅
+            if (mixer.GetFloat(bgmParameter, out float bgmsoundfitch)) {
+                bgmSlider.value = bgmsoundfitch;
+            }
+            else {
+                CatLog.WLog("Failed to BgmFitch Value Global AudioMixer.");
+            }
+
+            if (mixer.GetFloat(seParameter, out float sesoundfitch)) {
+                seSlider.value = sesoundfitch;
+            }
+            else {
+                CatLog.WLog("Failed to SeFitch Value Global AudioMixer.");
+            }
         }
 
         private void Start() {
             switchControlType.AddListnerSwitch(settings.SetPullType);
         }
 
-        private void OnDisable() => Data.CCPlayerData.SaveSettingsJson();
+        private void OnDisable() => Data.CCPlayerData.SaveSettingsJson(); //변경된 GameSettings 변수 변경에 따른 저장
 
         #region BUTTON_EVENT
 
@@ -64,18 +84,37 @@
             }
         }
 
-        public void SV_BGM() {
-            settings.BgmSoundValue = bgSlider.value;
+        #endregion
+
+        #region SLIDER_ONVALUECHANGED
+
+        /// <summary>
+        /// AudioMixer의 BGM Fitch 변경. (볼륨 조절)
+        /// </summary>
+        public void SLIDER_BGM() => mixer.SetFloat(bgmParameter, bgmSlider.value <= bgmSlider.minValue ? -80f : bgmSlider.value);
+
+        /// <summary>
+        /// AudioMixer의 SE Fitch 변경. (볼륨 조절)
+        /// </summary>
+        public void SLIDER_SE()  => mixer.SetFloat(seParameter, seSlider.value <= seSlider.minValue ? -80f : seSlider.value);
+
+        /// <summary>
+        /// GameSettings.BgmSoundVolume 변경. (저장되는 변수 변경)
+        /// </summary>
+        public void SLIDER_RELEASE_BGM() {
+            if (mixer.GetFloat(bgmParameter, out float bgmsoundfitch)) {
+                settings.BgmParamVolumeValue = bgmsoundfitch;
+            }
         }
 
-        public void SV_SE() {
-            settings.SeSoundValue = seSlider.value;
+        /// <summary>
+        /// GameSettings.SeSoundVolume 변경. (저장되는 변수 변경)
+        /// </summary>
+        public void SLIDER_RELEASE_SE() {
+            if (mixer.GetFloat(seParameter, out float sesoundfitch)) {
+                settings.SeParamVolumeValue = sesoundfitch;
+            }
         }
-
-        public void SU_BGM() => SoundManager.Instance.SetVolumeScale(Audio.SOUNDTYPE.BGM);
-
-        public void SU_SE()  => SoundManager.Instance.SetVolumeScale(Audio.SOUNDTYPE.SE);
-
         #endregion
     }
 }

@@ -17,12 +17,16 @@
         [SerializeField] bool ignoreClick = false;
 
         [Header("SOUND")]
-        [SerializeField] ACSound slotSound = null;
-        [SerializeField] [ReadOnly] bool isInitSound = false;
+        [SerializeField] bool isSoundCompatiblity = false;
+        [SerializeField] CHANNELTYPE channelKey   = CHANNELTYPE.NONE;
+        [SerializeField] ACSound channel          = null;
 
         public void Start() {
-            //Check Slot Sound 
-            isInitSound = (slotSound != null);
+            //Get Channel
+            channel = (isSoundCompatiblity && SoundManager.Instance.TryGetChannel(channelKey, out ACSound result)) ? result : channel;
+            if (isSoundCompatiblity && channel == null) {
+                CatLog.ELog("Channel Not Found !");
+            }
         }
 
         public void SetItemSprite(Sprite sprite) => ItemImg.sprite = sprite;
@@ -77,8 +81,8 @@
                 return;
             }
 
-            if (isInitSound) {
-                slotSound.PlayOneShot();
+            if (isSoundCompatiblity) {
+                channel.PlayOneShot();
             }
             MainSceneRoute.OpenInfo_InventoryItem(ItemAddress);
         }

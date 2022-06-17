@@ -23,6 +23,11 @@
         [SerializeField] [ReadOnly] private float currentTouchTime = 0f;
         private float maxTouchTime = 1.5f;
 
+        [Header("SOUND COMPATIBILITY")]
+        [SerializeField] bool isSoundCompatibility = false;
+        [SerializeField] CHANNELTYPE channelKey    = CHANNELTYPE.NONE;
+        [SerializeField] Audio.ACSound channel     = null;
+
         //DOSCALE
         float scalingTime = 0.3f;
         Vector3 pressedScale = new Vector3(1.1f, 1.1f, 1f);
@@ -51,6 +56,12 @@
             }
         }
 
+        private void Start() {
+            channel = isSoundCompatibility && SoundManager.Instance.TryGetChannel(channelKey, out Audio.ACSound result) ? result : channel;
+            if (isSoundCompatibility && channel == null) {
+                CatLog.ELog("Channel Not Found !");
+            }
+        }
 
         #region ENABLE / DISABLE
 
@@ -90,6 +101,10 @@
                 actionOpenInfoPanel(itemRef);
             }
             ScaleTrigger();
+
+            if (isSoundCompatibility) {
+                channel.PlayOneShot();
+            }
         }
         
         void IPointerDownHandler.OnPointerDown(PointerEventData eventData) {

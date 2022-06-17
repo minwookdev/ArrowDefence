@@ -41,9 +41,10 @@
         [SerializeField] private RectTransform rectTrRewardTag   = null;
         [SerializeField] private RectTransform[] rewardTagsRectTr = null;
 
-        [Header("SOUND")]
-        [SerializeField] private ACSound slotSound = null;
-        [SerializeField] [ReadOnly] bool isInitSound = false;
+        [Header("SOUND COMPATIBLITY")]
+        [SerializeField] bool isSoundCompatiblity = false;
+        [SerializeField] CHANNELTYPE channelKey   = CHANNELTYPE.NONE;
+        [SerializeField] ACSound channel          = null;
 
         //Fields
         bool isPressed = false;
@@ -58,8 +59,11 @@
 
             isScrollRectParent = (scrollRect != null);
 
-            //Slot Sound Check
-            isInitSound = (slotSound != null);
+            //Get Channel
+            channel = (isSoundCompatiblity && SoundManager.Instance.TryGetChannel(channelKey, out ACSound result)) ? result : channel;
+            if (isSoundCompatiblity && channel == null) { //Check Sound
+                CatLog.ELog("AudioChannel Not Found !");
+            }
         }
 
         private void Update() {
@@ -169,8 +173,8 @@
                 MainSceneRoute.OpenInfo_DropListItem_Preview(tempItem);
             }
 
-            if (isInitSound) {
-                slotSound.PlayOneShot();
+            if (isSoundCompatiblity) {
+                channel.PlayOneShot();
             }
         }
 

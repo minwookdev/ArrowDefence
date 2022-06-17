@@ -18,6 +18,7 @@
 
         [Header("CHANNEL")]
         [SerializeField] List<ACSound> channels = new List<ACSound>();
+        Dictionary<CHANNELTYPE, ACSound> channelDictionary = new Dictionary<CHANNELTYPE, ACSound>();
 
         #region UNITY_CYCLE
 
@@ -30,11 +31,22 @@
 
         private void Start() {
             SceneLoader.SceneChangeCallback += ClearNumberCache;
+            SceneLoader.SceneChangeCallback += ClearChannels;
+
+            var globalMixer = GOSO.Inst.GlobalAudioMixer;
+            if (globalMixer) {
+                globalMixer.SetFloat(GOSO.Inst.BgmVolumeParameter, CCPlayerData.settings.BgmParamVolumeValue);
+                globalMixer.SetFloat(GOSO.Inst.SeVolumeParameter, CCPlayerData.settings.SeParamVolumeValue);
+            }
+            else {
+                CatLog.ELog("SoundManager: GlobalAudioMixer is Null.");
+            }
         }
 
         private void OnDestroy() {
             if (SceneLoader.IsExist) {
                 SceneLoader.SceneChangeCallback -= ClearNumberCache;
+                SceneLoader.SceneChangeCallback -= ClearChannels;
             }
         }
 
@@ -127,6 +139,14 @@
             channels.Add(audioSource);
         }
 
+        public void AddChannel2Dic(CHANNELTYPE type, ACSound audioSource) {
+            if (channelDictionary.ContainsKey(type)) {
+                throw new System.Exception("Duplicated Channel Key.");
+            }
+            channelDictionary.Add(type, audioSource);
+        }
+
+
         public void ClearChannels() {
             channels.Clear();
         }
@@ -140,6 +160,10 @@
                 case CHANNELTYPE.NONE:  throw new System.NotImplementedException();
                 default:                throw new System.NotImplementedException();
             }
+        }
+
+        public bool TryGetChannel(CHANNELTYPE type, out ACSound result) {
+            return channelDictionary.TryGetValue(type, out result);
         }
 
         #endregion
@@ -167,6 +191,9 @@
         ARROW,
         PROJECTILE,
         PLAYER,
-        MONSTER
+        MONSTER,
+        BUTTON_DEFAULT,
+        BUTTON_SEPARATION,
+        BATTLESTART,
     }
 }

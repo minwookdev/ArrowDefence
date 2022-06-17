@@ -24,8 +24,9 @@
         ActionCat.UI.CraftingFunc crafting = null;
 
         [Header("SOUND")]
-        [SerializeField] Audio.ACSound slotSound = null;
-        [SerializeField] [ReadOnly] bool isInitSound = false;
+        [SerializeField] bool isSoundCompatiblity = false;
+        [SerializeField] CHANNELTYPE channelKey   = CHANNELTYPE.NONE;
+        [SerializeField] Audio.ACSound channel    = null;
 
         Vector3 normalScale  = new Vector3(1f, 1f, 1f);
         Vector3 pressedScale = new Vector3(1.1f, 1.1f, 1f);
@@ -75,7 +76,10 @@
             itemReference = item;
 
             //Check Slot Sound
-            isInitSound = (slotSound != null);
+            channel = (isSoundCompatiblity && SoundManager.Instance.TryGetChannel(channelKey, out Audio.ACSound result)) ? result : channel;
+            if (isSoundCompatiblity && channel == null) {
+                CatLog.ELog("Channel Not Found !");
+            }
 
             if(gameObject.activeSelf == false) {
                 gameObject.SetActive(true);
@@ -108,8 +112,8 @@
             }
             ScaleTrigger();
 
-            if (isInitSound) {
-                slotSound.PlayOneShot();
+            if (isSoundCompatiblity) {
+                channel.PlayOneShot();
             }
         }
 

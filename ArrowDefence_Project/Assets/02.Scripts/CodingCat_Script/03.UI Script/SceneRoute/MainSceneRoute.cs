@@ -40,7 +40,8 @@ public class MainSceneRoute : MonoBehaviour {
     public string _stringWithTermPopup;
 
     [Header("SOUND")]
-    [SerializeField] ACSound bgmSound = null;
+    [SerializeField] ACSound bgmSound   = null;
+    [SerializeField] ACSound[] channels = null;
 
     private void Awake() {
         _inst = this;
@@ -58,6 +59,9 @@ public class MainSceneRoute : MonoBehaviour {
         GameManager.Instance.Initialize();
         GameManager.Instance.SetSavingFeedback(savingPanel);
         AdsManager.Instance.InitRuntimeMgr();
+
+        //Add Channels List
+        SoundManager.Instance.AddChannel2Dic(CHANNELTYPE.BUTTON_DEFAULT, channels[0]);
     }
 
     private void Start() {
@@ -74,7 +78,6 @@ public class MainSceneRoute : MonoBehaviour {
 
         UpdatePlayerCurrency();
         bgmSound.PlaySoundWithDelayed(0.5f, true);
-
         //I2.Loc.LocalizedString localString = "ABILITY_DAMAGE";
         //string translate = localString;
         //CatLog.Log(translate);

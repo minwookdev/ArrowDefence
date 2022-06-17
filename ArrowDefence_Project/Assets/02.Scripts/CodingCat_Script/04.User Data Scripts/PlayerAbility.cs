@@ -223,7 +223,7 @@
 
     public class PlayerAbility {
         //Global Ability Class
-        public GlobalAbility GlobalAbilityField;
+        public GlobalAbility GlobalAbilityField = new GlobalAbility(null, null, null);
 
         //Slot Ability
         PlayerAbilitySlot mainSlotAbility = null;

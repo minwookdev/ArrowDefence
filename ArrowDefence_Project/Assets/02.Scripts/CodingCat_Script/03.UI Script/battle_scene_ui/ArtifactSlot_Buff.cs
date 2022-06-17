@@ -20,9 +20,6 @@
         [SerializeField] [RangeEx(0f, 30f, 2f)] float rotateSpeed = 12f;
         Coroutine dotRotationCo = null;
 
-        [Header("SOUND")]
-        [SerializeField] Audio.ACSound audioSource = null;
-
         /// <summary>
         /// GameState가 PauseMode에 들어갔을 때, 버프가 종료되는 것을 방지. Duration동안 대기. (임시방편)
         /// </summary>
@@ -56,7 +53,8 @@
             waitPauseEnd = new WaitUntil(() => GameManager.Instance.GameState != GAMESTATE.STATE_PAUSE);
 
             //Init AudioClip
-            audioSource.SetClip = effect.SoundEffect;
+            soundEffectClip = effect.SoundEffect;
+            InitChannel();
             return this;
         }
 
@@ -93,7 +91,7 @@
 
             while (activatingCount > 0) {
                 artifactEffect.OnActive();
-                audioSource.PlaySound();
+                PlaySoundEffect();
                 effectDuration = duration;
                 while (effectDuration > 0f) {
                     yield return waitPauseEnd;  //yield return null 해줄필요 없음. 그 역활도 같이 함

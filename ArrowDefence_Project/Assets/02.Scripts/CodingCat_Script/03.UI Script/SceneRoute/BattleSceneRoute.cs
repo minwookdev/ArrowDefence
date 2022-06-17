@@ -48,7 +48,7 @@
         [SerializeField] RectTransform canvasRectTr = null;
 
         [Header("SOUND EFFECT")]
-        [SerializeField] Audio.ACSound startSound = null;
+        [SerializeField] Audio.ACSound[] channels = null;
 
         private float screenZpos = 0f;
         private LineRenderer arrowLimitLine;
@@ -100,6 +100,11 @@
 
         void Awake() {
             FadeOut();
+
+            //Add Channel List
+            SoundManager.Instance.AddChannel2Dic(CHANNELTYPE.BUTTON_DEFAULT, channels[0]);
+            SoundManager.Instance.AddChannel2Dic(CHANNELTYPE.BUTTON_SEPARATION, channels[1]);
+            SoundManager.Instance.AddChannel2Dic(CHANNELTYPE.BATTLESTART, channels[2]);
         }
 
         void Start() {
@@ -242,12 +247,9 @@
         #region SOUND
 
         public void PlayStartSound() {
-            if (startSound == null) {
-                CatLog.WLog("StartSound Component is Null.");
-                return;
+            if (SoundManager.Instance.TryGetChannel(CHANNELTYPE.BATTLESTART, out Audio.ACSound channel)) {
+                channel.PlaySound();
             }
-
-            startSound.PlayOneShot();
         }
 
         #endregion

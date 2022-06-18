@@ -438,6 +438,12 @@
             tempColor.a = 1f;
             text.color = tempColor;
         }
+
+        public static void SetAlpha(this UnityEngine.UI.Image image, float alpha) {
+            var color   = image.color;
+            color.a     = alpha;
+            image.color = color;
+        }
         #endregion
 
         #region UPGRADE

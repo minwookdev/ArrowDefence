@@ -120,23 +120,19 @@
 
         private void ChooseSlot(int num, Item_Arrow item) {
             switch (num) {
-                case 0: CCPlayerData.equipments.EquipItem_MainArr(item); break;
-                case 1: CCPlayerData.equipments.EquipItem_SubArr(item);  break;
+                case 0: CCPlayerData.equipments.EquipItem_MainArr(item); soundEffect.PlayOneShot(2); break;
+                case 1: CCPlayerData.equipments.EquipItem_SubArr(item);  soundEffect.PlayOneShot(2); break;
                 default: throw new System.NotImplementedException("잘못된 인덱스 넘버");
             }
-
-            soundEffect.PlayOneShot(2);
         }
 
         private void ChooseSlot(int num, Item_Accessory item) {
             switch (num) {
-                case 0: CCPlayerData.equipments.EquipItem_Artifact(item, 0);  break;
-                case 1: CCPlayerData.equipments.EquipItem_Artifact(item, 1);  break;
-                case 2: CCPlayerData.equipments.EquipItem_Artifact(item, 2);  break;
+                case 0: CCPlayerData.equipments.EquipItem_Artifact(item, 0); soundEffect.PlayOneShot(2); break;
+                case 1: CCPlayerData.equipments.EquipItem_Artifact(item, 1); soundEffect.PlayOneShot(2); break;
+                case 2: CCPlayerData.equipments.EquipItem_Artifact(item, 2); soundEffect.PlayOneShot(2); break;
                 default: throw new System.NotImplementedException("잘못된 인덱스 넘버");
             }
-
-            soundEffect.PlayOneShot(2);
         }
 
         #endregion

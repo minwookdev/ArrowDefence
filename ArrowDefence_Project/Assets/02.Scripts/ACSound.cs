@@ -8,7 +8,7 @@
         [SerializeField] SOUNDTYPE soundType          = SOUNDTYPE.NONE;
         [SerializeField] string assignSoundKey        = "defaultSound";
         [SerializeField] [ReadOnly] string soundKey   = "";
-        [SerializeField] [ReadOnly] float volumeScale = 0f;
+        [SerializeField] [ReadOnly] float tempVolumeScale = 0f;
 
         [Header("SOUND")]
         [SerializeField] AudioClip sound              = null;
@@ -70,9 +70,12 @@
 
         #region OPTIONS
 
-        public void SetVolumeScale(float volume) {
-            volumeScale = volume;
-            audioSource.volume = volumeScale;
+        /// <summary>
+        /// Range is 0f ~ 1f
+        /// </summary>
+        /// <param name="volume"></param>
+        public void SetVolume(float volume) {
+            audioSource.volume = volume;
         }
 
         public void ChangeKey(int index) {
@@ -146,13 +149,13 @@
         /// 사운드의 인덱스 넘버를 확실하게 알고있는 상태에서 사용할 것.
         /// </summary>
         /// <param name="idx"></param>
-        public void PlayOneShot(int idx) => audioSource.PlayOneShot(sounds[idx], volumeScale);
+        public void PlayOneShot(int idx) => audioSource.PlayOneShot(sounds[idx]);
 
         /// <summary>
         /// 재생항 AudioClip을 지정
         /// </summary>
         /// <param name="audio"></param>
-        public void PlayOneShot(AudioClip audio) => audioSource.PlayOneShot(audio, volumeScale);
+        public void PlayOneShot(AudioClip audio) => audioSource.PlayOneShot(audio);
 
         /// <summary>
         /// 커스텀 볼륨값으로 사운드 재생
@@ -169,9 +172,10 @@
         System.Collections.IEnumerator FadeOutVolume(float fadeTime) {
             float progress    = 0f;
             float fadeSpeed   = 1 / fadeTime;
+            tempVolumeScale   = audioSource.volume; 
             while (progress < 1f) {
                 progress += Time.deltaTime * fadeSpeed;
-                audioSource.volume = Mathf.Lerp(StNum.floatZero, volumeScale, progress);
+                audioSource.volume = Mathf.Lerp(StNum.floatZero, tempVolumeScale, progress);
                 yield return null;
             }
         }
@@ -179,12 +183,13 @@
         System.Collections.IEnumerator FadeInVolume(float fadeTime, bool isEndWithSoundStop = false) {
             float progress    = 0f;
             float fadeSpeed   = 1 / fadeTime;
+            tempVolumeScale   = audioSource.volume;
             while (progress < 1f) {
                 progress += Time.deltaTime * fadeSpeed;
-                audioSource.volume = Mathf.Lerp(volumeScale, StNum.floatZero, progress);
+                audioSource.volume = Mathf.Lerp(tempVolumeScale, StNum.floatZero, progress);
                 yield return null;
             }
-            volumeScale = StNum.floatZero;
+            tempVolumeScale = StNum.floatZero;
             if (isEndWithSoundStop) {
                 audioSource.Stop();
             }

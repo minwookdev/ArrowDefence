@@ -27,6 +27,17 @@ namespace I2.Loc
 			public static string RANGE_SMALL 		{ get{ return LocalizationManager.GetTranslation ("Common/RANGE_SMALL"); } }
 		}
 
+		public static class StageName
+		{
+			public static string Dungeon_Easy 		{ get{ return LocalizationManager.GetTranslation ("StageName/Dungeon_Easy"); } }
+			public static string Dungeon_Hard 		{ get{ return LocalizationManager.GetTranslation ("StageName/Dungeon_Hard"); } }
+			public static string Dungeon_Normal 		{ get{ return LocalizationManager.GetTranslation ("StageName/Dungeon_Normal"); } }
+			public static string Forest_Easy 		{ get{ return LocalizationManager.GetTranslation ("StageName/Forest_Easy"); } }
+			public static string Forest_Hard 		{ get{ return LocalizationManager.GetTranslation ("StageName/Forest_Hard"); } }
+			public static string Forest_Normal 		{ get{ return LocalizationManager.GetTranslation ("StageName/Forest_Normal"); } }
+			public static string Dev_Diff 		{ get{ return LocalizationManager.GetTranslation ("StageName/Dev_Diff"); } }
+		}
+
 		public static class UI
 		{
 			public static string craftingslot_remaining_complete 		{ get{ return LocalizationManager.GetTranslation ("UI/craftingslot_remaining_complete"); } }
@@ -57,6 +68,17 @@ namespace I2.Loc
 		    public const string RANGE_LARGE = "Common/RANGE_LARGE";
 		    public const string RANGE_MEDIUM = "Common/RANGE_MEDIUM";
 		    public const string RANGE_SMALL = "Common/RANGE_SMALL";
+		}
+
+		public static class StageName
+		{
+		    public const string Dungeon_Easy = "StageName/Dungeon_Easy";
+		    public const string Dungeon_Hard = "StageName/Dungeon_Hard";
+		    public const string Dungeon_Normal = "StageName/Dungeon_Normal";
+		    public const string Forest_Easy = "StageName/Forest_Easy";
+		    public const string Forest_Hard = "StageName/Forest_Hard";
+		    public const string Forest_Normal = "StageName/Forest_Normal";
+		    public const string Dev_Diff = "StageName/Dev_Diff";
 		}
 
 		public static class UI

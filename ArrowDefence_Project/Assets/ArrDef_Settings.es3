@@ -3,8 +3,8 @@
 		"__type" : "ActionCat.Data.GameSettings,Assembly-CSharp",
 		"value" : {
 			"stageSettings" : {"forest_secluded_e":{
-					"<isOnAutoMode>k__BackingField" : false,
-					"<isOnEliteSpawn>k__BackingField" : false
+					"<isOnAutoMode>k__BackingField" : true,
+					"<isOnEliteSpawn>k__BackingField" : true
 				},"forest_secluded_n":{
 					"<isOnAutoMode>k__BackingField" : false,
 					"<isOnEliteSpawn>k__BackingField" : false
@@ -13,8 +13,8 @@
 					"<isOnEliteSpawn>k__BackingField" : false
 				}
 			},
-			"bgmParamVolumeValue" : -13.0219822,
-			"seParamVolumeValue" : -4.50315,
+			"bgmParamVolumeValue" : -15.1328468,
+			"seParamVolumeValue" : -6.895435,
 			"<PullingType>k__BackingField" : 1
 		}
 	}

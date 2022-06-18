@@ -469,7 +469,8 @@ AudioSource:
   m_GameObject: {fileID: 211553080}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 5109439450856454835, guid: 66c082781c846204ab351a06794095dd,
+    type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
   m_Volume: 1
@@ -572,7 +573,7 @@ MonoBehaviour:
   soundType: 1
   assignSoundKey: sound_clear
   soundKey: 
-  volumeScale: 0
+  tempVolumeScale: 0
   sound: {fileID: 8300000, guid: 6af80f54ffe7a414ca3029a28f13288c, type: 3}
   sounds: []
 --- !u!114 &227364238
@@ -1144,7 +1145,8 @@ AudioSource:
   m_GameObject: {fileID: 578680651}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 5109439450856454835, guid: 66c082781c846204ab351a06794095dd,
+    type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
   m_Volume: 1
@@ -1247,7 +1249,7 @@ MonoBehaviour:
   soundType: 1
   assignSoundKey: sound_gamestart
   soundKey: 
-  volumeScale: 0
+  tempVolumeScale: 0
   sound: {fileID: 8300000, guid: 0fad8a942932a5a49a632ccc57bd1fa2, type: 3}
   sounds: []
 --- !u!4 &578680654
@@ -2783,7 +2785,8 @@ AudioSource:
   m_GameObject: {fileID: 1220356199}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 5109439450856454835, guid: 66c082781c846204ab351a06794095dd,
+    type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
   m_Volume: 1
@@ -2886,7 +2889,7 @@ MonoBehaviour:
   soundType: 1
   assignSoundKey: button_press_release
   soundKey: 
-  volumeScale: 0
+  tempVolumeScale: 0
   sound: {fileID: 0}
   sounds:
   - {fileID: 8300000, guid: 39967aa46d5def14aad4fb573126a67a, type: 3}
@@ -3306,7 +3309,8 @@ AudioSource:
   m_GameObject: {fileID: 1374299485}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 5109439450856454835, guid: 66c082781c846204ab351a06794095dd,
+    type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
   m_Volume: 1
@@ -3409,7 +3413,7 @@ MonoBehaviour:
   soundType: 1
   assignSoundKey: sound_gameover
   soundKey: 
-  volumeScale: 0
+  tempVolumeScale: 0
   sound: {fileID: 8300000, guid: 2adabc71101249b41a82cf2e1eab39dc, type: 3}
   sounds: []
 --- !u!114 &1405054241
@@ -3952,7 +3956,8 @@ AudioSource:
   m_GameObject: {fileID: 1455018488}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 5109439450856454835, guid: 66c082781c846204ab351a06794095dd,
+    type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
   m_Volume: 1
@@ -4055,7 +4060,7 @@ MonoBehaviour:
   soundType: 1
   assignSoundKey: button_default
   soundKey: 
-  volumeScale: 0
+  tempVolumeScale: 0
   sound: {fileID: 8300000, guid: 2a0b519fcc3d7104d83a1c7ac0671237, type: 3}
   sounds: []
 --- !u!1 &1522224456
@@ -4085,7 +4090,8 @@ AudioSource:
   m_GameObject: {fileID: 1522224456}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 5109439450856454835, guid: 66c082781c846204ab351a06794095dd,
+    type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
   m_Volume: 1
@@ -4188,7 +4194,7 @@ MonoBehaviour:
   soundType: 1
   assignSoundKey: sound_switch
   soundKey: 
-  volumeScale: 0
+  tempVolumeScale: 0
   sound: {fileID: 8300000, guid: d970c41f366230942b045b16a16a4eb8, type: 3}
   sounds: []
 --- !u!4 &1522224459
@@ -5726,7 +5732,7 @@ AudioSource:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2041182005}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
@@ -5822,7 +5828,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2041182005}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7ad6fca2c47904d489694948f93ec529, type: 3}
   m_Name: 
@@ -5831,7 +5837,7 @@ MonoBehaviour:
   soundType: 0
   assignSoundKey: defaultSound
   soundKey: 
-  volumeScale: 0
+  tempVolumeScale: 0
   sound: {fileID: 0}
   sounds: []
 --- !u!1001 &2081123533

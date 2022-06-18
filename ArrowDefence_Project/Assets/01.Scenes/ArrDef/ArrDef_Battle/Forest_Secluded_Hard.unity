@@ -8670,9 +8670,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3204541759480302795, guid: 75155828b9866ee4dbb6eb1c6d7a0a62,
         type: 3}
+      propertyPath: channelPlayer
+      value: 
+      objectReference: {fileID: 1829523832}
+    - target: {fileID: 3204541759480302795, guid: 75155828b9866ee4dbb6eb1c6d7a0a62,
+        type: 3}
       propertyPath: maxBattleTime
       value: 150
       objectReference: {fileID: 0}
+    - target: {fileID: 3204541759480302795, guid: 75155828b9866ee4dbb6eb1c6d7a0a62,
+        type: 3}
+      propertyPath: channelMonster
+      value: 
+      objectReference: {fileID: 1829523836}
     - target: {fileID: 3204541759480302795, guid: 75155828b9866ee4dbb6eb1c6d7a0a62,
         type: 3}
       propertyPath: dropCorrection
@@ -8705,6 +8715,11 @@ PrefabInstance:
       objectReference: {fileID: 1757660976}
     - target: {fileID: 3204541759480302795, guid: 75155828b9866ee4dbb6eb1c6d7a0a62,
         type: 3}
+      propertyPath: channelArrowHit
+      value: 
+      objectReference: {fileID: 1829523834}
+    - target: {fileID: 3204541759480302795, guid: 75155828b9866ee4dbb6eb1c6d7a0a62,
+        type: 3}
       propertyPath: musicAudioSource
       value: 
       objectReference: {fileID: 1829523837}
@@ -8713,6 +8728,11 @@ PrefabInstance:
       propertyPath: arrowAudioChannel
       value: 
       objectReference: {fileID: 1829523834}
+    - target: {fileID: 3204541759480302795, guid: 75155828b9866ee4dbb6eb1c6d7a0a62,
+        type: 3}
+      propertyPath: channelProjectile
+      value: 
+      objectReference: {fileID: 1829523833}
     - target: {fileID: 3204541759480302795, guid: 75155828b9866ee4dbb6eb1c6d7a0a62,
         type: 3}
       propertyPath: projectileChannel

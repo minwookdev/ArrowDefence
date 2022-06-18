@@ -32,7 +32,8 @@
         }
 
         private void Start() {
-            this.audioSource = SoundManager.Instance.GetChannel(CHANNELTYPE.PROJECTILE);
+            //Get Audio Channel
+            audioSource = SoundManager.Instance.TryGetChannel(CHANNELTYPE.PROJECTILE, out Audio.ACSound result) ? result : audioSource;
         }
 
         private void OnEnable() {

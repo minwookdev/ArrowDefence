@@ -34,14 +34,18 @@
         }
 
         public void AddListnerToSkillDel(ref AD_BowController.BowSkillsDel bowskilldelegate, Audio.ACSound audioSource) {
-            this.skills = GameManager.Instance.PlayerEquips.GetBowItem().GetSkillsOrNull(); //너무 많이 타고감
-            for (int i = 0; i < skills.Length; i++) {
-                if (skills[i] != null && skills[i].Type != BOWSKILL_TYPE.SKILL_EMPTY) { //null이 아니고, empty type이 아닌경우,
-                    skills[i].Init(audioSource);
-                    bowskilldelegate += skills[i].BowSpecialSkill;
-                    CatLog.Log($"Bow SkillSlot {i} Init, SkillName: {skills[i].ToString()}");
+            var skillList = new System.Collections.Generic.List<AD_BowSkill>(GameManager.Instance.PlayerEquips.GetBowItem().GetSkillsOrNull()); //너무 많이 타긴하는데 중간에 체크안해도 문제는 없음
+            for (int i = skillList.Count - 1; i >= 0; i--) {
+                if (skillList[i] != null && skillList[i].Type != BOWSKILL_TYPE.SKILL_EMPTY) { //null 아니고, empty type이 아닌경우,
+                    skillList[i].Init(audioSource);
+                    bowskilldelegate += skillList[i].BowSpecialSkill;
+                    CatLog.Log($"BowSkill Init. SkillName: {skillList[i].ToString()}");
+                }
+                else {
+                    skillList.RemoveAt(i);
                 }
             }
+            this.skills = skillList.ToArray();
         }
 
         /// <summary>

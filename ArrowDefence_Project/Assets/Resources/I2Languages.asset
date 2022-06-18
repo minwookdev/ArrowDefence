@@ -15,7 +15,7 @@ MonoBehaviour:
   mSource:
     UserAgreesToHaveItOnTheScene: 0
     UserAgreesToHaveItInsideThePluginsFolder: 0
-    GoogleLiveSyncIsUptoDate: 0
+    GoogleLiveSyncIsUptoDate: 1
     mTerms:
     - Term: ItemDesc/BluePrint/BP_ARROW
       TermType: 0
@@ -3460,6 +3460,76 @@ MonoBehaviour:
       Languages:
       - Alata-Regular-Outline 54 SDF
       - Gyeonggi_Title_Medium SDF
+      - 
+      - 
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: StageName/Forest_Easy
+      TermType: 0
+      Description: 
+      Languages:
+      - Secluded Forest I
+      - "\uC2A4\uC0B0\uD55C \uC232 I"
+      - 
+      - 
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: StageName/Forest_Normal
+      TermType: 0
+      Description: 
+      Languages:
+      - Secluded Forest II
+      - "\uC2A4\uC0B0\uD55C \uC232 II"
+      - 
+      - 
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: StageName/Forest_Hard
+      TermType: 0
+      Description: 
+      Languages:
+      - Secluded Forest III
+      - "\uC2A4\uC0B0\uD55C \uC232 III"
+      - 
+      - 
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: StageName/Dungeon_Easy
+      TermType: 0
+      Description: 
+      Languages:
+      - Dungeon Entrance I
+      - "\uB358\uC804 \uCD08\uC785\uBD80 I"
+      - 
+      - 
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: StageName/Dungeon_Normal
+      TermType: 0
+      Description: 
+      Languages:
+      - Dungeon Entrance II
+      - "\uB358\uC804 \uCD08\uC785\uBD80 II"
+      - 
+      - 
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: StageName/Dungeon_Hard
+      TermType: 0
+      Description: 
+      Languages:
+      - Dungeon Entrance III
+      - "\uB358\uC804 \uCD08\uC785\uBD80 III"
+      - 
+      - 
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: StageName/Dev_Diff
+      TermType: 0
+      Description: 
+      Languages:
+      - Developer-Only Stage
+      - "\uAC1C\uBC1C\uC790 \uC804\uC6A9 \uC2A4\uD14C\uC774\uC9C0"
       - 
       - 
       Flags: 00000000

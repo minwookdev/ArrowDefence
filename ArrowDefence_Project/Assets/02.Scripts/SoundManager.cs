@@ -117,7 +117,7 @@
             float targetVolume = GetVolumeScale(type);
             foreach (var pair in soundDic) {
                 if (pair.Value.SoundType == type) {
-                    pair.Value.SetVolumeScale(targetVolume);
+                    pair.Value.SetVolume(targetVolume);
                 }
             }
         }
@@ -127,7 +127,7 @@
         /// </summary>
         public void SetVolumeScale() {
             foreach (var pair in soundDic) {
-                pair.Value.SetVolumeScale(GetVolumeScale(pair.Value.SoundType));
+                pair.Value.SetVolume(GetVolumeScale(pair.Value.SoundType));
             }
         }
 
@@ -146,9 +146,9 @@
             channelDictionary.Add(type, audioSource);
         }
 
-
         public void ClearChannels() {
             channels.Clear();
+            channelDictionary.Clear();
         }
 
         public ACSound GetChannel(CHANNELTYPE type) {

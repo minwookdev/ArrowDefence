@@ -441,7 +441,7 @@ MonoBehaviour:
   soundType: 1
   assignSoundKey: notify
   soundKey: 
-  volumeScale: 0
+  tempVolumeScale: 0
   sound: {fileID: 8300000, guid: 25b1731be97dd5547945672e3e0ad452, type: 3}
   sounds: []
 --- !u!82 &6244500409276574031
@@ -453,10 +453,11 @@ AudioSource:
   m_GameObject: {fileID: 4931782204648948098}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 5109439450856454835, guid: 66c082781c846204ab351a06794095dd,
+    type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.5
   m_Pitch: 1
   Loop: 0
   Mute: 0

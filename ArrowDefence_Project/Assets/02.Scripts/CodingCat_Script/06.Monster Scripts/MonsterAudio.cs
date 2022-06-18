@@ -12,7 +12,8 @@
         [SerializeField] AudioClip blockClip = null;
 
         private void Start() {
-            this.audioSource = SoundManager.Instance.GetChannel(CHANNELTYPE.MONSTER);
+            //Get Channel
+            this.audioSource = SoundManager.Instance.TryGetChannel(CHANNELTYPE.MONSTER, out ACSound result) ? result : audioSource;
         }
 
         public void PlayRandomHitSound() => audioSource.PlayOneShot(hitClips.RandIndex());

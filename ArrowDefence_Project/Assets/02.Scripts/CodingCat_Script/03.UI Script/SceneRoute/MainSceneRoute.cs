@@ -243,6 +243,7 @@ public class MainSceneRoute : MonoBehaviour {
                          _inst.ImgFade.blocksRaycasts = false;
                          _inst.ImgFade.gameObject.SetActive(true);
                          startAction();
+                         _inst.bgmSound.StopSoundWithFadeIn(1f, true);
                      })
                      .OnComplete(() => {
                          completeAction();

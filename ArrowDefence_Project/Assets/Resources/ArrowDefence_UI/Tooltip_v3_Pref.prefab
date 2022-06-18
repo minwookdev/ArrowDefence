@@ -376,6 +376,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4421112409885585633}
+  - component: {fileID: 1857080580592832482}
+  - component: {fileID: 100974296531579805}
   - component: {fileID: 4421112409885585639}
   - component: {fileID: 4421112409885585632}
   m_Layer: 0
@@ -404,6 +406,63 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1857080580592832482
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4421112409885585634}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0568794e7026c2d4fab36c524747b8c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  textMaterial: {fileID: 2100000, guid: 000a3a0a9a735a447a33cbff6b3609ab, type: 2}
+  activeTime: 1
+  ActiveLanguageCode: Korean
+  texts:
+  - {fileID: 4421112409885585632}
+  isActive: 0
+--- !u!114 &100974296531579805
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4421112409885585634}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 344445a89b4f74a0e9a0a766903df87e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mTerm: '-'
+  mTermSecondary: Fonts/A28-GTitleMedium
+  PrimaryTermModifier: 0
+  SecondaryTermModifier: 0
+  TermPrefix: 
+  TermSuffix: 
+  LocalizeOnAwake: 1
+  IgnoreRTL: 0
+  MaxCharactersInRTL: 0
+  IgnoreNumbersInRTL: 1
+  CorrectAlignmentForRTL: 1
+  AddSpacesToJoinedLanguages: 0
+  AllowLocalizedParameters: 1
+  AllowParameters: 1
+  TranslatedObjects: []
+  LocalizeEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  AlwaysForceLocalize: 0
+  LocalizeCallBack:
+    Target: {fileID: 0}
+    MethodName: 
+  mGUI_ShowReferences: 0
+  mGUI_ShowTems: 1
+  mGUI_ShowCallback: 0
+  mLocalizeTarget: {fileID: 0}
+  mLocalizeTargetName: I2.Loc.LocalizeTarget_TextMeshPro_UGUI
 --- !u!222 &4421112409885585639
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -431,10 +490,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: THIS IS ITEM NAME TEXT
+  m_text: ITEM NAME TEXT
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 27f54c9130c9748c9be53df11fa03382, type: 2}
-  m_sharedMaterial: {fileID: -4171563015097924827, guid: 27f54c9130c9748c9be53df11fa03382,
+  m_fontAsset: {fileID: 11400000, guid: 5349c684eb8f02f44b0b6d902e68bb1b, type: 2}
+  m_sharedMaterial: {fileID: 5864887265993312644, guid: 5349c684eb8f02f44b0b6d902e68bb1b,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -1555,18 +1614,6 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 8148771911743406991, guid: 07963ed1caf360a429dfd7b2ee79fd4d, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 07963ed1caf360a429dfd7b2ee79fd4d, type: 3}
---- !u!114 &5710683501140024741 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7308589163855116780, guid: 07963ed1caf360a429dfd7b2ee79fd4d,
-    type: 3}
-  m_PrefabInstance: {fileID: 3039155127483688009}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1017965380486101520 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2597931995786649177, guid: 07963ed1caf360a429dfd7b2ee79fd4d,
@@ -1613,5 +1660,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &5710683501140024741 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7308589163855116780, guid: 07963ed1caf360a429dfd7b2ee79fd4d,
+    type: 3}
+  m_PrefabInstance: {fileID: 3039155127483688009}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

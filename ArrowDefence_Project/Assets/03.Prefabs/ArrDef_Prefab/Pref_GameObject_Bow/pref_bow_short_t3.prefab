@@ -152,7 +152,7 @@ MonoBehaviour:
   soundType: 1
   assignSoundKey: sound_bow_pref
   soundKey: 
-  volumeScale: 0
+  tempVolumeScale: 0
   sound: {fileID: 0}
   sounds: []
 --- !u!82 &8108255975657486154
@@ -164,7 +164,8 @@ AudioSource:
   m_GameObject: {fileID: 1197991447988646955}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 5109439450856454835, guid: 66c082781c846204ab351a06794095dd,
+    type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
   m_Volume: 1

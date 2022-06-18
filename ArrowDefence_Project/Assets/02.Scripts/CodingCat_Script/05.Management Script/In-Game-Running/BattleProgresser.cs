@@ -149,8 +149,11 @@
         float currentComboTime = 0f;
 
         [Header("SOUND CHANNEL")]
-        [SerializeField] ACSound[] soundChannels    = null;
-        [SerializeField] ACSound musicAudioSource   = null;
+        [SerializeField] ACSound channelArrowHit   = null;
+        [SerializeField] ACSound channelProjectile = null;
+        [SerializeField] ACSound channelPlayer     = null;
+        [SerializeField] ACSound channelMonster    = null;
+        [SerializeField] ACSound musicAudioSource  = null;
 
         [Header("DEBUG")]
         public bool IsQuickGameClear  = false;
@@ -206,9 +209,10 @@
             }
 
             //Add Sound Channels
-            foreach (var channel in soundChannels) {
-                SoundManager.Instance.AddChannel(channel);
-            }
+            SoundManager.Instance.AddChannel2Dic(CHANNELTYPE.ARROW, channelArrowHit);
+            SoundManager.Instance.AddChannel2Dic(CHANNELTYPE.PROJECTILE, channelProjectile);
+            SoundManager.Instance.AddChannel2Dic(CHANNELTYPE.PLAYER, channelPlayer);
+            SoundManager.Instance.AddChannel2Dic(CHANNELTYPE.MONSTER, channelMonster);
         }
 
         IEnumerator Start() {
@@ -368,7 +372,7 @@
             sceneRoute.PlayerSliderDec(dest);
 
             //Play Play-Hit Sound
-            soundChannels[2].PlayOneShot(0);
+            channelPlayer.PlayOneShot(0);
         }
 
         public void IncreaseHealthGauge(float value) {

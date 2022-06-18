@@ -48,7 +48,7 @@ MonoBehaviour:
   soundType: 1
   assignSoundKey: projectile
   soundKey: 
-  volumeScale: 0
+  tempVolumeScale: 0
   sound: {fileID: 0}
   sounds: []
 --- !u!82 &4468420155913159886
@@ -60,7 +60,8 @@ AudioSource:
   m_GameObject: {fileID: 4468420155913159872}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 5109439450856454835, guid: 66c082781c846204ab351a06794095dd,
+    type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
   m_Volume: 1
@@ -230,7 +231,7 @@ MonoBehaviour:
   soundType: 1
   assignSoundKey: arrow_hit
   soundKey: 
-  volumeScale: 0
+  tempVolumeScale: 0
   sound: {fileID: 0}
   sounds: []
 --- !u!82 &4468420157120791036
@@ -242,7 +243,8 @@ AudioSource:
   m_GameObject: {fileID: 4468420157120791039}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 5109439450856454835, guid: 66c082781c846204ab351a06794095dd,
+    type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
   m_Volume: 1
@@ -377,7 +379,7 @@ MonoBehaviour:
   soundType: 2
   assignSoundKey: battle_bgm
   soundKey: 
-  volumeScale: 0
+  tempVolumeScale: 0
   sound: {fileID: 8300000, guid: 75624f202747548ecbb24c1893618a64, type: 3}
   sounds: []
 --- !u!82 &1826933661487777284
@@ -389,7 +391,8 @@ AudioSource:
   m_GameObject: {fileID: 4772865724046730492}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -705141463120133740, guid: 66c082781c846204ab351a06794095dd,
+    type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
   m_Volume: 1
@@ -524,7 +527,7 @@ MonoBehaviour:
   soundType: 1
   assignSoundKey: player_status
   soundKey: 
-  volumeScale: 0
+  tempVolumeScale: 0
   sound: {fileID: 0}
   sounds:
   - {fileID: 8300000, guid: f3e81bd6a553174469e6b4064fecf6d2, type: 3}
@@ -537,7 +540,8 @@ AudioSource:
   m_GameObject: {fileID: 5341220094351901487}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 5109439450856454835, guid: 66c082781c846204ab351a06794095dd,
+    type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
   m_Volume: 1
@@ -672,7 +676,7 @@ MonoBehaviour:
   soundType: 1
   assignSoundKey: monster
   soundKey: 
-  volumeScale: 0
+  tempVolumeScale: 0
   sound: {fileID: 0}
   sounds: []
 --- !u!82 &1347878966585428058
@@ -684,10 +688,11 @@ AudioSource:
   m_GameObject: {fileID: 7743243569003490913}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 5109439450856454835, guid: 66c082781c846204ab351a06794095dd,
+    type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.8
   m_Pitch: 1
   Loop: 0
   Mute: 0

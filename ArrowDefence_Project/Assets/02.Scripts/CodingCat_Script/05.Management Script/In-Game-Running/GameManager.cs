@@ -69,7 +69,6 @@
 #endif
             fixedDeltaTime = Time.fixedDeltaTime;
             LoadSettings();
-            SoundManager.Instance.Init(); // 사운드에 불러온 볼륨 적용
             isManagerInitialized = true;
         }
 
@@ -97,6 +96,10 @@
         }
 
         private void Start() {
+            //Apply Settings Volume Value
+            SoundManager.Instance.Init();
+
+            //AddEvent to Scene Change Callback
             SceneLoader.SceneChangeCallback += this.ReleaseFeedbackPanel;
         }
 

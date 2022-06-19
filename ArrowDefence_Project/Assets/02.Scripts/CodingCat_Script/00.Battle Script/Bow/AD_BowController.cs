@@ -396,6 +396,7 @@
 
             //Check the Pulling Stop Trigger is true
             CheckStopPulling();
+            CineCam.Inst.CamMovement(this.direction);
 
 #region OLD_ARROW_LOGIC
 

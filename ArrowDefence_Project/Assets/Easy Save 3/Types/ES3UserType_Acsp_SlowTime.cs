@@ -4,7 +4,7 @@ using UnityEngine;
 namespace ES3Types
 {
 	[UnityEngine.Scripting.Preserve]
-	[ES3PropertiesAttribute("timeSlowRatio", "duration", "id", "name", "desc", "effectType", "level", "iconSprite", "nameTerms", "descTerms", "condition", "<IsStartingPrepared>k__BackingField")]
+	[ES3PropertiesAttribute("timeSlowRatio", "duration", "id", "name", "desc", "effectType", "level", "iconSprite", "nameTerms", "descTerms", "condition", "soundEffect", "<IsStartingPrepared>k__BackingField")]
 	public class ES3UserType_Acsp_SlowTime : ES3ObjectType
 	{
 		public static ES3Type Instance = null;
@@ -27,6 +27,7 @@ namespace ES3Types
 			writer.WritePrivateField("nameTerms", instance);
 			writer.WritePrivateField("descTerms", instance);
 			writer.WritePrivateField("condition", instance);
+			writer.WritePrivateFieldByRef("soundEffect", instance);
 			writer.WritePrivateField("<IsStartingPrepared>k__BackingField", instance);
 		}
 
@@ -39,40 +40,43 @@ namespace ES3Types
 				{
 					
 					case "timeSlowRatio":
-					reader.SetPrivateField("timeSlowRatio", reader.Read<System.Single>(), instance);
+					instance = (ActionCat.Acsp_SlowTime)reader.SetPrivateField("timeSlowRatio", reader.Read<System.Single>(), instance);
 					break;
 					case "duration":
-					reader.SetPrivateField("duration", reader.Read<System.Single>(), instance);
+					instance = (ActionCat.Acsp_SlowTime)reader.SetPrivateField("duration", reader.Read<System.Single>(), instance);
 					break;
 					case "id":
-					reader.SetPrivateField("id", reader.Read<System.String>(), instance);
+					instance = (ActionCat.Acsp_SlowTime)reader.SetPrivateField("id", reader.Read<System.String>(), instance);
 					break;
 					case "name":
-					reader.SetPrivateField("name", reader.Read<System.String>(), instance);
+					instance = (ActionCat.Acsp_SlowTime)reader.SetPrivateField("name", reader.Read<System.String>(), instance);
 					break;
 					case "desc":
-					reader.SetPrivateField("desc", reader.Read<System.String>(), instance);
+					instance = (ActionCat.Acsp_SlowTime)reader.SetPrivateField("desc", reader.Read<System.String>(), instance);
 					break;
 					case "effectType":
-					reader.SetPrivateField("effectType", reader.Read<ActionCat.ACSP_TYPE>(), instance);
+					instance = (ActionCat.Acsp_SlowTime)reader.SetPrivateField("effectType", reader.Read<ActionCat.ACSP_TYPE>(), instance);
 					break;
 					case "level":
-					reader.SetPrivateField("level", reader.Read<ActionCat.SKILL_LEVEL>(), instance);
+					instance = (ActionCat.Acsp_SlowTime)reader.SetPrivateField("level", reader.Read<ActionCat.SKILL_LEVEL>(), instance);
 					break;
 					case "iconSprite":
-					reader.SetPrivateField("iconSprite", reader.Read<UnityEngine.Sprite>(), instance);
+					instance = (ActionCat.Acsp_SlowTime)reader.SetPrivateField("iconSprite", reader.Read<UnityEngine.Sprite>(), instance);
 					break;
 					case "nameTerms":
-					reader.SetPrivateField("nameTerms", reader.Read<System.String>(), instance);
+					instance = (ActionCat.Acsp_SlowTime)reader.SetPrivateField("nameTerms", reader.Read<System.String>(), instance);
 					break;
 					case "descTerms":
-					reader.SetPrivateField("descTerms", reader.Read<System.String>(), instance);
+					instance = (ActionCat.Acsp_SlowTime)reader.SetPrivateField("descTerms", reader.Read<System.String>(), instance);
 					break;
 					case "condition":
-					reader.SetPrivateField("condition", reader.Read<ActionCat.ArtifactCondition>(), instance);
+					instance = (ActionCat.Acsp_SlowTime)reader.SetPrivateField("condition", reader.Read<ActionCat.ArtifactCondition>(), instance);
+					break;
+					case "soundEffect":
+					instance = (ActionCat.Acsp_SlowTime)reader.SetPrivateField("soundEffect", reader.Read<UnityEngine.AudioClip>(), instance);
 					break;
 					case "<IsStartingPrepared>k__BackingField":
-					reader.SetPrivateField("<IsStartingPrepared>k__BackingField", reader.Read<System.Boolean>(), instance);
+					instance = (ActionCat.Acsp_SlowTime)reader.SetPrivateField("<IsStartingPrepared>k__BackingField", reader.Read<System.Boolean>(), instance);
 					break;
 					default:
 						reader.Skip();

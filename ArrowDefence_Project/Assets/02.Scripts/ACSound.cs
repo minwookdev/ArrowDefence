@@ -4,15 +4,14 @@
     [RequireComponent(typeof(AudioSource))]
     public class ACSound : MonoBehaviour {
         [Header("OPTIONS")]
-        [SerializeField] AudioSource audioSource      = null;
-        [SerializeField] SOUNDTYPE soundType          = SOUNDTYPE.NONE;
-        [SerializeField] string assignSoundKey        = "defaultSound";
-        [SerializeField] [ReadOnly] string soundKey   = "";
-        [SerializeField] [ReadOnly] float tempVolumeScale = 0f;
+        [SerializeField] AudioSource audioSource = null;
+        [SerializeField] SOUNDTYPE soundType     = SOUNDTYPE.NONE;
+        [SerializeField] string soundKey         = "defaultSound";
+        float tempVolumeScale = 0f; //Lerp에 사용되는 temp volume 변수
 
         [Header("SOUND")]
-        [SerializeField] AudioClip sound              = null;
-        [SerializeField] AudioClip[] sounds           = null;
+        [SerializeField] AudioClip sound    = null;
+        [SerializeField] AudioClip[] sounds = null;
         public AudioClip[] Sounds {
             get => sounds;
         }
@@ -50,25 +49,13 @@
                 audioSource = GetComponent<AudioSource>();
             }
 
-            soundKey = assignSoundKey;              // Apply SoundKey
-            //SoundManager.Instance.AddSound(this);   // AddSound Dictionary by SoundKey
+            //ACSound에 AudioClip이 할당되어있으면 미리 꼽아둠
             audioSource.clip = (sound != null) ? sound : null;
-        }
-
-        private void Start() {
-            //volumeScale = SoundManager.Instance.GetVolumeScale(soundType); // Get Volume Variable
-            //audioSource.volume = volumeScale;                              // Set Volume Variable
-        }
-
-        private void OnDestroy() {
-            //if (SoundManager.IsExist) {
-            //    SoundManager.Instance.RemoveSound(soundKey);
-            //}
         }
 
         #endregion
 
-        #region OPTIONS
+        #region FUNCTION
 
         /// <summary>
         /// Range is 0f ~ 1f
@@ -79,7 +66,7 @@
         }
 
         public void ChangeKey(int index) {
-            this.soundKey = string.Format("{0}_{1}", this.assignSoundKey, index.ToString());
+            soundKey = string.Format("{0}_{1}", soundKey, index.ToString());
         }
 
         #endregion
@@ -167,7 +154,7 @@
 
         #endregion
 
-        #region COROUTINE
+        #region SOUND_FADE
 
         System.Collections.IEnumerator FadeOutVolume(float fadeTime) {
             float progress    = 0f;

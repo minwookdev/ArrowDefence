@@ -4,7 +4,7 @@ using UnityEngine;
 namespace ES3Types
 {
 	[UnityEngine.Scripting.Preserve]
-	[ES3PropertiesAttribute("arrowCount", "shotDelay", "id", "iconSprite", "level", "skillType", "termsName", "termsDesc")]
+	[ES3PropertiesAttribute("arrowCount", "shotDelay", "id", "iconSprite", "level", "skillType", "termsName", "termsDesc", "soundEffects")]
 	public class ES3UserType_Skill_Arrow_Rain : ES3ObjectType
 	{
 		public static ES3Type Instance = null;
@@ -24,6 +24,7 @@ namespace ES3Types
 			writer.WritePrivateField("skillType", instance);
 			writer.WritePrivateField("termsName", instance);
 			writer.WritePrivateField("termsDesc", instance);
+			writer.WritePrivateField("soundEffects", instance);
 		}
 
 		protected override void ReadObject<T>(ES3Reader reader, object obj)
@@ -35,28 +36,31 @@ namespace ES3Types
 				{
 					
 					case "arrowCount":
-					reader.SetPrivateField("arrowCount", reader.Read<System.Byte>(), instance);
+					instance = (ActionCat.Skill_Arrow_Rain)reader.SetPrivateField("arrowCount", reader.Read<System.Byte>(), instance);
 					break;
 					case "shotDelay":
-					reader.SetPrivateField("shotDelay", reader.Read<System.Single>(), instance);
+					instance = (ActionCat.Skill_Arrow_Rain)reader.SetPrivateField("shotDelay", reader.Read<System.Single>(), instance);
 					break;
 					case "id":
-					reader.SetPrivateField("id", reader.Read<System.String>(), instance);
+					instance = (ActionCat.Skill_Arrow_Rain)reader.SetPrivateField("id", reader.Read<System.String>(), instance);
 					break;
 					case "iconSprite":
-					reader.SetPrivateField("iconSprite", reader.Read<UnityEngine.Sprite>(), instance);
+					instance = (ActionCat.Skill_Arrow_Rain)reader.SetPrivateField("iconSprite", reader.Read<UnityEngine.Sprite>(), instance);
 					break;
 					case "level":
-					reader.SetPrivateField("level", reader.Read<ActionCat.SKILL_LEVEL>(), instance);
+					instance = (ActionCat.Skill_Arrow_Rain)reader.SetPrivateField("level", reader.Read<ActionCat.SKILL_LEVEL>(), instance);
 					break;
 					case "skillType":
-					reader.SetPrivateField("skillType", reader.Read<ActionCat.BOWSKILL_TYPE>(), instance);
+					instance = (ActionCat.Skill_Arrow_Rain)reader.SetPrivateField("skillType", reader.Read<ActionCat.BOWSKILL_TYPE>(), instance);
 					break;
 					case "termsName":
-					reader.SetPrivateField("termsName", reader.Read<System.String>(), instance);
+					instance = (ActionCat.Skill_Arrow_Rain)reader.SetPrivateField("termsName", reader.Read<System.String>(), instance);
 					break;
 					case "termsDesc":
-					reader.SetPrivateField("termsDesc", reader.Read<System.String>(), instance);
+					instance = (ActionCat.Skill_Arrow_Rain)reader.SetPrivateField("termsDesc", reader.Read<System.String>(), instance);
+					break;
+					case "soundEffects":
+					instance = (ActionCat.Skill_Arrow_Rain)reader.SetPrivateField("soundEffects", reader.Read<UnityEngine.AudioClip[]>(), instance);
 					break;
 					default:
 						reader.Skip();

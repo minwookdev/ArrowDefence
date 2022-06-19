@@ -39,7 +39,7 @@
 
         public abstract string GetDesc(string localizedString);
 
-        public virtual void PlayRandomSound() {
+        public virtual void PlaySound2Random() {
             arrow.PlayOneShot(sounds.RandIndex());
         }
 
@@ -366,7 +366,7 @@
             //================================================[ ON HIT TARGET & INC CHAIN ]=======================================================
             isResult = target.GetComponent<IDamageable>().TryOnHit(ref damage, contactpoint, direction);
             if (isResult) { //:몬스터 객체에 충돌
-                PlayRandomSound(); //Random Hit Sound Play
+                PlaySound2Random(); //Random Hit Sound Play
                 if (currentChainCount >= maxChainCount) {
                     return isResult; //:true
                 }
@@ -389,7 +389,7 @@
         public override bool OnHit(Collider2D target, out Transform targetTr, ref DamageStruct damage, Vector3 contactpoint, Vector2 direction) {
             isResult = target.GetComponent<IDamageable>().TryOnHit(ref damage, contactpoint, direction);
             if (isResult) {
-                PlayRandomSound();  //Random Hit Sound Play
+                PlaySound2Random();  //Random Hit Sound Play
                 if (currentChainCount >= maxChainCount) {
                     targetTr = null;
                     return isResult; //:true

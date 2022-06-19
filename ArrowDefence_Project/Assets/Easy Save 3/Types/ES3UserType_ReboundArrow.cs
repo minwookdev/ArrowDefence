@@ -4,7 +4,7 @@ using UnityEngine;
 namespace ES3Types
 {
 	[UnityEngine.Scripting.Preserve]
-	[ES3PropertiesAttribute("maxChainCount", "scanRange", "effects")]
+	[ES3PropertiesAttribute("maxChainCount", "scanRange", "effects", "sounds")]
 	public class ES3UserType_ReboundArrow : ES3ObjectType
 	{
 		public static ES3Type Instance = null;
@@ -19,6 +19,7 @@ namespace ES3Types
 			writer.WritePrivateField("maxChainCount", instance);
 			writer.WritePrivateField("scanRange", instance);
 			writer.WritePrivateField("effects", instance);
+			writer.WritePrivateField("sounds", instance);
 		}
 
 		protected override void ReadObject<T>(ES3Reader reader, object obj)
@@ -30,13 +31,16 @@ namespace ES3Types
 				{
 					
 					case "maxChainCount":
-					reader.SetPrivateField("maxChainCount", reader.Read<System.Int32>(), instance);
+					instance = (ActionCat.ReboundArrow)reader.SetPrivateField("maxChainCount", reader.Read<System.Int32>(), instance);
 					break;
 					case "scanRange":
-					reader.SetPrivateField("scanRange", reader.Read<System.Single>(), instance);
+					instance = (ActionCat.ReboundArrow)reader.SetPrivateField("scanRange", reader.Read<System.Single>(), instance);
 					break;
 					case "effects":
-					reader.SetPrivateField("effects", reader.Read<ActionCat.ACEffector2D[]>(), instance);
+					instance = (ActionCat.ReboundArrow)reader.SetPrivateField("effects", reader.Read<ActionCat.ACEffector2D[]>(), instance);
+					break;
+					case "sounds":
+					instance = (ActionCat.ReboundArrow)reader.SetPrivateField("sounds", reader.Read<UnityEngine.AudioClip[]>(), instance);
 					break;
 					default:
 						reader.Skip();

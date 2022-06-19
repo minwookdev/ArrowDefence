@@ -247,7 +247,7 @@
         #region SOUND
 
         public void PlayStartSound() {
-            if (SoundManager.Instance.TryGetChannel(CHANNELTYPE.BATTLESTART, out Audio.ACSound channel)) {
+            if (SoundManager.Instance.TryGetChannel2Dic(CHANNELTYPE.BATTLESTART, out Audio.ACSound channel)) {
                 channel.PlaySound();
             }
         }

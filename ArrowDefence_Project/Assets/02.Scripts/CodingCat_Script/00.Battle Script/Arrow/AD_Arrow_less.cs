@@ -92,7 +92,7 @@
             }
 
             //Get Sound Channel
-            audioSource = SoundManager.Instance.TryGetChannel(CHANNELTYPE.ARROW, out Audio.ACSound result) ? result : audioSource;
+            audioSource = SoundManager.Instance.TryGetChannel2Dic(CHANNELTYPE.ARROW, out Audio.ACSound result) ? result : audioSource;
         }
 
         private void Update() {

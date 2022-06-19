@@ -13,7 +13,7 @@
 
         private void Start() {
             //Get Channel
-            this.audioSource = SoundManager.Instance.TryGetChannel(CHANNELTYPE.MONSTER, out ACSound result) ? result : audioSource;
+            this.audioSource = SoundManager.Instance.TryGetChannel2Dic(CHANNELTYPE.MONSTER, out ACSound result) ? result : audioSource;
         }
 
         public void PlayRandomHitSound() => audioSource.PlayOneShot(hitClips.RandIndex());

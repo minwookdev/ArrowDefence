@@ -4,7 +4,7 @@ using UnityEngine;
 namespace ES3Types
 {
 	[UnityEngine.Scripting.Preserve]
-	[ES3PropertiesAttribute("value", "<BuffType>k__BackingField")]
+	[ES3PropertiesAttribute("value", "<BuffType>k__BackingField", "sounds")]
 	public class ES3UserType_ElementalAmplification : ES3ObjectType
 	{
 		public static ES3Type Instance = null;
@@ -18,6 +18,7 @@ namespace ES3Types
 			
 			writer.WritePrivateField("value", instance);
 			writer.WritePrivateField("<BuffType>k__BackingField", instance);
+			writer.WritePrivateField("sounds", instance);
 		}
 
 		protected override void ReadObject<T>(ES3Reader reader, object obj)
@@ -29,10 +30,13 @@ namespace ES3Types
 				{
 					
 					case "value":
-					reader.SetPrivateField("value", reader.Read<System.Single>(), instance);
+					instance = (ActionCat.ElementalAmplification)reader.SetPrivateField("value", reader.Read<System.Single>(), instance);
 					break;
 					case "<BuffType>k__BackingField":
-					reader.SetPrivateField("<BuffType>k__BackingField", reader.Read<ActionCat.ARROWBUFFTYPE>(), instance);
+					instance = (ActionCat.ElementalAmplification)reader.SetPrivateField("<BuffType>k__BackingField", reader.Read<ActionCat.ARROWBUFFTYPE>(), instance);
+					break;
+					case "sounds":
+					instance = (ActionCat.ElementalAmplification)reader.SetPrivateField("sounds", reader.Read<UnityEngine.AudioClip[]>(), instance);
 					break;
 					default:
 						reader.Skip();

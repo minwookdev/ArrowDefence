@@ -76,7 +76,7 @@
             itemReference = item;
 
             //Check Slot Sound
-            channel = (isSoundCompatiblity && SoundManager.Instance.TryGetChannel(channelKey, out Audio.ACSound result)) ? result : channel;
+            channel = (isSoundCompatiblity && SoundManager.Instance.TryGetChannel2Dic(channelKey, out Audio.ACSound result)) ? result : channel;
             if (isSoundCompatiblity && channel == null) {
                 CatLog.ELog("Channel Not Found !");
             }

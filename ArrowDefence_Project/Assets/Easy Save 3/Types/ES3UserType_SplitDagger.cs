@@ -4,7 +4,7 @@ using UnityEngine;
 namespace ES3Types
 {
 	[UnityEngine.Scripting.Preserve]
-	[ES3PropertiesAttribute("projectileCount", "projectilePref", "projectileDamage")]
+	[ES3PropertiesAttribute("projectileCount", "projectilePref", "projectileDamage", "sounds")]
 	public class ES3UserType_SplitDagger : ES3ObjectType
 	{
 		public static ES3Type Instance = null;
@@ -19,6 +19,7 @@ namespace ES3Types
 			writer.WritePrivateField("projectileCount", instance);
 			writer.WritePrivateFieldByRef("projectilePref", instance);
 			writer.WritePrivateField("projectileDamage", instance);
+			writer.WritePrivateField("sounds", instance);
 		}
 
 		protected override void ReadObject<T>(ES3Reader reader, object obj)
@@ -30,13 +31,16 @@ namespace ES3Types
 				{
 					
 					case "projectileCount":
-					reader.SetPrivateField("projectileCount", reader.Read<System.Int32>(), instance);
+					instance = (ActionCat.SplitDagger)reader.SetPrivateField("projectileCount", reader.Read<System.Int32>(), instance);
 					break;
 					case "projectilePref":
-					reader.SetPrivateField("projectilePref", reader.Read<ActionCat.ProjectilePref>(), instance);
+					instance = (ActionCat.SplitDagger)reader.SetPrivateField("projectilePref", reader.Read<ActionCat.ProjectilePref>(), instance);
 					break;
 					case "projectileDamage":
-					reader.SetPrivateField("projectileDamage", reader.Read<System.Int16>(), instance);
+					instance = (ActionCat.SplitDagger)reader.SetPrivateField("projectileDamage", reader.Read<System.Int16>(), instance);
+					break;
+					case "sounds":
+					instance = (ActionCat.SplitDagger)reader.SetPrivateField("sounds", reader.Read<UnityEngine.AudioClip[]>(), instance);
 					break;
 					default:
 						reader.Skip();

@@ -133,7 +133,7 @@
                     dagger.Shot(damage, ability.GetProjectileDamage(projectileDamage));
                 }
             }
-            PlayRandomSound();  //PlaySound
+            PlaySound2Random();  //PlaySound
         }
 
         public override void ClearOnDisable() { }
@@ -188,7 +188,7 @@
                 if (fire) {
                     fire.Shot(damage, ability.GetSpellDamage(projectileDamage)); //
                 }
-                PlayRandomSound();
+                PlaySound2Random();
             }
         }
         public override void ClearOnDisable() { }
@@ -270,7 +270,7 @@
                 effectShockWave.PlayOnce();
             }
             //Play SoundEffect
-            PlayRandomSound();
+            PlaySound2Random();
         }
 
         public override void ClearOnDisable() {

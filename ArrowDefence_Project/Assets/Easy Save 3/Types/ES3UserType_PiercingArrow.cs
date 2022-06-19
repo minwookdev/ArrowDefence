@@ -4,7 +4,7 @@ using UnityEngine;
 namespace ES3Types
 {
 	[UnityEngine.Scripting.Preserve]
-	[ES3PropertiesAttribute("maxChainCount", "effects")]
+	[ES3PropertiesAttribute("maxChainCount", "effects", "sounds")]
 	public class ES3UserType_PiercingArrow : ES3ObjectType
 	{
 		public static ES3Type Instance = null;
@@ -18,6 +18,7 @@ namespace ES3Types
 			
 			writer.WriteProperty("maxChainCount", instance.maxChainCount, ES3Type_byte.Instance);
 			writer.WritePrivateField("effects", instance);
+			writer.WritePrivateField("sounds", instance);
 		}
 
 		protected override void ReadObject<T>(ES3Reader reader, object obj)
@@ -32,7 +33,10 @@ namespace ES3Types
 						instance.maxChainCount = reader.Read<System.Byte>(ES3Type_byte.Instance);
 						break;
 					case "effects":
-					reader.SetPrivateField("effects", reader.Read<ActionCat.ACEffector2D[]>(), instance);
+					instance = (ActionCat.PiercingArrow)reader.SetPrivateField("effects", reader.Read<ActionCat.ACEffector2D[]>(), instance);
+					break;
+					case "sounds":
+					instance = (ActionCat.PiercingArrow)reader.SetPrivateField("sounds", reader.Read<UnityEngine.AudioClip[]>(), instance);
 					break;
 					default:
 						reader.Skip();

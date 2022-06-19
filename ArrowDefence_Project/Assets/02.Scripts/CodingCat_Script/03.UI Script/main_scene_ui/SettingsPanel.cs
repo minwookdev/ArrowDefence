@@ -99,20 +99,20 @@
         public void SLIDER_SE()  => mixer.SetFloat(seParameter, seSlider.value <= seSlider.minValue ? -80f : seSlider.value);
 
         /// <summary>
-        /// GameSettings.BgmSoundVolume 변경. (저장되는 변수 변경)
+        /// GameSettings에 최종적으로 변경된 BgmSoundVolume 변경. (저장되는 변수 변경)
         /// </summary>
         public void SLIDER_RELEASE_BGM() {
             if (mixer.GetFloat(bgmParameter, out float bgmsoundfitch)) {
-                settings.BgmParamVolumeValue = bgmsoundfitch;
+                settings.BgmVolumeParamsValue = bgmsoundfitch;
             }
         }
 
         /// <summary>
-        /// GameSettings.SeSoundVolume 변경. (저장되는 변수 변경)
+        /// GameSettings에 최종적으로 변경된 SeSoundVolume 변경. (저장되는 변수 변경)
         /// </summary>
         public void SLIDER_RELEASE_SE() {
             if (mixer.GetFloat(seParameter, out float sesoundfitch)) {
-                settings.SeParamVolumeValue = sesoundfitch;
+                settings.SeVolumeParamsValue = sesoundfitch;
             }
         }
         #endregion

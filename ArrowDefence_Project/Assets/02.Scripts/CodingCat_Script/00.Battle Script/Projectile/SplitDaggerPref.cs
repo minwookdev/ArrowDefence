@@ -23,7 +23,7 @@
             coll.enabled = false;
 
             //Get Audio Channel
-            audioSource = SoundManager.Instance.TryGetChannel(CHANNELTYPE.PROJECTILE, out Audio.ACSound result) ? result : audioSource; 
+            audioSource = SoundManager.Instance.TryGetChannel2Dic(CHANNELTYPE.PROJECTILE, out Audio.ACSound result) ? result : audioSource; 
         }
 
         private void OnDisable() {

@@ -60,7 +60,7 @@
             isScrollRectParent = (scrollRect != null);
 
             //Get Channel
-            channel = (isSoundCompatiblity && SoundManager.Instance.TryGetChannel(channelKey, out ACSound result)) ? result : channel;
+            channel = (isSoundCompatiblity && SoundManager.Instance.TryGetChannel2Dic(channelKey, out ACSound result)) ? result : channel;
             if (isSoundCompatiblity && channel == null) { //Check Sound
                 CatLog.ELog("AudioChannel Not Found !");
             }

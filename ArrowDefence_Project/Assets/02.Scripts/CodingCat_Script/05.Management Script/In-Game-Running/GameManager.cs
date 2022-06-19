@@ -69,7 +69,7 @@
 #endif
             fixedDeltaTime = Time.fixedDeltaTime;
             LoadSettings();
-            SoundManager.Instance.SetVolumeScale();
+            SoundManager.Instance.Init(); // 사운드에 불러온 볼륨 적용
             isManagerInitialized = true;
         }
 

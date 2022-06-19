@@ -4,7 +4,7 @@ using UnityEngine;
 namespace ES3Types
 {
 	[UnityEngine.Scripting.Preserve]
-	[ES3PropertiesAttribute("stageSettings", "bgmParamVolumeValue", "seParamVolumeValue", "<PullingType>k__BackingField")]
+	[ES3PropertiesAttribute("stageSettings", "bgmVolumeParamsValue", "seVolumeParamsValue", "<PullingType>k__BackingField")]
 	public class ES3UserType_GameSettings : ES3ObjectType
 	{
 		public static ES3Type Instance = null;
@@ -17,8 +17,8 @@ namespace ES3Types
 			var instance = (ActionCat.Data.GameSettings)obj;
 			
 			writer.WritePrivateField("stageSettings", instance);
-			writer.WritePrivateField("bgmParamVolumeValue", instance);
-			writer.WritePrivateField("seParamVolumeValue", instance);
+			writer.WritePrivateField("bgmVolumeParamsValue", instance);
+			writer.WritePrivateField("seVolumeParamsValue", instance);
 			writer.WritePrivateField("<PullingType>k__BackingField", instance);
 		}
 
@@ -33,11 +33,11 @@ namespace ES3Types
 					case "stageSettings":
 					instance = (ActionCat.Data.GameSettings)reader.SetPrivateField("stageSettings", reader.Read<System.Collections.Generic.Dictionary<System.String, ActionCat.Data.StageData.StageSetting>>(), instance);
 					break;
-					case "bgmParamVolumeValue":
-					instance = (ActionCat.Data.GameSettings)reader.SetPrivateField("bgmParamVolumeValue", reader.Read<System.Single>(), instance);
+					case "bgmVolumeParamsValue":
+					instance = (ActionCat.Data.GameSettings)reader.SetPrivateField("bgmVolumeParamsValue", reader.Read<System.Single>(), instance);
 					break;
-					case "seParamVolumeValue":
-					instance = (ActionCat.Data.GameSettings)reader.SetPrivateField("seParamVolumeValue", reader.Read<System.Single>(), instance);
+					case "seVolumeParamsValue":
+					instance = (ActionCat.Data.GameSettings)reader.SetPrivateField("seVolumeParamsValue", reader.Read<System.Single>(), instance);
 					break;
 					case "<PullingType>k__BackingField":
 					instance = (ActionCat.Data.GameSettings)reader.SetPrivateField("<PullingType>k__BackingField", reader.Read<ActionCat.PULLINGTYPE>(), instance);

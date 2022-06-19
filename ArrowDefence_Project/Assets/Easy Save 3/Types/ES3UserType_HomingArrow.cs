@@ -4,7 +4,7 @@ using UnityEngine;
 namespace ES3Types
 {
 	[UnityEngine.Scripting.Preserve]
-	[ES3PropertiesAttribute("scanRadius", "speed", "rotateSpeed")]
+	[ES3PropertiesAttribute("scanRadius", "speed", "rotateSpeed", "sounds")]
 	public class ES3UserType_HomingArrow : ES3ObjectType
 	{
 		public static ES3Type Instance = null;
@@ -19,6 +19,7 @@ namespace ES3Types
 			writer.WritePrivateField("scanRadius", instance);
 			writer.WritePrivateField("speed", instance);
 			writer.WritePrivateField("rotateSpeed", instance);
+			writer.WritePrivateField("sounds", instance);
 		}
 
 		protected override void ReadObject<T>(ES3Reader reader, object obj)
@@ -30,13 +31,16 @@ namespace ES3Types
 				{
 					
 					case "scanRadius":
-					reader.SetPrivateField("scanRadius", reader.Read<System.Single>(), instance);
+					instance = (ActionCat.HomingArrow)reader.SetPrivateField("scanRadius", reader.Read<System.Single>(), instance);
 					break;
 					case "speed":
-					reader.SetPrivateField("speed", reader.Read<System.Single>(), instance);
+					instance = (ActionCat.HomingArrow)reader.SetPrivateField("speed", reader.Read<System.Single>(), instance);
 					break;
 					case "rotateSpeed":
-					reader.SetPrivateField("rotateSpeed", reader.Read<System.Single>(), instance);
+					instance = (ActionCat.HomingArrow)reader.SetPrivateField("rotateSpeed", reader.Read<System.Single>(), instance);
+					break;
+					case "sounds":
+					instance = (ActionCat.HomingArrow)reader.SetPrivateField("sounds", reader.Read<UnityEngine.AudioClip[]>(), instance);
 					break;
 					default:
 						reader.Skip();

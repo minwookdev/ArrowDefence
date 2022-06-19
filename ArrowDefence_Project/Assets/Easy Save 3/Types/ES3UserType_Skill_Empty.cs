@@ -33,22 +33,22 @@ namespace ES3Types
 				{
 					
 					case "id":
-					reader.SetPrivateField("id", reader.Read<System.String>(), instance);
+					instance = (ActionCat.Skill_Empty)reader.SetPrivateField("id", reader.Read<System.String>(), instance);
 					break;
 					case "iconSprite":
-					reader.SetPrivateField("iconSprite", reader.Read<UnityEngine.Sprite>(), instance);
+					instance = (ActionCat.Skill_Empty)reader.SetPrivateField("iconSprite", reader.Read<UnityEngine.Sprite>(), instance);
 					break;
 					case "level":
-					reader.SetPrivateField("level", reader.Read<ActionCat.SKILL_LEVEL>(), instance);
+					instance = (ActionCat.Skill_Empty)reader.SetPrivateField("level", reader.Read<ActionCat.SKILL_LEVEL>(), instance);
 					break;
 					case "skillType":
-					reader.SetPrivateField("skillType", reader.Read<ActionCat.BOWSKILL_TYPE>(), instance);
+					instance = (ActionCat.Skill_Empty)reader.SetPrivateField("skillType", reader.Read<ActionCat.BOWSKILL_TYPE>(), instance);
 					break;
 					case "termsName":
-					reader.SetPrivateField("termsName", reader.Read<System.String>(), instance);
+					instance = (ActionCat.Skill_Empty)reader.SetPrivateField("termsName", reader.Read<System.String>(), instance);
 					break;
 					case "termsDesc":
-					reader.SetPrivateField("termsDesc", reader.Read<System.String>(), instance);
+					instance = (ActionCat.Skill_Empty)reader.SetPrivateField("termsDesc", reader.Read<System.String>(), instance);
 					break;
 					default:
 						reader.Skip();

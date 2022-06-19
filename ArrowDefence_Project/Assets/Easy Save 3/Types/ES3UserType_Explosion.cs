@@ -4,7 +4,7 @@ using UnityEngine;
 namespace ES3Types
 {
 	[UnityEngine.Scripting.Preserve]
-	[ES3PropertiesAttribute("effectShockWave", "addExplosionPref", "skillLevel", "explosionRange", "addExplosionRange", "addExplosionDamage", "projectilePref", "projectileDamage")]
+	[ES3PropertiesAttribute("effectShockWave", "addExplosionPref", "skillLevel", "explosionRange", "addExplosionRange", "addExplosionDamage", "projectilePref", "projectileDamage", "sounds")]
 	public class ES3UserType_Explosion : ES3ObjectType
 	{
 		public static ES3Type Instance = null;
@@ -24,6 +24,7 @@ namespace ES3Types
 			writer.WritePrivateField("addExplosionDamage", instance);
 			writer.WritePrivateFieldByRef("projectilePref", instance);
 			writer.WritePrivateField("projectileDamage", instance);
+			writer.WritePrivateField("sounds", instance);
 		}
 
 		protected override void ReadObject<T>(ES3Reader reader, object obj)
@@ -35,28 +36,31 @@ namespace ES3Types
 				{
 					
 					case "effectShockWave":
-					reader.SetPrivateField("effectShockWave", reader.Read<ActionCat.ACEffector2D>(), instance);
+					instance = (ActionCat.Explosion)reader.SetPrivateField("effectShockWave", reader.Read<ActionCat.ACEffector2D>(), instance);
 					break;
 					case "addExplosionPref":
-					reader.SetPrivateField("addExplosionPref", reader.Read<ActionCat.ProjectilePref>(), instance);
+					instance = (ActionCat.Explosion)reader.SetPrivateField("addExplosionPref", reader.Read<ActionCat.ProjectilePref>(), instance);
 					break;
 					case "skillLevel":
-					reader.SetPrivateField("skillLevel", reader.Read<System.Byte>(), instance);
+					instance = (ActionCat.Explosion)reader.SetPrivateField("skillLevel", reader.Read<System.Byte>(), instance);
 					break;
 					case "explosionRange":
-					reader.SetPrivateField("explosionRange", reader.Read<System.Single>(), instance);
+					instance = (ActionCat.Explosion)reader.SetPrivateField("explosionRange", reader.Read<System.Single>(), instance);
 					break;
 					case "addExplosionRange":
-					reader.SetPrivateField("addExplosionRange", reader.Read<System.Single>(), instance);
+					instance = (ActionCat.Explosion)reader.SetPrivateField("addExplosionRange", reader.Read<System.Single>(), instance);
 					break;
 					case "addExplosionDamage":
-					reader.SetPrivateField("addExplosionDamage", reader.Read<System.Int16>(), instance);
+					instance = (ActionCat.Explosion)reader.SetPrivateField("addExplosionDamage", reader.Read<System.Int16>(), instance);
 					break;
 					case "projectilePref":
-					reader.SetPrivateField("projectilePref", reader.Read<ActionCat.ProjectilePref>(), instance);
+					instance = (ActionCat.Explosion)reader.SetPrivateField("projectilePref", reader.Read<ActionCat.ProjectilePref>(), instance);
 					break;
 					case "projectileDamage":
-					reader.SetPrivateField("projectileDamage", reader.Read<System.Int16>(), instance);
+					instance = (ActionCat.Explosion)reader.SetPrivateField("projectileDamage", reader.Read<System.Int16>(), instance);
+					break;
+					case "sounds":
+					instance = (ActionCat.Explosion)reader.SetPrivateField("sounds", reader.Read<UnityEngine.AudioClip[]>(), instance);
 					break;
 					default:
 						reader.Skip();

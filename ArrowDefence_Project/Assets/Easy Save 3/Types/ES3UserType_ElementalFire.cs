@@ -4,7 +4,7 @@ using UnityEngine;
 namespace ES3Types
 {
 	[UnityEngine.Scripting.Preserve]
-	[ES3PropertiesAttribute("activationProbability", "projectilePref", "projectileDamage")]
+	[ES3PropertiesAttribute("activationProbability", "projectilePref", "projectileDamage", "sounds")]
 	public class ES3UserType_ElementalFire : ES3ObjectType
 	{
 		public static ES3Type Instance = null;
@@ -19,6 +19,7 @@ namespace ES3Types
 			writer.WritePrivateField("activationProbability", instance);
 			writer.WritePrivateFieldByRef("projectilePref", instance);
 			writer.WritePrivateField("projectileDamage", instance);
+			writer.WritePrivateField("sounds", instance);
 		}
 
 		protected override void ReadObject<T>(ES3Reader reader, object obj)
@@ -30,13 +31,16 @@ namespace ES3Types
 				{
 					
 					case "activationProbability":
-					reader.SetPrivateField("activationProbability", reader.Read<System.Single>(), instance);
+					instance = (ActionCat.ElementalFire)reader.SetPrivateField("activationProbability", reader.Read<System.Single>(), instance);
 					break;
 					case "projectilePref":
-					reader.SetPrivateField("projectilePref", reader.Read<ActionCat.ProjectilePref>(), instance);
+					instance = (ActionCat.ElementalFire)reader.SetPrivateField("projectilePref", reader.Read<ActionCat.ProjectilePref>(), instance);
 					break;
 					case "projectileDamage":
-					reader.SetPrivateField("projectileDamage", reader.Read<System.Int16>(), instance);
+					instance = (ActionCat.ElementalFire)reader.SetPrivateField("projectileDamage", reader.Read<System.Int16>(), instance);
+					break;
+					case "sounds":
+					instance = (ActionCat.ElementalFire)reader.SetPrivateField("sounds", reader.Read<UnityEngine.AudioClip[]>(), instance);
 					break;
 					default:
 						reader.Skip();

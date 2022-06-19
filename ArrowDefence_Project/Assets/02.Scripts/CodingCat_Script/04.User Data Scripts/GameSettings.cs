@@ -5,10 +5,8 @@
     public class GameSettings {
         //FIELD
         Dictionary<string, StageSetting> stageSettings = new Dictionary<string, StageSetting>();
-        private float bgmSoundValue = 1.0f;
-        private float seSoundValue  = 1.0f;
-        private float bgmParamVolumeValue = 0f;
-        private float seParamVolumeValue  = 0f;
+        private float bgmVolumeParamsValue = 0f;
+        private float seVolumeParamsValue  = 0f;
         public PULLINGTYPE PullingType { 
             get; private set; 
         } = PULLINGTYPE.FREE_TOUCH;
@@ -19,32 +17,18 @@
                 return (PullingType == PULLINGTYPE.FREE_TOUCH) ? true : false;
             }
         }
-        public float BgmSoundValue {
-            get => bgmSoundValue;
+        public float BgmVolumeParamsValue {
+            get => bgmVolumeParamsValue;
             set {
-                bgmSoundValue = (value >= 0f && value <= 1f) ? value : bgmSoundValue;
-                CatLog.Log($"Current Bgm Sound Value: {bgmSoundValue}");
+                bgmVolumeParamsValue = (value >= -80f && value <= 0f) ? value : bgmVolumeParamsValue;
+                CatLog.Log($"Set BGM SoundFitch Value: {bgmVolumeParamsValue}");
             }
         }
-        public float SeSoundValue {
-            get => seSoundValue;
+        public float SeVolumeParamsValue {
+            get => seVolumeParamsValue;
             set {
-                seSoundValue = (value >= 0f && value <= 1f) ? value : seSoundValue;
-                CatLog.Log($"Current Se Sound Value: {seSoundValue}");
-            }
-        }
-        public float BgmParamVolumeValue {
-            get => bgmParamVolumeValue;
-            set {
-                bgmParamVolumeValue = (value >= -80f && value <= 0f) ? value : bgmParamVolumeValue;
-                CatLog.Log($"Set BGM SoundFitch Value: {bgmParamVolumeValue}");
-            }
-        }
-        public float SeParamVolumeValue {
-            get => seParamVolumeValue;
-            set {
-                seParamVolumeValue = (value >= -80f && value <= 0f) ? value : seParamVolumeValue;
-                CatLog.Log($"Set SE SoundFitch Value: {seParamVolumeValue}");
+                seVolumeParamsValue = (value >= -80f && value <= 0f) ? value : seVolumeParamsValue;
+                CatLog.Log($"Set SE SoundFitch Value: {seVolumeParamsValue}");
             }
         }
 
@@ -76,8 +60,8 @@
                 return new GameSettings() {
                     stageSettings = new Dictionary<string, StageSetting>(),
                     PullingType = PULLINGTYPE.FREE_TOUCH,
-                    bgmSoundValue = 1.0f,
-                    seSoundValue  = 1.0f
+                    bgmVolumeParamsValue = 1.0f,
+                    seVolumeParamsValue  = 1.0f
                 };
             }
         }

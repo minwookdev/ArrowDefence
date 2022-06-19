@@ -33,7 +33,7 @@
         }
 
         protected void InitChannel() {
-            channel = isSoundCompatibility && SoundManager.Instance.TryGetChannel(channelKey, out Audio.ACSound result) ? result : channel;
+            channel = isSoundCompatibility && SoundManager.Instance.TryGetChannel2Dic(channelKey, out Audio.ACSound result) ? result : channel;
             if (isSoundCompatibility && channel == null) {
                 CatLog.ELog("Channel Not Found !");
             }

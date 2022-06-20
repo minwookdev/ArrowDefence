@@ -136,6 +136,10 @@ public class MainSceneRoute : MonoBehaviour {
                                 "This is Test Message. \n" +
                                 "This is Test Message. "); // Notify Text Size Test !
         }
+
+        if (Input.GetKeyDown(KeyCode.I)) {
+            CatLog.Log($"Unity.Time.time value: {Time.time.ToString("F0")}");
+        }
     }
 
     private void OnDestroy() {

@@ -387,17 +387,21 @@
                 //Draw Touch Line : Color Green.
                 if (currentPullType == PULLINGTYPE.AROUND_BOW_TOUCH) DrawTouchPos.Instance.DrawTouchLine(currentClickPosition, bowTr.position, true);
                 else if (currentPullType == PULLINGTYPE.FREE_TOUCH)  DrawTouchPos.Instance.DrawTouchLine(currentClickPosition, initialTouchPos, true);
+
+                CineCam.Inst.ZoomOut2Co();
+                CineCam.Inst.CamMove2Direction(direction);
             }
             else {
                 //Draw Touch Line : Color Red.
                 if (currentPullType == PULLINGTYPE.AROUND_BOW_TOUCH) DrawTouchPos.Instance.DrawTouchLine(currentClickPosition, bowTr.position, false);
                 else if (currentPullType == PULLINGTYPE.FREE_TOUCH)  DrawTouchPos.Instance.DrawTouchLine(currentClickPosition, initialTouchPos, false);
+
+                CineCam.Inst.ZoomRestore2Co();
+                CineCam.Inst.CamPosRestore();
             }
 
             //Check the Pulling Stop Trigger is true
             CheckStopPulling();
-            CineCam.Inst.CamMovement(this.direction);
-
 #region OLD_ARROW_LOGIC
 
             //if (LoadedArrow != null)
@@ -455,6 +459,8 @@
 
             //Erase Touch Line
             DrawTouchPos.Instance.ReleaseTouchLine();
+            CineCam.Inst.ZoomRestore2Co();
+            CineCam.Inst.CamPosRestore2Co();
         }
 
         private void Launch() {
@@ -506,7 +512,7 @@
             bowSprite.EffectMuzzleFlash(mainSlotTr.position, bowTr.eulerAngles.z - angleOffset);
 
             //Active Camera Shake & Release Sound Play
-            CineCam.Inst.ShakeCamera(8f, .1f);
+            CineCam.Inst.ShakeCamera(6f, .2f);
             sound.PlayReleasedSound();
 
             //Reload
@@ -557,6 +563,8 @@
                 isBowPullBegan = false; 
                 isBowPulling   = false;
                 DrawTouchPos.Instance.ReleaseTouchLine();
+                CineCam.Inst.CamPosRestore2Co();
+                CineCam.Inst.ZoomRestore2Co();
             }
         }
 

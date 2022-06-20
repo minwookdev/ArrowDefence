@@ -52,6 +52,16 @@ public class TitleSceneRoute : MonoBehaviour {
 
     Sequence titleSeq = null;
 
+    [Header("ASSET DOWNLOAD")]
+    [SerializeField] RectTransform rectTrDownloadingParent = null;
+    [SerializeField] Slider sliderDownload                 = null;
+    [SerializeField] TMPro.TextMeshProUGUI tmpDownloadSize = null;
+    [SerializeField] TMPro.TextMeshProUGUI tmpDownloadPack = null;
+    AssetDeliveryManager assetDeliveryManager = new AssetDeliveryManager();
+    WaitUntil waitSliderUpdate = null;
+    bool isAllAssetDownloaded  = false;
+    bool isSliderUpdate        = false;
+
     public void Awake() {
         GameManager.Instance.Initialize();
         AdsManager.Instance.InitRuntimeMgr();
@@ -89,6 +99,26 @@ public class TitleSceneRoute : MonoBehaviour {
 
         //Play TitleScene Background Music
         titleMusic.PlaySoundWithFadeOut(1f, true);
+
+        //일단 체크해두는데, 에셋 다운로드보다 앱-업데이트 체크가 먼저 이루어져야함 ---
+        //여기다 인-앱 업데이트 구현해두셈 
+
+#if   UNITY_EDITOR
+        isAllAssetDownloaded = true;
+#elif UNITY_ANDROID
+        //모든 에셋팩이 다운로드 상태인지 체크
+        isAllAssetDownloaded = assetDeliveryManager.IsDownloadedAllAssetPacks();
+        if (!isAllAssetDownloaded) {
+            StartCoroutine(AssetPackDownloadCoroutine());
+
+            // 슬라이더 코루틴 켜줌
+            waitSliderUpdate = new WaitUntil(() => isSliderUpdate);
+            StartCoroutine(DownloadSliderUpdate());
+        }
+        else { // 이미 모든팩이 설치되어있음 - 딜리버리 매니저 필요없음
+            assetDeliveryManager = null;
+        }
+#endif
     }
 
     private void OnDestroy() {
@@ -113,7 +143,7 @@ public class TitleSceneRoute : MonoBehaviour {
         }
     }
 
-    #region Action_Btn
+#region Action_Btn
 
     public void BE_START() {
         BreakButtons();
@@ -131,13 +161,18 @@ public class TitleSceneRoute : MonoBehaviour {
         titleSeq = DOTween.Sequence().Append(titleRect.DOScale(titleTextScale, StNum.floatOne).From(Vector3.zero).SetEase(Ease.OutExpo))
                                      .Append(titleRect.DOShakeScale(0.7f).SetEase(Ease.OutQuad))
                                      .OnStart(() => {
-                                         foreach (var image in imagesButton) {
-                                             image.DOFade(StNum.floatOne, 0.3f).SetDelay(tweenDelay).OnStart(() => image.raycastTarget = true);
+                                         // 모든 에셋팩이 다운로드 되어있다는 것을 확인하고 시작해줌
+                                         if (isAllAssetDownloaded) {
+                                             foreach (var image in imagesButton) {
+                                                 image.DOFade(StNum.floatOne, 0.3f).SetDelay(tweenDelay).OnStart(() => image.raycastTarget = true);
+                                             }
                                          }
                                      })
                                      .SetDelay(tweenDelay);
         //Play Button Fade
-        startButtonCanvasGroup.DOFade(StNum.floatOne, 0.7f).SetLoops(-1, LoopType.Yoyo).SetDelay(tweenDelay).OnStart(() => startButtonCanvasGroup.blocksRaycasts = true);
+        if (isAllAssetDownloaded) { //모든 에셋팩이 다운로드되어있을때만 버튼 살려줌
+            startButtonCanvasGroup.DOFade(StNum.floatOne, 0.7f).SetLoops(-1, LoopType.Yoyo).SetDelay(tweenDelay).OnStart(() => startButtonCanvasGroup.blocksRaycasts = true);
+        }
 
         StartCoroutine(EnableBlurCo());
 
@@ -153,7 +188,7 @@ public class TitleSceneRoute : MonoBehaviour {
 
     public void BE_OPEN_SETTINGS() => settingsPanel.OpenPanel();
 
-    #endregion
+#endregion
 
     System.Collections.IEnumerator EnableBlurCo() {
         if (titleVolume == null) {
@@ -250,5 +285,78 @@ public class TitleSceneRoute : MonoBehaviour {
         //테스트 결과 Scene을 다시로드하면 코드상으로 수정한 Profile의 내용이 초기화 되는것을 확인.
         //Restore Profile은 필요하지 않다.
     }
+
+#region PLAY-ASSET-DOWNLOAD
+    
+    System.Collections.IEnumerator AssetPackDownloadCoroutine() {
+        float startTime = Time.time; // 다운로드 시작한 시간 저장해둠
+
+        if (!assetDeliveryManager.IsSoundPackDownloaded) {
+            // 변수 정리
+            sliderDownload.value = 0f;
+            tmpDownloadSize.text = "[00.00 KB]";
+            tmpDownloadPack.text = "SOUND ASSET";
+
+            // 에셋 팩 총 다운로드 용량 구함
+            yield return StartCoroutine(assetDeliveryManager.GetTotalDownloadSizeAsync(CustomAssetPack.SoundAssetPackName));
+            tmpDownloadSize.text = string.Format("[{0}]", assetDeliveryManager.GetAssetPackDownloadSize());  //용량 구하는 코루틴 끝났으면 텍스트 문자열 값 전달
+
+            // 다운로드 시작.
+            isSliderUpdate = true; // 슬라이더 업데이트 시작 
+            yield return StartCoroutine(assetDeliveryManager.LoadSoundAssetPackAsync());
+            isSliderUpdate = false;
+        }
+
+        if (!assetDeliveryManager.IsFontsPackDownloaded) {
+            // 변수 정리
+            sliderDownload.value = 0f;
+            tmpDownloadSize.text = "[00.00 KB]";
+            tmpDownloadPack.text = "FONT ASSET";
+
+            // 에셋 팩 총 다운로드 용량 구함
+            yield return StartCoroutine(assetDeliveryManager.GetTotalDownloadSizeAsync(CustomAssetPack.FontsAssetPackName));
+            tmpDownloadSize.text = string.Format("[{0}]", assetDeliveryManager.GetAssetPackDownloadSize());  //용량 구하는 코루틴 끝났으면 텍스트 문자열 값 전달
+
+            // 다운로드 시작
+            isSliderUpdate = true; // 슬라이더 업데이트 시작
+            yield return StartCoroutine(assetDeliveryManager.LoadFontsAssetPackAsync());
+            isSliderUpdate = false;
+        }
+
+        // 모든 에셋-팩 다운로드 파이널 체크
+        bool allAssetDownloaded = assetDeliveryManager.IsDownloadedAllAssetPacks();
+        if (!allAssetDownloaded) {
+            errorPanel.EnablePanel("Failed to Download AssetPack", "AssetPack Download Error");
+            yield break;
+        }
+
+        // 완료대기시간 (개발자 확인용)
+        float completeTime = Time.time;
+        if (completeTime - startTime < maxWaitTime + 2f) { // 1f: 여유시간
+            float waitTime = (completeTime - startTime) - (maxWaitTime + 2f);
+            while (waitTime > 0) {
+                waitTime -= Time.deltaTime;
+                yield return null;
+            }
+        }
+
+        // 다운로드 완료 처리해주고 버튼 살려줌
+        isAllAssetDownloaded = true;
+        RestoreButtons();   
+    }
+
+    System.Collections.IEnumerator DownloadSliderUpdate() {
+        // 에셋 다운로드 슬라이더 그룹 활성화
+        rectTrDownloadingParent.gameObject.SetActive(true);
+
+        while (!isAllAssetDownloaded) { // 에셋을 다운로드가 완료되지않았을때만 슬라이더 업데이트
+            sliderDownload.value = assetDeliveryManager.CurrentDownloaded;
+            yield return waitSliderUpdate; // 다운로드 중인 에셋이 바뀔때 잠시 대기 
+        }
+
+        rectTrDownloadingParent.gameObject.SetActive(false);
+    }
+
+#endregion
 }
 

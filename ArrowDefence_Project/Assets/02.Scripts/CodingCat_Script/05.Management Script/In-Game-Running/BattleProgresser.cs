@@ -404,7 +404,7 @@
             sceneRoute.OnHitScreen();
 
             //Active Camera Shake
-            CineCam.Inst.ShakeCamera(5f, .2f);
+            CineCam.Inst.ShakeCamera(4f, .3f);
         }
 
         void ClearSliderInit() {

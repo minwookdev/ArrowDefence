@@ -349,7 +349,7 @@
             sound.PlayReleasedSound();
 
             //active camera shake
-            CineCam.Inst.ShakeCamera(5f, .1f);
+            CineCam.Inst.ShakeCamera(6f, .2f);
             //================================================<< RELOAD ARROW >>================================================
             arrowType = (arrowType == ARROWTYPE.ARROW_SPECIAL) ? previousType : arrowType;
             switch (arrowType) {    //Reload Arrow by current equipped Arrow Type.

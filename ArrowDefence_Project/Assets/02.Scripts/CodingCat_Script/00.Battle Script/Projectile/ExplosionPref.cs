@@ -61,7 +61,7 @@
         IEnumerator ExplosionCo() {
             yield return waitExplosionReady;
             effector.Play();
-            CineCam.Inst.ShakeCamera(8f, .3f);
+            CineCam.Inst.ShakeCamera(8f, .5f);
 
             if (GameGlobal.TryGetOverlapCircleAll2D(out Collider2D[] colliders, tr.position, explosionHitRadius, AD_Data.LAYER_MONSTER)) {
                 foreach (var collider in colliders) {

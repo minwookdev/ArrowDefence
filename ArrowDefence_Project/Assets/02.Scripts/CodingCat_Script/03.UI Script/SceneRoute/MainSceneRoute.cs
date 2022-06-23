@@ -111,6 +111,11 @@ public class MainSceneRoute : MonoBehaviour {
         //CatLog.Log($"TempStringOne is Empty?: {(tempStringOne.IsStringEmpty())}");
         //CatLog.Log($"TempStringTwo is Empty?: {(tempStringTwo.IsStringEmpty())}");
         //savingPanel.Invoke(nameof(savingPanel.Play), 2f);
+
+#if UNITY_ANDROID && !UNITY_EDITOR
+        // App Update Check
+        StartCoroutine(AppUpdateCheck());
+#endif
     }
 
     private void Update() {
@@ -140,6 +145,10 @@ public class MainSceneRoute : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.I)) {
             CatLog.Log($"Unity.Time.time value: {Time.time.ToString("F0")}");
         }
+
+        if (Input.GetKeyDown(KeyCode.A)) {
+
+        }
     }
 
     private void OnDestroy() {
@@ -148,7 +157,6 @@ public class MainSceneRoute : MonoBehaviour {
 
     #region BUTTON_EVENT
 
-    //======================================================================================================================================
     //============================================================ [ MAIN MENU ] ===========================================================
 
     public void BE_OPEN_MAINMENU(int index) {
@@ -197,7 +205,6 @@ public class MainSceneRoute : MonoBehaviour {
         openedPanelType = PANELTYPE.NONE;
     }
 
-    //======================================================================================================================================
     //============================================================== [ POPUP ] =============================================================
 
     public void BE_CLOSE_POPUP(GameObject go) {
@@ -214,7 +221,6 @@ public class MainSceneRoute : MonoBehaviour {
 
     #endregion
 
-    //======================================================================================================================================
     //============================================================= [ ITEMINFO ] ===========================================================
 
     public static void OpenInfo_CraftingItem_Preview(AD_item previewitem) {
@@ -238,7 +244,6 @@ public class MainSceneRoute : MonoBehaviour {
         }
     }
 
-    //======================================================================================================================================
     //=============================================================== [ FADE ] =============================================================
 
     public static void FadeIn(Action startAction, Action completeAction) {
@@ -269,7 +274,6 @@ public class MainSceneRoute : MonoBehaviour {
                });
     }
 
-    //======================================================================================================================================
     //============================================================= [ CURRENCY ] ===========================================================
 
     public static void UpdatePlayerCurrency() {
@@ -277,6 +281,31 @@ public class MainSceneRoute : MonoBehaviour {
         _inst.textGold.text  = currencyInfos[0];
         _inst.textStone.text = currencyInfos[1];
     }
+
+    #region IN_APP_UPDATE
+
+    System.Collections.IEnumerator AppUpdateCheck() {
+        yield return new WaitUntil(() => GameManager.Instance.IsOutAppUpdateAvailability.HasValue); // 업데이트 정보를 받아오기까지 대기
+
+        bool result = false;
+        while (GameManager.Instance.IsOutAppUpdateAvailability.Value == false) { // 제대로 된 결과를 받을때 까지 루프
+            result = GameManager.Instance.IsUpdateAvailable();                   // 업데이트 가능 여부 결과를 받아봄, 만약에 올바른 결과를 반환받으면 true로 변경되고 이 루프에 더 이상 들어오지 못함.
+            CatLog.Log("올바른 결과를 받을 때까지 대기합니다.");
+            yield return null;
+        }
+
+        if (!result) {
+            // 올바른 false 결과를 받았거나, 전의 씬에서 이미 올바른 결과를 받은적이 있으면 무조건 여기 들어옴
+            CatLog.Log("업데이트 정보를 받아오는데 실패했거나, 이미 다른 씬에서 결과를 받았습니다.");
+            GameManager.Instance.ClearInAppUpdateManager();
+            yield break; 
+        }
+
+        // 입 앱 업데이트 시작 -> 업데이트 팝업 띄워줌
+        GameManager.Instance.StartAppUpdate();
+    }
+
+    #endregion
 
     enum PANELTYPE {
         NONE,

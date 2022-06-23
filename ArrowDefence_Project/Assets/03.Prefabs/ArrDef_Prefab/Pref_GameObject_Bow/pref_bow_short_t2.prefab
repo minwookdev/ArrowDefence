@@ -150,9 +150,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   audioSource: {fileID: 6881905259633044160}
   soundType: 1
-  assignSoundKey: sound_bow_pref
-  soundKey: 
-  tempVolumeScale: 0
+  soundKey: sound_controller
   sound: {fileID: 0}
   sounds: []
 --- !u!82 &6881905259633044160

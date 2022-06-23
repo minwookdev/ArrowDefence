@@ -290,10 +290,9 @@ public class TitleSceneRoute : MonoBehaviour {
     
     System.Collections.IEnumerator AssetPackDownloadCoroutine() {
         float startTime = Time.time; // 다운로드 시작한 시간 저장해둠
-
+        isSliderUpdate = true;       // 슬라이더 업데이트 시작
         if (!assetDeliveryManager.IsSoundPackDownloaded) {
             // 변수 정리
-            sliderDownload.value = 0f;
             tmpDownloadSize.text = "[00.00 KB]";
             tmpDownloadPack.text = "SOUND ASSET";
 
@@ -302,14 +301,11 @@ public class TitleSceneRoute : MonoBehaviour {
             tmpDownloadSize.text = string.Format("[{0}]", assetDeliveryManager.GetAssetPackDownloadSize());  //용량 구하는 코루틴 끝났으면 텍스트 문자열 값 전달
 
             // 다운로드 시작.
-            isSliderUpdate = true; // 슬라이더 업데이트 시작 
             yield return StartCoroutine(assetDeliveryManager.LoadSoundAssetPackAsync());
-            isSliderUpdate = false;
         }
 
         if (!assetDeliveryManager.IsFontsPackDownloaded) {
             // 변수 정리
-            sliderDownload.value = 0f;
             tmpDownloadSize.text = "[00.00 KB]";
             tmpDownloadPack.text = "FONT ASSET";
 
@@ -318,26 +314,27 @@ public class TitleSceneRoute : MonoBehaviour {
             tmpDownloadSize.text = string.Format("[{0}]", assetDeliveryManager.GetAssetPackDownloadSize());  //용량 구하는 코루틴 끝났으면 텍스트 문자열 값 전달
 
             // 다운로드 시작
-            isSliderUpdate = true; // 슬라이더 업데이트 시작
             yield return StartCoroutine(assetDeliveryManager.LoadFontsAssetPackAsync());
-            isSliderUpdate = false;
         }
 
-        // 모든 에셋-팩 다운로드 파이널 체크
-        bool allAssetDownloaded = assetDeliveryManager.IsDownloadedAllAssetPacks();
-        if (!allAssetDownloaded) {
-            errorPanel.EnablePanel("Failed to Download AssetPack", "AssetPack Download Error");
-            yield break;
-        }
+        // 슬라이더 업데이트 중지
+        isSliderUpdate = false;
 
         // 완료대기시간 (개발자 확인용)
         float completeTime = Time.time;
-        if (completeTime - startTime < maxWaitTime + 2f) { // 1f: 여유시간
-            float waitTime = (completeTime - startTime) - (maxWaitTime + 2f);
+        if (completeTime < startTime + maxWaitTime + 2f) {                  // 다운로드가 빨리 끝난 경우
+            float waitTime = (startTime + maxWaitTime + 2f) - completeTime; // 타이틀이 정상적으로 열리는 시간 + 2 Sec 가 될때까지 대기
             while (waitTime > 0) {
                 waitTime -= Time.deltaTime;
                 yield return null;
             }
+        }
+
+        // 모든 에셋-팩이 정상적으로 다운로드되었는지 확인
+        bool allAssetDownloaded = assetDeliveryManager.IsDownloadedAllAssetPacks();
+        if (!allAssetDownloaded) {
+            errorPanel.EnablePanel("Failed to Download AssetPack", "AssetPack Download Error");
+            yield break;
         }
 
         // 다운로드 완료 처리해주고 버튼 살려줌
@@ -347,6 +344,7 @@ public class TitleSceneRoute : MonoBehaviour {
 
     System.Collections.IEnumerator DownloadSliderUpdate() {
         // 에셋 다운로드 슬라이더 그룹 활성화
+        sliderDownload.value = 0f;
         rectTrDownloadingParent.gameObject.SetActive(true);
 
         while (!isAllAssetDownloaded) { // 에셋을 다운로드가 완료되지않았을때만 슬라이더 업데이트

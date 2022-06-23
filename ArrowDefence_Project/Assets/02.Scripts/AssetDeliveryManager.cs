@@ -37,6 +37,7 @@
 
         public IEnumerator LoadSoundAssetPackAsync() {
             PlayAssetPackRequest packRequest = PlayAssetDelivery.RetrieveAssetPackAsync(CustomAssetPack.SoundAssetPackName);
+            currentDownloadProgress = 0f;
 
             while (!packRequest.IsDone) {
                 if (packRequest.Status == AssetDeliveryStatus.WaitingForWifi) {                       // Wifi가 연결되지않아 대기중인 경우
@@ -83,6 +84,7 @@
 
         public IEnumerator LoadFontsAssetPackAsync() {
             PlayAssetPackRequest packRequest = PlayAssetDelivery.RetrieveAssetPackAsync(CustomAssetPack.FontsAssetPackName);
+            currentDownloadProgress = 0f;
 
             while (!packRequest.IsDone) {
                 if (packRequest.Status == AssetDeliveryStatus.WaitingForWifi) {

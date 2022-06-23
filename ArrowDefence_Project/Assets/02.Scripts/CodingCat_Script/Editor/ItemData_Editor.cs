@@ -991,9 +991,9 @@ internal sealed class AbilityDrawer {
     bool isInitialized = false;
 
     internal AbilityDrawer() {
-        enableStarTexture = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/08.Sprites/ui_element/Scene_Main/Sprite_Icon/icon_star_grade_l.png");
-        disableStarTexure = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/08.Sprites/ui_element/Scene_Main/Sprite_Icon/icon_star_grade_l_d.png");
-        halfStarTexture   = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/08.Sprites/ui_element/Scene_Main/Sprite_Icon/icon_star_grade_l_half.png");
+        enableStarTexture = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/08.Sprites/ui_element/icons/icon_star_grade_l.png");
+        disableStarTexure = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/08.Sprites/ui_element/icons/icon_star_grade_l_d.png");
+        halfStarTexture   = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/08.Sprites/ui_element/icons/icon_star_grade_l_half.png");
         if (enableStarTexture == null || disableStarTexure == null || halfStarTexture == null) {
             throw new System.Exception("Ability Grade Star Texture is Null. Check the Texture Path.");
         }

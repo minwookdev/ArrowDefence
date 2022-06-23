@@ -26,6 +26,9 @@ public class BattlePopup : MonoBehaviour {
         textStageName.text = stageName;
         gameObject.SetActive(true);
 
+        CatLog.Log($"I2.Loc.ScriptLocalization.StageName: {stageName}");
+        CatLog.Log($"TextMeshProUGUI.text: {textStageName.text}");
+
         soundEffect.PlayOneShot();
     }
 

@@ -15,8 +15,9 @@
         private float totalDropChances;
         private float restoreTimeScale;
         private bool isManagerInitialized = false;
-        private ItemDropList.DropTable[] dropListArray;
-        private SavingFeedback savingFeedbackPanel = null;
+        private ItemDropList.DropTable[] dropListArray = null;
+        private SavingFeedback savingFeedbackPanel     = null;
+        private InAppUpdateSupport inAppUpdateSupport  = null;
 
         //PROPERTIES
         public GAMEPLATFORM PlayPlatform { get; private set; }
@@ -30,6 +31,9 @@
                 return CCPlayerData.equipments;
             }
         }
+        public bool? IsOutAppUpdateAvailability {
+            get; private set;
+        } = null;
 
         //Game Event Delegate
         public delegate void GameEventHandler();
@@ -56,7 +60,9 @@
         }
 
         public void Initialize() {
-            if (isManagerInitialized == true) return;
+            if (isManagerInitialized == true) { //이미 이니셜 했으면 넘김
+                return;
+            }
 #if UNITY_EDITOR
             PlayPlatform = GAMEPLATFORM.PLATFORM_EDITOR;
             IsDevMode    = true;
@@ -66,6 +72,9 @@
 #elif UNITY_ANDROID
             PlayPlatform = GAMEPLATFORM.PLATFORM_MOBILE;
             IsDevMode    = false;
+
+            // 앱-업데이트 체크
+            StartCoroutine(CheckAppUpdate());
 #endif
             fixedDeltaTime = Time.fixedDeltaTime;
             LoadSettings();
@@ -107,7 +116,7 @@
             SceneLoader.SceneChangeCallback -= this.ReleaseFeedbackPanel;
         }
 
-#region SCREEN
+        #region SCREEN
 
         /// <summary>
         /// Rect Set of Target Camera with a  9 : 16 Portrait Resolition
@@ -134,7 +143,7 @@
 
 #endregion
 
-#region SETTINGS
+        #region SETTINGS
 
         public void SetControlType(bool isChangeType) {
             CCPlayerData.settings.SetPullType(isChangeType);
@@ -154,7 +163,7 @@
 
 #endregion
 
-#region PLAYER_DATA
+        #region PLAYER_DATA
 
         public void InitEquips(Transform bowInitPos, Transform bowParent, int mainArrPoolQuantity, int subArrPoolQuantity, 
                                out UI.ArrSSData[] arrSlotData, out AccessorySPEffect[] artifactEffects, UI.SwapSlots swapSlot, out Sprite[] artifactIcons) {
@@ -379,7 +388,7 @@
 
 #endregion
 
-#region BATTLE
+        #region BATTLE
 
         public void ResumeBattle() {
             SetBowManualControl(false);
@@ -456,7 +465,7 @@
 
 #endregion
 
-#region TIME-CONTROL
+        #region TIME-CONTROL
 
         public void TimeScaleSet(float targetTimeScaleVal)
         {
@@ -495,7 +504,7 @@
 
 #endregion
 
-#region ITEM-DROP
+        #region ITEM-DROP
 
         public void InitialDroplist(ItemDropList newDropList) {
             dropListArray = newDropList.DropTableArray;
@@ -556,7 +565,7 @@
 
 #endregion
 
-#region SAVE_LOAD
+        #region SAVE_LOAD
         public void AutoLoadUserData() {
             throw new System.Exception();
             ///Original Codes
@@ -606,7 +615,7 @@
 
 #endregion
 
-#region STATE_EVENT_HANDLER
+        #region STATE_EVENT_HANDLER
 
         /// <summary>
         /// Change Current Game State
@@ -667,6 +676,40 @@
             return this.OnStatePause;
         }
 
-#endregion
+        #endregion
+
+        #region IN_APP_UPDATE_HANDLER
+
+        System.Collections.IEnumerator CheckAppUpdate() {
+            inAppUpdateSupport = new InAppUpdateSupport();
+            inAppUpdateSupport.Init();
+            yield return StartCoroutine(inAppUpdateSupport.CheckForUpdate());
+
+            IsOutAppUpdateAvailability = false; // HasValue를 통해서 앱-업데이트 체크는 끝났는지 확인.
+        }
+
+        System.Collections.IEnumerator StartAppUpdateCo() {
+            yield return StartCoroutine(inAppUpdateSupport.StartImmediateUpdate());
+            ClearInAppUpdateManager();  // 유저가 업데이트를 거부하거나 오류가 발생한 경우
+        }
+
+        public bool IsUpdateAvailable() {
+            if (inAppUpdateSupport == null || !inAppUpdateSupport.IsAppUpdateInfoOperationWorked) {
+                return false;
+            }
+
+            IsOutAppUpdateAvailability = true; // True를 리턴했을때는 올바른 결과(그게 true든 false든)를 반환한 상태로 전환
+            return inAppUpdateSupport.IsUpdateAvailable();
+        }
+
+        public void StartAppUpdate() {
+            StartCoroutine(StartAppUpdateCo());
+        }
+
+        public void ClearInAppUpdateManager() {
+            this.inAppUpdateSupport = null;
+        }
+
+        #endregion
     }
 }

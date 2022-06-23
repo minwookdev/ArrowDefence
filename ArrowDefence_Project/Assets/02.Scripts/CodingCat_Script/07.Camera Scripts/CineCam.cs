@@ -25,7 +25,7 @@
 
         [Header("CAMERA ZOOM")]
         [SerializeField] bool isRealTimeScaleZoom = false;
-        [SerializeField] float zoomInOrthographicSize = 9.5f;
+        [SerializeField] float zoomInOrthographicSize = 9.3f;
         float initOrthographicSize = 0f;
         float zoomInLerpDuration   = 1f;
         float zoomOutLerpDuration  = 0.2f;

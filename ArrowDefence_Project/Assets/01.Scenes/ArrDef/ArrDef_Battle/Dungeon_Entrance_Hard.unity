@@ -2325,7 +2325,7 @@ PrefabInstance:
     - target: {fileID: 2361684028155810858, guid: 7e1b7a606c9654a4284c65a76309f143,
         type: 3}
       propertyPath: m_RootOrder
-      value: 11
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 2361684028155810858, guid: 7e1b7a606c9654a4284c65a76309f143,
         type: 3}
@@ -2400,7 +2400,7 @@ PrefabInstance:
     - target: {fileID: 4468420156757755366, guid: fe82296d8d6b8e14898a98f8c28af504,
         type: 3}
       propertyPath: m_RootOrder
-      value: 10
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 4468420156757755366, guid: fe82296d8d6b8e14898a98f8c28af504,
         type: 3}
@@ -2692,6 +2692,36 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &613465017
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 613465018}
+  m_Layer: 0
+  m_Name: cinecam_positioner
+  m_TagString: Untagged
+  m_Icon: {fileID: -5442936267250999957, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &613465018
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 613465017}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &699860103
 GameObject:
@@ -4200,7 +4230,7 @@ Transform:
   - {fileID: 16553941}
   - {fileID: 2127436648}
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1342275007 stripped
 GameObject:
@@ -4302,7 +4332,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 15
+  m_RootOrder: 16
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1515152891
 GameObject:
@@ -4871,6 +4901,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a87902f3f740d3940b762347597dd693, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  camTarget: {fileID: 1360473791}
+  followTargetTr: {fileID: 613465018}
+  isRealTimeScaleZoom: 0
+  zoomInOrthographicSize: 9.3
 --- !u!1 &1757660972 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5957169593061960462, guid: 86b8a08e370fc7d48aa86d09bf50d9dd,
@@ -4911,7 +4945,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1920426366
 GameObject:
@@ -8331,7 +8365,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 14
+  m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2054882061
 GameObject:
@@ -8361,7 +8395,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2080027062
 GameObject:
@@ -8492,7 +8526,7 @@ Transform:
   - {fileID: 1934945936}
   - {fileID: 30111986}
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2127436647
 GameObject:
@@ -8604,7 +8638,7 @@ PrefabInstance:
     - target: {fileID: 1261563176538535866, guid: 91f0b1d3b691a524abff4fbc59a2a4cc,
         type: 3}
       propertyPath: m_RootOrder
-      value: 13
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 1261563176538535866, guid: 91f0b1d3b691a524abff4fbc59a2a4cc,
         type: 3}
@@ -9169,7 +9203,7 @@ PrefabInstance:
     - target: {fileID: 3204541759480302799, guid: 75155828b9866ee4dbb6eb1c6d7a0a62,
         type: 3}
       propertyPath: m_RootOrder
-      value: 12
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 3204541759480302799, guid: 75155828b9866ee4dbb6eb1c6d7a0a62,
         type: 3}

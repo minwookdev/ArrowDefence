@@ -13,6 +13,4 @@ MonoBehaviour:
   m_Name: tempItems
   m_EditorClassIdentifier: 
   tempItems:
-  - {fileID: 11400000, guid: 534308bb287ef8147b6442afbe44fbda, type: 2}
-  - {fileID: 11400000, guid: e503007e901a880448a5186432880cf4, type: 2}
-  - {fileID: 11400000, guid: 37c640c08ec51db4bb906299522d512e, type: 2}
+  - {fileID: 11400000, guid: 8e6a38037c8cfb749a94b046b7449f6c, type: 2}

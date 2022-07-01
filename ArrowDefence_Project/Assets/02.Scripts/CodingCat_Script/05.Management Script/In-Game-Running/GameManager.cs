@@ -31,7 +31,7 @@
                 return CCPlayerData.equipments;
             }
         }
-        public bool? IsOutAppUpdateAvailability {
+        public bool? IsAppUpdateAvailable {
             get; private set;
         } = null;
 
@@ -74,7 +74,7 @@
             IsDevMode    = false;
 
             // 앱-업데이트 체크
-            StartCoroutine(CheckAppUpdate());
+            //StartCoroutine(CheckAppUpdate());
 #endif
             fixedDeltaTime = Time.fixedDeltaTime;
             LoadSettings();
@@ -680,34 +680,35 @@
 
         #region IN_APP_UPDATE_HANDLER
 
-        System.Collections.IEnumerator CheckAppUpdate() {
+        public void CheckAppUpdateAvailable() {
+            StartCoroutine(AppUpdateAvailableCheckCo());
+        }
+
+        System.Collections.IEnumerator AppUpdateAvailableCheckCo() {
             inAppUpdateSupport = new InAppUpdateSupport();
             inAppUpdateSupport.Init();
+
+            // 업데이트 체크 시작
             yield return StartCoroutine(inAppUpdateSupport.CheckForUpdate());
 
-            IsOutAppUpdateAvailability = false; // HasValue를 통해서 앱-업데이트 체크는 끝났는지 확인.
-        }
+            // 가능한 업데이트가 존재하는지 받아옴
+            IsAppUpdateAvailable = inAppUpdateSupport.IsUpdateAvailable();
 
-        System.Collections.IEnumerator StartAppUpdateCo() {
-            yield return StartCoroutine(inAppUpdateSupport.StartImmediateUpdate());
-            ClearInAppUpdateManager();  // 유저가 업데이트를 거부하거나 오류가 발생한 경우
-        }
-
-        public bool IsUpdateAvailable() {
-            if (inAppUpdateSupport == null || !inAppUpdateSupport.IsAppUpdateInfoOperationWorked) {
-                return false;
+            // 바로 사용가능한 업데이트가 존재하는 경우 인-앱 API를 사용한 팝업 띄워줌
+            if (IsAppUpdateAvailable.Value) {
+                CatLog.Log("사용 가능한 업데이트가 존재합니다.");
+                yield return StartCoroutine(inAppUpdateSupport.StartImmediateUpdate());
+            }
+            else {
+                CatLog.Log("사용 가능한 업데이트가 존재하지 않습니다.");
             }
 
-            IsOutAppUpdateAvailability = true; // True를 리턴했을때는 올바른 결과(그게 true든 false든)를 반환한 상태로 전환
-            return inAppUpdateSupport.IsUpdateAvailable();
-        }
+            // 사용가능한 업데이트가 없거나 업데이트가 취소된 경우 (ex.유저 취소. 오류 취소)
+            CatLog.Log("Clear In-App Supporter.");
+            inAppUpdateSupport = null;
 
-        public void StartAppUpdate() {
-            StartCoroutine(StartAppUpdateCo());
-        }
-
-        public void ClearInAppUpdateManager() {
-            this.inAppUpdateSupport = null;
+            // 현재는 Update Supporter를 Clear 해주고 있지만, 추후에 IsExistAppUpdate 변수에 따라
+            // 메인화면에서 바로 업데이트로 이어지는 버튼을 추가하는것도 좋을 것 같다.
         }
 
         #endregion

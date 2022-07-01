@@ -92,7 +92,7 @@ public class MainSceneRoute : MonoBehaviour {
         CatLog.Log($"Streaming Asset Path: {Application.streamingAssetsPath}");
         CatLog.Log($"Presistent Data Path: {Application.persistentDataPath}");
         CatLog.Log($"Data Path: {Application.dataPath}"); // -> Recommended
-        CatLog.Log($"ES3 Settings FilePath: {ES3Settings.defaultSettings.FullPath}");
+        CatLog.Log($"ES3 defailt saving filepath: {ES3Settings.defaultSettings.FullPath}");
 
         //1. Application.dataPath의 경로로 잡고 진행,문제가 생기면 경로는 Presistent data path로 변경
         //2. 해당경로에 파일이 존재하는지 확인하고 없으면 GameSettings파일을 생성하도록 작성.
@@ -114,7 +114,9 @@ public class MainSceneRoute : MonoBehaviour {
 
 #if UNITY_ANDROID && !UNITY_EDITOR
         // App Update Check
-        StartCoroutine(AppUpdateCheck());
+        if (!GameManager.Instance.IsAppUpdateAvailable.HasValue) { // 아직 앱-업데이트 체크를 하지 않은 상태
+            GameManager.Instance.CheckAppUpdateAvailable();
+        }
 #endif
     }
 
@@ -149,6 +151,18 @@ public class MainSceneRoute : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.A)) {
 
         }
+
+        //if (Input.GetMouseButton(0)) {
+        //    if (UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject()) {
+        //        CatLog.Log("UI 클릭됨 !");
+        //    }
+        //    else {
+        //        CatLog.Log("UI 클릭되지 않음 !");
+        //    }
+        //}
+
+        //string tempString = "";
+        //(tempString ??= "");
     }
 
     private void OnDestroy() {
@@ -249,7 +263,7 @@ public class MainSceneRoute : MonoBehaviour {
     public static void FadeIn(Action startAction, Action completeAction) {
         _inst.ImgFade.DOFade(1f, _inst.FadeTime)
                      .OnStart(() => {
-                         _inst.ImgFade.blocksRaycasts = false;
+                         _inst.ImgFade.blocksRaycasts = true;
                          _inst.ImgFade.gameObject.SetActive(true);
                          startAction();
                          _inst.bgmSound.StopSoundWithFadeIn(1f, true);
@@ -281,31 +295,6 @@ public class MainSceneRoute : MonoBehaviour {
         _inst.textGold.text  = currencyInfos[0];
         _inst.textStone.text = currencyInfos[1];
     }
-
-    #region IN_APP_UPDATE
-
-    System.Collections.IEnumerator AppUpdateCheck() {
-        yield return new WaitUntil(() => GameManager.Instance.IsOutAppUpdateAvailability.HasValue); // 업데이트 정보를 받아오기까지 대기
-
-        bool result = false;
-        while (GameManager.Instance.IsOutAppUpdateAvailability.Value == false) { // 제대로 된 결과를 받을때 까지 루프
-            result = GameManager.Instance.IsUpdateAvailable();                   // 업데이트 가능 여부 결과를 받아봄, 만약에 올바른 결과를 반환받으면 true로 변경되고 이 루프에 더 이상 들어오지 못함.
-            CatLog.Log("올바른 결과를 받을 때까지 대기합니다.");
-            yield return null;
-        }
-
-        if (!result) {
-            // 올바른 false 결과를 받았거나, 전의 씬에서 이미 올바른 결과를 받은적이 있으면 무조건 여기 들어옴
-            CatLog.Log("업데이트 정보를 받아오는데 실패했거나, 이미 다른 씬에서 결과를 받았습니다.");
-            GameManager.Instance.ClearInAppUpdateManager();
-            yield break; 
-        }
-
-        // 입 앱 업데이트 시작 -> 업데이트 팝업 띄워줌
-        GameManager.Instance.StartAppUpdate();
-    }
-
-    #endregion
 
     enum PANELTYPE {
         NONE,

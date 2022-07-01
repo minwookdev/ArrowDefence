@@ -15,7 +15,7 @@ MonoBehaviour:
   mSource:
     UserAgreesToHaveItOnTheScene: 0
     UserAgreesToHaveItInsideThePluginsFolder: 0
-    GoogleLiveSyncIsUptoDate: 1
+    GoogleLiveSyncIsUptoDate: 0
     mTerms:
     - Term: ItemDesc/BluePrint/BP_ARROW
       TermType: 0
@@ -3427,9 +3427,9 @@ MonoBehaviour:
       - 'Create A New Save File Or
 
         Load Play Data to Google Game Serives.'
-      - "\uC0C8\uB85C\uC6B4 \uC138\uC774\uBE0C \uD30C\uC77C\uC744 \uB9CC\uB4E4\uAC70\uB098
-        \n\uAD6C\uAE00 \uC11C\uBE44\uC2A4\uC5D0 \uC5F0\uACB0\uD558\uC5EC \uAE30\uC874\uC758
-        \n\uD50C\uB808\uC774 \uB370\uC774\uD130\uB97C \uBD88\uB7EC\uC624\uC138\uC694."
+      - "\uC800\uC7A5\uB41C \uC138\uC774\uBE0C \uD30C\uC77C\uC774 \uC5C6\uC2B5\uB2C8\uB2E4.
+        \uC0C8\uB85C\uC6B4 \uD30C\uC77C\uC744 \uC791\uC131\uD558\uAE30 \uC704\uD574
+        \n\uD30C\uC77C \uB9CC\uB4E4\uAE30 \uBC84\uD2BC\uC744 \uB20C\uB7EC\uC8FC\uC138\uC694."
       - "\u65B0\u3057\u3044\u30BB\u30FC\u30D6\u30D5\u30A1\u30A4\u30EB\u3092\u4F5C\u6210\u3059\u308B\u304B\u3001Google\u30B5\u30FC\u30D3\u30B9\u306B\u63A5\u7D9A\u3057\u3066\u65E2\u5B58\u306E\u30D7\u30EC\u30A4\u30C7\u30FC\u30BF\u3092\u8AAD\u307F\u8FBC\u307F\u307E\u3059\u3002"
       - 
       Flags: 00000000
@@ -3531,6 +3531,46 @@ MonoBehaviour:
       - Developer-Only Stage
       - "\uAC1C\uBC1C\uC790 \uC804\uC6A9 \uC2A4\uD14C\uC774\uC9C0"
       - 
+      - 
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: ItemName/Bow/ITEM_BOW_STORM_1T
+      TermType: 0
+      Description: 
+      Languages:
+      - Storm Bow [1T]
+      - "\uD3ED\uD48D \uD65C [1T]"
+      - "\u30B9\u30C8\u30FC\u30E0\u30DC\u30A6[1T]"
+      - 
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: ItemName/Bow/ITEM_BOW_STORM_2T
+      TermType: 0
+      Description: 
+      Languages:
+      - Storm Bow [2T]
+      - "\uD3ED\uD48D \uD65C [2T]"
+      - "\u30B9\u30C8\u30FC\u30E0\u30DC\u30A6[2T]"
+      - 
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: ItemName/Bow/ITEM_BOW_STORM_3T
+      TermType: 0
+      Description: 
+      Languages:
+      - Storm Bow [3T]
+      - "\uD3ED\uD48D \uD65C [3T]"
+      - "\u30B9\u30C8\u30FC\u30E0\u30DC\u30A6[3T]"
+      - 
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: SkillName/SNAME_STORM
+      TermType: 0
+      Description: 
+      Languages:
+      - Storm Rain
+      - "\uD3ED\uD48D\uC6B0"
+      - "\u5D50\u306E\u96E8"
       - 
       Flags: 00000000
       Languages_Touch: []

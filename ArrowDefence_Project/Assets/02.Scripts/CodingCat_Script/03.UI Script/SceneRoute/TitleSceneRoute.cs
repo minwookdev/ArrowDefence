@@ -106,7 +106,7 @@ public class TitleSceneRoute : MonoBehaviour {
 #if   UNITY_EDITOR
         isAllAssetDownloaded = true;
 #elif UNITY_ANDROID
-        //모든 에셋팩이 다운로드 상태인지 체크
+        // 모든 에셋팩이 다운로드 상태인지 체크
         isAllAssetDownloaded = assetDeliveryManager.IsDownloadedAllAssetPacks();
         if (!isAllAssetDownloaded) {
             StartCoroutine(AssetPackDownloadCoroutine());
@@ -115,8 +115,16 @@ public class TitleSceneRoute : MonoBehaviour {
             waitSliderUpdate = new WaitUntil(() => isSliderUpdate);
             StartCoroutine(DownloadSliderUpdate());
         }
-        else { // 이미 모든팩이 설치되어있음 - 딜리버리 매니저 필요없음
-            assetDeliveryManager = null;
+        // 릴리즈 필요없어서 일단 주석해둠. (이 스크립트에서 인스턴스 생성하기 때문에 씬 종료되면 알아서 지워짐)
+        //else { // 이미 모든팩이 설치되어있음 - 딜리버리 매니저 필요없음
+        //    assetDeliveryManager = null;
+        //}
+
+        bool isDetectedOldAssetPack = assetDeliveryManager.IsDetectedOldAssetPack(out string[] detectedOldPackNames);
+        if (isDetectedOldAssetPack) {   // 사용되지 않는 에셋-팩이 다운로드 된 경우. 일단 캐치만 하고있음
+            foreach (var assetName in detectedOldPackNames) {
+                CatLog.Log($"Detected Old Asset Names: {assetName}");
+            }
         }
 #endif
     }
@@ -130,7 +138,7 @@ public class TitleSceneRoute : MonoBehaviour {
     void RestoreButtons() {
         startButtonCanvasGroup.DOFade(StNum.floatOne, 0.7f).SetLoops(-1, LoopType.Yoyo).OnStart(() => startButtonCanvasGroup.blocksRaycasts = true);
         foreach (var image in imagesButton) {
-            image.raycastTarget = true;
+            image.DOFade(StNum.floatOne, .2f).From(0f).OnComplete(() => image.raycastTarget = true);
         }
     }
 
@@ -289,7 +297,15 @@ public class TitleSceneRoute : MonoBehaviour {
 #region PLAY-ASSET-DOWNLOAD
     
     System.Collections.IEnumerator AssetPackDownloadCoroutine() {
-        float startTime = Time.time; // 다운로드 시작한 시간 저장해둠
+        float startTime = Time.time; // 에셋 팩 업데이트 작업시작 시간 저장
+
+        // 시작하기 전 지워야 할 에셋 팩이 존재하는지 확인. <추후에 지워야 할 에셋 팩만 존재하는 경우 로직 분리>
+        var isDetectedOldAssetPack = assetDeliveryManager.IsDetectedOldAssetPack(out string[] detectedOldAssetPackNames);
+        if (isDetectedOldAssetPack) { // 딜리트 타겟 에셋팩 존재
+            yield return assetDeliveryManager.RemoveOldAssetPacks(detectedOldAssetPackNames);
+        }
+
+        // 에셋 팩 다운로드 시작
         isSliderUpdate = true;       // 슬라이더 업데이트 시작
         if (!assetDeliveryManager.IsSoundPackDownloaded) {
             // 변수 정리

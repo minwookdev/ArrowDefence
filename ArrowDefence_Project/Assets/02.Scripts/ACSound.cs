@@ -139,7 +139,7 @@
         public void PlayOneShot(int idx) => audioSource.PlayOneShot(sounds[idx]);
 
         /// <summary>
-        /// 재생항 AudioClip을 지정
+        /// 재생할 AudioClip을 지정
         /// </summary>
         /// <param name="audio"></param>
         public void PlayOneShot(AudioClip audio) => audioSource.PlayOneShot(audio);

@@ -4,19 +4,20 @@
     using UnityEngine.Events;
 
     public class SliderReleaseEventTrigger : MonoBehaviour, IPointerUpHandler {
-        [Space(10f)]
-        [SerializeField] UnityEvent releaseEvent = null;
-        // 코드를 사용하여 Event를 등록하기 위한 변수
+        [Space(10f)] // 인스펙터를 사용하여 이벤트를 등록할 수 있도록 UnityEvent 형으로 선언
+        [SerializeField] UnityEvent releaseEvent = null; 
+
         public UnityEvent ReleaseEvent {
             get => releaseEvent;
             set => releaseEvent = value;
         }
+
         void IPointerUpHandler.OnPointerUp(PointerEventData eventData) {
             releaseEvent?.Invoke();
         }
 
-        public void TempEvent() {
-            CatLog.Log("PointerUp OnSlider !");
+        public void AddSliderReleaseListner(UnityAction releaseCallback) {
+            releaseEvent.AddListener(releaseCallback);
         }
     }
 }

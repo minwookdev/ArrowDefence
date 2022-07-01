@@ -387,7 +387,7 @@
 
             upgradeableTextRectTr.gameObject.SetActive(true);
 
-            //Scene에 존재하고 있던 Prefab 비-활성화, 새로 생성한 Prefab만 사용
+            // Scene에 존재하고 있던 Prefab 비-활성화, 새로 생성한 Prefab만 사용
             if (sceneExistSlots.Length > 1) {
                 CatLog.WLog("Scene Exist Slots Size Over, Recommanded delete other Slots.");
             }

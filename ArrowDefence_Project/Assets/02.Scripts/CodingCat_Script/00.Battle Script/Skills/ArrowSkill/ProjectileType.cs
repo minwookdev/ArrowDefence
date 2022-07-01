@@ -122,6 +122,7 @@
 
         public override void Init(Transform tr, Rigidbody2D rigid, IArrowObject arrowInter) {
             intervalAngle = StNum.DegreeFull / projectileCount;
+            arrow = arrowInter;
         }
 
         public override void OnHit(Vector2 point, ref DamageStruct damage) {
@@ -133,7 +134,7 @@
                     dagger.Shot(damage, ability.GetProjectileDamage(projectileDamage));
                 }
             }
-            PlaySound2Random();  //PlaySound
+            PlaySound2Random();  // PlaySound
         }
 
         public override void ClearOnDisable() { }
@@ -180,6 +181,10 @@
 
         protected override string[] GetUniqueTags() {
             return new string[1] { "elemental_fire" };
+        }
+
+        public override void Init(Transform tr, Rigidbody2D rigid, IArrowObject arrowInter) {
+            arrow = arrowInter;
         }
 
         public override void OnHit(Vector2 point, ref DamageStruct damage) {
@@ -234,6 +239,10 @@
         private short addExplosionDamage;
 
         public override int DefaultSpawnSize() => 3;
+
+        public override void Init(Transform tr, Rigidbody2D rigid, IArrowObject arrowInter) {
+            arrow = arrowInter;
+        }
 
         public override string GetDesc(string localizedString) {
             string rangeString = "";

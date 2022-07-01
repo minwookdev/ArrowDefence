@@ -49,8 +49,8 @@ MonoBehaviour:
   particleSys: {fileID: 2310056571964123123}
   particleRenderer: {fileID: 4518975863678179735}
   effectorType: 0
-  sortingLayerName: 
-  sortingOrder: 0
+  sortingLayerName: Effect:Player
+  sortingOrder: 1
 --- !u!198 &2310056571964123123
 ParticleSystem:
   m_ObjectHideFlags: 0

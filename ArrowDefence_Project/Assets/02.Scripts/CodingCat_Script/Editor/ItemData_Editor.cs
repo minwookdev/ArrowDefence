@@ -791,8 +791,6 @@ public class SpArrItemDataEditor : Editor {
     SerializedProperty EquipTypeProp;
     SerializedProperty EquipAbilityProp;
     bool isAbilityTapFoldout = false;
-    Texture2D enableStarTexture  = null;
-    Texture2D disableStarTexture = null;
 
     SerializedProperty PrefProp;
     SerializedProperty SkillInfoFst;
@@ -828,11 +826,6 @@ public class SpArrItemDataEditor : Editor {
 
         EquipTypeProp    = sobject.FindProperty(nameof(ItemDt_SpArr.Equip_Type));
         EquipAbilityProp = sobject.FindProperty(nameof(ItemDt_SpArr.abilityDatas));
-        enableStarTexture  = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/08.Sprites/ui_element/Scene_Main/Sprite_Icon/icon_star_grade_l.png");
-        disableStarTexture = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/08.Sprites/ui_element/Scene_Main/Sprite_Icon/icon_star_grade_l_d.png");
-        if(enableStarTexture == null || disableStarTexture == null) {
-            CatLog.WLog("Ability Star Texture is Null, Check the Texture Path");
-        }
 
         PrefProp     = sobject.FindProperty(nameof(ItemDt_SpArr.MainArrowObj));
         SkillInfoFst = sobject.FindProperty(nameof(ItemDt_SpArr.ArrowSkillFst));
@@ -962,24 +955,6 @@ public class SpArrItemDataEditor : Editor {
 
         GUILayout.EndVertical();
         sobject.ApplyModifiedProperties();
-    }
-
-    void DrawStar(byte count) {
-        byte maxStarCount = 5;
-        GUILayout.BeginHorizontal();
-        for (int i = 0; i < count; i++) {
-            maxStarCount--;
-            //Draw Enable Texture
-            GUILayout.Label(enableStarTexture, GUILayout.Width(30f), GUILayout.Height(30f));
-        }
-
-        if (maxStarCount > 0) {
-            for (int i = 0; i < maxStarCount; i++) {
-                //Draw Disable Texture
-                GUILayout.Label(disableStarTexture, GUILayout.Width(30f), GUILayout.Height(30f));
-            }
-        }
-        GUILayout.EndHorizontal();
     }
 }
 

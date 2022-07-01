@@ -15,9 +15,7 @@ MonoBehaviour:
   Item_Type: 1
   Item_Grade: 0
   Item_Id: 2002
-  DefaultAmount: 0
-  Item_Name: Mana Potion
-  Item_Desc: Restore Mana.
+  DefaultAmount: 10
   Item_Sprite: {fileID: 21300000, guid: f260ba702fde94584ae55b8a0a0aba71, type: 3}
   NameTerms: ItemName/Consumable/CON_MANA_POTION
   DescTerms: ItemDesc/Consumable/DESC_MANA_POTION

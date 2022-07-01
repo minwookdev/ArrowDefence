@@ -12,4 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0cb9bc41b2b5174e8c100fe50bbf0f2, type: 3}
   m_Name: UpgadeRecipe_v1.0
   m_EditorClassIdentifier: 
-  recipeArray: []
+  recipeArray:
+  - KeyItem: {fileID: 11400000, guid: 35e318914cb3bb445b2ba96680d7eacc, type: 2}
+    Materials:
+    - Mat: {fileID: 11400000, guid: 7f461da67a6a39149a4aea58f2c13601, type: 2}
+      Required: 40
+    - Mat: {fileID: 11400000, guid: f0edaa753fff8b643ac3c479ea81d8d7, type: 2}
+      Required: 3
+    - Mat: {fileID: 11400000, guid: 5ea1ef872a652434282fc21c9b008b70, type: 2}
+      Required: 1
+    FailedProb: 30
+    Result: {fileID: 11400000, guid: 38a1208e733d73a47b3d6157ab20f5c8, type: 2}

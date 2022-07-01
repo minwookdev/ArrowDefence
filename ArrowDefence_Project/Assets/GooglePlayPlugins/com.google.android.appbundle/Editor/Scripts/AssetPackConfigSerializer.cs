@@ -35,6 +35,13 @@ namespace Google.Android.AppBundle.Editor.AssetPacks
             File.WriteAllText(configurationFilePath, jsonText);
         }
 
+        public static void SaveConfig(AssetPackConfig assetPackConfig, bool isPrettyPrint, string configurationFilePath = SerializationHelper.ConfigurationFilePath) {
+            Debug.LogFormat("Saving {0}", configurationFilePath);
+            var config = SerializationHelper.Serialize(assetPackConfig);
+            var jsonText = JsonUtility.ToJson(config, isPrettyPrint);
+            File.WriteAllText(configurationFilePath, jsonText);
+        }
+
         /// <summary>
         /// Returns an <see cref="AssetPackConfig"/> loaded from disk.
         /// </summary>

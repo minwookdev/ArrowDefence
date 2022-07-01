@@ -7,9 +7,6 @@
     public class InAppUpdateSupport {
         AppUpdateManager appUpdateManager = null;
         AppUpdateInfo appUpdateInfoResult = null;
-        public bool IsAppUpdateInfoOperationWorked {
-            get; private set;
-        } = false;
 
         public void Init() {
             appUpdateManager = new AppUpdateManager();
@@ -51,8 +48,6 @@
 
                 CatLog.ELog("업데이트의 정보를 취득하는데 에러가 발생했습니다. 업데이트 정보를 취득하지 못했습니다.");
             }
-
-            IsAppUpdateInfoOperationWorked = true;
         }
 
         public bool IsUpdateAvailable() {
@@ -109,6 +104,8 @@
             }
 
             failedOrDeniedCallback?.Invoke();
+
+            CatLog.ELog("오류가 발생했거나, 사용자가 업데이트를 취소했습니다.");
         }
     }
 }

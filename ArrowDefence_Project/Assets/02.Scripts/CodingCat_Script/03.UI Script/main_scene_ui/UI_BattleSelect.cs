@@ -50,6 +50,10 @@
             CatLog.Log($"Start Page Index: {currentPageIndex}");
         }
 
+        void OnDisable() {
+            Data.CCPlayerData.SaveSettingsJson();
+        }
+
         void IMainMenu.MenuOpen() {
             tween.MenuOpenTween(rectTr, canvasGroup);
         }

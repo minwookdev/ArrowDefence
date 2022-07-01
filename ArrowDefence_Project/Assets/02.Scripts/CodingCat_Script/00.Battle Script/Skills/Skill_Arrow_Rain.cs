@@ -11,7 +11,7 @@
         private Audio.ACSound audioSource = null;
 
         public override string GetNameByTerms() {
-            throw new System.NotImplementedException();
+            return NameByTerms;
         }
 
         public override string GetDescByTerms() {

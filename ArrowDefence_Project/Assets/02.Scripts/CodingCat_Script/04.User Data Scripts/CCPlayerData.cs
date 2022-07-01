@@ -25,9 +25,9 @@
         }
 
         public static string SettingsJsonFilePath { 
-            //지금 Application.DataPath로 잡고있는데 만약에 빌드해보고 문제 생기면 Persistent path 로 잡아도 상관없음
             get {
-                return UnityEngine.Application.dataPath + "/ArrDef_Settings.es3";
+                //return UnityEngine.Application.dataPath + "/ArrDef_Settings.es3"; // 0625. 빌드 테스트에서 dataPath는 write가 불가능함을 확인 -> persistent path로 변경
+                return UnityEngine.Application.persistentDataPath + "/ArrDef_Settings.es3";
             }
         }
 
@@ -124,13 +124,13 @@
         public static bool LoadSettingsJson(out string log) {
             try {
                 var isExistsFile = ES3.FileExists(CCPlayerData.SettingsJsonFilePath, ES3Settings.defaultSettings);
-                if (!isExistsFile) { //SettingsJson이 존재하지 않는경우, 새로운 SettingsJson을 생성하고 저장
+                if (!isExistsFile) { // SettingsJson이 존재하지 않는경우, 새로운 SettingsJson을 생성하고 저장
                     settings = GameSettings.defaultSettings;
                     ES3.Save<GameSettings>(KEY_SETTINGS, settings, CCPlayerData.SettingsJsonFilePath, ES3Settings.defaultSettings);
                     CatLog.WLog("Settings Json Not Exists in DataPath. Create New Settings Json.");
                 }
 
-                //SettingsJson이 존재하지만 저장될 때와는 다른 KEY를 사용하여 저장된 경우, 새로운 Json을 생성함.
+                // SettingsJson이 존재하지만 저장될 때와는 다른 KEY를 사용하여 저장된 경우, 새로운 Json을 생성함.
                 if (ES3.KeyExists(KEY_SETTINGS, CCPlayerData.SettingsJsonFilePath, ES3Settings.defaultSettings) == false) {
                     ES3.DeleteFile(CCPlayerData.SettingsJsonFilePath);  //Different Key를 가진 Settings Json제거
                     ES3.Save<GameSettings>(KEY_SETTINGS, settings, CCPlayerData.SettingsJsonFilePath, ES3Settings.defaultSettings);
@@ -149,7 +149,7 @@
         }
 
         public static void SaveSettingsJson() {
-            try { //현재 GameSettings 저장
+            try { // 현재 GameSettings 저장
                 ES3.Save<GameSettings>(KEY_SETTINGS, settings, CCPlayerData.SettingsJsonFilePath, ES3Settings.defaultSettings);
             }
             catch (System.Exception ex) {

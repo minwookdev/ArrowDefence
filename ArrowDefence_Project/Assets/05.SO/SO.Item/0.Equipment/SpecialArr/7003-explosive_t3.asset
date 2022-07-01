@@ -26,13 +26,13 @@ MonoBehaviour:
   ArrowSkillFst: {fileID: 11400000, guid: 715fba3fd71c75446a795b621327456c, type: 2}
   ArrowSkillSec: {fileID: 11400000, guid: c4421e3c5c9d2d946bc220bf75fbc0fc, type: 2}
   AdditionalSpeed: 0
-  ArrowDamageInc: 0
+  ArrowDamageInc: 0.2
   ProjectileDamageInc: 0
   SpellDamageInc: 75
   BaseDamageInc: 200
   CriticalChanceInc: 0
   CriticalDamageMultiplierInc: 0
-  ArmorPenetrationInc: 0
+  ArmorPenetrationInc: 90
   effects: []
   ArrowSkillTrd: {fileID: 11400000, guid: 9c95dbacf0964c0409cc446f37c37b69, type: 2}
   ChargeType: 1

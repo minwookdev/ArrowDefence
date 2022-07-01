@@ -103,5 +103,38 @@
                 #endregion
             }
         }
+
+        string sceneNameStr = "";
+
+        IEnumerator LoadSceneAsyncWithProgress(LoadSceneMode loadSceneMode) {
+            yield return null;
+
+            // 씬 비동기 로드 객체 생성 
+            AsyncOperation asyncOperation = SceneManager.LoadSceneAsync(sceneNameStr, loadSceneMode); 
+            asyncOperation.allowSceneActivation = false; // 완전히 로드되지 전 까지 씬 로드 방지
+
+            // Operation Progress 변수 획득이 필요한 경우
+            float progressSliderValue = 0f;
+            while (!asyncOperation.isDone) {
+                progressSliderValue = asyncOperation.progress; // 비동기 로드 진행률 변수획득 (슬라이더 등으로 진행률 표시)
+                if (asyncOperation.progress >= 0.9f) {         // 지정 로드율 넘어가면 씬 로드
+                    progressSliderValue = 1f;
+                    asyncOperation.allowSceneActivation = true;
+                }
+                yield return null;
+            }
+        }
+
+        IEnumerator LoadSceneAsync(LoadSceneMode loadSceneMode) {
+            yield return null;
+
+            AsyncOperation asyncOperation = SceneManager.LoadSceneAsync(sceneNameStr, loadSceneMode);
+            asyncOperation.allowSceneActivation = false;
+
+            // Operation Progress 변수 획득이 필요하지 않은 경우. 지정 로드율 까지 대기
+            yield return new WaitUntil(() => asyncOperation.progress >= 0.9f);
+
+            asyncOperation.allowSceneActivation = true;
+        }
     }
 }

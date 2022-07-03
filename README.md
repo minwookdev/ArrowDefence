@@ -1,14 +1,3 @@
-# CodeBay_Prototype_01
-* UnityVersion   : 2019.4.15f1   
-* SettingDate    : 2021/04/28   
-* Target Devices : Windows, Android
-
-# Aeternus (StageName)  
-1. Dev             :   
-2. Genre           :   
-3. Target Platform :   
-
-# ArrowDefence (StageNAme)  
-1. Dev             :  
-2. Genre           :  
-3. Target Platform :  
+# 브랜치를 AD_Android_string-global 변경해주시면 최신자 코드를 확인하실 수 있습니다.
+* UnityVersion   : 2019.4.38f1   
+* Target Devices : Android

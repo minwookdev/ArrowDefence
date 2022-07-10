@@ -33,10 +33,10 @@ public class BattlePopup : MonoBehaviour {
     }
 
     public void DisablePopup() {
-        //Disable Popup Object
+        // Disable Popup Object
         gameObject.SetActive(false);
 
-        //Clear Popup Data
+        // Clear Popup Data
         stageName = null;
         stageTag  = null;
         textStageName.text = "";
@@ -45,6 +45,15 @@ public class BattlePopup : MonoBehaviour {
     #region BUTTON
 
     public void BE_START() {
+        if (GameManager.Instance.IsReady2BattleStart(out string log) == false) { // 전투 시작조건 체크
+            Notify.Inst.Message(log);
+            return;
+        }
+
+        // 테스트 성 광고를 모바일에서 1회 재생
+#if !UNITY_EDITOR && UNITY_ANDROID
+        GameManager.Instance.ShowInterstitialAdsOnce();
+#endif
         MainSceneRoute.FadeIn(() => ActionCat.Data.CCPlayerData.equipments.UpdatePlayerAbility(),
                               () => SceneLoader.Instance.LoadScene(stageTag));
     }

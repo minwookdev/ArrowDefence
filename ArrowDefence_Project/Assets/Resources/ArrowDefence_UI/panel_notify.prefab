@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1918917470505997471}
   - component: {fileID: 1918917470505997469}
+  - component: {fileID: 1963233878080763291}
   - component: {fileID: 1918917470505997468}
   - component: {fileID: 8740886196745830596}
   m_Layer: 5
@@ -46,6 +47,45 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1918917470505997470}
   m_CullTransparentMesh: 0
+--- !u!114 &1963233878080763291
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1918917470505997470}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 344445a89b4f74a0e9a0a766903df87e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mTerm: '-'
+  mTermSecondary: Fonts/A32-GTitleMedium
+  PrimaryTermModifier: 0
+  SecondaryTermModifier: 0
+  TermPrefix: 
+  TermSuffix: 
+  LocalizeOnAwake: 1
+  IgnoreRTL: 0
+  MaxCharactersInRTL: 0
+  IgnoreNumbersInRTL: 1
+  CorrectAlignmentForRTL: 1
+  AddSpacesToJoinedLanguages: 0
+  AllowLocalizedParameters: 1
+  AllowParameters: 1
+  TranslatedObjects: []
+  LocalizeEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  AlwaysForceLocalize: 0
+  LocalizeCallBack:
+    Target: {fileID: 0}
+    MethodName: 
+  mGUI_ShowReferences: 0
+  mGUI_ShowTems: 1
+  mGUI_ShowCallback: 0
+  mLocalizeTarget: {fileID: 0}
+  mLocalizeTargetName: I2.Loc.LocalizeTarget_TextMeshPro_UGUI
 --- !u!114 &1918917470505997468
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -159,6 +199,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1918917470645339032}
   - component: {fileID: 1918917470645339033}
+  - component: {fileID: 7931216724197596921}
   - component: {fileID: 9118697749803703645}
   m_Layer: 5
   m_Name: panel_notify
@@ -201,6 +242,24 @@ CanvasGroup:
   m_Interactable: 0
   m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
+--- !u!114 &7931216724197596921
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1918917470645339035}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0568794e7026c2d4fab36c524747b8c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  textMaterial: {fileID: 2100000, guid: 000a3a0a9a735a447a33cbff6b3609ab, type: 2}
+  activeTime: 1
+  ActiveLanguageCode: Korean
+  texts:
+  - {fileID: 1918917470505997468}
+  isActive: 1
 --- !u!114 &9118697749803703645
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -439,9 +498,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   audioSource: {fileID: 6244500409276574031}
   soundType: 1
-  assignSoundKey: notify
   soundKey: 
-  tempVolumeScale: 0
   sound: {fileID: 8300000, guid: 25b1731be97dd5547945672e3e0ad452, type: 3}
   sounds: []
 --- !u!82 &6244500409276574031

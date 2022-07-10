@@ -15,6 +15,7 @@
         private float totalDropChances;
         private float restoreTimeScale;
         private bool isManagerInitialized = false;
+        private bool isShowedAds = false;
         private ItemDropList.DropTable[] dropListArray = null;
         private SavingFeedback savingFeedbackPanel     = null;
         private InAppUpdateSupport inAppUpdateSupport  = null;
@@ -34,6 +35,12 @@
         public bool? IsAppUpdateAvailable {
             get; private set;
         } = null;
+        public string LanguageCode {
+            get {
+                string languageCode = CCPlayerData.settings.LanguageCode;
+                return (!string.IsNullOrEmpty(languageCode)) ? languageCode : I2.Loc.LocalizationManager.CurrentLanguageCode;
+            }
+        }
 
         //Game Event Delegate
         public delegate void GameEventHandler();
@@ -65,7 +72,7 @@
             }
 #if UNITY_EDITOR
             PlayPlatform = GAMEPLATFORM.PLATFORM_EDITOR;
-            IsDevMode    = true;
+            IsDevMode    = false;
 #elif UNITY_STANDALONE
             PlayPlatform = GAMEPLATFORM.PLATFORM_STANDALONE;
             IsDevMode    = false;
@@ -78,6 +85,9 @@
 #endif
             fixedDeltaTime = Time.fixedDeltaTime;
             LoadSettings();
+#if !UNITY_EDITOR && UNITY_ANDROID
+            ChangeLanguageCode(CCPlayerData.settings.LanguageCode);
+#endif
             isManagerInitialized = true;
         }
 
@@ -116,7 +126,18 @@
             SceneLoader.SceneChangeCallback -= this.ReleaseFeedbackPanel;
         }
 
-        #region SCREEN
+        /// <summary>
+        /// 게임이 실행되고 1회에 한해 테스트 성 광고를 재생함
+        /// </summary>
+        public void ShowInterstitialAdsOnce() {
+            // 해당 버전은 테스트 목적으로 게임 중 1회에 한해 광고를 송출
+            if (!isShowedAds && AdsManager.Instance.IsReadyInterstitialAds()) {
+                AdsManager.Instance.ShowInterstitialAds();
+                isShowedAds = true;
+            }
+        }
+
+#region SCREEN
 
         /// <summary>
         /// Rect Set of Target Camera with a  9 : 16 Portrait Resolition
@@ -143,7 +164,7 @@
 
 #endregion
 
-        #region SETTINGS
+#region SETTINGS
 
         public void SetControlType(bool isChangeType) {
             CCPlayerData.settings.SetPullType(isChangeType);
@@ -161,9 +182,24 @@
             return (controller.ControlType != CCPlayerData.settings.PullingType);
         }
 
+        public void SetLanguageCode(string languageCode) {
+            // 언어코드 변경
+            CCPlayerData.settings.SetLanguageCode(languageCode);
+        }
+
+        public void ChangeLanguageCode(string languageCode) {
+            if (string.Equals(languageCode, I2.Loc.LocalizationManager.CurrentLanguageCode)) {
+                // 동일한 언어코드일 경우는 바꾸지 않음
+                return;
+            }
+            else {
+                I2.Loc.LocalizationManager.CurrentLanguageCode = languageCode;
+            }
+        }
+
 #endregion
 
-        #region PLAYER_DATA
+#region PLAYER_DATA
 
         public void InitEquips(Transform bowInitPos, Transform bowParent, int mainArrPoolQuantity, int subArrPoolQuantity, 
                                out UI.ArrSSData[] arrSlotData, out AccessorySPEffect[] artifactEffects, UI.SwapSlots swapSlot, out Sprite[] artifactIcons) {
@@ -386,9 +422,24 @@
             CCPlayerData.Initialize();
         }
 
+        public bool IsReady2BattleStart(out string log) {
+            if (!CCPlayerData.equipments.IsEquippedBow) {
+                log = I2.Loc.ScriptLocalization.ErrorLog.NoEquippedBow;
+                return false;
+            }
+
+            if (!CCPlayerData.equipments.IsEquippedArrMain && !CCPlayerData.equipments.IsEquippedArrSub) {
+                log = I2.Loc.ScriptLocalization.ErrorLog.NoEquippedArrow;
+                return false;
+            }
+
+            log = "";
+            return true;
+        }
+
 #endregion
 
-        #region BATTLE
+#region BATTLE
 
         public void ResumeBattle() {
             SetBowManualControl(false);
@@ -465,7 +516,7 @@
 
 #endregion
 
-        #region TIME-CONTROL
+#region TIME-CONTROL
 
         public void TimeScaleSet(float targetTimeScaleVal)
         {
@@ -504,7 +555,7 @@
 
 #endregion
 
-        #region ITEM-DROP
+#region ITEM-DROP
 
         public void InitialDroplist(ItemDropList newDropList) {
             dropListArray = newDropList.DropTableArray;
@@ -534,17 +585,15 @@
             for (int i = 0; i < dropListArray.Length; i++) {
                 if (randomPoint < dropListArray[i].DropChance) {
                     return new DropItem(dropListArray[i].DefaultQuantity, dropListArray[i].ItemAsset);
-                    //return new DropItem(GameGlobal.RandomIntInArray(dropListArray[i].QuantityRange), dropListArray[i].ItemAsset);
                 }
                 else {
                     randomPoint -= dropListArray[i].DropChance;
                 }
             }
 
-            //Last index Item
+            // Last index Item
             var lastIndexItem = dropListArray[dropListArray.Length - 1];
             return new DropItem(lastIndexItem.DefaultQuantity, lastIndexItem.ItemAsset);
-            //return new DropItem(GameGlobal.RandomIntInArray(dropListArray[last].QuantityRange), dropListArray[last].ItemAsset);
 
 #region GET_LOW_CAHNCE_ITEM
             //var minimunChanceOfItem = dropListArray[0];
@@ -565,7 +614,7 @@
 
 #endregion
 
-        #region SAVE_LOAD
+#region SAVE_LOAD
         public void AutoLoadUserData() {
             throw new System.Exception();
             ///Original Codes
@@ -615,7 +664,7 @@
 
 #endregion
 
-        #region STATE_EVENT_HANDLER
+#region STATE_EVENT_HANDLER
 
         /// <summary>
         /// Change Current Game State
@@ -676,9 +725,9 @@
             return this.OnStatePause;
         }
 
-        #endregion
+#endregion
 
-        #region IN_APP_UPDATE_HANDLER
+#region IN_APP_UPDATE_HANDLER
 
         public void CheckAppUpdateAvailable() {
             StartCoroutine(AppUpdateAvailableCheckCo());
@@ -700,7 +749,7 @@
                 yield return StartCoroutine(inAppUpdateSupport.StartImmediateUpdate());
             }
             else {
-                CatLog.Log("사용 가능한 업데이트가 존재하지 않습니다.");
+                CatLog.Log("사용 가능한 업데이트가 존재하지 않거나 오류가 발생했습니다.");
             }
 
             // 사용가능한 업데이트가 없거나 업데이트가 취소된 경우 (ex.유저 취소. 오류 취소)
@@ -711,6 +760,6 @@
             // 메인화면에서 바로 업데이트로 이어지는 버튼을 추가하는것도 좋을 것 같다.
         }
 
-        #endregion
+#endregion
     }
 }

@@ -45,6 +45,8 @@
 		/// </summary>
 		public static AD_BowRope instance;
 
+		Vector3 zeroVector = Vector3.zero;
+
 		private void Awake() {
 			//static Instance Settings
 			if (instance == null) { 
@@ -73,11 +75,31 @@
 			rope1.material = ropeMaterial;
 			rope2.material = ropeMaterial;
 
-			StartCoroutine(DrawRope());
+			// <-- Update로 이관
+			//StartCoroutine(DrawRope());
 		}
 
 		private void OnDisable() {
 			RestoreAlpha();
+		}
+
+		private void Update() {
+			if (arrowCatchPoint == null) {	
+				// 화살을 잡고있지 않을 때
+				rope1.SetPosition(0, bowLeftPoint.position);
+				rope1.SetPosition(1, bowRightPoint.position);
+
+				rope2.SetPosition(0, zeroVector);
+				rope2.SetPosition(1, zeroVector);
+			}
+			else {                          
+				// 화살을 잡고있을 때
+				rope1.SetPosition(0, bowLeftPoint.position);
+				rope1.SetPosition(1, arrowCatchPoint.position);
+
+				rope2.SetPosition(0, arrowCatchPoint.position);
+				rope2.SetPosition(1, bowRightPoint.position);
+			}
 		}
 
 		void RopeUpdate() {

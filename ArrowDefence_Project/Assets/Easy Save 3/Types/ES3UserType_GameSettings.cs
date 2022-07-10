@@ -4,7 +4,7 @@ using UnityEngine;
 namespace ES3Types
 {
 	[UnityEngine.Scripting.Preserve]
-	[ES3PropertiesAttribute("stageSettings", "bgmVolumeParamsValue", "seVolumeParamsValue", "<PullingType>k__BackingField")]
+	[ES3PropertiesAttribute("stageSettings", "bgmVolumeParamsValue", "seVolumeParamsValue", "<PullingType>k__BackingField", "<LanguageCode>k__BackingField")]
 	public class ES3UserType_GameSettings : ES3ObjectType
 	{
 		public static ES3Type Instance = null;
@@ -20,6 +20,7 @@ namespace ES3Types
 			writer.WritePrivateField("bgmVolumeParamsValue", instance);
 			writer.WritePrivateField("seVolumeParamsValue", instance);
 			writer.WritePrivateField("<PullingType>k__BackingField", instance);
+			writer.WritePrivateField("<LanguageCode>k__BackingField", instance);
 		}
 
 		protected override void ReadObject<T>(ES3Reader reader, object obj)
@@ -41,6 +42,9 @@ namespace ES3Types
 					break;
 					case "<PullingType>k__BackingField":
 					instance = (ActionCat.Data.GameSettings)reader.SetPrivateField("<PullingType>k__BackingField", reader.Read<ActionCat.PULLINGTYPE>(), instance);
+					break;
+					case "<LanguageCode>k__BackingField":
+					instance = (ActionCat.Data.GameSettings)reader.SetPrivateField("<LanguageCode>k__BackingField", reader.Read<System.String>(), instance);
 					break;
 					default:
 						reader.Skip();

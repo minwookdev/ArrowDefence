@@ -223,62 +223,83 @@
 #elif UNITY_ANDROID
             //==============================================<< MOBILE CONTROLLER >>==============================================
             // Touch Update : Only Mobile
-            // New Controller
-            if (!isTouched) {
-                //if (Input.touchCount > 0 && GameManager.Instance.IsBattleState) {
-                //    for (int i = 0; i < Input.touchCount; i++) {
-                //        if (EventSystem.current.IsPointerOverGameObject(Input.GetTouch(i).fingerId) == false) {
-                //            touchIndex = i;    // Finded Correct Touch Index
-                //            isTouched  = true;  
-                //            this.BowBegan(Input.GetTouch(touchIndex).position); //Touch ID를 찾음과 동시에 Bow Pull Bega 들어감
-                //            break;
-                //        }
-                //    }
-                //}
+            //if (!isTouched) {
+            //    //if (Input.touchCount > 0 && GameManager.Instance.IsBattleState) {
+            //    //    for (int i = 0; i < Input.touchCount; i++) {
+            //    //        if (EventSystem.current.IsPointerOverGameObject(Input.GetTouch(i).fingerId) == false) {
+            //    //            touchIndex = i;    // Finded Correct Touch Index
+            //    //            isTouched  = true;  
+            //    //            this.BowBegan(Input.GetTouch(touchIndex).position); //Touch ID를 찾음과 동시에 Bow Pull Bega 들어감
+            //    //            break;
+            //    //        }
+            //    //    }
+            //    //}
+            //
+            //    // UI를 터치하지 않은 ID값 찾기
+            //    //for (int i = 0; i < Input.touchCount; i++) {
+            //    //    currentTouch = Input.GetTouch(i);
+            //    //    if (EventSystem.current.IsPointerOverGameObject(currentTouch.fingerId) == false) { // i번 터치가 UI와 겹치치 않은 경우
+            //    //        touchIndex = i;
+            //    //        this.BowBegan(currentTouch.position); // 올바른 ID를 찾음과 동시에 Draw Began 진입
+            //    //        break;                                // 올바른 값을 찾은 경우에 루프 탈출
+            //    //    }
+            //    //}
+            //
+            //    // GetTouch를 0번으로 제한하는 경우
+            //    if (Input.touchCount > 0) {
+            //        currentTouch = Input.GetTouch(0);                                                  // 0번으로 제한
+            //        if (EventSystem.current.IsPointerOverGameObject(currentTouch.fingerId) == false) { // 0번 터치가 UI와 겹치치 않은 경우
+            //            this.BowBegan(currentTouch.position);   //
+            //            isTouched  = true;
+            //            touchIndex = 0;                         //
+            //        }
+            //    }
+            //}
+            //else {
+            //    // Input.GetTouch 계속 받아오지 않으면 움직이지 않음.
+            //    currentTouch = Input.GetTouch(touchIndex);
+            //
+            //    // Touched State
+            //    //switch (currentTouch.phase) {
+            //    //    case TouchPhase.Began:      this.BowBegan(currentTouch.position);                            break;
+            //    //    case TouchPhase.Ended:      this.BowReleased(currentTouch.position); this.isTouched = false; break;
+            //    //    case TouchPhase.Moved:      break;
+            //    //    case TouchPhase.Stationary: break;
+            //    //    case TouchPhase.Canceled:   break;
+            //    //    default: break;
+            //    //}
+            //
+            //    if (isBowPullBegan) {
+            //        this.BowMoved(currentTouch.position);
+            //    }
+            //    if (currentTouch.phase == TouchPhase.Ended) {
+            //        this.BowReleased(currentTouch.position);
+            //        this.isTouched = false;
+            //    }
+            //}
 
-                // UI를 터치하지 않은 ID값 찾기
-                //for (int i = 0; i < Input.touchCount; i++) {
-                //    currentTouch = Input.GetTouch(i);
-                //    if (EventSystem.current.IsPointerOverGameObject(currentTouch.fingerId) == false) { // i번 터치가 UI와 겹치치 않은 경우
-                //        touchIndex = i;
-                //        this.BowBegan(currentTouch.position); // 올바른 ID를 찾음과 동시에 Draw Began 진입
-                //        break;                                // 올바른 값을 찾은 경우에 루프 탈출
-                //    }
-                //}
-
-                // GetTouch를 0번으로 제한하는 경우
-                if (GameManager.Instance.IsBattleState && Input.touchCount > 0) {
-                    currentTouch = Input.GetTouch(0);                                                  // 0번으로 제한
-                    if (EventSystem.current.IsPointerOverGameObject(currentTouch.fingerId) == false) { // 0번 터치가 UI와 겹치치 않은 경우
-                        this.BowBegan(currentTouch.position);   //
-                        isTouched  = true;
-                        touchIndex = 0;                         //
+            // :::::::::::::::::::::::: NEW MOBILE CONTROLLER ::::::::::::::::::::::::
+            // Not Touched 
+            if (!isTouched) { // Get Touch State
+                if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began) {
+                    if (!EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId)) {
+                        BowBegan(Input.GetTouch(0).position);
+                        isTouched = true;
                     }
                 }
             }
-            else {
-                // Input.GetTouch 계속 받아오지 않으면 움직이지 않음.
-                currentTouch = Input.GetTouch(touchIndex);
-
-                // Touched State
-                //switch (currentTouch.phase) {
-                //    case TouchPhase.Began:      this.BowBegan(currentTouch.position);                            break;
-                //    case TouchPhase.Ended:      this.BowReleased(currentTouch.position); this.isTouched = false; break;
-                //    case TouchPhase.Moved:      break;
-                //    case TouchPhase.Stationary: break;
-                //    case TouchPhase.Canceled:   break;
-                //    default: break;
-                //}
+            else { // Touching
+                currentTouch = Input.GetTouch(0);
 
                 if (isBowPullBegan) {
-                    this.BowMoved(currentTouch.position);
+                    BowMoved(currentTouch.position);
                 }
-                if (currentTouch.phase == TouchPhase.Ended) {
-                    this.BowReleased(currentTouch.position);
-                    this.isTouched = false;
+
+                if (currentTouch.phase == TouchPhase.Ended || currentTouch.phase == TouchPhase.Canceled) {
+                    BowReleased(currentTouch.position);
+                    isTouched = false;
                 }
             }
-            //=======================================================================================================================
 #endif
             //================================================<< ARROW POSITION UPDATE >>============================================
             UpdateArrPos();

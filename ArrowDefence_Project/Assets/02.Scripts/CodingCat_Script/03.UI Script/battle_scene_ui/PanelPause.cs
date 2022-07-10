@@ -15,38 +15,65 @@
         [Header("BUTTON EVENT")]
         [SerializeField] BattleSceneButton battleButtons = null;
 
+        bool isWorking = false;
+
         public void OpenPanel() {
             panelCanvasGroup.alpha = StNum.floatZero;
             gameObject.SetActive(true);
             panelCanvasGroup.DOFade(StNum.floatOne, openFadeTime)
                 .SetUpdate(true)
                 .OnStart(() => {
-                    panelCanvasGroup.blocksRaycasts = false;
+                    panelCanvasGroup.blocksRaycasts = true;
                     GameManager.Instance.PauseBattle();
+                    isWorking = true;
                 })
                 .OnComplete(() => {
-                    panelCanvasGroup.blocksRaycasts = true;
+                    isWorking = false;
                 });
         }
 
         #region Ref_Btn
 
         public void ButtonResume() {
+            if (isWorking) {
+                return;
+            }
+
             if (GameManager.Instance.IsControlTypeChanged()) {  //Settings Panel에서 Control Type를 바꿧으면 Controller에 업데이트를 요청
                 GameManager.Instance.GetControllerInstOrNull().ReloadControlType();
             }
-            battleButtons.Resume(this, panelCanvasGroup, openFadeTime, route.ExitPause);
+
+            isWorking = true;
+            battleButtons.Resume(this, 
+                                 panelCanvasGroup, 
+                                 openFadeTime, 
+                                 () => { 
+                                     route.ExitPause();
+                                     isWorking = false;
+                                 });
         }
 
         public void ButtonRestart() {
+            if (isWorking) {
+                return;
+            }
+
             battleButtons.Restart();
         }
 
         public void ButtonLoadMain() {
+            if (isWorking) {
+                return;
+            }
+
             battleButtons.LoadMain();
         }
 
         public void ButtonSettings() {
+            if (isWorking) {
+                return;
+            }
+
             battleButtons.Settings();
         }
 

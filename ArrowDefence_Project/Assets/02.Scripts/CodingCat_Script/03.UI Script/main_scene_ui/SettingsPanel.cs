@@ -1,6 +1,7 @@
 ﻿namespace ActionCat {
     using UnityEngine;
     using UnityEngine.UI;
+    using UnityEngine.UI.Extensions;
     using UnityEngine.Audio;
     using DG.Tweening;
 
@@ -17,6 +18,10 @@
         [SerializeField] AudioMixer mixer    = null;
         [SerializeField] string seParameter  = null;
         [SerializeField] string bgmParameter = null;
+
+        [Header("LANGUAGE")]
+        [SerializeField] LanguageConfirmPanel languageConfirmPanel = null;
+        [SerializeField] DropDownList languageDropDown = null;
 
         public void OpenPanel() => this.gameObject.SetActive(true);
 
@@ -54,6 +59,26 @@
 
         private void Start() {
             switchControlType.AddListnerSwitch(settings.SetPullType);
+
+            // 로비 씬의 설정 패널에만 언어선택 드랍 다운 메뉴가 있음
+            if (languageDropDown) {
+                //var languageDropDownItems = languageDropDown.Items;
+                //CatLog.Log($"DropDownItem Length : {languageDropDownItems.Count}");
+                //
+                //string currentLanguageCode = I2.Loc.LocalizationManager.CurrentLanguageCode;
+                //switch (currentLanguageCode) {
+                //    case GameGlobal.LangCodeKo:  break;
+                //    case GameGlobal.LangCodeEn:  break;
+                //    default: break;
+                //}
+
+                // 언어 코드 변경 이벤트 등록
+                languageDropDown.OnSelectionChanged.AddListener(LanguageDropDownChanged);
+
+                // Apply Localization to First Item
+                var firstItem = languageDropDown.Items[0];
+                firstItem.Caption = I2.Loc.ScriptLocalization.UI_SettingsPanel.SelectLanguage;
+            }
         }
 
         private void OnDisable() => Data.CCPlayerData.SaveSettingsJson(); //변경된 GameSettings 변수 변경에 따른 저장
@@ -115,6 +140,43 @@
                 settings.SeVolumeParamsValue = sesoundfitch;
             }
         }
+        #endregion
+
+        #region LANGUAGE_DROPDOWN
+
+        public void RestoreDropDownList() {
+            languageDropDown.OnSelectFirstItem();
+        }
+
+        void LanguageDropDownChanged(int selectedIndex) {
+            // Selected Index Range is
+            // ~ 0 Korean
+            // ~ 1 English
+
+            // DropDownList의 ID값으로 할당한 LanguageCode는 차선책.
+
+            if (selectedIndex == 0) {
+                return;
+            }
+
+            string languageCode = "";
+            switch (selectedIndex) {
+                case 1: languageCode = GameGlobal.LangCodeKo; break;
+                case 2: languageCode = GameGlobal.LangCodeEn; break;
+                default: throw new System.NotImplementedException("This Language Index is Not Implemented !");
+            }
+
+            if (string.Equals(languageCode, I2.Loc.LocalizationManager.CurrentLanguageCode)) {
+                CatLog.Log("현재 게임언어와 동일한 언어가 선택되었습니다.");
+                return;
+            }
+
+            // Enable Language Select Panel 
+            languageConfirmPanel.EnablePanel(languageCode, this);
+
+            //I2.Loc.LocalizationManager.CurrentLanguageCode = languageCode;
+        }
+
         #endregion
     }
 }

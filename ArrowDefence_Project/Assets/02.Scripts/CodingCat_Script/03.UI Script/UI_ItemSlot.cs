@@ -67,6 +67,22 @@
             gameObject.SetActive(true);
         }
 
+        /// <summary>
+        /// Item Sale Popup의 Item Slot 세팅 함수. 항상 Amount를 표시하지 않음
+        /// </summary>
+        /// <param name="item"></param>
+        public void EnableSalePopupSlot(AD_item item) {
+            // Set Item Address
+            ItemAddress = item;
+
+            // Set ItemIcon Sprite
+            ItemImg.sprite   = ItemAddress.GetSprite;
+            ItemFrame.sprite = Frames[(int)ItemAddress.GetGrade];
+
+            // Disable Item Amount Text
+            ItemStackTmp.text = "";
+        }
+
         public void DisableSlot() {
             //Data 정리하고 자체 Disable 처리
             ItemAddress = null;

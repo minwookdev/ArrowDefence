@@ -1,19 +1,13 @@
 {
-    "m_SelectedDeviceId": "R3CMC06BR0T",
+    "m_SelectedDeviceId": "172.30.1.27:5555",
     "m_SelectedPackage": {
-        "deviceId": "R3CMC06BR0T",
+        "deviceId": "172.30.1.27:5555",
         "name": "com.ActionCat.ArrowDefence",
-        "processId": 24872,
+        "processId": 13907,
         "exited": false
     },
     "m_SelectedPriority": 0,
     "m_KnownPackagesForSerialization": [
-        {
-            "deviceId": "R3CMC06BR0T",
-            "name": "com.ActionCat.ArrowDefence",
-            "processId": 9138,
-            "exited": true
-        },
         {
             "deviceId": "R3CMC06BR0T",
             "name": "com.ActionCat.ArrowDefence",
@@ -42,6 +36,48 @@
             "deviceId": "R3CMC06BR0T",
             "name": "com.ActionCat.ArrowDefence",
             "processId": 24872,
+            "exited": true
+        },
+        {
+            "deviceId": "R3CMC06BR0T",
+            "name": "com.ActionCat.ArrowDefence",
+            "processId": 8369,
+            "exited": false
+        },
+        {
+            "deviceId": "172.30.1.27:5555",
+            "name": "com.android.settings",
+            "processId": 1695,
+            "exited": true
+        },
+        {
+            "deviceId": "172.30.1.27:5555",
+            "name": "com.ActionCat.ArrowDefence",
+            "processId": 8369,
+            "exited": true
+        },
+        {
+            "deviceId": "172.30.1.27:5555",
+            "name": "com.ActionCat.ArrowDefence",
+            "processId": 29051,
+            "exited": true
+        },
+        {
+            "deviceId": "172.30.1.27:5555",
+            "name": "com.ActionCat.ArrowDefence",
+            "processId": 31126,
+            "exited": true
+        },
+        {
+            "deviceId": "172.30.1.27:5555",
+            "name": "com.samsung.android.game.gamehome",
+            "processId": 6161,
+            "exited": false
+        },
+        {
+            "deviceId": "172.30.1.27:5555",
+            "name": "com.ActionCat.ArrowDefence",
+            "processId": 13907,
             "exited": false
         }
     ],

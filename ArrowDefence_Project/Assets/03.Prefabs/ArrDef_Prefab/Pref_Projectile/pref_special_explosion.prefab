@@ -169,17 +169,17 @@ PrefabInstance:
     - target: {fileID: 6876414316984659909, guid: c685259a143c94b49bc6caf6581204ce,
         type: 3}
       propertyPath: m_SortingLayer
-      value: 12
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 6876414316984659909, guid: c685259a143c94b49bc6caf6581204ce,
         type: 3}
       propertyPath: m_SortingOrder
-      value: 2
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 6876414316984659909, guid: c685259a143c94b49bc6caf6581204ce,
         type: 3}
       propertyPath: m_SortingLayerID
-      value: -1122949135
+      value: 1612283651
       objectReference: {fileID: 0}
     - target: {fileID: 6876414316984659909, guid: c685259a143c94b49bc6caf6581204ce,
         type: 3}

@@ -28,25 +28,26 @@
             }
             else {
                 // Log appUpdateInfoOperation.Error.
+                string operationErrorLog = "";
                 switch (appUpdateInfoOperation.Error) {
-                    case AppUpdateErrorCode.NoError:                 break;
-                    case AppUpdateErrorCode.NoErrorPartiallyAllowed: break;
-                    case AppUpdateErrorCode.ErrorUnknown:            break;
-                    case AppUpdateErrorCode.ErrorApiNotAvailable:    break;
-                    case AppUpdateErrorCode.ErrorInvalidRequest:     break;
-                    case AppUpdateErrorCode.ErrorUpdateUnavailable:  break;
-                    case AppUpdateErrorCode.ErrorUpdateNotAllowed:   break;
-                    case AppUpdateErrorCode.ErrorDownloadNotPresent: break;
-                    case AppUpdateErrorCode.ErrorUpdateInProgress:   break;
-                    case AppUpdateErrorCode.ErrorInternalError:      break;
-                    case AppUpdateErrorCode.ErrorUserCanceled:       break;
-                    case AppUpdateErrorCode.ErrorUpdateFailed:       break;
-                    case AppUpdateErrorCode.ErrorPlayStoreNotFound:  break;
-                    case AppUpdateErrorCode.ErrorAppNotOwned:        break;
-                    default:                                         break;
+                    case AppUpdateErrorCode.NoError:                 operationErrorLog = $"AppUpdateInfoOperation Error Log: {appUpdateInfoOperation.Error.ToString()}"; break;
+                    case AppUpdateErrorCode.NoErrorPartiallyAllowed: operationErrorLog = $"AppUpdateInfoOperation Error Log: {appUpdateInfoOperation.Error.ToString()}"; break;
+                    case AppUpdateErrorCode.ErrorUnknown:            operationErrorLog = $"AppUpdateInfoOperation Error Log: {appUpdateInfoOperation.Error.ToString()}"; break;
+                    case AppUpdateErrorCode.ErrorApiNotAvailable:    operationErrorLog = $"AppUpdateInfoOperation Error Log: {appUpdateInfoOperation.Error.ToString()}"; break;
+                    case AppUpdateErrorCode.ErrorInvalidRequest:     operationErrorLog = $"AppUpdateInfoOperation Error Log: {appUpdateInfoOperation.Error.ToString()}"; break;
+                    case AppUpdateErrorCode.ErrorUpdateUnavailable:  operationErrorLog = $"AppUpdateInfoOperation Error Log: {appUpdateInfoOperation.Error.ToString()}"; break;
+                    case AppUpdateErrorCode.ErrorUpdateNotAllowed:   operationErrorLog = $"AppUpdateInfoOperation Error Log: {appUpdateInfoOperation.Error.ToString()}"; break;
+                    case AppUpdateErrorCode.ErrorDownloadNotPresent: operationErrorLog = $"AppUpdateInfoOperation Error Log: {appUpdateInfoOperation.Error.ToString()}"; break;
+                    case AppUpdateErrorCode.ErrorUpdateInProgress:   operationErrorLog = $"AppUpdateInfoOperation Error Log: {appUpdateInfoOperation.Error.ToString()}"; break;
+                    case AppUpdateErrorCode.ErrorInternalError:      operationErrorLog = $"AppUpdateInfoOperation Error Log: {appUpdateInfoOperation.Error.ToString()}"; break;
+                    case AppUpdateErrorCode.ErrorUserCanceled:       operationErrorLog = $"AppUpdateInfoOperation Error Log: {appUpdateInfoOperation.Error.ToString()}"; break;
+                    case AppUpdateErrorCode.ErrorUpdateFailed:       operationErrorLog = $"AppUpdateInfoOperation Error Log: {appUpdateInfoOperation.Error.ToString()}"; break;
+                    case AppUpdateErrorCode.ErrorPlayStoreNotFound:  operationErrorLog = $"AppUpdateInfoOperation Error Log: {appUpdateInfoOperation.Error.ToString()}"; break;
+                    case AppUpdateErrorCode.ErrorAppNotOwned:        operationErrorLog = $"AppUpdateInfoOperation Error Log: {appUpdateInfoOperation.Error.ToString()}"; break;
+                    default:                                         operationErrorLog = $"AppUpdateInfoOperation Error Log: {appUpdateInfoOperation.Error.ToString()}"; break;
                 }
 
-                CatLog.ELog("업데이트의 정보를 취득하는데 에러가 발생했습니다. 업데이트 정보를 취득하지 못했습니다.");
+                CatLog.ELog($"업데이트의 정보를 취득하는데 오류가 발생했습니다. {operationErrorLog}");
             }
         }
 
@@ -55,12 +56,13 @@
                 throw new System.Exception("먼저 CheckForUpdate를 사용가능한 업데이트가 있는지에 대한 정보를 취득하세요.");
             }
 
-            switch (appUpdateInfoResult.UpdateAvailability) {
-                case UpdateAvailability.Unknown:                            CatLog.Log("In-App Update Info State: {Unknown}.                            result: false."); return false;
-                case UpdateAvailability.UpdateNotAvailable:                 CatLog.Log("In-App Update Info State: {UpdateNotAvailable}.                 result: false."); return false;
-                case UpdateAvailability.UpdateAvailable:                    CatLog.Log("In-App Update Info State: {UpdateAvailable}.                    result: true.");  return true;
-                case UpdateAvailability.DeveloperTriggeredUpdateInProgress: CatLog.Log("In-App Update Info State: {DeveloperTriggeredUpdateInProgress}. result: false."); return false;
-                default:                                                    CatLog.Log("In-App Update Info State: {defaultInSwitch}.                    result: false."); return false;
+            // 앱 업데이트 가능 반환 결과
+            switch (appUpdateInfoResult.UpdateAvailability) {   // 앱 업데이트 확인 결과
+                case UpdateAvailability.UpdateAvailable:                    CatLog.Log($"AppUpdate Availability State: {appUpdateInfoResult.ToString()}"); return true;
+                case UpdateAvailability.Unknown:                            CatLog.Log($"AppUpdate Availability State: {appUpdateInfoResult.ToString()}"); return false;
+                case UpdateAvailability.UpdateNotAvailable:                 CatLog.Log($"AppUpdate Availability State: {appUpdateInfoResult.ToString()}"); return false;
+                case UpdateAvailability.DeveloperTriggeredUpdateInProgress: CatLog.Log($"AppUpdate Availability State: {appUpdateInfoResult.ToString()}"); return false;
+                default:                                                    CatLog.Log($"AppUpdate Availability State: {appUpdateInfoResult.ToString()}"); return false;
             }
         }
 
@@ -85,27 +87,27 @@
             // If the update completes successfully, then the app restarts and this line
             // is never reached. If this line is reached, then handle the failure (for
             // example, by logging result.Error or by displaying a message to the user).
+            string updateRequestLog = "";
             switch (startUpdateRequest.Error) {
-                case AppUpdateErrorCode.NoError:                 break;
-                case AppUpdateErrorCode.NoErrorPartiallyAllowed: break;
-                case AppUpdateErrorCode.ErrorUnknown:            break;
-                case AppUpdateErrorCode.ErrorApiNotAvailable:    break;
-                case AppUpdateErrorCode.ErrorInvalidRequest:     break;
-                case AppUpdateErrorCode.ErrorUpdateUnavailable:  break;
-                case AppUpdateErrorCode.ErrorUpdateNotAllowed:   break;
-                case AppUpdateErrorCode.ErrorDownloadNotPresent: break;
-                case AppUpdateErrorCode.ErrorUpdateInProgress:   break;
-                case AppUpdateErrorCode.ErrorInternalError:      break;
-                case AppUpdateErrorCode.ErrorUserCanceled:       break;
-                case AppUpdateErrorCode.ErrorUpdateFailed:       break;
-                case AppUpdateErrorCode.ErrorPlayStoreNotFound:  break;
-                case AppUpdateErrorCode.ErrorAppNotOwned:        break;
-                default:                                         break;
+                case AppUpdateErrorCode.NoError:                 updateRequestLog = $"AppUpdate Request Error Log: {startUpdateRequest.Error.ToString()}"; break;
+                case AppUpdateErrorCode.NoErrorPartiallyAllowed: updateRequestLog = $"AppUpdate Request Error Log: {startUpdateRequest.Error.ToString()}"; break;
+                case AppUpdateErrorCode.ErrorUnknown:            updateRequestLog = $"AppUpdate Request Error Log: {startUpdateRequest.Error.ToString()}"; break;
+                case AppUpdateErrorCode.ErrorApiNotAvailable:    updateRequestLog = $"AppUpdate Request Error Log: {startUpdateRequest.Error.ToString()}"; break;
+                case AppUpdateErrorCode.ErrorInvalidRequest:     updateRequestLog = $"AppUpdate Request Error Log: {startUpdateRequest.Error.ToString()}"; break;
+                case AppUpdateErrorCode.ErrorUpdateUnavailable:  updateRequestLog = $"AppUpdate Request Error Log: {startUpdateRequest.Error.ToString()}"; break;
+                case AppUpdateErrorCode.ErrorUpdateNotAllowed:   updateRequestLog = $"AppUpdate Request Error Log: {startUpdateRequest.Error.ToString()}"; break;
+                case AppUpdateErrorCode.ErrorDownloadNotPresent: updateRequestLog = $"AppUpdate Request Error Log: {startUpdateRequest.Error.ToString()}"; break;
+                case AppUpdateErrorCode.ErrorUpdateInProgress:   updateRequestLog = $"AppUpdate Request Error Log: {startUpdateRequest.Error.ToString()}"; break;
+                case AppUpdateErrorCode.ErrorInternalError:      updateRequestLog = $"AppUpdate Request Error Log: {startUpdateRequest.Error.ToString()}"; break;
+                case AppUpdateErrorCode.ErrorUserCanceled:       updateRequestLog = $"AppUpdate Request Error Log: {startUpdateRequest.Error.ToString()}"; break;
+                case AppUpdateErrorCode.ErrorUpdateFailed:       updateRequestLog = $"AppUpdate Request Error Log: {startUpdateRequest.Error.ToString()}"; break;
+                case AppUpdateErrorCode.ErrorPlayStoreNotFound:  updateRequestLog = $"AppUpdate Request Error Log: {startUpdateRequest.Error.ToString()}"; break;
+                case AppUpdateErrorCode.ErrorAppNotOwned:        updateRequestLog = $"AppUpdate Request Error Log: {startUpdateRequest.Error.ToString()}"; break;
+                default:                                         updateRequestLog = $"AppUpdate Request Error Log: {startUpdateRequest.Error.ToString()}"; break;
             }
 
             failedOrDeniedCallback?.Invoke();
-
-            CatLog.ELog("오류가 발생했거나, 사용자가 업데이트를 취소했습니다.");
+            CatLog.ELog($"업데이트 요청 에러가 발생했습니다. {updateRequestLog}");
         }
     }
 }

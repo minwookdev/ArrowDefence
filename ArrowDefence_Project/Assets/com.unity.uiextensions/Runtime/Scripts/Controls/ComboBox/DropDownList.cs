@@ -280,6 +280,11 @@ namespace UnityEngine.UI.Extensions
 			}
 		}
 
+		public void OnSelectFirstItem() {
+			OnItemClicked(0);
+			ToggleDropdownPanel(false);
+		}
+
 		private void OnItemClicked(int indx)
 		{
 			//Debug.Log("item " + indx + " clicked");

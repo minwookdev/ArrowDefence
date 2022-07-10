@@ -27,6 +27,12 @@ namespace I2.Loc
 			public static string RANGE_SMALL 		{ get{ return LocalizationManager.GetTranslation ("Common/RANGE_SMALL"); } }
 		}
 
+		public static class ErrorLog
+		{
+			public static string NoEquippedArrow 		{ get{ return LocalizationManager.GetTranslation ("ErrorLog/NoEquippedArrow"); } }
+			public static string NoEquippedBow 		{ get{ return LocalizationManager.GetTranslation ("ErrorLog/NoEquippedBow"); } }
+		}
+
 		public static class StageName
 		{
 			public static string Dungeon_Easy 		{ get{ return LocalizationManager.GetTranslation ("StageName/Dungeon_Easy"); } }
@@ -42,6 +48,11 @@ namespace I2.Loc
 		{
 			public static string craftingslot_remaining_complete 		{ get{ return LocalizationManager.GetTranslation ("UI/craftingslot_remaining_complete"); } }
 			public static string craftingslot_remaining_inprogress 		{ get{ return LocalizationManager.GetTranslation ("UI/craftingslot_remaining_inprogress"); } }
+		}
+
+		public static class UI_SettingsPanel
+		{
+			public static string SelectLanguage 		{ get{ return LocalizationManager.GetTranslation ("UI/SettingsPanel/SelectLanguage"); } }
 		}
 	}
 
@@ -70,6 +81,12 @@ namespace I2.Loc
 		    public const string RANGE_SMALL = "Common/RANGE_SMALL";
 		}
 
+		public static class ErrorLog
+		{
+		    public const string NoEquippedArrow = "ErrorLog/NoEquippedArrow";
+		    public const string NoEquippedBow = "ErrorLog/NoEquippedBow";
+		}
+
 		public static class StageName
 		{
 		    public const string Dungeon_Easy = "StageName/Dungeon_Easy";
@@ -85,6 +102,11 @@ namespace I2.Loc
 		{
 		    public const string craftingslot_remaining_complete = "UI/craftingslot_remaining_complete";
 		    public const string craftingslot_remaining_inprogress = "UI/craftingslot_remaining_inprogress";
+		}
+
+		public static class UI_SettingsPanel
+		{
+		    public const string SelectLanguage = "UI/SettingsPanel/SelectLanguage";
 		}
 	}
 }

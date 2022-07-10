@@ -8,7 +8,7 @@ namespace UnityEngine.UI.Extensions
     {
         public RectTransform rectTransform;
         public Button btn;
-        public Text txt;
+        public TMPro.TextMeshProUGUI txt;
         public Image btnImg;
         public Image img;
         public GameObject gameobject;
@@ -19,7 +19,7 @@ namespace UnityEngine.UI.Extensions
             rectTransform = btnObj.GetComponent<RectTransform>();
             btnImg = btnObj.GetComponent<Image>();
             btn = btnObj.GetComponent<Button>();
-            txt = rectTransform.Find("Text").GetComponent<Text>();
+            txt = rectTransform.Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
             img = rectTransform.Find("Image").GetComponent<Image>();
         }
     }

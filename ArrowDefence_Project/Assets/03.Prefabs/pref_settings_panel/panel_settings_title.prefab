@@ -270,6 +270,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 881284100194442456, guid: e41c3dcd76f235e458d990d19e522b95,
+        type: 3}
+      propertyPath: m_Value
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2392466690657149135, guid: e41c3dcd76f235e458d990d19e522b95,
         type: 3}
       propertyPath: m_fontAsset
@@ -493,6 +498,16 @@ PrefabInstance:
       propertyPath: m_sharedMaterial
       value: 
       objectReference: {fileID: 2100000, guid: 000a3a0a9a735a447a33cbff6b3609ab, type: 2}
+    - target: {fileID: 2608118256407193603, guid: e41c3dcd76f235e458d990d19e522b95,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2608118256407193603, guid: e41c3dcd76f235e458d990d19e522b95,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3133339917973089948, guid: e41c3dcd76f235e458d990d19e522b95,
         type: 3}
       propertyPath: mTermSecondary
@@ -533,6 +548,11 @@ PrefabInstance:
       propertyPath: mLocalizeTarget
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 5864958432988098505, guid: e41c3dcd76f235e458d990d19e522b95,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 6322824062485439787, guid: e41c3dcd76f235e458d990d19e522b95,
         type: 3}
       propertyPath: mTermSecondary
@@ -542,6 +562,11 @@ PrefabInstance:
         type: 3}
       propertyPath: mLocalizeTarget
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7719699864862904054, guid: e41c3dcd76f235e458d990d19e522b95,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8146351424097648461, guid: e41c3dcd76f235e458d990d19e522b95,
         type: 3}

@@ -160,9 +160,9 @@
         void FadeOut() {
             fadeCanvasGroup.alpha = StNum.floatOne;
             fadeCanvasGroup.DOFade(StNum.floatZero, fadeOutTime)
-                .OnStart(() => fadeCanvasGroup.blocksRaycasts = false)
+                .OnStart(() => fadeCanvasGroup.blocksRaycasts = true)
                 .OnComplete(() => {
-                    fadeCanvasGroup.blocksRaycasts = true;
+                    fadeCanvasGroup.blocksRaycasts = false;
                     fadeCanvasGroup.gameObject.SetActive(false);
                 });
         }

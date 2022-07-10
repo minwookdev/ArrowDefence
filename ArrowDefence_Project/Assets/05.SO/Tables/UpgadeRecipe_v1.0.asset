@@ -23,3 +23,23 @@ MonoBehaviour:
       Required: 1
     FailedProb: 30
     Result: {fileID: 11400000, guid: 38a1208e733d73a47b3d6157ab20f5c8, type: 2}
+  - KeyItem: {fileID: 11400000, guid: 7587c4bee74573e49a959676141e9625, type: 2}
+    Materials:
+    - Mat: {fileID: 11400000, guid: 818e48ff8014cd743904a971f1118bab, type: 2}
+      Required: 40
+    - Mat: {fileID: 11400000, guid: f8cf2d491cdbd38409db2b0178418dce, type: 2}
+      Required: 20
+    - Mat: {fileID: 11400000, guid: f8b55570f728f0340aad9eecc52166a5, type: 2}
+      Required: 3
+    FailedProb: 10
+    Result: {fileID: 11400000, guid: b52843f106b36774793af752cd86ae8b, type: 2}
+  - KeyItem: {fileID: 11400000, guid: e503007e901a880448a5186432880cf4, type: 2}
+    Materials:
+    - Mat: {fileID: 11400000, guid: 651977433f75de345bc072a75944188e, type: 2}
+      Required: 40
+    - Mat: {fileID: 11400000, guid: 6727f1d234cbc2a428aa767cc63796f6, type: 2}
+      Required: 20
+    - Mat: {fileID: 11400000, guid: aa2caf6c07b985543b396e9aace9189e, type: 2}
+      Required: 3
+    FailedProb: 95
+    Result: {fileID: 11400000, guid: 423764053d7dd624abc41927fcc94995, type: 2}

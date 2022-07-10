@@ -40,9 +40,12 @@
         }
 
         private void Start() {
-            //광고 매니저 초기화
-            AdsManager.Instance.InitRuntimeMgr();
             enabledColor = ImgInterstitialAds.color;
+
+            // 해당 패널은 에디터 안에서만 활성화
+#if !UNITY_EDITOR
+            gameObject.SetActive(false);
+#endif
         }
 
         private void Update() {
@@ -63,7 +66,7 @@
             }
         }
 
-        #region ADS_BUTTON
+#region ADS_BUTTON
 
         public void OnShowinterstitialAds() {
             AdsManager.Instance.ShowInterstitialAds();
@@ -73,9 +76,9 @@
             AdsManager.Instance.ShowRewardedAds();
         }
 
-        #endregion
+#endregion
 
-        #region BUTTON_METHOD
+#region BUTTON_METHOD
 
         public void Button_PanelOpen()
         {
@@ -148,7 +151,7 @@
             Notify.Inst.Message("Unlock User's Function.");
         }
 
-        #endregion
+#endregion
 
         //뒤집힌 그래픽에 대한 EventTrigger를 정상적으로 실행하지 않는 현상에 대한 기록할 것.
     }

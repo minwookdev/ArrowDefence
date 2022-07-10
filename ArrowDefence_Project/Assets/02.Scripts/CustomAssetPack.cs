@@ -9,8 +9,8 @@
 
     public static class CustomAssetPack {
         // AssetPack Name
-        public static string SoundAssetPackName   = "sound_assetpack_105";
-        public static string FontsAssetPackName   = "fonts_assetpack_105";
+        public static string SoundAssetPackName   = "sound_assetpack_107";
+        public static string FontsAssetPackName   = "fonts_assetpack_107";
 
         // Asset Folder Path
         public static string SoundAssetFolderPath   = "Assets/10.Sounds/packing_sound";
@@ -19,10 +19,18 @@
         public static string[] OldPackNames = new string[] {
             "sound_assetpack_102",
             "fonts_assetpack_102",
+
             "sound_assetpack_103",
             "fonts_assetpack_103",
+
             "sound_assetpack_104",
-            "fonts_assetpack_104"
+            "fonts_assetpack_104",
+
+            "sound_assetpack_105",
+            "fonts_assetpack_105",
+
+            "sound_assetpack_106",
+            "fonts_assetpack_106"
         };
 
         public static string[] AssetPackNames {

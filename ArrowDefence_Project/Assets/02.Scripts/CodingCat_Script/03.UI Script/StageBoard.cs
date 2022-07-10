@@ -36,20 +36,12 @@
         [SerializeField] bool isDebug = false;
         [SerializeField] bool isLockOnBuild = false;
 
-        [Header("OVERRIDE MATERIAL")]
-        [SerializeField] bool isOverrideMaterial       = false;
-        [SerializeField] Material fontMaterial         = null;
-        [SerializeField] TextMeshProUGUI[] targetTexts = null;
-
         void Start() {
             // Update Challenge Panel
             UpdateChallengeList(ref isAchieveAll, out bool isClearedStage);
             UpdateMonsterList();
             UpdateDropTableList(isClearedStage);
             UpdateSettingsPanel(isAchieveAll);
-
-            // Check Font Material Override
-            FontMaterialOverride();
         }
 
         void OnEnable() {
@@ -192,21 +184,6 @@
             MainSceneRoute.Inst.OpenBattlePopup(stageType);
         }
 
-        #region MATERIAL_OVERRIDE
-
-        private void FontMaterialOverride() {
-            if (!isOverrideMaterial) {
-                return;
-            }
-
-            //Apply All Texts
-            foreach (var text in targetTexts) {
-                text.fontMaterial = fontMaterial;
-            }
-        }
-
-        #endregion
-
         #region CHALLENGE_INFO
 
         [System.Serializable]
@@ -283,7 +260,7 @@
                 if(stageSetting == null) {
                     throw new System.Exception("Stage Settings Data is Null.");
                 }
-                stageSetting.SetMutant(toggleAutoShot.isOn);
+                stageSetting.SetMutant(toggleSpawnMutantMonster.isOn);
             }
         }
         //============================================================================================================================

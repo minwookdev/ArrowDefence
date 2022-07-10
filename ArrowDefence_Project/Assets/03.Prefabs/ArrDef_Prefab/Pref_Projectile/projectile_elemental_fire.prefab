@@ -45,7 +45,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2fa19530644a698449510897cb2dffe9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseDamage: 50
   finCalcDamage: 0
   tr: {fileID: 4698312999232360744}
   coll: {fileID: 5277913442314701506}
@@ -158,6 +157,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3123562649251334628, guid: d2e43e720584388498a15751b0507a76,
+        type: 3}
+      propertyPath: m_SortingLayer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 3123562649251334628, guid: d2e43e720584388498a15751b0507a76,
+        type: 3}
+      propertyPath: m_SortingOrder
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3123562649251334628, guid: d2e43e720584388498a15751b0507a76,
+        type: 3}
+      propertyPath: m_SortingLayerID
+      value: 1612283651
       objectReference: {fileID: 0}
     - target: {fileID: 3123562649251334629, guid: d2e43e720584388498a15751b0507a76,
         type: 3}

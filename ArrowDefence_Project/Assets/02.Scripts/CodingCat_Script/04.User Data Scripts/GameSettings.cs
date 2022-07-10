@@ -11,6 +11,10 @@
             get; private set; 
         } = PULLINGTYPE.FREE_TOUCH;
 
+        public string LanguageCode {
+            get; private set;
+        } = "";
+
         //PROPERTY
         public bool GetPullTypeToBoolean {
             get {
@@ -55,13 +59,16 @@
             CatLog.Log($"Currnet Control Type: {PullingType}");
         }
 
+        public void SetLanguageCode(string languageCode) => LanguageCode = languageCode;
+
         public static GameSettings defaultSettings {
             get {
                 return new GameSettings() {
                     stageSettings = new Dictionary<string, StageSetting>(),
-                    PullingType = PULLINGTYPE.FREE_TOUCH,
+                    PullingType   = PULLINGTYPE.FREE_TOUCH,
                     bgmVolumeParamsValue = 1.0f,
-                    seVolumeParamsValue  = 1.0f
+                    seVolumeParamsValue  = 1.0f,
+                    LanguageCode = I2.Loc.LocalizationManager.GetCurrentDeviceLanguage()
                 };
             }
         }

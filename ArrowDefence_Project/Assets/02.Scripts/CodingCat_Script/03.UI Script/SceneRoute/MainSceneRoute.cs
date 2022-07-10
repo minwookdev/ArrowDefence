@@ -149,7 +149,7 @@ public class MainSceneRoute : MonoBehaviour {
         }
 
         if (Input.GetKeyDown(KeyCode.A)) {
-
+            CatLog.Log($"Current Time: {DateTime.Now}");
         }
 
         //if (Input.GetMouseButton(0)) {
@@ -281,9 +281,9 @@ public class MainSceneRoute : MonoBehaviour {
         ImgFade.alpha = 1f;
 
         ImgFade.DOFade(0f, FadeTime)
-               .OnStart(() => ImgFade.blocksRaycasts = false)
+               .OnStart(() => ImgFade.blocksRaycasts = true)
                .OnComplete(() => {  
-                   ImgFade.blocksRaycasts = true;
+                   ImgFade.blocksRaycasts = false;
                    ImgFade.gameObject.SetActive(false);
                });
     }

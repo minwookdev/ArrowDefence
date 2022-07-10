@@ -68,7 +68,7 @@
             fadePanel.DOFade(StNum.floatOne, defaultFadeTime)
                      .SetUpdate(true)
                      .OnStart(() => {
-                         fadePanel.blocksRaycasts = false;
+                         fadePanel.blocksRaycasts = true;
                          fadePanel.gameObject.SetActive(true);
                      })
                      .OnComplete(() => {
@@ -84,7 +84,7 @@
             fadePanel.DOFade(StNum.floatOne, defaultFadeTime)
                 .SetUpdate(true)
                 .OnStart(() => {
-                    fadePanel.blocksRaycasts = false;
+                    fadePanel.blocksRaycasts = true;
                     fadePanel.gameObject.SetActive(true);
                 })
                 .OnComplete(() => {
@@ -100,7 +100,7 @@
         public void Resume(PanelPause panel, CanvasGroup canvasGroup, float fadeTime, System.Action completeCallback = null) {
             canvasGroup.DOFade(StNum.floatZero, fadeTime)
                 .SetUpdate(true)
-                .OnStart(() => canvasGroup.blocksRaycasts = false)
+                .OnStart(() => { })
                 .OnComplete(() => {
                     GameManager.Instance.ResumeBattle();
                     panel.gameObject.SetActive(false);

@@ -475,6 +475,14 @@
 
             return false;
         }
+
+        public static bool IsNull<T>(this T target) where T : class {
+            return (target == null);
+        }
+
+        public static string GetCurrencyUnitStr(int amount) {
+            return amount.ToString("#,##0");
+        }
     }
 
     public static class StNum {

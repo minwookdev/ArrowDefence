@@ -15,7 +15,7 @@ MonoBehaviour:
   mSource:
     UserAgreesToHaveItOnTheScene: 0
     UserAgreesToHaveItInsideThePluginsFolder: 0
-    GoogleLiveSyncIsUptoDate: 1
+    GoogleLiveSyncIsUptoDate: 0
     mTerms:
     - Term: ABILITY/ADDITIONAL_FIRE
       TermType: 0
@@ -3644,6 +3644,66 @@ MonoBehaviour:
       - SALE ITEM
       - "\uC544\uC774\uD15C \uD310\uB9E4"
       - "\u30A2\u30A4\u30C6\u30E0\u8CA9\u58F2"
+      - 
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: UI/SellPopup/TotalAmount
+      TermType: 0
+      Description: 
+      Languages:
+      - Total Amount
+      - "\uC18C\uC9C0 \uC544\uC774\uD15C \uAC2F\uC218"
+      - "\u6240\u6301\u30A2\u30A4\u30C6\u30E0\u672C\u6570"
+      - 
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: UI/SellPopup/UnitPrice
+      TermType: 0
+      Description: 
+      Languages:
+      - Unit Price
+      - "\uAC1C\uB2F9 \uC544\uC774\uD15C \uAC00\uACA9"
+      - "\u5358\u4FA1"
+      - 
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: UI/SellPopup/SellPrice
+      TermType: 0
+      Description: 
+      Languages:
+      - SALE PRICE
+      - "\uCD1D \uD310\uB9E4 \uAE08\uC561"
+      - "\u7DCF\u8CA9\u58F2\u984D"
+      - 
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: UI/SellPopup/ButtonSell
+      TermType: 0
+      Description: 
+      Languages:
+      - SELL
+      - "\uD310\uB9E4"
+      - 
+      - 
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: UI/SellPopup/ButtonCancel
+      TermType: 0
+      Description: 
+      Languages:
+      - CANCEL
+      - "\uCDE8\uC18C"
+      - 
+      - 
+      Flags: 00000000
+      Languages_Touch: []
+    - Term: UI/SellPopup/Title_Equip
+      TermType: 0
+      Description: 
+      Languages:
+      - SALE EQUIPMENT
+      - "\uC7A5\uBE44 \uC544\uC774\uD15C \uD310\uB9E4"
+      - "\u88C5\u5099\u54C1\u306E\u8CA9\u58F2"
       - 
       Flags: 00000000
       Languages_Touch: []

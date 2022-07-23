@@ -32,6 +32,11 @@
                 return CCPlayerData.equipments;
             }
         }
+        public AD_Inventory PlayerInven {
+            get {
+                return CCPlayerData.inventory;
+            }
+        }
         public bool? IsAppUpdateAvailable {
             get; private set;
         } = null;

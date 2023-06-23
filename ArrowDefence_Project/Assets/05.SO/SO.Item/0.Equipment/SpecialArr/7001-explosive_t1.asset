@@ -25,13 +25,13 @@ MonoBehaviour:
   LessArrowObj: {fileID: 0}
   ArrowSkillFst: {fileID: 11400000, guid: 6a7823c1d45714d4aa9c0dc7b72ebb12, type: 2}
   ArrowSkillSec: {fileID: 11400000, guid: 196b0c6a8aec919499a883aaed2acc9f, type: 2}
-  AdditionalSpeed: 0
-  ArrowDamageInc: 0
-  ProjectileDamageInc: 0
-  SpellDamageInc: 45
-  BaseDamageInc: 100
-  CriticalChanceInc: 0
-  CriticalDamageMultiplierInc: 0
+  AdditionalSpeed: 3.2
+  ArrowDamageInc: 0.5
+  ProjectileDamageInc: 20
+  SpellDamageInc: 60
+  BaseDamageInc: 300
+  CriticalChanceInc: 12
+  CriticalDamageMultiplierInc: 1.5
   ArmorPenetrationInc: 0
   effects: []
   ArrowSkillTrd: {fileID: 0}

@@ -62,7 +62,7 @@
             tmpCount.text = "";
 
             //Disable GameObejct (this action is stop the coroutine)
-            DisableRequest();
+            ReturnToPoolRequest();
         }
 
         System.Collections.IEnumerator FloatingWithScale(string count, Vector2 direction) {
@@ -101,9 +101,9 @@
             tmpCount.text = ""; //Clear Text
 
             //Disable GameObejct (this action is stop the coroutine)
-            DisableRequest();
+            ReturnToPoolRequest();
         }
 
-        public void DisableRequest() => CCPooler.ReturnToPool(gameObject);
+        public void ReturnToPoolRequest() => CCPooler.ReturnToPool(gameObject);
     }
 }

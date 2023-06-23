@@ -91,7 +91,7 @@
             }
 
             //Equipment Item : Accessories
-            var accessories = equipment.GetAccessories();
+            var accessories = equipment.GetArtifacts();
 
             for (int i = 0; i < accessories.Length; i++)
             {

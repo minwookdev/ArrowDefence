@@ -259,7 +259,7 @@
         public void UpdateAbility(Player_Equipments equipments) {
             //Get All Artifact Abilities.
             System.Collections.Generic.List<Ability> allArtifactAbilites = new System.Collections.Generic.List<Ability>();
-            foreach (var artifact in equipments.GetAccessories()) {
+            foreach (var artifact in equipments.GetArtifacts()) {
                 if (artifact != null) {
                     var abilities = artifact.AbilitiesOrNull;
                     for (int i = 0; i < abilities.Length; i++) {

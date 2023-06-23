@@ -23,7 +23,7 @@
             }
         }
 
-        public virtual void DisableRequest() {
+        public virtual void ReturnToPoolRequest() {
             CCPooler.ReturnToPool(gameObject);
         }
 
@@ -34,7 +34,7 @@
             xIn = (tempPos.x >= PointLeftTop.x - screenOffset.x && tempPos.x <= PointRightBottom.x + screenOffset.x);
             yIn = (tempPos.y >= PointRightBottom.y - screenOffset.y && tempPos.y <= PointLeftTop.y + screenOffset.y);
             if (!(xIn && yIn)) { //Out of Screen
-                DisableRequest();
+                ReturnToPoolRequest();
             }
         }
 

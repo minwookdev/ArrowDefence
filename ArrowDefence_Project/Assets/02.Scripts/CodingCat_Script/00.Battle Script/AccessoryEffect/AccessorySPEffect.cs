@@ -176,7 +176,12 @@
         float timeSlowRatio;
         float duration;
 
+        /// <summary>
+        /// 게임 시간 느려지는 효과
+        /// </summary>
         public override void OnActive() {
+            // (UnityEngine.Time.timeScale 수치 조정)
+            // 1f - (시간이 느려지게 할 비율 (0f~1f) 1f일 때 완전히 게임 시간의 흐름이 멈춤)
             GameManager.Instance.TimeScaleSet(StNum.floatOne - timeSlowRatio);
         }
 
@@ -214,7 +219,11 @@
         int healRepeatTime = 0;
         float repeatIntervalTime = 0f;
 
+        /// <summary>
+        /// 플레이어 체력의 회복
+        /// </summary>
         public override void OnActive() {
+            // 플레이어의 체력을 회복하는 이벤트 호출 (매개 변수는 체력 회복 수치)
             BattleProgresser.OnIncPlayerHealth(healAmount);
         }
 
@@ -263,25 +272,30 @@
             return string.Format(loc, (slowRatio * 100).ToString().GetColor(StringColor.GREEN), duration.ToString().GetColor(StringColor.YELLOW));
         }
 
-        public override void ActiveDebuff(MonsterStatus[] statusArray) {
-            //base.ActiveDebuff(position);
-            //전달받은 position에 Physics2D로 콜라이더 뿌려서 해당 반경의 몬스터 객체들 거두고 
-            //걔네들한테 MonsterState 컴포넌트 배열로 잡아서 다 디버프 효과 뿌려주면 될듯?
-            //CatLog.Log("Artifact SP Effect: Cursed Slow까지 잘 전달됨");
+        /// <summary>
+        /// 몬스터의 스테아터스 수치 하락
+        /// </summary>
+        /// <param name="monsterStatusArray"></param>
+        public override void ActiveDebuff(MonsterStatus[] monsterStatusArray) {
+            ///base.ActiveDebuff(position);
+            ///전달받은 position에 Physics2D로 콜라이더 뿌려서 해당 반경의 몬스터 객체들 거두고 
+            ///걔네들한테 MonsterState 컴포넌트 배열로 잡아서 다 디버프 효과 뿌려주면 될듯?
+            ///CatLog.Log("Artifact SP Effect: Cursed Slow까지 잘 전달됨");
+            ///
+            ///var isTargetExist = GameGlobal.TryGetOverlapCircleAll2D(out Collider2D[] targets, position, radius, AD_Data.LAYER_MONSTER);
+            ///if (isTargetExist) {
+            ///    foreach (var target in targets) {
+            ///        if (target.TryGetComponent<MonsterState>(out MonsterState state)) {
+            ///            state.ValActionSpeed(slowRatio, duration);
+            ///        }
+            ///        else {
+            ///            CatLog.WLog($"The Target Can't Exsist MonsterState Component, but this target is Monster. Name: {target.name}");
+            ///        }
+            ///    }
+            ///}
 
-            //var isTargetExist = GameGlobal.TryGetOverlapCircleAll2D(out Collider2D[] targets, position, radius, AD_Data.LAYER_MONSTER);
-            //if (isTargetExist) {
-            //    foreach (var target in targets) {
-            //        if (target.TryGetComponent<MonsterState>(out MonsterState state)) {
-            //            state.ValActionSpeed(slowRatio, duration);
-            //        }
-            //        else {
-            //            CatLog.WLog($"The Target Can't Exsist MonsterState Component, but this target is Monster. Name: {target.name}");
-            //        }
-            //    }
-            //}
-
-            foreach (var status in statusArray) {
+            // 몬스터의 Status를 배열로 받고 ActionSpeed 수치를 조정하는 함수 호출. 느려질 비율과 지속시간 전달
+            foreach (var status in monsterStatusArray) {
                 status.ValActionSpeed(slowRatio, duration);
             }
         }

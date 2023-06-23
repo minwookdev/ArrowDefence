@@ -52,8 +52,6 @@
         }
         #endregion
 
-        public override object GetItem() => throw new System.NotImplementedException();
-
         protected abstract Ability[] GetNewAbilities(Ability[] abilities);
 
         public EQUIP_ITEMTYPE GetEquipType() => EquipType;

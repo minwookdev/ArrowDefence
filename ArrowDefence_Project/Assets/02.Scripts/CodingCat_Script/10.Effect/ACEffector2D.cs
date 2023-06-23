@@ -47,7 +47,7 @@
             }
         }
 
-        public void DisableRequest() {
+        public void ReturnToPoolRequest() {
             CCPooler.ReturnToPool(gameObject);
         }
 
@@ -98,7 +98,7 @@
         IEnumerator RunEffect() {
             particleSys.Play();
             yield return waitUntil;
-            DisableRequest();
+            ReturnToPoolRequest();
         }
 
         public bool IsPlaying() {

@@ -293,6 +293,14 @@
             return (number >= (number - range) && number <= (number + range));
         }
 
+        public static bool IsInRange(float targetNum, float range) {
+            return (targetNum >= (range - range) && targetNum <= (range + range));
+        }
+
+        public static bool IsInRange(float targetNum, float standardNum, float range) {
+            return (targetNum >= (standardNum - range) && targetNum <= (standardNum + range));
+        }
+
         public static T RandIndex<T>(this T[] array) {
             return array[Random.Range(0, array.Length)];
         }

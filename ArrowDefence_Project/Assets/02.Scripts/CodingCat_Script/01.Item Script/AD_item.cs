@@ -75,13 +75,8 @@
 
         #endregion
 
-        /// <summary>
-        /// NEVER USE CASTING
-        /// </summary>
-        /// <returns></returns>
-        public abstract object GetItem();
+        public abstract T GetItem<T>() where T : AD_item;
 
-        
         /// <summary>
         /// Only Terms Constructor
         /// </summary>

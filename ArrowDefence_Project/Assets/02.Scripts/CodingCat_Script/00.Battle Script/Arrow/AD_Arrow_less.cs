@@ -156,7 +156,7 @@
 
             //Out of Screen
             if (!(xIn && yIn)) {
-                DisableRequest();
+                ReturnToPoolRequest();
                 return;
             }
         }
@@ -216,7 +216,7 @@
 
         #region Interface_Pool
 
-        public void DisableRequest() => CCPooler.ReturnToPool(gameObject, 0);
+        public void ReturnToPoolRequest() => CCPooler.ReturnToPool(gameObject, 0);
 
         #endregion
         
@@ -231,7 +231,7 @@
                         //Hit Result True - Disable GameObject
                         PlayEffect(collData.CollisionPoint);
                         collisionQueue.Clear();
-                        DisableRequest();
+                        ReturnToPoolRequest();
                     }
                     else { //Hit Result False - Ignore Collision
                         break;
@@ -243,7 +243,7 @@
                         PlayEffect(collData.CollisionPoint);
                         audioSource.PlayOneShot(defaultHitSounds.RandIndex());
                         collisionQueue.Clear();
-                        DisableRequest();
+                        ReturnToPoolRequest();
                     }
                     else { //Hit Result False - Ignore Collision
                         break;

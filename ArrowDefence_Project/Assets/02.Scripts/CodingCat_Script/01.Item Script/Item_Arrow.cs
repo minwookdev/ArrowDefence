@@ -168,8 +168,6 @@
             return tempList.ToArray();
         }
 
-        public override object GetItem() => this;
-
         public GameObject GetObject_MainArrow()
         {
             if(MainArrowObject == null)
@@ -249,8 +247,16 @@
             return false;
         }
 
-        public void Init(string mainArrowObjTag, string lessArrowObjTag, int poolQuantity, PlayerAbilitySlot ability) {
-            if(MainArrowObject == null || LessArrowObject == null) {
+        /// <summary>
+        /// Battle Scene Setup
+        /// </summary>
+        /// <param name="mainArrowObjTag"></param>
+        /// <param name="lessArrowObjTag"></param>
+        /// <param name="poolAmount"></param>
+        /// <param name="ability"></param>
+        /// <exception cref="System.Exception"></exception>
+        public void Setup(string mainArrowObjTag, string lessArrowObjTag, int poolAmount, PlayerAbilitySlot ability) {
+            if (MainArrowObject == null || LessArrowObject == null) {
                 throw new System.Exception($"ArrowItem : {termsName} is ArrowPrefab NULL.");
             }
 
@@ -302,8 +308,8 @@
             //lessArrow.PowerFactor = (isExistsSpeedAbility) ? speed + incSpeed.GetValueToSingle() : speed;
 
             //Create Pools of Arrow Object
-            CCPooler.AddPoolList(mainArrowObjTag, poolQuantity, MainArrowObject, isTracking: false);
-            CCPooler.AddPoolList(lessArrowObjTag, poolQuantity, LessArrowObject, isTracking: false);
+            CCPooler.AddPoolList(mainArrowObjTag, poolAmount, MainArrowObject, isTracking: false);
+            CCPooler.AddPoolList(lessArrowObjTag, poolAmount, LessArrowObject, isTracking: false);
         }
 
         public void Release() {
@@ -319,6 +325,10 @@
             //Remove Origin Prefab EffectTags string Array
             MainArrowObject.GetComponent<AD_Arrow>().RemoveEffectInfo();
             LessArrowObject.GetComponent<AD_Arrow_less>().RemoveEffectInfo();
+        }
+
+        public override T GetItem<T>() {
+            throw new System.NotImplementedException();
         }
     }
 }

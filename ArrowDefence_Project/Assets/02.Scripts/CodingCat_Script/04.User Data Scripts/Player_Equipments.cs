@@ -51,7 +51,7 @@
         public Item_SpArr GetSpArrOrNull {
             get {
                 if (EquippedSpArr == null) return null;
-                else                       return EquippedSpArr;
+                else return EquippedSpArr;
             }
         }
         #endregion
@@ -153,7 +153,7 @@
         //=================================================================================================================================================
 
         public void Equip_SpArrow(Item_SpArr item) {
-            if(IsEquippedSpArr == true) {
+            if (IsEquippedSpArr == true) {
                 Release_SpArrow();
             }
             EquippedSpArr = item; // 실험적인 기능. 문제가 없다면 다른 아이템에도 동일 로직 적용
@@ -231,8 +231,7 @@
 
         #endregion
 
-        public Item_Bow GetBowItem()
-        {
+        public Item_Bow GetBowItem() {
             return EquippedBow;
         }
 
@@ -240,8 +239,7 @@
             return EquippedArrow_f;
         }
 
-        public Item_Arrow GetSubArrow()
-        {
+        public Item_Arrow GetSubArrow() {
             return EquippedArrow_s;
         }
 
@@ -249,8 +247,7 @@
         /// Null 체크 해야댐.
         /// </summary>
         /// <returns></returns>
-        public Item_Accessory[] GetAccessories()
-        {
+        public Item_Accessory[] GetArtifacts() {
             Item_Accessory[] accessories = { this.EquippedAccessory_f,
                                              this.EquippedAccessory_s,
                                              this.EquippedAccessory_t };
@@ -258,7 +255,7 @@
         }
 
         public Item_SpArr GetSpArrow() {
-            if(this.EquippedSpArr == null) {
+            if (this.EquippedSpArr == null) {
                 throw new System.Exception("Equipped Special Arrow is Null.");
             }
             return this.EquippedSpArr;
@@ -280,34 +277,41 @@
         #region INIT_EQUIPMENTS_IN_BATTLE
 
         /// <summary>
-        /// Battle Scene에서 Init처리되야할 요소들 처리
+        /// 장비 아이템의 장착을 확인하고 Setup호출
         /// </summary>
         /// <param name="bowObjectInitPos"></param>
         /// <param name="bowObjectParentTr"></param>
-        /// <param name="mainArrowPoolQuantity"></param>
-        /// <param name="subArrowPoolQuantity"></param>
-        public void InitEquipments(Transform bowObjectInitPos, Transform bowObjectParentTr, int mainArrowPoolQuantity, int subArrowPoolQuantity, UI.SwapSlots slot) {
-            AD_BowAbility ability = null;
-            if(IsEquippedBow == true) {
-                ability = EquippedBow.Initialize(bowObjectInitPos, bowObjectParentTr);
-            }
-            if(IsEquippedArrMain == true) {
-                EquippedArrow_f.Init(AD_Data.POOLTAG_MAINARROW, AD_Data.POOLTAG_MAINARROW_LESS, mainArrowPoolQuantity, ability.GetAbility(0));
-            }
-            if(IsEquippedArrSub == true) {
-                EquippedArrow_s.Init(AD_Data.POOLTAG_SUBARROW, AD_Data.POOLTAG_SUBARROW_LESS, subArrowPoolQuantity, ability.GetAbility(1));
-            }
-            //Equipment Ready, (Wait For Spawn Arrow Prafabs)
-            if (ability) {
-                ability.IsInitializedEquipments(this, true);
-            }
-            
-            foreach (var accessory in GetAccessories()) {
-                if (accessory != null) accessory.Init();
+        /// <param name="mainArrowPoolSpawnAmount"></param>
+        /// <param name="subArrowPoolSpawnAmoun"></param>
+        public void SetupEquipments(Transform bowPrefabInitTr, Transform bowPrefabParentTr, int mainArrowPoolSpawnAmount, int subArrowPoolSpawnAmoun, UI.SwapSlots slot) {
+            // Setup Bow: Main
+            AD_BowAbility ability = EquippedBow.Setup(bowPrefabInitTr.position, bowPrefabParentTr);
+            if (ability == null) {
+                CatLog.ELog("Equipped Bow Item Setup Failed.");
+                return;
             }
 
+            // Setup Arrows
+            if (IsEquippedArrMain) {
+                EquippedArrow_f.Setup(AD_Data.POOLTAG_MAINARROW, AD_Data.POOLTAG_MAINARROW_LESS, mainArrowPoolSpawnAmount, ability.GetAbility(0));
+            }
+            if (IsEquippedArrSub == true) {
+                EquippedArrow_s.Setup(AD_Data.POOLTAG_SUBARROW, AD_Data.POOLTAG_SUBARROW_LESS, subArrowPoolSpawnAmoun, ability.GetAbility(1));
+            }
+
+            // Send Result
+            ability.ArrowsSetupCompleted();
+            
+            // Setup Artifacts
+            foreach (var artifact in GetArtifacts()) {
+                if (artifact != null) {
+                    artifact.Setup();
+                }
+            }
+
+            // Setup SP Arrow
             if (IsEquippedSpArr) {
-                EquippedSpArr.Init(ability.GetAbility(2), 3);
+                EquippedSpArr.Setup(ability.GetAbility(2), 3);
                 ability.SetCondition(EquippedSpArr.Condition, slot);
             }
         }
@@ -330,9 +334,9 @@
         /// Clear Equipped Item Class
         /// </summary>
         public void Clear() {
-            this.EquippedBow         = null;
-            this.EquippedArrow_f     = null;
-            this.EquippedArrow_s     = null;
+            this.EquippedBow = null;
+            this.EquippedArrow_f = null;
+            this.EquippedArrow_s = null;
             this.EquippedAccessory_f = null;
             this.EquippedAccessory_s = null;
             this.EquippedAccessory_t = null;

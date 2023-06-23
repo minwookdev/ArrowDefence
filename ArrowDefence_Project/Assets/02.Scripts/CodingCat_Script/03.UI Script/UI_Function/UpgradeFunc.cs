@@ -3,6 +3,7 @@
     using System.Collections.Generic;
     using TMPro;
     using DG.Tweening;
+    using UnityEngine.Rendering.PostProcessing;
 
     [System.Serializable]
     public class UpgradeFunc {
@@ -12,15 +13,15 @@
         [SerializeField] RectTransform[] upgradePopups = null;
 
         [Header("INFORMATION")]
-        [SerializeField] [ReadOnly] PANELTYPE openedPanelType = PANELTYPE.NONE;
-        [SerializeField] [ReadOnly] POPUPTYPE openedPopupType = POPUPTYPE.NONE;
+        [SerializeField][ReadOnly] PANELTYPE openedPanelType = PANELTYPE.NONE;
+        [SerializeField][ReadOnly] POPUPTYPE openedPopupType = POPUPTYPE.NONE;
 
         [Header("REQUIRED")]
         [SerializeField] RequirementSlot requirementSlotPref = null;
         [SerializeField] RectTransform requirementSlotParent = null;
         [SerializeField] RectTransform requirementTextRectTr = null;
         [SerializeField] UI_ItemSlot selectedItemSlot = null;
-        [SerializeField] UI_ItemSlot previewItemSlot  = null;
+        [SerializeField] UI_ItemSlot previewItemSlot = null;
         [SerializeField] TextMeshProUGUI textSuccessProb = null;
         [SerializeField] TextMeshProUGUI textUpgradeResultName = null;
         List<RequirementSlot> requirementSlotList = null;
@@ -29,7 +30,7 @@
         [SerializeField] UpgradeableSlot upgradeableSlotPref = null;
         [SerializeField] RectTransform upgradeableSlotParent = null;
         [SerializeField] RectTransform upgradeableTextRectTr = null;
-        [SerializeField] CraftingFunc.Toggle toggleButton    = null;
+        [SerializeField] CraftingFunc.Toggle toggleButton = null;
         List<UpgradeableSlot> upgradeableSlotList = null;
 
         [Header("ITEM INFO POPUP")]
@@ -45,13 +46,13 @@
         [SerializeField] TextMeshProUGUI resultSubText = null;
         [SerializeField] UnityEngine.UI.Image resultHorizontalBar = null;
         [SerializeField] Audio.ACSound successSound = null;
-        [SerializeField] Audio.ACSound failedSound  = null;
+        [SerializeField] Audio.ACSound failedSound = null;
 
         [Header("ADS")]
         [SerializeField] UnityEngine.UI.Image[] imagesAd = null;
         float currentAdsReadyCheckTime = 0f;
         Color disableBtnColor = new Color(.4f, .4f, .4f, 1f);
-        Color enableBtnColor  = new Color(1f, 1f, 1f, 1f);
+        Color enableBtnColor = new Color(1f, 1f, 1f, 1f);
         Color tempColor;
         bool isReadyAds = false;
         bool IsAdsApplied = false;
@@ -62,8 +63,8 @@
         //
         UpgradeableSlot selectedSlot = null;
         UpgradeRecipe selectedRecipe = null;
-        AD_item selectedItemRef      = null;
-        Item_Equipment previewCache  = null;
+        AD_item selectedItemRef = null;
+        Item_Equipment previewCache = null;
 
         //New ItemGet Popup Tween Class
         TweenGetItemPopup itemGetPopupTween = null;
@@ -80,7 +81,7 @@
 
         public void Start(UpgradeRecipeSO recipe) {
             this.recipe = recipe;
-            if(this.recipe == null) {
+            if (this.recipe == null) {
                 CatLog.ELog("Upgrade Recipe ScriptableObject is Empty !");
             }
 
@@ -92,7 +93,7 @@
         }
 
         public void Enable() {
-            if(selectedItemRef != null) {
+            if (selectedItemRef != null) {
                 selectedItemRef = null;
             }
 
@@ -128,7 +129,7 @@
                     }
                     upgradePanels[0].anchoredPosition = anchoredPos;
                     return upgradePanels[0];
-                case PANELTYPE.CHOOSE: 
+                case PANELTYPE.CHOOSE:
                     if (isclearpanel) {
                         RefreshSelectPanel();
                     }
@@ -142,9 +143,9 @@
             openedPopupType = type;
             switch (openedPopupType) {
                 case POPUPTYPE.ITEMINFO: upgradePopups[0].anchoredPosition = anchoredPos; return upgradePopups[0];
-                case POPUPTYPE.ITEMGET:  upgradePopups[1].anchoredPosition = anchoredPos; return upgradePopups[1];
-                case POPUPTYPE.CONFIRM:  upgradePopups[2].anchoredPosition = anchoredPos; return upgradePopups[2];
-                case POPUPTYPE.ADS:      upgradePopups[3].anchoredPosition = anchoredPos; return upgradePopups[3];
+                case POPUPTYPE.ITEMGET: upgradePopups[1].anchoredPosition = anchoredPos; return upgradePopups[1];
+                case POPUPTYPE.CONFIRM: upgradePopups[2].anchoredPosition = anchoredPos; return upgradePopups[2];
+                case POPUPTYPE.ADS: upgradePopups[3].anchoredPosition = anchoredPos; return upgradePopups[3];
                 default: throw new System.NotImplementedException();
             }
         }
@@ -153,16 +154,16 @@
             openedPopupType = type;
             switch (openedPopupType) {
                 case POPUPTYPE.ITEMINFO: upgradePopups[0].anchoredPosition = upgradePanels[1].anchoredPosition; break;
-                case POPUPTYPE.ITEMGET:  upgradePopups[1].anchoredPosition = upgradePanels[0].anchoredPosition; break;
-                case POPUPTYPE.CONFIRM:  upgradePopups[2].anchoredPosition = upgradePanels[0].anchoredPosition; break;
+                case POPUPTYPE.ITEMGET: upgradePopups[1].anchoredPosition = upgradePanels[0].anchoredPosition; break;
+                case POPUPTYPE.CONFIRM: upgradePopups[2].anchoredPosition = upgradePanels[0].anchoredPosition; break;
                 default: throw new System.NotImplementedException();
             }
         }
 
         public void CloseOpenedPanel() {
             switch (openedPanelType) {
-                case PANELTYPE.NONE:                                                                          return;
-                case PANELTYPE.MAIN:   upgradePanels[0].anchoredPosition = navigateRectTr[0].anchoredPosition; break;
+                case PANELTYPE.NONE: return;
+                case PANELTYPE.MAIN: upgradePanels[0].anchoredPosition = navigateRectTr[0].anchoredPosition; break;
                 case PANELTYPE.CHOOSE: upgradePanels[1].anchoredPosition = navigateRectTr[1].anchoredPosition; break;
                 default: throw new System.NotImplementedException();
             }
@@ -172,9 +173,9 @@
         public void CloseOpenedPopup() {
             switch (openedPopupType) {
                 case POPUPTYPE.ITEMINFO: upgradePopups[0].anchoredPosition = navigateRectTr[2].anchoredPosition; break;
-                case POPUPTYPE.ITEMGET:  upgradePopups[1].anchoredPosition = navigateRectTr[3].anchoredPosition; break;
-                case POPUPTYPE.CONFIRM:  upgradePopups[2].anchoredPosition = navigateRectTr[4].anchoredPosition; break;
-                case POPUPTYPE.ADS:      upgradePopups[3].anchoredPosition = navigateRectTr[5].anchoredPosition; break;
+                case POPUPTYPE.ITEMGET: upgradePopups[1].anchoredPosition = navigateRectTr[3].anchoredPosition; break;
+                case POPUPTYPE.CONFIRM: upgradePopups[2].anchoredPosition = navigateRectTr[4].anchoredPosition; break;
+                case POPUPTYPE.ADS: upgradePopups[3].anchoredPosition = navigateRectTr[5].anchoredPosition; break;
                 default: throw new System.NotImplementedException();
             }
             openedPopupType = POPUPTYPE.NONE;
@@ -182,7 +183,7 @@
 
         public void ClearSelected() {
             selectedItemRef = null;
-            selectedRecipe  = null;
+            selectedRecipe = null;
             if (selectedSlot != null) {
                 selectedSlot.DeSelected();
                 selectedSlot = null;
@@ -205,7 +206,7 @@
             requirementTextRectTr.gameObject.SetActive(true);
 
             //Scene에 존재하고 있던 Prefab 비-활성화, 새로 생성한 Prefab만 사용
-            if(sceneExistSlots.Length > 1) {
+            if (sceneExistSlots.Length > 1) {
                 CatLog.WLog("Scene Exist Slots Size Over, Recommanded delete other Slots.");
             }
             foreach (var slot in sceneExistSlots) {
@@ -223,10 +224,10 @@
             previewItemSlot.DisableSlot();
             selectedItemSlot.DisableSlot();
 
-            if(selectedItemRef != null) {
+            if (selectedItemRef != null) {
                 selectedItemRef = null;
             }
-            
+
             previewCache = null; //Clear Preview Item Cache
 
             //Clear Selected Data
@@ -262,18 +263,18 @@
             selectedRecipe = targetRecipe;
             //assignment new preview cache
             switch (selectedRecipe.Result) {
-                case ItemData_Equip_Bow resultEntity:       previewCache = new Item_Bow(resultEntity);       break;
-                case ItemDt_SpArr resultEntity:             previewCache = new Item_SpArr(resultEntity);     break;
-                case ItemData_Equip_Arrow resultEntity:     previewCache = new Item_Arrow(resultEntity);     break;
+                case ItemData_Equip_Bow resultEntity: previewCache = new Item_Bow(resultEntity); break;
+                case ItemDt_SpArr resultEntity: previewCache = new Item_SpArr(resultEntity); break;
+                case ItemData_Equip_Arrow resultEntity: previewCache = new Item_Arrow(resultEntity); break;
                 case ItemData_Equip_Accessory resultEntity: previewCache = new Item_Accessory(resultEntity); break;
-                case null: CatLog.WLog("this Recipe is Not Assignment Result Item Entity");  previewCache = null; break;
-                default:   CatLog.WLog("this Result Item Entity Type is Not Implemented !"); previewCache = null; break;
+                case null: CatLog.WLog("this Recipe is Not Assignment Result Item Entity"); previewCache = null; break;
+                default: CatLog.WLog("this Result Item Entity Type is Not Implemented !"); previewCache = null; break;
             }
             UpdateProbText(); //Update Probablity Text
         }
 
         public bool TryOpenPreview(Vector2 anchoredPosition, out string log) {
-            if(previewCache == null) {
+            if (previewCache == null) {
                 if (selectedRecipe == null) {
                     log = "Please Select Upgrade Item First.";
                     return false;
@@ -302,7 +303,7 @@
         }
 
         void AddRequirementSlot(int count) {
-            if(count <= 0) {
+            if (count <= 0) {
                 return;
             }
 
@@ -316,7 +317,7 @@
         public bool IsCheckUpgradeable(out byte exceptionNumber) {
             //Selected Item is null
             if (selectedItemRef == null) {
-                exceptionNumber = 0; 
+                exceptionNumber = 0;
                 return false;
             }
 
@@ -357,11 +358,11 @@
         }
 
         public void UpdateProbText() {
-            string successProbString = string.Format("{0}{1} %{2}", (IsAdsApplied) ? "<color=green>" : "<color=white>", 
+            string successProbString = string.Format("{0}{1} %{2}", (IsAdsApplied) ? "<color=green>" : "<color=white>",
                                                                     (selectedRecipe != null) ? (100f - GameGlobal.GetUpgradeFailedProb(selectedRecipe.FailedProb, IsAdsApplied)).ToString() : "00",
                                                                     "</color>");
             textSuccessProb.fontSize = (IsAdsApplied) ? 48f : 40f;
-            textSuccessProb.text     = successProbString;
+            textSuccessProb.text = successProbString;
 
             //Scale Tween
             if (IsAdsApplied) {
@@ -406,9 +407,9 @@
             var enableNumber = toggleButton.EnableSlotIndex;
             AD_item[] upgradeableItems;
             switch (enableNumber) {
-                case 0: upgradeableItems = GameManager.Instance.FindUpgradeableItems(recipe.DictionaryKeys);                   break; // ALL
-                case 1: upgradeableItems = GameManager.Instance.FindUpgradeableItems(recipe.GetKeys(EQUIP_ITEMTYPE.BOW));      break; // BOW
-                case 2: upgradeableItems = GameManager.Instance.FindUpgradeableItems(recipe.GetKeys(EQUIP_ITEMTYPE.ARROW));    break; // ARROW
+                case 0: upgradeableItems = GameManager.Instance.FindUpgradeableItems(recipe.DictionaryKeys); break; // ALL
+                case 1: upgradeableItems = GameManager.Instance.FindUpgradeableItems(recipe.GetKeys(EQUIP_ITEMTYPE.BOW)); break; // BOW
+                case 2: upgradeableItems = GameManager.Instance.FindUpgradeableItems(recipe.GetKeys(EQUIP_ITEMTYPE.ARROW)); break; // ARROW
                 case 3: upgradeableItems = GameManager.Instance.FindUpgradeableItems(recipe.GetKeys(EQUIP_ITEMTYPE.ARTIFACT)); break; // ARTIFACT
                 default: throw new System.NotImplementedException();
             }
@@ -428,7 +429,7 @@
         }
 
         public void SetSelectPanel(sbyte enableNumber) {
-            if(enableNumber == toggleButton.EnableSlotIndex) { //같은타입 불러오기는 리턴
+            if (enableNumber == toggleButton.EnableSlotIndex) { //같은타입 불러오기는 리턴
                 return;
             }
 
@@ -438,9 +439,9 @@
             upgradeableSlotList.ForEach(slot => slot.DisableSlot());
             AD_item[] upgradeableItems;
             switch (toggleButton.EnableSlotIndex) {
-                case 0: upgradeableItems = GameManager.Instance.FindUpgradeableItems(recipe.DictionaryKeys);                   break; //all Recipe
-                case 1: upgradeableItems = GameManager.Instance.FindUpgradeableItems(recipe.GetKeys(EQUIP_ITEMTYPE.BOW));      break; //bow Recipe
-                case 2: upgradeableItems = GameManager.Instance.FindUpgradeableItems(recipe.GetKeys(EQUIP_ITEMTYPE.ARROW));    break; //arrow Recipe
+                case 0: upgradeableItems = GameManager.Instance.FindUpgradeableItems(recipe.DictionaryKeys); break; //all Recipe
+                case 1: upgradeableItems = GameManager.Instance.FindUpgradeableItems(recipe.GetKeys(EQUIP_ITEMTYPE.BOW)); break; //bow Recipe
+                case 2: upgradeableItems = GameManager.Instance.FindUpgradeableItems(recipe.GetKeys(EQUIP_ITEMTYPE.ARROW)); break; //arrow Recipe
                 case 3: upgradeableItems = GameManager.Instance.FindUpgradeableItems(recipe.GetKeys(EQUIP_ITEMTYPE.ARTIFACT)); break; //artifact recipe
                 default: throw new System.Exception();
             }
@@ -461,12 +462,12 @@
         }
 
         void AddUpgradeAbleSlot(int count) {
-            if(count <= 0) {
+            if (count <= 0) {
                 return;
             }
 
             for (int i = 0; i < count; i++) {
-                var newSlot  = GameObject.Instantiate<UpgradeableSlot>(upgradeableSlotPref, upgradeableSlotParent);
+                var newSlot = GameObject.Instantiate<UpgradeableSlot>(upgradeableSlotPref, upgradeableSlotParent);
                 newSlot.name = "slot_upgradeable_pref";
                 newSlot.SetAction(OpenItemInfoPopup, SelectSlotSwitch);
                 upgradeableSlotList.Add(newSlot);
@@ -475,12 +476,12 @@
 
         void SelectSlotSwitch(UpgradeableSlot slot, bool isSelect, AD_item itemref = null) {
             if (!isSelect) {
-                if(selectedSlot != null) {
+                if (selectedSlot != null) {
                     selectedSlot.DeSelected();
                     selectedSlot = null;
                 }
 
-                if(itemref == null) {
+                if (itemref == null) {
                     throw new System.Exception("Item Referecne is Null.");
                 }
 
@@ -494,7 +495,7 @@
                 }
 
                 slot.DeSelected();
-                selectedSlot    = null;
+                selectedSlot = null;
                 selectedItemRef = null;
             }
         }
@@ -533,13 +534,13 @@
         //============================================================ [ ITEM INFO ] ===========================================================
 
         void OpenItemInfoPopup(AD_item item) {
-            if(selectedSlot != null) {
+            if (selectedSlot != null) {
                 selectedSlot.DeSelected();
-                selectedSlot    = null;
+                selectedSlot = null;
                 selectedItemRef = null;
             }
 
-            if(item == null) {
+            if (item == null) {
                 throw new System.Exception("item reference is null");
             }
 
@@ -562,6 +563,58 @@
             textResultItemName.text = string.Format("[ {0} ]", selectedRecipe.Result.NameByTerms);
         }
 
+        public bool TryUpgradeItem(ref bool isUpgradeSuccess) {
+            // 업그레이드 선택된 장비 아이템이 인벤토리에 있는지 다시 체크
+            if (GameManager.Instance.FindItemByRef(selectedItemRef) == false) {
+                Notify.Inst.Message("해당 장비 아이템이 없습니다.");
+                return false; // 강화 로직처리 실패
+            }
+
+            // 업그레이드 레시피 재료 아이템들의 요구 수량만큼 인벤토리에있는지 체크
+            bool checkAllMaterialItems = CheckMaterialItems().TrueForAll(isFind => isFind);
+            if (checkAllMaterialItems == false) { // 재료 아이템 부족
+                Notify.Inst.Message("재료 아이템이 부족합니다.");
+                return false; // 강화 로직처리 실패
+            }
+
+            // 재료 아이템을 인벤토리에서 제거
+            var recipeMaterials = selectedRecipe.Materials;
+            for (int i = 0; i < recipeMaterials.Length; i++) {
+                // 플레이어의 인벤토리에서 재료 아이템 제거
+                if (GameManager.Instance.TryRemoveItem(recipeMaterials[i].Mat.Item_Id, recipeMaterials[i].Required) == false) {
+                    return false;
+                }
+            }
+
+            // 강화시도 로직 실행
+            isUpgradeSuccess = GameGlobal.TryUpgrade(selectedRecipe.FailedProb, ref IsAdsApplied);
+            if (isUpgradeSuccess == false) { // 아이템 강화 실패 (재료 아이템만 소진되고 강화로직 종료)
+                failedSound.PlayOneShot();   // 강화 실패 사운드 출력
+                return true; // 강화 로직 실행 자체는 성공
+            }
+
+            // 아이템 강화 성공
+            // 선택된 강화 타겟 아이템을 인벤토리에서 제거
+            if (GameManager.Instance.TryRemoveItem(selectedItemRef) == false) {
+                return false;
+            }
+
+            // 강화된 아이템을 플레이어의 인벤토리에 추가하고 강화성공 사운드 출력
+            GameManager.Instance.AddItem(selectedRecipe.Result, selectedRecipe.Result.DefaultAmount);
+            successSound.PlayOneShot();
+            return true;
+
+            bool[] CheckMaterialItems() {
+                var findMaterialList = new List<bool>();
+                for (int i = 0; i < selectedRecipe.Materials.Length; i++) {
+                    bool isFind = GameManager.Instance.TryGetItemAmount(selectedRecipe.Materials[i].Mat.Item_Id, out int amount);
+                    bool result = isFind && amount >= selectedRecipe.Materials[i].Required;
+                    findMaterialList.Add(result);
+                }
+                return findMaterialList.ToArray();
+            }
+        }
+
         public bool TryItemUpgrade(out bool? isSuccessUpgrade) {
             var findMaterialList = new List<bool>();
             for (int i = 0; i < selectedRecipe.Materials.Length; i++) {
@@ -575,12 +628,12 @@
             }
 
             //업그레이드 선택된 아이템과 레시피 재료 아이템들의 요구 수량만큼 인벤토리에 있는지 체크
-            bool isFindSelectedItem     = GameManager.Instance.FindItemRef(selectedItemRef);
+            bool isFindSelectedItem = GameManager.Instance.FindItemByRef(selectedItemRef);
             bool isFindAllMaterialItems = findMaterialList.TrueForAll(isFind => isFind);
 
             if (!isFindAllMaterialItems || !isFindSelectedItem) {
                 //Close Confirm Popup & Upgrade Main Panel
-                if (!isFindAllMaterialItems)  Notify.Inst.Message("Not Enough Upgrade Requirement");
+                if (!isFindAllMaterialItems) Notify.Inst.Message("Not Enough Upgrade Requirement");
                 else if (!isFindSelectedItem) Notify.Inst.Message("Not Assignment Selected Item in Inventory");
 
                 isSuccessUpgrade = null;
@@ -589,8 +642,8 @@
 
             //Material Items 제거
             for (int i = 0; i < selectedRecipe.Materials.Length; i++) {
-                if(GameManager.Instance.TryRemoveItem(selectedRecipe.Materials[i].Mat.Item_Id, selectedRecipe.Materials[i].Required) == false) {
-                    throw new System.Exception("Warning !, Item Upgrade Failed."); 
+                if (GameManager.Instance.TryRemoveItem(selectedRecipe.Materials[i].Mat.Item_Id, selectedRecipe.Materials[i].Required) == false) {
+                    throw new System.Exception("Warning !, Item Upgrade Failed.");
                 }
             }
 
@@ -623,17 +676,17 @@
         //======================================================================================================================================
 
         public enum PANELTYPE {
-            NONE   = 0,
-            MAIN   = 1,
+            NONE = 0,
+            MAIN = 1,
             CHOOSE = 2,
         }
 
         public enum POPUPTYPE {
-            NONE     = 0,
+            NONE = 0,
             ITEMINFO = 1,
-            ITEMGET  = 2,
-            CONFIRM  = 3,
-            ADS      = 4,
+            ITEMGET = 2,
+            CONFIRM = 3,
+            ADS = 4,
         }
 
         //======================================================================================================================================

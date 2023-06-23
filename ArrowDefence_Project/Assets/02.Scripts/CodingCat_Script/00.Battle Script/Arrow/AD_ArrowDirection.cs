@@ -67,7 +67,7 @@
 
             //Arrow Out of Screen
             if(!(xIn && yIn)) {
-                adArrow.DisableRequest();
+                adArrow.ReturnToPoolRequest();
                 return;
             }
         }

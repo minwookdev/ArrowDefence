@@ -134,7 +134,7 @@
                     dagger.Shot(damage, ability.GetProjectileDamage(projectileDamage));
                 }
             }
-            PlaySound2Random();  // PlaySound
+            PlaySoundToRandom();  // PlaySound
         }
 
         public override void ClearOnDisable() { }
@@ -193,7 +193,7 @@
                 if (fire) {
                     fire.Shot(damage, ability.GetSpellDamage(projectileDamage)); //
                 }
-                PlaySound2Random();
+                PlaySoundToRandom();
             }
         }
         public override void ClearOnDisable() { }
@@ -268,18 +268,25 @@
             return dictionary;
         }
 
-        public override void OnHit(Vector2 point, ref DamageStruct damage) {
-            var explosionPref = CCPooler.SpawnFromPool<ExplosionPref>(poolTags[0], point, Quaternion.identity);
-            if (explosionPref) {
+        /// <summary>
+        /// 몬스터와 충돌 시 호출되는 함수
+        /// </summary>
+        /// <param name="spawnPoint"></param>
+        /// <param name="damage"></param>
+        public override void OnHit(Vector2 spawnPoint, ref DamageStruct damage) {
+            // 오브젝트 풀로 부터 폭발 프리팹 생성
+            var explosionPref = CCPooler.SpawnFromPool<ExplosionPref>(poolTags[0], spawnPoint, Quaternion.identity);
+            if (explosionPref) { // 프리팹에 폭발 범위, 데미지 등을 전달 폭발 실행 함수 호출
                 explosionPref.SetValue(poolTags[1], explosionRange, addExplosionRange, addExplosionDamage, skillLevel);
                 explosionPref.Shot(damage, ability.GetProjectileDamage(projectileDamage));
             }
-            var effectShockWave = CCPooler.SpawnFromPool<ACEffector2D>(poolTags[2], point, Quaternion.identity);
+            // 오브젝트 풀로 부터 폭발 이펙트 생성
+            var effectShockWave = CCPooler.SpawnFromPool<ACEffector2D>(poolTags[2], spawnPoint, Quaternion.identity);
             if (effectShockWave) {
                 effectShockWave.PlayOnce();
             }
-            //Play SoundEffect
-            PlaySound2Random();
+            // 폭발 사운드 플레이
+            PlaySoundToRandom();
         }
 
         public override void ClearOnDisable() {

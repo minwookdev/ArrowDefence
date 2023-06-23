@@ -1,13 +1,11 @@
-﻿namespace ActionCat
-{
+﻿namespace ActionCat {
     using System.Collections;
     using UnityEngine;
     using UnityEngine.UI;
     using UnityEngine.SceneManagement;
     using TMPro;
 
-    public class LoadingManager : MonoBehaviour
-    {
+    public class LoadingManager : MonoBehaviour {
         private static string nextScene;
         private float loadingPer;
         private string loadingPerStr;
@@ -21,8 +19,7 @@
         //private Text progressText = null;
         //private Text loadingText = null;
 
-        private void Start()
-        {
+        private void Start() {
             //Set timescale Default Value
             //Current TimeScale variable affects loading Logic.
             if (Time.timeScale != 1f)
@@ -31,13 +28,11 @@
             //Set Loading Slider Color
             SliderFillImage.color = LoadingSliderColor;
 
-            if (SceneLoader.Instance.NextScene != null)
-            {
+            if (SceneLoader.Instance.NextScene != null) {
                 nextScene = SceneLoader.Instance.NextScene;
                 StartCoroutine(this.LoadScene());
             }
-            else
-            {
+            else {
                 CatLog.ELog("Load Target Scene Info is NULL, Stop Loading Process");
             }
         }
@@ -104,37 +99,45 @@
             }
         }
 
-        string sceneNameStr = "";
+        string sceneNameStr = "Load Target Scene Name";
 
-        IEnumerator LoadSceneAsyncWithProgress(LoadSceneMode loadSceneMode) {
-            yield return null;
-
+        /// <summary>
+        /// 비 동기 씬 로드 코루틴
+        /// </summary>
+        /// <param name="loadSceneMode"></param>
+        /// <returns></returns>
+        IEnumerator LoadSceneAsync(LoadSceneMode loadSceneMode) {
             // 씬 비동기 로드 객체 생성 
-            AsyncOperation asyncOperation = SceneManager.LoadSceneAsync(sceneNameStr, loadSceneMode); 
-            asyncOperation.allowSceneActivation = false; // 완전히 로드되지 전 까지 씬 로드 방지
+            AsyncOperation sceneLoadAsyncOperation = SceneManager.LoadSceneAsync(sceneNameStr, loadSceneMode);
+            sceneLoadAsyncOperation.allowSceneActivation = false; // 완전히 로드될 때 까지 씬 전환 방지
 
-            // Operation Progress 변수 획득이 필요한 경우
-            float progressSliderValue = 0f;
-            while (!asyncOperation.isDone) {
-                progressSliderValue = asyncOperation.progress; // 비동기 로드 진행률 변수획득 (슬라이더 등으로 진행률 표시)
-                if (asyncOperation.progress >= 0.9f) {         // 지정 로드율 넘어가면 씬 로드
-                    progressSliderValue = 1f;
-                    asyncOperation.allowSceneActivation = true;
+            float sliderValue = 0f; // Progress 변수가 필요한 경우 (ex: Slider.value)
+
+            while (!sceneLoadAsyncOperation.isDone) {
+                float operationProgressValue = sceneLoadAsyncOperation.progress;
+                sliderValue = operationProgressValue; // 비동기 로드 진행률
+                if (operationProgressValue >= 0.9f) { // 씬 로드 완료
+                    break;
                 }
+
                 yield return null;
             }
-        }
 
-        IEnumerator LoadSceneAsync(LoadSceneMode loadSceneMode) {
+            sliderValue = 1f;
+            sceneLoadAsyncOperation.allowSceneActivation = true; // 씬 전환
             yield return null;
-
-            AsyncOperation asyncOperation = SceneManager.LoadSceneAsync(sceneNameStr, loadSceneMode);
-            asyncOperation.allowSceneActivation = false;
-
-            // Operation Progress 변수 획득이 필요하지 않은 경우. 지정 로드율 까지 대기
-            yield return new WaitUntil(() => asyncOperation.progress >= 0.9f);
-
-            asyncOperation.allowSceneActivation = true;
         }
+
+        //IEnumerator LoadSceneAsync(LoadSceneMode loadSceneMode) {
+        //    yield return null;
+        //
+        //    AsyncOperation asyncOperation = SceneManager.LoadSceneAsync(sceneNameStr, loadSceneMode);
+        //    asyncOperation.allowSceneActivation = false;
+        //
+        //    // Operation Progress 변수 획득이 필요하지 않은 경우. 지정 로드율 까지 대기
+        //    yield return new WaitUntil(() => asyncOperation.progress >= 0.9f);
+        //
+        //    asyncOperation.allowSceneActivation = true;
+        //}
     }
 }

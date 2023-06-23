@@ -1,74 +1,56 @@
-﻿namespace ActionCat
-{
+﻿namespace ActionCat {
     using UnityEngine;
 
-    ///inherit from this base class to Create a Singleton
-    ///e.g. public class MyCustomScript : Singleton {}
-
-    ///Untiy Generic Singleton Template Codes
-    ///Scene에 배치하여 미리 어떤 참조를 캐싱하는 것처럼 사용하는 형태에는 맞지 않다
-    ///이 싱글턴클래스를 상속받아서 일처리 하는 경우는 오로지 모든 동작이 코드로 작동되어야 맞다
-    ///Arrow & Defence Project에서는 Scene UI와 내부 Data들과 소통하는 형태로 사용중임
-
     /// <summary>
-    /// Make Singleton Class
+    /// Generic Singleton Class
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
-    {
-        //Check to see if we're about to be Destoryed
-        private static bool _shuttingdown = false;
+    public class Singleton<T> : MonoBehaviour where T : MonoBehaviour {
+        private static bool _shuttingdown = false; // Singleton Object가 파괴되었는지 확인하기 위한 변수
         private static object _lock = new object();
         private static T _instance;
 
         /// <summary>
         /// Access Singleton Instance through this Property
         /// </summary>
-        public static T Instance
-        {
-            get
-            {
-                //게임종료 시 object보다 싱글턴의 OnDestroy가 먼저 실행될 수 있다
-                //해당 싱글턴을 gameObject.OnDestroy() 에서는 사용하지 않거나 사용한다면 null체크 해주자
-                if (_shuttingdown)
-                {
-                    Debug.Log("[Singleton] Instance '" + typeof(T) + "' already Destroyed. Returning Null.");
+        public static T Instance {
+            get {
+                // gameObject.Destory() 메서드에서 사용 금지 사용한다면 IsExist를 통해서 체크
+                if (_shuttingdown) {
+                    Debug.Log("Singleton Instance '" + typeof(T) + "' is already Destroyed. Returning Null.");
                     return null;
                 }
 
-                lock (_lock) //Thread Safe
-                {
-                    if (_instance == null)
-                    {
-                        //인스턴스 존재 여부 확인
+                lock (_lock) { //Thread Safe 
+                    if (_instance == null) {
+                        // 이미 생성된 Instance가 있는지 확인
                         _instance = (T)FindObjectOfType(typeof(T));
 
-                        //아직 생성되지 않았다면 인스턴스를 생성함
-                        if (_instance == null)
-                        {
-                            //새로운 싱글턴 게임오브젝트를 만들어서 싱글턴 Attach
+                        // 아직 생성되지 않았다면 인스턴스를 생성
+                        if (_instance == null) {
+                            //새로운 싱글턴 게임오브젝트를 만들어서 싱글턴화
                             var singletonObject = new GameObject();
                             _instance = singletonObject.AddComponent<T>();
                             singletonObject.name = typeof(T).ToString() + " [Singleton]";
+                            _instance.GetComponent<Singleton<T>>().Init();
 
-                            //Make Instance Persistence
+                            // 씬이 넘어감에 따라 파괴되지않도록 하는 처리
                             DontDestroyOnLoad(singletonObject);
                         }
                     }
-
                     return _instance;
                 }
             }
         }
+        /// <summary>
+        /// Singleton<T>.Instnace를 거치지 않고 존재하는지 확인하기 위함. (Instance로 체크 시 무조건 생성하기 때문)
+        /// </summary>
+        public static bool IsExist => _instance != null && _shuttingdown == false; 
 
         /// <summary>
-        /// OnDestory에서 Instance를 비교하여 하면 Singleton을 다시 생성해버리는 로직오류를 방지.
+        /// Singleton Instance가 생성되고 바로 호출되는 가상함수. (대형 로직 작성 금지)
         /// </summary>
-        public static bool IsExist {
-            get {
-                return (_instance != null && _shuttingdown == false);
-            }
-        }
+        protected virtual void Init() { }
 
         private void Awake() {
 #if UNITY_EDITOR
@@ -78,13 +60,11 @@
 #endif
         }
 
-        private void OnApplicationQuit()
-        {
+        private void OnApplicationQuit() {
             _shuttingdown = true;
         }
 
-        private void OnDestroy()
-        {
+        private void OnDestroy() {
             _shuttingdown = true;
         }
     }

@@ -6,12 +6,12 @@
         List<CraftingInfo> craftingInfoList = new List<CraftingInfo>();
 
         // < Currency >
-        int gold  = 0;
+        int gold = 0;
         int stone = 0;
 
-        const int MaxGoldAmount  = 99999999;
+        const int MaxGoldAmount = 99999999;
         const int MaxStoneAmount = 999999;
-        const int MinCurrency    = 0;
+        const int MinCurrency = 0;
 
         public CraftingInfo[] CraftingInfos {
             get {
@@ -21,7 +21,7 @@
 
         public int CraftSlotSize {
             get {
-                if(craftingInfoList == null) {
+                if (craftingInfoList == null) {
                     return 0;
                 }
                 return craftingInfoList.Count;
@@ -68,7 +68,7 @@
         }
 
         public void OpenSlot(byte index) {
-            if(craftingInfoList[index].IsAvailable == true) {
+            if (craftingInfoList[index].IsAvailable == true) {
                 return;
             }
 
@@ -77,7 +77,7 @@
 
         public void OpenSlot(params byte[] index) {
             for (int i = 0; i < index.Length; i++) {
-                if( craftingInfoList[index[i]].IsAvailable == true) {
+                if (craftingInfoList[index[i]].IsAvailable == true) {
                     return;
                 }
                 craftingInfoList[index[i]].Available();
@@ -127,29 +127,38 @@
     }
 
     public class StageInfo {
+        // 최대 콤보 카운트
         public short MaxComboCount { get; private set; } = 0;
-        public short KilledCount { get; private set; }   = 0;
-        public byte ClearedCount { get; private set; }   = 0;
+        // 총 처치 수
+        public short KilledCount { get; private set; } = 0;
+        // 총 클리어 횟수
+        public byte ClearedCount { get; private set; } = 0;
+        // 부활 사용 여부
         public bool IsUsedResurrect { get; private set; } = false;
-        public bool IsStageCleared { get; private set; }  = false;
-        public bool IsUseableAuto { get; private set; }   = false;
+        // 스테이지 클리어 여부
+        public bool IsStageCleared { get; private set; } = false;
+        // 자동 사격 사용가능 여부
+        public bool IsUseableAuto { get; private set; } = false;   
 
         public void UpdateInfo(in BattleData data) {
-            if(MaxComboCount < data.maxComboCount) {
+            // 최대 콤보 수 갱신
+            if (MaxComboCount < data.maxComboCount) {
                 MaxComboCount = data.maxComboCount;
             }
-
-            if(KilledCount < data.totalKilledCount) {
+            // 최대 처치 수 갱신
+            if (KilledCount < data.totalKilledCount) {
                 KilledCount = data.totalKilledCount;
             }
-
+            // 마지막 플레이에서 부활기능 사용 여부 체크
             if (IsUsedResurrect == true) {
                 IsUsedResurrect = data.isUsedResurrect;
             }
-            
+            // 마지막 플레이에서 스테이지가 클리어되었는지 체크
             IsStageCleared = data.isCleared;
-            ClearedCount++;
+            ClearedCount++; // 클리어 횟수 증가
         }
+
+
 
         public void EnableAutoUse() {
             IsUseableAuto = true;
@@ -160,11 +169,11 @@
         }
 
         public StageInfo(in BattleData data) {
-            MaxComboCount   = data.maxComboCount;
-            KilledCount     = data.totalKilledCount;
+            MaxComboCount = data.maxComboCount;
+            KilledCount = data.totalKilledCount;
             IsUsedResurrect = data.isUsedResurrect;
-            IsStageCleared  = data.isCleared;
-            ClearedCount    = 1;
+            IsStageCleared = data.isCleared;
+            ClearedCount = 1;
         }
 
         public StageInfo() { }
@@ -172,10 +181,10 @@
 
     public class CraftingInfo {
         public bool IsAvailable { get; private set; } = false;
-        public bool IsSkipable  { get; private set; } = false;
-        public int Current      { get; private set; } = 0;
-        public int Max          { get; private set; } = 0;
-        public ItemData Result  { get; private set; } = null;
+        public bool IsSkipable { get; private set; } = false;
+        public int Current { get; private set; } = 0;
+        public int Max { get; private set; } = 0;
+        public ItemData Result { get; private set; } = null;
         private int amount = 0;
 
         #region PROPERTY
@@ -208,14 +217,14 @@
 
 
         public void Start(int craftingTime, int craftingAmount, ItemData resultItem) {
-            if(resultItem == null) {
+            if (resultItem == null) {
                 throw new System.Exception("Result Item Is Null.");
             }
 
             Current = 0;
-            Max     = craftingTime;
-            Result  = resultItem;
-            amount  = craftingAmount;
+            Max = craftingTime;
+            Result = resultItem;
+            amount = craftingAmount;
             IsSkipable = true;
         }
 
@@ -226,10 +235,10 @@
         }
 
         public void Clear() {
-            Max     = 0;
+            Max = 0;
             Current = 0;
-            amount  = 0;
-            Result     = null;
+            amount = 0;
+            Result = null;
             IsSkipable = false;
         }
 
@@ -242,16 +251,16 @@
         }
 
         public bool TryReceipt(out ItemData resultItemRef, out int resultAmount) {
-            if(!IsComplete) {
+            if (!IsComplete) {
                 CatLog.ELog("Crafting is Not Complete !");
                 resultItemRef = null;
-                resultAmount  = 0;
+                resultAmount = 0;
                 return false;
             }
 
             CCPlayerData.inventory.AddItem(Result, amount);
             resultItemRef = Result;
-            resultAmount  = amount;
+            resultAmount = amount;
 
             Clear();
             return true;

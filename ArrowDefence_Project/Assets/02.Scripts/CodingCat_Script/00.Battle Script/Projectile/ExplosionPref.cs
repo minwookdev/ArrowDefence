@@ -8,7 +8,7 @@
         [SerializeField] ACEffector2D effector = null;
 
         [Header("SOUND")]
-        [SerializeField] [ReadOnly] Audio.ACSound audioSource = null;
+        [SerializeField][ReadOnly] Audio.ACSound audioSource = null;
         [SerializeField] AudioClip[] addExplosionClips = null;
 
         byte skillLevel = 0;
@@ -16,18 +16,18 @@
         float addExplosionRadius = 0f;
         float explosionInterval = 0.7f;
         short addExplosionDamage;
-        string addExpTag   = "";
+        string addExpTag = "";
         bool isReady = false;
 
         //Coroutine
         WaitForSeconds waitForInterval = null;
-        WaitUntil waitEffectStop       = null;
-        WaitUntil waitExplosionReady   = null;
+        WaitUntil waitEffectStop = null;
+        WaitUntil waitUntilReady = null;
 
         private void Awake() {
             waitForInterval = new WaitForSeconds(explosionInterval);
-            waitEffectStop  = new WaitUntil(() => effector.IsPlaying() == false);
-            waitExplosionReady = new WaitUntil(() => isReady == true);
+            waitEffectStop = new WaitUntil(() => effector.IsPlaying() == false);
+            waitUntilReady = new WaitUntil(() => isReady == true);
             CheckComponent();
         }
 
@@ -37,44 +37,83 @@
         }
 
         private void OnEnable() {
-            StartCoroutine(ExplosionCo());
+            StartCoroutine(ExplosionAsync());
         }
 
         public override void Shot(DamageStruct damage, short projectileDamage = 0) {
             finCalcDamage = projectileDamage;
-            damageStruct  = damage;
+            damageStruct = damage;
             damageStruct.SetDamage(finCalcDamage);
 
             isReady = true;
         }
 
-        public override void DisableRequest() {
+        public override void ReturnToPoolRequest() {
             isReady = false;
-            base.DisableRequest();
+            base.ReturnToPoolRequest();
         }
 
         protected override void CheckComponent() {
-            if (tr == null)       CatLog.ComponentMent();
+            if (tr == null) CatLog.ComponentMent();
             if (effector == null) CatLog.ComponentMent();
         }
 
-        IEnumerator ExplosionCo() {
-            yield return waitExplosionReady;
+        /// <summary>
+        /// 스킬 발동 코루틴
+        /// </summary>
+        /// <returns></returns>
+        IEnumerator ExplosionAsync() {
+            // 변수들 초기화가 완료될 때 까지 대기
+            yield return waitUntilReady;
             effector.Play();
             CineCam.Inst.ShakeCamera(8f, .5f);
 
+            // OverlapCircleAll2D를 통한 범위 내 레이어 지정을 통한 몬스터 오브젝트만 검출
             if (GameGlobal.TryGetOverlapCircleAll2D(out Collider2D[] colliders, tr.position, explosionHitRadius, AD_Data.LAYER_MONSTER)) {
                 foreach (var collider in colliders) {
-                    if(collider.TryGetComponent<IDamageable>(out IDamageable target)) {
-                        target.OnHitElemental(ref damageStruct, collider.ClosestPoint(tr.position), direction: (collider.transform.position - tr.position));
+                    // 검출된 몬스터 오브젝트들에게 데미지 처리
+                    if (collider.TryGetComponent<IDamageable>(out IDamageable target)) {
+                        var hitPoint = collider.ClosestPoint(tr.position);
+                        var hitDirection = collider.transform.position - tr.position;
+                        target.OnHitElemental(ref damageStruct, hitPoint, hitDirection);// 몬스터 오브젝트의 데미지 처리 함수 호출
                     }
                 }
             }
 
-            yield return StartCoroutine(AddExplosionPhase(skillLevel));
-
+            // 스킬 레벨 변수에 따른 추가 폭발 코루틴 종료 및 이펙트 종료 대기
+            yield return StartCoroutine(AdditionalExplosionAsync(skillLevel));
             yield return waitEffectStop;
-            DisableRequest();
+
+            // 오브젝트 풀 회수 요청 (비활성화)
+            ReturnToPoolRequest();
+        }
+
+        /// <summary>
+        /// 몬스터 오브젝트와 충돌 시 폭발 구현 함수
+        /// </summary>
+        private void ExplosionByCollision()
+        {
+            // OverlapCircleAll2D를 통한 범위 내 레이어 지정을 통한 몬스터 오브젝트만 검출
+            if (GameGlobal.TryGetOverlapCircleAll2D(out Collider2D[] colliders, tr.position, explosionHitRadius, AD_Data.LAYER_MONSTER))
+            {
+                for (int i = 0; i < colliders.Length; i++)
+                {
+                    if (colliders[i].TryGetComponent(out IDamageable target))
+                    {
+                        // 검출된 몬스터 오브젝트의 데미지 처리 함수 호출 (충돌 지점 및 방향 전달)
+                        var hitPoint = colliders[i].ClosestPoint(tr.position);
+                        var hitDirection = colliders[i].transform.position - tr.position;
+                        target.OnHitElemental(ref damageStruct, hitPoint, hitDirection); 
+                    }
+                }
+            }
+
+            // 폭발 이펙트 및 카메라 쉐이크
+            effector.Play();
+            CineCam.Inst.ShakeCamera(8f, .5f);
+
+            // 오브젝트 풀 회수 요청 (비활성화)
+            ReturnToPoolRequest();
         }
 
         public void SetValue(string smallExplosionTag, float expHitRange, float addExpRange, short addexpdamage, byte level) {
@@ -85,11 +124,11 @@
             addExplosionDamage = addexpdamage;
         }
 
-        IEnumerator AddExplosionPhase(byte level) {
+        IEnumerator AdditionalExplosionAsync(byte level) {
             switch (level) {
-                case 1:  yield break;
-                case 2:  break;
-                case 3:  break;
+                case 1: yield break;
+                case 2: break;
+                case 3: break;
                 default: CatLog.ELog("Over Range Explosion SkillLevel."); yield break;
             }
 
@@ -116,8 +155,8 @@
 
         IEnumerator AddExplosionPhaseEx(byte level) {
             switch (level) {
-                case 3:   break;
-                default:  yield break;
+                case 3: break;
+                default: yield break;
             }
 
             yield return waitForInterval;

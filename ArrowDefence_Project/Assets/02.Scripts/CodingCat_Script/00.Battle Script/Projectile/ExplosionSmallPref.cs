@@ -24,9 +24,9 @@
             StartCoroutine(ExplosionCo());
         }
 
-        public override void DisableRequest() {
+        public override void ReturnToPoolRequest() {
             isReady = false;
-            base.DisableRequest();
+            base.ReturnToPoolRequest();
         }
 
         public override void Shot(DamageStruct damage, short projectileDamage = 0) {
@@ -55,7 +55,7 @@
             }
 
             yield return waitEffectStop;
-            DisableRequest();
+            ReturnToPoolRequest();
         }
     }
 }

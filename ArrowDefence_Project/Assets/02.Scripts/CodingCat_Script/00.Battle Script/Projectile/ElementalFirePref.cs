@@ -51,7 +51,7 @@
             effector.Play(true);
             yield return StartCoroutine(CollisionCo());
             yield return EndWait;
-            DisableRequest(); //Coroutine End
+            ReturnToPoolRequest(); //Coroutine End
         }
     }
 }

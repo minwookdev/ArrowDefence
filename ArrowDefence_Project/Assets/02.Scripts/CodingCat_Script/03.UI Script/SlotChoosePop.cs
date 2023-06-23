@@ -58,7 +58,7 @@
                 if (objectLeftPanel.activeSelf)
                     objectLeftPanel.SetActive(false);
 
-                var accessories = playerEquips.GetAccessories();
+                var accessories = playerEquips.GetArtifacts();
 
                 for (int i = 0; i < accessories.Length; i++)
                 {

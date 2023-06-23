@@ -4,7 +4,7 @@
     public class Item_SpArr : Item_Equipment {
         //SAVED VALUES
         private GameObject spArrowPref = null;
-        private ASInfo[] skillInfos    = null;      //Skill이 존재하지 않더라도 Length = 0인 상태
+        private ASInfo[] skillInfos = null;      //Skill이 존재하지 않더라도 Length = 0인 상태
         private SpArrCondition condition = null;
         private float specialArrDefaultSpeed = 12f;
         private float additionalSpeed = 0f;
@@ -15,7 +15,7 @@
         #region PROPERTY
         public ASInfo[] GetSkillInfos {
             get {
-                if(skillInfos == null) {
+                if (skillInfos == null) {
                     skillInfos = new ASInfo[0];
                 }
                 return skillInfos;
@@ -23,7 +23,7 @@
         }
         public SpArrCondition Condition {
             get {
-                if(condition == null) {
+                if (condition == null) {
                     throw new System.Exception("Special Arrow Condition is Null.");
                 }
                 return condition;
@@ -107,7 +107,7 @@
         }
 
         public bool TryGetSkillSet(out ArrowSkillSet skillset) {
-            if(tempSkillSet == null) {
+            if (tempSkillSet == null) {
                 skillset = null;
                 return false;
             }
@@ -116,16 +116,27 @@
             return true;
         }
 
-        public void Init(PlayerAbilitySlot ability, int poolQuatity) {
-            if(spArrowPref.TryGetComponent<AD_Arrow>(out AD_Arrow arrow)) {
-                arrow.SetSpeed(specialArrDefaultSpeed + additionalSpeed);
+        /// <summary>
+        /// SP Arrow Battle Scene Setup
+        /// </summary>
+        /// <param name="ability"></param>
+        /// <param name="poolAmount"></param>
+        public void Setup(PlayerAbilitySlot ability, int poolAmount) {
+            if (spArrowPref.TryGetComponent<AD_Arrow>(out AD_Arrow arrow) == false) {
+                CatLog.ELog("Arrow Component is Null.");
+                return;
             }
             else {
-                throw new System.Exception("Not Added Component in Arrow Prefab");
+                arrow.SetSpeed(specialArrDefaultSpeed + additionalSpeed);
             }
-            //Init New SpecialArrow SkillSet.
+
+            // Set Skill and Add to Object Pool
             tempSkillSet = ArrowSkillSet.GetSpecialSkillSet(skillInfos, AD_Data.POOLTAG_SPECIAL_ARROW, ability);
-            CCPooler.AddPoolList(AD_Data.POOLTAG_SPECIAL_ARROW, poolQuatity, spArrowPref, false);
+            CCPooler.AddPoolList(AD_Data.POOLTAG_SPECIAL_ARROW, poolAmount, spArrowPref, false);
+        }
+
+        public override T GetItem<T>() {
+            throw new System.NotImplementedException();
         }
 
         public Item_SpArr(ItemDt_SpArr entity) : base(entity) {
@@ -164,14 +175,14 @@
         public bool IsTypeTime {
             get {
                 if (chargeType == CHARGETYPE.TIME) return true;
-                else                               return false;
+                else return false;
             }
         }
 
         public bool IsInitSlot {
             get {
                 if (spSlot == null) return false;
-                else                return true;
+                else return true;
             }
         }
 
@@ -189,14 +200,14 @@
         #endregion
 
         public SpArrCondition(CHARGETYPE type, int cost, int count, float increase) {
-            if(type == CHARGETYPE.NONE || count <= 0) {
+            if (type == CHARGETYPE.NONE || count <= 0) {
                 throw new System.Exception("New Condition instnace: Missing condition");
             }
 
-            this.chargeType    = type;
+            this.chargeType = type;
             this.maxStackCount = count;
-            this.maxCost       = cost;
-            this.costIncrease  = increase;
+            this.maxCost = cost;
+            this.costIncrease = increase;
         }
         #region ES3
         public SpArrCondition() { }
@@ -235,9 +246,9 @@
             if (currentStackedCount >= maxStackCount) return;
 
             tempCost = currentCost + (costIncrease + addIncCost);
-            if(tempCost >= maxCost) {
+            if (tempCost >= maxCost) {
                 currentStackedCount++;
-                if(currentStackedCount < maxStackCount) {
+                if (currentStackedCount < maxStackCount) {
                     tempCost -= maxCost;
                 }
                 else {
@@ -268,7 +279,7 @@
         public void CostIncByTime() {
             if (currentStackedCount >= maxStackCount) return;
             currentCost = Time.deltaTime + (addIncCost * 0.01f);
-            if(currentCost >= maxCost) {
+            if (currentCost >= maxCost) {
                 currentStackedCount++;
                 currentCost = 0f;
                 spSlot.PlayNotify();
@@ -279,16 +290,16 @@
 
         public void Clear() {
             currentCost = 0f;
-            addIncCost  = 0f;
+            addIncCost = 0f;
             currentStackedCount = 0;
             tempCost = 0f;
             spSlot = null;
 
             switch (chargeType) {
-                case CHARGETYPE.NONE:                                                   break;
+                case CHARGETYPE.NONE: break;
                 case CHARGETYPE.KILL: BattleProgresser.OnMonsterDeathByAttack -= CostIncByKill; break;
-                case CHARGETYPE.TIME:                                                   break;
-                case CHARGETYPE.ATCK: BattleProgresser.OnMonsterHit   -= CostIncByAtck; break;
+                case CHARGETYPE.TIME: break;
+                case CHARGETYPE.ATCK: BattleProgresser.OnMonsterHit -= CostIncByAtck; break;
                 default: break;
             }
         }

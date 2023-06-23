@@ -94,7 +94,7 @@ public class PlayerData_Editor : EditorWindow
         EditorGUILayout.Space(10f);
 
         //Get Array Accessories
-        var accessories = CCPlayerData.equipments.GetAccessories();
+        var accessories = CCPlayerData.equipments.GetArtifacts();
 
         //Equipped Accessory (f)
         if (CCPlayerData.equipments.IsEquippedArtifact(0))

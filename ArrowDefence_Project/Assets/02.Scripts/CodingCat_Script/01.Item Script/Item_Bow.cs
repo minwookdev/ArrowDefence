@@ -18,18 +18,18 @@
             this.bowSkill_Sec  = origin.bowSkill_Sec;
             this.abilities     = origin.abilities;
         }
-
+        
         /// <summary>
         /// Bow Item Constructor
         /// </summary>
-        /// <param name="entity"></param>
-        public Item_Bow(ItemData_Equip_Bow entity) : base(entity) {
+        /// <param name="scriptableObject"></param>
+        public Item_Bow(ItemData_Equip_Bow scriptableObject) : base(scriptableObject) {
             this.EquipType = EQUIP_ITEMTYPE.BOW;
 
-            this.bowGameObject = entity.BowGameObject;
-            this.bowSkill_Fst  = GetNewSkill(entity.SkillAsset_f);
-            this.bowSkill_Sec  = GetNewSkill(entity.SkillAsset_s);
-            this.abilities     = GetNewAbilities(entity.abilityDatas);
+            this.bowGameObject = scriptableObject.BowGameObject;
+            this.bowSkill_Fst  = GetNewSkill(scriptableObject.SkillAsset_f);
+            this.bowSkill_Sec  = GetNewSkill(scriptableObject.SkillAsset_s);
+            this.abilities     = GetNewAbilities(scriptableObject.abilityDatas);
         }
         #region ES3
         public Item_Bow() { }
@@ -164,32 +164,25 @@
             return (bowGameObject != null) ? bowGameObject : null;
         }
 
-        public override object GetItem() => this;
-
-        public void Init(Transform initPos, Transform parentTr)
-        {
-            if(bowGameObject == null)
-            {
-                CatLog.ELog($"{termsName} is Bow GameObject is NULL, return Function");
-                return;
+        public AD_BowAbility Setup(Vector3 initPos, Transform parentTr) {
+            if (!bowGameObject) {
+                CatLog.ELog("Prefab is Null.");
+                return null;
             }
 
-            var bowObject = GameObject.Instantiate(bowGameObject, initPos.position, Quaternion.Euler(0f, 0f, 90f), parentTr);
-        }
-
-        public AD_BowAbility Initialize(Transform initTr, Transform parentTr) {
-            if(bowGameObject == null) {
-                throw new System.Exception("Bow GameObejct Prefab is null.");
+            var spawnedPrefab = GameObject.Instantiate(bowGameObject, initPos, Quaternion.Euler(0f, 0f, 90f), parentTr);
+            if (spawnedPrefab.TryGetComponent<AD_BowAbility>(out AD_BowAbility ability) == false) {
+                CatLog.ELog("BowAbility Component is Null.");
+                return null;
             }
-
-            var prefab = GameObject.Instantiate(bowGameObject, initTr.position, Quaternion.Euler(0f, 0f, 90f), parentTr);
-            if (prefab.TryGetComponent<AD_BowAbility>(out AD_BowAbility ability)) {
+            else {
                 ability.Initialize();
                 return ability;
             }
-            else {
-                throw new System.Exception("Controller Ability Component is Null.");
-            }
+        }
+
+        public override T GetItem<T>() {
+            throw new System.NotImplementedException();
         }
     }
 }

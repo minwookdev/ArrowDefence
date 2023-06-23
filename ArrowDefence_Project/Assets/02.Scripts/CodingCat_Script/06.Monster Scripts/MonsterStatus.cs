@@ -5,12 +5,22 @@
 
     //[RequireComponent(typeof(MonsterController))]
     public class MonsterStatus : MonoBehaviour, IPoolObject, IDamageable {
+        [SerializeField] MonsterStatusEntity statusEntity = null; // Scriptable Object
+
+        private void Awake() {
+            MaxMonsterHP       = statusEntity.HealthPointAmount;
+            MaxMonsterMP       = statusEntity.ManaPointAmount;
+            InitAttackDamage   = statusEntity.DamageAmount;
+            Armorating         = statusEntity.Armorating;
+            CriticalResist     = statusEntity.CriticalResist;
+            ItemDropCorrection = statusEntity.ItemDropCorrection;
+            GaugeIncreaseValue = statusEntity.GaugeIncreaseAmount;
+        }
+
         [Header("COMPONENT")]
         [SerializeField] MonsterState monsterState;
         [SerializeField] SpriteRenderer sprite;
 
-        [Header("STATUS DATA")] //Scriptable Object 처리.
-        [SerializeField] MonsterStatusEntity statusEntity = null;
         [SerializeField] [ReadOnly] private float MaxMonsterHP       = 0f;
         [SerializeField] [ReadOnly] private float MaxMonsterMP       = 0f;
         [SerializeField] [ReadOnly] private float InitAttackDamage   = 0f;
@@ -43,15 +53,6 @@
             get => statusEntity;
         }
 
-        private void Awake() {
-            MaxMonsterHP       = statusEntity.HealthPointAmount;
-            MaxMonsterMP       = statusEntity.ManaPointAmount;
-            InitAttackDamage   = statusEntity.DamageAmount;
-            Armorating         = statusEntity.Armorating;
-            CriticalResist     = statusEntity.CriticalResist;
-            ItemDropCorrection = statusEntity.ItemDropCorrection;
-            GaugeIncreaseValue = statusEntity.GaugeIncreaseAmount;
-        }
 
         private void Start() {
             InitComponent();
@@ -91,7 +92,7 @@
                 BattleProgresser.OnDecPlayerHealth?.Invoke(10f);
                 
                 isDeath = true;
-                DisableRequest();
+                ReturnToPoolRequest();
             }
         }
 
@@ -114,13 +115,13 @@
 
         #region MESSAGE
 
-        public void OnStageClear() => DisableRequest();
+        public void OnStageClear() => ReturnToPoolRequest();
 
         #endregion
 
         #region POOL-OBJECT
 
-        public void DisableRequest() => CCPooler.ReturnToPool(gameObject);
+        public void ReturnToPoolRequest() => CCPooler.ReturnToPool(gameObject);
 
         #endregion
 
@@ -255,7 +256,7 @@
         /// Animation Event 
         /// </summary>
         public void OnMonsterDeath() {
-            DisableRequest();
+            ReturnToPoolRequest();
         }
 
         /// <summary>

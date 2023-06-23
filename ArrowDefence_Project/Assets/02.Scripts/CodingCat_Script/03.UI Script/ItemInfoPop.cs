@@ -509,7 +509,7 @@
                     //장착중 유물 체크, 장착 슬롯 확인작업.
                     byte artifactIdx = 0;
                     bool isEquippedItem = false;
-                    foreach (var artifact in CCPlayerData.equipments.GetAccessories()) {
+                    foreach (var artifact in CCPlayerData.equipments.GetArtifacts()) {
                         if (ReferenceEquals(artifact, address)) {
                             isEquippedItem = true;
                             break;

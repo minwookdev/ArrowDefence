@@ -109,4 +109,4 @@ MonoBehaviour:
       Item: {fileID: 11400000, guid: 8e6a38037c8cfb749a94b046b7449f6c, type: 2}
       Count: 1
     CraftingTime: 3
-  version: 1.01
+  version: 1

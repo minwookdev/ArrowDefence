@@ -108,11 +108,11 @@
         /// <summary>
         /// 카메라를 원래 위치로 복귀 (코루틴)
         /// </summary>
-        public void CamPosRestore2Co() {
+        public void CamPositionRestoreAsync() {
             camRestoreCoroutine = StartCoroutine(CameraPosRestore());
         }
 
-        public void ZoomOut2Co() {
+        public void ZoomOutAsync() {
             if (!isZoomIn) {                 // Update에서 돌려져도 상관없도록 현재 상태정의 
                 if (zoomCoroutine != null) { // 이미 Zoom관련 로직이 실행중이면 중지처리
                     StopCoroutine(zoomCoroutine);
@@ -122,7 +122,7 @@
             }
         }
 
-        public void ZoomRestore2Co() {
+        public void ZoomRestoreAsync() {
             if (isZoomIn) {
                 if (zoomCoroutine != null) {
                     StopCoroutine(zoomCoroutine);

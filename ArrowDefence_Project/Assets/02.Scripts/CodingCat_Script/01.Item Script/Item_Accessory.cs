@@ -39,7 +39,7 @@
         /// </summary>
         public Item_Accessory() : base() { }
 
-        public void Init() {
+        public void Setup() {
             if (specialEffect != null) specialEffect.Init();
         }
 
@@ -84,6 +84,10 @@
         }
 
         protected override Ability[] GetNewAbilities(Ability[] abilities) {
+            throw new System.NotImplementedException();
+        }
+
+        public override T GetItem<T>() {
             throw new System.NotImplementedException();
         }
     }

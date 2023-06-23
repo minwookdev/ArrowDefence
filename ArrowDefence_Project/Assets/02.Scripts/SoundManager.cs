@@ -5,21 +5,60 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    /// <summary>
+    /// 게임 내 사운드 효과 담당 클래스
+    /// </summary>
     public class SoundManager : Singleton<SoundManager> {
         [Header("DEBUG")]
-        [SerializeField] [Tooltip("ContextMenu를 사용하여 Inspector에 표현할 수 있습니다.")] List<ACSound> soundList = null;
-        [SerializeField] [Tooltip("ContectMenu를 사용하여 Inspector에 표현할 수 있습니다.")] string[] keys           = null;
+        [SerializeField] List<ACSound> soundList = null;
+        [SerializeField] string[] keys = null;
         [SerializeField] int[] numberCacheArray = null;
 
         [Header("OPTION")]
-        [SerializeField] [RangeEx(1, 10, 1)] int numberCacheStart = 3;
+        [SerializeField][RangeEx(1, 10, 1)] int numberCacheStart = 3;
 
         [Header("SOUND MANAGED SYSTEM")]
-        Dictionary<string, int> numberCacheDic  = new Dictionary<string, int>();
+        Dictionary<string, int> numberCacheDic = new Dictionary<string, int>();
         Dictionary<string, ACSound> managedSoundDic = new Dictionary<string, ACSound>();
 
         [Header("CHANNEL SYSTEM")]
         Dictionary<CHANNELTYPE, ACSound> channelDictionary = new Dictionary<CHANNELTYPE, ACSound>();
+
+        protected override void Init() {
+            // Global AudioMixer 초기화
+            var globalMixer = GOSO.Inst.GlobalAudioMixer;
+            if (globalMixer) {  // Audio Mixer에 저장된 Settings의 Volume변수 적용해줌
+                globalMixer.SetFloat(GOSO.Inst.BgmVolumeParameter, CCPlayerData.settings.BgmVolumeParamsValue);
+                globalMixer.SetFloat(GOSO.Inst.SeVolumeParameter, CCPlayerData.settings.SeVolumeParamsValue);
+            }
+            else {
+                CatLog.ELog("SoundManager: GlobalAudioMixer is Null.");
+            }
+        }
+
+        public void Initialize() {
+            // Global AudioMixer 초기화
+            var globalMixer = GOSO.Inst.GlobalAudioMixer;
+            if (globalMixer) {  // Audio Mixer에 저장된 Settings의 Volume변수 적용해줌
+                globalMixer.SetFloat(GOSO.Inst.BgmVolumeParameter, CCPlayerData.settings.BgmVolumeParamsValue);
+                globalMixer.SetFloat(GOSO.Inst.SeVolumeParameter, CCPlayerData.settings.SeVolumeParamsValue);
+            }
+            else {
+                CatLog.ELog("SoundManager: GlobalAudioMixer is Null.");
+            }
+        }
+
+        /// <summary>
+        /// 매개변수 type의 AudioSource의 Volume값 수정.
+        /// </summary>
+        /// <param name="type"></param>
+        public void SetVolumeScale(SOUNDTYPE type, float audioSourceVolume) {
+            foreach (var pair in managedSoundDic) {
+                if (pair.Value.SoundType == type) {
+                    pair.Value.SetVolume(audioSourceVolume);
+                }
+            }
+        }
 
         #region UNITY_CYCLE
 
@@ -44,33 +83,10 @@
             }
         }
 
-#endregion
+        #endregion
 
-#region SOUNDMANAGER_FUNCTION
+        #region SOUNDMANAGER_FUNCTION
 
-        public void Init() {
-            //Init Global AudioMixer
-            var globalMixer = GOSO.Inst.GlobalAudioMixer;
-            if (globalMixer) {  //Audio Mixer에 저장된 Settings의 Volume변수 적용해줌
-                globalMixer.SetFloat(GOSO.Inst.BgmVolumeParameter, CCPlayerData.settings.BgmVolumeParamsValue);
-                globalMixer.SetFloat(GOSO.Inst.SeVolumeParameter, CCPlayerData.settings.SeVolumeParamsValue);
-            }
-            else {
-                CatLog.ELog("SoundManager: GlobalAudioMixer is Null.");
-            }
-        }
-
-        /// <summary>
-        /// 매개변수 type의 AudioSource의 Volume값 수정.
-        /// </summary>
-        /// <param name="type"></param>
-        public void SetVolumeScale(SOUNDTYPE type, float audioSourceVolume) {
-            foreach (var pair in managedSoundDic) {
-                if (pair.Value.SoundType == type) {
-                    pair.Value.SetVolume(audioSourceVolume);
-                }
-            }
-        }
 
         /// <summary>
         /// 모든 ManagedSoundDictionary의 AudioSource컴포넌트 Volume값 수정.
@@ -81,9 +97,9 @@
             }
         }
 
-#endregion
+        #endregion
 
-#region MANAGED_SOUND
+        #region MANAGED_SOUND
 
         /// <summary>
         /// 관리되는 Sound Dictionary에 ACSound 컴포넌트를 추가
@@ -100,7 +116,7 @@
                 if (loopCounts > numberCacheStart) {                    //체크 루프 카운트 넘어가면 해당 사운드의 루프 횟수를 저장해 둠
                     if (numberCacheDic.ContainsKey(source.SoundKey)) {   //이미 해당 키의 루프가 존재하면 덮어씀
                         numberCacheDic[source.SoundKey] = loopCounts;
-                    }                                       
+                    }
                     else {                                               //없으면 새로 저장
                         numberCacheDic.Add(source.SoundKey, loopCounts);
                     }
@@ -136,9 +152,9 @@
 
         void ClearManagedSoundDic() => managedSoundDic.Clear();
 
-#endregion
+        #endregion
 
-#region CHANNEL
+        #region CHANNEL
 
         public void AddChannel2Dic(CHANNELTYPE type, ACSound audioSource) {
             if (channelDictionary.ContainsKey(type)) {

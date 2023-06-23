@@ -88,7 +88,7 @@
             }
             //=================================================[ ONE TARGET FIND ]==========================================================
             else if (colliderList.Count == 1) {
-                PlaySound2Random();
+                PlaySoundToRandom();
                 isTargetFind = true;
                 return colliderList[0].transform;
             }
@@ -107,7 +107,7 @@
                     }
                 }
 
-                PlaySound2Random();
+                PlaySoundToRandom();
                 isTargetFind = true;
                 return optimalTargetTr;
             }

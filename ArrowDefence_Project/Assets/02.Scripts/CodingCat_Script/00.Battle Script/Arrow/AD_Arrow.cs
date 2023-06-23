@@ -194,7 +194,7 @@
 
         #region Interface_Pool
 
-        public void DisableRequest() => CCPooler.ReturnToPool(gameObject, 0);
+        public void ReturnToPoolRequest() => CCPooler.ReturnToPool(gameObject, 0);
 
         #endregion
 
@@ -275,7 +275,7 @@
                     if (arrowSkillSets.OnHit(collData.Collider, ref damageStruct, collData.CollisionPoint, collData.CollisionDirection)) {
                         PlayEffect(collData.CollisionPoint);
                         collisionQueue.Clear();
-                        DisableRequest();
+                        ReturnToPoolRequest();
                     }
                     else { //Hit Failed - Get Next Collision Queue
                         break;
@@ -287,7 +287,7 @@
                         PlayEffect(collData.CollisionPoint);
                         collisionQueue.Clear();
                         audioSource.PlayOneShot(defaultHitSounds.RandIndex()); //Default Hit Sound Play
-                        DisableRequest();
+                        ReturnToPoolRequest();
                     }
                     else {  //Hit Failed - Get Next Collision Queue
                         break;

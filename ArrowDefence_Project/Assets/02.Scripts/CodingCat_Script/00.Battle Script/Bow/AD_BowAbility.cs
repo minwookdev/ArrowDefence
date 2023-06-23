@@ -79,8 +79,8 @@
             return abilitySlots[index];
         }
 
-        public void IsInitializedEquipments(Player_Equipments equipments, bool initialized) {
-            IsInitEquipments = initialized;
+        public void ArrowsSetupCompleted() {
+            IsInitEquipments = true;
         }
 
         public void SetCondition(SpArrCondition condition, UI.SwapSlots slot) {

@@ -14,12 +14,14 @@
         public Item_Material() { }
         #endregion
 
-        public override object GetItem() => this;
-
         public void SetAmount(int value) => this.Item_Amount = value;
 
         public void IncAmount(int value) => this.Item_Amount += value;
 
         public void DecAmount(int value) => this.Item_Amount -= value;
+
+        public override T GetItem<T>() {
+            throw new System.NotImplementedException();
+        }
     }
 }

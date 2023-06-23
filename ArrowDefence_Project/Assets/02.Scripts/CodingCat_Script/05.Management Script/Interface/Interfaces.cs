@@ -5,7 +5,7 @@
     }
 
     public interface IPoolObject {
-        void DisableRequest();
+        void ReturnToPoolRequest();
     }
 
     public interface IArrowObject {
